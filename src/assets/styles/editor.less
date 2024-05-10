@@ -1,0 +1,307 @@
+@import '@/assets/styles/_mixins.less';
+
+.umo-editor-container {
+  .editor-container {
+    flex: 1;
+    width: 100%;
+    &.show-line-number {
+      .umo-editor {
+        > *:not([data-line-number='false']):not(div) {
+          position: relative;
+          &::before {
+            position: absolute;
+            content: counter(title) '.';
+            counter-increment: title;
+            right: 100%;
+            margin-right: 20px;
+            color: var(--umo-content-line-number-color);
+            font-family: var(--umo-font-family);
+            font-size: 14px;
+            font-weight: 400;
+          }
+        }
+      }
+    }
+    .umo-editor {
+      height: 100%;
+      width: 100%;
+      outline: none;
+      counter-reset: title;
+      > * + * {
+        margin-top: var(--umo-content-node-bottom);
+      }
+      .is-editor-empty {
+        &:first-child {
+          > * {
+            display: none;
+          }
+          &::before {
+            color: var(--umo-content-placeholder-color);
+            content: attr(data-placeholder);
+            float: left;
+            height: 0;
+            pointer-events: none;
+          }
+        }
+      }
+    }
+    code {
+      color: var(--umo-content-code-color);
+      background-color: var(--umo-content-code-background);
+      font-family: var(--umo-content-code-family);
+      border-radius: 3px;
+      padding: 0.1em 0.4em;
+    }
+    a {
+      color: var(--umo-primary-color);
+      text-decoration: none;
+      &:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+      }
+    }
+    .tableWrapper {
+      max-width: 100%;
+      overflow-x: auto;
+      .scrollbar();
+      table {
+        border-collapse: collapse;
+        table-layout: fixed;
+        width: 100%;
+        margin: 0;
+        overflow: hidden;
+        td,
+        th {
+          min-width: 1em;
+          border: 1px solid var(--umo-content-table-border-color);
+          padding: 3px 5px;
+          vertical-align: middle;
+          box-sizing: border-box;
+          position: relative;
+          > * {
+            margin-bottom: 0;
+          }
+          &[data-align='left-top'] {
+            vertical-align: top;
+            text-align: left;
+          }
+          &[data-align='center-top'] {
+            vertical-align: top;
+            text-align: center;
+          }
+          &[data-align='right-top'] {
+            vertical-align: middle;
+            text-align: right;
+          }
+          &[data-align='justify-top'] {
+            vertical-align: middle;
+            text-align: justify;
+          }
+          &[data-align='left-middle'] {
+            vertical-align: middle;
+            text-align: left;
+          }
+          &[data-align='center-middle'] {
+            vertical-align: middle;
+            text-align: center;
+          }
+          &[data-align='right-middle'] {
+            vertical-align: middle;
+            text-align: right;
+          }
+          &[data-align='justify-middle'] {
+            vertical-align: middle;
+            text-align: justify;
+          }
+          &[data-align='left-bottom'] {
+            vertical-align: bottom;
+            text-align: left;
+          }
+          &[data-align='center-bottom'] {
+            vertical-align: middle;
+            text-align: center;
+          }
+          &[data-align='right-bottom'] {
+            vertical-align: bottom;
+            text-align: right;
+          }
+          &[data-align='justify-bottom'] {
+            vertical-align: bottom;
+            text-align: justify;
+          }
+        }
+        th {
+          font-weight: bold;
+          text-align: left;
+          background-color: var(--umo-content-table-thead-background);
+        }
+        .selectedCell:after {
+          z-index: 2;
+          position: absolute;
+          content: '';
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          background: var(--umo-content-table-selected-background);
+          pointer-events: none;
+        }
+        .column-resize-handle {
+          position: absolute;
+          right: -1px;
+          top: 0;
+          bottom: -1px;
+          width: 3px;
+          background-color: var(--umo-primary-color);
+          pointer-events: none;
+        }
+        p {
+          margin: 0;
+        }
+      }
+    }
+    .resize-cursor {
+      cursor: ew-resize;
+      cursor: col-resize;
+    }
+    .task-list {
+      list-style: none;
+      padding: 0;
+      li {
+        display: flex;
+        align-items: center;
+        &[data-checked='true'] {
+          p {
+            opacity: 0.5;
+            text-decoration: line-through;
+            &:has([style]) {
+              text-decoration: inherit;
+            }
+            * {
+              text-decoration: line-through;
+            }
+          }
+        }
+        > label {
+          flex: 0 0 auto;
+          margin-right: 10px;
+          user-select: none;
+        }
+        > div {
+          flex: 1 1 auto;
+        }
+      }
+      input[type='checkbox'] {
+        cursor: pointer;
+        font-family: unset;
+        color: var(--umo-primary-color);
+        border: 1px solid var(--umo-primary-color);
+        border-radius: 0;
+        margin: 0.25em;
+        width: 16px;
+        height: 16px;
+        padding: 0.1em 0.4em;
+        background: white;
+        accent-color: var(--umo-primary-color);
+      }
+    }
+    .search-result {
+      background-color: var(--umo-content-search-result-background);
+      &-current {
+        background: var(--umo-content-search-result-current-background);
+      }
+    }
+    .page-break {
+      display: block;
+      width: 100%;
+      height: 1px;
+      background: var(--umo-content-node-border);
+      page-break-after: always;
+      margin-top: 30px;
+      margin-bottom: 30px;
+      position: relative;
+      &::after {
+        content: '分页符';
+        font-size: 10px;
+        border: solid 1px var(--umo-content-node-border);
+        padding: 1px 8px;
+        border-radius: 2px;
+        background-color: var(--umo-color-white);
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+    .page-divider {
+      .page-divider();
+    }
+    .node-view {
+      display: flex;
+      position: relative;
+      .hover-shadow:hover {
+        box-shadow: var(--umo-shadow);
+      }
+    }
+    // 节点选中样式
+    .ProseMirror-selectednode {
+      background: var(--umo-content-node-selected-background);
+      &.page-divider {
+        color: var(--umo-primary-color) !important;
+      }
+      &.page-break {
+        background-color: var(--umo-primary-color);
+        color: var(--umo-primary-color);
+        outline: none;
+        &::after {
+          border-color: var(--umo-primary-color);
+        }
+      }
+      .select-outline {
+        outline: solid 1px var(--umo-primary-color);
+      }
+    }
+    // 插件样式
+    .ProseMirror-gapcursor {
+      &:after {
+        width: 1px;
+        height: 16px;
+        background-color: var(--umo-color-black);
+      }
+    }
+    .Tiptap-invisible-character {
+      &--break::before {
+        content: '↓';
+        transform: translateY(0.1em);
+        color: var(--umo-content-invisible-break-color);
+      }
+      &--paragraph::before {
+        content: '↵';
+        transform: translateY(0.2em);
+        color: var(--umo-content-invisible-break-color);
+      }
+    }
+    .Tiptap-mathematics {
+      &-editor {
+        background: var(--umo-button-hover-background);
+        font-family: monospace;
+        padding: 0.2em 0.5em;
+        // outline: solid 1px var(--umo-primary-color);
+      }
+      &-render {
+        cursor: pointer;
+        padding: 0 0.25em;
+        transition: background 0.2s;
+
+        &:hover {
+          background: var(--umo-button-hover-background);
+        }
+      }
+      &-editor,
+      &-render {
+        border-radius: 0.2em;
+        display: inline-block;
+      }
+    }
+  }
+}

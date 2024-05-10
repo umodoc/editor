@@ -1,0 +1,121 @@
+<template>
+  <div ref="wraperRef" class="scrollable-container">
+    <div v-if="!hidePrev" class="scrollable-control left" @click="scrollLeft">
+      <icon name="arrow-down" />
+    </div>
+    <div ref="contentRef" class="scrollable-content">
+      <slot />
+    </div>
+    <div v-if="!hideNext" class="scrollable-control right" @click="scrollRight">
+      <icon name="arrow-down" />
+    </div>
+  </div>
+</template>
+
+<script setup>
+const wraperRef = ref(null)
+const contentRef = $ref(null)
+let hidePrev = $ref(true)
+let hideNext = $ref(true)
+
+const checkScrollPosition = () => {
+  const { scrollLeft, scrollWidth, clientWidth } = contentRef
+  hidePrev = scrollLeft === 0
+  hideNext = scrollLeft + clientWidth + 1 >= scrollWidth
+}
+
+const scrollLeft = () => (contentRef.scrollLeft -= 100)
+
+const scrollRight = () => (contentRef.scrollLeft += 100)
+
+// 监听父元素大小变化
+useResizeObserver(wraperRef, () => {
+  checkScrollPosition()
+})
+
+//
+onMounted(() => {
+  contentRef.addEventListener('scroll', checkScrollPosition)
+})
+
+// 更新
+const update = () => {
+  contentRef.scrollLeft = 0
+  hideNext = true
+  checkScrollPosition()
+}
+
+defineExpose({
+  update,
+})
+</script>
+
+<style lang="less" scoped>
+.scrollable-container {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  .scrollable-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: solid 1px var(--umo-border-color);
+    border-radius: var(--umo-radius);
+    cursor: pointer;
+    color: var(--umo-text-color-light);
+    position: relative;
+    overflow: visible;
+    background-color: var(--umo-button-hover-background);
+    z-index: 10;
+    font-size: 20px;
+    &:hover {
+      border-color: var(--umo-primary-color);
+      background-color: var(--umo-primary-color);
+      color: var(--umo-color-white);
+    }
+    &.left {
+      margin-right: 5px;
+      :deep(.icon) {
+        transform: rotate(90deg);
+      }
+      &::before {
+        display: block;
+        content: '';
+        background: linear-gradient(to left, transparent, #fff);
+        position: absolute;
+        left: 22px;
+        top: 0;
+        bottom: 0;
+        width: 40px;
+        pointer-events: none;
+      }
+    }
+    &.right {
+      margin-left: 5px;
+      :deep(.icon) {
+        transform: rotate(-90deg);
+      }
+      &::before {
+        display: block;
+        content: '';
+        background: linear-gradient(to right, transparent, #fff);
+        position: absolute;
+        right: 22px;
+        top: 0;
+        bottom: 0;
+        width: 40px;
+        pointer-events: none;
+      }
+    }
+  }
+  .scrollable-content {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    flex: 1;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+</style>

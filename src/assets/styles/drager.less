@@ -1,0 +1,105 @@
+.es-drager {
+  position: relative;
+  --es-drager-color: var(--umo-primary-color) !important;
+  box-sizing: border-box;
+  &:not([draggable='true']) {
+    left: 0 !important;
+    top: 0 !important;
+  }
+  &[draggable='true'] {
+    position: absolute;
+    z-index: 90 !important;
+    cursor: move;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+  &.selected {
+    transition: none;
+    user-select: none;
+    &:after {
+      display: block;
+    }
+    &.border {
+      outline: 1px solid var(--umo-primary-color);
+    }
+    .es-drager-dot {
+      display: block;
+    }
+  }
+  &-dot {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+    cursor: se-resize;
+    &[data-side*='right'] {
+      transform: translate(50%, -50%);
+    }
+    &[data-side*='bottom'] {
+      transform: translate(-50%, 50%);
+    }
+    &[data-side='bottom-right'] {
+      transform: translate(50%, 50%);
+    }
+    &-handle {
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border: solid 1px var(--umo-primary-color);
+    }
+  }
+  &-rotate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: solid 1px var(--umo-content-node-border);
+    background-color: #fff;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+    cursor: default;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -78px);
+    &::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 58px;
+      position: absolute;
+      background-color: var(--umo-primary-color);
+      left: 10px;
+      top: 21px;
+    }
+    &-handle {
+      width: 16px;
+      height: 16px;
+      font-size: 20px;
+      color: var(--umo-primary-color);
+      svg {
+        display: block;
+      }
+    }
+  }
+}
+
+[contenteditable='false'] {
+  .es-drager {
+    &.border {
+      outline: none;
+    }
+    &-dot,
+    &-rotate {
+      display: none;
+    }
+  }
+}

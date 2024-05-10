@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Umo Editor</title>
+    <script src="./dist/umd/libs/vue.min.js"></script>
+    <script src="./dist/umd/libs/mermaid.min.js"></script>
+    <script src="./dist/umd/libs/katex/katex.min.js"></script>
+    <script src="./dist/umd/libs/plyr.min.js"></script>
+    <script src="./dist/umd/libs/qrcode-svg.min.js"></script>
+    <script src="./dist/umd/libs/jsbarcode.all.min.js"></script>
+    <script src="./dist/umd/umo-editor.js"></script>
+    <link rel="stylesheet" href="./dist/umd/libs/katex/katex.min.css" />
+    <link rel="stylesheet" href="./dist/umd/style.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      #app {
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <umo-editor
+        v-bind="options"
+        share-url="https://xx.com/?id=2"
+        cdn-url="./dist/umd"
+      />
+    </div>
+    <script>
+      const app = Vue.createApp()
+
+      const onFileUpload = async (file) => {
+        if (!file) throw new Error('没有找到要上传的文件')
+        console.log('onUpload', file)
+        await new Promise((resolve) => setTimeout(resolve, 3000))
+        return {
+          id: new Date().getTime(),
+          url: file.url || URL.createObjectURL(file),
+          name: file.name,
+          type: file.type,
+          size: file.size,
+        }
+      }
+
+      const onSave = async (data) => {
+        console.log('onSave', data)
+        await new Promise((resolve) => setTimeout(resolve, 3000))
+        return {
+          id: new Date().getTime(),
+          url: data.url,
+          name: data.name,
+          type: data.type,
+          size: data.size,
+        }
+      }
+
+      const options = {
+        shareUrl: 'https://xx.com/?id=1',
+        cdnUrl: './dist/umd',
+        onSave,
+        onFileUpload,
+      }
+      app.use(UmoEditor.useUmoEditor, options)
+      app.mount('#app')
+    </script>
+  </body>
+</html>

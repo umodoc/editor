@@ -1,0 +1,8 @@
+# 忽略目录
+.DS_Store
+.vscode/
+node_modules/
+dist/
+imports.d.ts
+vite.config.js.timestamp*
+*.log
