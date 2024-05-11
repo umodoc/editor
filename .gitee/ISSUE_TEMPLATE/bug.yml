@@ -6,13 +6,12 @@ body:
   - type: markdown
     attributes:
       value: |
-        感谢对项目的支持与关注。在提出问题之前，请确保你已查看相关开发或使用文档：
-        - https://docs.umodoc.com/
+        感谢对项目的支持与关注。在提出问题之前，请确保你已查看相关开发或使用文档：https://docs.umodoc.com/
   - type: checkboxes
     attributes:
       label: 这个问题是否已经存在？
       options:
-        - label: 我已经搜索过现有的问题 (https://gitee.com/umodoc/editor/issues)
+        - label: 我已经搜索过现有的问题 (https://gitee.com/umodoc/editor/issues) 和 (https://github.com/umodoc/editor/issues)
           required: true
   - type: textarea
     attributes:
