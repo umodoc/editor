@@ -8,7 +8,7 @@
       @change="codeChange"
     >
       <template #loading>
-        <span>加载中...</span>
+        <span>正在加载编辑器，请稍后...</span>
       </template>
     </monaco-editor>
   </div>
