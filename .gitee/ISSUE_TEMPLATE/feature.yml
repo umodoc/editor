@@ -35,6 +35,10 @@ body:
       description: 在此处添加有关功能请求的任何其他上下文或截图。
     validations:
       required: false
+  - type: textarea
+    attributes:
+      label: 其他说明
+      description: 如果还有其他说明，请填写在这里。
   - type: checkboxes
     attributes:
       label: 意向参与贡献
