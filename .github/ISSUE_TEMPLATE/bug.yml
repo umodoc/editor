@@ -46,8 +46,6 @@ body:
     attributes:
       label: 其他说明
       description: 如果还有其他说明，请填写在这里。
-      value: |
-        [在这里上传图片]
   - type: dropdown
     id: version
     attributes:
