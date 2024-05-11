@@ -14,7 +14,7 @@ Umo Editor 是一个基于 [Tiptap 无头编辑器](https://tiptap.dev) 的 Vue3
 
 <img src="https://unpkg.com/@umoteam/editor@latest/static/umo-editor.png" alt="umo editor" />
 
-作为一个独立的 Vue3 插件，Umo Editor 可以轻松集成到各类 Vue3 项目中，无需复杂配置。
+作为一个独立的 Vue3 插件，Umo Editor 可以零配置轻松集成到各类 Vue3 项目中。
 
 [开发文档](https://editor.umodoc.com/docs) | [在线演示](https://demo.umodoc.com/editor) | [GitHub](https://github.com/umodoc/editor) | [码云(国内镜像)](https://gitee.com/umodoc/editor) | [NPM](https://www.npmjs.com/package/@umoteam/editor)
 
