@@ -98,5 +98,3 @@ Umo Editor 的诞生，旨在解决 Web 应用中文档编辑的复杂性，为 
 ## 开源协议
 
 Umo Editor 采用 [MIT 许可证](./LICENSE)，您可以免费使用、修改和使用本软件。
-
-本文档采用 [CC BY-NC-SA 4.0 DEED 许可证](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans) 发布。
