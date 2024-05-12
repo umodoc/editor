@@ -1,6 +1,6 @@
 {
   "name": "@umoteam/editor",
-  "version": "1.0.0-beta.6",
+  "version": "1.0.0-beta.7",
   "description": "Umo Editor 是一个基于 Vue3 适合于国人使用的本土化开源文档编辑器。Umo Editor 提供完善的文档编辑能力，支持 Markdown 语法，支持基础的富文本编辑功能，支持多种插入多种格式的节点类型、提供了多种类型的实用工具，并支持设置页面的样式，支持导出多种类型的格式。",
   "keywords": [
     "umo editor",
