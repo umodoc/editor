@@ -42,7 +42,8 @@
     "format": "prettier --write src/",
     "build": "vite build",
     "build:all": "vite build && vite build --config vite.config.umd.js",
-    "libs:copy": "cp -r node_modules/@imgly/background-removal-data/dist/* libs/imgly/ && cp -r node_modules/monaco-editor/* libs/monaco-editor/ && cp -r node_modules/katex/dist/* libs/katex/"
+    "libs:copy": "cp -r node_modules/@imgly/background-removal-data/dist/* libs/imgly/ && cp -r node_modules/monaco-editor/* libs/monaco-editor/ && cp -r node_modules/katex/dist/* libs/katex/",
+    "publish": "npm run build:all && npm publish"
   },
   "dependencies": {
     "@humanwhocodes/object-schema": "^2.0.3",
