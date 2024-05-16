@@ -89,7 +89,7 @@ const headingClick = (heading) => {
       color: var(--umo-text-color-light);
     }
     .toc-item {
-      line-height: 1;
+      min-height: 32px;
       text-overflow: ellipsis;
       overflow: hidden;
       word-break: break-all;
