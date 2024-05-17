@@ -63,6 +63,7 @@ export default defineConfig({
       name: pkg.name,
       fileName: 'umo-editor',
     },
+    outDir: 'dist/es',
     minify: 'esbuild',
     cssMinify: true,
     rollupOptions: {

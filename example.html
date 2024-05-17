@@ -10,9 +10,9 @@
     <script src="./libs/plyr.min.js"></script>
     <script src="./libs/qrcode-svg.min.js"></script>
     <script src="./libs/jsbarcode.all.min.js"></script>
-    <script src="./dist/umo-editor.js"></script>
+    <script src="./dist/umd/umo-editor.js"></script>
     <link rel="stylesheet" href="./libs/katex/katex.min.css" />
-    <link rel="stylesheet" href="./dist/style.css" />
+    <link rel="stylesheet" href="./dist/umd/style.css" />
     <style>
       * {
         margin: 0;
@@ -29,7 +29,7 @@
       <umo-editor
         v-bind="options"
         share-url="https://xx.com/?id=2"
-        cdn-url="./libs"
+        cdn-url="./dist/umd"
       />
     </div>
     <script>
@@ -62,7 +62,7 @@
 
       const options = {
         shareUrl: 'https://xx.com/?id=1',
-        cdnUrl: './libs',
+        cdnUrl: './dist/umd',
         onSave,
         onFileUpload,
       }
