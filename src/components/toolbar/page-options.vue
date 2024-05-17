@@ -2,7 +2,8 @@
   <modal
     :visible="visible"
     :footer="false"
-    header="页面设置"
+    icon="page-margin"
+    title="页面设置"
     width="460px"
     @close="emits('close')"
   >
