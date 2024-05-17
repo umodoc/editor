@@ -4,15 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Umo Editor</title>
-    <script src="./dist/umd/libs/vue.min.js"></script>
-    <script src="./dist/umd/libs/mermaid.min.js"></script>
-    <script src="./dist/umd/libs/katex/katex.min.js"></script>
-    <script src="./dist/umd/libs/plyr.min.js"></script>
-    <script src="./dist/umd/libs/qrcode-svg.min.js"></script>
-    <script src="./dist/umd/libs/jsbarcode.all.min.js"></script>
-    <script src="./dist/umd/umo-editor.js"></script>
-    <link rel="stylesheet" href="./dist/umd/libs/katex/katex.min.css" />
-    <link rel="stylesheet" href="./dist/umd/style.css" />
+    <script src="./libs/vue.min.js"></script>
+    <script src="./libs/mermaid.min.js"></script>
+    <script src="./libs/katex/katex.min.js"></script>
+    <script src="./libs/plyr.min.js"></script>
+    <script src="./libs/qrcode-svg.min.js"></script>
+    <script src="./libs/jsbarcode.all.min.js"></script>
+    <script src="./dist/umo-editor.js"></script>
+    <link rel="stylesheet" href="./libs/katex/katex.min.css" />
+    <link rel="stylesheet" href="./dist/style.css" />
     <style>
       * {
         margin: 0;
@@ -29,7 +29,7 @@
       <umo-editor
         v-bind="options"
         share-url="https://xx.com/?id=2"
-        cdn-url="./dist/umd"
+        cdn-url="./libs"
       />
     </div>
     <script>
@@ -62,7 +62,7 @@
 
       const options = {
         shareUrl: 'https://xx.com/?id=1',
-        cdnUrl: './dist/umd',
+        cdnUrl: './libs',
         onSave,
         onFileUpload,
       }

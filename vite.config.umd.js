@@ -67,9 +67,8 @@ export default defineConfig({
     lib: {
       entry: process.cwd() + '/src/components/index.js',
       name: pkg.name,
-      fileName: 'umo-editor',
+      fileName: 'umo-editor.umd',
     },
-    outDir: 'dist/umd',
     minify: 'terser',
     cssMinify: true,
     rollupOptions: {

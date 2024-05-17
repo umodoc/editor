@@ -33,7 +33,7 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/es/umo-editor.mjs"
+      "import": "./dist/umo-editor.mjs"
     }
   },
   "scripts": {
