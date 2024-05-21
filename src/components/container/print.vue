@@ -115,8 +115,6 @@ const getIframeCode = () => {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <script src="/libs/paged.polyfill.min.js"><\/script>
-      <script src="/libs/katex/katex.min.js"><\/script>
-      <link rel="stylesheet" href="/libs/katex/katex.min.css" />
       <link href="/dist/umd/style.css?v=${new Date().getTime()}" rel="stylesheet" />
       <link href="/print.css" rel="stylesheet" />
       <style>
