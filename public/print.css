@@ -31,7 +31,7 @@ body.printing {
 }
 
 /* 文档节点 */
-.ProseMirror {
+.umo-editor {
   position: relative;
   word-wrap: break-word;
   white-space: pre-wrap;
@@ -40,12 +40,19 @@ body.printing {
   font-variant-ligatures: none;
   font-feature-settings: 'liga' 0;
 }
-.Tiptap-invisible-character {
+.umo-editor > .is-empty,
+.ProseMirror-selectednode,
+.Tiptap-invisible-character,
+.node-view .uploading,
+.select-outline.file .file-action,
+.node-view .code-block .show-toolbar,
+.node-view .uploading,
+.selectedCell::after,
+.prism-code-editor .guide-indents,
+.prism-code-editor .active-line::after {
   display: none !important;
 }
-.ProseMirror-selectednode {
-  background: none !important;
-}
+
 .hover-shadow {
   box-shadow: none !important;
 }
@@ -59,28 +66,11 @@ body.printing {
 .select-outline.audio {
   outline: solid 1px var(--umo-content-node-border) !important;
 }
-.select-outline.file .file-action {
-  display: none;
-}
-.node-view .code-block .show-toolbar {
-  display: none !important;
-}
-.node-view .uploading {
-  display: none !important;
-}
-.selectedCell::after {
-  display: none !important;
-}
+
 .page-break {
   margin: 0 !important;
   height: 0 !important;
   overflow: hidden;
-}
-.prism-code-editor .guide-indents {
-  display: none !important;
-}
-.prism-code-editor .active-line::after {
-  display: none !important;
 }
 
 /* 打印样式 */
