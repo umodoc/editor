@@ -19,6 +19,9 @@ const mimeTypes = {
 
 const getAccept = (type) => {
   const accept = options.value.file.allowedMimeTypes
+  if (accept.length === 0) {
+    return ''
+  }
   if (!type || !['image', 'video', 'audio'].includes(type)) {
     return accept.toString()
   }
@@ -124,7 +127,7 @@ export default Node.create({
         (type) =>
         ({ editor }) => {
           const accept = getAccept(type)
-          if (!accept) {
+          if (!accept && accept !== '') {
             const dialog = useAlert({
               theme: 'danger',
               header: '错误提示',
