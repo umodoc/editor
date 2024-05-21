@@ -1,7 +1,7 @@
 <template>
   <editor-menus-button
     huge-button
-    @button-click="editor.chain().focus().selectFiles().run()"
+    @button-click="editor.chain().focus().selectFiles('file').run()"
   >
     <icon name="file" />
     <template #text>

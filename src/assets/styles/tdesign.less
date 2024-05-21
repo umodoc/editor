@@ -106,14 +106,17 @@
       }
     }
   }
-  &:not(.umo-dialog__fullscreen),
-  &:not(.t-dialog__fullscreen) {
+  &:not(.umo-dialog__fullscreen):not(.t-dialog__fullscreen) {
     padding: 22px 25px 25px;
   }
   &__fullscreen {
     border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: none;
   }
   &__header {
+    background: none;
     &-content {
       display: flex;
       font-size: 18px;
@@ -125,23 +128,33 @@
       }
     }
     &--fullscreen {
-      min-height: 48px;
+      min-height: 58px;
       padding: 0 15px;
+      border-bottom: solid 1px var(--umo-border-color);
       .umo-dialog__header-content,
       .t-dialog__header-content {
         justify-content: flex-start;
       }
     }
   }
-
   &__close {
     color: rgba(0, 0, 0, 0.3);
     &:hover {
       color: rgba(0, 0, 0, 0.6);
     }
   }
+  &__body {
+    &--fullscreen {
+      flex: 1;
+      padding: 0;
+    }
+  }
   &__footer {
     padding-top: 5px;
+    &--fullscreen {
+      padding: 15px;
+      border-top: solid 1px var(--umo-border-color);
+    }
   }
 
   .umo-dialog__body__icon,

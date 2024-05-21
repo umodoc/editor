@@ -1,7 +1,7 @@
 <template>
   <node-view-wrapper
     ref="containerRef"
-    class="node-view"
+    class="node-view video-node-view"
     :style="{ 'justify-content': node.attrs.nodeAlign }"
   >
     <div class="node-container hover-shadow video">
@@ -82,48 +82,50 @@ onBeforeUnmount(() => {
 onClickOutside(containerRef, () => (selected = false))
 </script>
 
-<style lang="less" scoped>
-.video {
-  max-width: 100%;
-  pointer-events: none;
-  border-radius: var(--umo-radius);
-  :deep(.es-drager) {
-    .es-drager-dot {
-      pointer-events: auto;
+<style lang="less">
+.node-view {
+  .video {
+    max-width: 100%;
+    pointer-events: none;
+    border-radius: var(--umo-radius);
+    .es-drager {
+      .es-drager-dot {
+        pointer-events: auto;
+      }
+      .plyr {
+        height: 100%;
+      }
+      video {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: var(--umo-radius);
+        overflow: hidden;
+        pointer-events: auto;
+        outline: none;
+      }
     }
     .plyr {
-      height: 100%;
-    }
-    video {
-      display: block;
-      width: 100%;
-      height: auto;
-      border-radius: var(--umo-radius);
-      overflow: hidden;
       pointer-events: auto;
-      outline: none;
     }
-  }
-  :deep(.plyr) {
-    pointer-events: auto;
-  }
-  .uploading {
-    position: absolute;
-    right: 0;
-    top: 0;
-    background: rgba(255, 255, 255, 0.7);
-    height: 2px;
-    top: 0;
-    left: 0;
-    right: 0;
-    border-top-left-radius: var(--umo-radius);
-    border-top-right-radius: var(--umo-radius);
-    &:after {
-      content: '';
-      display: block;
-      height: 100%;
-      background-color: var(--umo-primary-color);
-      animation: progress 1s linear infinite;
+    .uploading {
+      position: absolute;
+      right: 0;
+      top: 0;
+      background: rgba(255, 255, 255, 0.7);
+      height: 2px;
+      top: 0;
+      left: 0;
+      right: 0;
+      border-top-left-radius: var(--umo-radius);
+      border-top-right-radius: var(--umo-radius);
+      &:after {
+        content: '';
+        display: block;
+        height: 100%;
+        background-color: var(--umo-primary-color);
+        animation: progress 1s linear infinite;
+      }
     }
   }
 }

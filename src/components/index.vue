@@ -50,6 +50,7 @@ const emits = defineEmits([
   'changed:pagePreview',
   'changed:pageZoom',
   'changed:pageWatermark',
+  'print',
   'focus',
   'blur',
   'saved',
@@ -67,6 +68,7 @@ const {
   editorDestroyed,
   editor,
   setOptions,
+  printing,
   resetStore,
 } = useStore()
 const $toolbar = useState('toolbar', props.editorKey)
@@ -323,6 +325,13 @@ const getContentExcerpt = (charLimit = 100, more = ' ...') => {
   if (text.length === 0) return ''
   return text.substring(0, charLimit) + more
 }
+const print = () => {
+  const { toolbar, document } = options.value
+  if (toolbar.disableMenuItems.includes('print')) return
+  if ($toolbar.value.mode !== 'source' && !document.readOnly) {
+    printing.value = true
+  }
+}
 const focus = (position = 'start') => editor.value.commands.focus(position)
 const blur = () => editor.value.chain().blur().run()
 const reset = (silent) => {
@@ -368,6 +377,7 @@ defineExpose({
   setReadOnly(readOnly = true) {
     options.value.document.readOnly = readOnly
   },
+  print,
   focus,
   blur,
   reset,
@@ -455,6 +465,11 @@ watch(
     emits('changed:pageWatermark', { pageWatermark, oldPageWatermark }),
   { deep: true },
 )
+watch(
+  () => printing.value,
+  () => emits('print'),
+  { deep: true },
+)
 
 // 将方法传递给子孙组件使用
 provide('saveContent', saveContent)
@@ -462,6 +477,7 @@ provide('reset', reset)
 
 // 快捷键
 useHotkeys('ctrl+s,command+s', saveContent)
+useHotkeys('ctrl+p,command+p', print)
 
 // 工具栏切换时重置编辑器
 watch(

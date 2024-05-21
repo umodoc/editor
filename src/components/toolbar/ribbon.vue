@@ -67,9 +67,9 @@
             <editor-menus-base-markdown />
             <editor-menus-base-search-replace />
           </div>
-          <!-- <div class="virtual-group">
-            <editor-menus-base-print />
-          </div> -->
+          <div class="virtual-group">
+            <editor-menus-base-print v-if="!disableItem('print')" />
+          </div>
         </template>
         <template v-if="currentMenu === 'insert'">
           <div class="virtual-group">

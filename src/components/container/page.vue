@@ -40,6 +40,7 @@
       :offset="['25px', '30px']"
     />
     <container-search-replace />
+    <container-print />
   </div>
 </template>
 

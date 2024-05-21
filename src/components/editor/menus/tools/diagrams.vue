@@ -1,5 +1,8 @@
 <template>
-  <editor-menus-button huge-button @button-click="dialogVisible = true">
+  <editor-menus-button
+    :huge-button="hugeButton"
+    @button-click="dialogVisible = true"
+  >
     <icon :name="content ? 'edit' : 'diagrams'" />
     <template #text>
       <p class="button-text">流程图</p>
@@ -26,6 +29,10 @@
 import DiagramEditor from '@/utils/diagram-editor'
 
 const props = defineProps({
+  hugeButton: {
+    type: Boolean,
+    default: true,
+  },
   content: {
     type: String,
   },
@@ -111,7 +118,6 @@ onBeforeMount(() => {
   width: 100%;
   height: calc(100% - var(--td-comp-size-xxxl));
   box-sizing: border-box;
-  border-top: solid 1px var(--umo-border-color);
   display: flex;
   align-items: center;
   justify-content: center;

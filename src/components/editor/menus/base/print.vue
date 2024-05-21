@@ -1,5 +1,5 @@
 <template>
-  <editor-menus-button huge-button>
+  <editor-menus-button huge-button @button-click="printing = true">
     <icon name="print" />
     <template #text>
       <p class="button-text">打印</p>
@@ -7,4 +7,8 @@
   </editor-menus-button>
 </template>
 
-<script setup></script>
+<script setup>
+const { printing } = useStore()
+</script>
+
+<style lang="less" scoped></style>

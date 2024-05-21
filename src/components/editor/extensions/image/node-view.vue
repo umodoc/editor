@@ -1,7 +1,7 @@
 <template>
   <node-view-wrapper
     ref="containerRef"
-    class="node-view"
+    class="node-view image-node-view"
     :style="{ 'justify-content': node.attrs.nodeAlign }"
     @dblclick="imagePreview = node.attrs.src"
   >
@@ -151,73 +151,76 @@ watch(
 )
 </script>
 
-<style lang="less" scoped>
-.image {
-  max-width: 100%;
-  width: auto;
-  display: inline-flex;
-  img {
-    display: block;
-    width: 100%;
-  }
-  .loading {
-    width: 160px;
-    height: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--umo-text-color-light);
-    background: rgba(0, 0, 0, 0.02);
-    font-size: 12px;
-    gap: 10px;
-    .loading-icon {
-      color: var(--umo-primary-color);
-      font-size: 22px;
-      animation: turn 1s linear infinite;
-    }
-  }
-  .error {
-    width: 160px;
-    height: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    color: var(--umo-text-color-light);
-    background: rgba(0, 0, 0, 0.02);
-    font-size: 12px;
-    .error-icon {
-      font-size: 72px;
-      margin: -8px 0 2px;
-    }
-  }
-  .uploading {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.1);
-    span {
+<style lang="less">
+.node-view {
+  .image {
+    max-width: 100%;
+    width: auto;
+    display: inline-flex;
+    img {
       display: block;
+      width: 100%;
+    }
+    .loading {
+      width: 160px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--umo-text-color-light);
+      background: rgba(0, 0, 0, 0.02);
+      font-size: 12px;
+      gap: 10px;
+      .loading-icon {
+        color: var(--umo-primary-color);
+        font-size: 22px;
+        animation: turn 1s linear infinite;
+      }
+    }
+    .error {
+      width: 160px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      color: var(--umo-text-color-light);
+      background: rgba(0, 0, 0, 0.02);
+      font-size: 12px;
+      .error-icon {
+        font-size: 72px;
+        margin: -8px 0 2px;
+      }
+    }
+    .uploading {
       position: absolute;
-      background: rgba(0, 0, 0, 0.2);
-      height: 4px;
-      border-radius: 2px;
-      top: 50%;
-      left: 20%;
-      right: 20%;
-      transform: translateY(-50%);
-      &:after {
-        content: '';
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.1);
+      span {
         display: block;
-        height: 100%;
-        background-color: var(--umo-primary-color);
-        animation: progress 1s linear infinite;
+        position: absolute;
+        background: rgba(0, 0, 0, 0.2);
+        height: 4px;
+        border-radius: 2px;
+        top: 50%;
+        left: 20%;
+        right: 20%;
+        transform: translateY(-50%);
+        &:after {
+          content: '';
+          display: block;
+          height: 100%;
+          background-color: var(--umo-primary-color);
+          animation: progress 1s linear infinite;
+        }
       }
     }
   }
 }
+
 @keyframes turn {
   0% {
     transform: rotate(0deg);

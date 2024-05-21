@@ -42,10 +42,11 @@ const shortcuts = $ref([
       { label: '撤销', keys: ['Ctrl', 'Z'] },
       { label: '重做', keys: ['Ctrl', 'Y'] },
       { label: '全选', keys: ['Ctrl', 'A'] },
-      { label: '查找/替换', keys: ['Ctrl', 'F'] },
+      { label: '查找 / 替换', keys: ['Ctrl', 'F'] },
       { label: '插入新段落', keys: ['Enter'] },
       { label: '换行', keys: ['Shift', 'Enter'] },
       { label: '保存', keys: ['Ctrl', 'S'] },
+      { label: '打印', keys: ['Ctrl', 'P'] },
     ],
   },
   {

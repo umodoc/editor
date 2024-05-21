@@ -1,7 +1,6 @@
 <template>
   <div class="box">
     <umo-editor ref="editorRef" v-bind="options" @save="onSave" />
-    <button @click="setPage">设置页面信息</button>
   </div>
 </template>
 
@@ -26,6 +25,7 @@ const options = $ref({
   toolbar: {
     // defaultMode: 'classic',
     // menus: ['base'],
+    enableSourceEditor: true,
   },
   document: {
     // title: '测试文档',
@@ -46,7 +46,8 @@ const options = $ref({
   // shareUrl: 'https://xx.com/?id=1',
   cdnUrl: location.origin,
   file: {
-    allowedMimeTypes: ['image/svg+xml', 'video/mp4', 'audio/*'],
+    // allowedMimeTypes: ['image/svg+xml', 'video/mp4', 'audio/*'],
+    allowedMimeTypes: ['application/pdf'],
   },
   async onFileUpload(file) {
     if (!file) throw new Error('没有找到要上传的文件')
@@ -61,13 +62,6 @@ const options = $ref({
     }
   },
 })
-
-const setPage = () => {
-  editorRef.setPage({
-    size: 'A5',
-    background: 'rgb(233, 246, 227)',
-  })
-}
 </script>
 
 <style>

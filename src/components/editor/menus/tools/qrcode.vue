@@ -1,5 +1,5 @@
 <template>
-  <editor-menus-button huge-button @button-click="buttonClick">
+  <editor-menus-button :huge-button="hugeButton" @button-click="buttonClick">
     <icon :name="content ? 'edit' : 'qrcode'" />
     <template #text>
       <p class="button-text">二维码</p>
@@ -96,6 +96,10 @@ import QRCode from 'qrcode-svg'
 import svg64 from 'svg64'
 
 const { content } = defineProps({
+  hugeButton: {
+    type: Boolean,
+    default: true,
+  },
   content: {
     type: String,
   },

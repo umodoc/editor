@@ -1,5 +1,8 @@
 <template>
-  <editor-menus-button huge-button @button-click="dialogVisible = true">
+  <editor-menus-button
+    :huge-button="hugeButton"
+    @button-click="dialogVisible = true"
+  >
     <icon :name="content ? 'edit' : 'barcode'" />
     <template #text>
       <p class="button-text">条形码</p>
@@ -204,6 +207,10 @@ import JsBarcode from 'jsbarcode'
 import svg64 from 'svg64'
 
 const { content } = defineProps({
+  hugeButton: {
+    type: Boolean,
+    default: true,
+  },
   content: {
     type: String,
   },

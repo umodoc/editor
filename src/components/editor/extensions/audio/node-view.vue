@@ -1,7 +1,7 @@
 <template>
   <node-view-wrapper
     ref="containerRef"
-    class="node-view"
+    class="node-view audio-node-view"
     :style="{ 'justify-content': node.attrs.nodeAlign }"
   >
     <div class="node-container hover-shadow select-outline audio">
@@ -46,36 +46,38 @@ onBeforeUnmount(() => {
 onClickOutside(containerRef, () => (selected = false))
 </script>
 
-<style lang="less" scoped>
-.audio {
-  max-width: 100%;
-  width: 360px;
-  position: relative;
-  display: flex;
-  border-radius: var(--umo-radius);
-  outline: solid 1px var(--umo-border-color);
-  audio {
-    width: 100%;
-    outline: none;
-  }
-  .uploading {
-    position: absolute;
-    z-index: 10;
-    right: 0;
-    top: 0;
-    background: rgba(0, 0, 0, 0.2);
-    height: 2px;
-    top: 0;
-    left: 0;
-    right: 0;
-    border-top-left-radius: var(--umo-radius);
-    border-top-right-radius: var(--umo-radius);
-    &:after {
-      content: '';
-      display: block;
-      height: 100%;
-      background-color: var(--umo-primary-color);
-      animation: progress 1s linear infinite;
+<style lang="less">
+.node-view {
+  .audio {
+    max-width: 100%;
+    width: 360px;
+    position: relative;
+    display: flex;
+    border-radius: var(--umo-radius);
+    outline: solid 1px var(--umo-border-color);
+    audio {
+      width: 100%;
+      outline: none;
+    }
+    .uploading {
+      position: absolute;
+      z-index: 10;
+      right: 0;
+      top: 0;
+      background: rgba(0, 0, 0, 0.2);
+      height: 2px;
+      top: 0;
+      left: 0;
+      right: 0;
+      border-top-left-radius: var(--umo-radius);
+      border-top-right-radius: var(--umo-radius);
+      &:after {
+        content: '';
+        display: block;
+        height: 100%;
+        background-color: var(--umo-primary-color);
+        animation: progress 1s linear infinite;
+      }
     }
   }
 }

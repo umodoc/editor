@@ -1,7 +1,7 @@
 <template>
   <node-view-wrapper
     ref="containerRef"
-    class="node-view"
+    class="node-view text-box-node-view"
     @dblclick.capture="disabled = true"
   >
     <div class="node-container text-box">
@@ -56,36 +56,38 @@ const onDrag = ({ left, top }) => {
 onClickOutside(containerRef, () => (selected = false))
 </script>
 
-<style lang="less" scoped>
-.text-box {
-  position: relative;
-  z-index: 90;
-  :deep(.es-drager) {
-    user-select: text !important;
-    cursor: default !important;
-    &.disabled {
-      outline: none;
-      &:after {
-        display: none !important;
+<style lang="less">
+.node-view {
+  .text-box {
+    position: relative;
+    z-index: 90;
+    .es-drager {
+      user-select: text !important;
+      cursor: default !important;
+      &.disabled {
+        outline: none;
+        &:after {
+          display: none !important;
+        }
+      }
+      &.selected {
+        .content {
+          border: none;
+        }
+      }
+      &.disabled.selected {
+        .content {
+          outline: solid 1px var(--umo-text-color);
+        }
       }
     }
-    &.selected {
-      .content {
-        border: none;
-      }
+    .content {
+      outline: solid 1px var(--umo-text-color);
+      height: 100%;
+      padding: 5px;
+      box-sizing: border-box;
+      overflow: hidden;
     }
-    &.disabled.selected {
-      .content {
-        outline: solid 1px var(--umo-text-color);
-      }
-    }
-  }
-  .content {
-    outline: solid 1px var(--umo-text-color);
-    height: 100%;
-    padding: 5px;
-    box-sizing: border-box;
-    overflow: hidden;
   }
 }
 </style>

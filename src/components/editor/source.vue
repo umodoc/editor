@@ -8,7 +8,7 @@
       @change="codeChange"
     >
       <template #loading>
-        <span>正在加载编辑器，请稍后...</span>
+        <span class="loading">正在加载编辑器，请稍后...</span>
       </template>
     </monaco-editor>
   </div>
@@ -66,5 +66,9 @@ const codeChange = () => {
       border-radius: 3px;
     }
   }
+}
+.loading {
+  font-size: 12px;
+  color: var(--umo-text-color-light);
 }
 </style>

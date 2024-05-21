@@ -1,5 +1,5 @@
 <template>
-  <node-view-wrapper class="node-view">
+  <node-view-wrapper class="node-view code-block-node-view">
     <div
       class="node-container hover-shadow select-outline code-block"
       :class="node.attrs.theme"
@@ -112,47 +112,47 @@ watch(
 )
 </script>
 
-<style lang="less" scoped>
-.code-block {
-  width: 100%;
-  outline: solid 1px var(--umo-content-node-border);
-  overflow: hidden;
-  border-radius: var(--umo-content-node-radius);
-  position: relative;
-  .show-toolbar {
-    position: absolute;
-    right: 10px;
-    top: 7px;
-    font-size: 12px;
-    padding: 3px 6px;
-    cursor: pointer;
-    background-color: #fff;
-    border: solid 1px var(--umo-border-color);
-    z-index: 10;
-    border-radius: var(--umo-radius);
-    display: none;
-  }
-  &.dark {
+<style lang="less">
+@import '@/assets/styles/_mixins.less';
+
+.node-view {
+  .code-block {
+    width: 100%;
+    outline: solid 1px var(--umo-content-node-border);
+    overflow: hidden;
+    border-radius: var(--umo-content-node-radius);
+    position: relative;
     .show-toolbar {
-      color: #999;
-      background-color: var(--umo-color-black);
+      position: absolute;
+      right: 10px;
+      top: 7px;
+      font-size: 12px;
+      padding: 3px 6px;
+      cursor: pointer;
+      background-color: #fff;
+      border: solid 1px var(--umo-border-color);
+      z-index: 10;
+      border-radius: var(--umo-radius);
+      display: none;
     }
-  }
-  &:hover {
-    .show-toolbar {
-      display: block;
-      &:hover {
-        opacity: 1;
+    &.dark {
+      .show-toolbar {
+        color: #999;
+        background-color: var(--umo-color-black);
+      }
+    }
+    &:hover {
+      .show-toolbar {
+        display: block;
+        &:hover {
+          opacity: 1;
+        }
       }
     }
   }
 }
-</style>
 
-<style lang="less">
-@import '@/assets/styles/_mixins.less';
-
-.code-block .prism-code-editor {
+.prism-code-editor {
   max-height: 560px;
   font-size: 14px;
   .scrollbar();

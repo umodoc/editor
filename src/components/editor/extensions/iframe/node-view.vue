@@ -1,7 +1,7 @@
 <template>
   <node-view-wrapper
     ref="containerRef"
-    class="node-view"
+    class="node-view iframe-node-view"
     :style="{ 'justify-content': node.attrs.nodeAlign }"
   >
     <div class="node-container hover-shadow select-outline iframe">
@@ -43,21 +43,23 @@ const onResize = ({ width, height }) => {
 onClickOutside(containerRef, () => (selected = false))
 </script>
 
-<style lang="less" scoped>
-.iframe {
-  max-width: 100%;
-  :deep(.es-drager) {
-    &:not(.selected) {
-      outline: solid 1px var(--umo-content-node-border);
+<style lang="less">
+.node-view {
+  .iframe {
+    max-width: 100%;
+    .es-drager {
+      &:not(.selected) {
+        outline: solid 1px var(--umo-content-node-border);
+      }
     }
-  }
-  iframe {
-    display: block;
-    width: 100%;
-    height: 100%;
-    border: none;
-    pointer-events: none;
-    background-color: var(--umo-color-white);
+    iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: none;
+      pointer-events: none;
+      background-color: var(--umo-color-white);
+    }
   }
 }
 </style>
