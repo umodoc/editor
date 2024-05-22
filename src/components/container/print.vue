@@ -9,6 +9,7 @@
     mode="full-screen"
     @confirm="printPage"
     @close="printing = false"
+    @closed="iframeLoading = true"
   >
     <template #header>
       <div class="preview-header">
@@ -27,7 +28,13 @@
       </div>
     </template>
     <div class="preview-container">
-      <iframe ref="iframeRef" :srcdoc="iframeCode" />
+      <t-loading :loading="iframeLoading" text="加载中..." size="small">
+        <iframe
+          ref="iframeRef"
+          :srcdoc="iframeCode"
+          @load="iframeLoading = false"
+        />
+      </t-loading>
     </div>
   </t-dialog>
   <toolbar-page-options
@@ -37,7 +44,46 @@
 </template>
 
 <script setup>
-import katex from 'katex'
+import Katex from 'katex'
+import Prism from 'prismjs'
+import 'prismjs/components/prism-bash'
+import 'prismjs/components/prism-css'
+import 'prismjs/components/prism-css-extras'
+import 'prismjs/components/prism-ini'
+import 'prismjs/components/prism-kotlin'
+import 'prismjs/components/prism-markup'
+import 'prismjs/components/prism-r'
+import 'prismjs/components/prism-basic'
+import 'prismjs/components/prism-vbnet'
+import 'prismjs/components/prism-c'
+import 'prismjs/components/prism-opencl'
+import 'prismjs/components/prism-diff'
+import 'prismjs/components/prism-java'
+import 'prismjs/components/prism-less'
+import 'prismjs/components/prism-objectivec'
+import 'prismjs/components/prism-ruby'
+import 'prismjs/components/prism-sql'
+import 'prismjs/components/prism-wasm'
+import 'prismjs/components/prism-cpp'
+import 'prismjs/components/prism-go'
+import 'prismjs/components/prism-javascript'
+import 'prismjs/components/prism-js-templates'
+import 'prismjs/components/prism-jsx'
+import 'prismjs/components/prism-lua'
+import 'prismjs/components/prism-perl'
+import 'prismjs/components/prism-python'
+import 'prismjs/components/prism-rust'
+import 'prismjs/components/prism-swift'
+import 'prismjs/components/prism-clike'
+import 'prismjs/components/prism-csharp'
+import 'prismjs/components/prism-graphql'
+import 'prismjs/components/prism-json'
+import 'prismjs/components/prism-makefile'
+import 'prismjs/components/prism-scss'
+import 'prismjs/components/prism-typescript'
+import 'prismjs/components/prism-tsx'
+import 'prismjs/components/prism-yaml'
+import 'prismjs/components/prism-regex'
 
 const { container, options, page, printing } = useStore()
 const $document = useState('document')
@@ -62,25 +108,29 @@ watch(
 
 let iframeRef = $ref(null)
 let iframeCode = $ref('')
+let iframeLoading = $ref(true)
 
 const getIframeCode = () => {
   if (!dialogVisible) return ''
 
-  // 获取页面内容并进行整理和清洗
+  // 获取页面内容并进行清洗和加工
   let pageContent = document
     .querySelector(`${container} .umo-editor`)
     .cloneNode(true)
   pageContent.childNodes.forEach((item) => {
     const classes = item.classList
+    // 移除选中样式
     if (classes.contains('ProseMirror-selectednode')) {
       classes.remove('ProseMirror-selectednode')
     }
+    // 图片
     if (classes.contains('image-node-view')) {
       if (item.querySelector('.es-drager img')) {
         item.querySelector('.es-drager').innerHTML =
           item.querySelector('.es-drager img').outerHTML
       }
     }
+    // 文本框
     if (classes.contains('text-box-node-view')) {
       if (item.querySelector('.es-drager .content')) {
         console.log(item.querySelector('.es-drager .content').outerHTML)
@@ -89,17 +139,20 @@ const getIframeCode = () => {
         ).outerHTML
       }
     }
+    // Iframe
     if (classes.contains('iframe-node-view')) {
       if (item.querySelector('.es-drager iframe')) {
-        console.log(item.querySelector('.es-drager iframe').outerHTML)
         item.querySelector('.es-drager').innerHTML =
           item.querySelector('.es-drager iframe').outerHTML
       }
     }
-    // if (classes.contains('code-block-node-view')) {
-    //   // 在 item 中查找 textarea
-    //    item.innerHTML = item.querySelector('textarea').value
-    // }
+    // 代码块
+    if (classes.contains('code-block-node-view')) {
+      item.querySelector('.prism-code-editor').innerHTML =
+        `<pre>${item.querySelector('textarea').value}</pre>`
+      Prism.highlightElement(item.querySelector('pre'))
+    }
+    // 分页符
     if (classes.contains('page-break')) {
       item.innerHTML =
         '<div class="page-break"></div><div class="page-break"></div>'
@@ -114,7 +167,7 @@ const getIframeCode = () => {
       if (text.length > 2) {
         item.classList.remove('Tiptap-mathematics-editor--hidden')
         item.setAttribute('style', '')
-        item.innerHTML = katex.renderToString(text.slice(1, -1), {
+        item.innerHTML = Katex.renderToString(text.slice(1, -1), {
           output: 'html',
         })
       }
@@ -142,7 +195,7 @@ const getIframeCode = () => {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <script src="${options.value.cdnUrl}/libs/paged.polyfill.min.js"><\/script>
-      <link href="/dist/umd/style.css" rel="stylesheet" />
+      <link href="/dist/umd/style.css?v=${new Date().getTime()}" rel="stylesheet" />
       <link href="${options.value.cdnUrl}/libs/katex/katex.min.css" rel="stylesheet" />
       <style>
       body {
@@ -150,28 +203,6 @@ const getIframeCode = () => {
         padding: 25px;
         box-sizing: border-box;
         margin: 0;
-      }
-      body.loading {
-        overflow: hidden;
-        position: relative;
-        height: 100vh;
-        padding: 0;
-      }
-      body.loading:after {
-        content: '正在加载中...';
-        display: block;
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #999;
-        font-size: 12px;
-        background-color: var(--umo-container-background);
-        z-index: 9999;
       }
       body.printing {
         padding: 0;
@@ -197,7 +228,9 @@ const getIframeCode = () => {
       .selectedCell::after,
       .prism-code-editor .guide-indents,
       .prism-code-editor .active-line::after,
-      .katex-mathml {
+      .katex-mathml,
+      .prism-code-editor.show-line-numbers:before,
+      [data-tippy-root] {
         display: none !important;
       }
 
@@ -225,6 +258,17 @@ const getIframeCode = () => {
         overflow: hidden;
       }
 
+      .prism-code-editor {
+        padding: 0.8em;
+        display: block;
+        max-height: unset!important;
+      }
+      .prism-code-editor pre{
+        white-space: pre-wrap;
+        white-space: break-spaces;
+      }
+      
+
       /* 打印样式 */
       .pagedjs_pages {
         display: flex;
@@ -241,7 +285,7 @@ const getIframeCode = () => {
         box-shadow:
           rgba(0, 0, 0, 0.06) 0px 0px 10px 0px,
           rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
-        pointer-events: none;
+        /* pointer-events: none; */
         @bottom-center {
           content: '第 ' counter(page) ' 页 / 共 ' counter(pages) ' 页';
           font-size: 12px;
@@ -252,11 +296,13 @@ const getIframeCode = () => {
       body.printing .pagedjs_page {
         box-shadow: none !important;
       }
+      body.printing .pagedjs_margin-content {
+        display: none !important;
+      }
       </style>
       <script>
       class Handler extends Paged.Handler {
         afterPreview() {
-          document.querySelector('body').classList.remove('loading');
           const pages = document.querySelectorAll('.pagedjs_pagebox');
           const observer = new MutationObserver(mutations => {
             mutations.forEach(mutation => {
@@ -286,7 +332,7 @@ const getIframeCode = () => {
       }
       <\/script>
     </head>
-    <body class="umo-editor-container umo-scrollbar loading">
+    <body class="umo-editor-container umo-scrollbar">
       <div id="sprite-plyr" style="display: none;">
         ${document.querySelector('#sprite-plyr')?.innerHTML || ''}
       </div>
@@ -327,7 +373,12 @@ const printPage = () => {
 }
 .preview-container {
   height: 100%;
-  background-color: var(--umo-container-background);
+  :deep(.umo-loading__parent) {
+    height: 100%;
+    .umo-loading {
+      background-color: var(--umo-container-background);
+    }
+  }
   iframe {
     height: 100%;
     width: 100%;

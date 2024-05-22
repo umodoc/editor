@@ -96,6 +96,7 @@
     "plyr": "^3.7.8",
     "pretty-bytes": "^6.1.1",
     "prism-code-editor": "^3.3.1",
+    "prismjs": "^1.29.0",
     "qrcode-svg": "^1.1.0",
     "svg64": "^2.0.0",
     "tdesign-vue-next": "^1.9.4",

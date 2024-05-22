@@ -44,10 +44,14 @@ const options = $ref({
     },
   ],
   // shareUrl: 'https://xx.com/?id=1',
-  cdnUrl: location.origin,
+  // cdnUrl: location.origin,
   file: {
-    // allowedMimeTypes: ['image/svg+xml', 'video/mp4', 'audio/*'],
-    allowedMimeTypes: ['application/pdf'],
+    // allowedMimeTypes: [
+    //   'application/pdf',
+    //   'image/svg+xml',
+    //   'video/mp4',
+    //   'audio/*',
+    // ],
   },
   async onFileUpload(file) {
     if (!file) throw new Error('没有找到要上传的文件')
