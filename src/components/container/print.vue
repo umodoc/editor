@@ -29,11 +29,7 @@
     </template>
     <div class="preview-container">
       <t-loading :loading="iframeLoading" text="加载中..." size="small">
-        <iframe
-          ref="iframeRef"
-          :srcdoc="iframeCode"
-          @load="iframeLoading = false"
-        />
+        <iframe ref="iframeRef" :srcdoc="iframeCode" @load="iframeLoaded" />
       </t-loading>
     </div>
   </t-dialog>
@@ -109,6 +105,11 @@ watch(
 let iframeRef = $ref(null)
 let iframeCode = $ref('')
 let iframeLoading = $ref(true)
+const iframeLoaded = () => {
+  setTimeout(() => {
+    iframeLoading = false
+  }, 1000)
+}
 
 const getIframeCode = () => {
   if (!dialogVisible) return ''
@@ -375,6 +376,7 @@ const printPage = () => {
   height: 100%;
   :deep(.umo-loading__parent) {
     height: 100%;
+    background-color: var(--umo-container-background);
     .umo-loading {
       background-color: var(--umo-container-background);
     }
