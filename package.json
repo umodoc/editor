@@ -76,6 +76,7 @@
     "@tiptap/pm": "^2.3.2",
     "@tiptap/starter-kit": "^2.3.2",
     "@tiptap/vue-3": "^2.3.2",
+    "@umoteam/editor-external": "^1.0.2",
     "@vue-monaco/editor": "^0.0.6",
     "@vueuse/core": "^10.9.0",
     "dom-to-image-more": "^3.3.0",

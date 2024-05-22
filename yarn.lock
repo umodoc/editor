@@ -840,6 +840,11 @@
   resolved "https://registry.yarnpkg.com/@types/web-bluetooth/-/web-bluetooth-0.0.20.tgz#f066abfcd1cbe66267cdbbf0de010d8a41b41597"
   integrity sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==
 
+"@umoteam/editor-external@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@umoteam/editor-external/-/editor-external-1.0.2.tgz#d51e517c3c576366e61ec05578fa414598880217"
+  integrity sha512-OugwI/bMFdjzECZWnLsuLW86Ys24VkowFTuSSwlqWZ1XA0d9t5N0hABh9IUNJhjEN57ogo8P1iGBKf+YMEH71Q==
+
 "@vitejs/plugin-vue@^5.0.4":
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-5.0.4.tgz#508d6a0f2440f86945835d903fcc0d95d1bb8a37"
