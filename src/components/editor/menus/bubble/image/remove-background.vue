@@ -19,11 +19,9 @@ let converting = $ref(false)
 const removeBackground = async () => {
   const image = editor.value.commands.getSelectionNode()
   const { src } = editor.value?.getAttributes('image')
+  converting = true
   const blob = await imglyRemoveBackground(src, {
-    publicPath: `${options.value.cdnUrl}/libs/imgly/`,
-    progress() {
-      converting = true
-    },
+    publicPath: `${options.value.cdnUrl}/libs/imgly/background-removal-data/`,
   })
   const file = new File([blob], `${generateId(10)}.png`, { type: 'image/png' })
   image.props.updateAttributes({

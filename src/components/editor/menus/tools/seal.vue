@@ -57,8 +57,9 @@ const selectImage = async () => {
     if (!file) return
     try {
       sealImg = null
+      converting = '正在加载组件...'
       const img = await imglyRemoveBackground(file, {
-        publicPath: `${options.value.cdnUrl}/libs/imgly/`,
+        publicPath: `${options.value.cdnUrl}/libs/imgly/background-removal-data/`,
         progress: (key, current, total) => {
           if (key.startsWith('fetch')) {
             converting = `正在加载组件: ${((current / total) * 100).toFixed(1)}%`

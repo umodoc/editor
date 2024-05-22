@@ -4,14 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Umo Editor</title>
-    <script src="/libs/vue.min.js"></script>
-    <script src="/libs/mermaid.min.js"></script>
-    <script src="/libs/katex/katex.min.js"></script>
-    <script src="/libs/plyr.min.js"></script>
-    <script src="/libs/qrcode-svg.min.js"></script>
-    <script src="/libs/jsbarcode.all.min.js"></script>
+    <script src="https://unpkg.com/@umoteam/editor-external@latest/libs/vue.min.js"></script>
+    <script src="https://unpkg.com/@umoteam/editor-external@latest/libs/mermaid.min.js"></script>
+    <script src="https://unpkg.com/@umoteam/editor-external@latest/libs/katex/katex.min.js"></script>
+    <script src="https://unpkg.com/@umoteam/editor-external@latest/libs/plyr.min.js"></script>
+    <script src="https://unpkg.com/@umoteam/editor-external@latest/libs/qrcode-svg.min.js"></script>
+    <script src="https://unpkg.com/@umoteam/editor-external@latest/libs/jsbarcode.all.min.js"></script>
     <script src="/dist/umd/umo-editor.js"></script>
-    <link rel="stylesheet" href="/libs/katex/katex.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@umoteam/editor-external@latest/libs/katex/katex.min.css"
+    />
     <link rel="stylesheet" href="/dist/umd/style.css" />
     <style>
       #app {
@@ -22,11 +25,7 @@
   </head>
   <body>
     <div id="app">
-      <umo-editor
-        v-bind="options"
-        share-url="https://xx.com/?id=2"
-        cdn-url=""
-      />
+      <umo-editor v-bind="options" />
     </div>
     <script>
       const app = Vue.createApp()
@@ -57,7 +56,10 @@
       }
 
       const options = {
-        shareUrl: 'https://xx.com/?id=1',
+        toolbar: {
+          enableSourceEditor: true,
+        },
+        shareUrl: 'https://umodoc.com',
         onSave,
         onFileUpload,
       }

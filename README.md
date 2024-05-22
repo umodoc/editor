@@ -1,5 +1,5 @@
 <p style="text-align: center; margin: 2rem 0">
-<a href="https://umodoc.com" target="_blank"><img src="https://unpkg.com/@umoteam/editor@latest/static/logo.svg" alt="umodoc.com" width="360" /></a>
+<a href="https://umodoc.com" target="_blank"><img src="https://unpkg.com/@umoteam/editor-external@latest/static/logo.svg" alt="umodoc.com" width="360" /></a>
 </p>
 
 <p style="text-align: center;">
@@ -12,7 +12,7 @@
 
 Umo Editor 是一个基于 Vue3 的适合于国人使用的本土化开源文档编辑器。Umo Editor 提供完善的文档编辑能力，支持 Markdown 语法，支持基础的富文本编辑功能，支持多种插入多种格式的节点类型、提供了多种类型的实用工具，并支持设置页面的样式，支持导出多种类型的格式，支持页面预览和打印。
 
-<img src="https://unpkg.com/@umoteam/editor@latest/static/umo-editor@2x.png" alt="umo editor" />
+<img src="https://unpkg.com/@umoteam/editor-external@latest/static/umo-editor@2x.png" alt="umo editor" />
 
 作为一个独立的 Vue3 插件，Umo Editor 可以零配置轻松集成到各类 Vue3 项目中，对于非 Vue3 项目，您可以通过 Iframe 将 Umo Editor 嵌入到您的项目中。
 
