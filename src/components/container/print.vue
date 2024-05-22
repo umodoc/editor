@@ -196,7 +196,7 @@ const getIframeCode = () => {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <script src="${options.value.cdnUrl}/libs/paged.polyfill.min.js"><\/script>
-      <link href="/dist/umd/style.css?v=${new Date().getTime()}" rel="stylesheet" />
+      <link href="${options.value.cdnUrl}/dist/umd/style.css" rel="stylesheet" />
       <link href="${options.value.cdnUrl}/libs/katex/katex.min.css" rel="stylesheet" />
       <style>
       body {
