@@ -209,6 +209,7 @@ watch(
         left: 20%;
         right: 20%;
         transform: translateY(-50%);
+        overflow: hidden;
         &:after {
           content: '';
           display: block;
