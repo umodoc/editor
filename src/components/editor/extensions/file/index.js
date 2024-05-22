@@ -19,7 +19,7 @@ const mimeTypes = {
 
 const getAccept = (type) => {
   const accept = options.value.file.allowedMimeTypes
-  if (accept.length === 0) {
+  if (type === 'file' && accept.length === 0) {
     return ''
   }
   if (!type || !['image', 'video', 'audio'].includes(type)) {
@@ -28,8 +28,10 @@ const getAccept = (type) => {
   let acceptArray = [...accept]
   if (acceptArray.includes(`${type}/*`) || accept.length === 0) {
     acceptArray = mimeTypes[type]
-  } else {
+  } else if (acceptArray.filter((item) => item.startsWith(type)).length > 0) {
     acceptArray = accept.filter((item) => mimeTypes[type].includes(item))
+  } else {
+    acceptArray = ['notAllow']
   }
   return acceptArray.length === 0 ? '' : acceptArray.toString()
 }
@@ -127,7 +129,7 @@ export default Node.create({
         (type) =>
         ({ editor }) => {
           const accept = getAccept(type)
-          if (!accept && accept !== '') {
+          if ((!accept && accept !== '') || accept === 'notAllow') {
             const dialog = useAlert({
               theme: 'danger',
               header: '错误提示',
