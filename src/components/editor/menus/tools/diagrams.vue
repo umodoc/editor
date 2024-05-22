@@ -19,7 +19,7 @@
     @close="dialogVisible = false"
   >
     <div v-if="loading" class="diagrams-loading">
-      <t-loading text="正在加载编辑器..." size="small" />
+      <t-loading text="加载中..." size="small" />
     </div>
     <div class="diagrams-container"></div>
   </modal>
@@ -51,6 +51,8 @@ const openDiagramEditor = () => {
   diagramEditor.edit(props.content || '')
 }
 
+let image = $ref({})
+
 const messageListener = (evt) => {
   if (evt?.type !== 'message' && evt?.origin !== options.value.diagrams.domain)
     return
@@ -60,20 +62,13 @@ const messageListener = (evt) => {
   if (event === 'export') {
     const { width, height } = bounds
     if (!props.content || (props.content && props.content !== data)) {
-      editor.value
-        ?.chain()
-        .focus()
-        .setImage(
-          {
-            type: 'diagrams',
-            src: data,
-            width,
-            height,
-            content: data,
-          },
-          props.content ? true : false,
-        )
-        .run()
+      image = {
+        type: 'diagrams',
+        src: data,
+        width,
+        height,
+        content: data,
+      }
     }
     dialogVisible = false
     return
@@ -89,10 +84,18 @@ watch(
     if (!val) {
       window.removeEventListener('message', messageListener)
       diagramEditor.stopEditing()
+      if (image.type) {
+        editor.value
+          ?.chain()
+          .focus()
+          .setImage(image, props.content ? true : false)
+          .run()
+      }
       return
     }
     loading = true
     window.addEventListener('message', messageListener)
+    image = {}
   },
 )
 
@@ -122,10 +125,7 @@ onBeforeMount(() => {
   align-items: center;
   justify-content: center;
   position: absolute;
-  background-color: var(--umo-color-white);
-  .umo-loading * {
-    color: var(--umo-primary-color);
-  }
+  background-color: var(--umo-container-background);
 }
 .diagrams-container {
   height: 100%;
