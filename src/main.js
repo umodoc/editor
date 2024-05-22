@@ -15,6 +15,7 @@ const options = {
   toolbar: {
     // defaultMode: 'classic',
     // menus: ['base'],
+    enableSourceEditor: true,
   },
   document: {
     title: '测试文档',
@@ -32,8 +33,7 @@ const options = {
       content: '<h2>工作任务</h2>',
     },
   ],
-  shareUrl: 'https://xx.com/?id=1',
-  cdnUrl: location.origin,
+  shareUrl: 'https://umodoc.com',
   onSave(content, page, document) {
     console.log('onSave', { content, page, document })
     localStorage.setItem('document.content', document.content)

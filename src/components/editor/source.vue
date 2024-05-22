@@ -8,7 +8,7 @@
       @change="codeChange"
     >
       <template #loading>
-        <span class="loading">正在加载编辑器，请稍后...</span>
+        <span class="loading">加载中...</span>
       </template>
     </monaco-editor>
   </div>
@@ -36,10 +36,12 @@ const config = {
   formatOnPaste: true,
   lineNumbersMinChars: 3,
   minimap: { enabled: false },
+  wordWrap:'on',
   scrollbar: {
     verticalScrollbarSize: 5,
     horizontalScrollbarSize: 5,
     scrollbarVisibility: 'auto',
+    horizontal:'hidden'
   },
 }
 const code = $ref(editor.value?.getHTML() || $document.value.content)

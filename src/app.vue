@@ -43,8 +43,7 @@ const options = $ref({
       content: '<h2>工作任务</h2>',
     },
   ],
-  // shareUrl: 'https://xx.com/?id=1',
-  // cdnUrl: location.origin,
+  shareUrl: 'https://umodoc.com',
   file: {
     // allowedMimeTypes: [
     //   'application/pdf',
