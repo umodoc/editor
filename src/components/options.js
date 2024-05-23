@@ -202,12 +202,12 @@ const ojbectSchema = new ObjectSchema({
         merge: 'replace',
         validate(value) {
           if (value && !Array.isArray(value)) {
-            throw new Error('Key "dicts": Key "fonts": must be a array.')
+            throw new Error('Key "dicts": Key "fonts" must be a array.')
           }
           value.forEach((item) => {
             if (!item.label || (!item.value && item.value !== null)) {
               throw new Error(
-                'Key "dicts": Key "fonts": must be a array of objects with "label" and "value" properties.',
+                'Key "dicts": Key "fonts" must be a array of objects with "label" and "value" properties.',
               )
             }
           })
@@ -351,7 +351,7 @@ const ojbectSchema = new ObjectSchema({
         validate(value) {
           if (value && !['horizontal', 'vertical'].includes(value)) {
             throw new Error(
-              'Key "page": Key "defaultOrientation": defaultOrientation" must be one of "horizontal" or "vertical".',
+              'Key "page": Key "defaultOrientation" must be one of "horizontal" or "vertical".',
             )
           }
         },
