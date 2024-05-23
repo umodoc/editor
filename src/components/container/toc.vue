@@ -13,14 +13,14 @@
       <div
         v-else
         class="toc-item"
-        v-for="item in tableOfContents"
+        v-for="(item, index) in tableOfContents"
         :key="item.id"
         :class="{
-          active: item.isActive,
-          ['level-' + item.originalLevel]: true,
+          active: activeHeading === index || item.isActive,
+          ['level-' + item.level]: true,
         }"
         :data-heading="'H' + item.originalLevel"
-        @click="headingClick(item)"
+        @click="headingClick(item, index)"
       >
         {{ item.textContent }}
       </div>
@@ -32,7 +32,9 @@
 import { TextSelection } from '@tiptap/pm/state'
 const { editor, tableOfContents } = useStore()
 
-const headingClick = (heading) => {
+let activeHeading = $ref(null)
+const headingClick = (heading, index) => {
+  activeHeading = index
   if (!editor.value) return
   const element = editor.value.view.dom.querySelector(
     `[data-toc-id="${heading.id}"`,
@@ -52,7 +54,7 @@ const headingClick = (heading) => {
 .toc-container {
   background-color: var(--umo-color-white);
   border-right: solid 1px var(--umo-border-color);
-  width: 320px;
+  width: 360px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -61,7 +63,7 @@ const headingClick = (heading) => {
     display: flex;
     align-items: center;
     position: relative;
-    padding: 15px;
+    padding: 10px 15px;
     .icon-toc {
       margin-right: 5px;
       font-size: 20px;
@@ -78,7 +80,7 @@ const headingClick = (heading) => {
     list-style: none;
     flex: 1;
     display: flex;
-    padding: 15px;
+    padding: 10px;
     flex-direction: column;
     .toc-empty {
       font-size: 14px;
@@ -89,18 +91,18 @@ const headingClick = (heading) => {
       color: var(--umo-text-color-light);
     }
     .toc-item {
-      min-height: 32px;
       text-overflow: ellipsis;
       overflow: hidden;
       word-break: break-all;
       white-space: nowrap;
       border-radius: 3px;
-      padding: 10px;
-      display: flex;
-      width: 100%;
+      padding: 5px 7px 5px 37px;
       box-sizing: border-box;
       align-items: center;
+      position: relative;
+      margin: 2px 0;
       &::before {
+        position: absolute;
         content: attr(data-heading);
         color: var(--umo-text-color-light);
         margin-right: 8px;
@@ -108,11 +110,13 @@ const headingClick = (heading) => {
         border: solid 1px var(--umo-border-color);
         font-size: 8px;
         padding: 5px 4px;
-        height: 1em;
+        left: 7px;
+        top: 50%;
+        transform: translateY(-50%);
       }
       &:hover {
         cursor: pointer;
-        background: var(--umo-button-hover-background);
+        background: var(--umo-content-node-selected-background);
         color: var(--umo-primary-color);
         &::before {
           color: var(--umo-primary-color);
@@ -120,26 +124,36 @@ const headingClick = (heading) => {
         }
       }
       &.active {
-        background: var(--umo-primary-color);
-        color: var(--umo-color-white);
+        background: var(--umo-button-hover-background);
+        color: var(--umo-primary-color);
+        &::before {
+          color: var(--umo-primary-color);
+          border-color: var(--umo-primary-color);
+        }
       }
       &.level-1 {
-        font-size: 20px;
+        margin-left: 0;
+        width: 100%;
       }
       &.level-2 {
-        font-size: 18px;
+        margin-left: 15px;
+        width: calc(100% - 15px);
       }
       &.level-3 {
-        font-size: 16px;
+        margin-left: 30px;
+        width: calc(100% - 30px);
       }
       &.level-4 {
-        font-size: 14px;
+        margin-left: 45px;
+        width: calc(100% - 45px);
       }
       &.level-5 {
-        font-size: 12px;
+        margin-left: 60px;
+        width: calc(100% - 60px);
       }
       &.level-6 {
-        font-size: 10px;
+        padding-left: 75px;
+        width: calc(100% - 75px);
       }
     }
   }

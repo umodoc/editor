@@ -5,7 +5,7 @@
       <ul class="toc-body">
         <li
           class="toc-item"
-          :class="`level-${heading.originalLevel}`"
+          :class="`level-${heading.level}`"
           v-for="heading in tableOfContents"
           :key="heading.id"
         >
@@ -54,29 +54,29 @@ const { tableOfContents } = useStore()
     }
 
     &-item {
-      line-height: 1.8;
+      font-weight: bold;
       &.level-1 {
         font-size: 20px;
       }
-
       &.level-2 {
         font-size: 18px;
+        text-indent: 20px;
       }
-
       &.level-3 {
         font-size: 16px;
+        text-indent: 40px;
       }
-
       &.level-4 {
         font-size: 14px;
+        text-indent: 60px;
       }
-
       &.level-5 {
         font-size: 12px;
+        text-indent: 80px;
       }
-
       &.level-6 {
         font-size: 10px;
+        text-indent: 100px;
       }
     }
   }
