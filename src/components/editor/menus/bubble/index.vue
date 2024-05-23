@@ -77,7 +77,11 @@
     <editor-menus-bubble-node-delete />
   </template>
   <template
-    v-else-if="editor?.isActive('toc') || editor?.isActive('pageBreak')"
+    v-else-if="
+      editor?.isActive('toc') ||
+      editor?.isActive('pageBreak') ||
+      editor?.isActive('horizontalRule')
+    "
   >
     <editor-menus-bubble-node-delete />
   </template>
