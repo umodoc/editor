@@ -43,7 +43,7 @@
     "format": "prettier --write src/",
     "build": "vite build",
     "build:all": "vite build && vite build --config vite.config.umd.js",
-    "npm:publish": "npm run build:all && npm publish"
+    "prepublishOnly": "npm run build:all"
   },
   "dependencies": {
     "@humanwhocodes/object-schema": "^2.0.3",
