@@ -113,5 +113,8 @@
     "vite": "^5.2.11",
     "vite-plugin-compression2": "^1.1.0",
     "vite-plugin-svg-icons": "^2.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
