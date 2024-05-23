@@ -8,7 +8,7 @@
   <modal
     :visible="dialogVisible"
     icon="link"
-    heatitleder="插入链接"
+    title="插入链接"
     width="420px"
     draggable
     destroy-on-close
