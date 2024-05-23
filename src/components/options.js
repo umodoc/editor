@@ -148,7 +148,7 @@ const defaultOptions = {
     typographyRules: {},
   },
   templates: [],
-  cdnUrl: 'https://unpkg.com/@umoteam/editor-external@latest',
+  cdnUrl: '//unpkg.com/@umoteam/editor-external@latest',
   shareUrl: location?.href || '',
   diagrams: {
     domain: 'https://embed.diagrams.net',
