@@ -9,6 +9,9 @@
     --td-font-size-body-medium: var(--umo-font-size-small);
     .umo-popup__content {
       padding: 5px 12px;
+      &:empty {
+        display: none;
+      }
     }
   }
   .umo-dropdown {
