@@ -78,6 +78,7 @@ export default defineConfig({
         /@vueuse\/.*/,
         /@tiptap\/.*/,
         /prism-code-editor\/.*/,
+        /prismjs\/.*/,
         /nzh\/.*/,
         'vue',
         '@humanwhocodes/object-schema',
