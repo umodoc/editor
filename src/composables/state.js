@@ -32,6 +32,12 @@ export const useState = (key, editorKey) => {
         colors: [],
       }
       break
+    case 'print':
+      data = {
+        singleColumn: true,
+        showPageNumber: true,
+      }
+      break
     default:
       console.error('[useStorage]', 'Key is not valid')
   }

@@ -32,11 +32,11 @@
             </t-button>
             <template #content>
               <div class="preview-options">
-                <t-checkbox v-model="previewOptions.singleColumn"
+                <t-checkbox v-model="$print.singleColumn"
                   >单列显示页面</t-checkbox
                 >
-                <t-checkbox v-model="previewOptions.showPageNumber"
-                  >打印时包括页码</t-checkbox
+                <t-checkbox v-model="$print.showPageNumber"
+                  >打印时包含页码</t-checkbox
                 >
               </div>
             </template>
@@ -100,12 +100,9 @@ import 'prismjs/components/prism-regex'
 
 const { container, options, page, printing } = useStore()
 const $document = useState('document')
+const $print = useState('print')
 let dialogVisible = $ref(false)
 let pageOptionsVisible = $ref(false)
-const previewOptions = $ref({
-  singleColumn: true,
-  showPageNumber: true,
-})
 
 watch(
   () => printing.value,
@@ -123,7 +120,7 @@ watch(
   },
 )
 watch(
-  () => previewOptions,
+  () => $print.value,
   () => {
     iframeCode = getIframeCode()
     iframeRef.contentWindow.location.reload()
@@ -365,7 +362,7 @@ const getIframeCode = () => {
       }
       <\/script>
     </head>
-    <body class="umo-editor-container umo-scrollbar ${previewOptions.singleColumn ? 'single-column' : ''} ${previewOptions.showPageNumber ? 'show-page-number' : ''}">
+    <body class="umo-editor-container umo-scrollbar ${$print.value.singleColumn ? 'single-column' : ''} ${$print.value.showPageNumber ? 'show-page-number' : ''}">
       <div id="sprite-plyr" style="display: none;">
         ${document.querySelector('#sprite-plyr')?.innerHTML || ''}
       </div>
