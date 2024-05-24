@@ -76,11 +76,11 @@
     "@tiptap/pm": "^2.4.0",
     "@tiptap/starter-kit": "^2.4.0",
     "@tiptap/vue-3": "^2.4.0",
-    "@umoteam/editor-external": "^1.0.3",
+    "@umoteam/editor-external": "^1.2.1",
     "@vue-monaco/editor": "^0.0.6",
     "@vueuse/core": "^10.9.0",
     "dom-to-image-more": "^3.3.0",
-    "es-drager": "^1.2.10",
+    "es-drager": "^1.2.11",
     "file-saver": "^2.0.5",
     "file64": "^1.0.3",
     "hotkeys-js": "^3.13.7",
@@ -111,7 +111,7 @@
     "unplugin-vue-components": "^0.27.0",
     "unplugin-vue-macros": "^2.9.2",
     "vite": "^5.2.11",
-    "vite-plugin-compression2": "^1.1.0",
+    "vite-plugin-compression2": "^1.1.1",
     "vite-plugin-svg-icons": "^2.0.1"
   },
   "engines": {
