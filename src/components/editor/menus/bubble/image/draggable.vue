@@ -1,11 +1,10 @@
 <template>
   <editor-menus-button
-    :button-active="editor?.getAttributes('image')?.draggable"
-    tooltip="图片浮动"
+    ico="image-draggable"
+    text="图片浮动"
+    :menu-active="editor?.getAttributes('image')?.draggable"
     @button-click="toggleDraggable"
-  >
-    <icon name="image-draggable" />
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

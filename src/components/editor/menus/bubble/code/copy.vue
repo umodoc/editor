@@ -1,7 +1,5 @@
 <template>
-  <editor-menus-button tooltip="复制代码" @button-click="copyCode">
-    <icon name="copy" />
-  </editor-menus-button>
+  <editor-menus-button ico="copy" text="复制代码" @button-click="copyCode" />
 </template>
 
 <script setup>

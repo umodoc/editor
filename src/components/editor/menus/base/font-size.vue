@@ -1,8 +1,9 @@
 <template>
   <editor-menus-button
     v-if="select"
-    tooltip="字体大小"
-    button-type="select"
+    text="字体大小"
+    menu-type="select"
+    hide-text
     :style="{ width: $toolbar.mode !== 'classic' ? '80px' : '58px' }"
     :select-options="fontSizes"
     :value="editor?.getAttributes('textStyle').fontSize || '14px'"
@@ -12,12 +13,18 @@
     @button-click="setFontSize"
   >
   </editor-menus-button>
-  <editor-menus-button tooltip="增大字号" @button-click="increaseFontSize">
-    <icon name="font-size-increase" />
-  </editor-menus-button>
-  <editor-menus-button tooltip="减小字号" @button-click="decreaseFontSize">
-    <icon name="font-size-decrease" />
-  </editor-menus-button>
+  <editor-menus-button
+    ico="font-size-increase"
+    text="增大字号"
+    hide-text
+    @button-click="increaseFontSize"
+  />
+  <editor-menus-button
+    ico="font-size-decrease"
+    text="减小字号"
+    hide-text
+    @button-click="decreaseFontSize"
+  />
 </template>
 
 <script setup>

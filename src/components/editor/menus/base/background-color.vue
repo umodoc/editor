@@ -1,8 +1,9 @@
 <template>
   <editor-menus-button
-    :tooltip="tooltip"
-    button-type="popup"
+    :text="text"
+    menu-type="popup"
     popup-handle="arrow"
+    hide-text
     :popup-visible="popupVisible"
     @toggle-popup="togglePopup"
   >
@@ -24,7 +25,7 @@
 
 <script setup>
 const props = defineProps({
-  tooltip: {
+  text: {
     type: String,
     default: '字体背景颜色',
   },

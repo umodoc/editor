@@ -1,8 +1,10 @@
 <template>
-  <editor-menus-button tooltip="逆时针旋转90度" @button-click="setRotate(-90)">
-    <icon name="image-rotate" />
-  </editor-menus-button>
-  <editor-menus-button tooltip="顺时针旋转90度" @button-click="setRotate(90)">
+  <editor-menus-button
+    ico="image-rotate"
+    text="逆时针旋转90度"
+    @button-click="setRotate(-90)"
+  />
+  <editor-menus-button text="顺时针旋转90度" @button-click="setRotate(90)">
     <icon name="image-rotate" style="transform: rotateY(180deg)" />
   </editor-menus-button>
 </template>

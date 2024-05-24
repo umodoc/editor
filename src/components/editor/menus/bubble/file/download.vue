@@ -1,7 +1,9 @@
 <template>
-  <editor-menus-button tooltip="下载文件" @button-click="downloadFile">
-    <icon name="download" />
-  </editor-menus-button>
+  <editor-menus-button
+    ico="download"
+    text="下载文件"
+    @button-click="downloadFile"
+  />
 </template>
 
 <script setup>

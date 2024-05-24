@@ -50,8 +50,9 @@
   </div>
   <editor-menus-button
     v-else
-    tooltip="设置标题，可依据标题生成大纲"
-    button-type="select"
+    text="设置标题，可依据标题生成大纲"
+    hide-text
+    menu-type="select"
     :style="{ width: '70px' }"
     placeholder="标题"
     borderless

@@ -1,15 +1,12 @@
 <template>
   <editor-menus-button
-    button-type="dropdown"
-    huge-button
+    ico="image"
+    text="图片"
+    menu-type="dropdown"
+    huge
     :select-options="formats"
     @click="saveImage"
-  >
-    <icon name="image" />
-    <template #text>
-      <p class="button-text">图片</p>
-    </template>
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

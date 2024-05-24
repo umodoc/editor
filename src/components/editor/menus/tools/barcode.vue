@@ -1,13 +1,10 @@
 <template>
   <editor-menus-button
-    :huge-button="hugeButton"
+    :ico="content ? 'edit' : 'barcode'"
+    :text="content ? '编辑' : '条形码'"
+    huge
     @button-click="dialogVisible = true"
-  >
-    <icon :name="content ? 'edit' : 'barcode'" />
-    <template #text>
-      <p class="button-text">条形码</p>
-    </template>
-  </editor-menus-button>
+  />
   <modal
     :visible="dialogVisible"
     icon="barcode"
@@ -20,60 +17,60 @@
       <div class="barcode-toolbar">
         <editor-menus-button
           style="width: 126px"
-          tooltip="条形码标准"
+          text="条形码标准"
           :select-options="formats"
-          button-type="select"
+          menu-type="select"
           :value="config.format"
           @button-click="(value) => (config.format = value)"
         ></editor-menus-button>
         <t-divider layout="vertical" />
         <editor-menus-button
           style="width: 114px"
-          tooltip="文字字体"
+          text="文字字体"
           :select-options="options.dicts.fonts"
-          button-type="select"
+          menu-type="select"
           :value="config.font"
           @button-click="(value) => (config.font = value)"
         ></editor-menus-button>
         <t-divider layout="vertical" />
         <editor-menus-base-color
-          tooltip="条形码及文字颜色"
+          text="条形码及文字颜色"
           :default-color="config.lineColor"
           modeless
           @change="(value) => (config.lineColor = value)"
         />
         <editor-menus-base-background-color
-          tooltip="条形码背景颜色"
+          text="条形码背景颜色"
           :default-color="config.background"
           modeless
           @change="(value) => (config.background = value)"
         />
         <t-divider layout="vertical" />
         <editor-menus-base-bold
-          :button-active="config.fontOptions.includes('bold')"
+          :menu-active="config.fontOptions.includes('bold')"
           @button-click-through="changeFontOptions('bold')"
         />
         <editor-menus-base-italic
-          :button-active="config.fontOptions.includes('italic')"
+          :menu-active="config.fontOptions.includes('italic')"
           @button-click-through="changeFontOptions('italic')"
         />
         <t-divider layout="vertical" />
         <editor-menus-base-align-left
-          :button-active="config.textAlign === 'left'"
+          :menu-active="config.textAlign === 'left'"
           @button-click-through="config.textAlign = 'left'"
         />
         <editor-menus-base-align-center
-          :button-active="config.textAlign === 'center'"
+          :menu-active="config.textAlign === 'center'"
           @button-click-through="config.textAlign = 'center'"
         />
         <editor-menus-base-align-right
-          :button-active="config.textAlign === 'right'"
+          :menu-active="config.textAlign === 'right'"
           @button-click-through="config.textAlign = 'right'"
         />
         <t-divider layout="vertical" />
         <editor-menus-button
-          tooltip="更多"
-          button-type="popup"
+          text="更多"
+          menu-type="popup"
           :popup-visible="popupVisible"
           @toggle-popup="togglePopup"
         >
@@ -207,10 +204,6 @@ import JsBarcode from 'jsbarcode'
 import svg64 from 'svg64'
 
 const { content } = defineProps({
-  hugeButton: {
-    type: Boolean,
-    default: true,
-  },
   content: {
     type: String,
   },

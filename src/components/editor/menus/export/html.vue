@@ -1,10 +1,10 @@
 <template>
-  <editor-menus-button huge-button @button-click="saveHtmlFile">
-    <icon name="html5" />
-    <template #text>
-      <p class="button-text">HTML</p>
-    </template>
-  </editor-menus-button>
+  <editor-menus-button
+    ico="html5"
+    text="HTML"
+    huge
+    @button-click="saveHtmlFile"
+  />
 </template>
 
 <script setup>

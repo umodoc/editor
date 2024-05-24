@@ -1,6 +1,10 @@
 <template>
   <editor-menus-button
-    :button-active="
+    text="居中对齐"
+    ico="align-center"
+    shortcut="Ctrl+Shift+E"
+    hide-text
+    :menu-active="
       editor?.isActive({ textAlign: 'center' }) ||
       editor?.isActive({ nodeAlign: 'center' })
     "
@@ -8,12 +12,8 @@
       !editor?.can().chain().focus().setTextAlign('center').run() &&
       !editor?.can().chain().focus().setNodeAlign('center').run()
     "
-    tooltip="居中对齐"
-    shortcut="Ctrl+Shift+E"
     @button-click="setAlignCenter"
-  >
-    <icon name="align-center" />
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

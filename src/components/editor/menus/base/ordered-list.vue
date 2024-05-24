@@ -1,15 +1,16 @@
 <template>
   <editor-menus-button
-    :button-active="editor?.isActive('orderedList')"
-    tooltip="数字编号"
+    ico="ordered-list"
+    text="数字编号"
     shortcut="Ctrl+Shift+7"
-    button-type="popup"
+    menu-type="popup"
     popup-handle="arrow"
+    hide-text
     :popup-visible="popupVisible"
+    :menu-active="editor?.isActive('orderedList')"
     @toggle-popup="togglePopup"
     @button-click="toggleOrderedList(options[0].value)"
   >
-    <icon name="ordered-list" />
     <template #content>
       <div class="ordered-list-group">
         <tooltip

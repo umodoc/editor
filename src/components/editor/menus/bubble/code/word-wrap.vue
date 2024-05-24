@@ -1,11 +1,10 @@
 <template>
   <editor-menus-button
-    :button-active="editor?.getAttributes('codeBlock')?.wordWrap"
-    tooltip="自动换行"
+    ico="code-word-wrap"
+    text="自动换行"
+    :menu-active="editor?.getAttributes('codeBlock')?.wordWrap"
     @button-click="toggleWordWrap"
-  >
-    <icon name="code-word-wrap" />
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

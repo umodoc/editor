@@ -1,13 +1,10 @@
 <template>
   <editor-menus-button
-    :huge-button="hugeButton"
+    :ico="content ? 'edit' : 'diagrams'"
+    :text="content ? '编辑' : '流程图'"
+    huge
     @button-click="dialogVisible = true"
-  >
-    <icon :name="content ? 'edit' : 'diagrams'" />
-    <template #text>
-      <p class="button-text">流程图</p>
-    </template>
-  </editor-menus-button>
+  />
   <modal
     :visible="dialogVisible"
     icon="diagrams"
@@ -29,10 +26,6 @@
 import DiagramEditor from '@/utils/diagram-editor'
 
 const props = defineProps({
-  hugeButton: {
-    type: Boolean,
-    default: true,
-  },
   content: {
     type: String,
   },

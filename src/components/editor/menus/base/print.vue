@@ -1,9 +1,11 @@
 <template>
-  <editor-menus-button huge-button @button-click="printing = true">
-    <icon name="print" />
-    <template #text>
-      <p class="button-text">打印</p>
-    </template>
+  <editor-menus-button
+    text="打印"
+    ico="print"
+    shortcut="Ctrl+P"
+    huge
+    @button-click="printing = true"
+  >
   </editor-menus-button>
 </template>
 

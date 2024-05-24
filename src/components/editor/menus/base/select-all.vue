@@ -1,11 +1,11 @@
 <template>
   <editor-menus-button
-    tooltip="全选"
+    ico="select-all"
+    text="全选"
     shortcut="Ctrl+A"
+    hide-text
     @button-click="editor?.chain().focus().selectAll().run()"
-  >
-    <icon name="select-all" style="font-size: 16px" />
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

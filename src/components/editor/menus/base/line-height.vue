@@ -1,12 +1,12 @@
 <template>
   <editor-menus-button
-    tooltip="行高"
-    button-type="dropdown"
+    text="行高"
+    ico="line-height"
+    menu-type="dropdown"
+    hide-text
     :select-options="lineHeights"
     @click="setLineHeight"
-  >
-    <icon name="line-height" />
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

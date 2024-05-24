@@ -1,11 +1,11 @@
 <template>
   <editor-menus-button
-    tooltip="减少缩进"
+    ico="outdent"
+    text="减少缩进"
     shortcut="Shift+Tab"
+    hide-text
     @button-click="editor?.chain().focus().outdent().run()"
-  >
-    <icon name="outdent" />
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

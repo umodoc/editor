@@ -1,26 +1,24 @@
 <template>
   <editor-menus-button
-    huge-button
-    button-type="popup"
+    ico="watermark"
+    text="页面水印"
+    huge
+    menu-type="popup"
     :popup-visible="popupVisible"
     @toggle-popup="togglePopup"
   >
-    <icon name="watermark" />
-    <template #text>
-      <p class="button-text">页面水印</p>
-    </template>
     <template #content>
       <div class="watermark-container">
         <div class="watermark-toolbar">
           <editor-menus-button
             style="width: 140px"
             tooltip="水印文字字体"
-            button-type="select"
+            menu-type="select"
             :select-options="options.dicts.fonts"
             :value="page.watermark.fontFamily"
             @button-click="(value) => (page.watermark.fontFamily = value)"
           ></editor-menus-button>
-          <editor-menus-button button-type="input" tooltip="水印文字大小">
+          <editor-menus-button menu-type="input" tooltip="水印文字大小">
             <t-input-number
               v-model="page.watermark.fontSize"
               style="width: 60px"
@@ -35,7 +33,7 @@
             </t-input-number>
           </editor-menus-button>
           <editor-menus-base-bold
-            :button-active="page.watermark.fontWeight === 'bold'"
+            :menu-active="page.watermark.fontWeight === 'bold'"
             @button-click-through="
               page.watermark.fontWeight === 'bold'
                 ? (page.watermark.fontWeight = 'normal')
@@ -43,7 +41,7 @@
             "
           />
           <editor-menus-base-color
-            tooltip="水印文字颜色"
+            text="水印文字颜色"
             :default-color="page.watermark.fontColor"
             modeless
             @change="(value) => (page.watermark.fontColor = value)"

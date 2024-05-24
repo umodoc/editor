@@ -36,12 +36,12 @@ const config = {
   formatOnPaste: true,
   lineNumbersMinChars: 3,
   minimap: { enabled: false },
-  wordWrap:'on',
+  wordWrap: 'on',
   scrollbar: {
     verticalScrollbarSize: 5,
     horizontalScrollbarSize: 5,
     scrollbarVisibility: 'auto',
-    horizontal:'hidden'
+    horizontal: 'hidden',
   },
 }
 const code = $ref(editor.value?.getHTML() || $document.value.content)

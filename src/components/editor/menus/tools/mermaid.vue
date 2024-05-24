@@ -1,10 +1,10 @@
 <template>
-  <editor-menus-button :huge-button="hugeButton" @button-click="buttonClick">
-    <icon :name="content ? 'edit' : 'mermaid'" />
-    <template #text>
-      <p class="button-text">Mermaid</p>
-    </template>
-  </editor-menus-button>
+  <editor-menus-button
+    :ico="content ? 'edit' : 'mermaid'"
+    :text="content ? '编辑' : 'Mermaid'"
+    huge
+    @button-click="buttonClick"
+  />
   <modal
     :visible="dialogVisible"
     icon="mermaid"
@@ -37,10 +37,6 @@ import mermaid from 'mermaid'
 import svg64 from 'svg64'
 
 const props = defineProps({
-  hugeButton: {
-    type: Boolean,
-    default: true,
-  },
   content: {
     type: String,
   },

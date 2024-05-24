@@ -1,10 +1,10 @@
 <template>
-  <editor-menus-button huge-button @button-click="dialogVisible = true">
-    <icon name="share" />
-    <template #text>
-      <p class="button-text">文档分享</p>
-    </template>
-  </editor-menus-button>
+  <editor-menus-button
+    ico="share"
+    text="文档分享"
+    huge
+    @button-click="dialogVisible = true"
+  />
   <modal
     :visible="dialogVisible"
     icon="share"

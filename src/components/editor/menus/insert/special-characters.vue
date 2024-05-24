@@ -1,14 +1,12 @@
 <template>
   <editor-menus-button
-    button-type="popup"
-    huge-button
+    ico="special-characters"
+    text="特殊字符"
+    menu-type="popup"
+    huge
     :popup-visible="popupVisible"
     @toggle-popup="togglePopup"
   >
-    <icon name="special-characters" />
-    <template #text>
-      <p class="button-text">特殊字符</p>
-    </template>
     <template #content>
       <div class="characters-container narrow-scrollbar">
         <template

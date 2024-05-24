@@ -1,14 +1,12 @@
 <template>
   <editor-menus-button
-    huge-button
-    button-type="popup"
+    ico="page-background"
+    text="页面背景"
+    huge
+    menu-type="popup"
     :popup-visible="popupVisible"
     @toggle-popup="togglePopup"
   >
-    <icon name="page-background" />
-    <template #text>
-      <p class="button-text">页面背景</p>
-    </template>
     <template #content>
       <div class="background-container">
         <div

@@ -1,12 +1,12 @@
 <template>
   <editor-menus-button
-    tooltip="撤销"
+    ico="undo"
+    text="撤销"
     shortcut="Ctrl+Z"
+    hide-text
     :disabled="!editor?.can().chain().focus().undo().run()"
     @button-click="editor?.chain().focus().undo().run()"
-  >
-    <icon name="undo" />
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

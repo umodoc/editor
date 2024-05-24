@@ -1,14 +1,11 @@
 <template>
   <editor-menus-button
-    huge-button
-    :button-active="page.showBreakMarks"
+    ico="break-marks"
+    text="显示换行"
+    huge
+    :menu-active="page.showBreakMarks"
     @button-click="toggleInvisibleCharacters"
-  >
-    <icon name="break-marks" />
-    <template #text>
-      <p class="button-text">显示换行</p>
-    </template>
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

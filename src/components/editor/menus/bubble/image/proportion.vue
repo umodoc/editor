@@ -1,11 +1,10 @@
 <template>
   <editor-menus-button
-    :button-active="editor?.getAttributes('image')?.equalProportion"
-    tooltip="锁定长宽比"
+    ico="equal-proportion"
+    text="锁定长宽比"
+    :menu-active="editor?.getAttributes('image')?.equalProportion"
     @button-click="toggleEqualProportion"
-  >
-    <icon name="equal-proportion" />
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

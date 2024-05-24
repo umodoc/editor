@@ -1,7 +1,8 @@
 <template>
   <editor-menus-button
-    tooltip="选择字体"
-    button-type="select"
+    text="选择字体"
+    menu-type="select"
+    hide-text
     :value="editor?.getAttributes('textStyle').fontFamily || null"
     :style="{ width: $toolbar.mode !== 'classic' ? '144px' : '90px' }"
     placeholder="字体"

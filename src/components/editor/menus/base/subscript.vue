@@ -1,13 +1,13 @@
 <template>
   <editor-menus-button
-    :button-active="editor?.isActive('subscript')"
-    :disabled="!editor?.can().chain().focus().toggleSubscript().run()"
-    tooltip="下标"
+    ico="subscript"
+    text="下标"
     shortcut="Ctrl+,"
+    hide-text
+    :menu-active="editor?.isActive('subscript')"
+    :disabled="!editor?.can().chain().focus().toggleSubscript().run()"
     @button-click="editor?.commands.toggleSubscript()"
-  >
-    <icon name="subscript" />
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

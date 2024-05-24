@@ -1,16 +1,14 @@
 <template>
   <editor-menus-button
-    button-type="popup"
+    ico="table-cells-background"
+    text="背景颜色"
     tooltip="单元格背景颜色"
-    :huge-button="hugeButton"
+    menu-type="popup"
+    huge
     :disabled="!editor?.can().setCellAttribute('backgroundColor')"
     :popup-visible="popupVisible"
     @toggle-popup="togglePopup"
   >
-    <icon name="table-cells-background" :size="hugeButton ? '1em' : '18px'" />
-    <template #text>
-      <p class="button-text">背景颜色</p>
-    </template>
     <template #content>
       <toolbar-color-picker default-color="" @change="colorChange" />
     </template>
@@ -18,12 +16,6 @@
 </template>
 
 <script setup>
-const { hugeButton } = defineProps({
-  hugeButton: {
-    type: Boolean,
-    default: true,
-  },
-})
 const emits = defineEmits(['change'])
 
 let { popupVisible, togglePopup } = usePopup()

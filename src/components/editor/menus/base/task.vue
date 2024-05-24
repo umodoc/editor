@@ -1,13 +1,14 @@
 <template>
   <editor-menus-button
-    button-type="dropdown"
-    popup-handle="arrow"
-    :button-active="editor?.isActive('taskList')"
-    tooltip="待办事项"
+    ico="task"
+    text="待办事项"
     shortcut="Ctrl+Shift+9"
+    menu-type="dropdown"
+    popup-handle="arrow"
+    hide-text
+    :menu-active="editor?.isActive('taskList')"
     @button-click="editor?.chain().focus().toggleTaskList().run()"
   >
-    <icon name="task" />
     <template #dropmenu>
       <t-dropdown-menu>
         <t-dropdown-item

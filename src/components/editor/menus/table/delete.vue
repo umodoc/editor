@@ -1,15 +1,12 @@
 <template>
   <editor-menus-button
+    ico="table-delete"
+    text="删除"
     tooltip="删除当前表格"
+    huge
     :disabled="!editor?.can().deleteTable()"
-    huge-button
     @button-click="deleteTable"
-  >
-    <icon name="table-delete" />
-    <template #text>
-      <p class="button-text">删除</p>
-    </template>
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

@@ -1,14 +1,12 @@
 <template>
   <editor-menus-button
-    button-type="popup"
-    huge-button
+    ico="emoji"
+    text="表情"
+    menu-type="popup"
+    huge
     :popup-visible="popupVisible"
     @toggle-popup="togglePopup"
   >
-    <icon name="emoji" />
-    <template #text>
-      <p class="button-text">表情</p>
-    </template>
     <template #content>
       <div class="emojis-container narrow-scrollbar">
         <template v-for="(group, index) in options.dicts.emojis" :key="index">

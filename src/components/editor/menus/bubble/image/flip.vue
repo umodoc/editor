@@ -1,14 +1,13 @@
 <template>
   <editor-menus-button
-    :button-active="editor?.getAttributes('image')?.flipY"
-    tooltip="水平翻转"
+    ico="image-flip"
+    text="水平翻转"
+    :menu-active="editor?.getAttributes('image')?.flipY"
     @button-click="setFlip('flipY')"
-  >
-    <icon name="image-flip" />
-  </editor-menus-button>
+  />
   <editor-menus-button
-    :button-active="editor?.getAttributes('image')?.flipX"
-    tooltip="垂直翻转"
+    text="垂直翻转"
+    :menu-active="editor?.getAttributes('image')?.flipX"
     @button-click="setFlip('flipX')"
   >
     <icon name="image-flip" style="transform: rotate(90deg)" />

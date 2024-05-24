@@ -1,10 +1,9 @@
 <template>
   <editor-menus-button
-    tooltip="图片预览"
+    ico="image-preview"
+    text="图片预览"
     @button-click="viewerVisible = !viewerVisible"
-  >
-    <icon name="image-preview" />
-  </editor-menus-button>
+  />
   <t-image-viewer
     v-model:visible="viewerVisible"
     :images="[editor?.getAttributes('image').src]"

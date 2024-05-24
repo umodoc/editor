@@ -1,10 +1,10 @@
 <template>
-  <editor-menus-button huge-button @button-click="saveTextFile">
-    <icon name="text" />
-    <template #text>
-      <p class="button-text">文本文档</p>
-    </template>
-  </editor-menus-button>
+  <editor-menus-button
+    ico="text"
+    text="文本文档"
+    huge
+    @button-click="saveTextFile"
+  />
 </template>
 
 <script setup>

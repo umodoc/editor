@@ -1,14 +1,13 @@
 <template>
   <editor-menus-button
-    tooltip="主题"
-    button-type="select"
+    text="主题"
+    menu-type="select"
     style="width: 100px"
     :select-options="themes"
     :value="editor?.getAttributes('codeBlock')?.theme"
     placeholder="清选择"
     @button-click="setTheme"
-  >
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

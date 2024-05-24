@@ -1,7 +1,7 @@
 <template>
   <editor-menus-button
-    tooltip="语言列表"
-    button-type="select"
+    text="语言列表"
+    menu-type="select"
     style="width: 120px"
     :select-options="languageOptions"
     :value="editor?.getAttributes('codeBlock')?.language"

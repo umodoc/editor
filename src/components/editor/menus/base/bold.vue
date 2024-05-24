@@ -1,13 +1,13 @@
 <template>
   <editor-menus-button
-    :button-active="editor?.isActive('bold')"
-    :disabled="!editor?.can().chain().focus().toggleBold().run()"
-    tooltip="加粗"
+    ico="bold"
+    text="加粗"
     shortcut="Ctrl+B"
+    hide-text
+    :menu-active="editor?.isActive('bold')"
+    :disabled="!editor?.can().chain().focus().toggleBold().run()"
     @button-click="editor?.chain().focus().toggleBold().run()"
-  >
-    <icon name="bold" />
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

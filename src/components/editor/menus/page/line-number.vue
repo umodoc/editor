@@ -1,14 +1,11 @@
 <template>
   <editor-menus-button
-    :button-active="page.showLineNumber"
-    huge-button
+    ico="line-number"
+    text="显示行号"
+    :menu-active="page.showLineNumber"
+    huge
     @button-click="page.showLineNumber = !page.showLineNumber"
-  >
-    <icon name="line-number" />
-    <template #text>
-      <p class="button-text">显示行号</p>
-    </template>
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

@@ -1,12 +1,13 @@
 <template>
   <editor-menus-button
-    tooltip="文字对齐方式"
-    button-type="popup"
+    :ico="`align-${textAlign}`"
+    text="文字对齐方式"
+    menu-type="popup"
+    hide-text
     :disabled="!editor?.can().chain().focus().setTextAlign('center').run()"
     :popup-visible="popupVisible"
     @toggle-popup="togglePopup"
   >
-    <icon :name="`align-${textAlign}`" class="text-align" />
     <template #content>
       <div class="text-align-group">
         <editor-menus-base-align-left />
@@ -46,7 +47,6 @@ const textAlign = computed(() => {
 
 <style lang="less" scoped>
 .text-align {
-  font-size: 16px;
   &-group {
     padding-top: 2px;
     margin: -5px 0;

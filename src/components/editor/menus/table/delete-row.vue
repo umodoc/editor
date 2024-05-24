@@ -1,13 +1,11 @@
 <template>
   <editor-menus-button
-    :tooltip="$toolbar.mode === 'ribbon' ? '' : '删除行'"
-    :class="{ 'width-auto': $toolbar.mode === 'ribbon' }"
+    ico="table-delete-row"
+    text="删除行"
+    :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().deleteRow()"
     @button-click="deleteRow"
-  >
-    <icon name="table-delete-row" />
-    <span v-if="$toolbar.mode === 'ribbon'" class="button-text">删除行</span>
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

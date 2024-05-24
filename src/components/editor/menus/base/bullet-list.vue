@@ -1,15 +1,16 @@
 <template>
   <editor-menus-button
-    :button-active="editor?.isActive('bulletList')"
-    tooltip="项目符号"
+    ico="bullet-list"
+    text="项目符号"
     shortcut="Ctrl+Shift+8"
-    button-type="popup"
+    menu-type="popup"
     popup-handle="arrow"
+    hide-text
+    :menu-active="editor?.isActive('bulletList')"
     :popup-visible="popupVisible"
     @toggle-popup="togglePopup"
     @button-click="toggleBulletList(options[0].value)"
   >
-    <icon name="bullet-list" />
     <template #content>
       <div class="bullet-list-group">
         <tooltip

@@ -1,13 +1,13 @@
 <template>
   <editor-menus-button
-    :button-active="editor?.isActive('code')"
-    :disabled="!editor?.can().chain().focus().toggleCode().run()"
-    tooltip="代码"
+    ico="code"
+    text="代码"
     shortcut="Ctrl+E"
+    hide-text
+    :menu-active="editor?.isActive('code')"
+    :disabled="!editor?.can().chain().focus().toggleCode().run()"
     @button-click="editor?.chain().focus().toggleCode().run()"
-  >
-    <icon name="code" />
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

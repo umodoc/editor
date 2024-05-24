@@ -1,13 +1,14 @@
 <template>
   <editor-menus-button
-    :tooltip="tooltip"
-    button-type="popup"
+    ico="color"
+    :text="text"
+    menu-type="popup"
     popup-handle="arrow"
+    hide-text
     :popup-visible="popupVisible"
     @toggle-popup="togglePopup"
     @button-click="colorChange(currentColor)"
   >
-    <icon name="color" />
     <div
       class="current-color"
       :style="{
@@ -25,7 +26,7 @@
 
 <script setup>
 const props = defineProps({
-  tooltip: {
+  text: {
     type: String,
     default: '字体颜色',
   },

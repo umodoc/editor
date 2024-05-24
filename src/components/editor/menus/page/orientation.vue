@@ -1,10 +1,10 @@
 <template>
   <editor-menus-button
-    button-type="dropdown"
+    ico="page-orientation"
+    text="页面方向"
+    menu-type="dropdown"
     overlay-class-name="page-orientation-dropdown"
   >
-    <icon name="page-orientation" style="margin-left: 1px" />
-    <span class="button-text">页面方向</span>
     <template #dropmenu>
       <t-dropdown-menu>
         <t-dropdown-item

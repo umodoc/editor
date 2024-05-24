@@ -1,14 +1,12 @@
 <template>
   <editor-menus-button
     v-if="options.templates && options.templates.length > 0"
-    button-type="dropdown"
-    huge-button
+    ico="template"
+    text="模板"
+    menu-type="dropdown"
+    huge
     overlay-class-name="templates-dropdown"
   >
-    <icon name="template" />
-    <template #text>
-      <p class="button-text">模板</p>
-    </template>
     <template #dropmenu>
       <t-dropdown-menu>
         <t-dropdown-item

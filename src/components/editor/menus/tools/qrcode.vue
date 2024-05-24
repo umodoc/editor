@@ -1,10 +1,10 @@
 <template>
-  <editor-menus-button :huge-button="hugeButton" @button-click="buttonClick">
-    <icon :name="content ? 'edit' : 'qrcode'" />
-    <template #text>
-      <p class="button-text">二维码</p>
-    </template>
-  </editor-menus-button>
+  <editor-menus-button
+    :ico="content ? 'edit' : 'qrcode'"
+    :text="content ? '编辑' : '二维码'"
+    huge
+    @button-click="buttonClick"
+  />
   <modal
     :visible="dialogVisible"
     icon="qrcode"
@@ -17,13 +17,13 @@
       <div class="qrcode-toolbar">
         <editor-menus-button
           style="width: 126px"
-          tooltip="二维码容错能力"
+          text="二维码容错能力"
           :select-options="levels"
-          button-type="select"
+          menu-type="select"
           :value="config.ecl"
           @button-click="(value) => (config.ecl = value)"
         ></editor-menus-button>
-        <editor-menus-button button-type="input" tooltip="二维码四周留白大小">
+        <editor-menus-button menu-type="input" tooltip="二维码四周留白大小">
           <t-input-number
             v-model="config.padding"
             size="small"
@@ -36,7 +36,7 @@
             <template #label><span>四周留白：</span></template>
           </t-input-number>
         </editor-menus-button>
-        <editor-menus-button button-type="input" tooltip="二维码的宽度和高度">
+        <editor-menus-button menu-type="input" tooltip="二维码的宽度和高度">
           <t-input-number
             v-model="config.width"
             size="small"
@@ -51,13 +51,13 @@
         </editor-menus-button>
         <t-divider layout="vertical" />
         <editor-menus-base-color
-          tooltip="二维码颜色"
+          text="二维码颜色"
           :default-color="config.color"
           modeless
           @change="(value) => (config.color = value)"
         />
         <editor-menus-base-background-color
-          tooltip="二维码背景颜色"
+          text="二维码背景颜色"
           :default-color="config.background"
           modeless
           @change="(value) => (config.background = value)"
@@ -96,10 +96,6 @@ import QRCode from 'qrcode-svg'
 import svg64 from 'svg64'
 
 const { content } = defineProps({
-  hugeButton: {
-    type: Boolean,
-    default: true,
-  },
   content: {
     type: String,
   },

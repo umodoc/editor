@@ -1,15 +1,13 @@
 <template>
   <editor-menus-button
-    button-type="popup"
+    ico="table"
+    text="插入"
     tooltip="插入新表格"
-    huge-button
+    menu-type="popup"
+    huge
     :popup-visible="popupVisible"
     @toggle-popup="togglePopup"
   >
-    <icon name="table" />
-    <template #text>
-      <p class="button-text">插入</p>
-    </template>
     <template #content>
       <div class="table-grid" @mouseleave="resetTable">
         <div v-for="(row, rowIndex) in table" :key="rowIndex" class="row">

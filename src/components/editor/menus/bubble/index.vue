@@ -49,9 +49,9 @@
     <editor-menus-bubble-node-delete />
   </template>
   <template v-else-if="editor?.isActive('table')">
-    <editor-menus-table-cells-align :huge-button="false" />
-    <editor-menus-table-cells-background :huge-button="false" />
-    <!-- <editor-menus-table-border-color :huge-button="false" /> -->
+    <editor-menus-table-cells-align  />
+    <editor-menus-table-cells-background  />
+    <!-- <editor-menus-table-border-color  /> -->
     <div class="divider"></div>
     <editor-menus-table-add-row-before />
     <editor-menus-table-add-row-after />

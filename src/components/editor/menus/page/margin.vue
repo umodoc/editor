@@ -1,9 +1,10 @@
 <template>
-  <editor-menus-button huge-button @button-click="dialogVisible = true">
-    <icon name="page-margin" />
-    <template #text>
-      <p class="button-text">页边距</p>
-    </template>
+  <editor-menus-button
+    ico="page-margin"
+    text="页边距"
+    huge
+    @button-click="dialogVisible = true"
+  >
     <toolbar-page-options
       :visible="dialogVisible"
       @close="dialogVisible = false"

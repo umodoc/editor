@@ -99,27 +99,27 @@
           <!-- <editor-menus-table-border-color /> -->
         </div>
         <div class="virtual-group">
-          <editor-menus-table-add-row-before :huge-button="false" />
-          <editor-menus-table-add-row-after :huge-button="false" />
-          <editor-menus-table-add-column-before :huge-button="false" />
-          <editor-menus-table-add-column-after :huge-button="false" />
+          <editor-menus-table-add-row-before :huge="false" />
+          <editor-menus-table-add-row-after :huge="false" />
+          <editor-menus-table-add-column-before :huge="false" />
+          <editor-menus-table-add-column-after :huge="false" />
         </div>
         <div class="virtual-group">
-          <editor-menus-table-delete-row :huge-button="false" />
-          <editor-menus-table-delete-column :huge-button="false" />
+          <editor-menus-table-delete-row :huge="false" />
+          <editor-menus-table-delete-column :huge="false" />
         </div>
         <div class="virtual-group">
-          <editor-menus-table-merge-cells :huge-button="false" />
-          <editor-menus-table-split-cell :huge-button="false" />
+          <editor-menus-table-merge-cells :huge="false" />
+          <editor-menus-table-split-cell :huge="false" />
         </div>
         <div class="virtual-group">
-          <editor-menus-table-toggle-header-row :huge-button="false" />
-          <editor-menus-table-toggle-header-column :huge-button="false" />
-          <editor-menus-table-toggle-header-cell :huge-button="false" />
+          <editor-menus-table-toggle-header-row :huge="false" />
+          <editor-menus-table-toggle-header-column :huge="false" />
+          <editor-menus-table-toggle-header-cell :huge="false" />
         </div>
         <div class="virtual-group">
-          <editor-menus-table-next-cell :huge-button="false" />
-          <editor-menus-table-previous-cell :huge-button="false" />
+          <editor-menus-table-next-cell :huge="false" />
+          <editor-menus-table-previous-cell :huge="false" />
         </div>
         <div class="virtual-group">
           <editor-menus-table-delete />

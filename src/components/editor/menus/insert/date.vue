@@ -1,15 +1,12 @@
 <template>
   <editor-menus-button
-    button-type="dropdown"
-    huge-button
+    ico="date"
+    text="日期"
+    menu-type="dropdown"
+    huge
     :select-options="options"
     @click="setDate"
-  >
-    <icon name="date" />
-    <template #text>
-      <p class="button-text">日期</p>
-    </template>
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

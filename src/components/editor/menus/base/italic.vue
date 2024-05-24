@@ -1,13 +1,13 @@
 <template>
   <editor-menus-button
-    :button-active="editor?.isActive('italic')"
-    :disabled="!editor?.can().chain().focus().toggleItalic().run()"
-    tooltip="斜体"
+    text="斜体"
+    ico="italic"
     shortcut="Ctrl+I"
+    hide-text
+    :menu-active="editor?.isActive('italic')"
+    :disabled="!editor?.can().chain().focus().toggleItalic().run()"
     @button-click="editor?.chain().focus().toggleItalic().run()"
-  >
-    <icon name="italic" />
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

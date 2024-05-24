@@ -1,10 +1,10 @@
 <template>
   <editor-menus-button
-    button-type="dropdown"
+    ico="page-size"
+    text="页面大小"
+    menu-type="dropdown"
     overlay-class-name="page-size-dropdown"
   >
-    <icon name="page-size" style="margin-left: 1px" />
-    <span class="button-text">页面大小</span>
     <template #dropmenu>
       <t-dropdown-menu>
         <t-dropdown-item

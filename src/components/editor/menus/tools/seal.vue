@@ -1,14 +1,11 @@
 <template>
   <editor-menus-button
     v-if="imglyRemoveBackground"
-    huge-button
+    ico="seal"
+    text="电子签章"
+    huge
     @button-click="dialogVisible = true"
-  >
-    <icon name="seal" />
-    <template #text>
-      <p class="button-text">电子签章</p>
-    </template>
-  </editor-menus-button>
+  />
   <modal
     :visible="dialogVisible"
     icon="seal"

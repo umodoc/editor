@@ -1,14 +1,12 @@
 <template>
   <editor-menus-button
-    button-type="popup"
-    huge-button
+    ico="horizontal-line"
+    text="分割线"
+    menu-type="popup"
+    huge
     :popup-visible="popupVisible"
     @toggle-popup="togglePopup"
   >
-    <icon name="horizontal-line" />
-    <template #text>
-      <p class="button-text">分割线</p>
-    </template>
     <template #content>
       <div class="page-divider-dropdown">
         <div class="page-divider-item-title">

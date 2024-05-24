@@ -1,9 +1,10 @@
 <template>
-  <editor-menus-button huge-button @button-click="dialogVisible = true">
-    <icon name="web-page" />
-    <template #text>
-      <p class="button-text">网页</p>
-    </template>
+  <editor-menus-button
+    ico="web-page"
+    text="网页"
+    huge
+    @button-click="dialogVisible = true"
+  >
   </editor-menus-button>
   <modal
     :visible="dialogVisible"

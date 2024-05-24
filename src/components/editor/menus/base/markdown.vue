@@ -1,20 +1,17 @@
 <template>
   <editor-menus-button
     v-if="options.document.enableMarkdown"
+    ico="markdown"
+    text="Markdown"
     :tooltip="
       options.document.enableMarkdown
         ? '关闭 Markdown 模式'
         : '切换到 Markdown 模式'
     "
-    :button-active="$document.markdown"
-    huge-button
+    :menu-active="$document.markdown"
+    huge
     @button-click="toggleMarkdownMode"
-  >
-    <icon name="markdown" />
-    <template #text>
-      <p class="button-text">Markdown</p>
-    </template>
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

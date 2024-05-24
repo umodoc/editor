@@ -1,13 +1,13 @@
 <template>
   <editor-menus-button
-    :button-active="editor?.isActive({ textAlign: 'distributed' })"
-    :disabled="!editor?.can().chain().focus().setTextAlign('distributed').run()"
-    tooltip="分散对齐"
+    ico="align-distributed"
+    text="分散对齐"
     shortcut="Ctrl+Shift+D"
+    hide-text
+    :menu-active="editor?.isActive({ textAlign: 'distributed' })"
+    :disabled="!editor?.can().chain().focus().setTextAlign('distributed').run()"
     @button-click="editor?.chain().focus().setTextAlign('distributed').run()"
-  >
-    <icon name="align-distributed" />
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

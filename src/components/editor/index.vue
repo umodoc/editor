@@ -251,8 +251,19 @@ onBeforeUnmount(() => editorInstance.destroy())
   background-color: var(--umo-color-white);
   flex-wrap: wrap;
 
-  .button-text {
+  .menu-button.show-text .button-content .text {
     display: none !important;
+  }
+  .menu-button.huge {
+    height: var(--td-comp-size-xs);
+    min-width: unset;
+    .button-content {
+      min-width: unset !important;
+      .icon {
+        font-size: 16px;
+        margin-top: 0;
+      }
+    }
   }
 }
 </style>

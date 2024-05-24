@@ -1,7 +1,9 @@
 <template>
-  <editor-menus-button tooltip="重置图片位置" @button-click="resetPosition">
-    <icon name="image-reset" />
-  </editor-menus-button>
+  <editor-menus-button
+    ico="image-reset"
+    text="重置图片位置"
+    @button-click="resetPosition"
+  />
 </template>
 
 <script setup>

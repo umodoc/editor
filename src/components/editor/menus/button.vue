@@ -1,6 +1,6 @@
 <template>
   <t-tooltip
-    :content="`${tooltip || ''}${shortcut ? ' (' + getShortcut(shortcut) + ')' : ''}`"
+    :content="getTooltipContent"
     :visible="tooltipVisible && !tooltipForceHide"
     theme="light"
     placement="top"
@@ -14,13 +14,13 @@
       @mouseover="tooltipVisible = true"
       @mouseleave="tooltipVisible = false"
     >
-      <template v-if="buttonType === 'button'">
+      <template v-if="menuType === 'button'">
         <t-button
           class="menu-button"
           :class="{
-            'toolbar-classic': $toolbar.mode === 'classic',
-            'huge-button': hugeButton,
-            active: buttonActive && editor?.isEditable,
+            huge: huge && $toolbar.mode === 'ribbon',
+            'show-text': !hideText,
+            active: menuActive && editor?.isEditable,
           }"
           shape="square"
           variant="text"
@@ -31,17 +31,18 @@
         >
           <div class="button-content">
             <slot />
+            <icon class="icon" v-if="ico" :name="ico" />
+            <p class="text">{{ text }}</p>
           </div>
-          <slot v-if="hugeButton" name="text" />
         </t-button>
       </template>
-      <template v-else-if="buttonType === 'dropdown'">
+      <template v-else-if="menuType === 'dropdown'">
         <template v-if="popupHandle === 'arrow'">
           <t-button
             class="menu-button has-arrow"
             :class="{
-              'toolbar-classic': $toolbar.mode === 'classic',
-              'huge-button': hugeButton,
+              huge: huge && $toolbar.mode === 'ribbon',
+              'show-text': !hideText,
               active: tooltipForceHide,
             }"
             variant="text"
@@ -49,12 +50,11 @@
             v-bind="attrs"
             :disabled="disabled || !editor?.isEditable"
           >
-            <div class="button-content">
-              <div @click="buttonClick">
-                <slot />
-              </div>
+            <div class="button-content" @click="buttonClick">
+              <slot />
+              <icon class="icon" v-if="ico" :name="ico" />
+              <p class="text">{{ text }}</p>
             </div>
-            <slot v-if="hugeButton" name="text" />
             <t-dropdown
               v-bind="attrs"
               trigger="click"
@@ -97,8 +97,8 @@
             <t-button
               class="menu-button has-arrow"
               :class="{
-                'toolbar-classic': $toolbar.mode === 'classic',
-                'huge-button': hugeButton,
+                huge: huge && $toolbar.mode === 'ribbon',
+                'show-text': !hideText,
                 active: tooltipForceHide,
               }"
               variant="text"
@@ -108,11 +108,12 @@
             >
               <div class="button-content" @click="buttonClick">
                 <slot />
+                <icon class="icon" v-if="ico" :name="ico" />
+                <p class="text">{{ text }}</p>
                 <span v-if="$toolbar.mode === 'ribbon'" class="icon-arrow">
                   <icon name="arrow-down" />
                 </span>
               </div>
-              <slot v-if="hugeButton" name="text" />
               <span v-if="$toolbar.mode === 'classic'" class="icon-arrow">
                 <icon name="arrow-down" />
               </span>
@@ -121,7 +122,7 @@
           </t-dropdown>
         </template>
       </template>
-      <template v-else-if="buttonType === 'select'">
+      <template v-else-if="menuType === 'select'">
         <t-select
           size="small"
           placement="bottom-left"
@@ -139,18 +140,23 @@
           <slot />
         </t-select>
       </template>
-      <template v-else-if="buttonType === 'popup'">
+      <template v-else-if="menuType === 'popup'">
         <template v-if="popupHandle === 'arrow'">
           <t-button
             class="menu-button has-arrow"
-            :class="{ active: popupVisible }"
+            :class="{
+              'show-text': !hideText,
+              active: popupVisible,
+            }"
             variant="text"
             size="small"
             v-bind="attrs"
             :disabled="disabled || !editor?.isEditable"
           >
-            <div @click="buttonClick">
+            <div class="button-content" @click="buttonClick">
               <slot />
+              <icon class="icon" v-if="ico" :name="ico" />
+              <p class="text">{{ text }}</p>
             </div>
             <t-popup
               :attach="container"
@@ -197,8 +203,8 @@
               ref="popupHandleRef"
               class="menu-button has-arrow"
               :class="{
-                'toolbar-classic': $toolbar.mode === 'classic',
-                'huge-button': hugeButton,
+                huge: huge && $toolbar.mode === 'ribbon',
+                'show-text': !hideText,
                 active: popupVisible,
               }"
               variant="text"
@@ -209,11 +215,12 @@
             >
               <div class="button-content">
                 <slot />
+                <icon class="icon" v-if="ico" :name="ico" />
+                <p class="text">{{ text }}</p>
                 <span v-if="$toolbar.mode === 'ribbon'" class="icon-arrow">
                   <icon name="arrow-down" />
                 </span>
               </div>
-              <slot v-if="hugeButton" name="text" />
               <span v-if="$toolbar.mode === 'classic'" class="icon-arrow">
                 <icon name="arrow-down" />
               </span>
@@ -245,9 +252,23 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  // 按钮图标
+  ico: {
+    type: String,
+    default: '',
+  },
+  // 按钮文字
+  text: {
+    type: String,
+    default: '',
+  },
+  hideText: {
+    type: Boolean,
+    default: false,
+  },
   // 提示
   tooltip: {
-    type: String,
+    type: [String, Boolean],
     default: undefined,
   },
   // 快捷键
@@ -255,16 +276,17 @@ const props = defineProps({
     type: String,
     default: undefined,
   },
-  // Button 相关
-  buttonType: {
+  // 菜单类型
+  menuType: {
     type: String,
     default: 'button',
   },
-  buttonActive: {
+  huge: {
     type: Boolean,
     default: false,
   },
-  hugeButton: {
+  // 菜单激活状态
+  menuActive: {
     type: Boolean,
     default: false,
   },
@@ -300,6 +322,18 @@ const popupVisileChange = (visible) => {
   // 隐藏 Tooltip，适用于 select、dropdown、popup 等子组件展开时，隐藏 Tooltip
   tooltipForceHide = visible
 }
+const getTooltipContent = () => {
+  if (props.tooltip === false) {
+    return ''
+  }
+  if (props.huge && props.tooltip) {
+    return `${props.tooltip}${props.shortcut ? ` (${getShortcut(props.shortcut)})` : ''}`
+  }
+  if (props.text) {
+    return `${props.tooltip || props.text}${props.shortcut ? ` (${getShortcut(props.shortcut)})` : ''}`
+  }
+  return ''
+}
 watch(
   () => props.popupVisible,
   (val) => {
@@ -329,24 +363,22 @@ onClickOutside(
   --td-comp-paddingLR-s: 5px;
   --td-radius-default: var(--umo-radius);
   border: none;
-  &.width-auto {
+  &.show-text {
     width: auto;
     padding-left: var(--td-comp-paddingLR-s);
     padding-right: var(--td-comp-paddingLR-s);
+    .button-content .text {
+      display: block !important;
+      margin-left: 3px;
+    }
   }
   &[disabled] {
-    :deep(.icon) {
+    .icon {
       --umo-primary-color: var(--umo-text-color-disabled);
       color: var(--umo-text-color-disabled) !important;
     }
-    :deep(.button-text) {
+    .text {
       color: var(--umo-text-color-disabled) !important;
-    }
-  }
-  &.toolbar-classic {
-    padding: 0;
-    :deep(.umo-button__text) {
-      padding: 0 3px;
     }
   }
   &-wrap {
@@ -361,96 +393,72 @@ onClickOutside(
       background-color: rgba(0, 0, 0, 0.05);
     }
   }
-  :deep(.umo-button__text) {
+  .button-content {
     display: flex;
     align-items: center;
-    .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .icon,
+    :deep(.icon) {
       font-size: 16px;
     }
+    .text {
+      display: none;
+    }
+  }
+  .icon-arrow {
+    display: flex;
+    border-top-right-radius: var(--td-radius-default);
+    border-bottom-right-radius: var(--td-radius-default);
+    width: 12px;
+    height: 26px;
+    align-items: center;
+    justify-content: center;
+    margin-right: -3px;
+    .icon {
+      font-size: 10px;
+      color: var(--umo-text-color-light);
+    }
+    &.handle {
+      margin: 0 -4px 0 2px;
+      &:hover {
+        background-color: var(--td-bg-color-container-active);
+      }
+    }
+  }
+  &.huge {
+    padding: 0 3px;
+    width: auto;
+    padding: 0 var(--td-comp-paddingLR-s);
+    height: 56px;
+    margin-bottom: 0;
+    flex-direction: column;
     .button-content {
       display: flex;
       align-items: center;
       justify-content: center;
-      .button-text {
-        margin-left: 3px;
+      flex-direction: column;
+      min-width: 32px;
+      .icon {
+        display: block;
+        font-size: 24px;
+        margin-top: 3px;
+      }
+      .text {
+        display: block;
+        font-size: 12px;
         color: var(--umo-text-color);
       }
-    }
-    .icon-arrow {
-      display: flex;
-      border-top-right-radius: var(--td-radius-default);
-      border-bottom-right-radius: var(--td-radius-default);
-      width: 12px;
-      height: 26px;
-      align-items: center;
-      justify-content: center;
-      margin-right: -3px;
-      .icon {
-        font-size: 10px;
-        color: var(--umo-text-color-light);
-      }
-      &.handle {
-        margin: 0 -4px 0 2px;
-        &:hover {
-          background-color: var(--td-bg-color-container-active);
-        }
+      .icon-arrow {
+        position: absolute;
+        left: calc(50% + 12px);
+        top: 2px;
       }
     }
-  }
-  &.huge-button {
-    padding: 0 3px;
-    width: auto;
-    &.toolbar-classic {
-      :deep(.umo-button__text) {
-        display: flex;
-        align-items: center;
-        .icon {
-          font-size: 18px !important;
-          @media screen and (min-width: 640px) {
-            margin-left: -2px;
-          }
-        }
-        .icon-arrow {
-          margin: 0 -5px 0 2px;
-        }
-        .button-text {
-          margin-left: 3px;
-          @media screen and (max-width: 640px) {
-            display: none;
-          }
-        }
-      }
-    }
-    &:not(.toolbar-classic) {
-      --td-comp-paddingLR-s: 6px;
-      --td-comp-size-xs: 'auto';
-      padding: 0 var(--td-comp-paddingLR-s);
-      height: 56px;
-      margin-bottom: 0;
-      flex-direction: column;
+    &.has-arrow {
       .button-content {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 32px;
-      }
-      :deep(.umo-button__text) {
-        flex-direction: column;
-        .icon {
-          display: block;
-          font-size: 24px;
-          margin-top: 5px;
-        }
-        .button-text {
-          font-size: 12px;
-          color: var(--umo-text-color);
-          margin: 4px 0 2px 0;
-        }
-      }
-      &.has-arrow {
-        .button-content {
-          padding-left: 9px;
-        }
+        min-width: 40px;
       }
     }
   }

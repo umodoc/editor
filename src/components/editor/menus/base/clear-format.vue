@@ -1,10 +1,10 @@
 <template>
   <editor-menus-button
-    tooltip="清除文本格式"
+    ico="clear-format"
+    text="清除文本格式"
+    hide-text
     @button-click="editor?.chain().focus().unsetAllMarks().run()"
-  >
-    <icon name="clear-format" />
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

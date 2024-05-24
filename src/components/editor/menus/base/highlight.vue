@@ -1,9 +1,10 @@
 <template>
   <editor-menus-button
-    tooltip="高亮显示"
+    text="高亮显示"
     shortcut="Ctrl+Shift+H"
-    button-type="dropdown"
+    menu-type="dropdown"
     popup-handle="arrow"
+    hide-text
     overlay-class-name="hightlight-dropdown"
     @button-click="highlightChange(hightlight)"
   >

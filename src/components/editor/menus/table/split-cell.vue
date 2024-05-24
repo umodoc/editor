@@ -1,15 +1,11 @@
 <template>
   <editor-menus-button
-    :tooltip="$toolbar.mode === 'ribbon' ? '' : '拆分单元格'"
-    :class="{ 'width-auto': $toolbar.mode === 'ribbon' }"
+    ico="table-split-cell"
+    text="拆分单元格"
+    :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().splitCell()"
     @button-click="editor?.chain().focus().splitCell().run()"
-  >
-    <icon name="table-split-cell" />
-    <span v-if="$toolbar.mode === 'ribbon'" class="button-text"
-      >拆分单元格</span
-    >
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

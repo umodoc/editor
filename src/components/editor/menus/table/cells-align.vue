@@ -1,27 +1,17 @@
 <template>
   <editor-menus-button
-    button-type="dropdown"
+    ico="table-cells-align"
+    text="对齐方式"
     tooltip="单元格对齐方式"
-    :huge-button="hugeButton"
+    menu-type="dropdown"
+    huge
     :select-options="alignments"
     :disabled="!editor?.can().setCellAttribute('align')"
     @change="setCellsAlign"
-  >
-    <icon name="table-cells-align" :size="hugeButton ? '1em' : '18px'" />
-    <template #text>
-      <p class="button-text">对齐方式</p>
-    </template>
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>
-const { hugeButton } = defineProps({
-  hugeButton: {
-    type: Boolean,
-    default: true,
-  },
-})
-
 const { editor } = useStore()
 
 const alignments = [

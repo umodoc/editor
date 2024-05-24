@@ -1,6 +1,6 @@
 <template>
   <editor-menus-button
-    :tooltip="converting ? '正在去除图片背景...' : '去除图片背景'"
+    :text="converting ? '正在去除图片背景...' : '去除图片背景'"
     :disabled="converting"
     @button-click="removeBackground"
   >

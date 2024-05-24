@@ -1,10 +1,5 @@
 <template>
-  <editor-menus-button huge-button>
-    <icon name="page-footer" />
-    <template #text>
-      <p class="button-text">页脚</p>
-    </template>
-  </editor-menus-button>
+  <editor-menus-button ico="page-footer" text="页脚" huge />
 </template>
 
 <script setup></script>

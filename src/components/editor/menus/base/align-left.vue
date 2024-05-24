@@ -1,6 +1,10 @@
 <template>
   <editor-menus-button
-    :button-active="
+    ico="align-left"
+    text="左对齐"
+    shortcut="Ctrl+Shift+L"
+    hide-text
+    :menu-active="
       editor?.isActive({ textAlign: 'left' }) ||
       editor?.isActive({ nodeAlign: 'flex-start' })
     "
@@ -8,12 +12,8 @@
       !editor?.can().chain().focus().setTextAlign('left').run() &&
       !editor?.can().chain().focus().setNodeAlign('left').run()
     "
-    tooltip="左对齐"
-    shortcut="Ctrl+Shift+L"
     @button-click="setAlignLeft"
-  >
-    <icon name="align-left" />
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

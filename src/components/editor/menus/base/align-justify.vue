@@ -1,13 +1,13 @@
 <template>
   <editor-menus-button
-    :button-active="editor?.isActive({ textAlign: 'justify' })"
-    :disabled="!editor?.can().chain().focus().setTextAlign('justify').run()"
-    tooltip="两端对齐"
+    ico="align-justify"
+    text="两端对齐"
     shortcut="Ctrl+Shift+J"
+    hide-text
+    :menu-active="editor?.isActive({ textAlign: 'justify' })"
+    :disabled="!editor?.can().chain().focus().setTextAlign('justify').run()"
     @button-click="editor?.chain().focus().setTextAlign('justify').run()"
-  >
-    <icon name="align-justify" />
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

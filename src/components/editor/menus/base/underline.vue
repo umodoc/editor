@@ -1,13 +1,13 @@
 <template>
   <editor-menus-button
-    :button-active="editor?.isActive('underline')"
-    :disabled="!editor?.can().chain().focus().toggleUnderline().run()"
-    tooltip="下划线"
+    ico="underline"
+    text="下划线"
     shortcut="Ctrl+U"
+    hide-text
+    :menu-active="editor?.isActive('underline')"
+    :disabled="!editor?.can().chain().focus().toggleUnderline().run()"
     @button-click="editor?.chain().focus().toggleUnderline().run()"
-  >
-    <icon name="underline" />
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

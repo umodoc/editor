@@ -1,13 +1,11 @@
 <template>
   <editor-menus-button
-    button-type="dropdown"
-    huge-button
+    ico="chinese-case"
+    text="中文大小写"
+    menu-type="dropdown"
+    huge
     overlay-class-name="chinese-case-dropdown"
   >
-    <icon name="chinese-case" />
-    <template #text>
-      <p class="button-text">中文大小写</p>
-    </template>
     <template #dropmenu>
       <t-dropdown-menu>
         <t-dropdown-item

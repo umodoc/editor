@@ -1,15 +1,11 @@
 <template>
   <editor-menus-button
-    :tooltip="$toolbar.mode === 'ribbon' ? '' : '切换表头行'"
-    :class="{ 'width-auto': $toolbar.mode === 'ribbon' }"
+    ico="table-header-row"
+    text="切换表头行"
+    :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().toggleHeaderRow()"
     @button-click="editor?.chain().focus().toggleHeaderRow().run()"
-  >
-    <icon name="table-header-row" />
-    <span v-if="$toolbar.mode === 'ribbon'" class="button-text"
-      >切换表头行</span
-    >
-  </editor-menus-button>
+  />
 </template>
 
 <script setup>

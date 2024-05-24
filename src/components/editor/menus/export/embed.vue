@@ -1,10 +1,10 @@
 <template>
-  <editor-menus-button huge-button @button-click="dialogVisible = true">
-    <icon name="embed" />
-    <template #text>
-      <p class="button-text">Embed</p>
-    </template>
-  </editor-menus-button>
+  <editor-menus-button
+    ico="embed"
+    text="Embed"
+    huge
+    @button-click="dialogVisible = true"
+  />
   <modal
     :visible="dialogVisible"
     icon="embed"

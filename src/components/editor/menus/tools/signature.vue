@@ -1,10 +1,10 @@
 <template>
-  <editor-menus-button huge-button @button-click="dialogVisible = true">
-    <icon name="signature" />
-    <template #text>
-      <p class="button-text">电子签名</p>
-    </template>
-  </editor-menus-button>
+  <editor-menus-button
+    ico="signature"
+    text="电子签名"
+    huge
+    @button-click="dialogVisible = true"
+  />
   <modal
     v-model:visible="dialogVisible"
     icon="signature"
@@ -14,7 +14,7 @@
     @close="dialogVisible = false"
   >
     <div class="signature-toolbar">
-      <editor-menus-button tooltip="清空画布" @button-click="reset">
+      <editor-menus-button text="清空画布" @button-click="reset">
         <icon name="clear-format" />
       </editor-menus-button>
       <editor-menus-base-color
@@ -23,8 +23,8 @@
         @change="changeLineColor"
       />
       <editor-menus-button
-        tooltip="画笔粗细"
-        button-type="dropdown"
+        text="画笔粗细"
+        menu-type="dropdown"
         :select-options="lineWidthOptions"
         @change="changeLineWidth"
       >
