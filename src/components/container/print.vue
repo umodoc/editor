@@ -17,14 +17,31 @@
           <icon name="print" />
           <span>打印预览</span>
         </div>
-        <t-button
-          size="small"
-          variant="outline"
-          theme="default"
-          @click="pageOptionsVisible = true"
-        >
-          页面设置
-        </t-button>
+        <div class="actions">
+          <t-button
+            size="small"
+            variant="outline"
+            theme="default"
+            @click="pageOptionsVisible = true"
+          >
+            页面设置
+          </t-button>
+          <t-popup trigger="click" placement="bottom-right">
+            <t-button size="small" variant="outline" theme="default">
+              打印设置
+            </t-button>
+            <template #content>
+              <div class="preview-options">
+                <t-checkbox v-model="previewOptions.singleColumn"
+                  >单列显示页面</t-checkbox
+                >
+                <t-checkbox v-model="previewOptions.showPageNumber"
+                  >打印时包括页码</t-checkbox
+                >
+              </div>
+            </template>
+          </t-popup>
+        </div>
       </div>
     </template>
     <div class="preview-container">
@@ -85,6 +102,10 @@ const { container, options, page, printing } = useStore()
 const $document = useState('document')
 let dialogVisible = $ref(false)
 let pageOptionsVisible = $ref(false)
+const previewOptions = $ref({
+  singleColumn: true,
+  showPageNumber: true,
+})
 
 watch(
   () => printing.value,
@@ -100,6 +121,14 @@ watch(
       iframeRef.contentWindow.location.reload()
     }
   },
+)
+watch(
+  () => previewOptions,
+  () => {
+    iframeCode = getIframeCode()
+    iframeRef.contentWindow.location.reload()
+  },
+  { deep: true },
 )
 
 let iframeRef = $ref(null)
@@ -274,8 +303,8 @@ const getIframeCode = () => {
       .pagedjs_pages {
         display: flex;
         align-content: center;
+        justify-content: center;
         flex-wrap: wrap;
-        flex-direction: column;
         gap: 15px;
       }
 
@@ -286,7 +315,7 @@ const getIframeCode = () => {
         box-shadow:
           rgba(0, 0, 0, 0.06) 0px 0px 10px 0px,
           rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
-        /* pointer-events: none; */
+        pointer-events: none;
         @bottom-center {
           content: '第 ' counter(page) ' 页 / 共 ' counter(pages) ' 页';
           font-size: 12px;
@@ -297,8 +326,11 @@ const getIframeCode = () => {
       body.printing .pagedjs_page {
         box-shadow: none !important;
       }
-      body.printing .pagedjs_margin-content {
+      body.printing:not(.show-page-number) .pagedjs_margin-content {
         display: none !important;
+      }
+      body.single-column .pagedjs_pages{
+        flex-direction: column;
       }
       </style>
       <script>
@@ -333,7 +365,7 @@ const getIframeCode = () => {
       }
       <\/script>
     </head>
-    <body class="umo-editor-container umo-scrollbar">
+    <body class="umo-editor-container umo-scrollbar ${previewOptions.singleColumn ? 'single-column' : ''} ${previewOptions.showPageNumber ? 'show-page-number' : ''}">
       <div id="sprite-plyr" style="display: none;">
         ${document.querySelector('#sprite-plyr')?.innerHTML || ''}
       </div>
@@ -368,6 +400,19 @@ const printPage = () => {
     :deep(.icon) {
       margin-right: 8px;
       font-size: 24px;
+    }
+  }
+  .actions {
+    display: flex;
+    gap: 5px;
+  }
+}
+.preview-options {
+  padding: 10px 15px;
+  > * {
+    display: block;
+    &:not(:last-child) {
+      margin-bottom: 6px;
     }
   }
 }
