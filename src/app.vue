@@ -69,9 +69,10 @@ const options = $ref({
 
 <style>
 .box {
-  margin: 50px;
-  height: 500px;
+  margin: 20px;
+  height: calc(100vh - 40px);
   border: solid 1px #ddd;
+  box-sizing: border-box;
   position: relative;
 }
 </style>
