@@ -109,7 +109,7 @@
     "terser": "^5.31.0",
     "unplugin-auto-import": "^0.17.6",
     "unplugin-vue-components": "^0.27.0",
-    "unplugin-vue-macros": "^2.9.2",
+    "unplugin-vue-macros": "^2.9.3",
     "vite": "^5.2.11",
     "vite-plugin-compression2": "^1.1.1",
     "vite-plugin-svg-icons": "^2.0.1"
