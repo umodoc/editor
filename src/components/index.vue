@@ -217,7 +217,13 @@ const setDocument = (parmas) => {
     if (typeof parmas.bubbleMenu !== 'boolean') {
       throw new Error('"parmas.bubbleMenu" must be a boolean.')
     }
-    $document.value.bubbleMenu = parmas.bubbleMenu
+    options.value.document.bubbleMenu = parmas.bubbleMenu
+  }
+  if (parmas.blockMenu !== undefined) {
+    if (typeof parmas.blockMenu !== 'boolean') {
+      throw new Error('"parmas.blockMenu" must be a boolean.')
+    }
+    options.value.document.blockMenu = parmas.blockMenu
   }
   if (parmas.markdown !== undefined) {
     if (typeof parmas.markdown !== 'boolean') {

@@ -10,7 +10,7 @@ import { useUmoEditor, UmoEditor } from './components'
 
 const app = createApp(App)
 
-// @umodoc/editor
+// @umoteam/editor
 const options = {
   toolbar: {
     // defaultMode: 'classic',

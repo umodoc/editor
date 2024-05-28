@@ -142,6 +142,7 @@ const defaultOptions = {
     enableSpellcheck: true,
     enableMarkdown: true,
     enableBubbleMenu: true,
+    enableBlockMenu: true,
     readOnly: false,
     autofocus: true,
     characterLimit: 0,
@@ -433,6 +434,10 @@ const ojbectSchema = new ObjectSchema({
         validate: 'boolean',
       },
       enableBubbleMenu: {
+        merge: 'replace',
+        validate: 'boolean',
+      },
+      enableBlockMenu: {
         merge: 'replace',
         validate: 'boolean',
       },

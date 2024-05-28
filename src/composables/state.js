@@ -9,21 +9,14 @@ export const useState = (key, editorKey) => {
       }
       break
     case 'document':
-      const {
-        id,
-        title,
-        content,
-        enableMarkdown,
-        enableSpellcheck,
-        enableBubbleMenu,
-      } = options.value.document
+      const { id, title, content, enableMarkdown, enableSpellcheck } =
+        options.value.document
       data = {
         id,
         title,
         content,
         markdown: enableMarkdown,
         spellcheck: enableSpellcheck,
-        bubbleMenu: enableBubbleMenu,
       }
       break
     case 'recent':

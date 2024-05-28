@@ -8,12 +8,7 @@
     :editor="editor"
   />
   <template
-    v-if="
-      options.document.enableBubbleMenu &&
-      $document.bubbleMenu &&
-      editor &&
-      !editorDestroyed
-    "
+    v-if="options.document.enableBubbleMenu && editor && !editorDestroyed"
   >
     <bubble-menu
       class="umo-editor-bubble-menu"
@@ -27,10 +22,35 @@
       <editor-menus-bubble />
     </bubble-menu>
   </template>
+  <template
+    v-if="options.document.enableBlockMenu && editor && !editorDestroyed"
+  >
+    <block-menu
+      :editor="editor"
+      :tippy-options="{
+        appendTo: 'parent',
+        zIndex: 100,
+        onCreate({ popper }) {
+          popper.classList.add('umo-editor-block-menu')
+        },
+        onAfterUpdate({ props }) {
+          updateBlockMenuStyle(props)
+        },
+      }"
+      :should-show="() => true"
+    >
+      <editor-menus-block />
+    </block-menu>
+  </template>
 </template>
 
 <script setup>
-import { Editor, EditorContent, BubbleMenu } from '@tiptap/vue-3'
+import {
+  Editor,
+  EditorContent,
+  BubbleMenu,
+  FloatingMenu as BlockMenu,
+} from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 
@@ -233,6 +253,27 @@ const editorInstance = new Editor({
 })
 setEditor(editorInstance)
 
+// 初始化块级菜单样式
+const initBlockMenuStyle = () => {
+  const blockMenuSyle = document.createElement('style')
+  blockMenuSyle.setAttribute('data-block-menu-style', '')
+  document.querySelector('head').appendChild(blockMenuSyle)
+}
+// 更新块级菜单样式
+const updateBlockMenuStyle = (props) => {
+  const { margin } = page.value
+  if (!props.getReferenceClientRect) return
+  const blockMenuSyle = document.querySelector('[data-block-menu-style]')
+  const rect = props.getReferenceClientRect()
+  const translateX = `translateX(${margin.left - 1}cm)`
+  const translateY =
+    rect.top > 0
+      ? `translateY(calc(${rect.top - 69}px - ${margin.top}cm))`
+      : `translateY(calc(${margin.top}cm - 2px))`
+  blockMenuSyle.innerHTML = `.umo-editor-block-menu { transform: ${translateX} ${translateY} !important; }`
+}
+onMounted(() => initBlockMenuStyle())
+
 // 销毁编辑器实例
 onBeforeUnmount(() => editorInstance.destroy())
 </script>
@@ -264,6 +305,11 @@ onBeforeUnmount(() => editorInstance.destroy())
         margin-top: 0;
       }
     }
+  }
+}
+.umo-editor-block-menu {
+  .menu-button {
+    color: var(--umo-text-color-light) !important;
   }
 }
 </style>
