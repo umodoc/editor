@@ -24,10 +24,7 @@
         </t-dropdown-item>
       </t-dropdown-menu>
     </template>
-    <toolbar-page-options
-      :visible="dialogVisible"
-      @close="dialogVisible = false"
-    />
+    <page-options :visible="dialogVisible" @close="dialogVisible = false" />
   </editor-menus-button>
 </template>
 

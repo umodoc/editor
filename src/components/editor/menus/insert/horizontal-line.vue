@@ -42,10 +42,7 @@
           </div>
           <template #content>
             <div class="page-divider-color-picker">
-              <toolbar-color-picker
-                default-color="#000"
-                @change="colorChange"
-              />
+              <color-picker default-color="#000" @change="colorChange" />
             </div>
           </template>
         </t-popup>

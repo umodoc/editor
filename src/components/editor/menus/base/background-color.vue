@@ -15,10 +15,7 @@
       }"
     />
     <template #content>
-      <toolbar-color-picker
-        :default-color="defaultColor"
-        @change="colorChange"
-      />
+      <color-picker :default-color="defaultColor" @change="colorChange" />
     </template>
   </editor-menus-button>
 </template>

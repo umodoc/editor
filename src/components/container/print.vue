@@ -50,7 +50,7 @@
       </t-loading>
     </div>
   </t-dialog>
-  <toolbar-page-options
+  <page-options
     :visible="pageOptionsVisible"
     @close="pageOptionsVisible = false"
   />

@@ -5,10 +5,7 @@
     huge
     @button-click="dialogVisible = true"
   >
-    <toolbar-page-options
-      :visible="dialogVisible"
-      @close="dialogVisible = false"
-    />
+    <page-options :visible="dialogVisible" @close="dialogVisible = false" />
   </editor-menus-button>
 </template>
 
