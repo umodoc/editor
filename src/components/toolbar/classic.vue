@@ -26,159 +26,161 @@
       </div>
       <template v-if="currentMenu === 'base'">
         <div class="virtual-group">
-          <editor-menus-base-undo />
-          <editor-menus-base-redo />
-          <editor-menus-base-select-all />
-          <editor-menus-base-clear-format />
+          <menus-toolbar-base-undo />
+          <menus-toolbar-base-redo />
+          <menus-toolbar-base-select-all />
+          <menus-toolbar-base-clear-format />
         </div>
         <div class="virtual-group">
-          <editor-menus-base-heading />
-          <editor-menus-base-font-family borderless />
-          <editor-menus-base-font-size borderless />
-          <editor-menus-base-bold />
-          <editor-menus-base-italic />
-          <editor-menus-base-underline />
-          <editor-menus-base-strike />
-          <editor-menus-base-subscript />
-          <editor-menus-base-superscript />
-          <editor-menus-base-color />
-          <editor-menus-base-background-color />
-          <editor-menus-base-highlight />
+          <menus-toolbar-base-heading />
+          <menus-toolbar-base-font-family borderless />
+          <menus-toolbar-base-font-size borderless />
+          <menus-toolbar-base-bold />
+          <menus-toolbar-base-italic />
+          <menus-toolbar-base-underline />
+          <menus-toolbar-base-strike />
+          <menus-toolbar-base-subscript />
+          <menus-toolbar-base-superscript />
+          <menus-toolbar-base-color />
+          <menus-toolbar-base-background-color />
+          <menus-toolbar-base-highlight />
         </div>
         <div class="virtual-group">
-          <editor-menus-base-bullet-list />
-          <editor-menus-base-ordered-list />
-          <editor-menus-base-task />
-          <editor-menus-base-outdent />
-          <editor-menus-base-indent />
-          <editor-menus-base-line-height />
-          <editor-menus-base-align-dropdown />
-          <editor-menus-base-quote />
-          <editor-menus-base-code v-if="!disableItem('code')" />
+          <menus-toolbar-base-bullet-list />
+          <menus-toolbar-base-ordered-list />
+          <menus-toolbar-base-task />
+          <menus-toolbar-base-outdent />
+          <menus-toolbar-base-indent />
+          <menus-toolbar-base-line-height />
+          <menus-toolbar-base-align-dropdown />
+          <menus-toolbar-base-quote />
+          <menus-toolbar-base-code v-if="!disableItem('code')" />
         </div>
         <div class="virtual-group">
-          <editor-menus-base-markdown />
-          <editor-menus-base-search-replace />
+          <menus-toolbar-base-markdown />
+          <menus-toolbar-base-search-replace />
         </div>
         <div class="virtual-group">
-          <editor-menus-base-print v-if="!disableItem('print')" />
+          <menus-toolbar-base-print v-if="!disableItem('print')" />
         </div>
       </template>
       <template v-if="currentMenu === 'insert'">
         <div class="virtual-group">
-          <editor-menus-insert-link />
-          <editor-menus-insert-image />
-          <editor-menus-insert-video v-if="!disableItem('video')" />
-          <editor-menus-insert-audio v-if="!disableItem('audio')" />
-          <editor-menus-insert-file v-if="!disableItem('file')" />
-          <editor-menus-insert-code-block v-if="!disableItem('code')" />
-          <editor-menus-insert-special-characters />
-          <editor-menus-insert-date />
-          <editor-menus-insert-emoji v-if="!disableItem('emoji')" />
-          <editor-menus-insert-mathematics v-if="!disableItem('mathematics')" />
+          <menus-toolbar-insert-link />
+          <menus-toolbar-insert-image />
+          <menus-toolbar-insert-video v-if="!disableItem('video')" />
+          <menus-toolbar-insert-audio v-if="!disableItem('audio')" />
+          <menus-toolbar-insert-file v-if="!disableItem('file')" />
+          <menus-toolbar-insert-code-block v-if="!disableItem('code')" />
+          <menus-toolbar-insert-special-characters />
+          <menus-toolbar-insert-date />
+          <menus-toolbar-insert-emoji v-if="!disableItem('emoji')" />
+          <menus-toolbar-insert-mathematics
+            v-if="!disableItem('mathematics')"
+          />
         </div>
         <div class="virtual-group">
-          <editor-menus-insert-hard-break />
-          <editor-menus-insert-horizontal-line />
-          <editor-menus-insert-toc />
-          <editor-menus-insert-text-box />
+          <menus-toolbar-insert-hard-break />
+          <menus-toolbar-insert-horizontal-line />
+          <menus-toolbar-insert-toc />
+          <menus-toolbar-insert-text-box />
         </div>
         <div class="virtual-group">
-          <editor-menus-insert-template />
-          <editor-menus-insert-web-page />
+          <menus-toolbar-insert-template />
+          <menus-toolbar-insert-web-page />
         </div>
       </template>
       <template v-if="currentMenu === 'table'">
         <div class="virtual-group">
-          <editor-menus-table-insert />
-          <editor-menus-table-fix />
+          <menus-toolbar-table-insert />
+          <menus-toolbar-table-fix />
         </div>
         <div class="virtual-group">
-          <editor-menus-table-cells-align />
-          <editor-menus-table-cells-background />
-          <!-- <editor-menus-table-border-color /> -->
+          <menus-toolbar-table-cells-align />
+          <menus-toolbar-table-cells-background />
+          <!-- <menus-toolbar-table-border-color /> -->
         </div>
         <div class="virtual-group">
-          <editor-menus-table-add-row-before :huge="false" />
-          <editor-menus-table-add-row-after :huge="false" />
-          <editor-menus-table-add-column-before :huge="false" />
-          <editor-menus-table-add-column-after :huge="false" />
+          <menus-toolbar-table-add-row-before :huge="false" />
+          <menus-toolbar-table-add-row-after :huge="false" />
+          <menus-toolbar-table-add-column-before :huge="false" />
+          <menus-toolbar-table-add-column-after :huge="false" />
         </div>
         <div class="virtual-group">
-          <editor-menus-table-delete-row :huge="false" />
-          <editor-menus-table-delete-column :huge="false" />
+          <menus-toolbar-table-delete-row :huge="false" />
+          <menus-toolbar-table-delete-column :huge="false" />
         </div>
         <div class="virtual-group">
-          <editor-menus-table-merge-cells :huge="false" />
-          <editor-menus-table-split-cell :huge="false" />
+          <menus-toolbar-table-merge-cells :huge="false" />
+          <menus-toolbar-table-split-cell :huge="false" />
         </div>
         <div class="virtual-group">
-          <editor-menus-table-toggle-header-row :huge="false" />
-          <editor-menus-table-toggle-header-column :huge="false" />
-          <editor-menus-table-toggle-header-cell :huge="false" />
+          <menus-toolbar-table-toggle-header-row :huge="false" />
+          <menus-toolbar-table-toggle-header-column :huge="false" />
+          <menus-toolbar-table-toggle-header-cell :huge="false" />
         </div>
         <div class="virtual-group">
-          <editor-menus-table-next-cell :huge="false" />
-          <editor-menus-table-previous-cell :huge="false" />
+          <menus-toolbar-table-next-cell :huge="false" />
+          <menus-toolbar-table-previous-cell :huge="false" />
         </div>
         <div class="virtual-group">
-          <editor-menus-table-delete />
+          <menus-toolbar-table-delete />
         </div>
       </template>
       <template v-if="currentMenu === 'tools'">
         <div class="virtual-group">
-          <editor-menus-tools-qrcode />
-          <editor-menus-tools-barcode />
+          <menus-toolbar-tools-qrcode />
+          <menus-toolbar-tools-barcode />
         </div>
         <div class="virtual-group">
-          <editor-menus-tools-signature v-if="!disableItem('signature')" />
-          <editor-menus-tools-seal v-if="!disableItem('seal')" />
+          <menus-toolbar-tools-signature v-if="!disableItem('signature')" />
+          <menus-toolbar-tools-seal v-if="!disableItem('seal')" />
         </div>
         <div class="virtual-group">
-          <editor-menus-tools-diagrams v-if="!disableItem('diagrams')" />
-          <!-- <editor-menus-tools-mind-map v-if="!disableItem('mind-map')" /> -->
-          <editor-menus-tools-mermaid v-if="!disableItem('mermaid')" />
+          <menus-toolbar-tools-diagrams v-if="!disableItem('diagrams')" />
+          <!-- <menus-toolbar-tools-mind-map v-if="!disableItem('mind-map')" /> -->
+          <menus-toolbar-tools-mermaid v-if="!disableItem('mermaid')" />
         </div>
         <div class="virtual-group">
-          <editor-menus-tools-chinese-case />
+          <menus-toolbar-tools-chinese-case />
         </div>
       </template>
       <template v-if="currentMenu === 'page'">
         <div class="virtual-group">
-          <editor-menus-page-toggle-toc />
+          <menus-toolbar-page-toggle-toc />
         </div>
         <div class="virtual-group">
           <div class="virtual-group-row">
-            <editor-menus-page-margin />
-            <editor-menus-page-size />
-            <editor-menus-page-orientation />
+            <menus-toolbar-page-margin />
+            <menus-toolbar-page-size />
+            <menus-toolbar-page-orientation />
           </div>
         </div>
         <!-- <div class="virtual-group">
-          <editor-menus-page-header />
-          <editor-menus-page-footer />
+          <menus-toolbar-page-header />
+          <menus-toolbar-page-footer />
         </div> -->
         <div class="virtual-group">
-          <editor-menus-page-break />
-          <editor-menus-page-break-marks />
-          <editor-menus-page-line-number />
-          <editor-menus-page-watermark />
-          <editor-menus-page-background />
+          <menus-toolbar-page-break />
+          <menus-toolbar-page-break-marks />
+          <menus-toolbar-page-line-number />
+          <menus-toolbar-page-watermark />
+          <menus-toolbar-page-background />
         </div>
         <div class="virtual-group">
-          <editor-menus-page-preview />
+          <menus-toolbar-page-preview />
         </div>
       </template>
       <template v-if="currentMenu === 'export'">
         <div class="virtual-group">
-          <editor-menus-export-image />
-          <!-- <editor-menus-export-pdf /> -->
-          <editor-menus-export-html />
-          <editor-menus-export-text />
+          <menus-toolbar-export-image />
+          <!-- <menus-toolbar-export-pdf /> -->
+          <menus-toolbar-export-html />
+          <menus-toolbar-export-text />
         </div>
         <div class="virtual-group">
-          <editor-menus-export-share v-if="!disableItem('share')" />
-          <editor-menus-export-embed v-if="!disableItem('embed')" />
+          <menus-toolbar-export-share v-if="!disableItem('share')" />
+          <menus-toolbar-export-embed v-if="!disableItem('embed')" />
         </div>
       </template>
     </div>

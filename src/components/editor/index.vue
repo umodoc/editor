@@ -19,7 +19,7 @@
         zIndex: 99,
       }"
     >
-      <editor-menus-bubble />
+      <menus-bubble />
     </bubble-menu>
   </template>
   <template
@@ -39,7 +39,6 @@
       }"
       :should-show="() => true"
     >
-      <editor-menus-block />
     </block-menu>
   </template>
 </template>
