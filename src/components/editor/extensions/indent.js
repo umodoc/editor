@@ -9,7 +9,7 @@ export default Extension.create({
     return {
       types: ['heading', 'listItem', 'taskItem', 'paragraph'],
       minLevel: 0,
-      maxLevel: 8,
+      maxLevel: 5,
     }
   },
   addGlobalAttributes() {
