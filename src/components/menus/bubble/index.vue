@@ -37,6 +37,7 @@
     <menus-bubble-image-download />
     <div class="divider"></div>
     <menus-bubble-image-edit />
+    <menus-bubble-node-delete />
   </template>
   <template
     v-else-if="
