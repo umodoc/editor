@@ -328,10 +328,10 @@ const attrs = useAttrs()
 const { container, editor } = useStore()
 const $toolbar = useState('toolbar')
 const menuClick = (...args) => {
-  if (attrs.onButtonClickThrough) {
-    attrs.onButtonClickThrough(...args)
-  } else if (attrs.onButtonClick) {
-    attrs.onButtonClick(...args)
+  if (attrs.onMenuClickThrough) {
+    attrs.onMenuClickThrough(...args)
+  } else if (attrs.onMenuClick) {
+    attrs.onMenuClick(...args)
   }
 }
 
