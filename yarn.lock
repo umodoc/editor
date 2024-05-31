@@ -465,20 +465,20 @@
   resolved "https://registry.yarnpkg.com/@sereneinserenade/tiptap-search-and-replace/-/tiptap-search-and-replace-0.1.1.tgz#7f73ce1b80f2bd067829858dfb08aa8baa5254ae"
   integrity sha512-lVYuCYj8ORUCpv9WD7mmcKGQez/QaGUyCoJReH8Kn8hQo8dJEETo3sC3l7QrsYokoV8VNS42rBh0vj7qbgDg1Q==
 
-"@tiptap-pro/extension-invisible-characters@^2.8.7":
-  version "2.8.7"
-  resolved "https://registry.tiptap.dev/@tiptap-pro%2fextension-invisible-characters/-/extension-invisible-characters-2.8.7.tgz#bcef702aebd3cbf798a91772ca405146b27d76e9"
-  integrity sha512-uUL6D/NCxIAdPHviC5q13IdHs+nN/uimKSb2ENzwKL/MEhTy0/UujBPIhKktfXap8EuqjbaRLAuEJ8wPcyty+A==
+"@tiptap-pro/extension-invisible-characters@^2.8.8":
+  version "2.8.8"
+  resolved "https://registry.tiptap.dev/@tiptap-pro%2fextension-invisible-characters/-/extension-invisible-characters-2.8.8.tgz#60479c9387ad6da2aca93a2e17701a033ee38db6"
+  integrity sha512-9AwPCkQE39CWoIHl01PYPMtT1p0jUge2X6fZms+3Qm+Wu64AviT5aiOj3wA43HQn6X7j0/139CjBy/5VGHfBqw==
 
-"@tiptap-pro/extension-mathematics@^2.8.7":
-  version "2.8.7"
-  resolved "https://registry.tiptap.dev/@tiptap-pro%2fextension-mathematics/-/extension-mathematics-2.8.7.tgz#c2fe4ff79aeff8b2e6fd05c22a5ff37e2ae61298"
-  integrity sha512-iRQxBb9UbMGIaT5St+ypn19jeAknFwrWZk23Ly+qxSyAliQhwecT/ghy1aZBE2OeDXNbdr0h6mzGGOUbA1XZEQ==
+"@tiptap-pro/extension-mathematics@^2.8.8":
+  version "2.8.8"
+  resolved "https://registry.tiptap.dev/@tiptap-pro%2fextension-mathematics/-/extension-mathematics-2.8.8.tgz#d08bc02eeae2b271690cb6e247eb204ab82cf3f0"
+  integrity sha512-N0JoTSBfkTxnaUP8TKmaI64m54YORIm/0RaGBjbHxNASmUgFihFWwrPh9SXics77wpIw25vT/hueMDtTB2L9FA==
 
-"@tiptap-pro/extension-table-of-contents@^2.8.7":
-  version "2.8.7"
-  resolved "https://registry.tiptap.dev/@tiptap-pro%2fextension-table-of-contents/-/extension-table-of-contents-2.8.7.tgz#f96819481b3a079801b4dacd39251914fa36ecc8"
-  integrity sha512-wG5x2hmiydESQ6ePzFUtn4Qq4m2tsLEvbiZqBS0USZAW0zCT4bkNnqfMpC9C9tQGqH2ZEF4rdciZD7qbJL1rhw==
+"@tiptap-pro/extension-table-of-contents@^2.8.8":
+  version "2.8.8"
+  resolved "https://registry.tiptap.dev/@tiptap-pro%2fextension-table-of-contents/-/extension-table-of-contents-2.8.8.tgz#493dcefe7e919789378e5c7aba73210df9a3920a"
+  integrity sha512-bdOXNiz5BeyQ8KcBisz5F+awNEC8KJzDfGlhLgn/oeOjyJSNwE/Mj2hX4siyFj83vHTYgGjefv3f8ZduYrTHhg==
   dependencies:
     uuid "^8.3.2"
 
@@ -1275,25 +1275,25 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.4.27.tgz#f05e3cd107d157354bb4ae7a7b5fc9cf73c63b50"
   integrity sha512-DL3NmY2OFlqmYYrzp39yi3LDkKxa5vZVwxWdQ3rG0ekuWscHraeIbnI8t+aZK7qhYqEqWKTUdijadunb9pnrgA==
 
-"@vueuse/core@^10.9.0":
-  version "10.9.0"
-  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-10.9.0.tgz#7d779a95cf0189de176fee63cee4ba44b3c85d64"
-  integrity sha512-/1vjTol8SXnx6xewDEKfS0Ra//ncg4Hb0DaZiwKf7drgfMsKFExQ+FnnENcN6efPen+1kIzhLQoGSy0eDUVOMg==
+"@vueuse/core@^10.10.0":
+  version "10.10.0"
+  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-10.10.0.tgz#05a98d3c5674762455a2c552c915d461d83e6490"
+  integrity sha512-vexJ/YXYs2S42B783rI95lMt3GzEwkxzC8Hb0Ndpd8rD+p+Lk/Za4bd797Ym7yq4jXqdSyj3JLChunF/vyYjUw==
   dependencies:
     "@types/web-bluetooth" "^0.0.20"
-    "@vueuse/metadata" "10.9.0"
-    "@vueuse/shared" "10.9.0"
+    "@vueuse/metadata" "10.10.0"
+    "@vueuse/shared" "10.10.0"
     vue-demi ">=0.14.7"
 
-"@vueuse/metadata@10.9.0":
-  version "10.9.0"
-  resolved "https://registry.yarnpkg.com/@vueuse/metadata/-/metadata-10.9.0.tgz#769a1a9db65daac15cf98084cbf7819ed3758620"
-  integrity sha512-iddNbg3yZM0X7qFY2sAotomgdHK7YJ6sKUvQqbvwnf7TmaVPxS4EJydcNsVejNdS8iWCtDk+fYXr7E32nyTnGA==
+"@vueuse/metadata@10.10.0":
+  version "10.10.0"
+  resolved "https://registry.yarnpkg.com/@vueuse/metadata/-/metadata-10.10.0.tgz#53e61e9380670e342cbe6e03d852f3319308cb5b"
+  integrity sha512-UNAo2sTCAW5ge6OErPEHb5z7NEAg3XcO9Cj7OK45aZXfLLH1QkexDcZD77HBi5zvEiLOm1An+p/4b5K3Worpug==
 
-"@vueuse/shared@10.9.0":
-  version "10.9.0"
-  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-10.9.0.tgz#13af2a348de15d07b7be2fd0c7fc9853a69d8fe0"
-  integrity sha512-Uud2IWncmAfJvRaFYzv5OHDli+FbOzxiVEQdLCKQKLyhz94PIyFC3CHcH7EDMwIn8NPtD06+PNbC/PiO0LGLtw==
+"@vueuse/shared@10.10.0":
+  version "10.10.0"
+  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-10.10.0.tgz#93f7c2210151ff43c2c7677963f7aa3aef5d9896"
+  integrity sha512-2aW33Ac0Uk0U+9yo3Ypg9s5KcR42cuehRWl7vnUHadQyFvCktseyxxEPBi1Eiq4D2yBGACOnqLZpx1eMc7g5Og==
   dependencies:
     vue-demi ">=0.14.7"
 
@@ -5484,10 +5484,10 @@ vite-plugin-svg-icons@^2.0.1:
     svg-baker "1.7.0"
     svgo "^2.8.0"
 
-vite@^5.2.11:
-  version "5.2.11"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-5.2.11.tgz#726ec05555431735853417c3c0bfb36003ca0cbd"
-  integrity sha512-HndV31LWW05i1BLPMUCE1B9E9GFbOu1MbenhS58FuK6owSO5qHm7GiCotrNY1YE5rMeQSFBGmT5ZaLEjFizgiQ==
+vite@^5.2.12:
+  version "5.2.12"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-5.2.12.tgz#3536c93c58ba18edea4915a2ac573e6537409d97"
+  integrity sha512-/gC8GxzxMK5ntBwb48pR32GGhENnjtY30G4A0jemunsBkiEZFw60s8InGpN8gkhHEkjnRK1aSAxeQgwvFhUHAA==
   dependencies:
     esbuild "^0.20.1"
     postcss "^8.4.38"
