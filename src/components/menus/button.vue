@@ -33,6 +33,9 @@
             <slot />
             <icon class="icon" v-if="ico" :name="ico" />
             <p class="text">{{ text }}</p>
+            <kbd class="kbd" v-if="shortcutText">
+              {{ getShortcut(shortcutText) }}
+            </kbd>
           </div>
         </t-button>
       </template>
@@ -54,6 +57,9 @@
               <slot />
               <icon class="icon" v-if="ico" :name="ico" />
               <p class="text">{{ text }}</p>
+              <kbd class="kbd" v-if="shortcutText">
+                {{ getShortcut(shortcutText) }}
+              </kbd>
             </div>
             <t-dropdown
               v-bind="attrs"
@@ -110,6 +116,9 @@
                 <slot />
                 <icon class="icon" v-if="ico" :name="ico" />
                 <p class="text">{{ text }}</p>
+                <kbd class="kbd" v-if="shortcutText">{{
+                  getShortcut(shortcutText)
+                }}</kbd>
                 <span v-if="$toolbar.mode === 'ribbon'" class="icon-arrow">
                   <icon name="arrow-down" />
                 </span>
@@ -157,6 +166,9 @@
               <slot />
               <icon class="icon" v-if="ico" :name="ico" />
               <p class="text">{{ text }}</p>
+              <kbd class="kbd" v-if="shortcutText">
+                {{ getShortcut(shortcutText) }}
+              </kbd>
             </div>
             <t-popup
               :attach="container"
@@ -217,6 +229,9 @@
                 <slot />
                 <icon class="icon" v-if="ico" :name="ico" />
                 <p class="text">{{ text }}</p>
+                <kbd class="kbd" v-if="shortcutText">{{
+                  getShortcut(shortcutText)
+                }}</kbd>
                 <span v-if="$toolbar.mode === 'ribbon'" class="icon-arrow">
                   <icon name="arrow-down" />
                 </span>
@@ -273,6 +288,10 @@ const props = defineProps({
   },
   // 快捷键
   shortcut: {
+    type: String,
+    default: undefined,
+  },
+  shortcutText: {
     type: String,
     default: undefined,
   },

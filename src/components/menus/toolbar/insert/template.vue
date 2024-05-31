@@ -1,6 +1,6 @@
 <template>
   <menus-button
-    v-if="options.templates && options.templates.length > 0"
+    v-if="options.templates.length > 0"
     ico="template"
     text="模板"
     menu-type="dropdown"

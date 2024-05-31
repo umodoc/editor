@@ -1,31 +1,42 @@
 <template>
-  <template v-if="editor?.isActive('image')">
-    <template v-if="!editor?.getAttributes('image').error">
-      <menus-toolbar-base-align-left />
-      <menus-toolbar-base-align-center />
-      <menus-toolbar-base-align-right />
-      <div class="divider"></div>
-      <menus-bubble-image-flip />
-      <menus-bubble-image-proportion />
-      <menus-bubble-image-draggable />
-      <menus-bubble-image-reset />
-      <div class="divider"></div>
-      <menus-bubble-image-remove-background
-        v-if="
-          editor?.getAttributes('image')?.type === 'image' ||
-          ['image/png', 'image/jpeg'].includes(
-            editor?.getAttributes('image')?.type,
-          )
-        "
-      />
-      <menus-bubble-image-preview
-        v-if="editor?.getAttributes('image')?.type === 'image'"
-      />
-      <menus-bubble-image-download />
-      <div class="divider"></div>
-      <menus-bubble-image-edit />
-    </template>
-    <menus-bubble-node-delete />
+  <template
+    v-if="
+      editor?.isActive('toc') ||
+      editor?.isActive('pageBreak') ||
+      editor?.isActive('horizontalRule') ||
+      editor?.getAttributes('image').error
+    "
+  >
+    <!-- <menus-bubble-node-delete /> -->
+  </template>
+  <template
+    v-else-if="
+      editor?.isActive('image') && !editor?.getAttributes('image').error
+    "
+  >
+    <menus-toolbar-base-align-left />
+    <menus-toolbar-base-align-center />
+    <menus-toolbar-base-align-right />
+    <div class="divider"></div>
+    <menus-bubble-image-flip />
+    <menus-bubble-image-proportion />
+    <menus-bubble-image-draggable />
+    <menus-bubble-image-reset />
+    <div class="divider"></div>
+    <menus-bubble-image-remove-background
+      v-if="
+        editor?.getAttributes('image')?.type === 'image' ||
+        ['image/png', 'image/jpeg'].includes(
+          editor?.getAttributes('image')?.type,
+        )
+      "
+    />
+    <menus-bubble-image-preview
+      v-if="editor?.getAttributes('image')?.type === 'image'"
+    />
+    <menus-bubble-image-download />
+    <div class="divider"></div>
+    <menus-bubble-image-edit />
   </template>
   <template
     v-else-if="
@@ -74,15 +85,6 @@
     <menus-bubble-code-word-wrap />
     <div class="divider"></div>
     <menus-bubble-code-copy />
-    <menus-bubble-node-delete />
-  </template>
-  <template
-    v-else-if="
-      editor?.isActive('toc') ||
-      editor?.isActive('pageBreak') ||
-      editor?.isActive('horizontalRule')
-    "
-  >
     <menus-bubble-node-delete />
   </template>
   <template v-else>

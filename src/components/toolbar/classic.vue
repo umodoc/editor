@@ -46,9 +46,9 @@
           <menus-toolbar-base-highlight />
         </div>
         <div class="virtual-group">
-          <menus-toolbar-base-bullet-list />
           <menus-toolbar-base-ordered-list />
-          <menus-toolbar-base-task />
+          <menus-toolbar-base-bullet-list />
+          <menus-toolbar-base-task-list />
           <menus-toolbar-base-outdent />
           <menus-toolbar-base-indent />
           <menus-toolbar-base-line-height />

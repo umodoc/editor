@@ -75,6 +75,7 @@ const colorChange = (color) => {
 }
 
 const setHorizontalLine = ({ value }) => {
+  console.log(value)
   if (!value || !editor.value) return
   editor.value
     .chain()

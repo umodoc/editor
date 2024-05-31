@@ -4,32 +4,33 @@
     :text="content ? '编辑' : 'Mermaid'"
     huge
     @button-click="buttonClick"
-  />
-  <modal
-    :visible="dialogVisible"
-    icon="mermaid"
-    :title="content ? '编辑 Mermaid 图表' : '添加 Mermaid 图表'"
-    width="960px"
-    @confirm="setMermaid"
-    @close="dialogVisible = flase"
   >
-    <div class="mermaid-container">
-      <t-textarea
-        class="mermaid-code"
-        v-model="mermaidCode"
-        autofocus
-        placeholder="请输入 Mermaid 代码"
-      />
-      <div class="mermaid-render">
-        <div class="mermaid-title">预览</div>
-        <div
-          class="mermaid-svg narrow-scrollbar"
-          ref="mermaidRef"
-          v-html="svgCode"
-        ></div>
+    <modal
+      :visible="dialogVisible"
+      icon="mermaid"
+      :title="content ? '编辑 Mermaid 图表' : '添加 Mermaid 图表'"
+      width="960px"
+      @confirm="setMermaid"
+      @close="dialogVisible = flase"
+    >
+      <div class="mermaid-container">
+        <t-textarea
+          class="mermaid-code"
+          v-model="mermaidCode"
+          autofocus
+          placeholder="请输入 Mermaid 代码"
+        />
+        <div class="mermaid-render">
+          <div class="mermaid-title">预览</div>
+          <div
+            class="mermaid-svg narrow-scrollbar"
+            ref="mermaidRef"
+            v-html="svgCode"
+          ></div>
+        </div>
       </div>
-    </div>
-  </modal>
+    </modal>
+  </menus-button>
 </template>
 
 <script setup>

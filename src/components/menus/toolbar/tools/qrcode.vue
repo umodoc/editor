@@ -4,91 +4,92 @@
     :text="content ? '编辑' : '二维码'"
     huge
     @button-click="buttonClick"
-  />
-  <modal
-    :visible="dialogVisible"
-    icon="qrcode"
-    :title="content ? '编辑二维码' : '插入二维码'"
-    width="695px"
-    @confirm="setQrcode"
-    @close="dialogVisible = false"
   >
-    <div class="qrcode-container">
-      <div class="qrcode-toolbar">
-        <menus-button
-          style="width: 126px"
-          text="二维码容错能力"
-          :select-options="levels"
-          menu-type="select"
-          :value="config.ecl"
-          @button-click="(value) => (config.ecl = value)"
-        ></menus-button>
-        <menus-button menu-type="input" tooltip="二维码四周留白大小">
-          <t-input-number
-            v-model="config.padding"
-            size="small"
-            theme="normal"
-            :max="10"
-            :min="0"
-            :allow-input-over-limit="false"
-            placeholder=""
+    <modal
+      :visible="dialogVisible"
+      icon="qrcode"
+      :title="content ? '编辑二维码' : '插入二维码'"
+      width="695px"
+      @confirm="setQrcode"
+      @close="dialogVisible = false"
+    >
+      <div class="qrcode-container">
+        <div class="qrcode-toolbar">
+          <menus-button
+            style="width: 126px"
+            text="二维码容错能力"
+            :select-options="levels"
+            menu-type="select"
+            :value="config.ecl"
+            @button-click="(value) => (config.ecl = value)"
+          ></menus-button>
+          <menus-button menu-type="input" tooltip="二维码四周留白大小">
+            <t-input-number
+              v-model="config.padding"
+              size="small"
+              theme="normal"
+              :max="10"
+              :min="0"
+              :allow-input-over-limit="false"
+              placeholder=""
+            >
+              <template #label><span>四周留白：</span></template>
+            </t-input-number>
+          </menus-button>
+          <menus-button menu-type="input" tooltip="二维码的宽度和高度">
+            <t-input-number
+              v-model="config.width"
+              size="small"
+              theme="normal"
+              :max="1024"
+              :min="64"
+              :allow-input-over-limit="false"
+              placeholder=""
+            >
+              <template #label><span>宽高度：</span></template>
+            </t-input-number>
+          </menus-button>
+          <t-divider layout="vertical" />
+          <menus-toolbar-base-color
+            text="二维码颜色"
+            :default-color="config.color"
+            modeless
+            @change="(value) => (config.color = value)"
+          />
+          <menus-toolbar-base-background-color
+            text="二维码背景颜色"
+            :default-color="config.background"
+            modeless
+            @change="(value) => (config.background = value)"
+          />
+        </div>
+        <div class="qrcode-code">
+          <t-textarea
+            v-model="config.content"
+            maxlength="200"
+            show-limit-number
+            autofocus
+            autosize
+            placeholder="请输入要转化成二维码的内容"
           >
-            <template #label><span>四周留白：</span></template>
-          </t-input-number>
-        </menus-button>
-        <menus-button menu-type="input" tooltip="二维码的宽度和高度">
-          <t-input-number
-            v-model="config.width"
-            size="small"
-            theme="normal"
-            :max="1024"
-            :min="64"
-            :allow-input-over-limit="false"
-            placeholder=""
+          </t-textarea>
+          <div
+            v-if="renderError && config.content !== ''"
+            class="t-input__tips t-tips t-is-error"
           >
-            <template #label><span>宽高度：</span></template>
-          </t-input-number>
-        </menus-button>
-        <t-divider layout="vertical" />
-        <menus-toolbar-base-color
-          text="二维码颜色"
-          :default-color="config.color"
-          modeless
-          @change="(value) => (config.color = value)"
-        />
-        <menus-toolbar-base-background-color
-          text="二维码背景颜色"
-          :default-color="config.background"
-          modeless
-          @change="(value) => (config.background = value)"
-        />
-      </div>
-      <div class="qrcode-code">
-        <t-textarea
-          v-model="config.content"
-          maxlength="200"
-          show-limit-number
-          autofocus
-          autosize
-          placeholder="请输入要转化成二维码的内容"
-        >
-        </t-textarea>
-        <div
-          v-if="renderError && config.content !== ''"
-          class="t-input__tips t-tips t-is-error"
-        >
-          二维码生成错误。
+            二维码生成错误。
+          </div>
+        </div>
+        <div class="qrcode-render">
+          <div class="qrcode-title">预览</div>
+          <div class="qrcode-svg narrow-scrollbar">
+            <div v-if="!svgCode" class="qrcode-empty">当前无预览内容</div>
+            <div class="svg" v-else v-html="svgCode"></div>
+          </div>
         </div>
       </div>
-      <div class="qrcode-render">
-        <div class="qrcode-title">预览</div>
-        <div class="qrcode-svg narrow-scrollbar">
-          <div v-if="!svgCode" class="qrcode-empty">当前无预览内容</div>
-          <div class="svg" v-else v-html="svgCode"></div>
-        </div>
-      </div>
-    </div>
-  </modal>
+    </modal>
+  </menus-button>
 </template>
 
 <script setup>

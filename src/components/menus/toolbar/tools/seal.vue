@@ -5,28 +5,29 @@
     text="电子签章"
     huge
     @button-click="dialogVisible = true"
-  />
-  <modal
-    :visible="dialogVisible"
-    icon="seal"
-    title="插入电子签章"
-    width="480px"
-    confirm-btn="插入"
-    @confirm="setSeal"
-    @close="dialogVisible = false"
   >
-    <div class="seal-container" @click="selectImage">
-      <div class="tip">
-        选择纯色背景电子章的影印件或者照片，将自动扣取电子章，所有操作在本地完成，不会向服务器发送数据，请放心使用。
+    <modal
+      :visible="dialogVisible"
+      icon="seal"
+      title="插入电子签章"
+      width="480px"
+      confirm-btn="插入"
+      @confirm="setSeal"
+      @close="dialogVisible = false"
+    >
+      <div class="seal-container" @click="selectImage">
+        <div class="tip">
+          选择纯色背景电子章的影印件或者照片，将自动扣取电子章，所有操作在本地完成，不会向服务器发送数据，请放心使用。
+        </div>
+        <div class="seal-uploader">
+          <span v-if="!sealImg">{{
+            converting ? converting : '点击此处选择电子章图片'
+          }}</span>
+          <img class="seal-img" v-else :src="sealImg" />
+        </div>
       </div>
-      <div class="seal-uploader">
-        <span v-if="!sealImg">{{
-          converting ? converting : '点击此处选择电子章图片'
-        }}</span>
-        <img class="seal-img" v-else :src="sealImg" />
-      </div>
-    </div>
-  </modal>
+    </modal>
+  </menus-button>
 </template>
 
 <script setup>

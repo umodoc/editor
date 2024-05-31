@@ -5,27 +5,27 @@
     huge
     @button-click="dialogVisible = true"
   >
+    <modal
+      :visible="dialogVisible"
+      icon="web-page"
+      title="插入网页"
+      width="480px"
+      confirmBtn="插入"
+      @confirm="insertWebPage"
+      @close="dialogVisible = false"
+    >
+      <div class="web-page-container">
+        <div class="web-page-tip">某些网页可能不支持嵌入。</div>
+        <t-input
+          v-model.trim="url"
+          :status="error ? 'error' : 'default'"
+          type="url"
+          clearable
+          placeholder="请输入网页地址，以 http:// 或 https:// 开头"
+        />
+      </div>
+    </modal>
   </menus-button>
-  <modal
-    :visible="dialogVisible"
-    icon="web-page"
-    title="插入网页"
-    width="480px"
-    confirmBtn="插入"
-    @confirm="insertWebPage"
-    @close="dialogVisible = false"
-  >
-    <div class="web-page-container">
-      <div class="web-page-tip">某些网页可能不支持嵌入。</div>
-      <t-input
-        v-model.trim="url"
-        :status="error ? 'error' : 'default'"
-        type="url"
-        clearable
-        placeholder="请输入网页地址，以 http:// 或 https:// 开头"
-      />
-    </div>
-  </modal>
 </template>
 
 <script setup>

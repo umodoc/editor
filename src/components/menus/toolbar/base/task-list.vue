@@ -1,6 +1,6 @@
 <template>
   <menus-button
-    ico="task"
+    ico="task-list"
     text="待办事项"
     shortcut="Ctrl+Shift+9"
     menu-type="dropdown"

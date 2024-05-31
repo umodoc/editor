@@ -4,45 +4,46 @@
     text="电子签名"
     huge
     @button-click="dialogVisible = true"
-  />
-  <modal
-    v-model:visible="dialogVisible"
-    icon="signature"
-    title="插入电子签名"
-    width="642px"
-    @confirm="setSignature"
-    @close="dialogVisible = false"
   >
-    <div class="signature-toolbar">
-      <menus-button text="清空画布" @button-click="reset">
-        <icon name="clear-format" />
-      </menus-button>
-      <menus-toolbar-base-color
-        modeless
-        default-color="#000"
-        @change="changeLineColor"
-      />
-      <menus-button
-        text="画笔粗细"
-        menu-type="dropdown"
-        :select-options="lineWidthOptions"
-        @change="changeLineWidth"
-      >
-        <icon name="highlight" />
-      </menus-button>
-    </div>
-    <div class="signature-container" data-tip="请在当前区域签名">
-      <signature
-        ref="signatureRef"
-        :line-color="lineColor"
-        :line-width="lineWidth"
-        :width="600"
-        :height="200"
-        is-crop
-        format="image/png"
-      />
-    </div>
-  </modal>
+    <modal
+      v-model:visible="dialogVisible"
+      icon="signature"
+      title="插入电子签名"
+      width="642px"
+      @confirm="setSignature"
+      @close="dialogVisible = false"
+    >
+      <div class="signature-toolbar">
+        <menus-button text="清空画布" @button-click="reset">
+          <icon name="clear-format" />
+        </menus-button>
+        <menus-toolbar-base-color
+          modeless
+          default-color="#000"
+          @change="changeLineColor"
+        />
+        <menus-button
+          text="画笔粗细"
+          menu-type="dropdown"
+          :select-options="lineWidthOptions"
+          @change="changeLineWidth"
+        >
+          <icon name="highlight" />
+        </menus-button>
+      </div>
+      <div class="signature-container" data-tip="请在当前区域签名">
+        <signature
+          ref="signatureRef"
+          :line-color="lineColor"
+          :line-width="lineWidth"
+          :width="600"
+          :height="200"
+          is-crop
+          format="image/png"
+        />
+      </div>
+    </modal>
+  </menus-button>
 </template>
 
 <script setup>

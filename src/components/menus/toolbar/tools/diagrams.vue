@@ -4,22 +4,23 @@
     :text="content ? '编辑' : '流程图'"
     huge
     @button-click="dialogVisible = true"
-  />
-  <modal
-    :visible="dialogVisible"
-    icon="diagrams"
-    :title="content ? '编辑流程图' : '新建流程图'"
-    :footer="false"
-    class="diagrams-dialog"
-    mode="full-screen"
-    @opened="openDiagramEditor"
-    @close="dialogVisible = false"
   >
-    <div v-if="loading" class="diagrams-loading">
-      <t-loading text="加载中..." size="small" />
-    </div>
-    <div class="diagrams-container"></div>
-  </modal>
+    <modal
+      :visible="dialogVisible"
+      icon="diagrams"
+      :title="content ? '编辑流程图' : '新建流程图'"
+      :footer="false"
+      class="diagrams-dialog"
+      mode="full-screen"
+      @opened="openDiagramEditor"
+      @close="dialogVisible = false"
+    >
+      <div v-if="loading" class="diagrams-loading">
+        <t-loading text="加载中..." size="small" />
+      </div>
+      <div class="diagrams-container"></div>
+    </modal>
+  </menus-button>
 </template>
 
 <script setup>
