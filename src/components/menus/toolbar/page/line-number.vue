@@ -4,7 +4,7 @@
     text="显示行号"
     :menu-active="page.showLineNumber"
     huge
-    @button-click="page.showLineNumber = !page.showLineNumber"
+    @menu-click="page.showLineNumber = !page.showLineNumber"
   />
 </template>
 

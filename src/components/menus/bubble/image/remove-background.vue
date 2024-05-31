@@ -2,7 +2,7 @@
   <menus-button
     :text="converting ? '正在去除图片背景...' : '去除图片背景'"
     :disabled="converting"
-    @button-click="removeBackground"
+    @menu-click="removeBackground"
   >
     <icon v-if="!converting" name="image-remove-background" />
     <icon v-else class="loading" name="loading" />

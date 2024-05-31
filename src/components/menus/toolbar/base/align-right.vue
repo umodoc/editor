@@ -12,7 +12,7 @@
       !editor?.can().chain().focus().setTextAlign('right').run() &&
       !editor?.can().chain().focus().setNodeAlign('flex-end').run()
     "
-    @button-click="setAlignRight"
+    @menu-click="setAlignRight"
   />
 </template>
 

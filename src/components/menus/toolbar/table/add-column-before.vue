@@ -4,7 +4,7 @@
     text="插入列(左)"
     :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().addColumnBefore()"
-    @button-click="editor?.chain().focus().addColumnBefore().run()"
+    @menu-click="editor?.chain().focus().addColumnBefore().run()"
   />
 </template>
 

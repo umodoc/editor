@@ -12,7 +12,7 @@
       !editor?.can().chain().focus().setTextAlign('center').run() &&
       !editor?.can().chain().focus().setNodeAlign('center').run()
     "
-    @button-click="setAlignCenter"
+    @menu-click="setAlignCenter"
   />
 </template>
 

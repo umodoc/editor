@@ -4,7 +4,7 @@
     text="切换表头单元格"
     :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().toggleHeaderCell()"
-    @button-click="editor?.chain().focus().toggleHeaderCell().run()"
+    @menu-click="editor?.chain().focus().toggleHeaderCell().run()"
   />
 </template>
 

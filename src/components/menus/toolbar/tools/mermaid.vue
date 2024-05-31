@@ -3,7 +3,7 @@
     :ico="content ? 'edit' : 'mermaid'"
     :text="content ? '编辑' : 'Mermaid'"
     huge
-    @button-click="buttonClick"
+    @menu-click="buttonClick"
   >
     <modal
       :visible="dialogVisible"

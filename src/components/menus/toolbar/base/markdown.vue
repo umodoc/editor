@@ -10,7 +10,7 @@
     "
     :menu-active="$document.markdown"
     huge
-    @button-click="toggleMarkdownMode"
+    @menu-click="toggleMarkdownMode"
   />
 </template>
 

@@ -6,7 +6,7 @@
     :select-options="themes"
     :value="editor?.getAttributes('codeBlock')?.theme"
     placeholder="清选择"
-    @button-click="setTheme"
+    @menu-click="setTheme"
   />
 </template>
 

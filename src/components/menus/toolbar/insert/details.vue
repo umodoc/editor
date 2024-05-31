@@ -5,7 +5,7 @@
     huge
     :menu-active="editor?.isActive('details')"
     :disabled="!editor?.can().setDetails()"
-    @button-click="editor?.chain().focus().setDetails().run()"
+    @menu-click="editor?.chain().focus().setDetails().run()"
   />
 </template>
 

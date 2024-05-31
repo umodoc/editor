@@ -4,7 +4,7 @@
     text="代码块"
     shortcut="Ctrl+Alt+C"
     huge
-    @button-click="editor.chain().focus().setCodeBlock().run()"
+    @menu-click="editor.chain().focus().setCodeBlock().run()"
   />
 </template>
 

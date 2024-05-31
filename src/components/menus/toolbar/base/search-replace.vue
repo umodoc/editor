@@ -4,7 +4,7 @@
     text="查找替换"
     shortcut="Ctrl+F"
     huge
-    @button-click="searchReplace = true"
+    @menu-click="searchReplace = true"
   />
 </template>
 

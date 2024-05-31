@@ -4,7 +4,7 @@
     ico="indent"
     shortcut="Tab"
     hide-text
-    @button-click="editor?.chain().focus().indent().run()"
+    @menu-click="editor?.chain().focus().indent().run()"
   />
 </template>
 

@@ -4,7 +4,7 @@
     text="全选"
     shortcut="Ctrl+A"
     hide-text
-    @button-click="editor?.chain().focus().selectAll().run()"
+    @menu-click="editor?.chain().focus().selectAll().run()"
   />
 </template>
 

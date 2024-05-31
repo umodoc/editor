@@ -30,7 +30,7 @@
               ico="table"
               text="表格"
               :tooltip="false"
-              @button-click="editor?.chain().focus().insertTable().run()"
+              @menu-click="editor?.chain().focus().insertTable().run()"
             />
           </t-dropdown-item>
           <t-dropdown-item>
@@ -70,7 +70,7 @@
               ico="horizontal-line"
               text="分割线"
               :tooltip="false"
-              @button-click="
+              @menu-click="
                 editor
                   .chain()
                   .focus()
@@ -147,7 +147,7 @@
           text="段落"
           :tooltip="false"
           shortcut-text="ctrl+alt+0"
-          @button-click="toggleNodeType('paragraph')"
+          @menu-click="toggleNodeType('paragraph')"
         />
       </t-dropdown-item>
       <t-dropdown-item>
@@ -161,7 +161,7 @@
             <menus-button
               :tooltip="false"
               :shortcut-text="`ctrl+alt+${item.level}`"
-              @button-click="toggleNodeType('heading', { level: item.level })"
+              @menu-click="toggleNodeType('heading', { level: item.level })"
             >
               <span class="heading">
                 <span class="icon">H{{ item.level }}</span> {{ item.text }}
@@ -177,7 +177,7 @@
           :tooltip="false"
           shortcut-text="Ctrl+Shift+7"
           :menu-active="editor?.isActive('orderedList')"
-          @button-click="toggleNodeType('orderedList')"
+          @menu-click="toggleNodeType('orderedList')"
         />
       </t-dropdown-item>
       <t-dropdown-item>
@@ -187,7 +187,7 @@
           :tooltip="false"
           shortcut-text="Ctrl+Shift+8"
           :menu-active="editor?.isActive('bulletList')"
-          @button-click="toggleNodeType('bulletList')"
+          @menu-click="toggleNodeType('bulletList')"
         />
       </t-dropdown-item>
       <t-dropdown-item>
@@ -197,7 +197,7 @@
           :tooltip="false"
           shortcut-text="Ctrl+Shift+9"
           :menu-active="editor?.isActive('taskList')"
-          @button-click="toggleNodeType('taskList')"
+          @menu-click="toggleNodeType('taskList')"
         />
       </t-dropdown-item>
       <t-dropdown-item divider>
@@ -207,7 +207,7 @@
           :tooltip="false"
           shortcut-text="Ctrl+Shift+B"
           :menu-active="editor?.isActive('blockquote')"
-          @button-click="toggleNodeType('blockquote')"
+          @menu-click="toggleNodeType('blockquote')"
         />
       </t-dropdown-item>
       <t-dropdown-item class="block-menu-group-name" disabled>
@@ -218,7 +218,7 @@
           ico="node-delete-2"
           text="删除节点"
           :tooltip="false"
-          @button-click="deleteNode"
+          @menu-click="deleteNode"
         />
       </t-dropdown-item>
     </t-dropdown-menu>

@@ -9,7 +9,7 @@
     :popup-visible="popupVisible"
     :menu-active="editor?.isActive('orderedList')"
     @toggle-popup="togglePopup"
-    @button-click="toggleOrderedList(options[0].value)"
+    @menu-click="toggleOrderedList(options[0].value)"
   >
     <template #content>
       <div class="ordered-list-group">

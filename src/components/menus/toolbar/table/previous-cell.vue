@@ -5,7 +5,7 @@
     shortcut="Shift+Tab"
     :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().goToPreviousCell()"
-    @button-click="editor?.chain().focus().goToPreviousCell().run()"
+    @menu-click="editor?.chain().focus().goToPreviousCell().run()"
   />
 </template>
 

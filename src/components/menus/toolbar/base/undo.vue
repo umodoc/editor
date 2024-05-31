@@ -5,7 +5,7 @@
     shortcut="Ctrl+Z"
     hide-text
     :disabled="!editor?.can().chain().focus().undo().run()"
-    @button-click="editor?.chain().focus().undo().run()"
+    @menu-click="editor?.chain().focus().undo().run()"
   />
 </template>
 

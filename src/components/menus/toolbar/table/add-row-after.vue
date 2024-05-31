@@ -4,7 +4,7 @@
     text="插入行(后)"
     :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().addRowAfter()"
-    @button-click="editor?.chain().focus().addRowAfter().run()"
+    @menu-click="editor?.chain().focus().addRowAfter().run()"
   />
 </template>
 

@@ -4,7 +4,7 @@
     text="换行"
     huge
     shortcut="Shift+Enter"
-    @button-click="editor?.chain().focus().setHardBreak().run()"
+    @menu-click="editor?.chain().focus().setHardBreak().run()"
   />
 </template>
 

@@ -3,7 +3,7 @@
     ico="signature"
     text="电子签名"
     huge
-    @button-click="dialogVisible = true"
+    @menu-click="dialogVisible = true"
   >
     <modal
       v-model:visible="dialogVisible"
@@ -14,7 +14,7 @@
       @close="dialogVisible = false"
     >
       <div class="signature-toolbar">
-        <menus-button text="清空画布" @button-click="reset">
+        <menus-button text="清空画布" @menu-click="reset">
           <icon name="clear-format" />
         </menus-button>
         <menus-toolbar-base-color

@@ -3,7 +3,7 @@
     ico="code-line-number"
     text="显示行号"
     :menu-active="editor?.getAttributes('codeBlock')?.lineNumbers"
-    @button-click="toggleLineNumbers"
+    @menu-click="toggleLineNumbers"
   />
 </template>
 

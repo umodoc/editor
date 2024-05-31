@@ -6,7 +6,7 @@
     hide-text
     :menu-active="editor?.isActive('subscript')"
     :disabled="!editor?.can().chain().focus().toggleSubscript().run()"
-    @button-click="editor?.commands.toggleSubscript()"
+    @menu-click="editor?.commands.toggleSubscript()"
   />
 </template>
 

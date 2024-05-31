@@ -7,7 +7,7 @@
     hide-text
     :popup-visible="popupVisible"
     @toggle-popup="togglePopup"
-    @button-click="colorChange(currentColor)"
+    @menu-click="colorChange(currentColor)"
   >
     <div
       class="current-color"

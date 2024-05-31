@@ -4,7 +4,7 @@
     text="合并单元格"
     :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().mergeCells()"
-    @button-click="editor?.chain().focus().mergeCells().run()"
+    @menu-click="editor?.chain().focus().mergeCells().run()"
   />
 </template>
 

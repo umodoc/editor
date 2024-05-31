@@ -3,7 +3,7 @@
     ico="embed"
     text="Embed"
     huge
-    @button-click="dialogVisible = true"
+    @menu-click="dialogVisible = true"
   />
   <modal
     :visible="dialogVisible"

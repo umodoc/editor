@@ -3,7 +3,7 @@
     ico="image-draggable"
     text="图片浮动"
     :menu-active="editor?.getAttributes('image')?.draggable"
-    @button-click="toggleDraggable"
+    @menu-click="toggleDraggable"
   />
 </template>
 

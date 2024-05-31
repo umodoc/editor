@@ -4,7 +4,7 @@
     text="切换表头列"
     :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().toggleHeaderColumn()"
-    @button-click="editor?.chain().focus().toggleHeaderColumn().run()"
+    @menu-click="editor?.chain().focus().toggleHeaderColumn().run()"
   />
 </template>
 

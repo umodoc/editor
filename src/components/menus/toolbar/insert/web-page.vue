@@ -3,7 +3,7 @@
     ico="web-page"
     text="网页"
     huge
-    @button-click="dialogVisible = true"
+    @menu-click="dialogVisible = true"
   >
     <modal
       :visible="dialogVisible"

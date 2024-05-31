@@ -7,7 +7,7 @@
     :style="{ width: $toolbar.mode !== 'classic' ? '144px' : '90px' }"
     placeholder="字体"
     filterable
-    @button-click="setFontFamily"
+    @menu-click="setFontFamily"
   >
     <t-option-group
       v-for="(group, index) in allFonts"

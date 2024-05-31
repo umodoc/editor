@@ -7,7 +7,7 @@
     :value="editor?.getAttributes('codeBlock')?.language"
     placeholder="清选择"
     filterable
-    @button-click="setLanguage"
+    @menu-click="setLanguage"
   >
   </menus-button>
 </template>

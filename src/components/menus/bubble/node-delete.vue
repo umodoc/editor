@@ -3,7 +3,7 @@
     ico="node-delete"
     text="删除"
     shortcut="Backspace"
-    @button-click="editor?.chain().focus().deleteSelectionNode().run()"
+    @menu-click="editor?.chain().focus().deleteSelectionNode().run()"
   />
 </template>
 

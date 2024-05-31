@@ -4,7 +4,7 @@
     ico="print"
     shortcut="Ctrl+P"
     huge
-    @button-click="printing = true"
+    @menu-click="printing = true"
   >
   </menus-button>
 </template>

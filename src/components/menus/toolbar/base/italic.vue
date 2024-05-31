@@ -6,7 +6,7 @@
     hide-text
     :menu-active="editor?.isActive('italic')"
     :disabled="!editor?.can().chain().focus().toggleItalic().run()"
-    @button-click="editor?.chain().focus().toggleItalic().run()"
+    @menu-click="editor?.chain().focus().toggleItalic().run()"
   />
 </template>
 

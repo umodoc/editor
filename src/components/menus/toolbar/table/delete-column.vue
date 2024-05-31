@@ -4,7 +4,7 @@
     text="删除列"
     :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().deleteColumn()"
-    @button-click="deleteColumn"
+    @menu-click="deleteColumn"
   />
 </template>
 

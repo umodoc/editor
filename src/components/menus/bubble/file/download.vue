@@ -1,5 +1,5 @@
 <template>
-  <menus-button ico="download" text="下载文件" @button-click="downloadFile" />
+  <menus-button ico="download" text="下载文件" @menu-click="downloadFile" />
 </template>
 
 <script setup>

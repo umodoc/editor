@@ -2,9 +2,9 @@
   <menus-button
     ico="image-rotate"
     text="逆时针旋转90度"
-    @button-click="setRotate(-90)"
+    @menu-click="setRotate(-90)"
   />
-  <menus-button text="顺时针旋转90度" @button-click="setRotate(90)">
+  <menus-button text="顺时针旋转90度" @menu-click="setRotate(90)">
     <icon name="image-rotate" style="transform: rotateY(180deg)" />
   </menus-button>
 </template>

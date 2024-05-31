@@ -4,7 +4,7 @@
     text="显示大纲"
     huge
     :menu-active="page.showToc"
-    @button-click="page.showToc = !page.showToc"
+    @menu-click="page.showToc = !page.showToc"
   />
 </template>
 

@@ -4,7 +4,7 @@
     text="减少缩进"
     shortcut="Shift+Tab"
     hide-text
-    @button-click="editor?.chain().focus().outdent().run()"
+    @menu-click="editor?.chain().focus().outdent().run()"
   />
 </template>
 

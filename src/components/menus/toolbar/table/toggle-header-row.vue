@@ -4,7 +4,7 @@
     text="切换表头行"
     :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().toggleHeaderRow()"
-    @button-click="editor?.chain().focus().toggleHeaderRow().run()"
+    @menu-click="editor?.chain().focus().toggleHeaderRow().run()"
   />
 </template>
 

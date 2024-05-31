@@ -4,7 +4,7 @@
     text="显示换行"
     huge
     :menu-active="page.showBreakMarks"
-    @button-click="toggleInvisibleCharacters"
+    @menu-click="toggleInvisibleCharacters"
   />
 </template>
 

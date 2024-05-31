@@ -3,7 +3,7 @@
     ico="page-margin"
     text="页边距"
     huge
-    @button-click="dialogVisible = true"
+    @menu-click="dialogVisible = true"
   >
     <page-options :visible="dialogVisible" @close="dialogVisible = false" />
   </menus-button>

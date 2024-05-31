@@ -57,7 +57,7 @@
     placeholder="标题"
     borderless
     :value="currentValue"
-    @button-click="setParagraphOrHeading"
+    @menu-click="setParagraphOrHeading"
   >
     <t-option
       v-for="item in options"

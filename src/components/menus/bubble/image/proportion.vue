@@ -3,7 +3,7 @@
     ico="equal-proportion"
     text="锁定长宽比"
     :menu-active="editor?.getAttributes('image')?.equalProportion"
-    @button-click="toggleEqualProportion"
+    @menu-click="toggleEqualProportion"
   />
 </template>
 

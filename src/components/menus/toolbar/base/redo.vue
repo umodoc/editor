@@ -5,7 +5,7 @@
     shortcut="Ctrl+Y / Ctrl+Shift+Z"
     hide-text
     :disabled="!editor?.can().chain().focus().redo().run()"
-    @button-click="editor?.chain().focus().redo().run()"
+    @menu-click="editor?.chain().focus().redo().run()"
   />
 </template>
 

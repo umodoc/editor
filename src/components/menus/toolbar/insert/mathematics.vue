@@ -3,7 +3,7 @@
     ico="mathematics"
     text="数学公式"
     huge
-    @button-click="editor.chain().focus().insertContent('$\\LaTeX$').run()"
+    @menu-click="editor.chain().focus().insertContent('$\\LaTeX$').run()"
   />
 </template>
 

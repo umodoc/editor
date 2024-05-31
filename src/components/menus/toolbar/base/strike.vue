@@ -6,7 +6,7 @@
     hide-text
     :menu-active="editor?.isActive('strike')"
     :disabled="!editor?.can().chain().focus().toggleStrike().run()"
-    @button-click="editor?.chain().focus().toggleStrike().run()"
+    @menu-click="editor?.chain().focus().toggleStrike().run()"
   />
 </template>
 

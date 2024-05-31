@@ -3,7 +3,7 @@
     ico="code-word-wrap"
     text="自动换行"
     :menu-active="editor?.getAttributes('codeBlock')?.wordWrap"
-    @button-click="toggleWordWrap"
+    @menu-click="toggleWordWrap"
   />
 </template>
 

@@ -3,7 +3,7 @@
     ico="video"
     text="视频"
     huge
-    @button-click="editor.chain().focus().selectFiles('video').run()"
+    @menu-click="editor.chain().focus().selectFiles('video').run()"
   />
 </template>
 

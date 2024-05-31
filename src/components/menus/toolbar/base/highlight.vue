@@ -6,7 +6,7 @@
     popup-handle="arrow"
     hide-text
     overlay-class-name="hightlight-dropdown"
-    @button-click="highlightChange(hightlight)"
+    @menu-click="highlightChange(hightlight)"
   >
     <icon
       name="highlight"

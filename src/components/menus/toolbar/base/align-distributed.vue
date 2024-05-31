@@ -6,7 +6,7 @@
     hide-text
     :menu-active="editor?.isActive({ textAlign: 'distributed' })"
     :disabled="!editor?.can().chain().focus().setTextAlign('distributed').run()"
-    @button-click="editor?.chain().focus().setTextAlign('distributed').run()"
+    @menu-click="editor?.chain().focus().setTextAlign('distributed').run()"
   />
 </template>
 

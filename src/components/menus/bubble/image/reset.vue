@@ -2,7 +2,7 @@
   <menus-button
     ico="image-reset"
     text="重置图片位置"
-    @button-click="resetPosition"
+    @menu-click="resetPosition"
   />
 </template>
 

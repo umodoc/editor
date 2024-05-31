@@ -6,7 +6,7 @@
     hide-text
     :menu-active="editor?.isActive('blockquote')"
     :disabled="!editor?.can().chain().focus().toggleBlockquote().run()"
-    @button-click="editor?.chain().focus().toggleBlockquote().run()"
+    @menu-click="editor?.chain().focus().toggleBlockquote().run()"
   />
 </template>
 

@@ -3,7 +3,7 @@
     :ico="content ? 'edit' : 'qrcode'"
     :text="content ? '编辑' : '二维码'"
     huge
-    @button-click="buttonClick"
+    @menu-click="buttonClick"
   >
     <modal
       :visible="dialogVisible"
@@ -21,7 +21,7 @@
             :select-options="levels"
             menu-type="select"
             :value="config.ecl"
-            @button-click="(value) => (config.ecl = value)"
+            @menu-click="(value) => (config.ecl = value)"
           ></menus-button>
           <menus-button menu-type="input" tooltip="二维码四周留白大小">
             <t-input-number

@@ -3,7 +3,7 @@
     :ico="content ? 'edit' : 'barcode'"
     :text="content ? '编辑' : '条形码'"
     huge
-    @button-click="dialogVisible = true"
+    @menu-click="dialogVisible = true"
   >
     <modal
       :visible="dialogVisible"
@@ -21,7 +21,7 @@
             :select-options="formats"
             menu-type="select"
             :value="config.format"
-            @button-click="(value) => (config.format = value)"
+            @menu-click="(value) => (config.format = value)"
           ></menus-button>
           <t-divider layout="vertical" />
           <menus-button
@@ -30,7 +30,7 @@
             :select-options="options.dicts.fonts"
             menu-type="select"
             :value="config.font"
-            @button-click="(value) => (config.font = value)"
+            @menu-click="(value) => (config.font = value)"
           ></menus-button>
           <t-divider layout="vertical" />
           <menus-toolbar-base-color
@@ -48,24 +48,24 @@
           <t-divider layout="vertical" />
           <menus-toolbar-base-bold
             :menu-active="config.fontOptions.includes('bold')"
-            @button-click-through="changeFontOptions('bold')"
+            @menu-click-through="changeFontOptions('bold')"
           />
           <menus-toolbar-base-italic
             :menu-active="config.fontOptions.includes('italic')"
-            @button-click-through="changeFontOptions('italic')"
+            @menu-click-through="changeFontOptions('italic')"
           />
           <t-divider layout="vertical" />
           <menus-toolbar-base-align-left
             :menu-active="config.textAlign === 'left'"
-            @button-click-through="config.textAlign = 'left'"
+            @menu-click-through="config.textAlign = 'left'"
           />
           <menus-toolbar-base-align-center
             :menu-active="config.textAlign === 'center'"
-            @button-click-through="config.textAlign = 'center'"
+            @menu-click-through="config.textAlign = 'center'"
           />
           <menus-toolbar-base-align-right
             :menu-active="config.textAlign === 'right'"
-            @button-click-through="config.textAlign = 'right'"
+            @menu-click-through="config.textAlign = 'right'"
           />
           <t-divider layout="vertical" />
           <menus-button

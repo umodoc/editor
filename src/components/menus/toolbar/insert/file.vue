@@ -3,7 +3,7 @@
     ico="file"
     text="文件"
     huge
-    @button-click="editor.chain().focus().selectFiles('file').run()"
+    @menu-click="editor.chain().focus().selectFiles('file').run()"
   />
 </template>
 

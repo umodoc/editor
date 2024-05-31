@@ -3,12 +3,12 @@
     ico="image-flip"
     text="水平翻转"
     :menu-active="editor?.getAttributes('image')?.flipY"
-    @button-click="setFlip('flipY')"
+    @menu-click="setFlip('flipY')"
   />
   <menus-button
     text="垂直翻转"
     :menu-active="editor?.getAttributes('image')?.flipX"
-    @button-click="setFlip('flipX')"
+    @menu-click="setFlip('flipX')"
   >
     <icon name="image-flip" style="transform: rotate(90deg)" />
   </menus-button>

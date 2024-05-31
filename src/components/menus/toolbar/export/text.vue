@@ -1,5 +1,5 @@
 <template>
-  <menus-button ico="text" text="文本文档" huge @button-click="saveTextFile" />
+  <menus-button ico="text" text="文本文档" huge @menu-click="saveTextFile" />
 </template>
 
 <script setup>

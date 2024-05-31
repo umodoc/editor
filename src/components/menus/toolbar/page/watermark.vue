@@ -16,7 +16,7 @@
             menu-type="select"
             :select-options="options.dicts.fonts"
             :value="page.watermark.fontFamily"
-            @button-click="(value) => (page.watermark.fontFamily = value)"
+            @menu-click="(value) => (page.watermark.fontFamily = value)"
           ></menus-button>
           <menus-button menu-type="input" tooltip="水印文字大小">
             <t-input-number
@@ -34,7 +34,7 @@
           </menus-button>
           <menus-toolbar-base-bold
             :menu-active="page.watermark.fontWeight === 'bold'"
-            @button-click-through="
+            @menu-click-through="
               page.watermark.fontWeight === 'bold'
                 ? (page.watermark.fontWeight = 'normal')
                 : (page.watermark.fontWeight = 'bold')

@@ -5,7 +5,7 @@
     shortcut="F5"
     huge
     :menu-active="page.preview.enabled"
-    @button-click="page.preview.enabled = !page.preview.enabled"
+    @menu-click="page.preview.enabled = !page.preview.enabled"
   />
 </template>
 

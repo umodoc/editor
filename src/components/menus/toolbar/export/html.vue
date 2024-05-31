@@ -1,5 +1,5 @@
 <template>
-  <menus-button ico="html5" text="HTML" huge @button-click="saveHtmlFile" />
+  <menus-button ico="html5" text="HTML" huge @menu-click="saveHtmlFile" />
 </template>
 
 <script setup>

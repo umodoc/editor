@@ -2,7 +2,7 @@
   <menus-button
     ico="image-download"
     text="下载图片"
-    @button-click="downloadImage"
+    @menu-click="downloadImage"
   />
 </template>
 

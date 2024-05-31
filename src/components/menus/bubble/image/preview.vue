@@ -2,7 +2,7 @@
   <menus-button
     ico="image-preview"
     text="图片预览"
-    @button-click="viewerVisible = !viewerVisible"
+    @menu-click="viewerVisible = !viewerVisible"
   />
   <t-image-viewer
     v-model:visible="viewerVisible"

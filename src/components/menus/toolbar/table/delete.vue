@@ -5,7 +5,7 @@
     tooltip="删除当前表格"
     huge
     :disabled="!editor?.can().deleteTable()"
-    @button-click="deleteTable"
+    @menu-click="deleteTable"
   />
 </template>
 

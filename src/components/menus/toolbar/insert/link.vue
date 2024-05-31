@@ -3,7 +3,7 @@
     ico="link"
     text="链接"
     huge
-    @button-click="dialogVisible = true"
+    @menu-click="dialogVisible = true"
   />
   <modal
     :visible="dialogVisible"

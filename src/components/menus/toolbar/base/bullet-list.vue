@@ -9,7 +9,7 @@
     :menu-active="editor?.isActive('bulletList')"
     :popup-visible="popupVisible"
     @toggle-popup="togglePopup"
-    @button-click="toggleBulletList(options[0].value)"
+    @menu-click="toggleBulletList(options[0].value)"
   >
     <template #content>
       <div class="bullet-list-group">

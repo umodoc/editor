@@ -3,7 +3,7 @@
     ico="toc"
     text="页面大纲"
     huge
-    @button-click="editor?.chain().focus().addTableOfContents().run()"
+    @menu-click="editor?.chain().focus().addTableOfContents().run()"
   />
 </template>
 

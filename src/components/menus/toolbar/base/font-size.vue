@@ -10,20 +10,20 @@
     v-bind="$attrs"
     placeholder="字号"
     filterable
-    @button-click="setFontSize"
+    @menu-click="setFontSize"
   >
   </menus-button>
   <menus-button
     ico="font-size-increase"
     text="增大字号"
     hide-text
-    @button-click="increaseFontSize"
+    @menu-click="increaseFontSize"
   />
   <menus-button
     ico="font-size-decrease"
     text="减小字号"
     hide-text
-    @button-click="decreaseFontSize"
+    @menu-click="decreaseFontSize"
   />
 </template>
 

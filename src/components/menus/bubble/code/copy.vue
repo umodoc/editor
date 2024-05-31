@@ -1,5 +1,5 @@
 <template>
-  <menus-button ico="copy" text="复制代码" @button-click="copyCode" />
+  <menus-button ico="copy" text="复制代码" @menu-click="copyCode" />
 </template>
 
 <script setup>
