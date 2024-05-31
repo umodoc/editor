@@ -3,7 +3,7 @@
     :ico="content ? 'edit' : 'qrcode'"
     :text="content ? '编辑' : '二维码'"
     huge
-    @menu-click="buttonClick"
+    @menu-click="menuClick"
   >
     <modal
       :visible="dialogVisible"
@@ -105,7 +105,7 @@ const { content } = defineProps({
 let dialogVisible = $ref(false)
 const { editor } = useStore()
 
-const buttonClick = async () => {
+const menuClick = async () => {
   renderQrcode()
   dialogVisible = true
 }

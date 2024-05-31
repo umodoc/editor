@@ -3,7 +3,7 @@
     :ico="content ? 'edit' : 'mermaid'"
     :text="content ? '编辑' : 'Mermaid'"
     huge
-    @menu-click="buttonClick"
+    @menu-click="menuClick"
   >
     <modal
       :visible="dialogVisible"
@@ -57,7 +57,7 @@ const mermaidInit = () => {
   })
 }
 
-const buttonClick = () => {
+const menuClick = () => {
   dialogVisible = true
   mermaidInit()
 }

@@ -26,7 +26,7 @@
           variant="text"
           size="small"
           :disabled="disabled || !editor?.isEditable"
-          @click="buttonClick"
+          @click="menuClick"
           v-bind="attrs"
         >
           <div class="button-content">
@@ -53,7 +53,7 @@
             v-bind="attrs"
             :disabled="disabled || !editor?.isEditable"
           >
-            <div class="button-content" @click="buttonClick">
+            <div class="button-content" @click="menuClick">
               <slot />
               <icon class="icon" v-if="ico" :name="ico" />
               <p class="text">{{ text }}</p>
@@ -112,7 +112,7 @@
               v-bind="attrs"
               :disabled="disabled || !editor?.isEditable"
             >
-              <div class="button-content" @click="buttonClick">
+              <div class="button-content" @click="menuClick">
                 <slot />
                 <icon class="icon" v-if="ico" :name="ico" />
                 <p class="text">{{ text }}</p>
@@ -144,7 +144,7 @@
           v-bind="attrs"
           :options="selectOptions"
           :disabled="disabled || !editor?.isEditable"
-          @change="buttonClick"
+          @change="menuClick"
         >
           <slot />
         </t-select>
@@ -162,7 +162,7 @@
             v-bind="attrs"
             :disabled="disabled || !editor?.isEditable"
           >
-            <div class="button-content" @click="buttonClick">
+            <div class="button-content" @click="menuClick">
               <slot />
               <icon class="icon" v-if="ico" :name="ico" />
               <p class="text">{{ text }}</p>
@@ -327,7 +327,7 @@ const emits = defineEmits(['toggle-popup'])
 const attrs = useAttrs()
 const { container, editor } = useStore()
 const $toolbar = useState('toolbar')
-const buttonClick = (...args) => {
+const menuClick = (...args) => {
   if (attrs.onButtonClickThrough) {
     attrs.onButtonClickThrough(...args)
   } else if (attrs.onButtonClick) {
