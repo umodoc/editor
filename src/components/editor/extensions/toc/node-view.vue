@@ -2,7 +2,7 @@
   <node-view-wrapper class="node-view toc-node-view">
     <div class="node-container hover-shadow select-outline toc">
       <p class="toc-head">页面大纲</p>
-      <ul class="toc-body">
+      <ul v-if="tableOfContents && tableOfContents.length > 0" class="toc-body">
         <li
           class="toc-item"
           :class="`level-${heading.level}`"
@@ -14,6 +14,7 @@
           }}</a>
         </li>
       </ul>
+      <div v-else class="toc-empty">当前暂无大纲</div>
     </div>
   </node-view-wrapper>
 </template>
@@ -51,6 +52,12 @@ const { tableOfContents } = useStore()
     &-body {
       list-style: none;
       padding: 0;
+    }
+
+    &-empty {
+      color: var(--umo-text-color-light);
+      font-size: 12px;
+      margin-top: 5px;
     }
 
     &-item {
