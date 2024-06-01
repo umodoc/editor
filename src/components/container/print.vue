@@ -256,7 +256,8 @@ const getIframeCode = () => {
       .prism-code-editor .guide-indents,
       .prism-code-editor .active-line::after,
       .katex-mathml,
-      .prism-code-editor.show-line-numbers:before,
+      .block-menu-hander,
+      .error-icon,
       [data-tippy-root] {
         display: none !important;
       }
