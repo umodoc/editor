@@ -379,5 +379,8 @@ const deleteNode = () => {
       }
     }
   }
+  .umo-dropdown__submenu {
+    margin-left: -2px;
+  }
 }
 </style>
