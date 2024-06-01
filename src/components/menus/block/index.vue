@@ -316,7 +316,7 @@ const deleteNode = () => {
     }
     .umo-dropdown__item {
       padding: 2px 0;
-      min-width: 160px !important;
+      min-width: 180px !important;
       .menu-button {
         background-color: transparent;
         padding: 0 15px;
@@ -346,8 +346,7 @@ const deleteNode = () => {
           text-align: right;
           color: var(--umo-text-color-light);
           font-family: Arial, Helvetica, sans-serif;
-          font-size: 10px;
-          padding-left: 20px;
+          font-size: 9px;
         }
         .heading {
           display: flex;
