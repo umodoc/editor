@@ -28,7 +28,7 @@
   width: 100%;
   user-select: none;
   border: none;
-  &::before {
+  &::after {
     display: block;
     content: '\2000';
     text-decoration-line: line-through;
@@ -36,33 +36,33 @@
     text-decoration-thickness: 0.1em;
   }
   &[data-type='signle'] {
-    &::before {
+    &::after {
       text-decoration-style: solid;
     }
   }
   &[data-type='signle-bold'] {
-    &::before {
+    &::after {
       text-decoration-style: solid;
       text-decoration-thickness: 0.3em;
     }
   }
   &[data-type='double'] {
-    &::before {
+    &::after {
       text-decoration-style: double;
     }
   }
   &[data-type='dotted'] {
-    &::before {
+    &::after {
       text-decoration-style: dotted;
     }
   }
   &[data-type='dashed'] {
-    &::before {
+    &::after {
       text-decoration-style: dashed;
     }
   }
   &[data-type='dashed-double'] {
-    &::before {
+    &::after {
       text-decoration-style: dashed;
       text-decoration-thickness: 0.1em;
       margin-top: 0.5em;

@@ -26,8 +26,44 @@
     width: 100%;
     outline: none;
     counter-reset: title;
-    > * + * {
-      margin-top: var(--umo-content-node-bottom);
+    > * {
+      position: relative;
+      + * {
+        margin-top: var(--umo-content-node-bottom);
+      }
+      &.node-focused {
+        &:not(hr):not(.page-break):not(.tableWrapper):before {
+          content: '';
+          display: block;
+          position: absolute;
+          left: -8px;
+          top: -5px;
+          right: -8px;
+          bottom: -5px;
+          border-radius: var(--umo-radius);
+          background: var(--umo-content-table-thead-background);
+          pointer-events: none;
+          z-index: -1;
+        }
+        // background: var(--umo-content-node-selected-background);
+        &.page-divider {
+          color: var(--umo-primary-color) !important;
+        }
+        &.page-break {
+          background-color: var(--umo-primary-color);
+          color: var(--umo-primary-color);
+          &::after {
+            border-color: var(--umo-primary-color);
+          }
+        }
+        .select-outline {
+          outline: solid 1px var(--umo-primary-color);
+        }
+      }
+      + div.node-focused::before {
+        top: -8px !important;
+        bottom: -8px !important;
+      }
     }
     .is-editor-empty {
       &:first-child {
@@ -65,7 +101,7 @@
     list-style-position: inside;
     padding-left: 0;
     li {
-      padding: 0.25em 0;
+      padding: 0.25em 0 0.25em 3px;
       p {
         display: inline;
       }
@@ -276,24 +312,6 @@
     position: relative;
     .hover-shadow:hover {
       box-shadow: var(--umo-shadow);
-    }
-  }
-  // 节点选中样式
-  .ProseMirror-selectednode {
-    background: var(--umo-content-node-selected-background);
-    &.page-divider {
-      color: var(--umo-primary-color) !important;
-    }
-    &.page-break {
-      background-color: var(--umo-primary-color);
-      color: var(--umo-primary-color);
-      outline: none;
-      &::after {
-        border-color: var(--umo-primary-color);
-      }
-    }
-    .select-outline {
-      outline: solid 1px var(--umo-primary-color);
     }
   }
   // 插件样式

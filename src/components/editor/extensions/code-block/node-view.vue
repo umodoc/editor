@@ -5,7 +5,7 @@
       :class="node.attrs.theme"
       ref="containerRef"
     >
-      <div v-if="!options.document.readOnly" class="show-toolbar">工具栏</div>
+      <div v-if="!options.document.readOnly" class="show-toolbar">菜单栏</div>
     </div>
   </node-view-wrapper>
 </template>
@@ -122,8 +122,8 @@ watch(
     position: relative;
     .show-toolbar {
       position: absolute;
-      right: 10px;
-      top: 7px;
+      right: 5px;
+      top: 5px;
       font-size: 12px;
       padding: 3px 6px;
       cursor: pointer;

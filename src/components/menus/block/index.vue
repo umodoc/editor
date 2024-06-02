@@ -14,7 +14,7 @@
   >
     <div
       class="block-menu-hander"
-      :style="`transform: translate(-32px, ${menuScrollTop}px);`"
+      :style="`transform: translate(-38px, ${menuScrollTop}px);`"
     >
       <menus-button :menu-active="menuVisible" ico="block-menu" hide-text />
     </div>
@@ -231,7 +231,13 @@ let menuVisible = $ref(false)
 let menuScrollTop = $ref(0)
 const updateMenuPostion = () => {
   const currentBlock = document.querySelector(`${container} .node-focused`)
-  if (currentBlock !== null) menuScrollTop = currentBlock.offsetTop
+  if (currentBlock === null) return
+  let top = currentBlock.offsetTop
+  top = currentBlock.tagName === 'DIV' ? top - 8 : top - 5
+  if (editor.value.isActive('pageBreak')) top = top - 3
+  if (editor.value.isActive('horizontalRule')) top = top + 3
+  if (editor.value.isActive('table')) top = top + 7
+  menuScrollTop = top
 }
 watch(
   editor,
@@ -295,7 +301,6 @@ const deleteNode = () => {
 <style lang="less">
 .block-menu-hander {
   position: absolute;
-  margin-top: -1px;
   .button-content {
     color: var(--umo-text-color-light);
   }
