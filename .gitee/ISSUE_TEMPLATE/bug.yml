@@ -47,12 +47,9 @@ body:
     attributes:
       label: 其他说明
       description: 如果还有其他说明，请填写在这里。
-  - type: dropdown
-    id: version
+  - type: input
     attributes:
       label: 版本
-      description: 你当前正在使用我们软件的哪个版本/分支？
-      options:
-        - 1.0.0
+      description: 你当前正在使用我们软件的哪个版本/分支？。
     validations:
       required: true
