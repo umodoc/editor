@@ -22,7 +22,9 @@
         :data-heading="'H' + item.originalLevel"
         @click="headingClick(item, index)"
       >
-        {{ item.textContent }}
+        <div class="toc-text">
+          {{ item.textContent }}
+        </div>
       </div>
     </div>
   </div>
@@ -91,10 +93,6 @@ const headingClick = (heading, index) => {
       color: var(--umo-text-color-light);
     }
     .toc-item {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      word-break: break-all;
-      white-space: nowrap;
       border-radius: 3px;
       padding: 5px 7px 5px 37px;
       box-sizing: border-box;
@@ -154,6 +152,12 @@ const headingClick = (heading, index) => {
       &.level-6 {
         padding-left: 75px;
         width: calc(100% - 75px);
+      }
+      .toc-text {
+        text-overflow: ellipsis;
+        word-break: break-all;
+        white-space: nowrap;
+        overflow: hidden;
       }
     }
   }
