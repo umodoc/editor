@@ -53,3 +53,9 @@ body:
       description: 你当前正在使用我们软件的哪个版本/分支？。
     validations:
       required: true
+  - type: input
+    attributes:
+      label: 浏览器及浏览器版本
+      description: 你所使用的浏览器及浏览器版本。
+    validations:
+      required: true
