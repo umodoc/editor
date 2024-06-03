@@ -147,6 +147,10 @@ const defaultOptions = {
     autofocus: true,
     characterLimit: 0,
     typographyRules: {},
+    autoSave: {
+      enabled: true,
+      interval: 300000,
+    },
   },
   templates: [],
   cdnUrl: 'https://unpkg.com/@umoteam/editor-external@latest',
@@ -160,6 +164,7 @@ const defaultOptions = {
     allowedMimeTypes: [],
     maxSize: 1024 * 1024 * 100, // 100M
   },
+  extensions: [],
   async onSave(content, page, document) {
     throw new Error('Key "onSave": Please set the save method')
   },
@@ -457,6 +462,18 @@ const ojbectSchema = new ObjectSchema({
         merge: 'replace',
         validate: 'object',
       },
+      autoSave: {
+        schema: {
+          enabled: {
+            merge: 'replace',
+            validate: 'boolean',
+          },
+          interval: {
+            merge: 'replace',
+            validate: 'number',
+          },
+        },
+      },
     },
   },
   shareUrl: { merge: 'replace', validate: 'string' },
@@ -520,6 +537,10 @@ const ojbectSchema = new ObjectSchema({
         },
       },
     },
+  },
+  extensions: {
+    merge: 'replace',
+    validate: 'array',
   },
   onSave: {
     merge: 'replace',

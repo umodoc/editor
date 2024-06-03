@@ -230,6 +230,7 @@ const editorInstance = new Editor({
     Dropcursor.configure({
       color: 'var(--umo-primary-color)',
     }),
+    ...options.value.extensions,
   ],
   onUpdate({ editor }) {
     $document.value.content = editor.getHTML()

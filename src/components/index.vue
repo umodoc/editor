@@ -30,6 +30,7 @@
 import { toBlob, toJpeg, toPng } from 'dom-to-image-more'
 import { propsOptions } from './options'
 import '@/assets/styles/index.less'
+import { onBeforeUnmount } from 'vue'
 
 defineOptions({ name: 'UmoEditor' })
 
@@ -237,6 +238,16 @@ const setDocument = (parmas) => {
     }
     $document.value.spellcheck = parmas.spellcheck
   }
+  if (parmas.autoSave) {
+    if (typeof parmas.autoSave?.enabled !== 'boolean') {
+      throw new Error('"parmas.autoSave.enabled" must be a boolean.')
+    }
+    options.value.document.autoSave.enabled = parmas.autoSave.enabled
+    if (parmas.autoSave?.interval !== 'number') {
+      throw new Error('"parmas.autoSave.interval" must be a number.')
+    }
+    options.value.document.autoSave.interval = parmas.autoSave.interval
+  }
 }
 const setContent = (content) => {
   if (!editor.value) throw new Error('editor is not ready!')
@@ -396,6 +407,41 @@ defineExpose({
   },
 })
 
+// 定时保存
+let contentUpdated = $ref(false)
+let isFirstUpdate = $ref(true)
+let autoSaveInterval = $ref(null)
+const clearAutoSaveInterval = () => {
+  if (autoSaveInterval !== null) {
+    clearInterval(autoSaveInterval)
+    autoSaveInterval = null
+  }
+}
+watch(
+  () => contentUpdated,
+  (val) => {
+    const { autoSave } = options.value.document
+    if (!autoSave.enabled) return
+    if (isFirstUpdate) {
+      isFirstUpdate = false
+      setTimeout(() => (contentUpdated = false))
+      return
+    }
+    if (!val) {
+      clearAutoSaveInterval()
+      return
+    }
+    autoSaveInterval = setInterval(() => {
+      saveContent()
+      contentUpdated = false
+      clearAutoSaveInterval()
+    }, autoSave.interval)
+  },
+)
+onBeforeUnmount(() => {
+  clearAutoSaveInterval()
+})
+
 // 编辑器事件
 emits('beforeCreate')
 watch(
@@ -403,7 +449,10 @@ watch(
   () => {
     if (!editor.value) return
     editor.value.on('create', ({ editor }) => emits('created', { editor }))
-    editor.value.on('update', ({ editor }) => emits('changed', { editor }))
+    editor.value.on('update', ({ editor }) => {
+      emits('changed', { editor })
+      contentUpdated = true
+    })
     editor.value.on('selectionUpdate', ({ editor }) => {
       emits('changed:selection', { editor })
     })
