@@ -4269,9 +4269,9 @@ pretty-bytes@^6.1.1:
   integrity sha512-mQUvGU6aUFQ+rNvTIAcZuWGRT9a6f6Yrg9bHs4ImKF+HZCEK+plBvnAZYSIQztknZF2qnzNtr6F8s0+IuptdlQ==
 
 prism-code-editor@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/prism-code-editor/-/prism-code-editor-3.3.1.tgz#595bc64909e9b1e45aaae4ebc612790ca906200e"
-  integrity sha512-OFfXi1GgoeOwUAeC4K3iRZty0tSbuC3hin+UeYhGPWddsMUWGu8FqxENCr+R+ODC2PUkfU05EnS6qRjV9TvfMg==
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/prism-code-editor/-/prism-code-editor-3.3.2.tgz#7a4bdc47ea8b9ec0e76b73db0be463413e3314ce"
+  integrity sha512-olqOGwUo0e6isTLazpIM9RZRgrI2h/hOG9w+V2/SGPM00E6ZQmHm6MgISsSiXhXmTaENEWCARX/BLcWg595Y7g==
 
 prismjs@^1.29.0:
   version "1.29.0"
