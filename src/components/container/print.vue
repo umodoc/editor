@@ -58,7 +58,7 @@
 
 <script setup>
 import Katex from 'katex'
-import Prism from 'prismjs'
+import Prism from 'prismjs/prism'
 import 'prismjs/components/prism-bash'
 import 'prismjs/components/prism-css'
 import 'prismjs/components/prism-css-extras'
