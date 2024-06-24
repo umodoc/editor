@@ -77,7 +77,6 @@ export default defineConfig({
       external: [
         /@vueuse\/.*/,
         /@tiptap\/.*/,
-        /prism-code-editor\/.*/,
         /prismjs\/.*/,
         /nzh\/.*/,
         'vue',

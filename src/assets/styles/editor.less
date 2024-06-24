@@ -146,6 +146,14 @@
       width: 100%;
       margin: 0;
       overflow: hidden;
+      page-break-inside: auto;
+      tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+      }
+      // thead {
+      //   display: table-header-group;
+      // }
       td,
       th {
         min-width: 1em;
