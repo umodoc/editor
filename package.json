@@ -95,7 +95,7 @@
     "qrcode-svg": "^1.1.0",
     "svg64": "^2.0.0",
     "tdesign-vue-next": "^1.9.6",
-    "vue": "^3.4.27",
+    "vue": "^3.4.30",
     "vue-esign": "^1.1.4",
     "vue-i18n": "^9.13.1"
   },
@@ -103,7 +103,7 @@
     "@intlify/unplugin-vue-i18n": "^4.0.0",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/eslint-config-prettier": "^9.0.0",
-    "eslint": "^9.4.0",
+    "eslint": "^9.5.0",
     "eslint-plugin-vue": "^9.26.0",
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
@@ -112,7 +112,7 @@
     "unplugin-auto-import": "^0.17.6",
     "unplugin-vue-components": "^0.27.0",
     "unplugin-vue-macros": "^2.9.5",
-    "vite": "^5.2.13",
+    "vite": "^5.3.1",
     "vite-plugin-compression2": "^1.1.1",
     "vite-plugin-svg-icons": "^2.0.1"
   },
