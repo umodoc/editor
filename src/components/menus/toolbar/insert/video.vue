@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="video"
-    text="视频"
+    :text="t('insert.video')"
     huge
     @menu-click="editor.chain().focus().selectFiles('video').run()"
   />

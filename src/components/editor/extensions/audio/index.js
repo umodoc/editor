@@ -33,7 +33,7 @@ export default Node.create({
   },
   addCommands() {
     return {
-      setVideo:
+      setAudio:
         (options) =>
         ({ commands, editor }) => {
           return commands.insertContentAt(editor.state.selection.anchor, {

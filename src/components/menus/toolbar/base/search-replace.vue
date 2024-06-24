@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="search-replace"
-    text="查找替换"
+    :text="t('search.text')"
     shortcut="Ctrl+F"
     huge
     @menu-click="searchReplace = true"

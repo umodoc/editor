@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="table-next-cell"
-    text="下一个单元格"
+    :text="t('table.nextCell')"
     shortcut="Tab"
     :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().goToNextCell()"

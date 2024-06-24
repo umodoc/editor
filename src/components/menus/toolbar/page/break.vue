@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="page-break"
-    text="插入分页"
+    :text="t('page.break')"
     shortcut="Ctrl+Enter"
     huge
     @menu-click="setPageBreak"

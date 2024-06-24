@@ -1,0 +1,603 @@
+{
+  "toolbar": {
+    "ribbon": "Professional",
+    "classic": "Classic",
+    "toggle": "Toolbar",
+    "show": "Show Toolbar",
+    "hide": "Hide Toolbar",
+    "source": "Edit Source Code",
+    "base": "Home",
+    "insert": "Insert",
+    "table": "Table",
+    "tools": "Tools",
+    "page": "Page",
+    "export": "Export"
+  },
+  "base": {
+    "align": {
+      "title": "Alignment",
+      "left": "Left",
+      "center": "Center",
+      "right": "Right",
+      "justify": "Justify",
+      "distributed": "Distributed"
+    },
+    "bgColor": "Background Color of Text",
+    "bold": "Bold",
+    "clearFormat": "Clear Text Formatting",
+    "code": "Code",
+    "color": "Font Color",
+    "fontFamily": {
+      "text": "Select Font",
+      "all": "Common Fonts",
+      "recent": "Recently Used",
+      "used": "Used Fonts",
+      "unsupport": "This font may not display properly, possibly due to it not being installed on this device"
+    },
+    "fontSize": {
+      "text": "Font Size",
+      "increase": "Increase Font Size",
+      "decrease": "Decrease Font Size",
+      "default": "Default",
+      "42pt": "First",
+      "36pt": "Sub-first",
+      "26pt": "First Level",
+      "24pt": "Sub-first Level",
+      "22pt": "Second Level",
+      "18pt": "Sub-second Level",
+      "16pt": "Third Level",
+      "15pt": "Sub-third Level",
+      "14pt": "Fourth Level",
+      "12pt": "Sub-fourth Level",
+      "10_5pt": "Fifth Level",
+      "9pt": "Sub-fifth Level",
+      "7_5pt": "Sub-sixth Level",
+      "6_5pt": "Default"
+    },
+    "formatPaint": {
+      "text": "Format Painter",
+      "tip": "Double click to reuse"
+    },
+    "heading": {
+      "text": "Title {level}",
+      "paragraph": "Normal",
+      "tip": "Set heading, can generate document map based on headings"
+    },
+    "highlight": {
+      "text": "Highlight",
+      "clear": "Clear Highlight",
+      "yellowBg": "Yellow Background",
+      "purpleBg": "Purple Background",
+      "greenBg": "Green Background",
+      "blueBg": "Blue Background",
+      "red": "Red Text",
+      "green": "Green Text"
+    },
+    "indent": "Increase Indent",
+    "italic": "Italic",
+    "lineHeight": {
+      "text": "Line Height",
+      "default": " (Default)"
+    },
+    "outdent": "Decrease Indent",
+    "markdown": {
+      "text": "Markdown",
+      "enable": "Enable Markdown",
+      "disable": "Disable Markdown",
+      "message": "This action will reset the editor, and after switching, current history will be lost, unable to undo, etc. Confirm now?",
+      "toggle": "Switch Now"
+    },
+    "quote": "Quote",
+    "redo": "Redo",
+    "selectAll": "Select All",
+    "strike": "Strikethrough",
+    "subscript": "Subscript",
+    "superscript": "Superscript",
+    "underline": "Underline",
+    "undo": "Undo"
+  },
+  "insert": {
+    "audio": "Audio",
+    "codeBlock": "Code Block",
+    "date": "Chinese Date",
+    "emoji": "Emoji",
+    "file": "File",
+    "hardBreak": "Line Break",
+    "hr": {
+      "text": "Divider",
+      "title": "Divider Style",
+      "color": "Divider Color",
+      "signle": "Single Line",
+      "double": "Double Thin Lines",
+      "dotted": "Dotted Line",
+      "dashed": "Dashed Line",
+      "dashedDouble": "Double Dashed Line",
+      "signleBold": "Thick Line",
+      "doubleBoldTop": "Thick & Thin Lines (Top)",
+      "doubleBoldBottom": "Thin & Thick Lines (Bottom)",
+      "wavy": "Wavy Line"
+    },
+    "image": "Image",
+    "link": {
+      "text": "Link",
+      "title": "Insert Link",
+      "insert": "Insert",
+      "hrefText": "Link Text:",
+      "hrefTextTip": "Enter or select link text",
+      "href": "Link URL:",
+      "hrefTip": "Enter the link URL, usually starting with http:// or https://"
+    },
+    "math": "Mathematics",
+    "symbol": "Symbol",
+    "template": "Template",
+    "textBox": "Text Box",
+    "toc": "Document Map",
+    "video": "Video",
+    "web": {
+      "text": "Web Page",
+      "insert": "Insert",
+      "title": "Insert Web Page",
+      "tip": "Some web pages may not support embedding.",
+      "placeholder": "Enter a web address, starting with http:// or https://"
+    }
+  },
+  "table": {
+    "addColumnAfter": "Insert Column After",
+    "addColumnBefore": "Insert Column Before",
+    "addRowAfter": "Insert Row Below",
+    "addRowBefore": "Insert Row Above",
+    "borderColor": "Border Color",
+    "cellAlign": {
+      "text": "Alignment",
+      "tip": "Cell Alignment",
+      "lt": "Top Left",
+      "ct": "Top Center",
+      "rt": "Top Right",
+      "jt": "Top Justify",
+      "lm": "Middle Left",
+      "cm": "Middle Center",
+      "rm": "Middle Right",
+      "jm": "Middle Justify",
+      "lb": "Bottom Left",
+      "cb": "Bottom Center",
+      "rb": "Bottom Right",
+      "jb": "Bottom Justify"
+    },
+    "cellBgColor": {
+      "text": "Background",
+      "tip": "Cell Background Color"
+    },
+    "deleteColumn": {
+      "text": "Delete Column",
+      "title": "Delete Table Column",
+      "message": "This operation will delete the selected table column. Continue?",
+      "delete": "Delete Now",
+      "success": "Deleted Successfully"
+    },
+    "deleteRow": {
+      "text": "Delete Row",
+      "title": "Delete Table Row",
+      "message": "This operation will delete the selected table row. Continue?",
+      "delete": "Delete Now",
+      "success": "Deleted Successfully"
+    },
+    "delete": {
+      "text": "Delete Table",
+      "title": "Delete Current Table",
+      "message": "This operation will delete the selected table. Continue?",
+      "delete": "Delete Now",
+      "success": "Deleted Successfully"
+    },
+    "fix": {
+      "text": "Fix Table",
+      "tip": "Click to automatically fix table when it's disordered"
+    },
+    "insert": {
+      "text": "Insert Table",
+      "tip": "Insert New Table",
+      "property": "Table Properties",
+      "withHeader": "Include Header",
+      "rows": "Number of Rows:",
+      "cols": "Number of Columns:",
+      "create": "Create Table"
+    },
+    "mergeCells": "Merge Cells",
+    "nextCell": "Next Cell",
+    "prevCell": "Previous Cell",
+    "splitCell": "Split Cell",
+    "toggleHeaderCell": "Header Cell",
+    "toggleHeaderRow": "Header Row",
+    "toggleHeaderColumn": "Header Column"
+  },
+  "tools": {
+    "barcode": {
+      "text": "Barcode",
+      "edit": "Edit Barcode",
+      "title": "Barcode",
+      "format": "Format",
+      "font": "Font Style",
+      "lineColor": "Barcode & Text Color",
+      "bgColor": "Barcode Background Color",
+      "more": "More",
+      "width": "Width:",
+      "height": "Height:",
+      "margin": "Margin:",
+      "displayValue": "Display Text",
+      "displayValueText": "Show Text",
+      "textContent": "Text Content:",
+      "textContentTip": "Overrides barcode content text",
+      "textPosition": "Text Position:",
+      "top": "Top",
+      "bottom": "Bottom",
+      "textMargin": "Vertical Distance:",
+      "fontSize": "Font Size:",
+      "placeholder": "Enter content to convert into barcode",
+      "error": "Your input may not comply with the current barcode standard constraints, please check.",
+      "preview": "Preview",
+      "renderError": "No preview available",
+      "notEmpty": "Barcode content cannot be empty"
+    },
+    "chineseCase": {
+      "text": "Chinese Case",
+      "tip": "Chinese Case Conversion"
+    },
+    "diagrams": {
+      "text": "Diagram",
+      "edit": "Edit Diagram",
+      "loading": "Loading..."
+    },
+    "mermaid": {
+      "text": "Mermaid",
+      "edit": "Edit Mermaid",
+      "placeholder": "Enter Mermaid code",
+      "preview": "Preview",
+      "notEmpty": "Mermaid content cannot be empty"
+    },
+    "mindMap": "Mind Map",
+    "qrcode": {
+      "text": "QR Code",
+      "edit": "Edit QR Code",
+      "level": "QR Code Error Correction Level",
+      "levelL": "Low",
+      "levelM": "Medium",
+      "levelQ": "Quartile",
+      "levelH": "High",
+      "padding": "padding:",
+      "paddingTip": "white space padding",
+      "width": "Size:",
+      "widthTip": "QR Code size in pixels",
+      "color": "QR Code Color",
+      "bgColor": "Color of background",
+      "placeholder": "Enter content to convert into QR Code",
+      "preview": "Preview",
+      "renderError": "QR Code generation failed",
+      "notEmpty": "QR Code content cannot be empty"
+    },
+    "seal": {
+      "text": "Official Seal",
+      "title": "Insert Official Seal",
+      "insert": "Insert",
+      "tip": "Select a photocopy or photo of a solid-color background seal; it will be automatically extracted. All operations are completed locally without sending data to the server, so feel free to use.",
+      "insertTip": "Click here to select seal image",
+      "converting1": "Loading component...",
+      "converting2": "Loading component: {percentage}%",
+      "converting3": "Extracting image, please wait...",
+      "convertError": "Electronic seal extraction failed, please retry",
+      "notEmpty": "Please select a seal"
+    },
+    "signature": {
+      "text": "E-Signature",
+      "title": "Insert Electronic Signature",
+      "clear": "Clear",
+      "lineWidth": "Pen Thickness",
+      "tip": "Please sign in the this area",
+      "notEmpty": "No signature detected"
+    }
+  },
+  "page": {
+    "bg": {
+      "text": "Background",
+      "custom": "Custom Page Background",
+      "default": "Default",
+      "color1": "Eye-friendly\nGreen",
+      "color2": "Elegant\nYellow",
+      "color3": "Cloudy\nBlue",
+      "color4": "Sky Blue",
+      "color5": "Dark Night\nBlack"
+    },
+    "breakMarks": "Line Breaks",
+    "break": "Page Break",
+    "footer": "Footer",
+    "header": "Header",
+    "lineNumber": "Line Numbers",
+    "margin": "Margins",
+    "orientation": {
+      "text": "Orientation",
+      "landscape": "Landscape",
+      "portrait": "Portrait"
+    },
+    "preview": "Presentation",
+    "size": {
+      "text": "Size",
+      "cm": "CM",
+      "custom": "Custom Settings"
+    },
+    "watermark": {
+      "text": "Watermark",
+      "fontFamily": "Watermark Font",
+      "fontSize": "Watermark Size",
+      "fontColor": "Watermark Color",
+      "content": "Watermark Text",
+      "type": "Watermark Style",
+      "compact": "Compact",
+      "spacious": "Spacious",
+      "clear": "Remove Watermark"
+    }
+  },
+  "export": {
+    "embed": {
+      "text": "Embed",
+      "title": "Embed Code",
+      "tip": "After copying, manually adjust the iframe width and height for optimal viewing.",
+      "copy": "Copy",
+      "copied": "Code copied to clipboard"
+    },
+    "image": {
+      "text": "Image",
+      "jpg": "JPG",
+      "png": "PNG",
+      "error": {
+        "title": "Error Message",
+        "message": "Failed to export image, please try again or refresh the page."
+      }
+    },
+    "share": {
+      "text": "Share",
+      "tip": "Copy the link and send it to those you want to share with.",
+      "copy": "Copy Link",
+      "copied": "Link copied to clipboard"
+    },
+    "text": "Text"
+  },
+  "list": {
+    "bullet": {
+      "text": "Bulleted List",
+      "disc": "Filled Circle",
+      "circle": "Open Circle",
+      "square": "Filled Square"
+    },
+    "ordered": {
+      "text": "Numbered List",
+      "property": "List Properties",
+      "startAt": "Starting Number:",
+      "decimal": "Numbers",
+      "decimalLeadingZero": "Numbers with Leading Zero",
+      "lowerRoman": "Lowercase Roman Numerals",
+      "upperRoman": "Uppercase Roman Numerals",
+      "lowerLatin": "Lowercase Alphabet",
+      "upperLatin": "Uppercase Alphabet",
+      "tradChineseInformal": "Traditional Chinese Counting",
+      "simpChineseFormal": "Formal Uppercase Chinese Counting"
+    },
+    "task": {
+      "text": "To-Do List",
+      "split": "Add Task",
+      "sink": "Convert to Sub-task",
+      "lift": "Remove as Task"
+    }
+  },
+  "colorPicker": {
+    "default": "Default Color",
+    "standard": "Standard Colors",
+    "recent": "Recently Used",
+    "more": "More Colors"
+  },
+  "blockMenu": {
+    "insert": "Insert New Block",
+    "select": "Select Block",
+    "template": "Insert Template",
+    "toogleNode": "Switch Block Type",
+    "other": "Other",
+    "delete": "Delete Block"
+  },
+  "bubbleMenu": {
+    "code": {
+      "copy": {
+        "text": "Copy Code",
+        "success": "Code copied to clipboard"
+      },
+      "languages": "Languages",
+      "lineNumbers": "Show Line Numbers",
+      "themes": {
+        "text": "Theme",
+        "light": "Light Theme",
+        "dark": "Dark Theme"
+      },
+      "wordWrap": "Word Wrap"
+    },
+    "delete": "Delete",
+    "file": {
+      "download": "Download File"
+    },
+    "image": {
+      "download": "Download Image",
+      "draggable": "Image Floating",
+      "flipX": "Flip Horizontally",
+      "flipY": "Flip Vertically",
+      "preview": "Preview Image",
+      "proportion": "Lock Image Aspect Ratio",
+      "removeBg": "Remove Image Background",
+      "removingBg": "Removing Image Background...",
+      "reset": "Reset Image Position",
+      "rotateCC": "Rotate Counter-Clockwise 90°",
+      "rotateC": "Rotate Clockwise 90°"
+    }
+  },
+  "pageOptions": {
+    "title": "Page Settings",
+    "size": {
+      "text": "Page Size",
+      "width": "Width:",
+      "height": "Height:",
+      "custom": "Custom"
+    },
+    "margin": {
+      "text": "Page Margins",
+      "default": "Default",
+      "narrow": "Narrow",
+      "moderate": "Moderate",
+      "wide": "Wide",
+      "top": "Top:",
+      "right": "Right:",
+      "bottom": "Bottom:",
+      "left": "Left:"
+    }
+  },
+  "source": {
+    "loading": "Loading Source Editor..."
+  },
+  "document": {
+    "untitled": "Untitled Document"
+  },
+  "search": {
+    "text": "Search",
+    "title": "Search and Replace",
+    "searchText": "Search...",
+    "replaceText": "Replace...",
+    "caseSensitive": "Case Sensitive",
+    "search": "Search",
+    "replace": "Replace",
+    "replaceAll": "Replace All"
+  },
+  "toc": {
+    "title": "Document Map",
+    "show": "Document Map",
+    "hide": "Hide Document Map",
+    "empty": "No Document Map Available"
+  },
+  "spellcheck": {
+    "enable": "Enable Spell Check",
+    "disable": "Disable Spell Check"
+  },
+  "pageBreak": {
+    "title": "Page Break",
+    "disable": "Exit Page Break"
+  },
+  "shortcut": {
+    "title": "Keyboard Shortcuts",
+    "text": "Text",
+    "commonlyUsed": "Common",
+    "copy": "Copy",
+    "paste": "Paste",
+    "pasteAsText": "Paste as Plain Text",
+    "paragraph": "Insert New Paragraph",
+    "hardBreak": "Line Break",
+    "format": "Text",
+    "page": "Page",
+    "pageZoomIn": "Zoom In",
+    "pageZoomOut": "Zoom Out",
+    "pageZoomReset": "Reset Zoom to Default",
+    "pageAutoWidth": "Fit to Best Width",
+    "markdown": "Markdown"
+  },
+  "changeLocale": {
+    "title": "Switch Language",
+    "message": "After changing the language, the page will refresh. Please save your document content first. Are you sure you want to switch now?",
+    "confirm": "Switch Now"
+  },
+  "resetAll": {
+    "title": "Reset Editor",
+    "message": "This action will clear all editor settings and current content, and refresh the page. It's recommended to save your content before resetting. Are you sure you want to reset now?",
+    "reset": "Reset Now"
+  },
+  "feedback": "Feedback",
+  "poweredBy": "Powered by Umodoc",
+  "wordCount": {
+    "input": "{count} characters,",
+    "limit": "total should not exceed {count} characters,",
+    "selected": "{count} characters selected"
+  },
+  "preview": {
+    "title": "Presentation",
+    "disable": "Exit Presentation",
+    "laserPointer": "Laser Pointer",
+    "exit": "Exit"
+  },
+  "fullscreen": {
+    "title": "Fullscreen",
+    "disable": "Exit Fullscreen"
+  },
+  "zoom": {
+    "zoomIn": "Zoom In",
+    "zoomOut": "Zoom Out",
+    "level": "Zoom Level: ",
+    "autoWidth": "Best Fit Width",
+    "autoWidthError": "Error calculating automatic page width",
+    "reset": "Back to 100%"
+  },
+  "node": {
+    "codeBlock": {
+      "menu": "Menu"
+    },
+    "image": {
+      "loading": "Loading...",
+      "error": "Image load failed"
+    },
+    "textBox": {
+      "tip": "Double-click to edit"
+    }
+  },
+  "file": {
+    "uploading": "Uploading file...",
+    "download": "Download File",
+    "limit": "File \"{filename}\" exceeds the limit of {size}MB",
+    "notAllow": {
+      "title": "Error Prompt",
+      "message": "Insertion of this file type is not allowed in the current document."
+    }
+  },
+  "save": {
+    "text": "Save",
+    "saved": "Saved",
+    "unsaved": "Unsaved",
+    "network": "Network Status:",
+    "online": "Online",
+    "offline": "Offline",
+    "saving": "Saving document...",
+    "savedAt": "Saved at:",
+    "savedAtText": "Saved at {time}",
+    "failed": "Failed to save document",
+    "success": "Document saved successfully",
+    "error": "Error saving document",
+    "cache": {
+      "text": "Restore from Cache",
+      "error": {
+        "title": "Error Prompt",
+        "message": "There is no content in the cache!"
+      }
+    }
+  },
+  "print": {
+    "text": "Print",
+    "title": "Print Document",
+    "preview": "Page Preview",
+    "closePreview": "Close Page Preview",
+    "settings": "Print Settings",
+    "singleColumn": "Display in Single Column",
+    "showPageNumber": "Include Page Numbers when Printing",
+    "loading": "Page loading...",
+    "page": "Page 'counter(page)' of 'counter(pages)'"
+  },
+  "time": {
+    "justNow": "Just now",
+    "past": "{n} ago",
+    "yesterday": "Yesterday",
+    "day": "{n} days",
+    "hour": "{n} hours",
+    "minute": "{n} minutes",
+    "second": "{n} seconds"
+  },
+  "dialog": {
+    "cancel": "Cancel"
+  }
+}

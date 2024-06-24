@@ -1,6 +1,8 @@
 export default (shortcut) => {
-  if (!shortcut) return ''
-  // 判断是 MAC OS
+  if (!shortcut) {
+    return ''
+  }
+  // 判断是 Mac OS
   const isMacOS = /macintosh|mac os x/gi.test(navigator.userAgent)
   let keys = shortcut
   if (isMacOS) {

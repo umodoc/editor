@@ -1,27 +1,27 @@
 <template>
   <menus-button
     v-if="select"
-    text="字体大小"
+    :text="t('base.fontSize.text')"
     menu-type="select"
     hide-text
-    :style="{ width: $toolbar.mode !== 'classic' ? '80px' : '58px' }"
+    style="width: 80px"
     :select-options="fontSizes"
     :value="editor?.getAttributes('textStyle').fontSize || '14px'"
     v-bind="$attrs"
-    placeholder="字号"
+    :placeholder="t('base.fontSize.text')"
     filterable
     @menu-click="setFontSize"
   >
   </menus-button>
   <menus-button
     ico="font-size-increase"
-    text="增大字号"
+    :text="t('base.fontSize.increase')"
     hide-text
     @menu-click="increaseFontSize"
   />
   <menus-button
     ico="font-size-decrease"
-    text="减小字号"
+    :text="t('base.fontSize.increase')"
     hide-text
     @menu-click="decreaseFontSize"
   />
@@ -39,21 +39,21 @@ const { editor } = useStore()
 const $toolbar = useState('toolbar')
 
 const fontSizes = [
-  { label: '默认', value: '14px', order: 4 },
-  { label: '初号', value: '42pt', order: 20 }, //56
-  { label: '小初', value: '36pt', order: 19 }, //48
-  { label: '一号', value: '26pt', order: 16 }, //35
-  { label: '小一', value: '24pt', order: 15 }, //32
-  { label: '二号', value: '22pt', order: 14 }, //29
-  { label: '小二', value: '18pt', order: 11 }, //24
-  { label: '三号', value: '16pt', order: 10 }, //22
-  { label: '小三', value: '15pt', order: 9 }, //21
-  { label: '四号', value: '14pt', order: 7 }, //19
-  { label: '小四', value: '12pt', order: 4 }, //16
-  { label: '五号', value: '10.5pt', order: 1 }, //14
-  { label: '小五', value: '9pt', order: 3 }, //12
-  { label: '六号', value: '7.5pt', order: 1 }, //10
-  { label: '小六', value: '6.5pt', order: 0 }, //9
+  { label: t('base.fontSize.default'), value: '14px', order: 4 },
+  { label: t('base.fontSize.42pt'), value: '42pt', order: 20 }, //56
+  { label: t('base.fontSize.36pt'), value: '36pt', order: 19 }, //48
+  { label: t('base.fontSize.26pt'), value: '26pt', order: 16 }, //35
+  { label: t('base.fontSize.24pt'), value: '24pt', order: 15 }, //32
+  { label: t('base.fontSize.22pt'), value: '22pt', order: 14 }, //29
+  { label: t('base.fontSize.18pt'), value: '18pt', order: 11 }, //24
+  { label: t('base.fontSize.16pt'), value: '16pt', order: 10 }, //22
+  { label: t('base.fontSize.15pt'), value: '15pt', order: 9 }, //21
+  { label: t('base.fontSize.14pt'), value: '14pt', order: 7 }, //19
+  { label: t('base.fontSize.12pt'), value: '12pt', order: 4 }, //16
+  { label: t('base.fontSize.10_5pt'), value: '10.5pt', order: 1 }, //14
+  { label: t('base.fontSize.9pt'), value: '9pt', order: 3 }, //12
+  { label: t('base.fontSize.7_5pt'), value: '7.5pt', order: 1 }, //10
+  { label: t('base.fontSize.6_5pt'), value: '6.5pt', order: 0 }, //9
   { label: '10', value: '10px', order: 1 },
   { label: '11', value: '11px', order: 2 },
   { label: '12', value: '12px', order: 3 },
@@ -82,7 +82,9 @@ const increaseFontSize = () => {
   const { fontSize } = editor.value.getAttributes('textStyle')
   if (fontSize) {
     const size = fontSizes.find(({ value }) => value === fontSize)
-    if (!size) return
+    if (!size) {
+      return
+    }
     const nextFont = fontSizes.find(({ order }) => order === size.order + 1)
     if (nextFont) {
       setFontSize(nextFont.value)
@@ -97,7 +99,9 @@ const decreaseFontSize = () => {
   const { fontSize } = editor.value.getAttributes('textStyle')
   if (fontSize) {
     const size = fontSizes.find(({ value }) => value === fontSize)
-    if (!size) return
+    if (!size) {
+      return
+    }
     const prevFont = fontSizes.find(({ order }) => order === size.order - 1)
     if (prevFont) {
       setFontSize(prevFont.value)

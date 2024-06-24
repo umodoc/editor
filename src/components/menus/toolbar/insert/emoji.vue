@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="emoji"
-    text="表情"
+    :text="t('insert.emoji')"
     menu-type="popup"
     huge
     :popup-visible="popupVisible"
@@ -10,7 +10,7 @@
     <template #content>
       <div class="emojis-container narrow-scrollbar">
         <template v-for="(group, index) in options.dicts.emojis" :key="index">
-          <div class="emojis-group-title">{{ group.label }}</div>
+          <div class="emojis-group-title" v-text="l(group.label)"></div>
           <div class="emojis-group-container">
             <div
               class="emojis-group-item"

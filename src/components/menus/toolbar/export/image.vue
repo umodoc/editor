@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="image"
-    text="图片"
+    :text="t('export.image.text')"
     menu-type="dropdown"
     huge
     :select-options="formats"
@@ -16,26 +16,31 @@ import { saveAs } from 'file-saver'
 const { container, options, page } = useStore()
 
 const formats = [
-  { content: 'PNG 格式', value: 'png' },
-  { content: 'JPG 格式', value: 'jpg' },
+  { content: t('export.image.png'), value: 'png' },
+  { content: t('export.image.jpg'), value: 'jpg' },
 ]
 
 const saveImage = async ({ content, value }) => {
-  if (!content) return
+  if (!content) {
+    return
+  }
   const zoomLevel = page.value.zoomLevel
   try {
     page.value.zoomLevel = 100
     const node = document.querySelector(`${container} .page-content`)
     const blob = await toBlob(node, { scale: devicePixelRatio })
+    const { title } = options.value.document
+    const filename =
+      title !== '' ? options.value.document.title : t('document.untitled')
     saveAs(
       blob,
-      `${options.value.document.title}${devicePixelRatio > 1 ? '@' + devicePixelRatio + 'x' : ''}.${value}`,
+      `${filename}${devicePixelRatio > 1 ? '@' + devicePixelRatio + 'x' : ''}.${value}`,
     )
   } catch {
     const dialog = useAlert({
       theme: 'warning',
-      header: '错误提示',
-      body: '导出图片失败，请重试或尝试刷新页面。',
+      header: t('export.image.error.title'),
+      body: t('export.image.error.message'),
       onConfirm() {
         dialog.destroy()
       },

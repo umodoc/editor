@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="page-margin"
-    text="页边距"
+    :text="t('page.margin')"
     huge
     @menu-click="dialogVisible = true"
   >

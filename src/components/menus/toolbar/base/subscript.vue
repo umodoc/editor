@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="subscript"
-    text="下标"
+    :text="t('base.subscript')"
     shortcut="Ctrl+,"
     hide-text
     :menu-active="editor?.isActive('subscript')"

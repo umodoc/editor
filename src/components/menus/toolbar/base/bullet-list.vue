@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="bullet-list"
-    text="项目符号"
+    :text="t('list.bullet.text')"
     shortcut="Ctrl+Shift+8"
     menu-type="popup"
     popup-handle="arrow"
@@ -39,9 +39,9 @@ let { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
 const options = [
-  { label: '圆点', value: 'disc' },
-  { label: '空心圆点', value: 'circle' },
-  { label: '方块', value: 'square' },
+  { label: t('list.bullet.disc'), value: 'disc' },
+  { label: t('list.bullet.circle'), value: 'circle' },
+  { label: t('list.bullet.square'), value: 'square' },
 ]
 
 let listType = $ref('')

@@ -49,8 +49,8 @@
           <menus-toolbar-base-ordered-list />
           <menus-toolbar-base-bullet-list />
           <menus-toolbar-base-task-list />
-          <menus-toolbar-base-outdent />
           <menus-toolbar-base-indent />
+          <menus-toolbar-base-outdent />
           <menus-toolbar-base-line-height />
           <menus-toolbar-base-align-dropdown />
           <menus-toolbar-base-quote />
@@ -72,16 +72,16 @@
           <menus-toolbar-insert-audio v-if="!disableItem('audio')" />
           <menus-toolbar-insert-file v-if="!disableItem('file')" />
           <menus-toolbar-insert-code-block v-if="!disableItem('code')" />
-          <menus-toolbar-insert-special-characters />
-          <menus-toolbar-insert-date />
-          <menus-toolbar-insert-emoji v-if="!disableItem('emoji')" />
-          <menus-toolbar-insert-mathematics
-            v-if="!disableItem('mathematics')"
+          <menus-toolbar-insert-symbol />
+          <menus-toolbar-insert-chinese-date
+            v-if="!disableItem('chineseDate')"
           />
+          <menus-toolbar-insert-emoji v-if="!disableItem('emoji')" />
+          <menus-toolbar-insert-math v-if="!disableItem('math')" />
         </div>
         <div class="virtual-group">
           <menus-toolbar-insert-hard-break />
-          <menus-toolbar-insert-horizontal-line />
+          <menus-toolbar-insert-hr />
           <menus-toolbar-insert-toc />
           <menus-toolbar-insert-text-box />
         </div>
@@ -142,7 +142,9 @@
           <menus-toolbar-tools-mermaid v-if="!disableItem('mermaid')" />
         </div>
         <div class="virtual-group">
-          <menus-toolbar-tools-chinese-case />
+          <menus-toolbar-tools-chinese-case
+            v-if="!disableItem('chineseCase')"
+          />
         </div>
       </template>
       <template v-if="currentMenu === 'page'">
@@ -175,7 +177,7 @@
         <div class="virtual-group">
           <menus-toolbar-export-image />
           <!-- <menus-toolbar-export-pdf /> -->
-          <menus-toolbar-export-html />
+          <!-- <menus-toolbar-export-html /> -->
           <menus-toolbar-export-text />
         </div>
         <div class="virtual-group">

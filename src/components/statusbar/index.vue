@@ -1,7 +1,7 @@
 <template>
   <div v-if="!page.preview.enabled" class="status-bar">
     <div class="bar-left">
-      <tooltip :content="page.showToc ? '隐藏大纲' : '显示大纲'">
+      <tooltip :content="page.showToc ? t('toc.hide') : t('toc.show')">
         <t-button
           class="bar-button"
           :class="{ active: page.showToc }"
@@ -14,7 +14,11 @@
       </tooltip>
       <tooltip
         v-if="options.document.enableSpellcheck"
-        :content="$document.spellcheck ? '关闭拼写检查' : '开启拼写检查'"
+        :content="
+          $document.spellcheck
+            ? t('spellcheck.disable')
+            : t('spellcheck.enable')
+        "
       >
         <t-button
           class="bar-button"
@@ -27,7 +31,7 @@
         </t-button>
       </tooltip>
       <!-- <tooltip
-        :content="page.pageBreak ? '退出分页模式' : '进入分页模式'"
+        :content="page.pageBreak ? t('pageBreak.disable') : t('pageBreak.title')"
       >
         <t-button
           class="bar-button"
@@ -39,7 +43,7 @@
           <icon name="page-break" />
         </t-button>
       </tooltip> -->
-      <tooltip content="快捷键">
+      <tooltip :content="t('shortcut.title')">
         <t-button
           class="bar-button"
           variant="text"
@@ -49,13 +53,13 @@
           <icon name="shortcut" />
         </t-button>
       </tooltip>
-      <tooltip content="重置编辑器">
+      <tooltip :content="t('resetAll.title')">
         <t-button class="bar-button" variant="text" size="small" @click="reset">
           <icon name="clear-cache" />
         </t-button>
       </tooltip>
       <div class="bar-split"></div>
-      <tooltip content="由「有墨文档」提供技术支持">
+      <tooltip :content="t('poweredBy')">
         <t-button
           class="bar-button"
           variant="text"
@@ -66,7 +70,7 @@
           <icon name="home-page" />
         </t-button>
       </tooltip>
-      <tooltip content="使用感受和建议反馈">
+      <tooltip :content="t('feedback')">
         <t-button
           class="bar-button"
           variant="text"
@@ -79,16 +83,20 @@
       </tooltip>
       <div class="bar-split"></div>
       <div class="simple-text word-count" v-if="editor">
-        已输入 {{ editor.storage.characterCount.characters() }} 字符，{{
-          options.document.characterLimit > 0
-            ? `总计不能超过 ${options.document.characterLimit} 字符，`
-            : ''
-        }}已选中 {{ selectionCharacters }} 字符
+        {{
+          t('wordCount.input', {
+            count: editor.storage.characterCount.characters(),
+          })
+        }}
+        <template v-if="options.document.characterLimit > 0">{{
+          t('wordCount.limit', { count: options.document.characterLimit })
+        }}</template>
+        {{ t('wordCount.selected', { count: selectionCharacters }) }}
       </div>
     </div>
     <div class="bar-right">
       <tooltip
-        :content="`${page.preview.enabled ? '退出演示' : '演示模式 '} (F5)`"
+        :content="`${page.preview.enabled ? t('preview.disable') : t('preview.title')} (F5)`"
       >
         <t-button
           class="bar-button"
@@ -101,7 +109,7 @@
         </t-button>
       </tooltip>
       <tooltip
-        :content="`${fullscreen.isFullscreen ? '退出全屏' : '全屏模式'} (F11 / ⌘+F11)`"
+        :content="`${fullscreen.isFullscreen ? t('fullscreen.disable') : t('fullscreen.title')} (F11 / ⌘+F11)`"
       >
         <t-button
           class="bar-button"
@@ -116,7 +124,7 @@
       </tooltip>
       <div class="bar-split"></div>
       <div class="zoom-level-bar">
-        <tooltip :content="`减小缩放 (${getShortcut('Ctrl-')})`">
+        <tooltip :content="`${t('zoom.zoomOut')} (${getShortcut('Ctrl-')})`">
           <t-button
             class="bar-button"
             variant="text"
@@ -139,9 +147,9 @@
               modifiers: [{ name: 'offset', options: { offset: [0, 2] } }],
             },
           }"
-          label="当前缩放比例: ${value}%%"
+          :label="t('zoom.level') + '${value}%%'"
         />
-        <tooltip :content="`增加缩放 (${getShortcut('Ctrl+')})`">
+        <tooltip :content="`${t('zoom.zoomIn')} (${getShortcut('Ctrl+')})`">
           <t-button
             class="bar-button"
             variant="text"
@@ -152,7 +160,7 @@
             <icon name="plus" />
           </t-button>
         </tooltip>
-        <tooltip :content="`最佳宽度 (${getShortcut('Ctrl0')})`">
+        <tooltip :content="`${t('zoom.autoWidth')} (${getShortcut('Ctrl0')})`">
           <t-button
             class="bar-button"
             :class="{ active: page.autoWidth }"
@@ -163,7 +171,7 @@
             <icon name="auto-width" />
           </t-button>
         </tooltip>
-        <tooltip :content="`点击快速设置为 100% (${getShortcut('Ctrl1')})`">
+        <tooltip :content="`${t('zoom.reset')} (${getShortcut('Ctrl1')})`">
           <t-button
             class="bar-button zoom-button"
             variant="text"
@@ -174,6 +182,22 @@
           </t-button>
         </tooltip>
       </div>
+      <t-dropdown
+        :attach="container"
+        :options="langs"
+        placement="top-left"
+        trigger="click"
+        @click="changeLang"
+      >
+        <t-button
+          class="bar-button lang-button"
+          variant="text"
+          size="small"
+          v-text="locale"
+          @click="zoomReset"
+        >
+        </t-button>
+      </t-dropdown>
     </div>
   </div>
   <div v-else class="preview-bar">
@@ -183,11 +207,11 @@
       @click="page.preview.laserPointer = !page.preview.laserPointer"
     >
       <icon name="laser-pointer" />
-      激光笔
+      {{ t('preview.laserPointer') }}
     </div>
     <div class="item" @click="togglePreview">
       <icon name="exit" />
-      退出
+      {{ t('preview.exit') }}
     </div>
   </div>
   <t-drawer
@@ -202,7 +226,7 @@
     <template #header>
       <div class="shortcut-drawer-header">
         <icon name="shortcut" />
-        快捷键列表
+        {{ t('shortcut.title') }}
       </div>
     </template>
     <statusbar-shortcuts />
@@ -210,7 +234,9 @@
 </template>
 
 <script setup>
+import i18n from '@/i18n'
 import getShortcut from '@/utils/shortcut'
+import { computed } from 'vue'
 
 const { container, options, page, editor } = useStore()
 const $document = useState('document')
@@ -262,7 +288,9 @@ watch(
 watch(
   () => fullscreen.isFullscreen,
   (val) => {
-    if (!val) page.value.preview.enabled = false
+    if (!val) {
+      page.value.preview.enabled = false
+    }
   },
   { deep: true },
 )
@@ -305,7 +333,7 @@ const autoWidth = (auto, padding = 50) => {
     page.value.autoWidth = true
   } catch (e) {
     page.value.autoWidth = false
-    useMessage('error', '页面自动宽度计算出错')
+    useMessage('error', t('zoom.autoWidthError'))
     console.warn('Page auto width calculation error', e)
   }
 }
@@ -317,6 +345,34 @@ watch(
     if (page.value.autoWidth) autoWidth()
   },
 )
+
+// 多语言
+const langs = [
+  { content: '🇨🇳 简体中文', value: 'zh-CN' },
+  { content: '🇱🇷 English', value: 'en-US' },
+]
+const setLocale = inject('setLocale')
+const locale = computed(
+  () => langs.find((item) => item.value === i18n.global.locale.value).content,
+)
+const changeLang = ({ value }) => {
+  if (i18n.global.locale.value === value) {
+    return
+  }
+  const dialog = useConfirm({
+    theme: 'warning',
+    header: t('changeLocale.title'),
+    body: t('changeLocale.message'),
+    confirmBtn: {
+      theme: 'warning',
+      content: t('changeLocale.confirm'),
+    },
+    onConfirm() {
+      dialog.destroy()
+      setTimeout(() => setLocale(value), 300)
+    },
+  })
+}
 </script>
 
 <style lang="less" scoped>
@@ -361,7 +417,7 @@ watch(
     display: flex;
     align-items: center;
     .word-count {
-      @media screen and (max-width: 960px) {
+      @media screen and (max-width: 1024px) {
         display: none;
       }
     }
@@ -389,6 +445,19 @@ watch(
     .zoom-button {
       font-size: var(--umo-font-size-small);
       width: 64px;
+    }
+
+    .lang-button {
+      width: auto;
+      font-size: var(--umo-font-size-small);
+      :deep(.umo-button__text) {
+        display: flex;
+        align-items: center;
+        .icon {
+          font-size: 16px;
+          margin-right: 3px;
+        }
+      }
     }
   }
 }

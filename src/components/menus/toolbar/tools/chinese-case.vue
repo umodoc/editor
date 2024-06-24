@@ -1,7 +1,8 @@
 <template>
   <menus-button
     ico="chinese-case"
-    text="中文大小写"
+    :text="t('tools.chineseCase.text')"
+    :tooltip="t('tools.chineseCase.tip')"
     menu-type="dropdown"
     huge
     overlay-class-name="chinese-case-dropdown"
@@ -84,9 +85,13 @@ const options = [
 
 const setChineseCase = (func) => {
   try {
-    if (!editor.value) return
+    if (!editor.value) {
+      return
+    }
     const text = editor.value.commands.getSelectionText()
-    if (text === '') return
+    if (text === '') {
+      return
+    }
     const content = func(text)
     if (content === '') {
       throw new Error('转换失败')

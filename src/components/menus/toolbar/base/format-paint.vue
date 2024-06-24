@@ -1,8 +1,8 @@
 <template>
   <menus-button
     ico="format-paint"
-    text="格式刷"
-    tooltip="格式刷: 双击可重复使用"
+    :text="t('base.formatPaint.text')"
+    :tooltip="t('base.formatPaint.tip')"
     hide-text
   />
 </template>

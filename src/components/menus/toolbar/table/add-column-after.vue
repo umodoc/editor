@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="table-add-column-after"
-    text="插入列(右)"
+    :text="t('table.addColumnAfter')"
     :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().addColumnAfter()"
     @menu-click="editor?.chain().focus().addColumnAfter().run()"

@@ -4,8 +4,8 @@
     :attach="container"
     :prevent-scroll-through="false"
     placement="center"
-    confirmBtn="打印文档"
-    cancelBtn="关闭预览"
+    :confirmBtn="t('print.title')"
+    :cancelBtn="t('print.closePreview')"
     mode="full-screen"
     @confirm="printPage"
     @close="printing = false"
@@ -15,29 +15,33 @@
       <div class="preview-header">
         <div class="title">
           <icon name="print" />
-          <span>打印预览</span>
+          <span v-text="t('print.preview')"></span>
         </div>
         <div class="actions">
           <t-button
             size="small"
             variant="outline"
             theme="default"
+            v-text="t('pageOptions.title')"
             @click="pageOptionsVisible = true"
           >
-            页面设置
           </t-button>
           <t-popup trigger="click" placement="bottom-right">
-            <t-button size="small" variant="outline" theme="default">
-              打印设置
+            <t-button
+              size="small"
+              variant="outline"
+              theme="default"
+              v-text="t('print.settings')"
+            >
             </t-button>
             <template #content>
               <div class="preview-options">
-                <t-checkbox v-model="$print.singleColumn"
-                  >单列显示页面</t-checkbox
-                >
-                <t-checkbox v-model="$print.showPageNumber"
-                  >打印时包含页码</t-checkbox
-                >
+                <t-checkbox v-model="$print.singleColumn">
+                  {{ t('print.singleColumn') }}
+                </t-checkbox>
+                <t-checkbox v-model="$print.showPageNumber">
+                  {{ t('print.showPageNumber') }}
+                </t-checkbox>
               </div>
             </template>
           </t-popup>
@@ -45,7 +49,11 @@
       </div>
     </template>
     <div class="preview-container">
-      <t-loading :loading="iframeLoading" text="加载中..." size="small">
+      <t-loading
+        :loading="iframeLoading"
+        :text="t('print.loading')"
+        size="small"
+      >
         <iframe ref="iframeRef" :srcdoc="iframeCode" @load="iframeLoaded" />
       </t-loading>
     </div>
@@ -58,7 +66,7 @@
 
 <script setup>
 import Katex from 'katex'
-import Prism from 'prismjs'
+import Prism from 'prismjs/prism'
 import 'prismjs/components/prism-bash'
 import 'prismjs/components/prism-css'
 import 'prismjs/components/prism-css-extras'
@@ -138,7 +146,9 @@ const iframeLoaded = () => {
 }
 
 const getIframeCode = () => {
-  if (!dialogVisible) return ''
+  if (!dialogVisible) {
+    return ''
+  }
 
   // 获取页面内容并进行清洗和加工
   let pageContent = document
@@ -187,9 +197,9 @@ const getIframeCode = () => {
   })
 
   // 数学公式
-  const mathematics = pageContent.querySelectorAll('.Tiptap-mathematics-editor')
-  if (mathematics) {
-    mathematics.forEach((item) => {
+  const math = pageContent.querySelectorAll('.Tiptap-mathematics-editor')
+  if (math) {
+    math.forEach((item) => {
       const text = item.textContent
       if (text.length > 2) {
         item.classList.remove('Tiptap-mathematics-editor--hidden')
@@ -307,7 +317,7 @@ const getIframeCode = () => {
       }
 
       @page {
-        size: ${orientation === 'horizontal' ? size.width : size.height}cm ${orientation === 'horizontal' ? size.height : size.width}cm; 
+        size: ${orientation === 'portrait' ? size.width : size.height}cm ${orientation === 'portrait' ? size.height : size.width}cm; 
           margin: ${margin.top}cm ${margin.right}cm ${margin.bottom}cm ${margin.left}cm; 
           background: ${background};
         box-shadow:
@@ -315,7 +325,7 @@ const getIframeCode = () => {
           rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
         pointer-events: none;
         @bottom-center {
-          content: '第 ' counter(page) ' 页 / 共 ' counter(pages) ' 页';
+          content: '${t('print.page')}';
           font-size: 12px;
           color: #999;
         }

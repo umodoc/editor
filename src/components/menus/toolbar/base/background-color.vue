@@ -24,7 +24,7 @@
 const props = defineProps({
   text: {
     type: String,
-    default: '字体背景颜色',
+    default: t('base.bgColor'),
   },
   modeless: {
     type: Boolean,

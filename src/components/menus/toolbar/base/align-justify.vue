@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="align-justify"
-    text="两端对齐"
+    :text="t('base.align.justify')"
     shortcut="Ctrl+Shift+J"
     hide-text
     :menu-active="editor?.isActive({ textAlign: 'justify' })"

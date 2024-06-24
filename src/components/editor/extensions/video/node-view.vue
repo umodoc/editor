@@ -37,7 +37,7 @@
 <script setup>
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import Drager from 'es-drager'
-import { mediaPlayer } from '@/utils/media-player'
+import { mediaPlayer } from '@/utils/player'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const { options } = useStore()
@@ -76,7 +76,9 @@ const onResize = ({ width, height }) => {
 }
 
 onBeforeUnmount(() => {
-  if (player) player?.destroy()
+  if (player) {
+    player?.destroy()
+  }
 })
 
 onClickOutside(containerRef, () => (selected = false))

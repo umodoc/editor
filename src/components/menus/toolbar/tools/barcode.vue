@@ -1,14 +1,14 @@
 <template>
   <menus-button
     :ico="content ? 'edit' : 'barcode'"
-    :text="content ? '编辑' : '条形码'"
+    :text="content ? t('tools.barcode.edit') : t('tools.barcode.text')"
     huge
     @menu-click="dialogVisible = true"
   >
     <modal
       :visible="dialogVisible"
       icon="barcode"
-      title="条形码生成"
+      :header="t('tools.barcode.title')"
       width="720px"
       @confirm="setBarcode"
       @close="dialogVisible = false"
@@ -17,7 +17,7 @@
         <div class="barcode-toolbar">
           <menus-button
             style="width: 126px"
-            text="条形码标准"
+            :text="t('tools.barcode.format')"
             :select-options="formats"
             menu-type="select"
             :value="config.format"
@@ -26,21 +26,21 @@
           <t-divider layout="vertical" />
           <menus-button
             style="width: 114px"
-            text="文字字体"
-            :select-options="options.dicts.fonts"
+            :text="t('tools.barcode.font')"
+            :select-options="fonts"
             menu-type="select"
             :value="config.font"
             @menu-click="(value) => (config.font = value)"
           ></menus-button>
           <t-divider layout="vertical" />
           <menus-toolbar-base-color
-            text="条形码及文字颜色"
+            :text="t('tools.barcode.lineColor')"
             :default-color="config.lineColor"
             modeless
             @change="(value) => (config.lineColor = value)"
           />
           <menus-toolbar-base-background-color
-            text="条形码背景颜色"
+            :text="t('tools.barcode.bgColor')"
             :default-color="config.background"
             modeless
             @change="(value) => (config.background = value)"
@@ -69,7 +69,7 @@
           />
           <t-divider layout="vertical" />
           <menus-button
-            text="更多"
+            :text="t('tools.barcode.more')"
             menu-type="popup"
             :popup-visible="popupVisible"
             @toggle-popup="togglePopup"
@@ -78,7 +78,7 @@
             <template #content>
               <div class="barcode-toolbar-more">
                 <t-form size="small" label-align="left">
-                  <t-form-item label="单个条形的宽度：">
+                  <t-form-item :label="t('tools.barcode.width')">
                     <t-slider
                       v-model="config.width"
                       :min="1"
@@ -90,7 +90,7 @@
                       }"
                     />
                   </t-form-item>
-                  <t-form-item label="条形码的高度：">
+                  <t-form-item :label="t('tools.barcode.height')">
                     <t-slider
                       v-model="config.height"
                       :min="10"
@@ -102,7 +102,7 @@
                       }"
                     />
                   </t-form-item>
-                  <t-form-item label="条形码四周留白：">
+                  <t-form-item :label="t('tools.barcode.margin')">
                     <t-slider
                       v-model="config.margin"
                       :min="0"
@@ -115,14 +115,14 @@
                     />
                   </t-form-item>
                   <t-divider></t-divider>
-                  <t-form-item label="是否显示文字：">
-                    <t-checkbox v-model="config.displayValue"
-                      >显示文字</t-checkbox
-                    >
+                  <t-form-item :label="t('tools.barcode.displayValue')">
+                    <t-checkbox v-model="config.displayValue">
+                      {{ t('tools.barcode.displayValueText') }}
+                    </t-checkbox>
                   </t-form-item>
                   <t-form-item
-                    label="文字内容："
-                    help="填写后会覆盖条形码内容文本"
+                    :label="t('tools.barcode.textContent')"
+                    :help="t('tools.barcode.textContentTip')"
                   >
                     <t-textarea
                       v-model="config.text"
@@ -130,7 +130,7 @@
                       maxlength="100"
                     />
                   </t-form-item>
-                  <t-form-item label="文字所在位置：">
+                  <t-form-item :label="t('tools.barcode.textPosition')">
                     <t-select
                       v-model="config.textPosition"
                       :options="textPositions"
@@ -141,7 +141,7 @@
                     >
                     </t-select>
                   </t-form-item>
-                  <t-form-item label="文字上下距离：">
+                  <t-form-item :label="t('tools.barcode.textMargin')">
                     <t-slider
                       v-model="config.textMargin"
                       :min="-15"
@@ -153,7 +153,7 @@
                       }"
                     />
                   </t-form-item>
-                  <t-form-item label="文字字体大小：">
+                  <t-form-item :label="t('tools.barcode.fontSize')">
                     <t-slider
                       v-model="config.fontSize"
                       :min="8"
@@ -177,7 +177,7 @@
             show-limit-number
             autofocus
             clearable
-            placeholder="请输入要转化成条形码的内容"
+            :placeholder="t('tools.barcode.placeholder')"
             :status="renderError && config.content !== '' ? 'error' : ''"
           >
             <template #prefixIcon>
@@ -187,14 +187,17 @@
           <div
             v-if="renderError && config.content"
             class="t-input__tips t-tips t-is-error"
-          >
-            您输入的内容可能不符合当前选择的条形码规范约束，请检查。
-          </div>
+            v-text="t('tools.barcode.error')"
+          ></div>
         </div>
         <div class="barcode-render">
-          <div class="barcode-title">预览</div>
+          <div class="barcode-title" v-text="t('tools.barcode.preview')"></div>
           <div class="barcode-svg narrow-scrollbar">
-            <div v-if="renderError" class="barcode-empty">当前无预览内容</div>
+            <div
+              v-if="renderError"
+              class="barcode-empty"
+              v-text="t('tools.barcode.renderError')"
+            ></div>
             <svg ref="barcodeSvgRef" id="barcode" v-show="!renderError"></svg>
           </div>
         </div>
@@ -237,9 +240,15 @@ const formats = [
   { label: 'MSI1110', value: 'MSI1110' },
   { label: 'Pharmacode', value: 'Pharmacode' },
 ]
+const fonts = options.value.dicts.fonts.map((item) => {
+  return {
+    label: l(item.label),
+    value: item.value,
+  }
+})
 const textPositions = [
-  { label: '底部', value: 'bottom' },
-  { label: '顶部', value: 'top' },
+  { label: t('tools.barcode.bottom'), value: 'bottom' },
+  { label: t('tools.barcode.top'), value: 'top' },
 ]
 const defaultConfig = {
   content: '',
@@ -307,11 +316,11 @@ watch(
 // 创建或更新条形码
 const setBarcode = () => {
   if (renderError) {
-    useMessage('error', '条形码生成失败')
+    useMessage('error', t('tools.barcode.renderError'))
     return
   }
   if (config.content === '') {
-    useMessage('error', '条形码内容不能为空')
+    useMessage('error', t('tools.barcode.notEmpty'))
     return
   }
   const width = barcodeSvgRef.width.animVal.value

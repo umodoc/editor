@@ -1,7 +1,7 @@
 <template>
   <menus-button
     :ico="`align-${textAlign}`"
-    text="文字对齐方式"
+    :text="t('base.align.title')"
     menu-type="popup"
     hide-text
     :disabled="!editor?.can().chain().focus().setTextAlign('center').run()"

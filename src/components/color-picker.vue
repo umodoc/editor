@@ -6,9 +6,9 @@
         variant="outline"
         size="small"
         block
+        v-text="t('colorPicker.default')"
         @click="selectColor(color)"
       >
-        默认颜色
       </t-button>
     </div>
     <div class="color-picker-group">
@@ -20,7 +20,10 @@
         @click="selectColor(item)"
       ></div>
     </div>
-    <div class="color-picker-group-title">标准色</div>
+    <div
+      class="color-picker-group-title"
+      v-text="t('colorPicker.standard')"
+    ></div>
     <div class="color-picker-group">
       <div
         class="color-picker-item"
@@ -30,9 +33,11 @@
         @click="selectColor(item)"
       ></div>
     </div>
-    <div class="color-picker-group-title" v-if="$recent.colors.length > 0">
-      最近使用
-    </div>
+    <div
+      class="color-picker-group-title"
+      v-if="$recent.colors.length > 0"
+      v-text="t('colorPicker.recent')"
+    ></div>
     <div class="color-picker-group" v-if="$recent.colors.length > 0">
       <div
         class="color-picker-item"
@@ -52,7 +57,7 @@
       <div class="color-picker-more" :class="{ active: moreColorPicker }">
         <div class="color-picker-more-menu">
           <icon :style="{ color }" name="palette-color" />
-          <span>更多颜色</span>
+          <span v-text="t('colorPicker.more')"></span>
         </div>
         <div class="color-picker-more-arrow">
           <icon name="arrow-down" />

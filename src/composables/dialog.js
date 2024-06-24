@@ -13,6 +13,7 @@ export const useConfirm = (parmas) => {
     attach: container,
     placement: 'center',
     preventScrollThrough: false,
+    cancelBtn: t('dialog.cancel'),
     ...parmas,
   })
 }

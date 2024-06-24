@@ -1,8 +1,8 @@
 import { nodeInputRule } from '@tiptap/core'
-import HorizontalRule from '@tiptap/extension-horizontal-rule'
+import hr from '@tiptap/extension-horizontal-rule'
 import { TextSelection, NodeSelection } from '@tiptap/pm/state'
 
-export default HorizontalRule.extend({
+export default hr.extend({
   addOptions() {
     return {
       HTMLAttributes: {
@@ -39,7 +39,7 @@ export default HorizontalRule.extend({
   },
   addCommands() {
     return {
-      setHorizontalRule:
+      sethr:
         ({ type, color }) =>
         ({ chain, state }) => {
           const { $to: $originTo } = state.selection

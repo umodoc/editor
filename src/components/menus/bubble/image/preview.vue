@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="image-preview"
-    text="图片预览"
+    :text="t('bubbleMenu.image.preview')"
     @menu-click="viewerVisible = !viewerVisible"
   />
   <t-image-viewer

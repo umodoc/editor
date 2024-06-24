@@ -1,11 +1,10 @@
 <template>
   <menus-button
-    text="主题"
+    :text="t('bubbleMenu.code.themes.text')"
     menu-type="select"
     style="width: 100px"
     :select-options="themes"
     :value="editor?.getAttributes('codeBlock')?.theme"
-    placeholder="清选择"
     @menu-click="setTheme"
   />
 </template>
@@ -14,8 +13,8 @@
 const { editor } = useStore()
 
 const themes = [
-  { label: '暗色主题', value: 'dark' },
-  { label: '浅色主题', value: 'light' },
+  { label: t('bubbleMenu.code.themes.dark'), value: 'dark' },
+  { label: t('bubbleMenu.code.themes.light'), value: 'light' },
 ]
 
 const setTheme = (theme) => {

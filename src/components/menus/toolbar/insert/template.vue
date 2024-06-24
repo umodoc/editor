@@ -2,7 +2,7 @@
   <menus-button
     v-if="options.templates.length > 0"
     ico="template"
-    text="模板"
+    :text="t('insert.template')"
     menu-type="dropdown"
     huge
     overlay-class-name="templates-dropdown"
@@ -36,7 +36,9 @@
 const { options, editor } = useStore()
 
 const setTemplate = ({ content }) => {
-  if (!content || !editor.value) return
+  if (!content || !editor.value) {
+    return
+  }
   editor.value.commands.insertContent(content)
 }
 </script>

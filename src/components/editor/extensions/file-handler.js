@@ -14,8 +14,12 @@ const FileHandlePlugin = ({
     props: {
       handleDrop(view, event) {
         const { dataTransfer } = event
-        if (!onDrop) return
-        if (!dataTransfer?.files?.length) return
+        if (!onDrop) {
+          return
+        }
+        if (!dataTransfer?.files?.length) {
+          return
+        }
         const pos = view.posAtCoords({
           left: event.clientX,
           top: event.clientY,
@@ -23,9 +27,12 @@ const FileHandlePlugin = ({
         let files = Array.from(dataTransfer.files)
         if (allowedMimeTypes.length > 0) {
           files = files.filter((item) => {
-            if (allowedMimeTypes.includes(item.type)) return true
-            if (allowedMimeTypes.includes(`${item.type.split('/')[0]}/*`))
+            if (allowedMimeTypes.includes(item.type)) {
               return true
+            }
+            if (allowedMimeTypes.includes(`${item.type.split('/')[0]}/*`)) {
+              return true
+            }
             return false
           })
         }
@@ -37,15 +44,22 @@ const FileHandlePlugin = ({
       },
       handlePaste(view, event) {
         const { clipboardData } = event
-        if (!onPaste) return
-        if (!clipboardData?.files?.length) return
+        if (!onPaste) {
+          return
+        }
+        if (!clipboardData?.files?.length) {
+          return
+        }
         let files = Array.from(clipboardData.files)
         const html = clipboardData.getData('text/html')
         if (allowedMimeTypes.length > 0) {
           files = files.filter((item) => {
-            if (allowedMimeTypes.includes(item.type)) return true
-            if (allowedMimeTypes.includes(`${item.type.split('/')[0]}/*`))
+            if (allowedMimeTypes.includes(item.type)) {
               return true
+            }
+            if (allowedMimeTypes.includes(`${item.type.split('/')[0]}/*`)) {
+              return true
+            }
             return false
           })
         }

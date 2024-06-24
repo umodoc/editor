@@ -1,14 +1,14 @@
 <template>
   <menus-button
     :ico="content ? 'edit' : 'diagrams'"
-    :text="content ? '编辑' : '流程图'"
+    :text="content ? t('tools.diagrams.edit') : t('tools.diagrams.text')"
     huge
     @menu-click="dialogVisible = true"
   >
     <modal
       :visible="dialogVisible"
       icon="diagrams"
-      :title="content ? '编辑流程图' : '新建流程图'"
+      :header="content ? t('tools.diagrams.edit') : t('tools.diagrams.text')"
       :footer="false"
       class="diagrams-dialog"
       mode="full-screen"
@@ -16,7 +16,7 @@
       @close="dialogVisible = false"
     >
       <div v-if="loading" class="diagrams-loading">
-        <t-loading text="加载中..." size="small" />
+        <t-loading :text="t('tools.diagrams.loading')" size="small" />
       </div>
       <div class="diagrams-container"></div>
     </modal>
@@ -48,11 +48,17 @@ const openDiagramEditor = () => {
 let image = $ref({})
 
 const messageListener = (evt) => {
-  if (evt?.type !== 'message' && evt?.origin !== options.value.diagrams.domain)
+  if (
+    evt?.type !== 'message' &&
+    evt?.origin !== options.value.diagrams.domain
+  ) {
     return
+  }
 
   const { event, bounds, data } = JSON.parse(evt.data)
-  if (event === 'load') loading = false
+  if (event === 'load') {
+    loading = false
+  }
   if (event === 'export') {
     const { width, height } = bounds
     if (!props.content || (props.content && props.content !== data)) {

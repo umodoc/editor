@@ -1,14 +1,14 @@
 <template>
   <menus-button
     :ico="content ? 'edit' : 'mermaid'"
-    :text="content ? '编辑' : 'Mermaid'"
+    :text="content ? t('tools.mermaid.edit') : t('tools.mermaid.text')"
     huge
     @menu-click="menuClick"
   >
     <modal
       :visible="dialogVisible"
       icon="mermaid"
-      :title="content ? '编辑 Mermaid 图表' : '添加 Mermaid 图表'"
+      :header="content ? t('tools.mermaid.edit') : t('tools.mermaid.text')"
       width="960px"
       @confirm="setMermaid"
       @close="dialogVisible = flase"
@@ -18,10 +18,10 @@
           class="mermaid-code"
           v-model="mermaidCode"
           autofocus
-          placeholder="请输入 Mermaid 代码"
+          :placeholder="t('tools.mermaid.placeholder')"
         />
         <div class="mermaid-render">
-          <div class="mermaid-title">预览</div>
+          <div class="mermaid-title" v-text="t('tools.mermaid.preview')"></div>
           <div
             class="mermaid-svg narrow-scrollbar"
             ref="mermaidRef"
@@ -78,7 +78,9 @@ const renderMermaid = async () => {
 watch(
   () => dialogVisible,
   (val) => {
-    if (val) mermaidCode = props.content || defaultCode
+    if (val) {
+      mermaidCode = props.content || defaultCode
+    }
   },
   { immediate: true },
 )
@@ -96,7 +98,7 @@ watch(
 // 创建或更新 Mermaid
 const setMermaid = () => {
   if (mermaidCode === '') {
-    useMessage('error', 'Mermaid 代码不能为空')
+    useMessage('error', t('tools.mermaid.notEmpty'))
     return
   }
   const svg = mermaidRef.querySelector('svg')

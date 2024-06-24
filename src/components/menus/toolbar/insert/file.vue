@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="file"
-    text="文件"
+    :text="t('insert.file')"
     huge
     @menu-click="editor.chain().focus().selectFiles('file').run()"
   />

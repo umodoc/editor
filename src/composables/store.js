@@ -1,8 +1,8 @@
-import { defaultOptions, ojbectSchema } from '@/components/options'
-import generateId from '@/utils/generate-id'
+import { defaultOptions, ojbectSchema } from '@/options'
+import shortId from '@/utils/short-id'
 
 export const useStore = createGlobalState(() => {
-  const toolbarKey = ref(generateId())
+  const toolbarKey = ref(shortId())
   const options = ref(defaultOptions)
   const page = ref({})
   const editor = ref(null)
@@ -18,7 +18,9 @@ export const useStore = createGlobalState(() => {
     options.value = ojbectSchema.merge(
       options.value,
       Object.keys(opts).reduce((acc, key) => {
-        if (opts[key] !== undefined) acc[key] = opts[key]
+        if (opts[key] !== undefined) {
+          acc[key] = opts[key]
+        }
         return acc
       }, {}),
     )
@@ -67,13 +69,13 @@ export const useStore = createGlobalState(() => {
     () => options.value.document.readOnly,
     async (val) => {
       editor.value.setEditable(!val)
-      toolbarKey.value = generateId()
+      toolbarKey.value = shortId()
     },
   )
 
   return {
     toolbarKey,
-    container: `#umo-editor-${generateId(4)}`,
+    container: `#umo-editor-${shortId(4)}`,
     options,
     page,
     editor,

@@ -1,5 +1,10 @@
 <template>
-  <t-config-provider :global-config="globalConfig">
+  <t-config-provider
+    :global-config="{
+      ...localeConfig[i18n.global.locale.value],
+      classPrefix: 'umo',
+    }"
+  >
     <div
       :id="container.substr(1)"
       class="umo-editor-container"
@@ -28,9 +33,13 @@
 
 <script setup>
 import { toBlob, toJpeg, toPng } from 'dom-to-image-more'
-import { propsOptions } from './options'
-import '@/assets/styles/index.less'
+import i18n from '@/i18n'
+import { propsOptions } from '@/options'
 import { onBeforeUnmount } from 'vue'
+import enConfig from 'tdesign-vue-next/esm/locale/en_US'
+import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
+
+import '@/assets/styles/index.less'
 
 defineOptions({ name: 'UmoEditor' })
 
@@ -51,6 +60,7 @@ const emits = defineEmits([
   'changed:pagePreview',
   'changed:pageZoom',
   'changed:pageWatermark',
+  'changed:locale',
   'print',
   'focus',
   'blur',
@@ -80,14 +90,25 @@ watch(
   { deep: true },
 )
 
+// i18n
+const { appContext } = getCurrentInstance()
+appContext.config.globalProperties.t = i18n.global.t
+appContext.config.globalProperties.l = l
+const locale = useState('locale')
+i18n.global.locale.value =
+  locale.value !== options.value.locale ? locale.value : options.value.locale
+
 // 全局设置
-const globalConfig = {
-  classPrefix: 'umo',
-}
+const localeConfig = $ref({
+  'zh-CN': cnConfig,
+  'en-US': enConfig,
+})
 
 // 对外暴露的编辑器方法
 const setToolbar = (parmas) => {
-  if ((!parmas) instanceof Object) throw new Error('parmas must be an object.')
+  if ((!parmas) instanceof Object) {
+    throw new Error('parmas must be an object.')
+  }
   if (parmas.mode) {
     if (typeof parmas.mode !== 'string') {
       throw new Error('"parmas.size" must be a string.')
@@ -105,25 +126,28 @@ const setToolbar = (parmas) => {
   }
 }
 const setPage = (parmas) => {
-  if ((!parmas) instanceof Object) throw new Error('parmas must be an object.')
+  if ((!parmas) instanceof Object) {
+    throw new Error('parmas must be an object.')
+  }
   if (parmas.size) {
     if (typeof parmas.size !== 'string')
       throw new Error('"parmas.size" must be a string.')
     const size = options.value.dicts.pageSizes.find(
       (item) => item.label === parmas.size,
     )
-    if (!size)
+    if (!size) {
       throw new Error(
         `"parmas.size" must be one of ${options.value.dicts.pageSizes.map((item) => item.label)}.`,
       )
+    }
     page.value.size = size
   }
   if (parmas.orientation) {
     if (typeof parmas.orientation !== 'string') {
       throw new Error('"parmas.orientation" must be a string.')
     }
-    if (!['horizontal', 'vertical'].includes(parmas.orientation)) {
-      throw new Error('"parmas.mode" must be one of "classic" or "ribbon".')
+    if (!['portrait', 'landscape'].includes(parmas.orientation)) {
+      throw new Error('"parmas.mode" must be one of "portrait" or "landscape".')
     }
     page.value.orientation = parmas.orientation
   }
@@ -147,7 +171,9 @@ const setPage = (parmas) => {
   }
 }
 const setWatermark = (parmas) => {
-  if ((!parmas) instanceof Object) throw new Error('parmas must be an object.')
+  if ((!parmas) instanceof Object) {
+    throw new Error('parmas must be an object.')
+  }
   if (parmas.alpha !== undefined) {
     if (typeof parmas.alpha !== 'number') {
       throw new Error('"parmas.alpha" must be a number.')
@@ -205,12 +231,14 @@ const setWatermark = (parmas) => {
   }
 }
 const setDocument = (parmas) => {
-  if ((!parmas) instanceof Object) throw new Error('parmas must be an object.')
+  if ((!parmas) instanceof Object) {
+    throw new Error('parmas must be an object.')
+  }
   if (parmas.title) {
     if (typeof parmas.title !== 'string') {
       throw new Error('"parmas.title" must be a string.')
     }
-    const title = parmas.title !== '' ? parmas.title : '未命名文档'
+    const title = parmas.title !== '' ? parmas.title : t('document.untitled')
     $document.value.title = title
     options.value.document.title = title
   }
@@ -250,14 +278,33 @@ const setDocument = (parmas) => {
   }
 }
 const setContent = (content) => {
-  if (!editor.value) throw new Error('editor is not ready!')
+  if (!editor.value) {
+    throw new Error('editor is not ready!')
+  }
   editor.value.chain().setContent(content).focus().run()
+}
+const setLocale = (parmas) => {
+  if (!['zh-CN', 'en-US'].includes(parmas)) {
+    throw new Error('"parmas" must be one of "zh-CN" or "en-US".')
+  }
+  if (i18n.global.locale.value === parmas) {
+    return
+  }
+  const locale = useState('locale')
+  locale.value = parmas
+  location.reload()
 }
 const getContent = (format = 'html') => {
   if (!editor.value) throw new Error('editor is not ready!')
-  if (format === 'html') return editor.value.getHTML()
-  if (format === 'text') return editor.value.getText()
-  if (format === 'json') return editor.value.getJSON()
+  if (format === 'html') {
+    return editor.value.getHTML()
+  }
+  if (format === 'text') {
+    return editor.value.getText()
+  }
+  if (format === 'json') {
+    return editor.value.getJSON()
+  }
   throw new Error('format must be html, text or json')
 }
 const getImage = async (format = 'blob') => {
@@ -278,7 +325,7 @@ const getImage = async (format = 'blob') => {
       return image
     }
   } catch {
-    throw new Error('导出图片失败，请重试或尝试刷新页面。')
+    throw new Error(t('export.image.error.message'))
   } finally {
     page.value.zoomLevel = zoomLevel
   }
@@ -294,7 +341,7 @@ const saveContent = async () => {
     let message = await useMessage(
       'loading',
       {
-        content: '正在保存文档内容...',
+        content: t('save.saving'),
         placement: 'bottom',
         closeBtn: true,
         offset: [0, -20],
@@ -313,7 +360,7 @@ const saveContent = async () => {
     if (!success) {
       message.close()
       message = useMessage('error', {
-        content: '文档内容失败，请重试！',
+        content: t('save.failed'),
         placement: 'bottom',
         offset: [0, -20],
       })
@@ -322,7 +369,7 @@ const saveContent = async () => {
     emits('saved')
     message.close()
     useMessage('success', {
-      content: '文档内容保存成功！',
+      content: t('save.success'),
       placement: 'bottom',
       offset: [0, -20],
     })
@@ -330,7 +377,7 @@ const saveContent = async () => {
     savedAt.value = time.value
   } catch (e) {
     useMessage('error', {
-      content: '文档内容保存出错！',
+      content: t('save.error'),
       placement: 'bottom',
       offset: [0, -20],
     })
@@ -339,12 +386,18 @@ const saveContent = async () => {
 }
 const getContentExcerpt = (charLimit = 100, more = ' ...') => {
   const text = editor.value.getText()
-  if (text.length === 0) return ''
+  if (text.length === 0) {
+    return ''
+  }
   return text.substring(0, charLimit) + more
 }
+const getLocale = () => i18n.global.locale.value
+const getI18n = () => i18n
 const print = () => {
   const { toolbar, document } = options.value
-  if (toolbar.disableMenuItems.includes('print')) return
+  if (toolbar.disableMenuItems.includes('print')) {
+    return
+  }
   if ($toolbar.value.mode !== 'source' && !document.readOnly) {
     printing.value = true
   }
@@ -356,17 +409,17 @@ const reset = (silent) => {
     localStorage.clear()
     location.reload()
   }
-  if (silent) {
+  if (silent === true) {
     resetFn()
     return
   }
   const dialog = useConfirm({
     theme: 'warning',
-    header: '重置编辑器',
-    body: '此操作会清空所有的编辑器设置数据，包括当前编辑的内容，并刷新页面，建议保存内容后再重置，确定要现在重置吗？',
+    header: t('resetAll.title'),
+    body: t('resetAll.message'),
     confirmBtn: {
       theme: 'warning',
-      content: '立即重置',
+      content: t('resetAll.reset'),
     },
     onConfirm() {
       dialog.destroy()
@@ -383,6 +436,7 @@ defineExpose({
   setWatermark,
   setDocument,
   setContent,
+  setLocale,
   getContent,
   getImage,
   getText,
@@ -391,6 +445,8 @@ defineExpose({
   saveContent,
   getContentExcerpt,
   getEditor: () => editor,
+  getLocale,
+  getI18n,
   setReadOnly(readOnly = true) {
     options.value.document.readOnly = readOnly
   },
@@ -421,7 +477,9 @@ watch(
   () => contentUpdated,
   (val) => {
     const { autoSave } = options.value.document
-    if (!autoSave.enabled) return
+    if (!autoSave.enabled) {
+      return
+    }
     if (isFirstUpdate) {
       isFirstUpdate = false
       setTimeout(() => (contentUpdated = false))
@@ -447,7 +505,9 @@ emits('beforeCreate')
 watch(
   () => editor.value,
   () => {
-    if (!editor.value) return
+    if (!editor.value) {
+      return
+    }
     editor.value.on('create', ({ editor }) => emits('created', { editor }))
     editor.value.on('update', ({ editor }) => {
       emits('changed', { editor })
@@ -525,9 +585,16 @@ watch(
   () => emits('print'),
   { deep: true },
 )
+watch(
+  () => i18n.global.locale.value,
+  (locale, oldLocale) => {
+    emits('changed:locale', { locale, oldLocale })
+  },
+)
 
 // 将方法传递给子孙组件使用
 provide('saveContent', saveContent)
+provide('setLocale', setLocale)
 provide('reset', reset)
 
 // 快捷键

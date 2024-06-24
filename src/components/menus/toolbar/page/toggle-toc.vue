@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="toc"
-    text="显示大纲"
+    :text="t('toc.show')"
     huge
     :menu-active="page.showToc"
     @menu-click="page.showToc = !page.showToc"

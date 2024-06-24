@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="table-header-cell"
-    text="切换表头单元格"
+    :text="t('table.toggleHeaderCell')"
     :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().toggleHeaderCell()"
     @menu-click="editor?.chain().focus().toggleHeaderCell().run()"

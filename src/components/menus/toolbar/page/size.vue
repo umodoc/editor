@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="page-size"
-    text="页面大小"
+    :text="t('page.size.text')"
     menu-type="dropdown"
     overlay-class-name="page-size-dropdown"
   >
@@ -16,11 +16,14 @@
           :min-column-width="150"
           @click="page.size = item"
         >
-          <div class="label">{{ item.label }}</div>
-          <div class="desc">{{ item.width }}厘米 × {{ item.height }}厘米</div>
+          <div class="label" v-text="l(item.label)"></div>
+          <div class="desc">
+            {{ item.width + t('page.size.cm') }} ×
+            {{ item.height + t('page.size.cm') }}
+          </div>
         </t-dropdown-item>
         <t-dropdown-item @click="dialogVisible = true">
-          <div class="label">自定义设置</div>
+          <div class="label" v-text="t('page.size.custom')"></div>
         </t-dropdown-item>
       </t-dropdown-menu>
     </template>

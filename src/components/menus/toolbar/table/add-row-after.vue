@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="table-add-row-after"
-    text="插入行(后)"
+    :text="t('table.addRowAfter')"
     :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().addRowAfter()"
     @menu-click="editor?.chain().focus().addRowAfter().run()"

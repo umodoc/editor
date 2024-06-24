@@ -1,8 +1,8 @@
 <template>
   <menus-button
     ico="table-fix"
-    text="修复"
-    tooltip="当表格有错乱时，点击此按钮可自动修复表格"
+    :text="t('table.fix.text')"
+    :tooltip="t('table.fix.tip')"
     huge
     :disabled="!editor?.can().fixTables()"
     @menu-click="editor?.chain().focus().fixTables().run()"

@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="image-draggable"
-    text="图片浮动"
+    :text="t('bubbleMenu.image.draggable')"
     :menu-active="editor?.getAttributes('image')?.draggable"
     @menu-click="toggleDraggable"
   />

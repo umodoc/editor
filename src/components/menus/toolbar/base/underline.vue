@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="underline"
-    text="下划线"
+    :text="t('base.underline')"
     shortcut="Ctrl+U"
     hide-text
     :menu-active="editor?.isActive('underline')"

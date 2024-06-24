@@ -53,7 +53,7 @@ export default Extension.create({
   },
   addCommands() {
     const setNodeIndentMarkup = (tr, pos, delta) => {
-      const node = tr?.doc?.nodeAt(pos) || null // 使用可选链操作符进行安全访问
+      const node = tr?.doc?.nodeAt(pos) || null
       if (node) {
         const nextLevel = (node.attrs.indent || 0) + delta
         const { minLevel, maxLevel } = this.options

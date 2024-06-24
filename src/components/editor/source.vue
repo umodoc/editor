@@ -8,7 +8,7 @@
       @change="codeChange"
     >
       <template #loading>
-        <span class="loading">加载中...</span>
+        <span class="loading" v-text="t('source.loading')"></span>
       </template>
     </monaco-editor>
   </div>

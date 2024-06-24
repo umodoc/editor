@@ -1,12 +1,12 @@
 <template>
   <menus-button
     ico="image-flip"
-    text="水平翻转"
+    :text="t('bubbleMenu.image.flipX')"
     :menu-active="editor?.getAttributes('image')?.flipY"
     @menu-click="setFlip('flipY')"
   />
   <menus-button
-    text="垂直翻转"
+    :text="t('bubbleMenu.image.flipY')"
     :menu-active="editor?.getAttributes('image')?.flipX"
     @menu-click="setFlip('flipX')"
   >

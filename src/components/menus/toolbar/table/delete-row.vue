@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="table-delete-row"
-    text="删除行"
+    :text="t('table.deleteRow.text')"
     :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().deleteRow()"
     @menu-click="deleteRow"
@@ -15,15 +15,15 @@ const $toolbar = useState('toolbar')
 const deleteRow = () => {
   const dialog = useConfirm({
     theme: 'danger',
-    header: '信息提醒',
-    body: '此操作会删除当前选中的表格行，是否继续？',
+    header: t('table.deleteRow.title'),
+    body: t('table.deleteRow.message'),
     confirmBtn: {
       theme: 'danger',
-      content: '删除',
+      content: t('table.deleteRow.delete'),
     },
     onConfirm() {
       editor.value?.chain().focus().deleteRow().run()
-      useMessage('success', '删除成功')
+      useMessage('success', t('table.deleteRow.success'))
       dialog.destroy()
     },
   })

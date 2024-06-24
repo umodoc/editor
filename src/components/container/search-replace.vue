@@ -2,7 +2,7 @@
   <modal
     :visible="searchReplace"
     icon="search-replace"
-    title="查找替换"
+    :header="t('search.title')"
     :footer="false"
     class="search-replace-dialog"
     width="420px"
@@ -14,7 +14,7 @@
       <div class="search-text">
         <t-input
           v-model="searchText"
-          placeholder="要查找的字符"
+          :placeholder="t('search.searchText')"
           clearable
           autofocus
           @enter="next"
@@ -47,31 +47,40 @@
         </t-button>
       </div>
       <div class="replace-text">
-        <t-input v-model="replaceText" placeholder="要替换的字符" clearable />
+        <t-input
+          v-model="replaceText"
+          :placeholder="t('search.replaceText')"
+          clearable
+        />
       </div>
       <div class="advanced-options">
-        <t-checkbox v-model="caseSensitive">区分大小写(英文)</t-checkbox>
+        <t-checkbox v-model="caseSensitive">
+          {{ t('search.caseSensitive') }}
+        </t-checkbox>
       </div>
       <div class="button-actions">
         <t-button
           :disabled="resultLength === 0"
           theme="default"
           variant="text"
+          v-text="t('search.replace')"
           @click="replace"
         >
-          替换
         </t-button>
         <t-button
           :disabled="resultLength === 0"
           theme="default"
           variant="text"
+          v-text="t('search.replaceAll')"
           @click="replaceAll"
         >
-          全部替换
         </t-button>
-        <t-button :disabled="resultLength === 0" theme="primary" @click="next"
-          >查找</t-button
-        >
+        <t-button
+          :disabled="resultLength === 0"
+          theme="primary"
+          v-text="t('search.search')"
+          @click="next"
+        ></t-button>
       </div>
     </div>
   </modal>
@@ -96,7 +105,9 @@ const clear = () => {
 }
 
 const search = (clearIndex = false) => {
-  if (!editor.value) return
+  if (!editor.value) {
+    return
+  }
   if (clearIndex) {
     editor.value.commands.resetIndex()
   }
@@ -106,10 +117,14 @@ const search = (clearIndex = false) => {
 }
 
 const goToSelection = () => {
-  if (!editor.value) return
+  if (!editor.value) {
+    return
+  }
   const { results, resultIndex } = editor.value.storage.searchAndReplace
   const position = results[resultIndex]
-  if (!position) return
+  if (!position) {
+    return
+  }
   editor.value.commands.setTextSelection(position)
   const { node } = editor.value.view.domAtPos(
     editor.value.state.selection.anchor,
@@ -120,8 +135,12 @@ const goToSelection = () => {
 watch(
   () => searchText.trim(),
   (val, oldVal) => {
-    if (!val) clear()
-    if (val !== oldVal) search(true)
+    if (!val) {
+      clear()
+    }
+    if (val !== oldVal) {
+      search(true)
+    }
   },
 )
 watch(

@@ -11,7 +11,7 @@
           class="card"
           :class="{ active: item.value === currentValue && editor?.isEditable }"
           v-if="index < 4"
-          @click="setParagraphOrHeading(item.value)"
+          @click="setHeading(item.value)"
         >
           <div class="title" :class="item.desc">{{ item.label }}</div>
           <div class="subtitle">{{ item.desc }}</div>
@@ -37,7 +37,7 @@
                   active: item.value === currentValue && editor?.isEditable,
                 }"
                 v-if="index >= 4"
-                @click="setParagraphOrHeading(item.value)"
+                @click="setHeading(item.value)"
               >
                 <div class="title" :class="item.desc">{{ item.label }}</div>
                 <div class="subtitle">{{ item.desc }}</div>
@@ -50,14 +50,14 @@
   </div>
   <menus-button
     v-else
-    text="设置标题，可依据标题生成大纲"
+    :text="t('base.heading.tip')"
     hide-text
     menu-type="select"
-    :style="{ width: '70px' }"
-    placeholder="标题"
+    :style="{ width: '76px' }"
+    :placeholder="t('base.heading.text')"
     borderless
     :value="currentValue"
-    @menu-click="setParagraphOrHeading"
+    @menu-click="setHeading"
   >
     <t-option
       v-for="item in options"
@@ -77,31 +77,47 @@ const { container, editor } = useStore()
 const $toolbar = useState('toolbar')
 const popupContentRef = ref(null)
 
-const options = [
-  { label: '正文', desc: 'text', value: 'paragraph' },
-  { label: '标题 1', desc: 'h1', value: 1 },
-  { label: '标题 2', desc: 'h2', value: 2 },
-  { label: '标题 3', desc: 'h3', value: 3 },
-  { label: '标题 4', desc: 'h4', value: 4 },
-  { label: '标题 5', desc: 'h5', value: 5 },
-  { label: '标题 6', desc: 'h6', value: 6 },
-]
+const options = $ref([
+  { label: t('base.heading.paragraph'), desc: 'text', value: 'paragraph' },
+])
+for (let i in Array.from({ length: 5 })) {
+  const level = Number(i) + 1
+  options.push({
+    label: `${t('base.heading.text', { level })}`,
+    desc: `h${level}`,
+    value: level,
+  })
+}
 
 const currentValue = computed(() => {
   const heading = (level) => editor.value?.isActive('heading', { level })
   if (editor.value) {
-    if (editor.value?.isActive('paragraph')) return 'paragraph'
-    if (heading(1)) return 1
-    if (heading(2)) return 2
-    if (heading(3)) return 3
-    if (heading(4)) return 4
-    if (heading(5)) return 5
-    if (heading(6)) return 6
+    if (editor.value?.isActive('paragraph')) {
+      return 'paragraph'
+    }
+    if (heading(1)) {
+      return 1
+    }
+    if (heading(2)) {
+      return 2
+    }
+    if (heading(3)) {
+      return 3
+    }
+    if (heading(4)) {
+      return 4
+    }
+    if (heading(5)) {
+      return 5
+    }
+    if (heading(6)) {
+      return 6
+    }
   }
   return ''
 })
 
-const setParagraphOrHeading = (value) => {
+const setHeading = (value) => {
   if (value === 'paragraph') {
     editor.value?.chain().focus().setParagraph().run()
   } else {
@@ -154,6 +170,7 @@ onClickOutside(
   border-radius: var(--umo-radius);
   box-sizing: border-box;
   border: solid 1px transparent;
+  white-space: nowrap;
   .card {
     background-color: var(--umo-color-white);
     border: solid 1px var(--umo-border-color-light);

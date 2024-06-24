@@ -8,6 +8,7 @@ export default Node.create({
       HTMLAttributes: {
         class: 'page-break',
         'data-line-number': false,
+        'data-content': t('page.break'),
       },
     }
   },

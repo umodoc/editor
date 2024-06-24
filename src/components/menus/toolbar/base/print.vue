@@ -1,6 +1,6 @@
 <template>
   <menus-button
-    text="打印"
+    :text="t('print.text')"
     ico="print"
     shortcut="Ctrl+P"
     huge

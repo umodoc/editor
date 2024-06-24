@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="task-list"
-    text="待办事项"
+    :text="t('list.task.text')"
     shortcut="Ctrl+Shift+9"
     menu-type="dropdown"
     popup-handle="arrow"
@@ -15,19 +15,19 @@
           :disabled="!editor?.can().splitListItem('taskItem')"
           @click="editor?.chain().focus().splitListItem('taskItem').run()"
         >
-          增加任务
+          {{ t('list.task.split') }}
         </t-dropdown-item>
         <t-dropdown-item
           :disabled="!editor?.can().sinkListItem('taskItem')"
           @click="editor?.chain().focus().sinkListItem('taskItem').run()"
         >
-          设为子任务
+          {{ t('list.task.sink') }}
         </t-dropdown-item>
         <t-dropdown-item
           :disabled="!editor?.can().liftListItem('taskItem')"
           @click="editor?.chain().focus().liftListItem('taskItem').run()"
         >
-          移除任务
+          {{ t('list.task.lift') }}
         </t-dropdown-item>
       </t-dropdown-menu>
     </template>

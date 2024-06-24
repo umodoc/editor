@@ -1,23 +1,21 @@
 <template>
   <menus-button
     ico="embed"
-    text="Embed"
+    :text="t('export.embed.text')"
     huge
     @menu-click="dialogVisible = true"
   />
   <modal
     :visible="dialogVisible"
     icon="embed"
-    title="Embed 嵌入"
-    width="420px"
-    confirmBtn="复制"
+    :header="t('export.embed.title')"
+    width="460px"
+    :confirmBtn="t('export.embed.copy')"
     @confirm="copyEmbed"
     @close="dialogVisible = false"
   >
     <div class="embed-container">
-      <div class="embed-tip">
-        复制后，请手动修改 &lt;iframe&gt; 的宽度和高度，以便获得更好的浏览效果。
-      </div>
+      <div class="embed-tip" v-text="t('export.embed.tip')"></div>
       <t-textarea
         class="embed-textarea"
         :value="embedValue"
@@ -39,7 +37,7 @@ const embedValue = computed(() => {
 const copyEmbed = () => {
   const { copy } = useClipboard({ source: embedValue })
   copy()
-  useMessage('success', '代码已复制到剪切板')
+  useMessage('success', t('export.embed.copied'))
   dialogVisible = false
 }
 </script>

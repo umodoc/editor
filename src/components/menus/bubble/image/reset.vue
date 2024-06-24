@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="image-reset"
-    text="重置图片位置"
+    :text="t('bubbleMenu.image.reset')"
     @menu-click="resetPosition"
   />
 </template>

@@ -1,5 +1,5 @@
 import App from './app.vue'
-import generateId from '@/utils/generate-id'
+import shortId from '@/utils/short-id'
 import 'katex/dist/katex.min.css'
 
 // 插件本地开发
@@ -53,7 +53,7 @@ const options = {
     console.log('onUpload', file)
     await new Promise((resolve) => setTimeout(resolve, 3000))
     return {
-      id: generateId(),
+      id: shortId(),
       url: file.url || URL.createObjectURL(file),
       name: file.name,
       type: file.type,
@@ -61,7 +61,7 @@ const options = {
     }
   },
 }
-// app.use(useUmoEditor, options)
-app.component('UmoEditor', UmoEditor)
+app.use(useUmoEditor, options)
+// app.component('UmoEditor', UmoEditor)
 
 app.mount('#app')

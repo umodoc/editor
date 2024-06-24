@@ -1,6 +1,6 @@
 <template>
   <menus-button
-    text="增加缩进"
+    :text="t('base.indent')"
     ico="indent"
     shortcut="Tab"
     hide-text

@@ -10,7 +10,7 @@
   >
     <template #header>
       <icon v-if="$attrs.icon" :name="$attrs.icon" />
-      <span>{{ $attrs.title }}</span>
+      <span>{{ $attrs.header }}</span>
     </template>
     <slot />
   </t-dialog>

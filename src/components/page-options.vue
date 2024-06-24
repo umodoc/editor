@@ -3,25 +3,25 @@
     :visible="visible"
     :footer="false"
     icon="page-margin"
-    title="页面设置"
+    :header="t('pageOptions.title')"
     width="460px"
     @close="emits('close')"
   >
     <div class="page-options-container">
       <t-form label-align="left">
-        <t-form-item label="页面方向">
+        <t-form-item :label="t('page.orientation.text')">
           <t-radio-group v-model="page.orientation" variant="default-filled">
-            <t-radio-button value="horizontal">
+            <t-radio-button value="landscape">
               <icon name="page" />
-              纵向
+              {{ t('page.orientation.landscape') }}
             </t-radio-button>
-            <t-radio-button value="vertical">
+            <t-radio-button value="portrait">
               <icon class="rotate" name="page" />
-              横向
+              {{ t('page.orientation.portrait') }}
             </t-radio-button>
           </t-radio-group>
         </t-form-item>
-        <t-form-item label="页面大小">
+        <t-form-item :label="t('page.size.text')">
           <t-select
             :popup-props="{
               overlayClassName: 'page-size-select',
@@ -37,14 +37,15 @@
               :key="index"
               :value="index"
             >
-              <div class="label">{{ item.label }}</div>
+              <div class="label" v-text="l(item.label)"></div>
               <div class="desc">
-                {{ item.width }}厘米 × {{ item.height }}厘米
+                {{ item.width }}{{ t('page.size.cm') }} × {{ item.height
+                }}{{ t('page.size.cm') }}
               </div>
             </t-option>
           </t-select>
         </t-form-item>
-        <t-form-item label="页面尺寸">
+        <t-form-item :label="t('pageOptions.size.text')">
           <div class="page-setting">
             <div class="item">
               <t-input-number
@@ -53,8 +54,8 @@
                 theme="normal"
                 align="center"
                 :min="10"
-                label="宽:"
-                suffix="厘米"
+                :label="t('pageOptions.size.width')"
+                :suffix="t('page.size.cm')"
                 placeholder=""
                 :allow-input-overLimit="false"
                 @blur="(val) => inputPageSize(val, 'width')"
@@ -67,8 +68,8 @@
                 theme="normal"
                 align="center"
                 :min="10"
-                label="高:"
-                suffix="厘米"
+                :label="t('pageOptions.size.height')"
+                :suffix="t('page.size.cm')"
                 placeholder=""
                 :allow-input-overLimit="false"
                 @blur="(val) => inputPageSize(val, 'height')"
@@ -76,19 +77,19 @@
             </div>
           </div>
         </t-form-item>
-        <t-form-item label="页边距" name="name">
+        <t-form-item :label="t('pageOptions.margin.text')" name="name">
           <div>
             <div class="page-margin-inbuilt">
               <div
                 class="item"
                 :class="{ active: !page.margin.layout }"
-                @click="selectPageMargin(page.defaultMargin)"
-              >
-                默认
-              </div>
+                v-text="t('pageOptions.margin.default')"
+                @click="selectPageMargin(options.page.defaultMargin)"
+              ></div>
               <div
                 class="item narrow"
                 :class="{ active: page.margin.layout === 'narrow' }"
+                v-text="t('pageOptions.margin.narrow')"
                 @click="
                   selectPageMargin({
                     left: 1.27,
@@ -98,12 +99,11 @@
                     layout: 'narrow',
                   })
                 "
-              >
-                窄
-              </div>
+              ></div>
               <div
                 class="item moderate"
                 :class="{ active: page.margin.layout === 'moderate' }"
+                v-text="t('pageOptions.margin.moderate')"
                 @click="
                   selectPageMargin({
                     left: 1.91,
@@ -113,12 +113,11 @@
                     layout: 'moderate',
                   })
                 "
-              >
-                适中
-              </div>
+              ></div>
               <div
                 class="item wide"
                 :class="{ active: page.margin.layout === 'wide' }"
+                v-text="t('pageOptions.margin.wide')"
                 @click="
                   selectPageMargin({
                     top: 2.54,
@@ -128,9 +127,7 @@
                     layout: 'wide',
                   })
                 "
-              >
-                宽
-              </div>
+              ></div>
             </div>
             <div class="page-setting">
               <div class="item">
@@ -141,8 +138,8 @@
                   align="center"
                   :min="0"
                   :step="0.1"
-                  label="上:"
-                  suffix="厘米"
+                  :label="t('pageOptions.margin.top')"
+                  :suffix="t('page.size.cm')"
                   placeholder=""
                   :allow-input-overLimit="false"
                   @blur="(val) => inputPageMargin(val, 'top')"
@@ -156,8 +153,8 @@
                   align="center"
                   :min="0"
                   :step="0.1"
-                  label="下:"
-                  suffix="厘米"
+                  :label="t('pageOptions.margin.bottom')"
+                  :suffix="t('page.size.cm')"
                   placeholder=""
                   :allow-input-overLimit="false"
                   @blur="(val) => inputPageMargin(val, 'bottom')"
@@ -171,8 +168,8 @@
                   align="center"
                   :min="0"
                   :step="0.1"
-                  label="左:"
-                  suffix="厘米"
+                  :label="t('pageOptions.margin.left')"
+                  :suffix="t('page.size.cm')"
                   placeholder=""
                   :allow-input-overLimit="false"
                   @blur="(val) => inputPageMargin(val, 'left')"
@@ -186,8 +183,8 @@
                   align="center"
                   :min="0"
                   :step="0.1"
-                  label="右:"
-                  suffix="厘米"
+                  :label="t('pageOptions.margin.right')"
+                  :suffix="t('page.size.cm')"
                   placeholder=""
                   :allow-input-overLimit="false"
                   @blur="(val) => inputPageMargin(val, 'right')"
@@ -221,7 +218,7 @@ const inputPageSize = (value, field) => {
     page.value.size[field] = 10
     return
   }
-  page.value.size.label = '自定义'
+  page.value.size.label = t('pageOptions.size.custom')
 }
 
 // 页边距
@@ -271,6 +268,7 @@ const inputPageMargin = (value, field) => {
     position: relative;
     cursor: pointer;
     overflow: hidden;
+    font-size: 8px;
     &::after {
       position: absolute;
       display: block;

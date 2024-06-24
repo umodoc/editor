@@ -1,7 +1,7 @@
 <template>
   <menus-button
+    :text="t('bubbleMenu.code.lineNumbers')"
     ico="code-line-number"
-    text="显示行号"
     :menu-active="editor?.getAttributes('codeBlock')?.lineNumbers"
     @menu-click="toggleLineNumbers"
   />

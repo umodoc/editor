@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="page-orientation"
-    text="页面方向"
+    :text="t('page.orientation.text')"
     menu-type="dropdown"
     overlay-class-name="page-orientation-dropdown"
   >
@@ -28,8 +28,8 @@
 const { page } = useStore()
 
 const orientations = [
-  { label: '横向', value: 'horizontal' },
-  { label: '纵向', value: 'vertical' },
+  { label: t('page.orientation.landscape'), value: 'landscape' },
+  { label: t('page.orientation.portrait'), value: 'portrait' },
 ]
 </script>
 

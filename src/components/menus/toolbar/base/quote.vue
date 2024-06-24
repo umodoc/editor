@@ -1,7 +1,7 @@
 <template>
   <menus-button
+    :text="t('base.quote')"
     ico="quote"
-    text="引用"
     shortcut="Ctrl+Shift+B"
     hide-text
     :menu-active="editor?.isActive('blockquote')"

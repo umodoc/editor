@@ -1,6 +1,10 @@
 <template>
   <menus-button
-    :text="converting ? '正在去除图片背景...' : '去除图片背景'"
+    :text="
+      converting
+        ? t('bubbleMenu.image.removingBg')
+        : t('bubbleMenu.image.removeBg')
+    "
     :disabled="converting"
     @menu-click="removeBackground"
   >
@@ -11,7 +15,7 @@
 
 <script setup>
 import imglyRemoveBackground from '@imgly/background-removal'
-import generateId from '@/utils/generate-id'
+import shortId from '@/utils/short-id'
 
 const { options, editor } = useStore()
 
@@ -23,7 +27,7 @@ const removeBackground = async () => {
   const blob = await imglyRemoveBackground(src, {
     publicPath: `${options.value.cdnUrl}/libs/imgly/background-removal-data/`,
   })
-  const file = new File([blob], `${generateId(10)}.png`, { type: 'image/png' })
+  const file = new File([blob], `${shortId(10)}.png`, { type: 'image/png' })
   image.props.updateAttributes({
     src: URL.createObjectURL(blob),
     uploaded: false,

@@ -8,14 +8,18 @@ export default Extension.create({
         () =>
         ({ editor }) => {
           const { from, to, empty } = editor.state.selection
-          if (empty) return ''
+          if (empty) {
+            return ''
+          }
           return editor.state.doc.textBetween(from, to, '')
         },
       getSelectionNode:
         () =>
         ({ editor }) => {
           for (const node of Array.from(editor.vueRenderers)) {
-            if (node[1].props.selected) return node[1]
+            if (node[1].props.selected) {
+              return node[1]
+            }
           }
         },
       deleteSelectionNode:
@@ -28,7 +32,9 @@ export default Extension.create({
             editor.isActive('file')
           ) {
             const node = editor.commands.getSelectionNode()
-            if (!node) return
+            if (!node) {
+              return
+            }
             const { options } = useStore()
             const { id, src } = node.props.node.attrs
             options.value.onFileDelete(id, src)

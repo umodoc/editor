@@ -1,17 +1,17 @@
 <template>
   <menus-button
-    text="高亮显示"
+    :text="t('base.highlight.text')"
     shortcut="Ctrl+Shift+H"
     menu-type="dropdown"
     popup-handle="arrow"
     hide-text
-    overlay-class-name="hightlight-dropdown"
-    @menu-click="highlightChange(hightlight)"
+    overlay-class-name="highlight-dropdown"
+    @menu-click="highlightChange(highlight)"
   >
     <icon
       name="highlight"
       class="icon-highlight"
-      :style="{ backgroundColor: hightlight.bgcolor, color: hightlight.color }"
+      :style="{ backgroundColor: highlight.bgcolor, color: highlight.color }"
     />
     <template #dropmenu>
       <t-dropdown-menu>
@@ -32,7 +32,7 @@
           @click="clearFormat()"
         >
           <icon name="clear-format" />
-          <span>清除高亮</span>
+          <span v-text="t('base.highlight.clear')"></span>
         </t-dropdown-item>
       </t-dropdown-menu>
     </template>
@@ -43,14 +43,24 @@
 const { editor } = useStore()
 
 const options = [
-  { label: '黄色背景', value: 1, bgcolor: '#ffff8a' },
-  { label: '绿色背景', value: 2, bgcolor: '#a7ffa7' },
-  { label: '紫色背景', value: 3, bgcolor: '#e6afff' },
-  { label: '蓝色背景', value: 4, bgcolor: '#83d3ff', divider: true },
-  { label: '红色字体', value: 5, color: '#e71313' },
-  { label: '绿色字体', value: 6, color: '#128a00', divider: true },
+  { label: t('base.highlight.yellowBg'), value: 1, bgcolor: '#ffff8a' },
+  { label: t('base.highlight.greenBg'), value: 2, bgcolor: '#a7ffa7' },
+  { label: t('base.highlight.purpleBg'), value: 3, bgcolor: '#e6afff' },
+  {
+    label: t('base.highlight.blueBg'),
+    value: 4,
+    bgcolor: '#83d3ff',
+    divider: true,
+  },
+  { label: t('base.highlight.red'), value: 5, color: '#e71313' },
+  {
+    label: t('base.highlight.green'),
+    value: 6,
+    color: '#128a00',
+    divider: true,
+  },
 ]
-let hightlight = $ref({})
+let highlight = $ref({})
 const highlightChange = (item) => {
   if (item.bgcolor) {
     editor.value?.chain().focus().setHighlight({ color: item.bgcolor }).run()
@@ -58,12 +68,12 @@ const highlightChange = (item) => {
   if (item.color) {
     editor.value?.chain().focus().setColor(item.color).run()
   }
-  hightlight = item
+  highlight = item
 }
 const clearFormat = () => {
   editor.value?.chain().focus().unsetHighlight().run()
   editor.value?.chain().focus().unsetColor().run()
-  hightlight = {}
+  highlight = {}
 }
 </script>
 
@@ -74,7 +84,7 @@ const clearFormat = () => {
 </style>
 
 <style lang="less">
-.text-hightlight-dropdown {
+.text-highlight-dropdown {
   .umo-popup__content {
     .umo-divider {
       margin-top: 8px;

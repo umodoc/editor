@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import generateId from '@/utils/generate-id'
+import shortId from '@/utils/short-id'
 const editorRef = $ref(null)
 const templates = [
   {
@@ -44,6 +44,7 @@ const options = $ref({
     content: localStorage.getItem('document.content') || '<p>测试文档</p>',
   },
   templates,
+  cdnUrl: 'https://cdn.umodoc.com',
   shareUrl: 'https://umodoc.com',
   file: {
     // allowedMimeTypes: [
@@ -58,7 +59,7 @@ const options = $ref({
     console.log('onUpload', file)
     await new Promise((resolve) => setTimeout(resolve, 3000))
     return {
-      id: generateId(),
+      id: shortId(),
       url: file.url || URL.createObjectURL(file),
       name: file.name,
       type: file.type,

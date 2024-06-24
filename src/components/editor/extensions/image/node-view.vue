@@ -8,11 +8,11 @@
     <div class="node-container hover-shadow select-outline image">
       <div v-if="node.attrs.src && isLoading" class="loading">
         <icon name="loading" class="loading-icon" />
-        加载中...
+        {{ t('node.image.loading') }}
       </div>
       <div class="error" v-else-if="node.attrs.src && error">
         <icon name="image-failed" class="error-icon" />
-        图片加载错误
+        {{ t('node.image.error') }}
       </div>
       <drager
         v-else
@@ -62,7 +62,7 @@
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import Drager from 'es-drager'
 import { base64ToFile } from 'file64'
-import generateId from '@/utils/generate-id'
+import shortId from '@/utils/short-id'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const { options } = useStore()
@@ -129,9 +129,13 @@ watch(
       if (src.startsWith('data:image')) {
         const type = src.split(';')[0].split(':')[1]
         let ext = type.split('/')[1]
-        if (ext === 'jpeg') ext = 'jpg'
-        if (ext === 'svg+xml') ext = 'svg'
-        const filename = generateId(10)
+        if (ext === 'jpeg') {
+          ext = 'jpg'
+        }
+        if (ext === 'svg+xml') {
+          ext = 'svg'
+        }
+        const filename = shortId(10)
         const file = await base64ToFile(src, `${filename}.${ext}`, {
           type,
         })

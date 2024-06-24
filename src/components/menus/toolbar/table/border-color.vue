@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="table"
-    text="表格边框颜色"
+    :text="t('table.borderColor')"
     menu-type="popup"
     huge
     :disabled="!editor?.can().setCellAttribute('borderColor')"

@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="audio"
-    text="音频"
+    :text="t('insert.audio')"
     huge
     @menu-click="editor.chain().focus().selectFiles('audio').run()"
   />

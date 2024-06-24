@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="toc"
-    text="页面大纲"
+    :text="t('insert.toc')"
     huge
     @menu-click="editor?.chain().focus().addTableOfContents().run()"
   />

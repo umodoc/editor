@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="hard-break"
-    text="换行"
+    :text="t('insert.hardBreak')"
     huge
     shortcut="Shift+Enter"
     @menu-click="editor?.chain().focus().setHardBreak().run()"

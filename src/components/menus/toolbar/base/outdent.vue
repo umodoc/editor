@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="outdent"
-    text="减少缩进"
+    :text="t('base.outdent')"
     shortcut="Shift+Tab"
     hide-text
     @menu-click="editor?.chain().focus().outdent().run()"

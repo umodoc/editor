@@ -1,7 +1,7 @@
 <template>
   <menus-button
+    :text="t('bubbleMenu.code.wordWrap')"
     ico="code-word-wrap"
-    text="自动换行"
     :menu-active="editor?.getAttributes('codeBlock')?.wordWrap"
     @menu-click="toggleWordWrap"
   />

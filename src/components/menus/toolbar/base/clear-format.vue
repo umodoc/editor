@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="clear-format"
-    text="清除文本格式"
+    :text="t('base.clearFormat')"
     hide-text
     @menu-click="editor?.chain().focus().unsetAllMarks().run()"
   />

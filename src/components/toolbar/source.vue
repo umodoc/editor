@@ -1,6 +1,8 @@
 <template>
   <div class="source-container">
-    <h3 class="title"><icon name="code" class="icon"></icon> 编辑源代码</h3>
+    <h3 class="title">
+      <icon name="code" class="icon"></icon> {{ t('toolbar.source') }}
+    </h3>
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="watermark"
-    text="页面水印"
+    :text="t('page.watermark.text')"
     huge
     menu-type="popup"
     :popup-visible="popupVisible"
@@ -12,13 +12,16 @@
         <div class="watermark-toolbar">
           <menus-button
             style="width: 140px"
-            tooltip="水印文字字体"
+            :tooltip="t('page.watermark.fontFamily')"
             menu-type="select"
-            :select-options="options.dicts.fonts"
+            :select-options="fonts"
             :value="page.watermark.fontFamily"
             @menu-click="(value) => (page.watermark.fontFamily = value)"
           ></menus-button>
-          <menus-button menu-type="input" tooltip="水印文字大小">
+          <menus-button
+            menu-type="input"
+            :tooltip="t('page.watermark.fontSize')"
+          >
             <t-input-number
               v-model="page.watermark.fontSize"
               style="width: 60px"
@@ -41,7 +44,7 @@
             "
           />
           <menus-toolbar-base-color
-            text="水印文字颜色"
+            :text="t('page.watermark.fontColor')"
             :default-color="page.watermark.fontColor"
             modeless
             @change="(value) => (page.watermark.fontColor = value)"
@@ -51,9 +54,12 @@
           v-model.trim="page.watermark.text"
           maxlength="30"
           clearable
-          placeholder="水印文字内容"
+          :placeholder="t('page.watermark.content')"
         />
-        <div class="watermark-type-title">水印类型</div>
+        <div
+          class="watermark-type-title"
+          v-text="t('page.watermark.type')"
+        ></div>
         <div class="watermark-type">
           <div
             class="item compact"
@@ -61,7 +67,7 @@
             @click="page.watermark.type = 'compact'"
           >
             <div class="bg"></div>
-            <span>紧凑型</span>
+            <span v-text="t('page.watermark.compact')"></span>
           </div>
           <div
             class="item spacious"
@@ -69,7 +75,7 @@
             @click="page.watermark.type = 'spacious'"
           >
             <div class="bg"></div>
-            <span>宽松型</span>
+            <span v-text="t('page.watermark.spacious')"></span>
           </div>
         </div>
         <t-button
@@ -77,9 +83,9 @@
           v-if="page.watermark.text !== ''"
           block
           variant="outline"
+          v-text="t('page.watermark.clear')"
           @click="clearWatermark"
-          >清除水印</t-button
-        >
+        ></t-button>
       </div>
     </template>
   </menus-button>
@@ -89,6 +95,13 @@
 let { popupVisible, togglePopup } = usePopup()
 
 const { options, page } = useStore()
+
+const fonts = options.value.dicts.fonts.map((item) => {
+  return {
+    label: l(item.label),
+    value: item.value,
+  }
+})
 
 const clearWatermark = () => {
   page.value.watermark.text = ''

@@ -1,11 +1,10 @@
 <template>
   <menus-button
-    text="语言列表"
+    :text="t('bubbleMenu.code.languages')"
     menu-type="select"
     style="width: 120px"
     :select-options="languageOptions"
     :value="editor?.getAttributes('codeBlock')?.language"
-    placeholder="清选择"
     filterable
     @menu-click="setLanguage"
   >

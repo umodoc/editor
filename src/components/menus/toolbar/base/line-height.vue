@@ -1,6 +1,6 @@
 <template>
   <menus-button
-    text="行高"
+    :text="t('base.lineHeight.text')"
     ico="line-height"
     menu-type="dropdown"
     hide-text
@@ -15,7 +15,9 @@ const { options, editor } = useStore()
 const lineHeights = computed(() => {
   const result = options.value.dicts.lineHeights.map((item) => {
     return {
-      content: item.default ? item.label + ' (默认)' : item.label,
+      content: item.default
+        ? l(item.label) + t('base.lineHeight.default')
+        : l(item.label),
       value: item.value,
       active: editor.value?.isActive({ lineHeight: item.value }),
     }
@@ -24,7 +26,9 @@ const lineHeights = computed(() => {
 })
 
 const setLineHeight = ({ content, value }) => {
-  if (!content) return
+  if (!content) {
+    return
+  }
   editor.value?.chain().focus().setLineHeight(value).run()
 }
 </script>

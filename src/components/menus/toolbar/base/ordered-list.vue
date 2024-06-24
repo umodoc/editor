@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="ordered-list"
-    text="数字编号"
+    :text="t('list.ordered.text')"
     shortcut="Ctrl+Shift+7"
     menu-type="popup"
     popup-handle="arrow"
@@ -31,7 +31,7 @@
         </tooltip>
       </div>
       <div class="ordered-list-divider"></div>
-      <div class="ordered-list-title">列表属性</div>
+      <div class="ordered-list-title" v-text="t('list.ordered.property')"></div>
       <div class="ordered-list-properties">
         <t-input-number
           v-model="startAt"
@@ -40,7 +40,9 @@
           theme="column"
           @change="changeOrderedListStart"
         >
-          <template #label><span>起始编号:</span></template>
+          <template #label
+            ><span v-text="t('list.ordered.startAt')"></span
+          ></template>
         </t-input-number>
       </div>
     </template>
@@ -52,14 +54,23 @@ let { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
 const options = [
-  { label: '数字', value: 'decimal' },
-  { label: '以0的开头的数字', value: 'decimal-leading-zero' },
-  { label: '小写罗马数字', value: 'lower-roman' },
-  { label: '大写罗马数字', value: 'upper-roman' },
-  { label: '小写英文编号', value: 'lower-latin' },
-  { label: '大写英文编号', value: 'upper-latin' },
-  { label: '中文编号', value: 'trad-chinese-informal' },
-  { label: '大写中文编号', value: 'simp-chinese-formal' },
+  { label: t('list.ordered.decimal'), value: 'decimal' },
+  {
+    label: t('list.ordered.decimalLeadingZero'),
+    value: 'decimal-leading-zero',
+  },
+  { label: t('list.ordered.lowerRoman'), value: 'lower-roman' },
+  { label: t('list.ordered.upperRoman'), value: 'upper-roman' },
+  { label: t('list.ordered.lowerLatin'), value: 'lower-latin' },
+  { label: t('list.ordered.upperLatin'), value: 'upper-latin' },
+  {
+    label: t('list.ordered.tradChineseInformal'),
+    value: 'trad-chinese-informal',
+  },
+  {
+    label: t('list.ordered.simpChineseFormal'),
+    value: 'simp-chinese-formal',
+  },
 ]
 
 // 列表类型

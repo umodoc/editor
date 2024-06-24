@@ -5,7 +5,11 @@
       :class="node.attrs.theme"
       ref="containerRef"
     >
-      <div v-if="!options.document.readOnly" class="show-toolbar">菜单栏</div>
+      <div
+        v-if="!options.document.readOnly"
+        class="show-toolbar"
+        v-text="t('node.codeBlock.menu')"
+      ></div>
     </div>
   </node-view-wrapper>
 </template>

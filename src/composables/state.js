@@ -1,3 +1,5 @@
+import i18n from '@/i18n'
+
 export const useState = (key, editorKey) => {
   const { options } = useStore()
   let data = null
@@ -31,8 +33,11 @@ export const useState = (key, editorKey) => {
         showPageNumber: true,
       }
       break
+    case 'locale':
+      data = i18n.global.locale.value
+      break
     default:
-      console.error('[useStorage]', 'Key is not valid')
+      throw new Error('[useStorage]', 'Key is not valid')
   }
   return useStorage(
     `umo-editor:${editorKey || options.value.editorKey}:${key}`,

@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="date"
-    text="日期"
+    :text="t('insert.date')"
     menu-type="dropdown"
     huge
     :select-options="options"
@@ -60,7 +60,9 @@ const options = [
 const { editor } = useStore()
 
 const setDate = ({ content }) => {
-  if (!content) return
+  if (!content) {
+    return
+  }
   editor.value?.chain().focus().insertContent(content).run()
 }
 </script>

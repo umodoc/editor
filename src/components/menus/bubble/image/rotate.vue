@@ -1,10 +1,13 @@
 <template>
   <menus-button
     ico="image-rotate"
-    text="逆时针旋转90度"
+    :text="t('bubbleMenu.image.rotateCC')"
     @menu-click="setRotate(-90)"
   />
-  <menus-button text="顺时针旋转90度" @menu-click="setRotate(90)">
+  <menus-button
+    :text="t('bubbleMenu.image.rotateC')"
+    @menu-click="setRotate(90)"
+  >
     <icon name="image-rotate" style="transform: rotateY(180deg)" />
   </menus-button>
 </template>

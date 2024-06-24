@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="strike"
-    text="删除线"
+    :text="t('base.strike')"
     shortcut="Ctrl+Shift+X"
     hide-text
     :menu-active="editor?.isActive('strike')"

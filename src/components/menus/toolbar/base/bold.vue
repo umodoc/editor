@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="bold"
-    text="加粗"
+    :text="t('base.bold')"
     shortcut="Ctrl+B"
     hide-text
     :menu-active="editor?.isActive('bold')"

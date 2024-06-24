@@ -18,7 +18,7 @@
         <div
           v-if="!node.attrs.uploaded && node.attrs.file !== null"
           class="action-item"
-          title="文件上传中..."
+          :title="t('file.uploading')"
         >
           <icon class="loading" name="loading" />
         </div>
@@ -28,6 +28,7 @@
           :download="node.attrs.name"
           target="_blank"
           class="action-item"
+          :title="t('file.download')"
         >
           <icon name="download" />
         </a>

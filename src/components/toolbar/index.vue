@@ -32,27 +32,40 @@
           <span class="status">
             <span class="status-online" :class="{ offline: !online }"></span>
             <span class="status-saved button-text">
-              <span v-if="savedAt"> {{ timeAgo(savedAt) }}保存</span>
-              <span class="unsaved" v-else>文档未保存</span>
+              <span
+                v-if="savedAt"
+                v-text="t('save.savedAtText', { time: timeAgo(savedAt) })"
+              ></span>
+              <span v-else class="unsaved" v-text="t('save.unsaved')"></span>
             </span>
           </span>
         </t-button>
         <template #content>
           <div class="document-status-container status">
-            <div>网络状态： {{ online ? '在线' : '离线' }}</div>
             <div>
-              保存时间：
-              <span v-if="savedAt"> {{ timeAgo(savedAt) }}保存</span>
-              <span v-else>未保存</span>
+              {{ t('save.network') }}
+              {{ online ? t('save.online') : t('save.offline') }}
+            </div>
+            <div>
+              {{ t('save.savedAt') }}
+              <span
+                v-if="savedAt"
+                v-text="t('save.savedAtText', { time: timeAgo(savedAt) })"
+              ></span>
+              <span v-else v-text="t('save.unsaved')"></span>
             </div>
             <div class="document-button-container">
-              <t-button size="small" @click="saveContent">保存文档</t-button>
+              <t-button
+                size="small"
+                v-text="t('save.text')"
+                @click="saveContent"
+              ></t-button>
               <t-button
                 size="small"
                 variant="outline"
+                v-text="t('save.cache.text')"
                 @click="setContentFromCache"
               >
-                从缓存中恢复
               </t-button>
             </div>
           </div>
@@ -70,7 +83,7 @@
       >
         <t-button class="button" variant="text" size="small">
           <icon name="expand-down" />
-          <span class="button-text">切换工具栏</span>
+          <span class="button-text">{{ t('toolbar.toggle') }}</span>
         </t-button>
         <template #dropdown>
           <t-dropdown-menu
@@ -89,7 +102,7 @@
       </t-dropdown>
     </div>
   </div>
-  <tooltip v-else content="显示工具栏" placement="bottom-right">
+  <tooltip v-else :content="t('toolbar.show')" placement="bottom-right">
     <div class="show-toolbar" @click="$toolbar.show = true">
       <icon name="arrow-down" />
     </div>
@@ -107,12 +120,12 @@ const online = useOnline()
 
 // 工具栏菜单
 const defaultToolbarMenus = [
-  { label: '开始', value: 'base' },
-  { label: '插入', value: 'insert' },
-  { label: '表格', value: 'table' },
-  { label: '工具', value: 'tools' },
-  { label: '页面', value: 'page' },
-  { label: '导出', value: 'export' },
+  { label: t('toolbar.base'), value: 'base' },
+  { label: t('toolbar.insert'), value: 'insert' },
+  { label: t('toolbar.table'), value: 'table' },
+  { label: t('toolbar.tools'), value: 'tools' },
+  { label: t('toolbar.page'), value: 'page' },
+  { label: t('toolbar.export'), value: 'export' },
 ]
 let toolbarMenus = defaultToolbarMenus
 if (options.value.toolbar.menus) {
@@ -141,24 +154,24 @@ watch(
 const editorModeOptions = computed(() => {
   const modeOptions = [
     {
-      label: '专业工具栏',
+      label: t('toolbar.ribbon'),
       value: 'ribbon',
       prefixIcon: 'toolbar-ribbon',
     },
     {
-      label: '经典工具栏',
+      label: t('toolbar.classic'),
       value: 'classic',
       prefixIcon: 'toolbar-classic',
     },
     {
-      label: '隐藏工具栏',
+      label: t('toolbar.hide'),
       value: 'hideToolbar',
       prefixIcon: 'hide-toolbar',
     },
   ]
   if (options.value.toolbar.enableSourceEditor) {
     modeOptions.splice(2, 0, {
-      label: '编辑源代码',
+      label: t('toolbar.source'),
       value: 'source',
       prefixIcon: 'toolbar-source',
       divider: true,
@@ -186,8 +199,8 @@ const setContentFromCache = () => {
   if (!content || content === '' || content === '<p></p>') {
     const dialog = useAlert({
       theme: 'info',
-      header: '错误提示',
-      body: '当前缓存中没有内容。',
+      header: t('save.cache.error.title'),
+      body: t('save.cache.error.message'),
       placement: 'center',
       onConfirm() {
         dialog.destroy()
@@ -284,14 +297,14 @@ const setContentFromCache = () => {
 .document-status-container {
   flex-direction: column;
   align-items: unset;
-  padding: 10px 15px;
+  padding: 12px 16px;
   color: var(--umo-text-color);
   min-width: 150px;
   cursor: default;
   .document-button-container {
-    margin: 6px 0 4px;
+    margin: 8px 0 4px;
     display: flex;
-    gap: 6px;
+    gap: 8px;
   }
 }
 </style>

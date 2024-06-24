@@ -17,7 +17,7 @@
           <div class="keyboard-shortcut">
             <template v-for="key in item.keys" :key="key">
               <kbd v-if="key !== 'TEXT'">{{ getShortcut(key) }}</kbd>
-              <span v-else>文字</span>
+              <span v-else v-text="t('shortcut.text')"></span>
             </template>
           </div>
         </li>
@@ -34,134 +34,176 @@ const $document = useState('document')
 
 const shortcuts = $ref([
   {
-    title: '常用快捷键',
+    title: t('shortcut.commonlyUsed'),
     items: [
-      { label: '复制', keys: ['Ctrl', 'C'] },
-      { label: '粘贴', keys: ['Ctrl', 'V'] },
-      { label: '粘贴纯文本', keys: ['Ctrl', 'Shift', 'V'] },
-      { label: '撤销', keys: ['Ctrl', 'Z'] },
-      { label: '重做', keys: ['Ctrl', 'Y'] },
-      { label: '全选', keys: ['Ctrl', 'A'] },
-      { label: '查找 / 替换', keys: ['Ctrl', 'F'] },
-      { label: '插入新段落', keys: ['Enter'] },
-      { label: '换行', keys: ['Shift', 'Enter'] },
-      { label: '保存', keys: ['Ctrl', 'S'] },
-      { label: '打印', keys: ['Ctrl', 'P'] },
+      { label: t('shortcut.copy'), keys: ['Ctrl', 'C'] },
+      { label: t('shortcut.paste'), keys: ['Ctrl', 'V'] },
+      { label: t('shortcut.pasteAsText'), keys: ['Ctrl', 'Shift', 'V'] },
+      { label: t('base.undo'), keys: ['Ctrl', 'Z'] },
+      { label: t('base.redo'), keys: ['Ctrl', 'Y'] },
+      { label: t('base.redo'), keys: ['Ctrl', 'A'] },
+      { label: t('search.text'), keys: ['Ctrl', 'F'] },
+      { label: t('shortcut.paragraph'), keys: ['Enter'] },
+      { label: t('shortcut.hardBreak'), keys: ['Shift', 'Enter'] },
+      { label: t('save.text'), keys: ['Ctrl', 'S'] },
+      { label: t('print.text'), keys: ['Ctrl', 'P'] },
     ],
   },
   {
-    title: '文字格式',
+    title: t('shortcut.format'),
     items: [
-      { icon: 'bold', tag: 'b', label: '粗体', keys: ['Ctrl', 'B'] },
-      { icon: 'italic', tag: 'i', label: '斜体', keys: ['Ctrl', 'I'] },
-      { icon: 'underline', tag: 'u', label: '下划线', keys: ['Ctrl', 'U'] },
+      { icon: 'bold', tag: 'b', label: t('base.bold'), keys: ['Ctrl', 'B'] },
+      {
+        icon: 'italic',
+        tag: 'i',
+        label: t('base.italic'),
+        keys: ['Ctrl', 'I'],
+      },
+      {
+        icon: 'underline',
+        tag: 'u',
+        label: t('base.underline'),
+        keys: ['Ctrl', 'U'],
+      },
       {
         icon: 'strike',
         tag: 's',
-        label: '删除线',
+        label: t('base.strike'),
         keys: ['Ctrl', 'Shift', 'X'],
       },
-      { icon: 'indent', label: '减少缩进', keys: ['Shift', 'Tab'] },
-      { icon: 'outdent', label: '增加缩进', keys: ['Tab'] },
+      { icon: 'indent', label: t('base.indent'), keys: ['Tab'] },
+      { icon: 'outdent', label: t('base.outdent'), keys: ['Shift', 'Tab'] },
     ],
   },
   {
-    title: '页面显示',
+    title: t('shortcut.page'),
     items: [
-      { label: '插入分页', keys: ['Ctrl', 'Enter'] },
-      { label: '页面放大', keys: ['Ctrl', '+'] },
-      { label: '页面缩小', keys: ['Ctrl', '-'] },
-      { label: '缩放到初始比例', keys: ['Ctrl', '1'] },
-      { label: '缩放到最佳比例', keys: ['Ctrl', '0'] },
-      { label: '演示模式', keys: ['F5'] },
-      { label: '全屏模式', keys: ['F11'] },
+      { label: t('page.break'), keys: ['Ctrl', 'Enter'] },
+      { label: t('shortcut.pageZoomIn'), keys: ['Ctrl', '+'] },
+      { label: t('shortcut.pageZoomOut'), keys: ['Ctrl', '-'] },
+      { label: t('shortcut.pageZoomReset'), keys: ['Ctrl', '1'] },
+      { label: t('shortcut.pageAutoWidth'), keys: ['Ctrl', '0'] },
+      { label: t('preview.title'), keys: ['F5'] },
+      { label: t('fullscreen.title'), keys: ['F11'] },
     ],
   },
 ])
 
 if ($document.value.markdown) {
   shortcuts.push({
-    title: 'Markdown 格式',
+    title: t('shortcut.markdown'),
     items: [
       {
         html: 'H<sub>1</sub>',
         tag: 'b',
         className: 'heading1',
-        label: '标题1',
+        label: t('base.heading.text', { level: 1 }),
         keys: ['#', '⎵'],
       },
       {
         html: 'H<sub>2</sub>',
         tag: 'b',
         className: 'heading2',
-        label: '标题2',
+        label: t('base.heading.text', { level: 2 }),
         keys: ['##', '⎵'],
       },
       {
         html: 'H<sub>3</sub>',
         tag: 'b',
         className: 'heading3',
-        label: '标题3',
+        label: t('base.heading.text', { level: 3 }),
         keys: ['###', '⎵'],
       },
       {
         html: 'H<sub>4</sub>',
         tag: 'b',
         className: 'heading4',
-        label: '标题4',
+        label: t('base.heading.text', { level: 4 }),
         keys: ['####', '⎵'],
       },
       {
         html: 'H<sub>5</sub>',
         tag: 'b',
         className: 'heading5',
-        label: '标题5',
+        label: t('base.heading.text', { level: 5 }),
         keys: ['#####', '⎵'],
       },
       {
         html: 'H<sub>6</sub>',
         tag: 'b',
         className: 'heading6',
-        label: '标题6',
+        label: t('base.heading.text', { level: 6 }),
         keys: ['######', '⎵'],
       },
-      { icon: 'bold', tag: 'b', label: '粗体', keys: ['**', 'TEXT', '**'] },
-      { icon: 'italic', tag: 'i', label: '斜体', keys: ['*', 'TEXT', '*'] },
+      {
+        icon: 'bold',
+        tag: 'b',
+        label: t('base.bold'),
+        keys: ['**', 'TEXT', '**'],
+      },
+      {
+        icon: 'italic',
+        tag: 'i',
+        label: t('base.italic'),
+        keys: ['*', 'TEXT', '*'],
+      },
       {
         icon: 'strike',
         tag: 's',
-        label: '删除线',
+        label: t('base.strike'),
         keys: ['~~', 'TEXT', '~~'],
       },
       {
         icon: 'subscript',
         tag: 'sub',
-        label: '下标',
+        label: t('base.subscript'),
         keys: ['~', 'TEXT', '~'],
       },
       {
         icon: 'superscript',
         tag: 'sup',
-        label: '上标',
+        label: t('base.superscript'),
         keys: ['^', 'TEXT', '^'],
       },
-      { icon: 'bullet-list', label: '· 无序列表', keys: ['*', '⎵'] },
-      { icon: 'ordered-list', label: '1. 有序列表', keys: ['1.', '⎵'] },
-      { icon: 'task', label: '待办事项', keys: ['[ ]', '⎵'] },
-      { icon: 'quote', tag: 'blockquote', label: '引用', keys: ['>', '⎵'] },
-      { icon: 'code', tag: 'code', label: '代码', keys: ['`', 'TEXT', '`'] },
       {
-        icon: 'mathematics',
-        label: '数学公式',
+        icon: 'bullet-list',
+        label: `· ${t('list.bullet.text')}`,
+        keys: ['*', '⎵'],
+      },
+      {
+        icon: 'ordered-list',
+        label: `1. ${t('list.ordered.text')}`,
+        keys: ['1.', '⎵'],
+      },
+      { icon: 'task-list', label: t('list.task.text'), keys: ['[ ]', '⎵'] },
+      {
+        icon: 'quote',
+        tag: 'blockquote',
+        label: t('base.quote'),
+        keys: ['>', '⎵'],
+      },
+      {
+        icon: 'code',
+        tag: 'code',
+        label: t('base.code'),
+        keys: ['`', 'TEXT', '`'],
+      },
+      {
+        icon: 'math',
+        label: t('insert.math'),
         keys: ['$', 'TEXT', '$'],
       },
       {
         icon: 'highlight',
         tag: 'mark',
-        label: '文本高亮',
+        label: t('base.highlight.text'),
         keys: ['==', 'TEXT', '=='],
       },
-      { icon: 'horizontal-line', label: '分割线', keys: ['---', 'Enter'] },
+      {
+        icon: 'hr',
+        label: t('insert.hr.text'),
+        keys: ['---', 'Enter'],
+      },
     ],
   })
 }

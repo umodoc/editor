@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="undo"
-    text="撤销"
+    :text="t('base.undo')"
     shortcut="Ctrl+Z"
     hide-text
     :disabled="!editor?.can().chain().focus().undo().run()"

@@ -1,8 +1,8 @@
 <template>
   <menus-button
     ico="table"
-    text="插入"
-    tooltip="插入新表格"
+    :text="t('table.insert.text')"
+    :tooltip="t('table.insert.tip')"
     menu-type="popup"
     huge
     :popup-visible="popupVisible"
@@ -22,30 +22,37 @@
         </div>
       </div>
       <div class="table-custom">
-        <div class="table-custom-title">表格属性</div>
+        <div
+          class="table-custom-title"
+          v-text="t('table.insert.property')"
+        ></div>
         <t-input-number
           v-model="selected.rows"
           theme="column"
+          align="right"
           :max="1000"
           :min="0"
-          label="行数:"
+          :label="t('table.insert.rows')"
         />
         <t-input-number
           v-model="selected.cols"
           theme="column"
+          align="right"
           :max="30"
           :min="0"
-          label="列数:"
+          :label="t('table.insert.cols')"
         />
-        <t-checkbox v-model="withHeaderRow">包含表头</t-checkbox>
+        <t-checkbox v-model="withHeaderRow">
+          {{ t('table.insert.withHeader') }}
+        </t-checkbox>
         <t-button
           class="insert-button"
           block
           theme="primary"
           variant="base"
+          v-text="t('table.insert.create')"
           @click="insertTable"
         >
-          创建表格
         </t-button>
       </div>
     </template>

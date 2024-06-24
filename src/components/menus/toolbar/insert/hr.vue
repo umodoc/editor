@@ -1,7 +1,7 @@
 <template>
   <menus-button
-    ico="horizontal-line"
-    text="分割线"
+    ico="hr"
+    :text="t('insert.hr.text')"
     menu-type="popup"
     huge
     :popup-visible="popupVisible"
@@ -10,14 +10,15 @@
     <template #content>
       <div class="page-divider-dropdown">
         <div class="page-divider-item-title">
-          <span>分割线类型</span>
+          <span v-text="t('insert.hr.title')"></span>
         </div>
         <div
           class="page-divider-item"
           v-for="item in options"
           :key="item.value"
           :value="item.value"
-          @click="setHorizontalLine(item)"
+          :title="item.label"
+          @click="sethr(item)"
         >
           <hr
             class="umo-page-divider"
@@ -35,7 +36,7 @@
             class="page-divider-item open-color-picker"
             :class="{ active: colorPickerVisible }"
           >
-            <span>分割线颜色</span>
+            <span v-text="t('insert.hr.color')"></span>
             <div class="arrow">
               <icon name="arrow-down" />
             </div>
@@ -56,15 +57,15 @@ let { popupVisible, togglePopup } = usePopup()
 const { container, editor } = useStore()
 
 const options = [
-  { label: '细线', value: 'signle' },
-  { label: '双细线', value: 'double' },
-  { label: '点线', value: 'dotted' },
-  { label: '虚线', value: 'dashed' },
-  { label: '双虚线', value: 'dashed-double' },
-  { label: '粗线', value: 'signle-bold' },
-  { label: '粗细线', value: 'double-bold-top' },
-  { label: '细粗线', value: 'double-bold-bottom' },
-  { label: '波浪线', value: 'wavy' },
+  { label: t('insert.hr.signle'), value: 'signle' },
+  { label: t('insert.hr.double'), value: 'double' },
+  { label: t('insert.hr.dotted'), value: 'dotted' },
+  { label: t('insert.hr.dashed'), value: 'dashed' },
+  { label: t('insert.hr.dashedDouble'), value: 'dashed-double' },
+  { label: t('insert.hr.signleBold'), value: 'signle-bold' },
+  { label: t('insert.hr.doubleBoldTop'), value: 'double-bold-top' },
+  { label: t('insert.hr.doubleBoldBottom'), value: 'double-bold-bottom' },
+  { label: t('insert.hr.wavy'), value: 'wavy' },
 ]
 
 let currentColor = $ref('#000')
@@ -74,14 +75,11 @@ const colorChange = (color) => {
   colorPickerVisible = false
 }
 
-const setHorizontalLine = ({ value }) => {
-  console.log(value)
-  if (!value || !editor.value) return
-  editor.value
-    .chain()
-    .focus()
-    .setHorizontalRule({ type: value, color: currentColor })
-    .run()
+const sethr = ({ value }) => {
+  if (!value || !editor.value) {
+    return
+  }
+  editor.value.chain().focus().sethr({ type: value, color: currentColor }).run()
   popupVisible.value = false
 }
 </script>

@@ -95,7 +95,10 @@ export default Node.create({
           if (maxSize !== 0 && size > maxSize) {
             useMessage(
               'error',
-              `文件”${file.name}“大小超过 ${maxSize / 1024 / 1024}MB 的限制`,
+              t('file.limit', {
+                filename: file.name,
+                size: maxSize / 1024 / 1024,
+              }),
             )
             return
           }
@@ -132,8 +135,8 @@ export default Node.create({
           if ((!accept && accept !== '') || accept === 'notAllow') {
             const dialog = useAlert({
               theme: 'danger',
-              header: '错误提示',
-              body: '当前文档不允许插入该类型的文件。',
+              header: t('file.notAllow.title'),
+              body: t('file.notAllow.message'),
               placement: 'center',
               onConfirm() {
                 dialog.destroy()
@@ -150,7 +153,9 @@ export default Node.create({
           // 插入文件
           onChange((fileList) => {
             const files = Array.from(fileList)
-            if (!files) return
+            if (!files) {
+              return
+            }
             files.forEach((file) => {
               editor.chain().focus().insertFile({ file }).run()
             })

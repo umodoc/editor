@@ -1,21 +1,21 @@
 <template>
   <menus-button
     ico="share"
-    text="文档分享"
+    :text="t('export.share.text')"
     huge
     @menu-click="dialogVisible = true"
   />
   <modal
     :visible="dialogVisible"
     icon="share"
-    title="文档分享"
+    :header="t('export.share.text')"
     width="420px"
-    confirmBtn="复制"
+    :confirmBtn="t('export.share.copy')"
     @confirm="copyLink"
     @close="dialogVisible = false"
   >
     <div class="share-container">
-      <div class="share-tip">复制链接发给需要分享的人。</div>
+      <div class="share-tip" v-text="t('export.share.tip')"></div>
       <t-textarea
         class="share-textarea"
         :value="options.shareUrl"
@@ -33,7 +33,7 @@ let dialogVisible = $ref(false)
 const copyLink = () => {
   const { copy } = useClipboard({ source: options.value.shareUrl })
   copy()
-  useMessage('success', '链接已复制到剪切板')
+  useMessage('success', t('export.share.copied'))
   dialogVisible = false
 }
 </script>

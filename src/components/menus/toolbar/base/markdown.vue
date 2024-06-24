@@ -1,12 +1,12 @@
 <template>
   <menus-button
     v-if="options.document.enableMarkdown"
+    :text="t('base.markdown.text')"
     ico="markdown"
-    text="Markdown"
     :tooltip="
       options.document.enableMarkdown
-        ? '关闭 Markdown 模式'
-        : '切换到 Markdown 模式'
+        ? t('base.markdown.disable')
+        : t('base.markdown.enable')
     "
     :menu-active="$document.markdown"
     huge
@@ -22,12 +22,12 @@ const toggleMarkdownMode = () => {
   const dialog = useConfirm({
     theme: 'warning',
     header: $document.value.enableMarkdown
-      ? '关闭 Markdown 模式'
-      : '切换到 Markdown 模式',
-    body: '此操作会重置编辑器，切换后当前历史记录会丢失，将无法进行“撤回”等操作，确定要现在切换吗？',
+      ? t('base.markdown.disable')
+      : t('base.markdown.enable'),
+    body: t('base.markdown.message'),
     confirmBtn: {
       theme: 'warning',
-      content: '立即切换',
+      content: t('base.markdown.toggle'),
     },
     async onConfirm() {
       $document.value.markdown = !$document.value.markdown

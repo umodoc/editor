@@ -1,25 +1,22 @@
 <template>
   <menus-button
-    ico="special-characters"
-    text="特殊字符"
+    ico="symbol"
+    :text="t('insert.symbol')"
     menu-type="popup"
     huge
     :popup-visible="popupVisible"
     @toggle-popup="togglePopup"
   >
     <template #content>
-      <div class="characters-container narrow-scrollbar">
-        <template
-          v-for="(group, index) in options.dicts.specialCharacters"
-          :key="index"
-        >
-          <div class="characters-group-title">{{ group.label }}</div>
-          <div class="characters-group-container">
+      <div class="symbols-container narrow-scrollbar">
+        <template v-for="(group, index) in options.dicts.symbols" :key="index">
+          <div class="symbols-group-title" v-text="l(group.label)"></div>
+          <div class="symbols-group-container">
             <div
-              class="characters-group-item"
+              class="symbols-group-item"
               v-for="(item, i) in group.items.split('')"
               :key="i"
-              @click="selectCharacter(item)"
+              @click="selectSymbol(item)"
             >
               {{ item }}
             </div>
@@ -34,14 +31,14 @@
 let { popupVisible, togglePopup } = usePopup()
 const { options, editor } = useStore()
 
-const selectCharacter = (char) => {
+const selectSymbol = (char) => {
   editor.value?.chain().focus().insertContent(char).run()
   popupVisible.value = false
 }
 </script>
 
 <style lang="less" scoped>
-.characters-container {
+.symbols-container {
   width: 336px;
   max-height: var(--umo-popup-max-height);
   min-height: 300px;
@@ -50,7 +47,7 @@ const selectCharacter = (char) => {
   padding: calc(var(--umo-popup-content-padding) - 2px);
 }
 
-.characters-group {
+.symbols-group {
   &-title {
     color: var(--umo-text-color-light);
     font-size: 12px;

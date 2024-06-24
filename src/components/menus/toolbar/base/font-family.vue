@@ -1,11 +1,10 @@
 <template>
   <menus-button
-    text="选择字体"
+    :text="t('base.fontFamily.text')"
     menu-type="select"
     hide-text
     :value="editor?.getAttributes('textStyle').fontFamily || null"
     :style="{ width: $toolbar.mode !== 'classic' ? '144px' : '90px' }"
-    placeholder="字体"
     filterable
     @menu-click="setFontFamily"
   >
@@ -20,13 +19,13 @@
         v-for="item in group.children"
         :value="item.value"
         :key="item.value"
-        :label="item.label"
+        :label="l(item.label)"
       >
-        <span :style="{ fontFamily: item.value }">{{ item.label }}</span>
+        <span :style="{ fontFamily: item.value }" v-text="l(item.label)"></span>
         <span
           v-if="!fontDetect(item.value)"
-          class="not-support"
-          title="可能无法正常显示该字体，可能是本机未安装该字体"
+          class="unsupport"
+          :title="t('base.fontFamily.unsupport')"
           >!</span
         >
       </t-option>
@@ -42,8 +41,12 @@ const $recent = useState('recent')
 let usedFonts = $ref([])
 // https://www.cnblogs.com/gaidalou/p/8479452.html
 const fontDetect = (font) => {
-  if (!font) return true
-  if (typeof font !== 'string') return false
+  if (!font) {
+    return true
+  }
+  if (typeof font !== 'string') {
+    return false
+  }
 
   const baseFont = 'fontname'
   const testChar = 'text'
@@ -77,7 +80,12 @@ const fontDetect = (font) => {
 }
 
 const allFonts = computed(() => {
-  const all = [{ label: '常用字体', children: options.value.dicts.fonts }]
+  const all = [
+    {
+      label: t('base.fontFamily.all'),
+      children: options.value.dicts.fonts,
+    },
+  ]
   // 通过字体值获取字体列表
   const getFontsByValues = (values) => {
     return values.map(
@@ -90,13 +98,13 @@ const allFonts = computed(() => {
   }
   if ($recent.value.fonts.length > 0) {
     all.unshift({
-      label: '最近使用',
+      label: t('base.fontFamily.recent'),
       children: getFontsByValues($recent.value.fonts),
     })
   }
   if (usedFonts.length > 0) {
     all.unshift({
-      label: '已使用的字体',
+      label: t('base.fontFamily.used'),
       children: getFontsByValues(usedFonts),
     })
   }
@@ -110,7 +118,9 @@ const getUsedFonts = () => {
   if (matches) {
     matches.forEach((item) => {
       const font = item.replace('"fontFamily":"', '').replace('"', '')
-      if (!usedFonts.includes(font)) usedFonts.push(font)
+      if (!usedFonts.includes(font)) {
+        usedFonts.push(font)
+      }
     })
   }
 }
@@ -134,7 +144,9 @@ const setFontFamily = (fontFamily) => {
 watch(
   () => editor.value,
   (val) => {
-    if (val) getUsedFonts()
+    if (val) {
+      getUsedFonts()
+    }
   },
 )
 </script>
@@ -147,7 +159,7 @@ watch(
     justify-content: space-between;
     font-size: 14px;
     width: 100%;
-    .not-support {
+    .unsupport {
       color: var(--umo-error-color);
       font-size: 14px;
     }

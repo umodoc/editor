@@ -1,3 +1,10 @@
+import i18n from '@/i18n'
+
+const locales = {
+  'zh-CN': 'zh',
+  'en-US': 'en',
+}
+
 // https://www.diagrams.com/doc/faq/embed-mode
 class DiagramEditor {
   constructor({ domain, params, container }) {
@@ -31,7 +38,6 @@ class DiagramEditor {
     configure: 1,
     noSaveBtn: 1,
     dark: 1,
-    lang: 'zh',
   }
   xml = null
   format = 'xmlsvg'
@@ -53,9 +59,10 @@ class DiagramEditor {
     const params = Object.keys(this.params)
       .map((key) => key + '=' + this.params[key])
       .join('&')
+    const lang = locales[i18n.global.locale.value]
     const frame = document.createElement('iframe')
     frame.setAttribute('class', 'diagrams-iframe')
-    frame.setAttribute('src', `${this.domain}?${params}`)
+    frame.setAttribute('src', `${this.domain}?${params}&lang=${lang}`)
     return frame
   }
 

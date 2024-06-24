@@ -52,8 +52,8 @@ const { container, page, imagePreview } = useStore()
 const pageSize = $computed(() => {
   const { width, height } = page.value.size
   return {
-    width: page.value.orientation === 'horizontal' ? width : height,
-    height: page.value.orientation === 'horizontal' ? height : width,
+    width: page.value.orientation === 'portrait' ? width : height,
+    height: page.value.orientation === 'portrait' ? height : width,
   }
 })
 // 页面缩放后的大小

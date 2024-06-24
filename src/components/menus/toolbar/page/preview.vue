@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="preview"
-    text="演示模式"
+    :text="t('page.preview')"
     shortcut="F5"
     huge
     :menu-active="page.preview.enabled"

@@ -2,26 +2,24 @@
   <menus-button
     v-if="imglyRemoveBackground"
     ico="seal"
-    text="电子签章"
+    :text="t('tools.seal.text')"
     huge
     @menu-click="dialogVisible = true"
   >
     <modal
       :visible="dialogVisible"
       icon="seal"
-      title="插入电子签章"
+      :header="t('tools.seal.title')"
       width="480px"
-      confirm-btn="插入"
+      confirm-btn="t('tools.seal.insert')"
       @confirm="setSeal"
       @close="dialogVisible = false"
     >
       <div class="seal-container" @click="selectImage">
-        <div class="tip">
-          选择纯色背景电子章的影印件或者照片，将自动扣取电子章，所有操作在本地完成，不会向服务器发送数据，请放心使用。
-        </div>
+        <div class="tip" v-text="t('tools.seal.tip')"></div>
         <div class="seal-uploader">
           <span v-if="!sealImg">{{
-            converting ? converting : '点击此处选择电子章图片'
+            converting ? converting : t('tools.seal.insertTip')
           }}</span>
           <img class="seal-img" v-else :src="sealImg" />
         </div>
@@ -50,25 +48,31 @@ const selectImage = async () => {
   open()
   // 选择图片
   onChange(async (files) => {
-    if (!files) return
+    if (!files) {
+      return
+    }
     file = files[0]
-    if (!file) return
+    if (!file) {
+      return
+    }
     try {
       sealImg = null
-      converting = '正在加载组件...'
+      converting = t('tools.seal.converting1')
       const img = await imglyRemoveBackground(file, {
         publicPath: `${options.value.cdnUrl}/libs/imgly/background-removal-data/`,
         progress: (key, current, total) => {
           if (key.startsWith('fetch')) {
-            converting = `正在加载组件: ${((current / total) * 100).toFixed(1)}%`
+            converting = t('tools.seal.converting2', {
+              ppercentage: ((current / total) * 100).toFixed(1),
+            })
           } else {
-            converting = '正在抠图中，请稍后...'
+            converting = t('tools.seal.converting3')
           }
         },
       })
       sealImg = URL.createObjectURL(img)
     } catch {
-      useMessage('error', '电子章抠取失败，请重试')
+      useMessage('error', t('tools.seal.convertError'))
       sealImg = null
     } finally {
       converting = null
@@ -78,7 +82,7 @@ const selectImage = async () => {
 
 const setSeal = () => {
   if (!sealImg) {
-    useMessage('error', '请选择电子章')
+    useMessage('error', t('tools.seal.notEmpty'))
     return
   }
   editor.value

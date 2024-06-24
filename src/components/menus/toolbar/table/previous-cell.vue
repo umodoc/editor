@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="table-previous-cell"
-    text="上一个单元格"
+    :text="t('table.prevCell')"
     shortcut="Shift+Tab"
     :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().goToPreviousCell()"

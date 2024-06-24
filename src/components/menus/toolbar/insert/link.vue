@@ -1,38 +1,38 @@
 <template>
   <menus-button
     ico="link"
-    text="链接"
+    :text="t('insert.link.text')"
     huge
     @menu-click="dialogVisible = true"
   />
   <modal
     :visible="dialogVisible"
     icon="link"
-    title="插入链接"
+    :header="t('insert.link.title')"
     width="420px"
     draggable
     destroy-on-close
-    confirmBtn="插入"
+    :confirmBtn="t('insert.link.insert')"
     @confirm="insertLink"
     @close="dialogVisible = false"
   >
     <div class="link-container">
       <t-form label-align="top">
-        <t-form-item label="链接文本：">
+        <t-form-item :label="t('insert.link.hrefText')">
           <t-input
             v-model.trim="text"
             :status="error.text ? 'error' : 'default'"
-            placeholder="请输入链接文本"
+            :placeholder="t('insert.link.hrefTextTip')"
             clearable
           />
         </t-form-item>
-        <t-form-item label="链接地址：">
+        <t-form-item :label="t('insert.link.href')">
           <t-input
             v-model="href"
             :status="error.href ? 'error' : 'default'"
             type="url"
             clearable
-            placeholder="请输入链接地址，一般以 http:// 或 https:// 开头"
+            :placeholder="t('insert.link.hrefTip')"
           />
         </t-form-item>
       </t-form>

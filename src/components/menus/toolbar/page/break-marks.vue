@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="break-marks"
-    text="显示换行"
+    :text="t('page.breakMarks')"
     huge
     :menu-active="page.showBreakMarks"
     @menu-click="toggleInvisibleCharacters"

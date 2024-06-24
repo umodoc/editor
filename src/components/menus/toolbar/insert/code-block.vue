@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="code-block"
-    text="代码块"
+    :text="t('insert.codeBlock')"
     shortcut="Ctrl+Alt+C"
     huge
     @menu-click="editor.chain().focus().setCodeBlock().run()"

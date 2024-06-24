@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="line-number"
-    text="显示行号"
+    :text="t('page.lineNumber')"
     :menu-active="page.showLineNumber"
     huge
     @menu-click="page.showLineNumber = !page.showLineNumber"

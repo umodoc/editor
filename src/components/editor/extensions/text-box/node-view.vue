@@ -18,7 +18,7 @@
         :top="node.attrs.top"
         :min-width="14"
         :min-height="14"
-        title="双击进行编辑"
+        :title="t('node.textBox.tip')"
         @rotate="onRotate"
         @resize="onResize"
         @drag="onDrag"

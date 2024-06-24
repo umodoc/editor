@@ -20,15 +20,19 @@
     </div>
     <t-dropdown-menu>
       <t-dropdown-item class="block-menu-group-name" disabled>
-        插入新内容
+        {{ t('blockMenu.insert') }}
       </t-dropdown-item>
       <t-dropdown-item :divider="options.templates?.length === 0">
-        <menus-button ico="node-add" text="选择节点" :tooltip="false" />
+        <menus-button
+          ico="node-add"
+          :text="t('blockMenu.select')"
+          :tooltip="false"
+        />
         <t-dropdown-menu overlay-class-name="block-menu-dropdown">
           <t-dropdown-item>
             <menus-button
               ico="table"
-              text="表格"
+              :text="t('table.insert.text')"
               :tooltip="false"
               @menu-click="editor?.chain().focus().insertTable().run()"
             />
@@ -67,15 +71,11 @@
           </t-dropdown-item>
           <t-dropdown-item>
             <menus-button
-              ico="horizontal-line"
-              text="分割线"
+              ico="hr"
+              :text="t('insert.hr.text')"
               :tooltip="false"
               @menu-click="
-                editor
-                  .chain()
-                  .focus()
-                  .setHorizontalRule({ type: 'signle' })
-                  .run()
+                editor.chain().focus().sethr({ type: 'signle' }).run()
               "
             />
           </t-dropdown-item>
@@ -125,7 +125,11 @@
         </t-dropdown-menu>
       </t-dropdown-item>
       <t-dropdown-item v-if="options.templates.length > 0" divider>
-        <menus-button ico="template" text="插入模板" :tooltip="false" />
+        <menus-button
+          ico="template"
+          :text="t('blockMenu.template')"
+          :tooltip="false"
+        />
         <t-dropdown-menu overlay-class-name="block-menu-dropdown">
           <t-dropdown-item
             v-for="item in options.templates"
@@ -139,32 +143,37 @@
         </t-dropdown-menu>
       </t-dropdown-item>
       <t-dropdown-item class="block-menu-group-name" disabled>
-        切换节点类型
+        {{ t('blockMenu.toogleNode') }}
       </t-dropdown-item>
       <t-dropdown-item :disabled="editor?.isActive('paragraph')">
         <menus-button
           ico="paragraph"
-          text="段落"
+          :text="t('base.heading.paragraph')"
           :tooltip="false"
           shortcut-text="ctrl+alt+0"
           @menu-click="toggleNodeType('paragraph')"
         />
       </t-dropdown-item>
       <t-dropdown-item>
-        <menus-button ico="heading" text="标题" :tooltip="false" />
+        <menus-button
+          ico="heading"
+          :text="t('base.heading.text')"
+          :tooltip="false"
+        />
         <t-dropdown-menu overlay-class-name="block-menu-dropdown">
           <t-dropdown-item
             v-for="item in headings"
             :key="item.level"
-            :disabled="editor?.isActive('heading', { level: item.level })"
+            :disabled="editor?.isActive('heading', { level: item })"
           >
             <menus-button
               :tooltip="false"
-              :shortcut-text="`ctrl+alt+${item.level}`"
-              @menu-click="toggleNodeType('heading', { level: item.level })"
+              :shortcut-text="`ctrl+alt+${item}`"
+              @menu-click="toggleNodeType('heading', { level: item })"
             >
               <span class="heading">
-                <span class="icon">H{{ item.level }}</span> {{ item.text }}
+                <span class="icon">H{{ item }}</span>
+                {{ t('base.heading.text', { level: item }) }}
               </span>
             </menus-button>
           </t-dropdown-item>
@@ -173,7 +182,7 @@
       <t-dropdown-item>
         <menus-button
           ico="ordered-list-2"
-          text="有序列表"
+          :text="t('list.ordered.text')"
           :tooltip="false"
           shortcut-text="Ctrl+Shift+7"
           :menu-active="editor?.isActive('orderedList')"
@@ -183,7 +192,7 @@
       <t-dropdown-item>
         <menus-button
           ico="bullet-list-2"
-          text="无序列表"
+          :text="t('list.bullet.text')"
           :tooltip="false"
           shortcut-text="Ctrl+Shift+8"
           :menu-active="editor?.isActive('bulletList')"
@@ -193,7 +202,7 @@
       <t-dropdown-item>
         <menus-button
           ico="task-list-2"
-          text="待办事项"
+          :text="t('list.task.text')"
           :tooltip="false"
           shortcut-text="Ctrl+Shift+9"
           :menu-active="editor?.isActive('taskList')"
@@ -203,7 +212,7 @@
       <t-dropdown-item divider>
         <menus-button
           ico="quote"
-          text="引用"
+          :text="t('base.quote')"
           :tooltip="false"
           shortcut-text="Ctrl+Shift+B"
           :menu-active="editor?.isActive('blockquote')"
@@ -211,12 +220,12 @@
         />
       </t-dropdown-item>
       <t-dropdown-item class="block-menu-group-name" disabled>
-        其他操作
+        {{ t('blockMenu.other') }}
       </t-dropdown-item>
       <t-dropdown-item>
         <menus-button
           ico="node-delete-2"
-          text="删除节点"
+          :text="t('blockMenu.delete')"
           :tooltip="false"
           @menu-click="deleteNode"
         />
@@ -231,37 +240,42 @@ let menuVisible = $ref(false)
 let menuScrollTop = $ref(0)
 const updateMenuPostion = () => {
   const currentBlock = document.querySelector(`${container} .node-focused`)
-  if (currentBlock === null) return
+  if (currentBlock === null) {
+    return
+  }
   let top = currentBlock.offsetTop
   top = currentBlock.tagName === 'DIV' ? top - 8 : top - 5
-  if (editor.value.isActive('pageBreak')) top = top - 3
-  if (editor.value.isActive('horizontalRule')) top = top + 3
-  if (editor.value.isActive('table')) top = top + 7
+  if (editor.value.isActive('pageBreak')) {
+    top = top - 3
+  }
+  if (editor.value.isActive('hr')) {
+    top = top + 3
+  }
+  if (editor.value.isActive('table')) {
+    top = top + 7
+  }
   menuScrollTop = top
 }
 watch(
   editor,
   (val) => {
-    if (val) editor.value.on('selectionUpdate', updateMenuPostion)
+    if (val) {
+      editor.value.on('selectionUpdate', updateMenuPostion)
+    }
   },
   { immediate: true },
 )
 
-const headings = $ref([
-  { text: '一级标题', level: 1 },
-  { text: '二级标题', level: 2 },
-  { text: '三级标题', level: 3 },
-  { text: '四级标题', level: 4 },
-  { text: '五级标题', level: 5 },
-  { text: '六级标题', level: 6 },
-])
+const headings = $ref([1, 2, 3, 4, 5, 6])
 
 const disableItem = (name) => {
   return options.value.toolbar.disableMenuItems.includes(name)
 }
 
 const setTemplate = ({ content }) => {
-  if (!content || !editor.value) return
+  if (!content || !editor.value) {
+    return
+  }
   editor.value.commands.insertContent(content)
 }
 

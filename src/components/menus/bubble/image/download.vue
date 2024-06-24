@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="image-download"
-    text="下载图片"
+    :text="t('bubbleMenu.image.download')"
     @menu-click="downloadImage"
   />
 </template>

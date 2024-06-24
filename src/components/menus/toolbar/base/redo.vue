@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="redo"
-    text="撤销"
+    :text="t('base.redo')"
     shortcut="Ctrl+Y / Ctrl+Shift+Z"
     hide-text
     :disabled="!editor?.can().chain().focus().redo().run()"

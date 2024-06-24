@@ -1,20 +1,20 @@
 <template>
   <menus-button
     ico="signature"
-    text="电子签名"
+    :text="t('tools.signature.text')"
     huge
     @menu-click="dialogVisible = true"
   >
     <modal
       v-model:visible="dialogVisible"
       icon="signature"
-      title="插入电子签名"
+      :header="t('tools.signature.title')"
       width="642px"
       @confirm="setSignature"
       @close="dialogVisible = false"
     >
       <div class="signature-toolbar">
-        <menus-button text="清空画布" @menu-click="reset">
+        <menus-button :text="t('tools.signature.clear')" @menu-click="reset">
           <icon name="clear-format" />
         </menus-button>
         <menus-toolbar-base-color
@@ -23,7 +23,7 @@
           @change="changeLineColor"
         />
         <menus-button
-          text="画笔粗细"
+          :text="t('tools.signature.lineWidth')"
           menu-type="dropdown"
           :select-options="lineWidthOptions"
           @change="changeLineWidth"
@@ -31,7 +31,7 @@
           <icon name="highlight" />
         </menus-button>
       </div>
-      <div class="signature-container" data-tip="请在当前区域签名">
+      <div class="signature-container" :data-tip="t('tools.signature.tip')">
         <signature
           ref="signatureRef"
           :line-color="lineColor"
@@ -90,14 +90,16 @@ const setSignature = async () => {
       .run()
     dialogVisible = false
   } catch {
-    useMessage('error', '没有检测到您的签名')
+    useMessage('error', t('tools.signature.notEmpty'))
   }
 }
 
 watch(
   () => dialogVisible,
   (val) => {
-    if (!val) reset()
+    if (!val) {
+      reset()
+    }
   },
 )
 </script>
@@ -129,7 +131,6 @@ watch(
     justify-content: center;
     z-index: 1;
     color: var(--umo-text-color-light);
-    letter-spacing: 5px;
     opacity: 0.5;
     pointer-events: none;
   }

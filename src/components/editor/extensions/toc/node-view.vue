@@ -1,7 +1,7 @@
 <template>
   <node-view-wrapper class="node-view toc-node-view">
     <div class="node-container hover-shadow select-outline toc">
-      <p class="toc-head">页面大纲</p>
+      <p class="toc-head" v-text="t('toc.title')"></p>
       <ul v-if="tableOfContents && tableOfContents.length > 0" class="toc-body">
         <li
           class="toc-item"
@@ -14,7 +14,7 @@
           }}</a>
         </li>
       </ul>
-      <div v-else class="toc-empty">当前暂无大纲</div>
+      <div v-else class="toc-empty" v-text="t('toc.empty')"></div>
     </div>
   </node-view-wrapper>
 </template>

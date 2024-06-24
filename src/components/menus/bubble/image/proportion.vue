@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="equal-proportion"
-    text="锁定长宽比"
+    :text="t('bubbleMenu.image.proportion')"
     :menu-active="editor?.getAttributes('image')?.equalProportion"
     @menu-click="toggleEqualProportion"
   />

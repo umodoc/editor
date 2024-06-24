@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="image"
-    text="图片"
+    :text="t('insert.image')"
     huge
     @menu-click="editor.chain().focus().selectFiles('image').run()"
   />

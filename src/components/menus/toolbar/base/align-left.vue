@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="align-left"
-    text="左对齐"
+    :text="t('base.align.left')"
     shortcut="Ctrl+Shift+L"
     hide-text
     :menu-active="

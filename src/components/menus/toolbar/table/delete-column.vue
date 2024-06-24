@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="table-delete-column"
-    text="删除列"
+    :text="t('table.deleteColumn.text')"
     :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().deleteColumn()"
     @menu-click="deleteColumn"
@@ -15,15 +15,15 @@ const $toolbar = useState('toolbar')
 const deleteColumn = () => {
   const dialog = useConfirm({
     theme: 'danger',
-    header: '信息提醒',
-    body: '此操作会删除当前选中的表格列，是否继续？',
+    header: t('table.deleteColumn.title'),
+    body: t('table.deleteColumn.message'),
     confirmBtn: {
       theme: 'danger',
-      content: '删除',
+      content: t('table.deleteColumn.delete'),
     },
     onConfirm() {
       editor.value?.chain().focus().deleteColumn().run()
-      useMessage('success', '删除成功')
+      useMessage('success', t('table.deleteColumn.success'))
       dialog.destroy()
     },
   })

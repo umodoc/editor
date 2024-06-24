@@ -1,5 +1,10 @@
 <template>
-  <menus-button ico="text" text="文本文档" huge @menu-click="saveTextFile" />
+  <menus-button
+    ico="text"
+    :text="t('export.text')"
+    huge
+    @menu-click="saveTextFile"
+  />
 </template>
 
 <script setup>
@@ -8,10 +13,15 @@ import { saveAs } from 'file-saver'
 const { options, editor } = useStore()
 
 const saveTextFile = () => {
-  if (!editor.value) return
+  if (!editor.value) {
+    return
+  }
   const blob = new Blob([editor.value?.getText()], {
     type: 'text/plain;charset=utf-8',
   })
-  saveAs(blob, `${options.value.document.title}.txt`)
+  const { title } = options.value.document
+  const filename =
+    title !== '' ? options.value.document.title : t('document.untitled')
+  saveAs(blob, `${filename}.text`)
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <menus-button
-    text="居中对齐"
+    :text="t('base.align.center')"
     ico="align-center"
     shortcut="Ctrl+Shift+E"
     hide-text

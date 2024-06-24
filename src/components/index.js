@@ -3,9 +3,11 @@ import UmoEditor from './index.vue'
 
 const useUmoEditor = {
   install: (app, options) => {
+    // 组件配置
     const { setOptions } = useStore()
     setOptions(options)
-    // app.config.warnHandler = () => null
+
+    // 使用组件
     app.component(UmoEditor.name, UmoEditor)
   },
 }

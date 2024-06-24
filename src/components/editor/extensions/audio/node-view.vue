@@ -16,7 +16,7 @@
 
 <script setup>
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
-import { mediaPlayer } from '@/utils/media-player'
+import { mediaPlayer } from '@/utils/player'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const { options } = useStore()
@@ -40,7 +40,9 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
-  if (player) player?.destroy()
+  if (player) {
+    player?.destroy()
+  }
 })
 
 onClickOutside(containerRef, () => (selected = false))

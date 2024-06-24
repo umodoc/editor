@@ -1,8 +1,8 @@
 <template>
   <menus-button
     ico="table-cells-background"
-    text="背景颜色"
-    tooltip="单元格背景颜色"
+    :text="t('table.cellBgColor.text')"
+    :tooltip="t('table.cellBgColor.tip')"
     menu-type="popup"
     huge
     :disabled="!editor?.can().setCellAttribute('backgroundColor')"

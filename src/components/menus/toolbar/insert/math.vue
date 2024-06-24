@@ -1,7 +1,7 @@
 <template>
   <menus-button
-    ico="mathematics"
-    text="数学公式"
+    ico="math"
+    :text="t('insert.math')"
     huge
     @menu-click="editor.chain().focus().insertContent('$\\LaTeX$').run()"
   />

@@ -1,8 +1,8 @@
 <template>
   <menus-button
     ico="table-cells-align"
-    text="对齐方式"
-    tooltip="单元格对齐方式"
+    :text="t('table.cellAlign.text')"
+    :tooltip="t('table.cellAlign.tip')"
     menu-type="dropdown"
     huge
     :select-options="alignments"
@@ -15,18 +15,18 @@
 const { editor } = useStore()
 
 const alignments = [
-  { content: '靠上左对齐', value: 'left-top' },
-  { content: '靠上居中对齐', value: 'center-top' },
-  { content: '靠上右对齐', value: 'right-top' },
-  { content: '靠上两端对齐', value: 'justify-top', divider: true },
-  { content: '中间左对齐', value: 'left-middle' },
-  { content: '中间对齐', value: 'center-middle' },
-  { content: '中间右对齐', value: 'right-middle' },
-  { content: '中间两端对齐', value: 'justify-middle', divider: true },
-  { content: '靠下左对齐', value: 'left-bottom' },
-  { content: '靠下居中对齐', value: 'center-bottom' },
-  { content: '靠下右对齐', value: 'right-bottom' },
-  { content: '靠下两端对齐', value: 'justify-bottom' },
+  { content: t('table.cellAlign.lt'), value: 'left-top' },
+  { content: t('table.cellAlign.ct'), value: 'center-top' },
+  { content: t('table.cellAlign.rt'), value: 'right-top' },
+  { content: t('table.cellAlign.jt'), value: 'justify-top', divider: true },
+  { content: t('table.cellAlign.lm'), value: 'left-middle' },
+  { content: t('table.cellAlign.cm'), value: 'center-middle' },
+  { content: t('table.cellAlign.rm'), value: 'right-middle' },
+  { content: t('table.cellAlign.jm'), value: 'justify-middle', divider: true },
+  { content: t('table.cellAlign.lb'), value: 'left-bottom' },
+  { content: t('table.cellAlign.cb'), value: 'center-bottom' },
+  { content: t('table.cellAlign.rb'), value: 'right-bottom' },
+  { content: t('table.cellAlign.jb'), value: 'justify-bottom' },
 ]
 
 const setCellsAlign = ({ value }) => {

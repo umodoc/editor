@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="code"
-    text="代码"
+    :text="t('base.code')"
     shortcut="Ctrl+E"
     hide-text
     :menu-active="editor?.isActive('code')"

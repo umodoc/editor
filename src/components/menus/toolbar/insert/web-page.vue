@@ -1,27 +1,27 @@
 <template>
   <menus-button
     ico="web-page"
-    text="网页"
+    :text="t('insert.web.text')"
     huge
     @menu-click="dialogVisible = true"
   >
     <modal
       :visible="dialogVisible"
       icon="web-page"
-      title="插入网页"
+      :header="t('insert.web.title')"
       width="480px"
-      confirmBtn="插入"
+      :confirmBtn="t('insert.web.insert')"
       @confirm="insertWebPage"
       @close="dialogVisible = false"
     >
       <div class="web-page-container">
-        <div class="web-page-tip">某些网页可能不支持嵌入。</div>
+        <div class="web-page-tip" v-text="t('insert.web.tip')"></div>
         <t-input
           v-model.trim="url"
           :status="error ? 'error' : 'default'"
           type="url"
           clearable
-          placeholder="请输入网页地址，以 http:// 或 https:// 开头"
+          :placeholder="t('insert.web.placeholder')"
         />
       </div>
     </modal>
@@ -36,7 +36,9 @@ let url = $ref('')
 let error = $ref(false)
 
 const insertWebPage = () => {
-  if (!editor.value) return
+  if (!editor.value) {
+    return
+  }
   if (
     url === '' ||
     (!url.startsWith('http://') && !url.startsWith('https://'))

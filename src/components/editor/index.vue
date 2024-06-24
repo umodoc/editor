@@ -63,7 +63,7 @@ import Audio from './extensions/audio'
 import File from './extensions/file'
 import CodeBlock from './extensions/code-block'
 import TextBox from './extensions/text-box'
-import HorizontalRule from './extensions/horizontal-rule'
+import hr from './extensions/hr'
 import Iframe from './extensions/iframe'
 import Mathematics from '@tiptap-pro/extension-mathematics'
 
@@ -93,7 +93,7 @@ import CharacterCount from '@tiptap/extension-character-count'
 import FileHandler from './extensions/file-handler'
 import Dropcursor from '@tiptap/extension-dropcursor'
 
-import generateId from '@/utils/generate-id'
+import shortId from '@/utils/short-id'
 
 const {
   container,
@@ -134,7 +134,7 @@ const editorInstance = new Editor({
     }),
     Placeholder.configure({
       considerAnyAsEmpty: true,
-      placeholder: options.value.document.placeholder,
+      placeholder: l(options.value.document.placeholder),
     }),
     Focus.configure({
       className: 'node-focused',
@@ -178,7 +178,7 @@ const editorInstance = new Editor({
     File,
     TextBox,
     CodeBlock,
-    HorizontalRule,
+    hr,
     Iframe,
     Mathematics,
 
@@ -205,7 +205,7 @@ const editorInstance = new Editor({
       getIndex: getHierarchicalIndexes,
       onUpdate: (content) => (tableOfContents.value = content),
       scrollParent: document.querySelector(`${container} .toc-content`),
-      getId: () => generateId(6),
+      getId: () => shortId(6),
     }),
     Typography.configure(options.value.document.typographyRules),
     CharacterCount.configure({

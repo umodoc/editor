@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="select-all"
-    text="全选"
+    :text="t('base.selectAll')"
     shortcut="Ctrl+A"
     hide-text
     @menu-click="editor?.chain().focus().selectAll().run()"

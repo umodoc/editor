@@ -1,14 +1,14 @@
 <template>
   <menus-button
     :ico="content ? 'edit' : 'qrcode'"
-    :text="content ? '编辑' : '二维码'"
+    :text="content ? t('tools.qrcode.edit') : t('tools.qrcode.text')"
     huge
     @menu-click="menuClick"
   >
     <modal
       :visible="dialogVisible"
       icon="qrcode"
-      :title="content ? '编辑二维码' : '插入二维码'"
+      :header="content ? t('tools.qrcode.edit') : t('tools.qrcode.text')"
       width="695px"
       @confirm="setQrcode"
       @close="dialogVisible = false"
@@ -17,13 +17,16 @@
         <div class="qrcode-toolbar">
           <menus-button
             style="width: 126px"
-            text="二维码容错能力"
+            :text="t('tools.qrcode.level')"
             :select-options="levels"
             menu-type="select"
             :value="config.ecl"
             @menu-click="(value) => (config.ecl = value)"
           ></menus-button>
-          <menus-button menu-type="input" tooltip="二维码四周留白大小">
+          <menus-button
+            menu-type="input"
+            :tooltip="t('tools.qrcode.paddingTip')"
+          >
             <t-input-number
               v-model="config.padding"
               size="small"
@@ -33,10 +36,12 @@
               :allow-input-over-limit="false"
               placeholder=""
             >
-              <template #label><span>四周留白：</span></template>
+              <template #label
+                ><span v-text="t('tools.qrcode.padding')"></span
+              ></template>
             </t-input-number>
           </menus-button>
-          <menus-button menu-type="input" tooltip="二维码的宽度和高度">
+          <menus-button menu-type="input" :tooltip="t('tools.qrcode.widthTip')">
             <t-input-number
               v-model="config.width"
               size="small"
@@ -46,18 +51,20 @@
               :allow-input-over-limit="false"
               placeholder=""
             >
-              <template #label><span>宽高度：</span></template>
+              <template #label
+                ><span v-text="t('tools.qrcode.width')"></span
+              ></template>
             </t-input-number>
           </menus-button>
           <t-divider layout="vertical" />
           <menus-toolbar-base-color
-            text="二维码颜色"
+            :text="t('tools.qrcode.color')"
             :default-color="config.color"
             modeless
             @change="(value) => (config.color = value)"
           />
           <menus-toolbar-base-background-color
-            text="二维码背景颜色"
+            :text="t('tools.qrcode.bgColor')"
             :default-color="config.background"
             modeless
             @change="(value) => (config.background = value)"
@@ -70,20 +77,23 @@
             show-limit-number
             autofocus
             autosize
-            placeholder="请输入要转化成二维码的内容"
+            :placeholder="t('tools.qrcode.placeholder')"
           >
           </t-textarea>
           <div
             v-if="renderError && config.content !== ''"
             class="t-input__tips t-tips t-is-error"
-          >
-            二维码生成错误。
-          </div>
+            v-text="t('tools.qrcode.renderError')"
+          ></div>
         </div>
         <div class="qrcode-render">
-          <div class="qrcode-title">预览</div>
+          <div class="qrcode-title" v-text="t('tools.qrcode.preview')"></div>
           <div class="qrcode-svg narrow-scrollbar">
-            <div v-if="!svgCode" class="qrcode-empty">当前无预览内容</div>
+            <div
+              v-if="!svgCode"
+              class="qrcode-empty"
+              v-text="t('tools.qrcode.notEmpty')"
+            ></div>
             <div class="svg" v-else v-html="svgCode"></div>
           </div>
         </div>
@@ -111,10 +121,10 @@ const menuClick = async () => {
 }
 
 const levels = [
-  { label: '低', value: 'L' },
-  { label: '中', value: 'M' },
-  { label: '高', value: 'Q' },
-  { label: '最高', value: 'H' },
+  { label: t('tools.qrcode.levelL'), value: 'L' },
+  { label: t('tools.qrcode.levelM'), value: 'M' },
+  { label: t('tools.qrcode.levelQ'), value: 'Q' },
+  { label: t('tools.qrcode.levelH'), value: 'H' },
 ]
 const defaultConfig = {
   ecl: 'M',
@@ -171,11 +181,11 @@ watch(
 // 创建或更新条形码
 const setQrcode = () => {
   if (renderError || !svgCode) {
-    useMessage('error', '条形码生成失败')
+    useMessage('error', t('tools.qrcode.renderError'))
     return
   }
   if (config.content === '') {
-    useMessage('error', '条形码内容不能为空')
+    useMessage('error', t('tools.qrcode.notEmpty'))
     return
   }
   const { width, height } = config

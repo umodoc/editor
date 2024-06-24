@@ -99,6 +99,7 @@ export default defineConfig({
         'qrcode-svg',
         'simple-code-editor',
         'svg64',
+        'vue-i18n',
         'vue-esign',
       ],
     },

@@ -1,5 +1,9 @@
 <template>
-  <menus-button ico="copy" text="复制代码" @menu-click="copyCode" />
+  <menus-button
+    ico="copy"
+    :text="t('bubbleMenu.code.copy.text')"
+    @menu-click="copyCode"
+  />
 </template>
 
 <script setup>
@@ -11,6 +15,6 @@ const copyCode = () => {
     source: ref(codeBlock.props.node.attrs.code),
   })
   copy()
-  useMessage('success', '代码已复制到剪切板')
+  useMessage('success', t('bubbleMenu.code.copy.success'))
 }
 </script>

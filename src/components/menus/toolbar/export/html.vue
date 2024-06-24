@@ -8,10 +8,15 @@ import { saveAs } from 'file-saver'
 const { options, editor } = useStore()
 
 const saveHtmlFile = () => {
-  if (!editor.value) return
+  if (!editor.value) {
+    return
+  }
   const blob = new Blob([editor.value?.getHTML()], {
     type: 'text/html;charset=utf-8',
   })
-  saveAs(blob, `${options.value.document.title}.html`)
+  const { title } = options.value.document
+  const filename =
+    title !== '' ? options.value.document.title : t('document.untitled')
+  saveAs(blob, `${filename}.html`)
 }
 </script>

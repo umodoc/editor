@@ -47,7 +47,12 @@
         }
         // background: var(--umo-content-node-selected-background);
         &.page-divider {
-          color: var(--umo-primary-color) !important;
+          border-radius: var(--umo-radius);
+          background: var(--umo-content-table-thead-background);
+          margin-left: -8px;
+          margin-right: -8px;
+          padding-left: 8px;
+          padding-right: 8px;
         }
         &.page-break {
           background-color: var(--umo-primary-color);
@@ -292,7 +297,7 @@
     margin-bottom: 30px;
     position: relative;
     &::after {
-      content: '分页符';
+      content: attr(data-content);
       font-size: 10px;
       border: solid 1px var(--umo-content-node-border);
       padding: 1px 8px;

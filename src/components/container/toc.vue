@@ -1,15 +1,17 @@
 <template>
   <div class="toc-container">
     <div class="toc-title">
-      <icon class="icon-toc" name="toc" />页面大纲
+      <icon class="icon-toc" name="toc" /> {{ t('toc.title') }}
       <div class="umo-dialog__close" @click="$emit('close')">
         <icon name="close" />
       </div>
     </div>
     <div class="toc-content umo-scrollbar">
-      <div v-if="tableOfContents.length === 0" class="toc-empty">
-        当前页面无大纲
-      </div>
+      <div
+        v-if="tableOfContents.length === 0"
+        class="toc-empty"
+        v-text="t('toc.empty')"
+      ></div>
       <div
         v-else
         class="toc-item"
@@ -37,7 +39,9 @@ const { editor, tableOfContents } = useStore()
 let activeHeading = $ref(null)
 const headingClick = (heading, index) => {
   activeHeading = index
-  if (!editor.value) return
+  if (!editor.value) {
+    return
+  }
   const element = editor.value.view.dom.querySelector(
     `[data-toc-id="${heading.id}"`,
   )

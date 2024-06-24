@@ -1,7 +1,7 @@
 <template>
   <menus-button
     ico="page-background"
-    text="页面背景"
+    :text="t('page.bg.text')"
     huge
     menu-type="popup"
     :popup-visible="popupVisible"
@@ -29,7 +29,7 @@
         <div class="background-more" :class="{ active: moreColorPicker }">
           <div class="background-more-menu">
             <icon name="palette-color" />
-            <span>自定义页面背景</span>
+            <span v-text="t('page.bg.custom')"></span>
           </div>
           <div class="background-more-arrow">
             <icon name="arrow-down" />
@@ -54,12 +54,12 @@ let { popupVisible, togglePopup } = usePopup()
 const { container, page } = useStore()
 
 const backgrounds = [
-  { label: '默认', value: page.value.defaultBackground },
-  { label: '护眼绿', value: 'rgb(233, 246, 227)' },
-  { label: '淡雅黄', value: 'rgb(252, 242, 224)' },
-  { label: '云水蓝', value: 'rgb(237, 244, 255)' },
-  { label: '天空蓝', value: 'rgb(153, 205, 250)' },
-  { label: '暗夜黑', value: 'rgb(145, 145, 145)' },
+  { label: t('page.bg.default'), value: page.value.defaultBackground },
+  { label: t('page.bg.color1'), value: 'rgb(233, 246, 227)' },
+  { label: t('page.bg.color2'), value: 'rgb(252, 242, 224)' },
+  { label: t('page.bg.color3'), value: 'rgb(237, 244, 255)' },
+  { label: t('page.bg.color4'), value: 'rgb(153, 205, 250)' },
+  { label: t('page.bg.color5'), value: 'rgb(145, 145, 145)' },
 ]
 
 // 更多颜色
@@ -85,9 +85,12 @@ const backgroundChange = (color) => {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 10px;
     color: var(--umo-text-color-light);
+    text-align: center;
     cursor: pointer;
+    white-space: pre;
+    line-height: 1.5;
     &:hover {
       border-color: rgba(0, 0, 0, 0.2);
       transform: scale(1.02);
