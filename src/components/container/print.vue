@@ -226,7 +226,7 @@ const getIframeCode = () => {
 
   return `
     <!DOCTYPE html>
-    <html lang="zh-CN">
+    <html lang="zh-CN" theme-mode="${options.value.theme}">
     <head>
       <title>${$document.value.title}</title>
       <meta charset="UTF-8">

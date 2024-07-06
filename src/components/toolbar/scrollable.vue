@@ -81,7 +81,11 @@ defineExpose({
       &::before {
         display: block;
         content: '';
-        background: linear-gradient(to left, transparent, #fff);
+        background: linear-gradient(
+          to left,
+          transparent,
+          var(--umo-color-white)
+        );
         position: absolute;
         left: 22px;
         top: 0;
@@ -98,7 +102,11 @@ defineExpose({
       &::before {
         display: block;
         content: '';
-        background: linear-gradient(to right, transparent, #fff);
+        background: linear-gradient(
+          to right,
+          transparent,
+          var(--umo-color-white)
+        );
         position: absolute;
         right: 22px;
         top: 0;

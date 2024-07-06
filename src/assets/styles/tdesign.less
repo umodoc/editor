@@ -103,7 +103,6 @@
       .umo-dialog,
       .t-dialog {
         &__mask {
-          background: rgba(255, 255, 255, 0.45);
           backdrop-filter: blur(5px);
         }
       }
@@ -141,9 +140,9 @@
     }
   }
   &__close {
-    color: rgba(0, 0, 0, 0.3);
+    color: var(--umo-text-color-light);
     &:hover {
-      color: rgba(0, 0, 0, 0.6);
+      color: var(--umo-text-color);
     }
   }
   &__body {
@@ -226,7 +225,7 @@
 }
 .umo-image-viewer__modal {
   &-mask {
-    background-color: rgba(255, 255, 255, 0.95) !important;
+    background-color: transparent !important;
   }
   &-header {
     border-bottom: solid 1px var(--umo-border-color-light);

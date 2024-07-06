@@ -80,7 +80,7 @@ export default defineConfig({
         /prismjs\/.*/,
         /nzh\/.*/,
         'vue',
-        '@humanwhocodes/object-schema',
+        '@eslint/object-schema',
         '@imgly/background-removal',
         '@sereneinserenade/tiptap-search-and-replace',
         '@vue-monaco/editor',

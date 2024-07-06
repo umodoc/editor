@@ -1,9 +1,10 @@
-import { ObjectSchema } from '@humanwhocodes/object-schema'
+import { ObjectSchema } from '@eslint/object-schema'
 
 // 默认配置
 const defaultOptions = {
   editorKey: 'default',
   locale: 'zh-CN',
+  theme: 'light',
   height: '100%',
   dicts: {
     fonts: [
@@ -277,6 +278,16 @@ const ojbectSchema = new ObjectSchema({
     validate(value) {
       if (value && !['en-US', 'zh-CN'].includes(value)) {
         throw new Error('Key "locale": must be one of "en-US" or "zh-CN".')
+      }
+    },
+  },
+  theme: {
+    merge: 'replace',
+    validate(value) {
+      if (value && !['dark', 'light', 'auto'].includes(value)) {
+        throw new Error(
+          'Key "locale": must be one of "dark", "light" or "auto".',
+        )
       }
     },
   },

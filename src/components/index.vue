@@ -61,6 +61,7 @@ const emits = defineEmits([
   'changed:pageZoom',
   'changed:pageWatermark',
   'changed:locale',
+  'changed:theme',
   'print',
   'focus',
   'blur',
@@ -103,6 +104,35 @@ const localeConfig = $ref({
   'zh-CN': cnConfig,
   'en-US': enConfig,
 })
+
+// 主题
+const setTheme = (theme) => {
+  if (!['light', 'dark', 'auto'].includes(theme)) {
+    throw new Error('"parmas" must be one of "light", "dark" or "auto".')
+  }
+  if (theme !== 'auto') {
+    document.querySelector('html').setAttribute('theme-mode', theme)
+    emits('changed:theme', theme)
+    return
+  }
+  // 检测用户偏好的主题
+  const darkScheme = '(prefers-color-scheme: dark)'
+  const prefersDarkScheme = window.matchMedia(darkScheme).matches
+  setTheme(prefersDarkScheme ? 'dark' : 'light')
+  // 添加事件监听器，监听主题变化
+  window.matchMedia(darkScheme).addEventListener('change', (e) => {
+    setTheme(e.matches ? 'dark' : 'light')
+  })
+}
+onMounted(() => {
+  setTheme(options.value.theme)
+})
+watch(
+  () => options.value.theme,
+  (theme) => {
+    setTheme(theme)
+  },
+)
 
 // 对外暴露的编辑器方法
 const setToolbar = (parmas) => {
@@ -437,6 +467,7 @@ defineExpose({
   setDocument,
   setContent,
   setLocale,
+  setTheme,
   getContent,
   getImage,
   getText,

@@ -37,7 +37,6 @@ class DiagramEditor {
     libraries: 1,
     configure: 1,
     noSaveBtn: 1,
-    dark: 1,
   }
   xml = null
   format = 'xmlsvg'

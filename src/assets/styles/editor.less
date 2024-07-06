@@ -3,6 +3,7 @@
 .editor-container {
   flex: 1;
   width: 100%;
+  color: var(--umo-content-text-color);
   &.show-line-number {
     .umo-editor {
       > *:not([data-line-number='false']):not(div) {
@@ -41,14 +42,14 @@
           right: -8px;
           bottom: -5px;
           border-radius: var(--umo-radius);
-          background: var(--umo-content-table-thead-background);
+          background: var(--umo-content-node-selected-background);
           pointer-events: none;
           z-index: -1;
         }
         // background: var(--umo-content-node-selected-background);
         &.page-divider {
           border-radius: var(--umo-radius);
-          background: var(--umo-content-table-thead-background);
+          background: var(--umo-content-node-selected-background);
           margin-left: -8px;
           margin-right: -8px;
           padding-left: 8px;
@@ -118,7 +119,7 @@
   blockquote {
     border-left: 3px solid var(--umo-primary-color);
     padding: 0.5em 1em;
-    color: var(--umo-text-color-light);
+    color: #777;
     background-color: rgba(0, 0, 0, 0.03);
   }
   .indent-1 {
@@ -348,7 +349,7 @@
   }
   .Tiptap-mathematics {
     &-editor {
-      background: var(--umo-button-hover-background);
+      background: var(--umo-content-node-selected-background);
       font-family: monospace;
       padding: 0.2em 0.5em;
       // outline: solid 1px var(--umo-primary-color);
@@ -359,7 +360,7 @@
       transition: background 0.2s;
 
       &:hover {
-        background: var(--umo-button-hover-background);
+        background: var(--umo-content-node-selected-background);
       }
     }
     &-editor,

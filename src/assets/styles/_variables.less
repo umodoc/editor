@@ -1,6 +1,6 @@
 :root {
   // 主题色
-  --umo-primary-color: #015beb;
+  --umo-primary-color: #3480f9;
   --umo-color-white: #fff;
   --umo-color-black: #000;
   // 警示颜色
@@ -38,6 +38,7 @@
 
   // 编辑器
   --umo-content-placeholder-color: #999;
+  --umo-content-text-color: var(--umo-text-color);
   --umo-content-node-border: #e7e7e7;
   --umo-content-node-radius: var(--umo-radius);
   --umo-content-node-bottom: 0.75em;
@@ -58,4 +59,35 @@
   --umo-scrollbar-size: 4px;
   --umo-scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
   --umo-scrollbar-thumb-hover-color: rgba(0, 0, 0, 0.35);
+}
+
+[theme-mode='dark'] {
+  // 主题色
+  --umo-color-white: #17171a;
+  --umo-color-black: #fff;
+
+  // 警示颜色
+  --umo-warning-color: rgb(207, 110, 45);
+  --umo-error-color: rgb(198, 71, 81);
+
+  // 背景颜色
+  --umo-container-background: #2a2b2d;
+  --umo-button-hover-background: #2c2c2c;
+
+  // 字体相关
+  --umo-text-color: #ddd;
+  --umo-text-color-light: #bbb;
+  --umo-text-color-disabled: #999;
+
+  // 边框
+  --umo-border-color: rgba(255, 255, 255, 0.15);
+  --umo-border-color-dark: rgba(255, 255, 255, 0.2);
+  --umo-border-color-light: rgba(255, 255, 255, 0.08);
+
+  // 编辑器
+  --umo-content-text-color: #000;
+
+  // 滚动条
+  --umo-scrollbar-thumb-color: rgba(255, 255, 255, 0.3);
+  --umo-scrollbar-thumb-hover-color: rgba(255, 255, 255, 0.45);
 }

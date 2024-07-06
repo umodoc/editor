@@ -31,6 +31,7 @@
       v-model="imagePreviewVisible"
       :images="previewImages"
       :index="currentImageIndex"
+      :attach="container"
       @close="imagePreview = false"
     />
     <t-back-top

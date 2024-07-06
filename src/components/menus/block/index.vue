@@ -16,7 +16,12 @@
       class="block-menu-hander"
       :style="`transform: translate(-38px, ${menuScrollTop}px);`"
     >
-      <menus-button :menu-active="menuVisible" ico="block-menu" hide-text />
+      <menus-button
+        class="block-menu-button"
+        :menu-active="menuVisible"
+        ico="block-menu"
+        hide-text
+      />
     </div>
     <t-dropdown-menu>
       <t-dropdown-item class="block-menu-group-name" disabled>
@@ -315,8 +320,22 @@ const deleteNode = () => {
 <style lang="less">
 .block-menu-hander {
   position: absolute;
-  .button-content {
-    color: var(--umo-text-color-light);
+  .menu-button {
+    background-color: transparent;
+    .button-content {
+      color: rgba(0, 0, 0, 0.5);
+    }
+    &:not(.active):hover {
+      background-color: var(--umo-content-node-selected-background);
+    }
+    &.active {
+      &:hover {
+        opacity: 0.8;
+      }
+      .button-content {
+        color: var(--umo-text-color-light);
+      }
+    }
   }
 }
 .block-menu-dropdown {
