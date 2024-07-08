@@ -1,5 +1,5 @@
 <p style="text-align: center; margin: 2rem 0">
-<a href="https://umodoc.com" target="_blank"><img src="https://unpkg.com/@umoteam/editor-external@latest/static/logo.svg" alt="umodoc.com" width="360" /></a>
+<a href="https://umodoc.com" target="_blank"><img src="https://unpkg.com/@umoteam/editor-external@latest/static/logo.svg" alt="umodoc.com" width="280" /></a>
 </p>
 
 <p style="text-align: center;">
