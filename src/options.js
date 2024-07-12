@@ -230,7 +230,9 @@ const defaultOptions = {
     throw new Error('Key "onSave": Please set the save method')
   },
   async onFileUpload(file) {
-    if (!file) throw new Error('File not found')
+    if (!file) {
+      throw new Error('File not found')
+    }
     throw new Error('Key "onFileUpload": Please set the upload method')
   },
   onFileDelete(id, src) {
