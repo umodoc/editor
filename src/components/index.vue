@@ -432,7 +432,8 @@ const print = () => {
     printing.value = true
   }
 }
-const focus = (position = 'start') => editor.value.commands.focus(position)
+const focus = (position = 'start', options = { scrollIntoView: true }) =>
+  editor.value.commands.focus(position, options)
 const blur = () => editor.value.chain().blur().run()
 const reset = (silent) => {
   const resetFn = () => {
