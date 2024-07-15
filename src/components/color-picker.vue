@@ -86,7 +86,7 @@ const props = defineProps({
 })
 const emits = defineEmits(['change'])
 
-const { container, options } = useStore()
+const { editor, container, options } = useStore()
 const $recent = useState('recent')
 // prettier-ignore
 const standardColors = ['#B12318', '#EB3323', '#F6C143', '#FFFE55', '#A0CD63', '#4FAD5B', '#4CAFEA', '#2D70BA', '#06215C', '#68389B']
@@ -110,6 +110,12 @@ const colorChange = (color, ctx) => {
   }
   emits('change', color)
 }
+watch(
+  () => moreColorPicker,
+  () => {
+    editor.value.commands.focus()
+  },
+)
 
 // 选择颜色
 const selectColor = (color) => {
