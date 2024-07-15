@@ -307,11 +307,22 @@ const setDocument = (parmas) => {
     options.value.document.autoSave.interval = parmas.autoSave.interval
   }
 }
-const setContent = (content) => {
+const setContent = (
+  content,
+  options = {
+    emitUpdate: false,
+    focusPosition: 'start',
+    focusOptions: { scrollIntoView: true },
+  },
+) => {
   if (!editor.value) {
     throw new Error('editor is not ready!')
   }
-  editor.value.chain().setContent(content).focus().run()
+  editor.value
+    .chain()
+    .setContent(content, options.emitUpdate)
+    .focus(options.focusPosition, options.focusOptions)
+    .run()
 }
 const setLocale = (parmas) => {
   if (!['zh-CN', 'en-US'].includes(parmas)) {
