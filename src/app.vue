@@ -1,7 +1,9 @@
 <template>
-  <div class="box">
+  <div class="box" v-if="show">
     <umo-editor ref="editorRef" v-bind="options" @save="onSave" />
   </div>
+  <button @click="xh">销毁</button>
+  <button @click="cz">重载</button>
 </template>
 
 <script setup>
@@ -67,6 +69,14 @@ const options = $ref({
     }
   },
 })
+
+let show = $ref(true)
+const xh = () => {
+  show = false
+}
+const cz = () => {
+  show = true
+}
 </script>
 
 <style>

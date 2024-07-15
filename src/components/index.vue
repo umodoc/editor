@@ -90,6 +90,7 @@ watch(
   () => setOptions(props),
   { deep: true },
 )
+editorDestroyed.value = false
 
 // i18n
 const { appContext } = getCurrentInstance()
@@ -469,6 +470,10 @@ const reset = (silent) => {
     },
   })
 }
+const destroy = () => {
+  editor.value.destroy()
+  resetStore()
+}
 
 defineExpose({
   getOptions: () => options.value,
@@ -500,10 +505,7 @@ defineExpose({
   useAlert,
   useConfirm,
   useMessage,
-  destroy: () => {
-    resetStore()
-    editor.value.destroy()
-  },
+  destroy,
 })
 
 // 定时保存
@@ -541,6 +543,7 @@ watch(
 )
 onBeforeUnmount(() => {
   clearAutoSaveInterval()
+  destroy()
 })
 
 // 编辑器事件
