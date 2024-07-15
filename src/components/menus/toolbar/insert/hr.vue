@@ -18,7 +18,7 @@
           :key="item.value"
           :value="item.value"
           :title="item.label"
-          @click="sethr(item)"
+          @click="setHr(item)"
         >
           <hr
             class="umo-page-divider"
@@ -75,11 +75,11 @@ const colorChange = (color) => {
   colorPickerVisible = false
 }
 
-const sethr = ({ value }) => {
+const setHr = ({ value }) => {
   if (!value || !editor.value) {
     return
   }
-  editor.value.chain().focus().sethr({ type: value, color: currentColor }).run()
+  editor.value.chain().focus().setHr({ type: value, color: currentColor }).run()
   popupVisible.value = false
 }
 </script>

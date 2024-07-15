@@ -39,7 +39,7 @@ export default hr.extend({
   },
   addCommands() {
     return {
-      sethr:
+      setHr:
         ({ type, color }) =>
         ({ chain, state }) => {
           const { $to: $originTo } = state.selection

@@ -80,7 +80,7 @@
               :text="t('insert.hr.text')"
               :tooltip="false"
               @menu-click="
-                editor.chain().focus().sethr({ type: 'signle' }).run()
+                editor.chain().focus().setHr({ type: 'signle' }).run()
               "
             />
           </t-dropdown-item>
