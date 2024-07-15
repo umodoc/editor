@@ -45,14 +45,12 @@ const headingClick = (heading, index) => {
   const element = editor.value.view.dom.querySelector(
     `[data-toc-id="${heading.id}"`,
   )
+  element.scrollIntoView()
   const pos = editor.value.view.posAtDOM(element, 0)
-
   const tr = editor.value.view.state.tr
   tr.setSelection(new TextSelection(tr.doc.resolve(pos)))
   editor.value.view.dispatch(tr)
-
   editor.value.view.focus()
-  editor.value.commands.scrollIntoView()
 }
 </script>
 
