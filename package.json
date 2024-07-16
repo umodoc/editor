@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@eslint/object-schema": "^2.1.4",
-    "@imgly/background-removal": "1.4.5",
+    "@imgly/background-removal": "1.5.3",
     "@sereneinserenade/tiptap-search-and-replace": "^0.1.1",
     "@tiptap-pro/extension-invisible-characters": "^2.8.9",
     "@tiptap-pro/extension-mathematics": "^2.8.9",

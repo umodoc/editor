@@ -6,7 +6,7 @@
         : t('bubbleMenu.image.removeBg')
     "
     :disabled="converting"
-    @menu-click="removeBackground"
+    @menu-click="removeBg"
   >
     <icon v-if="!converting" name="image-remove-background" />
     <icon v-else class="loading" name="loading" />
@@ -14,17 +14,17 @@
 </template>
 
 <script setup>
-import imglyRemoveBackground from '@imgly/background-removal'
+import { removeBackground } from '@imgly/background-removal'
 import shortId from '@/utils/short-id'
 
 const { options, editor } = useStore()
 
 let converting = $ref(false)
-const removeBackground = async () => {
+const removeBg = async () => {
   const image = editor.value.commands.getSelectionNode()
   const { src } = editor.value?.getAttributes('image')
   converting = true
-  const blob = await imglyRemoveBackground(src, {
+  const blob = await removeBackground(src, {
     publicPath: `${options.value.cdnUrl}/libs/imgly/background-removal-data/`,
   })
   const file = new File([blob], `${shortId(10)}.png`, { type: 'image/png' })

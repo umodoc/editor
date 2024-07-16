@@ -1,6 +1,6 @@
 <template>
   <menus-button
-    v-if="imglyRemoveBackground"
+    v-if="removeBackground"
     ico="seal"
     :text="t('tools.seal.text')"
     huge
@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-import imglyRemoveBackground from '@imgly/background-removal'
+import { removeBackground } from '@imgly/background-removal'
 
 let dialogVisible = $ref(false)
 const { options, editor } = useStore()
@@ -58,7 +58,7 @@ const selectImage = async () => {
     try {
       sealImg = null
       converting = t('tools.seal.converting1')
-      const img = await imglyRemoveBackground(file, {
+      const img = await removeBackground(file, {
         publicPath: `${options.value.cdnUrl}/libs/imgly/background-removal-data/`,
         progress: (key, current, total) => {
           if (key.startsWith('fetch')) {
