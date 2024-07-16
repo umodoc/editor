@@ -524,22 +524,22 @@
   resolved "https://registry.yarnpkg.com/@sereneinserenade/tiptap-search-and-replace/-/tiptap-search-and-replace-0.1.1.tgz#7f73ce1b80f2bd067829858dfb08aa8baa5254ae"
   integrity sha512-lVYuCYj8ORUCpv9WD7mmcKGQez/QaGUyCoJReH8Kn8hQo8dJEETo3sC3l7QrsYokoV8VNS42rBh0vj7qbgDg1Q==
 
-"@tiptap-pro/extension-invisible-characters@^2.8.9":
-  version "2.8.9"
-  resolved "https://registry.tiptap.dev/@tiptap-pro%2fextension-invisible-characters/-/extension-invisible-characters-2.8.9.tgz#2b0d5efbf89fd1c0d4570ddfa4adb49556a87277"
-  integrity sha512-RDYunZaKFIREvPeneZojFWkJQ2XIsSwUNWTmy/4fBAC7kv+sSU5nCtF4qxo5tMKJ0sRvB9j2MCrta98m6d4QSA==
+"@tiptap-pro/extension-invisible-characters@^2.10.2":
+  version "2.10.2"
+  resolved "https://registry.tiptap.dev/@tiptap-pro%2fextension-invisible-characters/-/extension-invisible-characters-2.10.2.tgz#6353e8e1e5fdfdad7b85ef57785b240405c8d76e"
+  integrity sha512-H0pl/sUixt+AQbMdFRAYZgRvUgXZcFtto4NuSKBHLLwG05KDBt6/1Tt9KjkPINPRN9m3EVyaLy3HazTNHR6gBw==
 
-"@tiptap-pro/extension-mathematics@^2.8.9":
-  version "2.8.9"
-  resolved "https://registry.tiptap.dev/@tiptap-pro%2fextension-mathematics/-/extension-mathematics-2.8.9.tgz#dd22c73ee110983b32e720703375a2a61f5ce6e7"
-  integrity sha512-uErG0c+V6wBkhVlg+KnDpnGsxHBpFLLK5LNjrvtmgPwCNP2qDIfuUyBtEkbfX7lmdIMVtCf2dTWdvDl+9eZTyg==
+"@tiptap-pro/extension-mathematics@^2.10.2":
+  version "2.10.2"
+  resolved "https://registry.tiptap.dev/@tiptap-pro%2fextension-mathematics/-/extension-mathematics-2.10.2.tgz#a2d16be0e4fd73c064506721d24f542ca4c8710a"
+  integrity sha512-ZYJyjo0nnJU616gcuMOLqdtEROFJI/mf8XpBkfpMMW4DXYTyFThr0c5hMMIpqw44A5C9bJZ7SPYQrEIw2sEWmw==
 
-"@tiptap-pro/extension-table-of-contents@^2.8.9":
-  version "2.8.9"
-  resolved "https://registry.tiptap.dev/@tiptap-pro%2fextension-table-of-contents/-/extension-table-of-contents-2.8.9.tgz#8be3b14ec0a020431b18376513c36b6dc6702d7e"
-  integrity sha512-SXrqeMIOfmHWRoaXH79UmRAjUdcB2qXbMpvFUfvqYb+zTIaGxz051v6B3juaCO+i4tRm97Y/fD5OuF03W36Gqg==
+"@tiptap-pro/extension-table-of-contents@^2.10.2":
+  version "2.10.2"
+  resolved "https://registry.tiptap.dev/@tiptap-pro%2fextension-table-of-contents/-/extension-table-of-contents-2.10.2.tgz#aed1c18c5e7c3bbccc29f9ec1d0da3cc343a7292"
+  integrity sha512-e9hXkEcJIr5yn4MKpFsx+dI7tiOVBiVqZg0Olc+pvTvGlSWkTPagP18gd5biQ8ePishD23jhct4SIYpuXEvFVA==
   dependencies:
-    uuid "^8.3.2"
+    uuid "^10.0.0"
 
 "@tiptap/core@^2.4.0":
   version "2.4.0"
@@ -5586,10 +5586,10 @@ util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
 
-uuid@^8.3.2:
-  version "8.3.2"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
-  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
+uuid@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-10.0.0.tgz#5a95aa454e6e002725c79055fd42aaba30ca6294"
+  integrity sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==
 
 uuid@^9.0.0:
   version "9.0.1"
