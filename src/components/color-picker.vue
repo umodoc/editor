@@ -112,8 +112,10 @@ const colorChange = (color, ctx) => {
 }
 watch(
   () => moreColorPicker,
-  () => {
-    editor.value.commands.focus()
+  (visible) => {
+    if (visible) {
+      editor.value.commands.focus(undefined, { scrollIntoView: false })
+    }
   },
 )
 
