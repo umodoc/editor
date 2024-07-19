@@ -3,7 +3,7 @@
     v-if="
       editor?.isActive('toc') ||
       editor?.isActive('pageBreak') ||
-      editor?.isActive('hr') ||
+      editor?.isActive('horizontalRule') ||
       editor?.getAttributes('image').error
     "
   >
