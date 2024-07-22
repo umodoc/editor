@@ -1,6 +1,6 @@
 {
   "name": "@umoteam/editor",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Umo Editor is an open-source document editor based on Vue3. It offers comprehensive document editing capabilities, supports Markdown syntax, and basic rich-text editing functions. It also supports the insertion of various formatted node types, provides a variety of practical tools, and allows for page style customization. Additionally, it supports exporting in multiple formats, printing and print preview, document block editing, the addition of custom extensions, i18n settings, and dark mode support.",
   "keywords": [
     "umo editor",
