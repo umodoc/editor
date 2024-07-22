@@ -22,6 +22,6 @@ const saveTextFile = () => {
   const { title } = options.value.document
   const filename =
     title !== '' ? options.value.document.title : t('document.untitled')
-  saveAs(blob, `${filename}.text`)
+  saveAs(blob, `${filename}.txt`)
 }
 </script>
