@@ -96,15 +96,8 @@ import Dropcursor from '@tiptap/extension-dropcursor'
 
 import shortId from '@/utils/short-id'
 
-const {
-  container,
-  options,
-  page,
-  editor,
-  tableOfContents,
-  setEditor,
-  editorDestroyed,
-} = useStore()
+const { options, page, editor, tableOfContents, setEditor, editorDestroyed } =
+  useStore()
 const $document = useState('document')
 
 let enableRules = true
@@ -126,7 +119,9 @@ const editorInstance = new Editor({
     attributes: {
       class: 'umo-editor',
     },
+    ...options.value.document.editorProps,
   },
+  parseOptions: options.value.document.parseOptions,
   extensions: [
     StarterKit.configure({
       bold: false,

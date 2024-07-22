@@ -204,6 +204,12 @@ const defaultOptions = {
     autofocus: true,
     characterLimit: 0,
     typographyRules: {},
+    // https://prosemirror.net/docs/ref/#view.EditorProps
+    editorProps: {},
+    // https://prosemirror.net/docs/ref/#model.ParseOptions
+    parseOptions: {
+      preserveWhitespace: 'full',
+    },
     autoSave: {
       enabled: true,
       interval: 300000,
@@ -595,13 +601,30 @@ const ojbectSchema = new ObjectSchema({
       },
       autofocus: {
         merge: 'replace',
-        validate: 'boolean',
+        validate(value) {
+          if (
+            !['start', 'end', 'all', true, false, null].includes(value) &&
+            !isNumber(value)
+          ) {
+            throw new Error(
+              'Key "document": Key "autofocus" must be one of "start", "end", "all", Number, true, false, null.',
+            )
+          }
+        },
       },
       characterLimit: {
         merge: 'replace',
         validate: 'number',
       },
       typographyRules: {
+        merge: 'replace',
+        validate: 'object',
+      },
+      editorProps: {
+        merge: 'replace',
+        validate: 'object',
+      },
+      parseOptions: {
         merge: 'replace',
         validate: 'object',
       },
