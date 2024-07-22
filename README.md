@@ -115,8 +115,6 @@ If you find Umo Editor useful, please consider supporting us in the following wa
 - ⭐ Star the [Umo Editor Repository](https://github.com/umodoc/editor) to show your support for the project.
 - 🔗 If you use Umo Editor in your project, please add a link to https://github.com/umodoc/editor.
 
-## Open Source License
+## License
 
 Umo Editor is licensed under the [MIT License](https://github.com/umodoc/editor/blob/main/LICENSE), allowing you to use, modify, and distribute the software freely.
-
-This document is published under the [CC BY-NC-SA 4.0 DEED License](https://creativecommons.org/licenses/by-nc-sa/4.0).
