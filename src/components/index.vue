@@ -312,7 +312,7 @@ const setDocument = (parmas) => {
 const setContent = (
   content,
   options = {
-    emitUpdate: false,
+    emitUpdate: true,
     focusPosition: 'start',
     focusOptions: { scrollIntoView: true },
   },
