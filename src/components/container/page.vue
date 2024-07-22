@@ -68,17 +68,20 @@ const pageZoomMinHeight = $computed(() => {
 let pageZoomHeight = $ref()
 const setPageZoomHeight = () => {
   const el = document.querySelector(`${container} .page-content`)
+  if (!el) {
+    console.warn('The element <.page-content> does not exist.')
+    return
+  }
   pageZoomHeight = (el.clientHeight * page.value.zoomLevel) / 100 + 'px'
 }
 watch(
   () => [page.value.zoomLevel, page.value.size, page.value.orientation],
   async () => {
     await nextTick()
-    setTimeout(() => setPageZoomHeight(), 10)
+    setTimeout(() => setPageZoomHeight(), 100)
   },
   { immediate: true, deep: true },
 )
-// 页面内容变化后更新页面高度
 watch(
   () => store.editor.value?.getHTML(),
   () => setPageZoomHeight(),
