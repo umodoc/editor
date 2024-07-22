@@ -1,6 +1,5 @@
 import App from './app.vue'
 import shortId from '@/utils/short-id'
-import 'katex/dist/katex.min.css'
 
 // 插件本地开发
 import { useUmoEditor, UmoEditor } from './components'
