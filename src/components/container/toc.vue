@@ -18,7 +18,7 @@
         v-for="(item, index) in tableOfContents"
         :key="item.id"
         :class="{
-          active: activeHeading === index || item.isActive,
+          active: item.isActive,
           ['level-' + item.level]: true,
         }"
         :data-heading="'H' + item.originalLevel"
@@ -34,14 +34,20 @@
 
 <script setup>
 import { TextSelection } from '@tiptap/pm/state'
-const { editor, tableOfContents } = useStore()
+import { onMounted } from 'vue'
+const { container, editor, tableOfContents } = useStore()
 
-let activeHeading = $ref(null)
-const headingClick = (heading, index) => {
-  activeHeading = index
+const headingClick = (heading) => {
   if (!editor.value) {
     return
   }
+  const activeHeading = tableOfContents.value.find(
+    (item) => item.isActive === true,
+  )
+  if (activeHeading) {
+    activeHeading.isActive = false
+  }
+  heading.isActive = true
   const element = editor.value.view.dom.querySelector(
     `[data-toc-id="${heading.id}"`,
   )

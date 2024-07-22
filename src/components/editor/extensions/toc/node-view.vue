@@ -9,9 +9,7 @@
           v-for="heading in tableOfContents"
           :key="heading.id"
         >
-          <a :href="`#${heading.id}`" target="_self">{{
-            heading.textContent
-          }}</a>
+          <a @click="headingClick(heading.id)">{{ heading.textContent }}</a>
         </li>
       </ul>
       <div v-else class="toc-empty" v-text="t('toc.empty')"></div>
@@ -20,11 +18,22 @@
 </template>
 
 <script setup>
+import { TextSelection } from '@tiptap/pm/state'
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 
 const props = defineProps(nodeViewProps)
 
-const { tableOfContents } = useStore()
+const { editor, tableOfContents } = useStore()
+
+const headingClick = (id) => {
+  const element = editor.value.view.dom.querySelector(`[data-toc-id="${id}"`)
+  element.scrollIntoView()
+  const pos = editor.value.view.posAtDOM(element, 0)
+  const tr = editor.value.view.state.tr
+  tr.setSelection(new TextSelection(tr.doc.resolve(pos)))
+  editor.value.view.dispatch(tr)
+  editor.value.view.focus()
+}
 </script>
 
 <style lang="less">
@@ -62,27 +71,22 @@ const { tableOfContents } = useStore()
 
     &-item {
       font-weight: bold;
+      font-size: 14px;
       &.level-1 {
-        font-size: 20px;
       }
       &.level-2 {
-        font-size: 18px;
         text-indent: 20px;
       }
       &.level-3 {
-        font-size: 16px;
         text-indent: 40px;
       }
       &.level-4 {
-        font-size: 14px;
         text-indent: 60px;
       }
       &.level-5 {
-        font-size: 12px;
         text-indent: 80px;
       }
       &.level-6 {
-        font-size: 10px;
         text-indent: 100px;
       }
     }
