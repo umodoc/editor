@@ -62,6 +62,7 @@ const emits = defineEmits([
   'changed:pageWatermark',
   'changed:locale',
   'changed:theme',
+  'contentError',
   'print',
   'focus',
   'blur',
@@ -567,6 +568,9 @@ watch(
     )
     editor.value.on('focus', ({ editor, event }) =>
       emits('focus', { editor, event }),
+    )
+    editor.value.on('contentError', ({ editor, error, disableCollaboration }) =>
+      emits('contentError', { editor, error, disableCollaboration }),
     )
     editor.value.on('blur', ({ editor, event }) =>
       emits('blur', { editor, event }),
