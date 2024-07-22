@@ -80,7 +80,7 @@ const popupContentRef = ref(null)
 const options = $ref([
   { label: t('base.heading.paragraph'), desc: 'text', value: 'paragraph' },
 ])
-for (let i in Array.from({ length: 5 })) {
+for (let i in Array.from({ length: 6 })) {
   const level = Number(i) + 1
   options.push({
     label: `${t('base.heading.text', { level })}`,
