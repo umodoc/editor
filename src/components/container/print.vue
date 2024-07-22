@@ -224,6 +224,11 @@ const getIframeCode = () => {
   // 页面属性
   const { orientation, size, margin, background } = page.value
 
+  // 默认行高
+  const defaultLineHeight = $computed(() => {
+    return options.value.dicts.lineHeights.find((item) => item.default).value
+  })
+
   return `
     <!DOCTYPE html>
     <html lang="zh-CN" theme-mode="${options.value.theme}">
@@ -305,7 +310,9 @@ const getIframeCode = () => {
         white-space: pre-wrap;
         white-space: break-spaces;
       }
-      
+      .pagedjs_pages .pagedjs_area {
+        line-height: ${defaultLineHeight}
+      }
 
       /* 打印样式 */
       .pagedjs_pages {

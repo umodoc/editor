@@ -5,6 +5,7 @@
     :class="{
       'show-line-number': page.showLineNumber,
     }"
+    :style="{ lineHeight: defaultLineHeight }"
     :editor="editor"
   />
   <template
@@ -111,6 +112,10 @@ if (!options.value.document.enableMarkdown || !$document.value.markdown) {
   enableRules = [Image, Mathematics, Typography]
 }
 
+const defaultLineHeight = $computed(() => {
+  return options.value.dicts.lineHeights.find((item) => item.default).value
+})
+
 const editorInstance = new Editor({
   editable: !options.value.document.readOnly,
   autofocus: options.value.document.autofocus,
@@ -165,9 +170,7 @@ const editorInstance = new Editor({
     }),
     LineHeight.configure({
       types: ['heading', 'paragraph'],
-      defaultLineHeight: options.value.dicts.lineHeights.find(
-        (item) => item.default,
-      ).value,
+      defaultLineHeight,
     }),
     SearchReplace,
 
@@ -203,8 +206,11 @@ const editorInstance = new Editor({
     Selection,
     TableOfContents.configure({
       getIndex: getHierarchicalIndexes,
-      onUpdate: (content) => (tableOfContents.value = content),
-      scrollParent: document.querySelector(`${container} .toc-content`),
+      onUpdate: (content) => {
+        tableOfContents.value = content
+      },
+      // scrollParent: () =>
+      //   document.querySelector(`${container} .zoomable-container`),
       getId: () => shortId(6),
     }),
     Typography.configure(options.value.document.typographyRules),
