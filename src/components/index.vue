@@ -78,6 +78,7 @@ const {
   toolbarKey,
   options,
   page,
+  tableOfContents,
   savedAt,
   editorDestroyed,
   editor,
@@ -495,6 +496,7 @@ defineExpose({
   saveContent,
   getContentExcerpt,
   getEditor: () => editor,
+  getTableOfContents: () => tableOfContents.value,
   getLocale,
   getI18n,
   setReadOnly(readOnly = true) {
