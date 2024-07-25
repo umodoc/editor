@@ -1,8 +1,0 @@
-blank_issues_enabled: false
-contact_links:
-  - name: Umo Editor 在线文档
-    url: https://editor.umodoc.com/docs
-    about: 提供 Umo Editor 使用基本介绍、使用指南、接口说明等
-  - name: Umo Editor 在线示例
-    url: https://demo.umodoc.com/editor
-    about: 提供 Umo Editor 在线示例、基础设置、方法事件、主题设置等
