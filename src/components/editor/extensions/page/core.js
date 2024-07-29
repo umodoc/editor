@@ -1,5 +1,7 @@
 import { DOMSerializer, Node, Schema } from "@tiptap/pm/model";
 import { createHTMLDocument, VHTMLDocument } from "zeed-dom";
+import Prism from 'prismjs'
+import Katex from 'katex'
 
 /**
  * 根据schema doc生成html
@@ -8,7 +10,7 @@ import { createHTMLDocument, VHTMLDocument } from "zeed-dom";
  * @param options
  */
 export function getHTMLFromFragment(doc,schema, options) {
-  if (options.document) {
+  if (options&&options.document) {
     const wrap = options.document.createElement('div')
     DOMSerializer.fromSchema(schema).serializeFragment(doc.content, { document: options.document }, wrap)
     return wrap.innerHTML
@@ -246,6 +248,12 @@ export class UnitConversion {
     const c_value = inch * this.arrDPI[0];
     return Number(c_value.toFixed());
   }
+
+  cmConversionPx(value) {
+    const inch = value*10 / 25.4;
+    const c_value = inch * this.arrDPI[0];
+    return Number(c_value.toFixed());
+  }
 }
 
 const map = new Map();
@@ -320,8 +328,6 @@ export function getDefault() {
     return map.get("defaultheight");
   }
   const computedspan = iframeDoc.getElementById("computedspan");
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   const defaultheight = getDomHeight(computedspan);
   map.set("defaultheight", defaultheight);
   return defaultheight;
@@ -368,7 +374,6 @@ function iframeDocAddP() {
   const computedspan = iframeDoc.getElementById("computedspan");
   if (!computedspan) {
     const p = iframeDoc.createElement("p");
-    p.classList.add("text-editor");
     p.setAttribute("id", "computedspan");
     p.setAttribute("style", "display: inline-block");
     p.innerHTML = "&nbsp;";
@@ -376,15 +381,17 @@ function iframeDocAddP() {
   }
 }
 
-function iframeDocAddDiv(options) {
+function iframeDocAddDiv() {
   const computeddiv = iframeDoc.getElementById("computeddiv");
   if (!computeddiv) {
+    const {page,options} =useStore();
+    const { width, height } = page.value.size
+    const {right,left,bottom,top} =page.value.margin;
     const dom = iframeDoc.createElement("div");
-    dom.setAttribute("class", "Page text-editor relative");
-    dom.setAttribute("style", "opacity: 0;position: absolute;max-width:" + options.bodyWidth + "px;width:" + options.bodyWidth + "px;");
+    dom.setAttribute("class", "Page text-editor relative editor-container");
+    dom.setAttribute("style", "opacity: 0;position: absolute;max-width:" + width + "cm;width:" + width + "cm;padding-left:"+left+"cm;padding-right:"+right+"cm;padding-top:"+top+"cm;padding-bottom:"+bottom+"cm;");
     const content = iframeDoc.createElement("div");
     content.classList.add("PageContent");
-    content.setAttribute("style", "min-height: " + options.bodyHeight + "px;padding:" + options.bodyPadding + "px");
     content.setAttribute("id", "computeddiv");
     dom.append(content);
     iframeDoc.body.append(dom);
@@ -404,20 +411,25 @@ export function removeComputedHtml() {
  * 构建计算html需要的辅助iframe 和打印html
  * @param options
  */
-export function buildComputedHtml(options) {
+export function buildComputedHtml() {
   removeComputedHtml();
   iframeComputed = document.createElement("iframe");
   document.body.appendChild(iframeComputed);
+  const { options} = useStore()
+  const defaultLineHeight = () => {
+    return options.value.dicts.lineHeights.find((item) => item.default).value
+  }
   //获得文档对象
   iframeDoc = iframeComputed.contentDocument || iframeComputed.contentWindow.document;
   iframeComputed.setAttribute("id", "computediframe");
   iframeComputed.setAttribute("style", "width: 100%;height: 100%;");
   //iframeComputed.setAttribute("style", "width: 100%;height: 100%;opacity: 0;position: absolute;z-index: -89;margin-left:-2003px;");
+  iframeDoc.body.setAttribute("class","editor-container")
+  iframeDoc.body.setAttribute("style","line-height:"+defaultLineHeight())
   copyStylesToIframe(iframeDoc);
   iframeDocAddP();
-  iframeDocAddDiv(options);
+  iframeDocAddDiv();
 }
-
 function copyStylesToIframe(iframeContentDoc) {
   // 获取当前页面的所有样式表
   const links = document.getElementsByTagName('link');

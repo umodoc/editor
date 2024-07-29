@@ -19,7 +19,7 @@
             width: pageSize.width + 'cm',
             minHeight: pageSize.height + 'cm',
             transform: `scale(${page.zoomLevel / 100})`,
-            padding: `${page.margin.top + 'cm'} ${page.margin.right + 'cm'} ${page.margin.bottom + 'cm'} ${page.margin.left + 'cm'}`,
+            //padding: `${page.margin.top + 'cm'} ${page.margin.right + 'cm'} ${page.margin.bottom + 'cm'} ${page.margin.left + 'cm'}`,
             background: page.background,
           }"
         >
@@ -45,6 +45,8 @@
 </template>
 
 <script setup>
+import { UnitConversion } from '@/components/editor/extensions/page/core'
+
 const store = useStore()
 const { container, page, imagePreview } = useStore()
 

@@ -5,31 +5,15 @@ import {  getNodeType } from "@tiptap/core";
 import { ReplaceStep } from "@tiptap/pm/transform";
 import { getId } from "../../utils/id";
 
-/**
- * @description 默认 table ol ul 列表类型的公共计算逻辑
- * @param splitContex 分割上下文
- * @param node 当前需要计算的节点
- * @param pos   当前节点的位置
- * @param parent 当前节点的父节点
- * @param dom 当前节点的dom
- */
+
 export const sameListCalculation = (splitContex, node, pos, parent, dom) => {
   const pHeight = getDomHeight(dom);
-  //如果列表的高度超过分页高度 直接返回继续循环 tr 或者li
   if (splitContex.isOverflow(pHeight)) return true;
-  //没有超过分页高度 累加高度
   splitContex.addHeight(pHeight);
   return false;
 };
 let count = 1;
-/**
- * @description 默认 LISTITEM TABLE_ROW 段落类型的公共计算逻辑
- * @param splitContex 分割上下文
- * @param node 当前需要计算的节点
- * @param pos  当前节点的位置
- * @param parent 当前节点的父节点
- * @param dom 当前节点的dom
- */
+
 export const sameItemCalculation = (splitContex, node, pos, parent, dom) => {
   const chunks = splitContex.splitResolve(pos);
   const pHeight = getDomHeight(dom);
@@ -38,11 +22,9 @@ export const sameItemCalculation = (splitContex, node, pos, parent, dom) => {
       splitContex.addHeight(getDomPaddingAndMargin(dom));
       return true;
     }
-    //如果当前行是list的第一行并且已经超过分页高度 直接返回上一层级的切割点
     if (parent?.firstChild == node) {
       splitContex.setBoundary(chunks[chunks.length - 2][2], chunks.length - 2);
     } else {
-      //如果不是第一行 直接返回当前行的切割点
       splitContex.setBoundary(pos, chunks.length - 1);
     }
   } else {
@@ -51,7 +33,6 @@ export const sameItemCalculation = (splitContex, node, pos, parent, dom) => {
   return false;
 };
 
-//默认高度计算方法
 export const defaultNodesComputed = {
   [ORDEREDLIST]: sameListCalculation,
   [BULLETLIST]: sameListCalculation,
@@ -94,15 +75,6 @@ export const defaultNodesComputed = {
     splitContex.addHeight(pHeight);
     return false;
   },
-  /*
-  、、*
-   * h1-h6 分割算法 如果heading的高度超过分页高度 直接返回当前heading
-   * @param splitContex 分割上下文
-   * @param node 当前需要计算的节点
-   * @param pos 当前节点的位置
-   * @param parent 当前节点的父节点
-   * @param dom 当前节点的dom
-   */
   [HEADING]: (splitContex, node, pos, parent, dom) => {
 
     const pHeight = getDomHeight(dom);
@@ -124,24 +96,15 @@ export const defaultNodesComputed = {
     }
     return false;
   },
-  /**
-   * p 分割算法 如果段落标签没有超过 默认段落高度 则直接返回段落分割点，否则继续计算 段落内部分割点
-   * @param splitContex 分割上下文
-   * @param node  当前需要计算的节点
-   * @param pos 当前节点的位置
-   * @param parent 当前节点的父节点
-   * @param dom 当前节点的dom
-   */
+
   [PARAGRAPH]: (splitContex, node, pos, parent, dom) => {
-    //如果p标签没有子标签直接返回默认高度 否则计算高度
-    const pHeight = node.childCount > 0 ? getDomHeight(dom) : splitContex.getDefaultHeight();
+    const pHeight =getDomHeight(dom);
     if (!splitContex.isOverflow(pHeight)) {
       splitContex.addHeight(pHeight);
       return false;
     }
-    /*如果当前段落已经 超出分页高度直接拆分 skip 设置为false 循环到下一个段落时 禁止重复进入*/
     const chunks = splitContex.splitResolve(pos);
-    //判断段落是否需要拆分
+
     if (pHeight > splitContex.getDefaultHeight()) {
       const point = getBreakPos(node, dom, splitContex);
       if (point) {
@@ -149,16 +112,13 @@ export const defaultNodesComputed = {
         return false;
       }
     }
-    //如果段落是当前块的第一个节点直接返回上一层级的切割点
     if (parent?.firstChild == node) {
       splitContex.setBoundary(chunks[chunks.length - 2][2], chunks.length - 2);
       return false;
     }
-    //直接返回当前段落
     splitContex.setBoundary(pos, chunks.length - 1);
     return false;
   },
-  //自定义块
   [CASSIE_BLOCK]: (splitContex, node, pos, parent, dom) => {
     const pHeight = getDomHeight(dom);
     if (splitContex.isOverflow(pHeight)) {
@@ -173,16 +133,18 @@ export const defaultNodesComputed = {
     splitContex.addHeight(8);
     return true;
   },
-  /**
-   * page 分割算法 永远返回最后一个page进行分割
-   * @param splitContex 分割上下文
-   * @param node 当前需要计算的节点
-   * @param pos 当前节点的位置
-   * @param parent 当前节点的父节点
-   * @param dom 当前节点的dom
-   */
   [PAGE]: (splitContex, node, pos, parent, dom) => {
     return node == splitContex.lastPage();
+  },
+  ["default"]: (splitContex, node, pos, parent, dom) => {
+    const pHeight =getDomHeight(dom);
+    if (!splitContex.isOverflow(pHeight)) {
+      splitContex.addHeight(pHeight);
+      return false;
+    }
+    const chunks = splitContex.splitResolve(pos);
+    splitContex.setBoundary(pos, chunks.length - 1);
+    return false;
   }
 };
 /**
@@ -510,8 +472,7 @@ export class PageComputedContext {
   getNodeHeight() {
     const doc = this.tr.doc;
     const { bodyOptions } = this.pageState;
-
-    const splitContex = new SplitContext(this.state.schema,doc, bodyOptions?.bodyHeight - bodyOptions?.bodyPadding * 2, getDefault());
+    const splitContex = new SplitContext(this.state.schema,doc, bodyOptions?.bodyHeight, getDefault());
     const nodesComputed = this.nodesComputed;
     const lastNode = doc.lastChild;
     doc.descendants((node, pos, parentNode, i) => {
@@ -521,7 +482,7 @@ export class PageComputedContext {
       if (!splitContex.pageBoundary()) {
         let dom = document.getElementById(node.attrs.id);
         if (!dom && node.type.name != PAGE) dom = getAbsentHtmlH(node,this.state.schema);
-        return nodesComputed[node.type.name](splitContex, node, pos, parentNode, dom);
+        return (nodesComputed[node.type.name]||nodesComputed["default"])(splitContex, node, pos, parentNode, dom);
       }
       return false;
     });

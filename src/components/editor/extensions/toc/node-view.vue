@@ -1,5 +1,5 @@
 <template>
-  <node-view-wrapper class="node-view toc-node-view">
+  <node-view-wrapper class="node-view toc-node-view" :id="node.attrs.id">
     <div class="node-container hover-shadow select-outline toc">
       <p class="toc-head" v-text="t('toc.title')"></p>
       <ul v-if="tableOfContents && tableOfContents.length > 0" class="toc-body">
@@ -21,7 +21,7 @@
 import { TextSelection } from '@tiptap/pm/state'
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 
-const props = defineProps(nodeViewProps)
+const {node} = defineProps(nodeViewProps)
 
 const { editor, tableOfContents } = useStore()
 

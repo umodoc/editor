@@ -3,6 +3,7 @@
     ref="containerRef"
     class="node-view image-node-view"
     :style="{ 'justify-content': node.attrs.nodeAlign }"
+    :id="node.attrs.id"
     @dblclick="imagePreview = node.attrs.src"
   >
     <div class="node-container hover-shadow select-outline image">

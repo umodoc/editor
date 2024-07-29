@@ -2,6 +2,7 @@
   <node-view-wrapper
     ref="containerRef"
     class="node-view audio-node-view"
+    :id="node.attrs.id"
     :style="{ 'justify-content': node.attrs.nodeAlign }"
   >
     <div class="node-container hover-shadow select-outline audio">

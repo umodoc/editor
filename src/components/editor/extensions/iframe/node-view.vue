@@ -2,6 +2,7 @@
   <node-view-wrapper
     ref="containerRef"
     class="node-view iframe-node-view"
+    :id="node.attrs.id"
     :style="{ 'justify-content': node.attrs.nodeAlign }"
   >
     <div class="node-container hover-shadow select-outline iframe">

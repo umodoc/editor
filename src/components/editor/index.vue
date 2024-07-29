@@ -82,7 +82,9 @@ import InvisibleCharacters, {
   ParagraphNode,
 } from '@tiptap-pro/extension-invisible-characters'
 import InvisibleNode from './extensions/invisible-node'
-
+// 分页
+import Page from './extensions/page'
+import { Document } from '@tiptap/extension-document'
 // 其他
 import Selection from './extensions/selection'
 import {
@@ -108,7 +110,6 @@ if (!options.value.document.enableMarkdown || !$document.value.markdown) {
 const defaultLineHeight = $computed(() => {
   return options.value.dicts.lineHeights.find((item) => item.default).value
 })
-
 const editorInstance = new Editor({
   editable: !options.value.document.readOnly,
   autofocus: options.value.document.autofocus,
@@ -123,7 +124,9 @@ const editorInstance = new Editor({
   },
   parseOptions: options.value.document.parseOptions,
   extensions: [
+
     StarterKit.configure({
+      document:false,
       bold: false,
       bulletList: false,
       orderedList: false,
@@ -132,13 +135,16 @@ const editorInstance = new Editor({
       gapcursor: true,
       dropcursor: false,
     }),
+    Document.extend({content:"page+"}),
+    Page,
     Placeholder.configure({
       considerAnyAsEmpty: true,
       placeholder: l(options.value.document.placeholder),
     }),
-    Focus.configure({
+/*    Focus.configure({
       className: 'node-focused',
-    }),
+      mode: 'deepest',
+    }),*/
     FontFamily,
     FontSize,
     Bold.extend({
@@ -238,7 +244,9 @@ const editorInstance = new Editor({
   },
 })
 setEditor(editorInstance)
-
+setTimeout(() => {
+  editor.value?.view.dispatch(editor.value?.state.tr.setMeta("splitPage", true));
+}, 1000);
 // 销毁编辑器实例
 onBeforeUnmount(() => editorInstance.destroy())
 </script>
