@@ -11,7 +11,7 @@
       icon="seal"
       :header="t('tools.seal.title')"
       width="480px"
-      confirm-btn="t('tools.seal.insert')"
+      :confirm-btn="t('tools.seal.insert')"
       @confirm="setSeal"
       @close="dialogVisible = false"
     >
