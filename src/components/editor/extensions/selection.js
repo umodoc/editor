@@ -16,10 +16,14 @@ export default Extension.create({
       getSelectionNode:
         () =>
         ({ editor }) => {
-          for (const node of Array.from(editor.vueRenderers)) {
-            if (node[1].props.selected) {
-              return node[1]
+          try {
+            for (const node of Array.from(editor.vueRenderers)) {
+              if (node[1].props.selected) {
+                return node[1]
+              }
             }
+          } catch (e) {
+            return undefined
           }
         },
       deleteSelectionNode:
