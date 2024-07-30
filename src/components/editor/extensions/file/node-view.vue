@@ -42,7 +42,7 @@ import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import { getFileIcon } from '@/utils/file'
 import prettyBytes from 'pretty-bytes'
 
-const { node, updateAttributes } = defineProps(nodeViewProps)
+const { node, getPos, updateAttributes } = defineProps(nodeViewProps)
 const { options } = useStore()
 const containerRef = ref(null)
 let filePath = $ref()
@@ -53,7 +53,7 @@ onMounted(async () => {
   if (node.attrs.uploaded === false && node.attrs.file) {
     try {
       const { id, url } = await options.value.onFileUpload(node.attrs.file)
-      if (containerRef.value) {
+      if (containerRef.value && getPos()) {
         updateAttributes({ id, url, file: null, uploaded: true })
       }
     } catch (error) {

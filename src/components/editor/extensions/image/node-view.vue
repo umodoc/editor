@@ -64,7 +64,7 @@ import Drager from 'es-drager'
 import { base64ToFile } from 'file64'
 import shortId from '@/utils/short-id'
 
-const { node, updateAttributes } = defineProps(nodeViewProps)
+const { node, getPos, updateAttributes } = defineProps(nodeViewProps)
 const { options } = useStore()
 const { imagePreview } = useStore()
 const { isLoading, error } = useImage({ src: node.attrs.src })
@@ -80,7 +80,7 @@ const uploadImage = async () => {
   }
   try {
     const { id, url } = await options.value.onFileUpload(node.attrs.file)
-    if (containerRef.value) {
+    if (containerRef.value && getPos()) {
       updateAttributes({ id, src: url, file: null, uploaded: true })
     }
   } catch (error) {
