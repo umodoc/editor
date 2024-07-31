@@ -393,8 +393,8 @@
     "more": "More Colors"
   },
   "blockMenu": {
-    "insert": "Insert New Block",
-    "select": "Select Block",
+    "insert": "Insert Content",
+    "select": "Insert Node",
     "template": "Insert Template",
     "toogleNode": "Switch Block Type",
     "other": "Other",

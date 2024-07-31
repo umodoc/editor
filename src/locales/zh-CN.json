@@ -393,8 +393,8 @@
     "more": "更多颜色"
   },
   "blockMenu": {
-    "insert": "插入新节点",
-    "select": "选择节点",
+    "insert": "插入新内容",
+    "select": "插入节点",
     "template": "插入模板",
     "toogleNode": "切换节点类型",
     "other": "其他操作",
