@@ -41,7 +41,7 @@
           :style="{
             height: node.attrs.equalProportion ? 'auto' : '100%',
             transform:
-              node.attrs.flipX || node.attrs.flipX
+              node.attrs.flipX || node.attrs.flipY
                 ? `rotateX(${node.attrs.flipX ? '180' : '0'}deg) rotateY(${node.attrs.flipY ? '180' : '0'}deg)`
                 : 'none',
           }"
