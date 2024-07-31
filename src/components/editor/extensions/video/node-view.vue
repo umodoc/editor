@@ -48,6 +48,7 @@ const videoRef = $ref(null)
 let player = $ref(null)
 let maxWidth = $ref(0)
 onMounted(async () => {
+  await nextTick()
   const width = containerRef.value.$el.clientWidth
   maxWidth = width
   if (node.attrs.width === null) {

@@ -88,6 +88,7 @@ const uploadImage = async () => {
   }
 }
 onMounted(async () => {
+  await nextTick()
   const width = containerRef.value.$el.clientWidth
   maxWidth = width
   if (node.attrs.width === null) {
