@@ -16,15 +16,8 @@ export default Extension.create({
       getSelectionNode:
         () =>
         ({ editor }) => {
-          try {
-            for (const node of Array.from(editor.vueRenderers)) {
-              if (node[1].props.selected) {
-                return node[1]
-              }
-            }
-          } catch (e) {
-            return undefined
-          }
+          editor.commands.selectParentNode()
+          return editor.state.selection.node
         },
       deleteSelectionNode:
         () =>
@@ -40,10 +33,10 @@ export default Extension.create({
               return
             }
             const { options } = useStore()
-            const { id, src } = node.props.node.attrs
+            const { id, src } = node
             options.value.onFileDelete(id, src)
           }
-          return chain().deleteSelection().run()
+          editor.commands.deleteSelection()
         },
     }
   },
