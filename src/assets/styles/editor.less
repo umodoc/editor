@@ -122,6 +122,109 @@
     color: #777;
     background-color: rgba(0, 0, 0, 0.03);
   }
+  table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    page-break-inside: auto;
+    tr {
+      page-break-inside: avoid;
+      page-break-after: auto;
+    }
+    // thead {
+    //   display: table-header-group;
+    // }
+    td,
+    th {
+      min-width: 1em;
+      border: 1px solid var(--umo-content-table-border-color);
+      padding: 3px 5px;
+      vertical-align: middle;
+      box-sizing: border-box;
+      position: relative;
+      > * {
+        margin-bottom: 0;
+      }
+      &[data-align='left-top'] {
+        vertical-align: top;
+        text-align: left;
+      }
+      &[data-align='center-top'] {
+        vertical-align: top;
+        text-align: center;
+      }
+      &[data-align='right-top'] {
+        vertical-align: middle;
+        text-align: right;
+      }
+      &[data-align='justify-top'] {
+        vertical-align: middle;
+        text-align: justify;
+      }
+      &[data-align='left-middle'] {
+        vertical-align: middle;
+        text-align: left;
+      }
+      &[data-align='center-middle'] {
+        vertical-align: middle;
+        text-align: center;
+      }
+      &[data-align='right-middle'] {
+        vertical-align: middle;
+        text-align: right;
+      }
+      &[data-align='justify-middle'] {
+        vertical-align: middle;
+        text-align: justify;
+      }
+      &[data-align='left-bottom'] {
+        vertical-align: bottom;
+        text-align: left;
+      }
+      &[data-align='center-bottom'] {
+        vertical-align: middle;
+        text-align: center;
+      }
+      &[data-align='right-bottom'] {
+        vertical-align: bottom;
+        text-align: right;
+      }
+      &[data-align='justify-bottom'] {
+        vertical-align: bottom;
+        text-align: justify;
+      }
+    }
+    th {
+      font-weight: bold;
+      text-align: left;
+      background-color: var(--umo-content-table-thead-background);
+    }
+    .selectedCell:after {
+      z-index: 2;
+      position: absolute;
+      content: '';
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background: var(--umo-content-table-selected-background);
+      pointer-events: none;
+    }
+    .column-resize-handle {
+      position: absolute;
+      right: -1px;
+      top: 0;
+      bottom: -1px;
+      width: 3px;
+      background-color: var(--umo-primary-color);
+      pointer-events: none;
+    }
+    p {
+      margin: 0;
+    }
+  }
   .indent-1 {
     text-indent: 2em;
   }
@@ -141,109 +244,6 @@
     max-width: 100%;
     overflow-x: auto;
     .scrollbar();
-    table {
-      border-collapse: collapse;
-      table-layout: fixed;
-      width: 100%;
-      margin: 0;
-      overflow: hidden;
-      page-break-inside: auto;
-      tr {
-        page-break-inside: avoid;
-        page-break-after: auto;
-      }
-      // thead {
-      //   display: table-header-group;
-      // }
-      td,
-      th {
-        min-width: 1em;
-        border: 1px solid var(--umo-content-table-border-color);
-        padding: 3px 5px;
-        vertical-align: middle;
-        box-sizing: border-box;
-        position: relative;
-        > * {
-          margin-bottom: 0;
-        }
-        &[data-align='left-top'] {
-          vertical-align: top;
-          text-align: left;
-        }
-        &[data-align='center-top'] {
-          vertical-align: top;
-          text-align: center;
-        }
-        &[data-align='right-top'] {
-          vertical-align: middle;
-          text-align: right;
-        }
-        &[data-align='justify-top'] {
-          vertical-align: middle;
-          text-align: justify;
-        }
-        &[data-align='left-middle'] {
-          vertical-align: middle;
-          text-align: left;
-        }
-        &[data-align='center-middle'] {
-          vertical-align: middle;
-          text-align: center;
-        }
-        &[data-align='right-middle'] {
-          vertical-align: middle;
-          text-align: right;
-        }
-        &[data-align='justify-middle'] {
-          vertical-align: middle;
-          text-align: justify;
-        }
-        &[data-align='left-bottom'] {
-          vertical-align: bottom;
-          text-align: left;
-        }
-        &[data-align='center-bottom'] {
-          vertical-align: middle;
-          text-align: center;
-        }
-        &[data-align='right-bottom'] {
-          vertical-align: bottom;
-          text-align: right;
-        }
-        &[data-align='justify-bottom'] {
-          vertical-align: bottom;
-          text-align: justify;
-        }
-      }
-      th {
-        font-weight: bold;
-        text-align: left;
-        background-color: var(--umo-content-table-thead-background);
-      }
-      .selectedCell:after {
-        z-index: 2;
-        position: absolute;
-        content: '';
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        background: var(--umo-content-table-selected-background);
-        pointer-events: none;
-      }
-      .column-resize-handle {
-        position: absolute;
-        right: -1px;
-        top: 0;
-        bottom: -1px;
-        width: 3px;
-        background-color: var(--umo-primary-color);
-        pointer-events: none;
-      }
-      p {
-        margin: 0;
-      }
-    }
   }
   .resize-cursor {
     cursor: ew-resize;

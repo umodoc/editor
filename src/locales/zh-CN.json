@@ -433,6 +433,21 @@
       "rotateC": "顺时针旋转90度"
     }
   },
+  "assistant": {
+    "text": "AI 文档助手",
+    "placeholder": "输入或选择指令...",
+    "send": "发送",
+    "exit": "退出 AI 文档助手",
+    "commands": "常用指令：",
+    "result": "AI 生成结果：",
+    "replace": "替换原文",
+    "insertAfter": "插入到后方",
+    "insertBelow": "插入到下方",
+    "copy": "复制生成结果",
+    "copySuccess": "复制成功",
+    "rewrite": "重写",
+    "delete": "删除结果"
+  },
   "pageOptions": {
     "title": "页面设置",
     "size": {

@@ -6,6 +6,7 @@ export const useStore = createGlobalState(() => {
   const options = ref(defaultOptions)
   const page = ref({})
   const editor = ref(null)
+  const assistant = ref(false)
   const tableOfContents = ref([])
   const imagePreview = ref(false)
   const searchReplace = ref(false)
@@ -79,6 +80,7 @@ export const useStore = createGlobalState(() => {
     options,
     page,
     editor,
+    assistant,
     tableOfContents,
     imagePreview,
     searchReplace,

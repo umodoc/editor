@@ -433,6 +433,21 @@
       "rotateC": "Rotate Clockwise 90°"
     }
   },
+  "assistant": {
+    "text": "AI Assistant",
+    "placeholder": "Enter or select a command...",
+    "send": "Send",
+    "exit": "Exit AI Assistant",
+    "commands": "Common Commands:",
+    "result": "AI Generation Result:",
+    "replace": "Replace",
+    "insertAfter": "Insert After",
+    "insertBelow": "Insert Below",
+    "copy": "Copy Generated Result",
+    "copySuccess": "Result copied to clipboard",
+    "rewrite": "Rewrite",
+    "delete": "Delete Result"
+  },
   "pageOptions": {
     "title": "Page Settings",
     "size": {

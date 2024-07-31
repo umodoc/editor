@@ -89,6 +89,10 @@
     <menus-bubble-node-delete />
   </template>
   <template v-else>
+    <template v-if="options.assistant.enabled">
+      <menus-bubble-assistant />
+      <div class="divider"></div>
+    </template>
     <menus-toolbar-base-font-size :select="false" />
     <div class="divider"></div>
     <menus-toolbar-base-bold />
@@ -105,7 +109,7 @@
 </template>
 
 <script setup>
-const { editor } = useStore()
+const { options, editor } = useStore()
 </script>
 
 <style lang="less" scoped>

@@ -8,19 +8,15 @@
     :style="{ lineHeight: defaultLineHeight }"
     :editor="editor"
   />
-  <template
-    v-if="options.document.enableBubbleMenu && editor && !editorDestroyed"
-  >
+  <template v-if="editor && !editorDestroyed">
     <bubble-menu
       class="umo-editor-bubble-menu"
+      :class="{ assistant }"
       :editor="editor"
-      :tippy-options="{
-        appendTo: 'parent',
-        maxWidth: 480,
-        zIndex: 99,
-      }"
+      :tippy-options="tippyOpitons"
     >
-      <menus-bubble />
+      <menus-bubble v-if="options.document.enableBubbleMenu && !assistant" />
+      <assistant-input v-if="options.assistant.enabled && assistant" />
     </bubble-menu>
   </template>
   <template
@@ -95,9 +91,17 @@ import FileHandler from './extensions/file-handler'
 import Dropcursor from '@tiptap/extension-dropcursor'
 
 import shortId from '@/utils/short-id'
+import { onMounted } from 'vue'
 
-const { options, page, editor, tableOfContents, setEditor, editorDestroyed } =
-  useStore()
+const {
+  options,
+  page,
+  editor,
+  assistant,
+  tableOfContents,
+  setEditor,
+  editorDestroyed,
+} = useStore()
 const $document = useState('document')
 
 let enableRules = true
@@ -218,14 +222,10 @@ const editorInstance = new Editor({
     FileHandler.configure({
       allowedMimeTypes: options.value.file.allowedMimeTypes,
       onPaste(editor, files, html) {
-        files.forEach((file) =>
-          editor.chain().focus().insertFile({ file }).run(),
-        )
+        files.forEach((file) => editor.commands.insertFile({ file }))
       },
       onDrop: (editor, files, pos) => {
-        files.forEach((file) =>
-          editor.chain().focus().insertFile({ file, pos }).run(),
-        )
+        files.forEach((file) => editor.commands.insertFile({ file, pos }))
       },
     }),
     Dropcursor.configure({
@@ -239,6 +239,33 @@ const editorInstance = new Editor({
 })
 setEditor(editorInstance)
 
+// 气泡菜单
+let tippyInstance = $ref(null)
+const tippyOpitons = $ref({
+  appendTo: 'parent',
+  maxWidth: 480,
+  zIndex: 99,
+  onShow(instance) {
+    tippyInstance = instance
+  },
+  onHide() {
+    assistant.value = false
+  },
+  onDestroy() {
+    tippyInstance = null
+  },
+})
+
+// AI 助手
+watch(
+  () => assistant.value,
+  (visible) => {
+    tippyInstance?.setProps({
+      placement: visible ? 'bottom' : 'top',
+    })
+  },
+)
+
 // 销毁编辑器实例
 onBeforeUnmount(() => editorInstance.destroy())
 </script>
@@ -248,14 +275,16 @@ onBeforeUnmount(() => editorInstance.destroy())
 @import '@/assets/styles/drager.less';
 
 .umo-editor-bubble-menu {
-  padding: 8px 10px;
-  box-shadow: var(--umo-shadow);
-  border: 0.5px solid var(--umo-border-color-dark);
   border-radius: var(--umo-radius);
   display: flex;
   align-items: center;
   background-color: var(--umo-color-white);
   flex-wrap: wrap;
+  &:not(.assistant) {
+    padding: 8px 10px;
+    box-shadow: var(--umo-shadow);
+    border: 1px solid var(--umo-border-color);
+  }
   &:empty {
     display: none;
   }

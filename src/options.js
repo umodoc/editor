@@ -215,6 +215,41 @@ const defaultOptions = {
       interval: 300000,
     },
   },
+  assistant: {
+    enabled: false,
+    maxlength: 100,
+    commands: [
+      {
+        label: { en_US: 'Continuation', zh_CN: '续写' },
+        value: { en_US: 'Continuation', zh_CN: '续写' },
+      },
+      {
+        label: { en_US: 'Rewrite', zh_CN: '重写' },
+        value: { en_US: 'Rewrite', zh_CN: '重写' },
+      },
+      {
+        label: { en_US: 'Abbreviation', zh_CN: '缩写' },
+        value: { en_US: 'Abbreviation', zh_CN: '缩写' },
+      },
+      {
+        label: { en_US: 'Expansion', zh_CN: '扩写' },
+        value: { en_US: 'Expansion', zh_CN: '扩写' },
+      },
+      {
+        label: { en_US: 'Polish', zh_CN: '润色' },
+        value: { en_US: 'Polish', zh_CN: '润色' },
+      },
+      {
+        label: { en_US: 'Proofread', zh_CN: '校阅' },
+        value: { en_US: 'Proofread', zh_CN: '校阅' },
+      },
+      {
+        label: { en_US: 'Translate', zh_CN: '翻译' },
+        value: { en_US: 'Translate to chinese', zh_CN: '翻译成英文' },
+        autoSend: false,
+      },
+    ],
+  },
   templates: [],
   cdnUrl: 'https://unpkg.com/@umoteam/editor-external@latest',
   shareUrl: location?.href || '',
@@ -246,27 +281,30 @@ const defaultOptions = {
       'The file has been deleted. Please configure the onFileDelete to completely delete the file from the server.',
     )
   },
+  async onAssistant(payload, content) {
+    throw new Error('Key "onAssistant": Please set the onAssistant method')
+  },
 }
 
 // 组件 props 所需格式
 const propsOptions = Object.keys(defaultOptions)
 
-const isNumber = (char) => {
-  if (typeof char === 'number') {
-    return isFinite(char)
+const isNumber = (value) => {
+  if (typeof value === 'number') {
+    return isFinite(value)
   }
-  if (typeof char === 'string') {
-    const parsed = parseFloat(char)
-    return !isNaN(parsed) && isFinite(parsed) && char === parsed.toString()
+  if (typeof value === 'string') {
+    const parsed = parseFloat(value)
+    return !isNaN(parsed) && isFinite(parsed) && value === parsed.toString()
   }
   return false
 }
-const isLocale = (data) => {
-  if (typeof data === 'string' && data.length > 0) {
+const isLocale = (value) => {
+  if (typeof value === 'string' && value.length > 0) {
     return true
   }
-  if (typeof data === 'object' && data !== null) {
-    for (let key in data) {
+  if (typeof value === 'object' && value !== null) {
+    for (let key in value) {
       if (!['en_US', 'zh_CN'].includes(key)) {
         return false
       }
@@ -274,6 +312,12 @@ const isLocale = (data) => {
     return true
   }
   return false
+}
+const isAsyncFunction = (value) => {
+  return (
+    value.constructor.name === 'AsyncFunction' ||
+    Promise.resolve(value) instanceof Promise
+  )
 }
 
 const ojbectSchema = new ObjectSchema({
@@ -642,6 +686,49 @@ const ojbectSchema = new ObjectSchema({
       },
     },
   },
+  assistant: {
+    schema: {
+      enabled: {
+        merge: 'replace',
+        validate: 'boolean',
+      },
+      maxlength: {
+        merge: 'replace',
+        validate(value) {
+          if (!isNumber(value) || !Number.isInteger(value) || value <= 0) {
+            throw new Error(
+              'Key "assistant": Key "maxlength" must be a number.',
+            )
+          }
+        },
+      },
+      commands: {
+        merge: 'replace',
+        validate(value) {
+          if (value && !Array.isArray(value)) {
+            throw new Error('Key "assistant": Key "commands" must be a array.')
+          }
+          value.forEach((item) => {
+            if (!item.label || !item.value) {
+              throw new Error(
+                'Key "assistant": Key "commands" must be a array of objects with "label" and "value" properties.',
+              )
+            }
+            if (!isLocale(item.label)) {
+              throw new Error(
+                `Key "assistant": Key "commands[${index}]": Key "label" must be string, or a object with "en_US" and "zh_CN" properties.`,
+              )
+            }
+            if (!isLocale(item.value)) {
+              throw new Error(
+                `Key "assistant": Key "commands[${index}]": Key "value" must be string, or a object with "en_US" and "zh_CN" properties.`,
+              )
+            }
+          })
+        },
+      },
+    },
+  },
   shareUrl: { merge: 'replace', validate: 'string' },
   templates: {
     merge: 'replace',
@@ -681,27 +768,6 @@ const ojbectSchema = new ObjectSchema({
         merge: 'replace',
         validate: 'number',
       },
-      onUpload: {
-        merge: 'replace',
-        validate(value) {
-          if (value.constructor.name !== 'AsyncFunction') {
-            throw new Error(
-              'Key "upload": Key "onUpload" must be a async function.',
-            )
-          }
-        },
-      },
-      onDelete: {
-        merge: 'replace',
-        validate(value) {
-          if (
-            typeof value !== 'function' &&
-            value.constructor.name !== 'AsyncFunction'
-          ) {
-            throw new Error('Key "upload": Key "onDelete" must be a function.')
-          }
-        },
-      },
     },
   },
   extensions: {
@@ -715,23 +781,16 @@ const ojbectSchema = new ObjectSchema({
   onSave: {
     merge: 'replace',
     validate(value) {
-      if (
-        value.constructor.name !== 'AsyncFunction' &&
-        value instanceof Promise
-      ) {
-        throw new Error(
-          'Key "document": Key "saveNethod" must be a async function.',
-        )
+      if (!isAsyncFunction(value)) {
+        throw new Error('Key "onSave" must be a async function.')
       }
     },
   },
   onFileUpload: {
     merge: 'replace',
     validate(value) {
-      if (value.constructor.name !== 'AsyncFunction') {
-        throw new Error(
-          'Key "upload": Key "onUpload" must be a async function.',
-        )
+      if (!isAsyncFunction(value)) {
+        throw new Error('Key "onFileUpload" must be a async function.')
       }
     },
   },
@@ -742,7 +801,15 @@ const ojbectSchema = new ObjectSchema({
         typeof value !== 'function' &&
         value.constructor.name !== 'AsyncFunction'
       ) {
-        throw new Error('Key "upload": Key "onDelete" must be a function.')
+        throw new Error('Key "onFileDelete" must be a function.')
+      }
+    },
+  },
+  onAssistant: {
+    merge: 'replace',
+    validate(value) {
+      if (!isAsyncFunction(value)) {
+        throw new Error('Key "onAssistant" must be a async function.')
       }
     },
   },
