@@ -39,7 +39,7 @@ import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import Drager from 'es-drager'
 import { mediaPlayer } from '@/utils/player'
 
-const { node, getPos, updateAttributes } = defineProps(nodeViewProps)
+const { node, updateAttributes } = defineProps(nodeViewProps)
 const { options } = useStore()
 
 const containerRef = ref(null)
@@ -57,7 +57,7 @@ onMounted(async () => {
   if (node.attrs.uploaded === false && node.attrs.file) {
     try {
       const { url } = await options.value.onFileUpload(node.attrs.file)
-      if (containerRef.value && getPos()) {
+      if (containerRef.value) {
         updateAttributes({ src: url, file: null, uploaded: true })
       }
     } catch (error) {
