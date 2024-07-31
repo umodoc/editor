@@ -22,18 +22,19 @@ const { options, editor } = useStore()
 let converting = $ref(false)
 const removeBg = async () => {
   const image = editor.value.commands.getSelectionNode()
-  const { src } = editor.value?.getAttributes('image')
+  const { src } = image.attrs
   converting = true
   const blob = await removeBackground(src, {
     publicPath: `${options.value.cdnUrl}/libs/imgly/background-removal-data/`,
   })
   const file = new File([blob], `${shortId(10)}.png`, { type: 'image/png' })
-  image.props.updateAttributes({
+  editor.value.commands.updateAttributes(image.type, {
     src: URL.createObjectURL(blob),
     uploaded: false,
     file,
   })
   converting = false
+  console.log('ok')
 }
 </script>
 

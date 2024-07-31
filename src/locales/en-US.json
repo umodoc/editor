@@ -393,8 +393,8 @@
     "more": "More Colors"
   },
   "blockMenu": {
-    "insert": "Insert New Block",
-    "select": "Select Block",
+    "insert": "Insert Content",
+    "select": "Insert Node",
     "template": "Insert Template",
     "toogleNode": "Switch Block Type",
     "other": "Other",
@@ -432,6 +432,21 @@
       "rotateCC": "Rotate Counter-Clockwise 90°",
       "rotateC": "Rotate Clockwise 90°"
     }
+  },
+  "assistant": {
+    "text": "AI Assistant",
+    "placeholder": "Enter or select a command...",
+    "send": "Send",
+    "exit": "Exit AI Assistant",
+    "commands": "Common Commands:",
+    "result": "AI Generation Result:",
+    "replace": "Replace",
+    "insertAfter": "Insert After",
+    "insertBelow": "Insert Below",
+    "copy": "Copy Generated Result",
+    "copySuccess": "Result copied to clipboard",
+    "rewrite": "Rewrite",
+    "delete": "Delete Result"
   },
   "pageOptions": {
     "title": "Page Settings",

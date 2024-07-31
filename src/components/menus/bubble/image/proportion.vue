@@ -12,9 +12,8 @@ const { editor } = useStore()
 
 const toggleEqualProportion = () => {
   const image = editor.value.commands.getSelectionNode()
-  const { equalProportion } = editor.value?.getAttributes('image')
-  image.props.updateAttributes({
-    equalProportion: !equalProportion,
+  editor.value.commands.updateAttributes(image.type, {
+    equalProportion: !image.attrs.equalProportion,
   })
 }
 </script>

@@ -19,6 +19,6 @@ const themes = [
 
 const setTheme = (theme) => {
   const codeBlock = editor.value.commands.getSelectionNode()
-  codeBlock.props.updateAttributes({ theme })
+  editor.value.commands.updateAttributes(codeBlock.type, { theme })
 }
 </script>

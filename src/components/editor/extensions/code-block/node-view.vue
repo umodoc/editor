@@ -95,7 +95,7 @@ onMounted(() => {
   )
 })
 onBeforeUnmount(() => {
-  codeEditor.remove()
+  codeEditor?.remove()
 })
 
 watch(

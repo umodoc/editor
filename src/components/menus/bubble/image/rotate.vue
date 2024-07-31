@@ -17,8 +17,8 @@ const { editor } = useStore()
 
 const setRotate = (rotate) => {
   const image = editor.value.commands.getSelectionNode()
-  const { angle } = editor.value?.getAttributes('image')
-  image.props.updateAttributes({
+  const { angle } = image.attrs
+  editor.value.commands.updateAttributes(image.type, {
     angle: angle ? angle + rotate : rotate,
   })
 }

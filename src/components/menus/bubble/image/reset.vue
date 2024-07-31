@@ -11,7 +11,7 @@ const { editor } = useStore()
 
 const resetPosition = () => {
   const image = editor.value.commands.getSelectionNode()
-  image.props.updateAttributes({
+  editor.value.commands.updateAttributes(image.type, {
     top: 0,
     left: 0,
     angle: 0,

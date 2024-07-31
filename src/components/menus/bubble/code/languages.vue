@@ -22,6 +22,6 @@ const languageOptions = Object.keys(languages).map((item) => {
 
 const setLanguage = (language) => {
   const codeBlock = editor.value.commands.getSelectionNode()
-  codeBlock.props.updateAttributes({ language })
+  editor.value.commands.updateAttributes(codeBlock.type, { language })
 }
 </script>

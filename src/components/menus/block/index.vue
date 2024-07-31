@@ -24,6 +24,21 @@
       />
     </div>
     <t-dropdown-menu>
+      <t-dropdown-item
+        v-if="
+          options.assistant.enabled &&
+          (editor?.isActive('paragraph') || editor?.isActive('heading')) &&
+          editor?.state?.selection?.$from?.nodeAfter
+        "
+        divider
+      >
+        <menus-button
+          ico="assistant"
+          :text="t('assistant.text')"
+          :tooltip="false"
+          @menu-click="openAssistant"
+        />
+      </t-dropdown-item>
       <t-dropdown-item class="block-menu-group-name" disabled>
         {{ t('blockMenu.insert') }}
       </t-dropdown-item>
@@ -240,7 +255,7 @@
 </template>
 
 <script setup>
-const { container, options, editor } = useStore()
+const { container, options, editor, assistant } = useStore()
 let menuVisible = $ref(false)
 let menuScrollTop = $ref(0)
 const updateMenuPostion = () => {
@@ -275,6 +290,14 @@ const headings = $ref([1, 2, 3, 4, 5, 6])
 
 const disableItem = (name) => {
   return options.value.toolbar.disableMenuItems.includes(name)
+}
+
+const openAssistant = () => {
+  assistant.value = true
+  editor.value.commands.selectParentNode()
+  editor.value.commands.focus()
+  const { from, to } = editor.value.state.selection
+  editor.value.commands.setTextSelection({ from, to })
 }
 
 const setTemplate = ({ content }) => {
@@ -313,7 +336,7 @@ const deleteNode = () => {
     editor.value?.chain().focus().deleteTable().run()
     return
   }
-  editor.value?.chain().focus().selectParentNode().deleteSelection().run()
+  editor.value?.chain().focus().deleteSelectionNode().run()
 }
 </script>
 

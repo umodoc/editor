@@ -12,9 +12,8 @@ const { editor } = useStore()
 
 const toggleDraggable = () => {
   const image = editor.value.commands.getSelectionNode()
-  const { draggable } = editor.value?.getAttributes('image')
-  image.props.updateAttributes({
-    draggable: !draggable,
+  editor.value.commands.updateAttributes(image.type, {
+    draggable: !image.attrs.draggable,
   })
 }
 </script>

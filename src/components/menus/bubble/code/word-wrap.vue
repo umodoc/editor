@@ -11,10 +11,9 @@
 const { editor } = useStore()
 
 const toggleWordWrap = () => {
-  const image = editor.value.commands.getSelectionNode()
-  const { wordWrap } = editor.value?.getAttributes('codeBlock')
-  image.props.updateAttributes({
-    wordWrap: !wordWrap,
+  const codeBlock = editor.value.commands.getSelectionNode()
+  editor.value.commands.updateAttributes(codeBlock.type, {
+    wordWrap: !codeBlock.attrs.wordWrap,
   })
 }
 </script>

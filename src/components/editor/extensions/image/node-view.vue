@@ -42,7 +42,7 @@
           :style="{
             height: node.attrs.equalProportion ? 'auto' : '100%',
             transform:
-              node.attrs.flipX || node.attrs.flipX
+              node.attrs.flipX || node.attrs.flipY
                 ? `rotateX(${node.attrs.flipX ? '180' : '0'}deg) rotateY(${node.attrs.flipY ? '180' : '0'}deg)`
                 : 'none',
           }"
@@ -65,7 +65,7 @@ import Drager from 'es-drager'
 import { base64ToFile } from 'file64'
 import shortId from '@/utils/short-id'
 
-const { node, updateAttributes } = defineProps(nodeViewProps)
+const { node, getPos, updateAttributes } = defineProps(nodeViewProps)
 const { options } = useStore()
 const { imagePreview } = useStore()
 const { isLoading, error } = useImage({ src: node.attrs.src })
@@ -81,7 +81,7 @@ const uploadImage = async () => {
   }
   try {
     const { id, url } = await options.value.onFileUpload(node.attrs.file)
-    if (containerRef.value) {
+    if (containerRef.value && getPos()) {
       updateAttributes({ id, src: url, file: null, uploaded: true })
     }
   } catch (error) {
@@ -89,6 +89,7 @@ const uploadImage = async () => {
   }
 }
 onMounted(async () => {
+  await nextTick()
   const width = containerRef.value.$el.clientWidth
   maxWidth = width
   if (node.attrs.width === null) {
