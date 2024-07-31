@@ -219,7 +219,7 @@
     :attach="container"
     size="320px"
     :footer="false"
-    close-btn
+    :close-btn="true"
     destroy-on-close
     show-in-attached-element
   >
