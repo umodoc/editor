@@ -11,10 +11,9 @@
 const { editor } = useStore()
 
 const toggleLineNumbers = () => {
-  const image = editor.value.commands.getSelectionNode()
-  const { lineNumbers } = editor.value?.getAttributes('codeBlock')
-  image.props.updateAttributes({
-    lineNumbers: !lineNumbers,
+  const codeBlock = editor.value.commands.getSelectionNode()
+  editor.value.commands.updateAttributes(codeBlock.type, {
+    lineNumbers: !codeBlock.attrs.lineNumbers,
   })
 }
 </script>

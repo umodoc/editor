@@ -12,7 +12,7 @@ const { editor } = useStore()
 const copyCode = () => {
   const codeBlock = editor.value.commands.getSelectionNode()
   const { copy } = useClipboard({
-    source: ref(codeBlock.props.node.attrs.code),
+    source: ref(codeBlock.attrs.code),
   })
   copy()
   useMessage('success', t('bubbleMenu.code.copy.success'))
