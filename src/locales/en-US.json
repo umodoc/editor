@@ -420,7 +420,7 @@
       "download": "Download File"
     },
     "image": {
-      "download": "Download Image",
+      "open": "Open in a new window",
       "draggable": "Image Floating",
       "flipX": "Flip Horizontally",
       "flipY": "Flip Vertically",
