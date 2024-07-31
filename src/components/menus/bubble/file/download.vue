@@ -10,9 +10,12 @@
 const { editor } = useStore()
 
 const downloadFile = () => {
+  const node = editor.value?.commands.getSelectionNode()
   const a = document.createElement('a')
-  a.href = editor.value?.getAttributes('file').url
-  a.target = '_blank'
+  a.href = node.attrs.url
+  a.download = node.attrs.name
+  document.body.appendChild(a)
   a.click()
+  document.body.removeChild(a)
 }
 </script>
