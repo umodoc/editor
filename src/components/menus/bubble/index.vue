@@ -34,7 +34,7 @@
     <menus-bubble-image-preview
       v-if="editor?.getAttributes('image')?.type === 'image'"
     />
-    <menus-bubble-image-download />
+    <menus-bubble-image-open />
     <div class="divider"></div>
     <menus-bubble-image-edit />
     <menus-bubble-node-delete />

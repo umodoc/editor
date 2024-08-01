@@ -420,7 +420,7 @@
       "download": "下载文件"
     },
     "image": {
-      "download": "下载图片",
+      "open": "新窗口打开",
       "draggable": "图片浮动",
       "flipX": "水平翻转",
       "flipY": "垂直翻转",
