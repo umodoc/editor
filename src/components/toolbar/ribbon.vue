@@ -70,6 +70,9 @@
           <div class="virtual-group">
             <menus-toolbar-base-print v-if="!disableItem('print')" />
           </div>
+          <div class="virtual-group is-slot">
+            <slot name="toolbar_base" toolbar-mode="ribbon" />
+          </div>
         </template>
         <template v-if="currentMenu === 'insert'">
           <div class="virtual-group">
@@ -97,6 +100,9 @@
           <div class="virtual-group">
             <menus-toolbar-insert-template />
             <menus-toolbar-insert-web-page />
+          </div>
+          <div class="virtual-group is-slot">
+            <slot name="toolbar_insert" toolbar-mode="ribbon" />
           </div>
         </template>
         <template v-if="currentMenu === 'table'">
@@ -149,6 +155,9 @@
           <div class="virtual-group">
             <menus-toolbar-table-delete />
           </div>
+          <div class="virtual-group is-slot">
+            <slot name="toolbar_table" toolbar-mode="ribbon" />
+          </div>
         </template>
         <template v-if="currentMenu === 'tools'">
           <div class="virtual-group">
@@ -168,6 +177,9 @@
             <menus-toolbar-tools-chinese-case
               v-if="!disableItem('chineseCase')"
             />
+          </div>
+          <div class="virtual-group">
+            <slot name="toolbar_tools" toolbar-mode="ribbon" />
           </div>
         </template>
         <template v-if="currentMenu === 'page'">
@@ -201,6 +213,9 @@
           <div class="virtual-group">
             <menus-toolbar-page-preview />
           </div>
+          <div class="virtual-group is-slot">
+            <slot name="toolbar_page" toolbar-mode="ribbon" />
+          </div>
         </template>
         <template v-if="currentMenu === 'export'">
           <div class="virtual-group">
@@ -212,6 +227,9 @@
           <div class="virtual-group">
             <menus-toolbar-export-share v-if="!disableItem('share')" />
             <menus-toolbar-export-embed v-if="!disableItem('embed')" />
+          </div>
+          <div class="virtual-group is-slot">
+            <slot name="toolbar_export" toolbar-mode="ribbon" />
           </div>
         </template>
       </div>
@@ -302,7 +320,7 @@ const changeMenu = async (menu) => {
   flex-shrink: 0;
   .virtual-group {
     padding: 0 20px;
-    border-right: solid 1px var(--umo-border-color-light);
+    border-left: solid 1px var(--umo-border-color-light);
     flex-shrink: 0;
     &:empty {
       display: none;
@@ -310,8 +328,9 @@ const changeMenu = async (menu) => {
     &:first-child {
       padding-left: 0;
     }
-    &:last-child {
-      border-right: none;
+    &:first-child,
+    &.is-slot:empty {
+      border-left: none;
     }
     &-row {
       display: flex;

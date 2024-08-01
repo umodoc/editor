@@ -1,6 +1,13 @@
 <template>
   <div class="box">
-    <umo-editor ref="editorRef" v-bind="options" @save="onSave" />
+    <umo-editor ref="editorRef" v-bind="options" @save="onSave">
+      <!-- <template #toolbar_base="props">
+        <span>slot：{{ props }}</span>
+      </template>
+      <template #bubble_menu>
+        <span>slot</span>
+      </template> -->
+    </umo-editor>
   </div>
 </template>
 

@@ -23,7 +23,11 @@
             background: page.background,
           }"
         >
-          <editor />
+          <editor>
+            <template #bubble_menu="props">
+              <slot name="bubble_menu" v-bind="props" />
+            </template>
+          </editor>
         </t-watermark>
       </div>
     </div>
