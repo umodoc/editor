@@ -33,6 +33,7 @@ export default Node.create({
   group: "block",
   isolating: true,
   selectable: false,
+  isLeaf:true,
   addOptions() {
     return {
       isPaging: true,

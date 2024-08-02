@@ -350,9 +350,9 @@ export function getDomHeight(dom) {
   const paddingBottom = contentStyle.getPropertyValue("padding-bottom");
   const marginTop = contentStyle.getPropertyValue("margin-top");
   const marginBottom = contentStyle.getPropertyValue("margin-bottom");
-  const padding = parseFloat(paddingTop) + parseFloat(paddingBottom);
+  //const padding = parseFloat(paddingTop) + parseFloat(paddingBottom);
   const margin = parseFloat(marginTop) + parseFloat(marginBottom);
-  return padding + margin + dom.offsetHeight + parseFloat(contentStyle.borderWidth);
+  return 0 + margin + dom.offsetHeight + parseFloat(contentStyle.borderWidth);
 }
 
 export function getAbsentHtmlH(node,schema) {

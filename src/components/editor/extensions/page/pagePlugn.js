@@ -66,8 +66,7 @@ class PageDetector {
         }
         tr.setMeta("bodyOption",this.#bodyOption);
       }
-      const state = view.state.apply(tr);
-      view.updateState(state);
+      view.dispatch(tr);
     }
   }
 }

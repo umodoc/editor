@@ -1,4 +1,18 @@
-import { TABLE, CASSIE_BLOCK, CASSIE_BLOCK_EXTEND, EXTEND, HEADING, LISTITEM, PAGE, PARAGRAPH, TABLE_ROW, ORDEREDLIST, BULLETLIST, TABLE_CELL } from "./nodeNames";
+import {
+  TABLE,
+  CASSIE_BLOCK,
+  CASSIE_BLOCK_EXTEND,
+  EXTEND,
+  HEADING,
+  LISTITEM,
+  PAGE,
+  PARAGRAPH,
+  TABLE_ROW,
+  ORDEREDLIST,
+  BULLETLIST,
+  TABLE_CELL,
+  TASKITEM, TASKLIST
+} from './nodeNames'
 import { Fragment, Slice } from "@tiptap/pm/model";
 import { getAbsentHtmlH, getBreakPos, getContentSpacing, getDefault, getDomHeight, getDomPaddingAndMargin } from "./core";
 import {  getNodeType } from "@tiptap/core";
@@ -37,6 +51,8 @@ export const defaultNodesComputed = {
   [ORDEREDLIST]: sameListCalculation,
   [BULLETLIST]: sameListCalculation,
   [LISTITEM]: sameItemCalculation,
+  [TASKLIST]: sameListCalculation,
+  [TASKITEM]: sameItemCalculation,
   [TABLE_ROW]: (splitContex, node, pos, parent, dom) => {
     const chunks = splitContex.splitResolve(pos);
     if (splitContex.isOverflow(0)) {
@@ -118,20 +134,6 @@ export const defaultNodesComputed = {
     }
     splitContex.setBoundary(pos, chunks.length - 1);
     return false;
-  },
-  [CASSIE_BLOCK]: (splitContex, node, pos, parent, dom) => {
-    const pHeight = getDomHeight(dom);
-    if (splitContex.isOverflow(pHeight)) {
-      const contentHeight = getContentSpacing(dom);
-      splitContex.addHeight(contentHeight);
-      return true;
-    }
-    splitContex.addHeight(pHeight);
-    return false;
-  },
-  [CASSIE_BLOCK_EXTEND]: (splitContex, node, pos, parent, dom) => {
-    splitContex.addHeight(8);
-    return true;
   },
   [PAGE]: (splitContex, node, pos, parent, dom) => {
     return node == splitContex.lastPage();
@@ -394,23 +396,15 @@ export class PageComputedContext {
       const typeAfter = typesAfter && typesAfter[i];
       const n = $pos.node(d);
       let na= $pos.node(d).copy(after);
-      if (schema.nodes[n.type.name + EXTEND]) {
-        const attr = Object.assign({}, n.attrs, { id: getId() });
-        if (!attr.id) {
-          console.log("id为空");
+      //处理id重复的问题
+      if (na && na.attrs.id) {
+        let extend = {};
+        if (na.attrs.extend == false) {
+          extend = { extend: true };
         }
-        na = schema.nodes[n.type.name + EXTEND].createAndFill(attr, after);
-      } else {
-        //处理id重复的问题
-        if (na && na.attrs.id) {
-          let extend = {};
-          if (na.attrs.extend == false) {
-            extend = { extend: true };
-          }
-          //重新生成id
-          const attr = Object.assign({}, n.attrs, { id: getId(), ...extend });
-          na = schema.nodes[n.type.name].createAndFill(attr, after);
-        }
+        //重新生成id
+        const attr = Object.assign({}, n.attrs, { id: getId(), ...extend });
+        na = schema.nodes[n.type.name].createAndFill(attr, after);
       }
       after = Fragment.from(
         typeAfter

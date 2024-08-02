@@ -98,6 +98,7 @@ import Dropcursor from '@tiptap/extension-dropcursor'
 
 import shortId from '@/utils/short-id'
 import { onMounted } from 'vue'
+import { TableView } from '@/components/editor/extensions/TableView'
 
 const {
   options,
@@ -149,10 +150,10 @@ const editorInstance = new Editor({
       considerAnyAsEmpty: true,
       placeholder: l(options.value.document.placeholder),
     }),
-/*    Focus.configure({
+    Focus.configure({
       className: 'node-focused',
       mode: 'deepest',
-    }),*/
+    }),
     FontFamily,
     FontSize,
     Bold.extend({
@@ -202,7 +203,6 @@ const editorInstance = new Editor({
     TableRow,
     TableHeader,
     TableCell,
-
     // 页面
     Toc,
     PageBreak,

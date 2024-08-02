@@ -14,7 +14,7 @@
   >
     <div
       class="block-menu-hander"
-      :style="`transform: translate(-38px, ${menuScrollTop}px);`"
+      :style="`transform: translate(${left-0.8}cm, ${menuScrollTop}px);`"
     >
       <menus-button
         class="block-menu-button"
@@ -255,15 +255,19 @@
 </template>
 
 <script setup>
+import { UnitConversion } from '@/components/editor/extensions/page/core'
+
 const { container, options, editor, assistant } = useStore()
 let menuVisible = $ref(false)
 let menuScrollTop = $ref(0)
+const {page} =useStore();
+let {left} = page.value.margin;
 const updateMenuPostion = () => {
   const currentBlock = document.querySelector(`${container} .node-focused`)
   if (currentBlock === null) {
     return
   }
-  let top = currentBlock.offsetTop
+  let top = currentBlock.offsetTop;
   top = currentBlock.tagName === 'DIV' ? top - 8 : top - 5
   if (editor.value.isActive('pageBreak')) {
     top = top - 3

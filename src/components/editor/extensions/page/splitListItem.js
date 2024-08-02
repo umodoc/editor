@@ -22,7 +22,6 @@ export const splitListItem =
     if ((node && node.isBlock) || $from.depth < 2 || !$from.sameParent($to)) {
       return false;
     }
-
     const grandParent = $from.node(-1);
 
     if (grandParent.type !== type) {

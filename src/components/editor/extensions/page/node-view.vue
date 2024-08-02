@@ -8,15 +8,19 @@
     padding: `${page.margin.top + 'cm'} ${page.margin.right + 'cm'} ${page.margin.bottom + 'cm'} ${page.margin.left + 'cm'}`
     }"
   >
+    <div class="corner-top-left"
+         :style="{left:page.margin.left-1 + 'cm',top:page.margin.top-1 + 'cm'}"
+    ></div>
+    <div class="corner-top-right" :style="{right:page.margin.right-1 + 'cm',top:page.margin.top-1 + 'cm'}"></div>
+    <div class="corner-bottom-left" :style="{left:page.margin.left-1 + 'cm',bottom:page.margin.bottom-1 + 'cm'}" ></div>
+    <div class="corner-bottom-right" :style="{right:page.margin.right-1 + 'cm',bottom:page.margin.bottom-1 + 'cm'}" ></div>
     <node-view-content class="PageContent" />
   </node-view-wrapper>
 </template>
-
 <script setup>
 import { nodeViewProps, NodeViewWrapper,NodeViewContent } from '@tiptap/vue-3'
-import { UnitConversion } from '@/components/editor/extensions/page/core'
-const {page} =useStore();
-const Props = defineProps(nodeViewProps)
+const {page,options,editorDestroyed} =useStore();
+const {editor} = defineProps(nodeViewProps)
 const containerRef = ref(null)
 
 const pageSize = $computed(() => {
@@ -30,7 +34,59 @@ const pageSize = $computed(() => {
 
 <style lang="less">
 .page-node-view {
-  //下划线
+  margin-top:0.5rem;
+  margin-bottom:0.5rem;
+//下划线
   border-bottom: 1px solid #ccc;
+  position: relative;
+  .corner-top-left{
+    position: absolute;
+    height: 1cm;
+    width: 1cm;
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-style: solid;
+    box-sizing:border-box;
+    border-color:#e5e7eb;
+  }
+  .corner-top-right{
+    position: absolute;
+    height: 1cm;
+    width: 1cm;
+    border-top-width: 0px;
+    border-left-width: 1px;
+    border-right-width: 0px;
+    border-bottom-width: 1px;
+    border-style: solid;
+    box-sizing:border-box;
+    border-color:#e5e7eb;
+  }
+
+  .corner-bottom-left{
+    position: absolute;
+    height: 1cm;
+    width: 1cm;
+    border-top-width: 1px;
+    border-left-width: 0px;
+    border-right-width: 1px;
+    border-bottom-width: 0px;
+    border-style: solid;
+    box-sizing:border-box;
+    border-color:#e5e7eb;
+  }
+  .corner-bottom-right{
+    position: absolute;
+    height: 1cm;
+    width: 1cm;
+    border-top-width: 1px;
+    border-left-width: 1px;
+    border-right-width: 0px;
+    border-bottom-width: 0px;
+    border-style: solid;
+    box-sizing:border-box;
+    border-color:#e5e7eb;
+  }
 }
 </style>
