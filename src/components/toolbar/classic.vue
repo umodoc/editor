@@ -63,6 +63,9 @@
         <div class="virtual-group">
           <menus-toolbar-base-print v-if="!disableItem('print')" />
         </div>
+        <div class="virtual-group is-slot">
+          <slot name="toolbar_base" toolbar-mode="classic" />
+        </div>
       </template>
       <template v-if="currentMenu === 'insert'">
         <div class="virtual-group">
@@ -88,6 +91,9 @@
         <div class="virtual-group">
           <menus-toolbar-insert-template />
           <menus-toolbar-insert-web-page />
+        </div>
+        <div class="virtual-group is-slot">
+          <slot name="toolbar_insert" toolbar-mode="classic" />
         </div>
       </template>
       <template v-if="currentMenu === 'table'">
@@ -126,6 +132,9 @@
         <div class="virtual-group">
           <menus-toolbar-table-delete />
         </div>
+        <div class="virtual-group is-slot">
+          <slot name="toolbar_table" toolbar-mode="classic" />
+        </div>
       </template>
       <template v-if="currentMenu === 'tools'">
         <div class="virtual-group">
@@ -145,6 +154,9 @@
           <menus-toolbar-tools-chinese-case
             v-if="!disableItem('chineseCase')"
           />
+        </div>
+        <div class="virtual-group is-slot">
+          <slot name="toolbar_tools" toolbar-mode="classic" />
         </div>
       </template>
       <template v-if="currentMenu === 'page'">
@@ -172,6 +184,9 @@
         <div class="virtual-group">
           <menus-toolbar-page-preview />
         </div>
+        <div class="virtual-group is-slot">
+          <slot name="toolbar_page" toolbar-mode="classic" />
+        </div>
       </template>
       <template v-if="currentMenu === 'export'">
         <div class="virtual-group">
@@ -183,6 +198,9 @@
         <div class="virtual-group">
           <menus-toolbar-export-share v-if="!disableItem('share')" />
           <menus-toolbar-export-embed v-if="!disableItem('embed')" />
+        </div>
+        <div class="virtual-group is-slot">
+          <slot name="toolbar_export" toolbar-mode="classic" />
         </div>
       </template>
     </div>
@@ -242,13 +260,19 @@ const toggoleMenu = async (menu) => {
     &:empty {
       display: none;
     }
-    &:not(:last-child)::after {
-      content: '';
-      display: block;
-      height: 18px;
-      width: 1px;
-      background-color: var(--umo-border-color-light);
-      margin: 0 10px;
+    &:not(:last-child),
+    &.is-slot {
+      &::before {
+        content: '';
+        display: block;
+        height: 18px;
+        width: 1px;
+        background-color: var(--umo-border-color-light);
+        margin: 0 10px;
+      }
+    }
+    &:first-child::before {
+      display: none;
     }
     :deep(.menu-button .umo-button--shape-square) {
       .icon {

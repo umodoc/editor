@@ -18,10 +18,22 @@
       :style="{ height: options.height }"
     >
       <header class="umo-toolbar">
-        <toolbar :key="toolbarKey" @menu-change="menuChange" />
+        <toolbar :key="toolbarKey" @menu-change="menuChange">
+          <template
+            v-for="item in options.toolbar.menus"
+            :key="item"
+            #[`toolbar_${item}`]="props"
+          >
+            <slot :name="`toolbar_${item}`" v-bind="props" />
+          </template>
+        </toolbar>
       </header>
       <main class="umo-main">
-        <container-page v-if="$toolbar.mode !== 'source'" />
+        <container-page v-if="$toolbar.mode !== 'source'">
+          <template #bubble_menu="props">
+            <slot name="bubble_menu" v-bind="props" />
+          </template>
+        </container-page>
         <editor-source v-else />
       </main>
       <footer v-if="$toolbar.mode !== 'source'" class="umo-footer">

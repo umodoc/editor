@@ -5,13 +5,29 @@
       :menus="toolbarMenus"
       :current-menu="currentMenu"
       @menu-change="menuChange"
-    />
+    >
+      <template
+        v-for="item in options.toolbar.menus"
+        :key="item"
+        #[`toolbar_${item}`]="props"
+      >
+        <slot :name="`toolbar_${item}`" v-bind="props" />
+      </template>
+    </toolbar-ribbon>
     <toolbar-classic
       v-if="$toolbar.mode === 'classic'"
       :menus="toolbarMenus"
       :current-menu="currentMenu"
       @menu-change="menuChange"
-    />
+    >
+      <template
+        v-for="item in options.toolbar.menus"
+        :key="item"
+        #[`toolbar_${item}`]="props"
+      >
+        <slot :name="`toolbar_${item}`" v-bind="props" />
+      </template>
+    </toolbar-classic>
     <toolbar-source
       v-if="$toolbar.mode === 'source' && options.toolbar.enableSourceEditor"
     />

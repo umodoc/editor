@@ -15,7 +15,11 @@
       :editor="editor"
       :tippy-options="tippyOpitons"
     >
-      <menus-bubble v-if="options.document.enableBubbleMenu && !assistant" />
+      <menus-bubble v-if="options.document.enableBubbleMenu && !assistant">
+        <template #bubble_menu="props">
+          <slot name="bubble_menu" v-bind="props" />
+        </template>
+      </menus-bubble>
       <assistant-input v-if="options.assistant.enabled && assistant" />
     </bubble-menu>
   </template>

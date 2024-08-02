@@ -105,6 +105,8 @@
     <menus-toolbar-base-color />
     <menus-toolbar-base-background-color />
     <menus-toolbar-base-highlight />
+    <div class="divider"></div>
+    <slot name="bubble_menu" />
   </template>
 </template>
 
@@ -118,5 +120,8 @@ const { options, editor } = useStore()
   border-right: solid 1px var(--umo-border-color-light);
   height: 16px;
   margin: 0 10px 0 5px;
+  &:last-child:is(.divider) {
+    display: none;
+  }
 }
 </style>
