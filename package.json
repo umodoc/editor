@@ -37,6 +37,9 @@
   "exports": {
     ".": {
       "import": "./dist/es/umo-editor.mjs"
+    },
+    "./style": {
+      "import": "./dist/es/style.css"
     }
   },
   "scripts": {
