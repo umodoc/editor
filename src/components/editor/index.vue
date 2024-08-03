@@ -247,7 +247,7 @@ setEditor(editorInstance)
 let tippyInstance = $ref(null)
 const tippyOpitons = $ref({
   appendTo: 'parent',
-  maxWidth: 480,
+  maxWidth: 580,
   zIndex: 99,
   onShow(instance) {
     tippyInstance = instance
@@ -282,12 +282,12 @@ onBeforeUnmount(() => editorInstance.destroy())
   border-radius: var(--umo-radius);
   display: flex;
   align-items: center;
-  background-color: var(--umo-color-white);
   flex-wrap: wrap;
   &:not(.assistant) {
     padding: 8px 10px;
     box-shadow: var(--umo-shadow);
     border: 1px solid var(--umo-border-color);
+    background-color: var(--umo-color-white);
   }
   &:empty {
     display: none;
