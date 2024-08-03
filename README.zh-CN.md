@@ -28,11 +28,11 @@ npm install --save @umoteam/editor @umoteam/editor-external
 
 ## 快速开始
 
-[开发文档](https://editor.umodoc.com/cn/docs) | [在线演示](https://demo.umodoc.com/editor?lang=cn) | [GitHub](https://github.com/umodoc/editor) | [码云(国内镜像)](https://gitee.com/umodoc/editor) | [NPM](https://www.npmjs.com/package/@umoteam/editor)
+[开发文档](https://editor.umodoc.com/cn/docs) | [在线演示](https://demo.umodoc.com/editor?lang=zh-CN) | [GitHub](https://github.com/umodoc/editor) | [码云(国内镜像)](https://gitee.com/umodoc/editor) | [NPM](https://www.npmjs.com/package/@umoteam/editor)
 
 ## 在线体验
 
-访问 [在线演示](https://demo.umodoc.com/editor?pane=no&lang=cn) 快速体验。
+访问 [在线演示](https://demo.umodoc.com/editor?pane=hide&lang=zh-CN) 快速体验。
 
 ## 安装说明
 
