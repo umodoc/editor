@@ -8,7 +8,7 @@
         ref="inputRef"
         class="input"
         v-model="command"
-        :maxlength="options.assistant.maxLength"
+        :maxlength="options.assistant.maxlength"
         :readonly="generating"
         autocomplete="false"
         :placeholder="t('assistant.placeholder')"
@@ -251,6 +251,7 @@ const deleteResult = () => {
   position: relative;
   .ai-icon {
     position: absolute;
+    border-radius: var(--umo-radius);
     z-index: 10;
     font-size: 20px;
     margin: 12px;
@@ -330,6 +331,8 @@ const deleteResult = () => {
   .result {
     font-size: 12px;
     margin-bottom: 18px;
+    max-width: 440px;
+    text-align: justify;
     * + * {
       margin-top: 6px;
     }
