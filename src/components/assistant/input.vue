@@ -154,42 +154,55 @@ const send = async () => {
   }
 
   // 获取 onAssistant 返回的数据
-  const data = await options.value.onAssistant(payload, content)
-  // 错误处理
-  const errorHandler = () => {
-    if (result.content.startsWith('[ERROR]: ')) {
-      result.error = true
-      result.content = result.content.replace('[ERROR]: ', '')
+  try {
+    const data = await options.value.onAssistant(payload, content)
+    // 错误处理
+    const errorHandler = () => {
+      if (result.content.startsWith('[ERROR]: ')) {
+        result.error = true
+        result.content = result.content.replace('[ERROR]: ', '')
+      }
     }
-  }
-  // 如果是可读流
-  if (data instanceof ReadableStream) {
-    // 创建可写流
-    const stream = new WritableStream({
-      write(chunk) {
-        errorHandler()
-        result.content += chunk
-      },
-      close() {
-        generating = false
-        result.command = command
+    // 如果是可读流
+    if (data instanceof ReadableStream) {
+      // 创建可写流
+      const stream = new WritableStream({
+        write(chunk) {
+          errorHandler()
+          result.content += chunk
+        },
+        close() {
+          generating = false
+          result.command = command
+        },
+      })
+      // 将可读流写入可写流
+      data.pipeTo(stream)
+      return
+    }
+    // 如果是纯文本
+    if (typeof data === 'string') {
+      generating = false
+      result.command = command
+      errorHandler()
+      result.content = data
+      return
+    }
+    console.error(
+      'onAssistant method returns data in an incorrect format, it can be a ReadableStream or plain text.',
+    )
+  } catch (err) {
+    console.error(err)
+    const dialog = useAlert({
+      theme: 'warning',
+      header: t('assistant.error.title'),
+      body: t('assistant.error.message'),
+      onConfirm() {
+        dialog.destroy()
       },
     })
-    // 将可读流写入可写流
-    data.pipeTo(stream)
-    return
+    assistant.value = false
   }
-  // 如果是纯文本
-  if (typeof data === 'string') {
-    generating = false
-    result.command = command
-    errorHandler()
-    result.content = data
-    return
-  }
-  console.error(
-    'onAssistant method returns data in an incorrect format, it can be a ReadableStream or plain text.',
-  )
 }
 
 const insertCommand = ({ value, autoSend }) => {
@@ -312,6 +325,8 @@ const deleteResult = () => {
   border-radius: var(--umo-radius);
   position: relative;
   background-color: var(--umo-color-white);
+  width: 480px;
+  box-sizing: border-box;
   .close {
     position: absolute;
     top: 12px;
@@ -331,7 +346,7 @@ const deleteResult = () => {
   .result {
     font-size: 12px;
     margin-bottom: 18px;
-    max-width: 440px;
+    width: 450px;
     text-align: justify;
     * + * {
       margin-top: 6px;

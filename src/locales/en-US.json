@@ -446,7 +446,11 @@
     "copy": "Copy Generated Result",
     "copySuccess": "Result copied to clipboard",
     "rewrite": "Rewrite",
-    "delete": "Delete Result"
+    "delete": "Delete Result",
+    "error": {
+      "title": "Error Message",
+      "message": "An error occurred with the AI Document Assistant result. Please try again!"
+    }
   },
   "pageOptions": {
     "title": "Page Settings",
@@ -587,7 +591,7 @@
     "cache": {
       "text": "Restore from Cache",
       "error": {
-        "title": "Error Prompt",
+        "title": "Error Message",
         "message": "There is no content in the cache!"
       }
     }
