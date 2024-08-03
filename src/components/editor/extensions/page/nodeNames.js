@@ -14,6 +14,7 @@ export const ORDEREDLIST = "orderedList";
 
 export const TABLE = "table";
 
+export const TABLEHEADER = "tableHeader";
 export const TABLE_ROW = "tableRow";
 export const TABLE_CELL = "tableCell";
 export const TEXT_BOX = "textBox";

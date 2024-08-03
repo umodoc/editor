@@ -15,8 +15,6 @@ export function getHTMLFromFragment(doc,schema, options) {
     DOMSerializer.fromSchema(schema).serializeFragment(doc.content, { document: options.document }, wrap)
     return wrap.innerHTML
   }
-
-  // Use zeed-dom for serialization.
   const zeedDocument = DOMSerializer.fromSchema(schema).serializeFragment(doc.content, {
     document: createHTMLDocument()
   })
@@ -388,7 +386,7 @@ function iframeDocAddDiv() {
     const { width, height } = page.value.size
     const {right,left,bottom,top} =page.value.margin;
     const dom = iframeDoc.createElement("div");
-    dom.setAttribute("class", "Page text-editor relative editor-container");
+    dom.setAttribute("class", "page");
     dom.setAttribute("style", "opacity: 0;position: absolute;max-width:" + width + "cm;width:" + width + "cm;padding-left:"+left+"cm;padding-right:"+right+"cm;padding-top:"+top+"cm;padding-bottom:"+bottom+"cm;");
     const content = iframeDoc.createElement("div");
     content.classList.add("PageContent");

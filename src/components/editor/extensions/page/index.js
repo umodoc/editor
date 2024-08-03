@@ -11,7 +11,7 @@ import {
   TABLE,
   TABLE_ROW,
   TEXT_BOX,
-  IMAGE,IFRAME,FILE,CODE_BLOCK,AUDIO,TOC,VIDEO,HORIZONTALRULE,PAGEBREAK
+  IMAGE,IFRAME,FILE,CODE_BLOCK,AUDIO,TOC,VIDEO,HORIZONTALRULE,PAGEBREAK,TABLEHEADER
 } from './nodeNames'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import { Selection,TextSelection } from "@tiptap/pm/state";
@@ -24,7 +24,7 @@ import NodeView from './node-view.vue'
 import { ReplaceStep } from '@tiptap/pm/transform'
 const types = [HEADING,PARAGRAPH,BULLETLIST,LISTITEM,ORDEREDLIST,
   TABLE,TABLE_ROW,CASSIE_BLOCK,TEXT_BOX,IMAGE,IFRAME,FILE,CODE_BLOCK,AUDIO,TOC,VIDEO,
-  HORIZONTALRULE,PAGEBREAK
+  HORIZONTALRULE,PAGEBREAK,TABLEHEADER
 ]
 export default Node.create({
   priority: 2,

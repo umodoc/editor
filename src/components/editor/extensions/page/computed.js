@@ -262,12 +262,14 @@ export class PageComputedContext {
   tr;
   pageState;
   editor;
+  restDomIds;
   constructor(editor, nodesComputed, pageState, state) {
     this.editor = editor;
     this.nodesComputed = nodesComputed;
     this.tr = state.tr;
     this.state = state;
     this.pageState = pageState;
+    this.restDomIds=[];
   }
 
   //核心执行逻辑
@@ -354,6 +356,7 @@ export class PageComputedContext {
 
         if ((lastPage?.firstChild?.type == prePage?.lastChild?.type || lastPage?.firstChild?.type.name.includes(EXTEND)) && lastPage?.firstChild?.attrs?.extend) {
           depth = 2;
+          this.restDomIds.push(prePage?.lastChild?.attrs?.id);
         }
       }
       tr.join(tr.doc.content.size - nodesize, depth);
@@ -469,13 +472,14 @@ export class PageComputedContext {
     const splitContex = new SplitContext(this.state.schema,doc, bodyOptions?.bodyHeight, getDefault());
     const nodesComputed = this.nodesComputed;
     const lastNode = doc.lastChild;
+    const restDomIds = this.restDomIds;
     doc.descendants((node, pos, parentNode, i) => {
       if (lastNode != node && parentNode?.type.name == "doc") {
         return false;
       }
       if (!splitContex.pageBoundary()) {
         let dom = document.getElementById(node.attrs.id);
-        if (!dom && node.type.name != PAGE) dom = getAbsentHtmlH(node,this.state.schema);
+        if (restDomIds.includes(node.attrs.id)||(!dom && node.type.name != PAGE)) dom = getAbsentHtmlH(node,this.state.schema);
         return (nodesComputed[node.type.name]||nodesComputed["default"])(splitContex, node, pos, parentNode, dom);
       }
       return false;

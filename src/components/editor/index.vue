@@ -69,7 +69,7 @@ import Iframe from './extensions/iframe'
 import Mathematics from '@tiptap-pro/extension-mathematics'
 
 // 表格
-import Table from '@tiptap/extension-table'
+import Table from './extensions/table'
 import TableCell from './extensions/table-cell'
 import TableHeader from './extensions/table-header'
 import TableRow from '@tiptap/extension-table-row'
@@ -86,7 +86,7 @@ import InvisibleNode from './extensions/invisible-node'
 import Page from './extensions/page'
 import { Document } from '@tiptap/extension-document'
 // 其他
-import Selection from './extensions/selection'
+/*import Selection from './extensions/selection'*/
 import {
   TableOfContents,
   getHierarchicalIndexes,
@@ -98,7 +98,7 @@ import Dropcursor from '@tiptap/extension-dropcursor'
 
 import shortId from '@/utils/short-id'
 import { onMounted } from 'vue'
-import { TableView } from '@/components/editor/extensions/TableView'
+
 
 const {
   options,
@@ -146,10 +146,10 @@ const editorInstance = new Editor({
     }),
     Document.extend({content:"page+"}),
     Page,
-    Placeholder.configure({
+/*    Placeholder.configure({
       considerAnyAsEmpty: true,
       placeholder: l(options.value.document.placeholder),
-    }),
+    }),*/
     Focus.configure({
       className: 'node-focused',
       mode: 'deepest',
@@ -197,7 +197,7 @@ const editorInstance = new Editor({
 
     // 表格
     Table.configure({
-      resizable: true,
+      content: "tableRow*",
       allowTableNodeSelection: true,
     }),
     TableRow,
@@ -212,7 +212,7 @@ const editorInstance = new Editor({
     }),
 
     // 其他
-    Selection,
+   /* Selection,*/
     TableOfContents.configure({
       getIndex: getHierarchicalIndexes,
       onUpdate: (content) => {
