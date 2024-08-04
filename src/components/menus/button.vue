@@ -20,18 +20,22 @@
           :class="{
             huge: huge && $toolbar.mode === 'ribbon',
             'show-text': !hideText,
-            active: menuActive && editor?.isEditable,
+            active: menuActive && editor?.isEditable===true,
           }"
           shape="square"
           variant="text"
           size="small"
-          :disabled="disabled || !editor?.isEditable"
+          :disabled="disabled || editor?.isEditable===false"
           @click="menuClick"
           v-bind="attrs"
         >
           <div class="button-content">
             <slot />
-            <icon class="icon" v-if="ico" :name="ico" />
+            <template v-if="ico"">
+              <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
+              </span>
+              <icon class="icon" v-else :name="ico" />
+            </template>
             <p class="text">{{ text }}</p>
             <kbd class="kbd" v-if="shortcutText">
               {{ getShortcut(shortcutText) }}
@@ -51,11 +55,15 @@
             variant="text"
             size="small"
             v-bind="attrs"
-            :disabled="disabled || !editor?.isEditable"
+            :disabled="disabled || editor?.isEditable===false"
           >
             <div class="button-content" @click="menuClick">
               <slot />
-              <icon class="icon" v-if="ico" :name="ico" />
+              <template v-if="ico"">
+                <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
+                </span>
+                <icon class="icon" v-else :name="ico" />
+              </template>
               <p class="text">{{ text }}</p>
               <kbd class="kbd" v-if="shortcutText">
                 {{ getShortcut(shortcutText) }}
@@ -110,11 +118,15 @@
               variant="text"
               size="small"
               v-bind="attrs"
-              :disabled="disabled || !editor?.isEditable"
+              :disabled="disabled || editor?.isEditable===false"
             >
               <div class="button-content" @click="menuClick">
                 <slot />
-                <icon class="icon" v-if="ico" :name="ico" />
+                <template v-if="ico"">
+                  <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
+                  </span>
+                  <icon class="icon" v-else :name="ico" />
+                </template>
                 <p class="text">{{ text }}</p>
                 <kbd class="kbd" v-if="shortcutText">{{
                   getShortcut(shortcutText)
@@ -136,14 +148,14 @@
           size="small"
           placement="bottom-left"
           :on-popup-visible-change="popupVisileChange"
-          :value="value"
+          :value="selectValue"
           :popup-props="{
             destroyOnClose: true,
             attach: container,
           }"
           v-bind="attrs"
           :options="selectOptions"
-          :disabled="disabled || !editor?.isEditable"
+          :disabled="disabled || editor?.isEditable===false"
           @change="menuClick"
         >
           <slot />
@@ -160,11 +172,15 @@
             variant="text"
             size="small"
             v-bind="attrs"
-            :disabled="disabled || !editor?.isEditable"
+            :disabled="disabled || editor?.isEditable===false"
           >
             <div class="button-content" @click="menuClick">
               <slot />
-              <icon class="icon" v-if="ico" :name="ico" />
+              <template v-if="ico"">
+                <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
+                </span>
+                <icon class="icon" v-else :name="ico" />
+              </template>
               <p class="text">{{ text }}</p>
               <kbd class="kbd" v-if="shortcutText">
                 {{ getShortcut(shortcutText) }}
@@ -222,12 +238,16 @@
               variant="text"
               size="small"
               v-bind="attrs"
-              :disabled="disabled || !editor?.isEditable"
+              :disabled="disabled || editor?.isEditable===false"
               @click="togglePopup()"
             >
               <div class="button-content">
                 <slot />
-                <icon class="icon" v-if="ico" :name="ico" />
+                <template v-if="ico"">
+                  <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
+                  </span>
+                  <icon class="icon" v-else :name="ico" />
+                </template>
                 <p class="text">{{ text }}</p>
                 <kbd class="kbd" v-if="shortcutText">{{
                   getShortcut(shortcutText)
@@ -259,18 +279,20 @@
 import getShortcut from '@/utils/shortcut'
 
 const props = defineProps({
-  value: {
-    type: [String, Number],
-    default: '',
+  // 菜单类型
+  menuType: {
+    type: String,
+    default: 'button',
   },
-  disabled: {
+  // 是否为大按钮
+  huge: {
     type: Boolean,
     default: false,
   },
   // 按钮图标
   ico: {
     type: String,
-    default: '',
+    default: undefined,
   },
   // 按钮文字
   text: {
@@ -281,7 +303,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  // 提示
+  // 文字提示
   tooltip: {
     type: [String, Boolean],
     default: undefined,
@@ -295,23 +317,13 @@ const props = defineProps({
     type: String,
     default: undefined,
   },
-  // 菜单类型
-  menuType: {
-    type: String,
-    default: 'button',
-  },
-  huge: {
-    type: Boolean,
-    default: false,
-  },
-  // 菜单激活状态
-  menuActive: {
-    type: Boolean,
-    default: false,
-  },
   // Dropdown,Select 相关
   selectOptions: {
     type: Array,
+  },
+  selectValue: {
+    type: [String, Number],
+    default: '',
   },
   // Popup 相关
   popupVisible: {
@@ -320,6 +332,15 @@ const props = defineProps({
   },
   popupHandle: {
     type: String,
+  },
+  // 菜单激活状态
+  menuActive: {
+    type: Boolean,
+    default: false,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
   },
 })
 const emits = defineEmits(['toggle-popup'])
@@ -422,6 +443,13 @@ onClickOutside(
     :deep(.icon) {
       font-size: 16px;
     }
+    .icon-svg {
+      display: flex;
+      :deep(svg){
+        width: 16px;
+        height: 16px;
+      }
+    }
     .text {
       display: none;
     }
@@ -463,6 +491,14 @@ onClickOutside(
         display: block;
         font-size: 24px;
         margin-top: 3px;
+      }
+      .icon-svg {
+        display: flex;
+        margin-top: 3px;
+        :deep(svg){
+          width: 24px;
+          height: 24px;
+        }
       }
       .text {
         display: block;

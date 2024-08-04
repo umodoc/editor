@@ -20,7 +20,7 @@
             :text="t('tools.qrcode.level')"
             :select-options="levels"
             menu-type="select"
-            :value="config.ecl"
+            :select-value="config.ecl"
             @menu-click="(value) => (config.ecl = value)"
           ></menus-button>
           <menus-button

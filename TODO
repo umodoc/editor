@@ -3,3 +3,5 @@
 3. 气泡菜单的 popup z-index 问题
 4. 粘贴文件时滚动到文档顶部
 5. 气泡菜单删除按钮报错
+6. 单独引入KaTeX的样式
+7. 将依赖全部放到 devDependencies
