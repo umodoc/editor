@@ -361,6 +361,9 @@ let tooltipForceHide = $ref(false)
 const popupVisileChange = (visible) => {
   // 隐藏 Tooltip，适用于 select、dropdown、popup 等子组件展开时，隐藏 Tooltip
   tooltipForceHide = visible
+  try{
+    editor.value.commands.focus()
+  }catch{}
 }
 const getTooltipContent = () => {
   if (props.tooltip === false) {
