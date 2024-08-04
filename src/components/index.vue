@@ -51,7 +51,6 @@ import { onBeforeUnmount } from 'vue'
 import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
 
-import 'katex/dist/katex.min.css'
 import '@/assets/styles/index.less'
 
 defineOptions({ name: 'UmoEditor' })

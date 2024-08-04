@@ -2,5 +2,4 @@
 2. 气泡菜单在页面缩放时位置不正确
 3. 气泡菜单的 popup z-index 问题
 4. 粘贴文件时滚动到文档顶部
-5. 单独引入KaTeX的样式
-6. 将依赖全部放到 devDependencies
+5. 将依赖全部放到 devDependencies

@@ -95,7 +95,6 @@ import FileHandler from './extensions/file-handler'
 import Dropcursor from '@tiptap/extension-dropcursor'
 
 import shortId from '@/utils/short-id'
-import { onMounted } from 'vue'
 
 const {
   options,
@@ -242,6 +241,21 @@ const editorInstance = new Editor({
   },
 })
 setEditor(editorInstance)
+
+// 动态导入 katex 样式
+onMounted(() => {
+  const katexStyleElement = document.getElementById('katex-style')
+  if (
+    katexStyleElement === null &&
+    !options.value.toolbar.disableMenuItems.includes('math')
+  ) {
+    const style = document.createElement('link')
+    style.href = `${options.value.cdnUrl}/libs/katex/katex.min.css`
+    style.rel = 'stylesheet'
+    style.id = 'katex-style'
+    document.querySelector('head').append(style)
+  }
+})
 
 // 气泡菜单
 let tippyInstance = $ref(null)
