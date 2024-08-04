@@ -509,6 +509,9 @@ defineExpose({
   getContentExcerpt,
   getEditor: () => editor,
   getTableOfContents: () => tableOfContents.value,
+  getSelectionText: () => editor.value?.commands.getSelectionText(),
+  getSelectionNode: () => editor.value?.commands.getSelectionNode(),
+  deleteSelectionNode: () => editor.value?.commands.deleteSelectionNode(),
   getLocale,
   getI18n,
   setReadOnly(readOnly = true) {
