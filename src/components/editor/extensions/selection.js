@@ -44,7 +44,7 @@ export default Extension.create({
             chain().focus().deleteTable().run()
             return
           }
-          editor.commands.deleteNode(node.type.name)
+          chain().focus().deleteNode(node.type.name).run()
         },
     }
   },
