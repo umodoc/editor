@@ -42,6 +42,9 @@ export default Node.create({
   atom: true,
   addAttributes() {
     return {
+      vueNode: {
+        default: true,
+      },
       id: {
         default: null,
       },

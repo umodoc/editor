@@ -9,6 +9,9 @@ export default Node.create({
   atom: true,
   addAttributes() {
     return {
+      vueNode: {
+        default: true,
+      },
       src: {
         default: null,
       },

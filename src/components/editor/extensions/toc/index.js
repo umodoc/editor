@@ -7,6 +7,13 @@ export default Node.create({
   name: 'toc',
   group: 'block',
   atom: true,
+  addAttributes() {
+    return {
+      vueNode: {
+        default: true,
+      },
+    }
+  },
   parseHTML() {
     return [{ tag: 'toc' }]
   },
