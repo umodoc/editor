@@ -22,21 +22,29 @@ export default Extension.create({
       deleteSelectionNode:
         () =>
         ({ editor, chain }) => {
-          if (
-            editor.isActive('image') ||
-            editor.isActive('video') ||
-            editor.isActive('audio') ||
-            editor.isActive('file')
-          ) {
-            const node = editor.commands.getSelectionNode()
-            if (!node) {
-              return
-            }
-            const { options } = useStore()
-            const { id, src } = node
-            options.value.onFileDelete(id, src)
+          const node = editor.commands.getSelectionNode()
+          if (!node) {
+            return
           }
-          editor.commands.deleteSelection()
+          if (node.attrs.vueNode) {
+            if (
+              editor.isActive('image') ||
+              editor.isActive('video') ||
+              editor.isActive('audio') ||
+              editor.isActive('file')
+            ) {
+              const { options } = useStore()
+              const { id, src } = node
+              options.value.onFileDelete(id, src)
+            }
+            chain().focus().deleteSelection().run()
+            return
+          }
+          if (editor.isActive('table')) {
+            chain().focus().deleteTable().run()
+            return
+          }
+          editor.commands.deleteNode(node.type.name)
         },
     }
   },

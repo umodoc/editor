@@ -332,10 +332,6 @@ const toggleNodeType = (type, props = {}) => {
 }
 
 const deleteNode = () => {
-  if (editor.value?.isActive('table')) {
-    editor.value?.chain().focus().deleteTable().run()
-    return
-  }
   editor.value?.chain().focus().deleteSelectionNode().run()
 }
 </script>
