@@ -48,10 +48,4 @@ export default Extension.create({
         },
     }
   },
-  addKeyboardShortcuts() {
-    return {
-      Backspace: () => this.editor.commands.deleteSelectionNode(),
-      Delete: () => this.editor.commands.deleteSelectionNode(),
-    }
-  },
 })
