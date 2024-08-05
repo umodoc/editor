@@ -143,15 +143,6 @@ function calculateNodeOverflowHeightAndPoint (node, dom,splitContex){
 
 }
 
-
-/**
- *获取段落里最后一个需要分页的地方
- * 行内中文字符和英文字符宽度超过 段落宽度 计算
- * 没有超过直接返回null
- * 由于行内有可能含有图片 不需要计算图片
- * @param cnode
- * @param dom
- */
 export function getBreakPos(cnode, dom, splitContex) {
   const paragraphDOM = dom;
   if (!paragraphDOM) return null;
@@ -162,8 +153,7 @@ export function getBreakPos(cnode, dom, splitContex) {
   if (width >= wordl) {
     return null;
   }
-
-  const index = calculateNodeOverflowHeightAndPoint(cnode,dom,splitContex);//calculateNodeOverflowWidthAndPoint(cnode, width, splitContex);
+  const index = calculateNodeOverflowHeightAndPoint(cnode,dom,splitContex);
   return index ? index : null;
 }
 
@@ -178,42 +168,16 @@ export function getJsonFromDoc(node) {
   };
 }
 
-export function getJsonFromDocForJson(json) {
-  return {
-    type: "doc",
-    content: [json]
-  };
-}
-
 let iframeComputed = null;
 var iframeDoc = null;
 
-/**
- * @description 获取节点高度 根据id获取dom高度
- * @author Cassie
- * @method getBlockHeight
- */
-export function getBlockHeight(node) {
-  const paragraphDOM = document.getElementById(node.attrs.id);
-  if (paragraphDOM) {
-    return paragraphDOM.offsetHeight;
-  }
-  return 0;
-}
 
 export class UnitConversion {
   arrDPI = [];
-
   constructor() {
     const arr = [];
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     if (window.screen.deviceXDPI) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       arr.push(window.screen.deviceXDPI);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       arr.push(window.screen.deviceYDPI);
     } else {
       const tmpNode = document.createElement("DIV");
@@ -290,37 +254,6 @@ export function computedWidth(html, cache = true) {
   return 0;
 }
 
-export function getContentSpacing(dom) {
-  const content = dom.querySelector(".content");
-  if (dom && content) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const contentStyle = window.getComputedStyle(content);
-    const paddingTop = contentStyle.getPropertyValue("padding-top");
-    const paddingBottom = contentStyle.getPropertyValue("padding-bottom");
-    const marginTop = contentStyle.getPropertyValue("margin-top");
-    const marginBottom = contentStyle.getPropertyValue("margin-bottom");
-    const padding = parseFloat(paddingTop) + parseFloat(paddingBottom);
-    const margin = parseFloat(marginTop) + parseFloat(marginBottom);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return padding + margin + (dom.offsetHeight - content.offsetHeight);
-  }
-  return 0;
-}
-
-export function getSpacing(dom) {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const contentStyle = window.getComputedStyle(dom);
-  const paddingTop = contentStyle.getPropertyValue("padding-top");
-  const paddingBottom = contentStyle.getPropertyValue("padding-bottom");
-  const marginTop = contentStyle.getPropertyValue("margin-top");
-  const marginBottom = contentStyle.getPropertyValue("margin-bottom");
-  const padding = parseFloat(paddingTop) + parseFloat(paddingBottom);
-  const margin = parseFloat(marginTop) + parseFloat(marginBottom);
-  return padding + margin;
-}
 
 export function getDefault() {
   if (map.has("defaultheight")) {
@@ -345,11 +278,8 @@ export function getDomPaddingAndMargin(dom) {
 
 export function getDomHeight(dom) {
   const contentStyle = window.getComputedStyle(dom) || iframeComputed.contentWindow.getComputedStyle(dom);
-  const paddingTop = contentStyle.getPropertyValue("padding-top");
-  const paddingBottom = contentStyle.getPropertyValue("padding-bottom");
   const marginTop = contentStyle.getPropertyValue("margin-top");
   const marginBottom = contentStyle.getPropertyValue("margin-bottom");
-  //const padding = parseFloat(paddingTop) + parseFloat(paddingBottom);
   const margin = parseFloat(marginTop) + parseFloat(marginBottom);
   return 0 + margin + dom.offsetHeight + parseFloat(contentStyle.borderWidth);
 }
@@ -477,6 +407,5 @@ function copyStylesToIframe(iframeContentDoc) {
     const styleAttr = element.getAttribute("style");
     const clonedElement = iframeContentDoc.createElement(element.tagName);
     clonedElement.setAttribute("style", styleAttr);
-    // 这里只是创建了带有内联样式的元素，根据实际情况，你可能需要将它们添加到iframe的DOM树中
   });
 }

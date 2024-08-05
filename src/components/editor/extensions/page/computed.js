@@ -14,7 +14,7 @@ import {
   TASKITEM, TASKLIST
 } from './nodeNames'
 import { Fragment, Slice } from "@tiptap/pm/model";
-import { getAbsentHtmlH, getBreakPos, getContentSpacing, getDefault, getDomHeight, getDomPaddingAndMargin } from "./core";
+import { getAbsentHtmlH, getBreakPos, getDefault, getDomHeight, getDomPaddingAndMargin } from "./core";
 import {  getNodeType } from "@tiptap/core";
 import { ReplaceStep } from "@tiptap/pm/transform";
 import { getId } from "../../utils/id";
@@ -319,14 +319,12 @@ export class PageComputedContext {
   splitDocument() {
     const { schema } = this.state;
     while (true) {
-      console.log("第:" + ++splitCount1 + "次计算分割点");
       // 获取最后一个page计算高度，如果返回值存在的话证明需要分割
       const splitInfo = this.getNodeHeight();
       if (!splitInfo) {
         break; // 当不需要分割（即splitInfo为null）时，跳出循环
       }
       const type = getNodeType(PAGE, schema);
-      console.log("第:" + ++splitCount + "次分割");
       this.splitPage({
         pos: splitInfo.pos,
         depth: splitInfo.depth,
@@ -375,7 +373,6 @@ export class PageComputedContext {
     const { selection } = this.state;
     const count = tr.doc.content.findIndex(selection.head).index + 1;
     //把所有的page 合并成一个 page
-    console.log("从第count页开始合并：", count);
     this.mergeDefaultDocument(count);
   }
 
@@ -422,7 +419,6 @@ export class PageComputedContext {
       );
     }
     tr.step(new ReplaceStep(pos, pos, new Slice(before.append(after), depth, depth)));
-
     this.tr = tr;
   }
 
