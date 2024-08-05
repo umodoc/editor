@@ -20,18 +20,18 @@
           :class="{
             huge: huge && $toolbar.mode === 'ribbon',
             'show-text': !hideText,
-            active: menuActive && editor?.isEditable===true,
+            active: menuActive && editor?.isEditable !== false,
           }"
           shape="square"
           variant="text"
           size="small"
-          :disabled="disabled || editor?.isEditable===false"
+          :disabled="disabled || editor?.isEditable === false"
           @click="menuClick"
           v-bind="attrs"
         >
           <div class="button-content">
             <slot />
-            <template v-if="ico"">
+            <template v-if="ico">
               <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
               </span>
               <icon class="icon" v-else :name="ico" />
@@ -55,11 +55,11 @@
             variant="text"
             size="small"
             v-bind="attrs"
-            :disabled="disabled || editor?.isEditable===false"
+            :disabled="disabled || editor?.isEditable === false"
           >
             <div class="button-content" @click="menuClick">
               <slot />
-              <template v-if="ico"">
+              <template v-if="ico">
                 <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
                 </span>
                 <icon class="icon" v-else :name="ico" />
@@ -118,12 +118,16 @@
               variant="text"
               size="small"
               v-bind="attrs"
-              :disabled="disabled || editor?.isEditable===false"
+              :disabled="disabled || editor?.isEditable === false"
             >
               <div class="button-content" @click="menuClick">
                 <slot />
-                <template v-if="ico"">
-                  <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
+                <template v-if="ico">
+                  <span
+                    v-if="ico?.startsWith('<')"
+                    class="icon-svg"
+                    v-html="ico"
+                  >
                   </span>
                   <icon class="icon" v-else :name="ico" />
                 </template>
@@ -155,7 +159,7 @@
           }"
           v-bind="attrs"
           :options="selectOptions"
-          :disabled="disabled || editor?.isEditable===false"
+          :disabled="disabled || editor?.isEditable === false"
           @change="menuClick"
         >
           <slot />
@@ -172,11 +176,11 @@
             variant="text"
             size="small"
             v-bind="attrs"
-            :disabled="disabled || editor?.isEditable===false"
+            :disabled="disabled || editor?.isEditable === false"
           >
             <div class="button-content" @click="menuClick">
               <slot />
-              <template v-if="ico"">
+              <template v-if="ico">
                 <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
                 </span>
                 <icon class="icon" v-else :name="ico" />
@@ -238,13 +242,17 @@
               variant="text"
               size="small"
               v-bind="attrs"
-              :disabled="disabled || editor?.isEditable===false"
+              :disabled="disabled || editor?.isEditable === false"
               @click="togglePopup()"
             >
               <div class="button-content">
                 <slot />
-                <template v-if="ico"">
-                  <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
+                <template v-if="ico">
+                  <span
+                    v-if="ico?.startsWith('<')"
+                    class="icon-svg"
+                    v-html="ico"
+                  >
                   </span>
                   <icon class="icon" v-else :name="ico" />
                 </template>
@@ -361,9 +369,9 @@ let tooltipForceHide = $ref(false)
 const popupVisileChange = (visible) => {
   // 隐藏 Tooltip，适用于 select、dropdown、popup 等子组件展开时，隐藏 Tooltip
   tooltipForceHide = visible
-  try{
+  try {
     editor.value.commands.focus()
-  }catch{}
+  } catch {}
 }
 const getTooltipContent = () => {
   if (props.tooltip === false) {
@@ -448,7 +456,7 @@ onClickOutside(
     }
     .icon-svg {
       display: flex;
-      :deep(svg){
+      :deep(svg) {
         width: 16px;
         height: 16px;
       }
@@ -498,7 +506,7 @@ onClickOutside(
       .icon-svg {
         display: flex;
         margin-top: 3px;
-        :deep(svg){
+        :deep(svg) {
           width: 24px;
           height: 24px;
         }
