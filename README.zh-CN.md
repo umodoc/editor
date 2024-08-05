@@ -34,16 +34,6 @@ npm install --save @umoteam/editor @umoteam/editor-external
 
 访问 [在线演示](https://demo.umodoc.com/editor?pane=hide&lang=zh-CN) 快速体验。
 
-## 安装说明
-
-```bash
-npm config set "@tiptap-pro:registry" https://registry.tiptap.dev/
-npm config set "//registry.tiptap.dev/:_authToken" 9fsQEgp8C8pbxpk8PFAjYn64BtBDq6HfXmI2qgpnI7XYr/OwHaMvOUIE5mfVR49y
-npm install --save @umoteam/editor @umoteam/editor-external
-```
-
-更多信息请访问 [开发文档](https://editor.umodoc.com/cn/docs/getting-started)。
-
 ## 开发文档
 
 请访问 [开发文档](https://editor.umodoc.com/cn/docs) 。

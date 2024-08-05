@@ -28,16 +28,6 @@ As a standalone Vue3 plugin, Umo Editor can be easily integrated into any Vue3 p
 
 Visit [Playground](https://demo.umodoc.com/editor?pane=hide&lang=en-US) for a fast experience.
 
-## Installation
-
-```bash
-npm config set "@tiptap-pro:registry" https://registry.tiptap.dev/
-npm config set "//registry.tiptap.dev/:_authToken" 9fsQEgp8C8pbxpk8PFAjYn64BtBDq6HfXmI2qgpnI7XYr/OwHaMvOUIE5mfVR49y
-npm install --save @umoteam/editor @umoteam/editor-external
-```
-
-For more information, please visit the [Developer Documentation](https://editor.umodoc.com/en/docs/getting-started).
-
 ## Documentation
 
 Please visit [Documentation](https://editor.umodoc.com/en/docs).
