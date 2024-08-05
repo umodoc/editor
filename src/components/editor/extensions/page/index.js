@@ -40,6 +40,7 @@ export default Node.create({
       mode: 1,
       SystemAttributes: {},
       nodesComputed:{},
+      View:VueNodeViewRenderer(NodeView),
       types:[]
     };
   },
@@ -226,7 +227,7 @@ export default Node.create({
     return [idPlugin(types.concat(this.options.types||[])),pagePlugin(this.editor, this.options.nodesComputed)];
   },
   addNodeView() {
-    return VueNodeViewRenderer(NodeView);
+    return this.options.View;
   }
 });
 
