@@ -52,7 +52,7 @@ import Indent from './extensions/indent'
 import TextAlign from './extensions/text-align'
 import NodeAlign from './extensions/node-align'
 import TaskItem from '@tiptap/extension-task-item'
-import TaskList from '@tiptap/extension-task-list'
+import TaskList from './extensions/list/tasklist'
 import LineHeight from './extensions/line-height'
 import SearchReplace from '@sereneinserenade/tiptap-search-and-replace'
 
@@ -69,7 +69,7 @@ import Iframe from './extensions/iframe'
 import Mathematics from '@tiptap-pro/extension-mathematics'
 
 // 表格
-import Table from './extensions/table'
+import Table from './extensions/list/table'
 import TableCell from './extensions/table-cell'
 import TableHeader from './extensions/table-header'
 import TableRow from '@tiptap/extension-table-row'
@@ -150,10 +150,10 @@ const editorInstance = new Editor({
       considerAnyAsEmpty: true,
       placeholder: l(options.value.document.placeholder),
     }),*/
-    Focus.configure({
+/*    Focus.configure({
       className: 'node-focused',
       mode: 'deepest',
-    }),
+    }),*/
     FontFamily,
     FontSize,
     Bold.extend({

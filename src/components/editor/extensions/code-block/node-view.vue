@@ -3,6 +3,7 @@
     <div
       class="node-container hover-shadow select-outline code-block"
       :class="node.attrs.theme"
+      :id="node.attrs.id"
       ref="containerRef"
     >
       <div
