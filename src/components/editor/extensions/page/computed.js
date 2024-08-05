@@ -195,7 +195,7 @@ export class SplitContext {
    * @returns 是否溢出
    */
   isOverflow(height) {
-    return this.#accumolatedHeight + height > this.#height;
+    return this.#accumolatedHeight + height >= this.#height;
   }
 
   isOverflowTest(height) {

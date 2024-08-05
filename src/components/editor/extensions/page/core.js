@@ -2,6 +2,7 @@ import { DOMSerializer, Node, Schema } from "@tiptap/pm/model";
 import { createHTMLDocument, VHTMLDocument } from "zeed-dom";
 import Prism from 'prismjs'
 import Katex from 'katex'
+import { getId } from '@/components/editor/utils/id'
 
 /**
  * 根据schema doc生成html
@@ -353,11 +354,33 @@ export function getDomHeight(dom) {
   return 0 + margin + dom.offsetHeight + parseFloat(contentStyle.borderWidth);
 }
 
+function findTextblockHacksIds(node) {
+  let ids=[];
+  node.descendants((node)=>{
+    if(node.isTextblock&&node.childCount==0){
+      ids.push(node.attrs.id)
+    }
+
+  })
+  return ids;
+}
+
 export function getAbsentHtmlH(node,schema) {
+  if(!node.attrs.id){
+    // @ts-ignore
+    node.attrs.id = getId();
+  }
   const html = generateHTML(getJsonFromDoc(node),schema);
   const computeddiv = iframeDoc.getElementById("computeddiv");
+  let ids = findTextblockHacksIds(node);
   if (computeddiv) {
     computeddiv.innerHTML = html;
+    ids.forEach((id)=>{
+      const nodeHtml = iframeDoc.getElementById(id);
+      if(nodeHtml){
+        nodeHtml.innerHTML="<br class='ProseMirror-trailingBreak'>";
+      }
+    })
   }
   const nodesom = iframeDoc.getElementById(node.attrs.id);
   return nodesom;
@@ -374,7 +397,7 @@ function iframeDocAddP() {
     const p = iframeDoc.createElement("p");
     p.setAttribute("id", "computedspan");
     p.setAttribute("style", "display: inline-block");
-    p.innerHTML = "&nbsp;";
+    p.innerHTML = "<br class='ProseMirror-trailingBreak'>";
     iframeDoc.body.append(p);
   }
 }
