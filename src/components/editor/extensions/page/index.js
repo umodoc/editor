@@ -39,6 +39,7 @@ export default Node.create({
       isPaging: true,
       mode: 1,
       SystemAttributes: {},
+      nodesComputed:{},
       types:[]
     };
   },
@@ -222,7 +223,7 @@ export default Node.create({
 
   },
   addProseMirrorPlugins() {
-    return [idPlugin(types.concat(this.options.types||[])),pagePlugin(this.editor, this.options)];
+    return [idPlugin(types.concat(this.options.types||[])),pagePlugin(this.editor, this.options.nodesComputed)];
   },
   addNodeView() {
     return VueNodeViewRenderer(NodeView);
