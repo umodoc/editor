@@ -1,5 +1,5 @@
 import { Plugin, PluginKey } from "@tiptap/pm/state";
-import { PAGE } from "./nodeNames";
+import { PAGE, TABLE, IMAGE, IFRAME, CODE_BLOCK, TOC, VIDEO } from './nodeNames'
 import { removeAbsentHtmlH, UnitConversion } from './core'
 import { findParentDomRefOfType } from "../../utils/index";
 import { defaultNodesComputed, PageComputedContext } from "./computed";
@@ -13,6 +13,7 @@ class PageDetector {
   #bodyOption;
   #pageClass;
   #unitConversion;
+  #checkPoints=[IMAGE,IFRAME,CODE_BLOCK,TOC,VIDEO];
   constructor(editor, pageClass = ".PageContent") {
     this.#editor = editor;
     this.#pageClass = pageClass;
@@ -33,6 +34,12 @@ class PageDetector {
   isOverflown(pageBody) {
     return pageBody.scrollHeight>this.#bodyOption.bodyHeight;
   }
+  checkCriticalPoint(node){
+    const { childCount, firstChild } = node;
+    if (childCount == 1 && firstChild?.type.name == "table" && firstChild.childCount == 1) return true;
+    if(childCount == 1&&this.#checkPoints.includes(firstChild.type.name))return true;
+    return false;
+  }
   update(view, prevState) {
     if(composition)return;
     const { selection, schema, tr } = view.state;
@@ -51,12 +58,7 @@ class PageDetector {
       const inserting = this.isOverflown(pageBody);
       if (inserting) {
         const curPage = findParentNode((n) => n.type.name == PAGE)(selection);
-        if (curPage) {
-          const { childCount, firstChild } = curPage.node;
-          if (childCount == 1 && firstChild?.type.name == "table" && firstChild.childCount == 1) {
-            return;
-          }
-        }
+        if (curPage&&this.checkCriticalPoint(curPage.node))return;
       }
       if (inserting || deleting) {
         if (inserting) tr.setMeta("inserting", inserting);

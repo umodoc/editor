@@ -1,7 +1,5 @@
 import { DOMSerializer, Node, Schema } from "@tiptap/pm/model";
 import { createHTMLDocument, VHTMLDocument } from "zeed-dom";
-import Prism from 'prismjs'
-import Katex from 'katex'
 import { getId } from '@/components/editor/utils/id'
 
 /**
