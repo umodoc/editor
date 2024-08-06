@@ -36,8 +36,6 @@ export default Node.create({
   isLeaf:true,
   addOptions() {
     return {
-      isPaging: true,
-      mode: 1,
       SystemAttributes: {},
       nodesComputed:{},
       View:VueNodeViewRenderer(NodeView),
@@ -66,9 +64,7 @@ export default Node.create({
     return ["page", mergeAttributes(HTMLAttributes), 0];
   },
   onBeforeCreate() {
-    if (this.options.isPaging) {
       buildComputedHtml(this.options);
-    }
   },
   onDestroy() {
     removeComputedHtml();
