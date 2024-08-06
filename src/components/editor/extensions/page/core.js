@@ -112,7 +112,7 @@ function calculateNodeOverflowHeightAndPoint (node, dom,splitContex){
         let calculatetext =text.slice(0,calculateLength)
         //计算高度
         let htmlNodeHeight = createAndCalculateHeight(node,[...calculateContent,splitContex.schema.text(calculatetext)],splitContex);
-        if(height>htmlNodeHeight){
+        if(height>htmlNodeHeight&&!splitContex.isOverflow(htmlNodeHeight)){
           point={i,calculateLength}
           break;
         }
@@ -120,7 +120,7 @@ function calculateNodeOverflowHeightAndPoint (node, dom,splitContex){
       }
     }else {
       let htmlNodeHeight = createAndCalculateHeight(node,calculateContent,splitContex);
-      if(height>htmlNodeHeight){
+      if(height>htmlNodeHeight&&!splitContex.isOverflow(htmlNodeHeight)){
         point={i,calculateLength:0}
         break
       }
@@ -337,8 +337,9 @@ function iframeDocAddDiv() {
     const { width, height } = page.value.size
     const {right,left,bottom,top} =page.value.margin;
     const dom = iframeDoc.createElement("div");
+
     dom.setAttribute("class", "page");
-    dom.setAttribute("style", "opacity: 0;position: absolute;max-width:" + width + "cm;width:" + width + "cm;padding-left:"+left+"cm;padding-right:"+right+"cm;padding-top:"+top+"cm;padding-bottom:"+bottom+"cm;");
+    dom.setAttribute("style", "opacity: 0;position: absolute;width:" + (width-left-right) + "cm;padding-left:"+left+"cm;padding-right:"+right+"cm;padding-top:"+top+"cm;padding-bottom:"+bottom+"cm;");
     const content = iframeDoc.createElement("div");
     content.classList.add("PageContent");
     content.setAttribute("id", "computeddiv");

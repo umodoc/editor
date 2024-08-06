@@ -149,9 +149,9 @@ const editorInstance = new Editor({
       considerAnyAsEmpty: true,
       placeholder: l(options.value.document.placeholder),
     }),*/
-/*    Focus.configure({
+   /*Focus.configure({
       className: 'node-focused',
-      mode: 'deepest',
+      mode: 'all',
     }),*/
     FontFamily,
     FontSize,
@@ -196,7 +196,6 @@ const editorInstance = new Editor({
 
     // 表格
     Table.configure({
-      content: "tableRow*",
       allowTableNodeSelection: true,
     }),
     TableRow,
