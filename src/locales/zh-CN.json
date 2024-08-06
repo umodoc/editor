@@ -446,7 +446,11 @@
     "copy": "复制生成结果",
     "copySuccess": "复制成功",
     "rewrite": "重写",
-    "delete": "删除结果"
+    "delete": "删除结果",
+    "error": {
+      "title": "错误提示",
+      "message": "AI 文档助手生成结果出现错误，请重试！"
+    }
   },
   "pageOptions": {
     "title": "页面设置",

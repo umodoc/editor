@@ -4,7 +4,7 @@
     menu-type="select"
     style="width: 120px"
     :select-options="languageOptions"
-    :value="editor?.getAttributes('codeBlock')?.language"
+    :select-value="editor?.getAttributes('codeBlock')?.language"
     filterable
     @menu-click="setLanguage"
   >

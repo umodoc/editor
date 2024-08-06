@@ -100,7 +100,7 @@ class PageState {
 }
 
 export const paginationPluginKey = new PluginKey("pagination");
-export const pagePlugin = (editor) => {
+export const pagePlugin = (editor,nodesComputed) => {
 
   const plugin = new Plugin({
     key: paginationPluginKey,
@@ -133,7 +133,7 @@ export const pagePlugin = (editor) => {
     },
     appendTransaction([newTr], _prevState, state) {
       removeAbsentHtmlH();
-      const page = new PageComputedContext(editor, defaultNodesComputed, this.getState(state), state);
+      const page = new PageComputedContext(editor, {...defaultNodesComputed,...nodesComputed}, this.getState(state), state);
       return page.run().scrollIntoView();
     },
     props: {

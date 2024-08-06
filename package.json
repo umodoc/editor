@@ -36,7 +36,10 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/es/umo-editor.mjs"
+      "import": "./dist/umo-editor.mjs"
+    },
+    "./style": {
+      "import": "./dist/style.css"
     }
   },
   "scripts": {
@@ -44,8 +47,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
     "build": "vite build",
-    "build:all": "vite build && vite build --config vite.config.umd.js",
-    "prepublishOnly": "npm run build:all"
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@eslint/object-schema": "^2.1.4",
@@ -117,12 +119,10 @@
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
     "prettier": "^3.3.3",
-    "terser": "^5.31.3",
     "unplugin-auto-import": "^0.18.2",
     "unplugin-vue-components": "^0.27.3",
     "unplugin-vue-macros": "^2.10.0",
     "vite": "^5.3.5",
-    "vite-plugin-compression2": "^1.1.3",
     "vite-plugin-svg-icons": "^2.0.1"
   },
   "engines": {

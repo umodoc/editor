@@ -318,14 +318,12 @@ export class PageComputedContext {
    */
   splitDocument() {
     const { schema } = this.state;
-    while (true) {
+    for (;;) {
       // 获取最后一个page计算高度，如果返回值存在的话证明需要分割
       const splitInfo = this.getNodeHeight();
-      if (!splitInfo) {
-        break; // 当不需要分割（即splitInfo为null）时，跳出循环
-      }
+      if (!splitInfo)return;
       const type = getNodeType(PAGE, schema);
-      this.splitPage({
+      this.lift({
         pos: splitInfo.pos,
         depth: splitInfo.depth,
         typesAfter: [{ type }],
@@ -385,7 +383,7 @@ export class PageComputedContext {
    * @param typesAfter
    * @param schema
    */
-  splitPage({ pos, depth = 1, typesAfter, schema }) {
+  lift({ pos, depth = 1, typesAfter, schema }) {
     const tr = this.tr;
     const $pos = tr.doc.resolve(pos);
     let before = Fragment.empty;

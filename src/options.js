@@ -338,7 +338,7 @@ const ojbectSchema = new ObjectSchema({
     validate(value) {
       if (value && !['dark', 'light', 'auto'].includes(value)) {
         throw new Error(
-          'Key "locale": must be one of "dark", "light" or "auto".',
+          'Key "theme": must be one of "dark", "light" or "auto".',
         )
       }
     },

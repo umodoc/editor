@@ -6,7 +6,7 @@
     hide-text
     style="width: 80px"
     :select-options="fontSizes"
-    :value="editor?.getAttributes('textStyle').fontSize || '14px'"
+    :select-value="editor?.getAttributes('textStyle').fontSize || '14px'"
     v-bind="$attrs"
     :placeholder="t('base.fontSize.text')"
     filterable

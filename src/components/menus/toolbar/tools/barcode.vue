@@ -20,7 +20,7 @@
             :text="t('tools.barcode.format')"
             :select-options="formats"
             menu-type="select"
-            :value="config.format"
+            :select-value="config.format"
             @menu-click="(value) => (config.format = value)"
           ></menus-button>
           <t-divider layout="vertical" />
@@ -29,7 +29,7 @@
             :text="t('tools.barcode.font')"
             :select-options="fonts"
             menu-type="select"
-            :value="config.font"
+            :select-value="config.font"
             @menu-click="(value) => (config.font = value)"
           ></menus-button>
           <t-divider layout="vertical" />

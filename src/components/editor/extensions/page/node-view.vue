@@ -3,8 +3,6 @@
     ref="containerRef"
     class="page page-node-view"
     :style="{
-    width: pageSize.width-page.margin.right-page.margin.left + 'cm',
-            minHeight: pageSize.height-page.margin.top-page.margin.bottom + 'cm',
     padding: `${page.margin.top + 'cm'} ${page.margin.right + 'cm'} ${page.margin.bottom + 'cm'} ${page.margin.left + 'cm'}`
     }"
   >
@@ -14,7 +12,12 @@
     <div class="corner-top-right" :style="{right:page.margin.right-1 + 'cm',top:page.margin.top-1 + 'cm'}"></div>
     <div class="corner-bottom-left" :style="{left:page.margin.left-1 + 'cm',bottom:page.margin.bottom-1 + 'cm'}" ></div>
     <div class="corner-bottom-right" :style="{right:page.margin.right-1 + 'cm',bottom:page.margin.bottom-1 + 'cm'}" ></div>
-    <node-view-content class="PageContent" />
+    <node-view-content class="PageContent"
+                       :style="{
+    width: pageSize.width-page.margin.right-page.margin.left + 'cm',
+            minHeight: pageSize.height-page.margin.top-page.margin.bottom + 'cm'
+    }"
+    />
   </node-view-wrapper>
 </template>
 <script setup>

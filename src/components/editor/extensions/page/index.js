@@ -36,9 +36,9 @@ export default Node.create({
   isLeaf:true,
   addOptions() {
     return {
-      isPaging: true,
-      mode: 1,
       SystemAttributes: {},
+      nodesComputed:{},
+      View:VueNodeViewRenderer(NodeView),
       types:[]
     };
   },
@@ -64,9 +64,7 @@ export default Node.create({
     return ["page", mergeAttributes(HTMLAttributes), 0];
   },
   onBeforeCreate() {
-    if (this.options.isPaging) {
       buildComputedHtml(this.options);
-    }
   },
   onDestroy() {
     removeComputedHtml();
@@ -222,10 +220,10 @@ export default Node.create({
 
   },
   addProseMirrorPlugins() {
-    return [idPlugin(types.concat(this.options.types||[])),pagePlugin(this.editor, this.options)];
+    return [idPlugin(types.concat(this.options.types||[])),pagePlugin(this.editor, this.options.nodesComputed)];
   },
   addNodeView() {
-    return VueNodeViewRenderer(NodeView);
+    return this.options.View;
   }
 });
 
