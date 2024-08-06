@@ -15,7 +15,7 @@
             :tooltip="t('page.watermark.fontFamily')"
             menu-type="select"
             :select-options="fonts"
-            :value="page.watermark.fontFamily"
+            :select-value="page.watermark.fontFamily"
             @menu-click="(value) => (page.watermark.fontFamily = value)"
           ></menus-button>
           <menus-button

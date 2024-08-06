@@ -128,7 +128,7 @@ watch(
   () => node.attrs.src,
   async (src) => {
     if (node.attrs.uploaded === false && !error.value) {
-      if (src.startsWith('data:image')) {
+      if (src?.startsWith('data:image')) {
         const type = src.split(';')[0].split(':')[1]
         let ext = type.split('/')[1]
         if (ext === 'jpeg') {

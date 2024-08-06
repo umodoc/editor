@@ -5,7 +5,7 @@ import shortId from '@/utils/short-id'
 import { useUmoEditor, UmoEditor } from './components'
 
 // 插件打包测试
-// import UmoEditor from '../dist/es/umo-editor'
+// import UmoEditor from '../dist/umo-editor'
 
 const app = createApp(App)
 

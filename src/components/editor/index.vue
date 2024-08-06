@@ -97,7 +97,6 @@ import FileHandler from './extensions/file-handler'
 import Dropcursor from '@tiptap/extension-dropcursor'
 
 import shortId from '@/utils/short-id'
-import { onMounted } from 'vue'
 
 
 const {
@@ -252,11 +251,26 @@ setTimeout(() => {
   editor.value?.view.dispatch(editor.value?.state.tr.setMeta("splitPage", true));
 }, 1000);
 
+// 动态导入 katex 样式
+onMounted(() => {
+  const katexStyleElement = document.getElementById('katex-style')
+  if (
+    katexStyleElement === null &&
+    !options.value.toolbar.disableMenuItems.includes('math')
+  ) {
+    const style = document.createElement('link')
+    style.href = `${options.value.cdnUrl}/libs/katex/katex.min.css`
+    style.rel = 'stylesheet'
+    style.id = 'katex-style'
+    document.querySelector('head').append(style)
+  }
+})
+
 // 气泡菜单
 let tippyInstance = $ref(null)
 const tippyOpitons = $ref({
   appendTo: 'parent',
-  maxWidth: 480,
+  maxWidth: 580,
   zIndex: 99,
   onShow(instance) {
     tippyInstance = instance
@@ -291,12 +305,12 @@ onBeforeUnmount(() => editorInstance.destroy())
   border-radius: var(--umo-radius);
   display: flex;
   align-items: center;
-  background-color: var(--umo-color-white);
   flex-wrap: wrap;
   &:not(.assistant) {
     padding: 8px 10px;
     box-shadow: var(--umo-shadow);
     border: 1px solid var(--umo-border-color);
+    background-color: var(--umo-color-white);
   }
   &:empty {
     display: none;

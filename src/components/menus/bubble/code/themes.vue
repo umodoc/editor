@@ -4,7 +4,7 @@
     menu-type="select"
     style="width: 100px"
     :select-options="themes"
-    :value="editor?.getAttributes('codeBlock')?.theme"
+    :select-value="editor?.getAttributes('codeBlock')?.theme"
     @menu-click="setTheme"
   />
 </template>

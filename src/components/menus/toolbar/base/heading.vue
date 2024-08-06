@@ -56,7 +56,7 @@
     :style="{ width: '76px' }"
     :placeholder="t('base.heading.text')"
     borderless
-    :value="currentValue"
+    :select-value="currentValue"
     @menu-click="setHeading"
   >
     <t-option

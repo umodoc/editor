@@ -22,21 +22,11 @@ Umo Editor is an open-source document editor based on Vue3, offering localized f
 
 As a standalone Vue3 plugin, Umo Editor can be easily integrated into any Vue3 project with zero configuration. For non-Vue3 projects, you can embed Umo Editor using an Iframe.
 
-[Documentation](https://editor.umodoc.com/en/docs) | [中文文档](https://editor.umodoc.com/cn/docs) | [Live Demo](https://demo.umodoc.com/editor?lang=en) | [GitHub](https://github.com/umodoc/editor) | [NPM](https://www.npmjs.com/package/@umoteam/editor)
+[Documentation](https://editor.umodoc.com/en/docs) | [中文文档](https://editor.umodoc.com/cn/docs) | [Live Demo](https://demo.umodoc.com/editor?lang=en-US) | [GitHub](https://github.com/umodoc/editor) | [NPM](https://www.npmjs.com/package/@umoteam/editor)
 
 ## Online Experience
 
-Visit [Playground](https://demo.umodoc.com/editor?pane=no&lang=en) for a fast experience.
-
-## Installation
-
-```bash
-npm config set "@tiptap-pro:registry" https://registry.tiptap.dev/
-npm config set "//registry.tiptap.dev/:_authToken" 9fsQEgp8C8pbxpk8PFAjYn64BtBDq6HfXmI2qgpnI7XYr/OwHaMvOUIE5mfVR49y
-npm install --save @umoteam/editor @umoteam/editor-external
-```
-
-For more information, please visit the [Developer Documentation](https://editor.umodoc.com/en/docs/getting-started).
+Visit [Playground](https://demo.umodoc.com/editor?pane=hide&lang=en-US) for a fast experience.
 
 ## Documentation
 

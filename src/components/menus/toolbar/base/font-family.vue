@@ -3,7 +3,7 @@
     :text="t('base.fontFamily.text')"
     menu-type="select"
     hide-text
-    :value="editor?.getAttributes('textStyle').fontFamily || null"
+    :select-value="editor?.getAttributes('textStyle').fontFamily || null"
     :style="{ width: $toolbar.mode !== 'classic' ? '144px' : '90px' }"
     filterable
     @menu-click="setFontFamily"
