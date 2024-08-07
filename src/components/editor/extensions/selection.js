@@ -16,6 +16,10 @@ export default Extension.create({
       getSelectionNode:
         () =>
         ({ editor }) => {
+          const { node } = editor.state.selection
+          if (node) {
+            return node
+          }
           editor.commands.selectParentNode()
           return editor.state.selection.node
         },
@@ -23,6 +27,7 @@ export default Extension.create({
         () =>
         ({ editor, chain }) => {
           const node = editor.commands.getSelectionNode()
+          console.log(node)
           if (!node) {
             return
           }
