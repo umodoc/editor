@@ -65,13 +65,13 @@ class PageDetector {
 
     const domAtPos = view.domAtPos.bind(view);
     const scrollHeight =paginationPluginKey.getState(prevState).scrollHeight
-    let deleting = window.stepStatus;
+    let deleting = false;
     const pageDOM = findParentDomRefOfType(schema.nodes[PAGE], domAtPos)(selection);
     if (!pageDOM) return;
     const pageBody = (pageDOM).querySelector(this.#pageClass);
     if (pageBody) {
       let childrenHeight =getTotalChildrenHeight(pageBody)
-      deleting = deleting&&scrollHeight>childrenHeight
+      deleting = view.state.doc.nodeSize<prevState.doc.nodeSize?scrollHeight>childrenHeight:false;
       tr.setMeta("scrollHeight", childrenHeight);
       const inserting = this.isOverflown(childrenHeight);
       if (inserting) {
@@ -82,7 +82,6 @@ class PageDetector {
         if (inserting) tr.setMeta("inserting", inserting);
         if (deleting) {
           tr.setMeta("deleting", true);
-          window.stepStatus = false;
         }
         tr.setMeta("bodyOption",this.#bodyOption);
       }
@@ -152,7 +151,7 @@ export const pagePlugin = (editor,nodesComputed) => {
     appendTransaction([newTr], _prevState, state) {
       removeAbsentHtmlH();
       const page = new PageComputedContext(editor, {...defaultNodesComputed,...nodesComputed}, this.getState(state), state);
-      return page.run().scrollIntoView();
+      return page.run();
     },
     props: {
       handleDOMEvents: {
@@ -170,14 +169,6 @@ export const pagePlugin = (editor,nodesComputed) => {
           node.attrs.id = getId();
         });
         return slice;
-      },
-      handleKeyDown(view, event) {
-        if (event.code == "Backspace") {
-          window.stepStatus = true;
-        } else {
-          window.stepStatus = false;
-        }
-        return false;
       }
     }
   });

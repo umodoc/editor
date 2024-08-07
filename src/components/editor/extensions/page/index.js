@@ -90,10 +90,6 @@ export default Node.create({
   addKeyboardShortcuts(){
     const handleBackspace = () =>
       this.editor.commands.first(({ commands }) => [
-        () => {
-          window.stepStatus = true;
-          return false;
-        },
         () => commands.undoInputRule(),
         () =>
           commands.command(({ tr }) => {
@@ -148,11 +144,6 @@ export default Node.create({
       ]);
     const handleDelete = () =>
       this.editor.commands.first(({ commands }) => [
-        () => {
-          console.log("delete");
-          window.stepStatus = true;
-          return false;
-        },
         () => deleteSelection(commands),
         () =>
           commands.command(({ tr }) => {
