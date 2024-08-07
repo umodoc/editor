@@ -280,9 +280,11 @@ export class PageComputedContext {
     if (splitPage) return this.initComputed();
     if (!inserting && deleting && selection.$head.node(1) === doc.lastChild) return this.tr;
     if (inserting || deleting) {
-
+      const startTime = performance.now();
       this.computed();
       this.checkNodeAndFix();
+      const endTime = performance.now();
+      console.info(`umo 分页用时: ${endTime - startTime}ms`);
     }
     return this.tr;
   }
