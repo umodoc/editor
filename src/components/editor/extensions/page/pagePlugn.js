@@ -7,7 +7,24 @@ import { findParentNode } from "@tiptap/core";
 import { getId } from "../../utils/id";
 
 let composition =false;
+function getTotalChildrenHeight(parentElement) {
+  let totalHeight = 0;
 
+  // 遍历所有的子元素
+  const children = parentElement.children;
+  for (let i = 0; i < children.length; i++) {
+    const child = children[i];
+
+    // 获取子元素的高度
+    const childHeight = child.offsetHeight;
+
+    // 累加高度
+    totalHeight += childHeight;
+  }
+
+  // 返回所有子元素的高度总和
+  return totalHeight;
+}
 class PageDetector {
   #editor;
   #bodyOption;
@@ -31,8 +48,8 @@ class PageDetector {
     }
   }
 
-  isOverflown(pageBody) {
-    return pageBody.scrollHeight>this.#bodyOption.bodyHeight;
+  isOverflown(childrenHeight) {
+    return childrenHeight>this.#bodyOption.bodyHeight;
   }
   checkCriticalPoint(node){
     const { childCount, firstChild } = node;
@@ -53,9 +70,10 @@ class PageDetector {
     if (!pageDOM) return;
     const pageBody = (pageDOM).querySelector(this.#pageClass);
     if (pageBody) {
-      deleting = deleting||scrollHeight>pageBody.scrollHeight
-      tr.setMeta("scrollHeight", pageBody.scrollHeight);
-      const inserting = this.isOverflown(pageBody);
+      let childrenHeight =getTotalChildrenHeight(pageBody)
+      deleting = deleting&&scrollHeight>childrenHeight
+      tr.setMeta("scrollHeight", childrenHeight);
+      const inserting = this.isOverflown(childrenHeight);
       if (inserting) {
         const curPage = findParentNode((n) => n.type.name == PAGE)(selection);
         if (curPage&&this.checkCriticalPoint(curPage.node))return;
@@ -138,6 +156,7 @@ export const pagePlugin = (editor,nodesComputed) => {
     },
     props: {
       handleDOMEvents: {
+
         compositionstart(view, event) {
           composition=true;
         },

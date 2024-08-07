@@ -148,6 +148,11 @@ export default Node.create({
       ]);
     const handleDelete = () =>
       this.editor.commands.first(({ commands }) => [
+        () => {
+          console.log("delete");
+          window.stepStatus = true;
+          return false;
+        },
         () => deleteSelection(commands),
         () =>
           commands.command(({ tr }) => {
