@@ -219,13 +219,19 @@ export class UnitConversion {
 
 const map = new Map();
 
-export function computedHeight(html,id) {
+export function computedHeight(html,id,cache = true) {
+  if (map.has(html)) {
+    return map.get(html);
+  }
   const computeddiv = iframeDoc.getElementById("computeddiv");
   if (computeddiv) {
     computeddiv.innerHTML = html;
     const htmldiv = iframeDoc.getElementById(id);
     const height = htmldiv.getBoundingClientRect().height;
     computeddiv.innerHTML = "&nbsp;";
+    if (cache) {
+      map.set(html, height);
+    }
     return height;
   }
   return 0;
