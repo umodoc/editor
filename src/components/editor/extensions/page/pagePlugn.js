@@ -7,7 +7,24 @@ import { findParentNode } from "@tiptap/core";
 import { getId } from "../../utils/id";
 
 let composition =false;
+function getTotalChildrenHeight(parentElement) {
+  let totalHeight = 0;
 
+  // 遍历所有的子元素
+  const children = parentElement.children;
+  for (let i = 0; i < children.length; i++) {
+    const child = children[i];
+
+    // 获取子元素的高度
+    const childHeight = child.offsetHeight;
+
+    // 累加高度
+    totalHeight += childHeight;
+  }
+
+  // 返回所有子元素的高度总和
+  return totalHeight;
+}
 class PageDetector {
   #editor;
   #bodyOption;
@@ -31,8 +48,8 @@ class PageDetector {
     }
   }
 
-  isOverflown(pageBody) {
-    return pageBody.scrollHeight>this.#bodyOption.bodyHeight;
+  isOverflown(childrenHeight) {
+    return childrenHeight>this.#bodyOption.bodyHeight;
   }
   checkCriticalPoint(node){
     const { childCount, firstChild } = node;
@@ -48,14 +65,15 @@ class PageDetector {
 
     const domAtPos = view.domAtPos.bind(view);
     const scrollHeight =paginationPluginKey.getState(prevState).scrollHeight
-    let deleting = window.stepStatus;
+    let deleting = false;
     const pageDOM = findParentDomRefOfType(schema.nodes[PAGE], domAtPos)(selection);
     if (!pageDOM) return;
     const pageBody = (pageDOM).querySelector(this.#pageClass);
     if (pageBody) {
-      deleting = deleting||scrollHeight>pageBody.scrollHeight
-      tr.setMeta("scrollHeight", pageBody.scrollHeight);
-      const inserting = this.isOverflown(pageBody);
+      let childrenHeight =getTotalChildrenHeight(pageBody)
+      deleting = view.state.doc.nodeSize<prevState.doc.nodeSize?scrollHeight>childrenHeight:false;
+      tr.setMeta("scrollHeight", childrenHeight);
+      const inserting = this.isOverflown(childrenHeight);
       if (inserting) {
         const curPage = findParentNode((n) => n.type.name == PAGE)(selection);
         if (curPage&&this.checkCriticalPoint(curPage.node))return;
@@ -64,7 +82,6 @@ class PageDetector {
         if (inserting) tr.setMeta("inserting", inserting);
         if (deleting) {
           tr.setMeta("deleting", true);
-          window.stepStatus = false;
         }
         tr.setMeta("bodyOption",this.#bodyOption);
       }
@@ -134,10 +151,11 @@ export const pagePlugin = (editor,nodesComputed) => {
     appendTransaction([newTr], _prevState, state) {
       removeAbsentHtmlH();
       const page = new PageComputedContext(editor, {...defaultNodesComputed,...nodesComputed}, this.getState(state), state);
-      return page.run().scrollIntoView();
+      return page.run();
     },
     props: {
       handleDOMEvents: {
+
         compositionstart(view, event) {
           composition=true;
         },
@@ -151,14 +169,6 @@ export const pagePlugin = (editor,nodesComputed) => {
           node.attrs.id = getId();
         });
         return slice;
-      },
-      handleKeyDown(view, event) {
-        if (event.code == "Backspace") {
-          window.stepStatus = true;
-        } else {
-          window.stepStatus = false;
-        }
-        return false;
       }
     }
   });

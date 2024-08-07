@@ -90,10 +90,6 @@ export default Node.create({
   addKeyboardShortcuts(){
     const handleBackspace = () =>
       this.editor.commands.first(({ commands }) => [
-        () => {
-          window.stepStatus = true;
-          return false;
-        },
         () => commands.undoInputRule(),
         () =>
           commands.command(({ tr }) => {

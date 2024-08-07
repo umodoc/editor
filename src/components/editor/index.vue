@@ -86,7 +86,7 @@ import InvisibleNode from './extensions/invisible-node'
 import Page from './extensions/page'
 import { Document } from '@tiptap/extension-document'
 // 其他
-/*import Selection from './extensions/selection'*/
+import Selection from './extensions/selection'
 import {
   TableOfContents,
   getHierarchicalIndexes,
@@ -210,7 +210,7 @@ const editorInstance = new Editor({
     }),
 
     // 其他
-   /* Selection,*/
+    Selection,
     TableOfContents.configure({
       getIndex: getHierarchicalIndexes,
       onUpdate: (content) => {
