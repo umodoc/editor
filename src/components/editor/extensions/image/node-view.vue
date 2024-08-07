@@ -33,6 +33,8 @@
         :equal-proportion="node.attrs.equalProportion"
         @rotate="onRotate"
         @resize="onResize"
+        @resizeStart="onResizeStart"
+        @resizeEnd="onResizeEnd"
         @drag="onDrag"
         @click="selected = true"
       >
@@ -66,7 +68,7 @@ import { base64ToFile } from 'file64'
 import shortId from '@/utils/short-id'
 
 const { node, getPos, updateAttributes } = defineProps(nodeViewProps)
-const { options } = useStore()
+const { options,editor } = useStore()
 const { imagePreview } = useStore()
 const { isLoading, error } = useImage({ src: node.attrs.src })
 
@@ -109,6 +111,13 @@ const onRotate = ({ angle }) => {
 const onResize = ({ width, height }) => {
   updateAttributes({ width, height })
 }
+const onResizeStart = () => {
+  editor.value.commands.autoPaging(false)
+}
+const onResizeEnd = () => {
+  editor.value.commands.autoPaging()
+}
+
 const onDrag = ({ left, top }) => {
   updateAttributes({ left, top })
 }

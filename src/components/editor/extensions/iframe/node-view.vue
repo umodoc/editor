@@ -15,6 +15,8 @@
         :min-height="100"
         :max-width="maxWidth"
         @resize="onResize"
+        @resizeStart="onResizeStart"
+        @resizeEnd="onResizeEnd"
         @click="selected = true"
       >
         <iframe :src="node.attrs.src"></iframe>
@@ -28,7 +30,7 @@ import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import Drager from 'es-drager'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
-
+const { editor } = useStore()
 const containerRef = ref(null)
 let selected = $ref(false)
 let maxWidth = $ref(0)
@@ -39,6 +41,12 @@ onMounted(() => {
 })
 const onResize = ({ width, height }) => {
   updateAttributes({ width, height })
+}
+const onResizeStart = () => {
+  editor.value.commands.autoPaging(false)
+}
+const onResizeEnd = () => {
+  editor.value.commands.autoPaging()
 }
 
 onClickOutside(containerRef, () => (selected = false))

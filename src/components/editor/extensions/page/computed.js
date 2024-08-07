@@ -280,6 +280,7 @@ export class PageComputedContext {
     if (splitPage) return this.initComputed();
     if (!inserting && deleting && selection.$head.node(1) === doc.lastChild) return this.tr;
     if (inserting || deleting) {
+
       this.computed();
       this.checkNodeAndFix();
     }

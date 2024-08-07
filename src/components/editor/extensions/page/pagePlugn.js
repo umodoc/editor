@@ -107,15 +107,19 @@ class PageState {
   }
   transform(tr) {
     const splitPage = tr.getMeta("splitPage");
-    const deleting = tr.getMeta("deleting");
-    const inserting = tr.getMeta("inserting");
+    let deleting = tr.getMeta("deleting");
+    let inserting = tr.getMeta("inserting");
     const bodyOption = tr.getMeta("bodyOption");
-    const runState = tr.getMeta("runState");
-    const scrollHeight = tr.getMeta("scrollHeight");
+    let runState = tr.getMeta("runState")//typeof tr.getMeta("runState")=="undefined"?this.runState:tr.getMeta("runState");
+    //如果设置为了 false 需要保存上一次 分页的参数
     const splitPage1 = splitPage ? splitPage : false;
-    const inserting2 = inserting ? inserting : false;
-    const deleting3 = deleting ? deleting : false;
-    return new PageState(bodyOption||this.bodyOptions, deleting3, inserting2, splitPage1,scrollHeight||this.scrollHeight,runState||this.runState);
+    let inserting2 = inserting ? inserting : false;
+    let deleting3 = deleting ? deleting : false;
+    //如果运行状态从false到true时，需要重新计算
+    if(this.runState==false && runState==true)inserting2 = true;
+    runState = typeof runState=="undefined"?this.runState:runState;
+    const scrollHeight = tr.getMeta("scrollHeight");
+    return new PageState(bodyOption||this.bodyOptions, deleting3, inserting2, splitPage1,scrollHeight||this.scrollHeight,runState);
   }
 }
 

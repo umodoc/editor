@@ -17,6 +17,8 @@
         :max-width="maxWidth"
         equal-proportion
         @resize="onResize"
+        @resizeStart="onResizeStart"
+        @resizeEnd="onResizeEnd"
         @click="selected = true"
       >
         <video
@@ -41,7 +43,7 @@ import Drager from 'es-drager'
 import { mediaPlayer } from '@/utils/player'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
-const { options } = useStore()
+const { options,editor } = useStore()
 
 const containerRef = ref(null)
 let selected = $ref(false)
@@ -76,7 +78,12 @@ const onLoad = () => {
 const onResize = ({ width, height }) => {
   updateAttributes({ width, height })
 }
-
+const onResizeStart = () => {
+  editor.value.commands.autoPaging(false)
+}
+const onResizeEnd = () => {
+  editor.value.commands.autoPaging()
+}
 onBeforeUnmount(() => {
   if (player) {
     player?.destroy()
