@@ -96,23 +96,26 @@ class PageState {
   inserting;
   splitPage;
   scrollHeight;
-  constructor(bodyOptions, deleting, inserting, splitPage,scrollHeight) {
+  runState;
+  constructor(bodyOptions, deleting, inserting, splitPage,scrollHeight,runState=true) {
     this.bodyOptions = bodyOptions;
     this.deleting = deleting;
     this.inserting = inserting;
     this.splitPage = splitPage;
     this.scrollHeight=scrollHeight;
+    this.runState=runState;
   }
   transform(tr) {
     const splitPage = tr.getMeta("splitPage");
     const deleting = tr.getMeta("deleting");
     const inserting = tr.getMeta("inserting");
     const bodyOption = tr.getMeta("bodyOption");
+    const runState = tr.getMeta("runState");
     const scrollHeight = tr.getMeta("scrollHeight");
     const splitPage1 = splitPage ? splitPage : false;
     const inserting2 = inserting ? inserting : false;
     const deleting3 = deleting ? deleting : false;
-    return new PageState(bodyOption||this.bodyOptions, deleting3, inserting2, splitPage1,scrollHeight||this.scrollHeight);
+    return new PageState(bodyOption||this.bodyOptions, deleting3, inserting2, splitPage1,scrollHeight||this.scrollHeight,runState||this.runState);
   }
 }
 

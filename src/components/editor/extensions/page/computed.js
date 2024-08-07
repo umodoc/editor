@@ -275,7 +275,8 @@ export class PageComputedContext {
   //核心执行逻辑
   run() {
     const { selection, doc } = this.state;
-    const { inserting, deleting, checkNode, splitPage } = this.pageState;
+    const { inserting, deleting, runState, splitPage } = this.pageState;
+    if (!runState) return null;
     if (splitPage) return this.initComputed();
     if (!inserting && deleting && selection.$head.node(1) === doc.lastChild) return this.tr;
     if (inserting || deleting) {

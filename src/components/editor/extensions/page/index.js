@@ -70,7 +70,14 @@ export default Node.create({
     removeComputedHtml();
   },
   addCommands(){
-   return{splitBlock,splitListItem}
+   return{splitBlock,splitListItem,autoPaging:(status=true)=>{
+       return ({tr, state, dispatch, editor})=>{
+          if(dispatch){
+            tr.setMeta("runState",status);
+          }
+         return true;
+       }
+     }}
   },
   addGlobalAttributes(){
     return [
