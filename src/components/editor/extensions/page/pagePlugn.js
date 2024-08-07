@@ -106,20 +106,16 @@ class PageState {
     this.runState=runState;
   }
   transform(tr) {
-    const splitPage = tr.getMeta("splitPage");
-    let deleting = tr.getMeta("deleting");
-    let inserting = tr.getMeta("inserting");
-    const bodyOption = tr.getMeta("bodyOption");
-    let runState = tr.getMeta("runState")//typeof tr.getMeta("runState")=="undefined"?this.runState:tr.getMeta("runState");
-    //如果设置为了 false 需要保存上一次 分页的参数
-    const splitPage1 = splitPage ? splitPage : false;
-    let inserting2 = inserting ? inserting : false;
-    let deleting3 = deleting ? deleting : false;
+    const splitPage = tr.getMeta("splitPage")||false;
+    let deleting = tr.getMeta("deleting")||false;
+    let inserting = tr.getMeta("inserting")||false;
+    const bodyOption = tr.getMeta("bodyOption")||this.bodyOptions;
+    let runState = tr.getMeta("runState");
     //如果运行状态从false到true时，需要重新计算
-    if(this.runState==false && runState==true)inserting2 = true;
+    if(this.runState==false && runState==true)inserting = true;
     runState = typeof runState=="undefined"?this.runState:runState;
-    const scrollHeight = tr.getMeta("scrollHeight");
-    return new PageState(bodyOption||this.bodyOptions, deleting3, inserting2, splitPage1,scrollHeight||this.scrollHeight,runState);
+    const scrollHeight = tr.getMeta("scrollHeight")||this.scrollHeight;
+    return new PageState(bodyOption, deleting, inserting, splitPage,scrollHeight,runState);
   }
 }
 
