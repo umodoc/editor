@@ -397,8 +397,12 @@
     "select": "Insert Node",
     "template": "Insert Template",
     "toogleNode": "Switch Block Type",
-    "other": "Other",
-    "delete": "Delete Block"
+    "common": "Common actions",
+    "clearFormat": "Clear formatting",
+    "duplicate": "Duplicate",
+    "copy": "Copy",
+    "cut": "Cut",
+    "delete": "Delete"
   },
   "bubbleMenu": {
     "code": {
