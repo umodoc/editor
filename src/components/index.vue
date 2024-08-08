@@ -511,6 +511,8 @@ defineExpose({
   getSelectionText: () => editor.value?.commands.getSelectionText(),
   getSelectionNode: () => editor.value?.commands.getSelectionNode(),
   deleteSelectionNode: () => editor.value?.commands.deleteSelectionNode(),
+  setCurrentNodeSelection: () =>
+    editor.value?.commands.setCurrentNodeSelection(),
   getLocale,
   getI18n,
   setReadOnly(readOnly = true) {

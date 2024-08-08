@@ -45,7 +45,17 @@ export default Extension.create({
         () =>
         ({ editor }) => {
           editor.commands.selectParentNode()
-          return editor.state.selection.node
+          const { $anchor, node } = editor.state.selection
+          return $anchor.node(1) || node
+        },
+      setCurrentNodeSelection:
+        () =>
+        ({ editor, chain }) => {
+          editor.commands.selectParentNode()
+          const { $anchor } = editor.state.selection
+          return chain()
+            .setNodeSelection($anchor.pos - $anchor.depth)
+            .run()
         },
       deleteSelectionNode:
         () =>
