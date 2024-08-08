@@ -34,6 +34,7 @@
     <div class="toolbar-actions" :class="$toolbar.mode">
       <t-popup
         v-if="$toolbar.mode !== 'source' && editor?.isEditable"
+        v-model="statusPopup"
         :attach="container"
         trigger="click"
         placement="bottom-right"
@@ -131,7 +132,7 @@ import timeAgo from '@/utils/time-ago'
 const emits = defineEmits(['menu-change'])
 const { container, options, editor, savedAt } = useStore()
 const $toolbar = useState('toolbar')
-const statusPopup = $ref(false)
+let statusPopup = $ref(false)
 const online = useOnline()
 
 // 工具栏菜单
@@ -206,7 +207,11 @@ const toggleToolbarMode = ({ value }) => {
 }
 
 // 保存文档
-const saveContent = inject('saveContent')
+const saveContentMethod = inject('saveContent')
+const saveContent = () => {
+  saveContentMethod()
+  statusPopup = false
+}
 
 // 从缓存中恢复文档
 const setContentFromCache = () => {
@@ -224,6 +229,7 @@ const setContentFromCache = () => {
     })
     return
   }
+  statusPopup = false
   editor.value?.chain().setContent(content, true).focus().run()
 }
 </script>
