@@ -124,7 +124,7 @@ export default Node.create({
             }
             const pageNode = findParentNode((node) => node.type.name === PAGE)(selection);
             if (pageNode) {
-              const curBlock = findParentNode((node) => node.type.name.endsWith(EXTEND))(selection);
+              const curBlock = findParentNode((node) => node.attrs.extend)(selection);
               const isAtStart = pageNode.start + Selection.atStart(pageNode.node).from === pos;
               if (isAtStart) {
                 const vm = TextSelection.create(doc, pos - 20, pos - 20);
@@ -198,7 +198,7 @@ export default Node.create({
                   const pos1 = Selection.atStart(afterPageNode.node).from + afterPageNode.start;
                   //EXTEND 是扩展类型 是可以删除并合并的
                   const selection1 = TextSelection.create(doc, pos1, pos1);
-                  const curBlock = findParentNode((node) => node.type.name.endsWith(EXTEND))(selection1);
+                  const curBlock = findParentNode((node) => node.attrs.extend)(selection1);
                   if (curBlock) {
                     tr.step(new ReplaceStep(pos, pos1, Slice.empty));
                     return true;
