@@ -1,4 +1,4 @@
-import { vnodeViewRenderer } from '@tiptap/vue-3'
+import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import Image from '@tiptap/extension-image'
 import NodeView from './node-view.vue'
 
@@ -66,7 +66,7 @@ export default Image.extend({
     return [{ tag: 'img' }]
   },
   addNodeView() {
-    return vnodeViewRenderer(NodeView)
+    return VueNodeViewRenderer(NodeView)
   },
   addCommands() {
     return {
