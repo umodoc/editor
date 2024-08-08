@@ -6,7 +6,7 @@ export default Image.extend({
   atom: true,
   addAttributes() {
     return {
-      vueNode: {
+      vnode: {
         default: true,
       },
       id: {

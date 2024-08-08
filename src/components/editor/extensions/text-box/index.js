@@ -8,7 +8,7 @@ export default Node.create({
   content: 'inline*',
   addAttributes() {
     return {
-      vueNode: {
+      vnode: {
         default: true,
       },
       width: {

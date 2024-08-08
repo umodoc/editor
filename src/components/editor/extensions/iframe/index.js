@@ -9,7 +9,7 @@ export default Node.create({
   atom: true,
   addAttributes() {
     return {
-      vueNode: {
+      vnode: {
         default: true,
       },
       src: {
