@@ -1,5 +1,5 @@
 import { Node, mergeAttributes } from '@tiptap/core'
-import { VueNodeViewRenderer } from '@tiptap/vue-3'
+import { vnodeViewRenderer } from '@tiptap/vue-3'
 import NodeView from './node-view.vue'
 
 export default Node.create({
@@ -8,7 +8,7 @@ export default Node.create({
   content: 'inline*',
   addAttributes() {
     return {
-      vueNode: {
+      vnode: {
         default: true,
       },
       width: {
@@ -41,7 +41,7 @@ export default Node.create({
     return ['text-box', mergeAttributes(HTMLAttributes), 0]
   },
   addNodeView() {
-    return VueNodeViewRenderer(NodeView)
+    return vnodeViewRenderer(NodeView)
   },
   addCommands() {
     return {

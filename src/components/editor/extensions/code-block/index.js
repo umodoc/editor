@@ -1,5 +1,5 @@
 import { Node, mergeAttributes } from '@tiptap/core'
-import { VueNodeViewRenderer } from '@tiptap/vue-3'
+import { vnodeViewRenderer } from '@tiptap/vue-3'
 import NodeView from './node-view.vue'
 
 export default Node.create({
@@ -8,7 +8,7 @@ export default Node.create({
   atom: true,
   addAttributes() {
     return {
-      vueNode: {
+      vnode: {
         default: true,
       },
       code: {
@@ -35,7 +35,7 @@ export default Node.create({
     return ['pre', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
   },
   addNodeView() {
-    return VueNodeViewRenderer(NodeView)
+    return vnodeViewRenderer(NodeView)
   },
   addCommands() {
     return {

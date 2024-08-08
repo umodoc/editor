@@ -64,7 +64,7 @@ export default Extension.create({
           if (!node) {
             return
           }
-          if (node.attrs.vueNode) {
+          if (node.attrs.vnode) {
             if (
               editor.isActive('image') ||
               editor.isActive('video') ||
