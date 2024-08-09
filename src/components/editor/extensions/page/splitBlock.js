@@ -2,7 +2,7 @@ import { EditorState, NodeSelection, TextSelection } from "@tiptap/pm/state";
 import { canSplit } from "@tiptap/pm/transform";
 
 import { defaultBlockAt} from "@tiptap/vue-3";
-import { getId } from "../../utils/id";
+import { getId } from "./core";
 import { getSplittedAttributes } from './index'
 
 function ensureMarks(state, splittableMarks) {
@@ -29,7 +29,6 @@ export const splitBlock =
     const newAttributes = getSplittedAttributes(extensionAttributes, $from.node().type.name, $from.node().attrs);
     //值如果包含id 需要重新生成
     newAttributes.id = getId();
-
     if (newAttributes.extend) {
       newAttributes.extend = false;
     }

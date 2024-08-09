@@ -249,9 +249,6 @@ const editorInstance = new Editor({
   },
 })
 setEditor(editorInstance)
-window.onload = () => {
-
-}
 /*setTimeout(() => {
   editor.value?.view.dispatch(editor.value?.state.tr.setMeta("splitPage", true));
 }, 1000);*/

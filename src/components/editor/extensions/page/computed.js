@@ -14,10 +14,9 @@ import {
   TASKITEM, TASKLIST
 } from './nodeNames'
 import { Fragment, Slice } from "@tiptap/pm/model";
-import { getAbsentHtmlH, getBreakPos, getDefault, getDomHeight, getDomPaddingAndMargin } from "./core";
+import { getAbsentHtmlH, getBreakPos, getDefault, getDomHeight, getDomPaddingAndMargin,getId } from "./core";
 import {  getNodeType } from "@tiptap/core";
 import { ReplaceStep } from "@tiptap/pm/transform";
-import { getId } from "../../utils/id";
 
 
 export const sameListCalculation = (splitContex, node, pos, parent, dom) => {

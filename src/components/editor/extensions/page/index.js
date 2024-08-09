@@ -118,7 +118,9 @@ export default Node.create({
             }
             const pageNode = findParentNode((node) => node.type.name === PAGE)(selection);
             if (pageNode) {
-              const curBlock = findParentNode((node) => node.attrs.extend)(selection);
+              //获取当前页面节点的 第一个子节点类型
+              const curBlockType = pageNode.node.firstChild.type;
+              //判断当前的光标位置是否是第一个节点的第一个点
               const isAtStart = pageNode.start + Selection.atStart(pageNode.node).from === pos;
               if (isAtStart) {
                 const vm = TextSelection.create(doc, pos - 20, pos - 20);
@@ -126,7 +128,8 @@ export default Node.create({
                 if (beforePageNode) {
                   const pos1 = Selection.atEnd(beforePageNode.node).from + beforePageNode.start;
                   const selection1 = TextSelection.create(doc, pos1, pos1);
-                  if (curBlock) {
+                  //和上一页的最后一个节点进行对比 如果相等则合并
+                  if (curBlockType==beforePageNode.node.lastChild.type) {
                     const parent = selection1.$anchor.parent;
                     if (getFlag(parent,editor.schema)) {
                       tr.setSelection(selection1);

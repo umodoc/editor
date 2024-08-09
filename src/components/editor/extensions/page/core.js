@@ -1,6 +1,5 @@
 import { DOMSerializer, Node, Schema } from "@tiptap/pm/model";
 import { createHTMLDocument, VHTMLDocument } from "zeed-dom";
-import { getId } from '@/components/editor/utils/id'
 
 /**
  * 根据schema doc生成html
@@ -299,33 +298,6 @@ export function removeAbsentHtmlH() {
   computeddiv.innerHTML = "";
 }
 
-function iframeDocAddP() {
-  const computedspan = iframeDoc.getElementById("computedspan");
-  if (!computedspan) {
-    const p = iframeDoc.createElement("p");
-    p.setAttribute("id", "computedspan");
-    p.setAttribute("style", "display: inline-block");
-    p.innerHTML = "<br class='ProseMirror-trailingBreak'>";
-    iframeDoc.body.append(p);
-  }
-}
-
-function iframeDocAddDiv() {
-  const computeddiv = iframeDoc.getElementById("computeddiv");
-  if (!computeddiv) {
-    const {page,options} =useStore();
-    const { width, height } = page.value.size
-    const {right,left,bottom,top} =page.value.margin;
-    const dom = iframeDoc.createElement("div");
-    dom.setAttribute("class", "page");
-    dom.setAttribute("style", "position: absolute;width:" + (width-left-right) + "cm;padding-left:"+left+"cm;padding-right:"+right+"cm;padding-top:"+top+"cm;padding-bottom:"+bottom+"cm;");
-    const content = iframeDoc.createElement("div");
-    content.classList.add("PageContent");
-    content.setAttribute("id", "computeddiv");
-    dom.append(content);
-    iframeDoc.body.append(dom);
-  }
-}
 
 export function removeComputedHtml() {
   const iframeComputed1 = document.getElementById("computediframe");
@@ -429,3 +401,57 @@ function filterAndCopyHtmlToIframe(iframe, excludedTags) {
   iframeDoc.adoptNode(docFragment);
   iframeDoc.body.parentNode.replaceChild(docFragment, iframeDoc.body);
 }
+
+//------------------------------util----------------------------------------------
+export function getId() {
+  return Math.random().toString(36).substring(2, 10);
+}
+
+
+export const findParentDomRefOfType = (nodeType, domAtPos) => (selection) => {
+  return findParentDomRef((node) => equalNodeType(nodeType, node), domAtPos)(selection);
+};
+export const equalNodeType = (nodeType, node) => {
+  return (Array.isArray(nodeType) && nodeType.indexOf(node.type) > -1) || node.type === nodeType;
+};
+
+export const findParentDomRef = (predicate, domAtPos) => (selection) => {
+  const parent = findParentNode(predicate)(selection);
+  if (parent) {
+    return findDomRefAtPos(parent.pos, domAtPos);
+  }
+};
+
+export const findDomRefAtPos = (position, domAtPos) => {
+  const dom = domAtPos(position);
+  const node = dom.node.childNodes[dom.offset];
+
+  if (dom.node.nodeType === Node.TEXT_NODE) {
+    return dom.node.parentNode;
+  }
+
+  if (!node || node.nodeType === Node.TEXT_NODE) {
+    return dom.node;
+  }
+
+  return node;
+};
+
+export const findParentNode =
+  (predicate) =>
+  ({ $from }) =>
+    findParentNodeClosestToPos($from, predicate);
+
+export const findParentNodeClosestToPos = ($pos, predicate) => {
+  for (let i = $pos.depth; i > 0; i--) {
+    const node = $pos.node(i);
+    if (predicate(node)) {
+      return {
+        pos: i > 0 ? $pos.before(i) : 0,
+        start: $pos.start(i),
+        depth: i,
+        node
+      };
+    }
+  }
+};

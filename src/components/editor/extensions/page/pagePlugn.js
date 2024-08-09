@@ -1,10 +1,9 @@
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { PAGE, TABLE, IMAGE, IFRAME, CODE_BLOCK, TOC, VIDEO } from './nodeNames'
-import { buildComputedHtml, removeAbsentHtmlH, UnitConversion } from './core'
-import { findParentDomRefOfType } from "../../utils/index";
+import { buildComputedHtml, removeAbsentHtmlH, UnitConversion,findParentDomRefOfType,getId } from './core'
 import { defaultNodesComputed, PageComputedContext } from "./computed";
 import { findParentNode } from "@tiptap/core";
-import { getId } from "../../utils/id";
+
 
 let composition =false;
 function getTotalChildrenHeight(parentElement) {

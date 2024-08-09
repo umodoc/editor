@@ -3,7 +3,7 @@ import { TextSelection } from "@tiptap/pm/state";
 import { canSplit } from "@tiptap/pm/transform";
 import { getNodeType } from "@tiptap/core";
 import { getSplittedAttributes } from './index'
-import { getId } from "../../utils/id";
+import { getId } from "./core";
 
 
 
