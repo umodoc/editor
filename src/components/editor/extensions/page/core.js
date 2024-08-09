@@ -21,49 +21,6 @@ export function getHTMLFromFragment(doc,schema, options) {
   return zeedDocument.render()
 }
 
-/**
- * 计算最后一行是否填满
- * @param cnode
- */
-export function getFlag(cnode, schema) {
-  const paragraphDOM = document.getElementById(cnode.attrs.id)||iframeDoc.getElementById(cnode.attrs.id);
-  if (!paragraphDOM) return null;
-  const width = paragraphDOM.getBoundingClientRect().width;
-  const html = generateHTML(getJsonFromDoc(cnode), schema);
-  const { width: wordl } = computedWidth(html, false);
-  //证明一行都没填满 应当执行 合并
-  if (width >= wordl) {
-    return false;
-  }
-  let strLength = 0;
-  cnode.descendants((node, pos, _, _i) => {
-    //todo 文字计算的时候使用性能较低 需要使用二分查找提高性能
-    if (node.isText) {
-      const nodeText = node.text;
-      if (nodeText) {
-        for (let i = 0; i < nodeText.length; i++) {
-          const { width: wl } = computedWidth(nodeText.charAt(i));
-          if (strLength + wl > width) {
-            strLength = wl;
-          } else {
-            strLength += wl;
-          }
-        }
-      }
-    } else {
-      const html = generateHTML(getJsonFromDoc(node), schema);
-      const { width: wordl } = computedWidth(html);
-      if (strLength + wordl > width) {
-        strLength = wordl;
-      } else {
-        strLength += wordl;
-      }
-    }
-  });
-  const space = parseFloat(window.getComputedStyle(paragraphDOM).getPropertyValue("font-size"));
-  return Math.abs(strLength - width) < space;
-}
-
 
 export function generateHTML(doc, schema) {
   const contentNode = Node.fromJSON(schema, doc)
@@ -71,11 +28,11 @@ export function generateHTML(doc, schema) {
   return getHTMLFromFragment(contentNode, schema)
 }
 
-function createAndCalculateHeight(node,content,splitContex){
+function createAndCalculateHeight(node,content){
   //生成需要计算的节点
   let calculateNode = node.type.create(node.attrs,content,node.marks);
   //生成对应的html
-  const htmlNode = generateHTML(getJsonFromDoc(calculateNode), splitContex.schema);
+  const htmlNode = generateHTML(getJsonFromDoc(calculateNode), node.type.schema);
   //计算高度
   let htmlNodeHeight = computedHeight(htmlNode,node.attrs.id);
   return htmlNodeHeight;
@@ -92,16 +49,17 @@ function calculateNodeOverflowHeightAndPoint (node, dom,splitContex){
   //获取当前需要计算的节点有多少个
   let childCount = node.childCount;
   //最终计算的点有多少
-  let point={};
+  let point=null;
   //获得到所有的节点 倒序遍历
 
   const content = node.content.content;
 //倒序遍历content
   for (let i = childCount-1; i >=0; i--) {
+    if(point)break;
     // @ts-ignore
     lastChild = content[i];
     //分割节点 永远保留最后一个节点用作计算
-    let calculateContent =  i?content.slice(i):[];
+    let calculateContent =  i?content.slice(0,i):[];
     //节点如果是文本的处理方式
     if(lastChild.isText){
       let text =lastChild.text;
@@ -111,7 +69,7 @@ function calculateNodeOverflowHeightAndPoint (node, dom,splitContex){
       while (calculateLength){
         let calculatetext =text.slice(0,calculateLength)
         //计算高度
-        let htmlNodeHeight = createAndCalculateHeight(node,[...calculateContent,splitContex.schema.text(calculatetext)],splitContex);
+        let htmlNodeHeight = createAndCalculateHeight(node,[...calculateContent,splitContex.schema.text(calculatetext)]);
         if(height>htmlNodeHeight&&!splitContex.isOverflow(htmlNodeHeight)){
           point={i,calculateLength}
           break;
@@ -119,7 +77,8 @@ function calculateNodeOverflowHeightAndPoint (node, dom,splitContex){
         calculateLength-=1;
       }
     }else {
-      let htmlNodeHeight = createAndCalculateHeight(node,calculateContent,splitContex);
+
+      let htmlNodeHeight = createAndCalculateHeight(node,calculateContent);
       if(height>htmlNodeHeight&&!splitContex.isOverflow(htmlNodeHeight)){
         point={i,calculateLength:0}
         break
@@ -139,6 +98,25 @@ function calculateNodeOverflowHeightAndPoint (node, dom,splitContex){
   })
   return index
 
+}
+
+/**
+ * 计算最后一行是否填满
+ * @param cnode
+ */
+export function getFlag(cnode, schema) {
+  const paragraphDOM = document.getElementById(cnode.attrs.id)||iframeDoc.getElementById(cnode.attrs.id);
+  if (!paragraphDOM) return null;
+  const height = paragraphDOM.getBoundingClientRect().height;
+  let lastChild = cnode.lastChild;
+  let childCount = cnode.childCount;
+  let content =  cnode.content.content;
+  if(lastChild.isText){
+    content.push(schema.text("gg"));
+  }
+  const html = generateHTML(getJsonFromDoc(cnode.type.create(cnode.attrs,content,cnode.marks)), schema);
+  const htmlNodeHeight =  computedHeight(html,cnode.attrs.id,false);
+    return htmlNodeHeight>height;
 }
 
 export function getBreakPos(cnode, dom, splitContex) {
@@ -220,18 +198,13 @@ export class UnitConversion {
 const map = new Map();
 
 export function computedHeight(html,id,cache = true) {
-  if (map.has(html)) {
-    return map.get(html);
-  }
+
   const computeddiv = iframeDoc.getElementById("computeddiv");
   if (computeddiv) {
     computeddiv.innerHTML = html;
     const htmldiv = iframeDoc.getElementById(id);
     const height = htmldiv.getBoundingClientRect().height;
     computeddiv.innerHTML = "&nbsp;";
-    if (cache) {
-      map.set(html, height);
-    }
     return height;
   }
   return 0;
