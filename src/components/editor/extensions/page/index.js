@@ -166,9 +166,7 @@ export default Node.create({
             return commands.joinForward();
           }),
         () => {
-          const a = commands.selectNodeForward();
-          console.log(a);
-          return a;
+          return commands.selectNodeForward();
         },
         () =>
           commands.command(({ tr }) => {
