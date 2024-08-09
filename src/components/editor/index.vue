@@ -206,11 +206,12 @@ const editorInstance = new Editor({
     // 页面
     Toc,
     PageBreak,
+/*
     InvisibleCharacters.configure({
       visible: page.value.showBreakMarks,
       builders: [new HardBreakNode(), new ParagraphNode(), new InvisibleNode()],
     }),
-
+*/
     // 其他
     Selection,
     TableOfContents.configure({

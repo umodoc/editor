@@ -202,18 +202,18 @@ export function computedHeight(html,id,cache = true) {
 
   const computeddiv = iframeDoc.getElementById("computeddiv");
   if (computeddiv) {
-    computeddiv.innerHTML = html;
-    const htmldiv = iframeDoc.getElementById(id);
-    const height = htmldiv.getBoundingClientRect().height;
-    computeddiv.innerHTML = "&nbsp;";
-    return height;
+    computeddiv.innerHTML = html
+    const htmldiv = iframeDoc.getElementById(id)
+    const height = htmldiv.getBoundingClientRect().height
+    computeddiv.innerHTML = '&nbsp;'
+    return height
   }
-  return 0;
+  return 0
 }
 
 export function computedWidth(html, cache = true) {
   if (map.has(html)) {
-    return map.get(html);
+    return map.get(html)
   }
   const computedspan = iframeDoc.getElementById("computedspan");
   if (html == " ") {
@@ -420,7 +420,6 @@ function filterAndCopyHtmlToIframe(iframe, excludedTags) {
   // 使用正则表达式过滤掉不需要的标签
   const regex = new RegExp(`<(${excludedTags.join('|')})[^>]*>.*?</\\1>`, 'g');
   const filteredContent = bodyContent.replace(regex, '');
-  debugger
   const docFragment = document.createDocumentFragment();
   const newBody = document.createElement('body');
   newBody.innerHTML = filteredContent;
