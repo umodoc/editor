@@ -22,7 +22,7 @@ const updateMenuPostion = () => {
   let offsetTop = currentBlock.offsetTop
 
   // 微修正菜单位置
-  offsetTop = currentBlock.tagName === 'DIV' ? offsetTop + 4 : offsetTop + 6
+  offsetTop = currentBlock.tagName === 'DIV' ? offsetTop - 8 : offsetTop - 5
   let offsetY = 0
   if (
     editor.value.isActive('horizontalRule') ||
