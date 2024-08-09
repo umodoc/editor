@@ -541,7 +541,7 @@
     "reset": "立即重置"
   },
   "feedback": "使用感受和建议反馈",
-  "poweredBy": "由「有墨文档」提供技术支持",
+  "poweredBy": "由「Umo Editor」提供技术支持",
   "wordCount": {
     "input": "已输入 {count} 字符，",
     "limit": "总计不能超过 {count} 字符，",

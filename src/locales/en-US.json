@@ -541,7 +541,7 @@
     "reset": "Reset Now"
   },
   "feedback": "Feedback",
-  "poweredBy": "Powered by Umodoc",
+  "poweredBy": "Powered by Umo Editor",
   "wordCount": {
     "input": "{count} characters,",
     "limit": "total should not exceed {count} characters,",

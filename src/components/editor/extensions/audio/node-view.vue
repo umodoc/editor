@@ -2,7 +2,7 @@
   <node-view-wrapper
     ref="containerRef"
     class="node-view audio-node-view"
-    :style="{ 'justify-content': node.attrs.nodeAlign }"
+    :style="nodeStyle"
   >
     <div class="node-container hover-shadow select-outline audio">
       <audio ref="audiorRef" :src="node.attrs.src" controls crossorigin></audio>
@@ -25,6 +25,20 @@ const containerRef = ref(null)
 const audiorRef = $ref(null)
 let player = $ref(null)
 let selected = $ref(false)
+
+const nodeStyle = $computed(() => {
+  const { nodeAlign, margin } = node.attrs
+  const marginTop =
+    margin?.top && margin?.top !== '' ? margin.top + 'px' : undefined
+  const marginBottom =
+    margin?.bottom && margin?.bottom !== '' ? margin.bottom + 'px' : undefined
+  return {
+    'justify-content': nodeAlign,
+    marginTop,
+    marginBottom,
+  }
+})
+
 onMounted(async () => {
   player = mediaPlayer(audiorRef)
   if (node.attrs.uploaded === false && node.attrs.file) {

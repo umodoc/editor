@@ -4,7 +4,23 @@ export default Extension.create({
   name: 'margin',
   addOptions() {
     return {
-      types: ['heading', 'paragraph'],
+      types: [
+        'heading',
+        'paragraph',
+        'audio',
+        'codeBlock',
+        'file',
+        'iframe',
+        'image',
+        'toc',
+        'video',
+        'horizontalRule',
+        'table',
+        'bulletList',
+        'orderedList',
+        'taskList',
+      ],
+      margin: {},
     }
   },
   addGlobalAttributes() {
@@ -14,19 +30,36 @@ export default Extension.create({
         attributes: {
           margin: {
             default: {},
-            renderHTML: (attributes) => {
-              if (!Object.keys(attributes.margin).length) return {}
-              const { top: top = 0, bottom: bottom = 0 } = attributes.margin
-              return { style: `margin-top: ${top}; margin-bottom: ${bottom};` }
-            },
             parseHTML: (element) => {
-              const margin = {}
-              const computedStyle = window.getComputedStyle(element)
-              const top = computedStyle.getPropertyValue('margin-top')
-              const bottom = computedStyle.getPropertyValue('margin-bottom')
-              top && (margin.top = top)
-              bottom && (margin.bottom = bottom)
-              return margin
+              const { marginTop, marginBottom } = element.style
+              if (
+                (marginTop === '' && marginBottom === '') ||
+                (marginTop === '0px' && marginBottom === '0px')
+              ) {
+                return {}
+              }
+              const styleMargin = {}
+              if (marginTop && marginTop !== '0px') {
+                styleMargin.top = marginTop.replace(/px/g, '')
+              }
+              if (marginBottom && marginBottom !== '0px') {
+                styleMargin.bottom = marginBottom.replace(/px/g, '')
+              }
+              return styleMargin
+            },
+            renderHTML: ({ margin }) => {
+              if (!Object.keys(margin).length) return {}
+              const { top, bottom } = margin
+              let styleMargin = ''
+              if (top && top !== '') {
+                styleMargin += `margin-top: ${top}px;`
+              }
+              if (bottom && bottom !== '') {
+                styleMargin += `margin-bottom: ${bottom}px;`
+              }
+              return {
+                style: styleMargin,
+              }
             },
           },
         },

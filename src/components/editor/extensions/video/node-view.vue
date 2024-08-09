@@ -2,7 +2,7 @@
   <node-view-wrapper
     ref="containerRef"
     class="node-view video-node-view"
-    :style="{ 'justify-content': node.attrs.nodeAlign }"
+    :style="nodeStyle"
   >
     <div class="node-container hover-shadow video">
       <drager
@@ -47,6 +47,20 @@ let selected = $ref(false)
 const videoRef = $ref(null)
 let player = $ref(null)
 let maxWidth = $ref(0)
+
+const nodeStyle = $computed(() => {
+  const { nodeAlign, margin } = node.attrs
+  const marginTop =
+    margin?.top && margin?.top !== '' ? margin.top + 'px' : undefined
+  const marginBottom =
+    margin?.bottom && margin?.bottom !== '' ? margin.bottom + 'px' : undefined
+  return {
+    'justify-content': nodeAlign,
+    marginTop,
+    marginBottom,
+  }
+})
+
 onMounted(async () => {
   await nextTick()
   const width = containerRef.value.$el.clientWidth

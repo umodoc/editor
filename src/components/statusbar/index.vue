@@ -64,7 +64,7 @@
           class="bar-button"
           variant="text"
           size="small"
-          href="https://umodoc.com"
+          :href="`https://editor.umodoc.com/${i18n.global.locale.value === 'zh-CN' ? 'cn' : 'en'}/docs`"
           target="_blank"
         >
           <icon name="home-page" />
