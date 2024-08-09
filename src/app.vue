@@ -61,6 +61,9 @@ const options = $ref({
     //   'audio/*',
     // ],
   },
+  assistant: {
+    enabled: true,
+  },
   async onFileUpload(file) {
     if (!file) throw new Error('没有找到要上传的文件')
     console.log('onUpload', file)

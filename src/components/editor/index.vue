@@ -10,6 +10,7 @@
   />
   <template v-if="editor && !editorDestroyed">
     <bubble-menu
+      v-show="!blockMenu"
       class="umo-editor-bubble-menu"
       :class="{ assistant }"
       :editor="editor"
@@ -26,7 +27,7 @@
   <template
     v-if="options.document.enableBlockMenu && editor && !editorDestroyed"
   >
-    <menus-block />
+    <menus-context-block />
   </template>
 </template>
 
@@ -103,6 +104,7 @@ const {
   options,
   page,
   editor,
+  blockMenu,
   assistant,
   tableOfContents,
   setEditor,

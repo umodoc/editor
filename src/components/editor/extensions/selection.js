@@ -1,7 +1,35 @@
 import { Extension } from '@tiptap/core'
+import { Plugin, PluginKey } from '@tiptap/pm/state'
+import { Decoration, DecorationSet } from '@tiptap/pm/view'
 
 export default Extension.create({
   name: 'selection',
+  addProseMirrorPlugins() {
+    const { editor } = this
+
+    return [
+      new Plugin({
+        key: new PluginKey('selection'),
+        props: {
+          decorations(state) {
+            if (state.selection.empty) {
+              return null
+            }
+
+            if (editor.isFocused === true) {
+              return null
+            }
+
+            return DecorationSet.create(state.doc, [
+              Decoration.inline(state.selection.from, state.selection.to, {
+                class: 'umo-text-selection',
+              }),
+            ])
+          },
+        },
+      }),
+    ]
+  },
   addCommands() {
     return {
       getSelectionText:
@@ -21,7 +49,17 @@ export default Extension.create({
             return node
           }
           editor.commands.selectParentNode()
-          return editor.state.selection.node
+          const { $anchor, node } = editor.state.selection
+          return $anchor.node(1) || node
+        },
+      setCurrentNodeSelection:
+        () =>
+        ({ editor, chain }) => {
+          editor.commands.selectParentNode()
+          const { $anchor } = editor.state.selection
+          return chain()
+            .setNodeSelection($anchor.pos - $anchor.depth)
+            .run()
         },
       deleteSelectionNode:
         () =>
@@ -31,7 +69,7 @@ export default Extension.create({
           if (!node) {
             return
           }
-          if (node.attrs.vueNode) {
+          if (node.attrs.vnode) {
             if (
               editor.isActive('image') ||
               editor.isActive('video') ||

@@ -397,8 +397,12 @@
     "select": "插入节点",
     "template": "插入模板",
     "toogleNode": "切换节点类型",
-    "other": "其他操作",
-    "delete": "删除节点"
+    "common": "常用操作",
+    "clearFormat": "清除格式",
+    "duplicate": "复制节点",
+    "copy": "复制",
+    "cut": "剪切",
+    "delete": "删除"
   },
   "bubbleMenu": {
     "code": {

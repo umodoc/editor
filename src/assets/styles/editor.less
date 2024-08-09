@@ -86,6 +86,12 @@
       }
     }
   }
+  .umo-text-selection {
+    background-color: var(--umo-text-selection-background);
+  }
+  ::selection {
+    background-color: var(--umo-text-selection-background);
+  }
   a {
     color: var(--umo-primary-color);
     text-decoration: none;
@@ -101,6 +107,8 @@
     font-family: var(--umo-content-code-family);
     border-radius: 3px;
     padding: 0.1em 0.4em;
+    margin-left: 0.25em;
+    margin-right: 0.25em;
   }
   ul,
   ol {

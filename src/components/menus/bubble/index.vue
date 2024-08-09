@@ -75,8 +75,6 @@
     <div class="divider"></div>
     <menus-toolbar-table-merge-cells />
     <menus-toolbar-table-split-cell />
-    <div class="divider"></div>
-    <menus-bubble-node-delete />
   </template>
   <template v-else-if="editor?.isActive('codeBlock')">
     <menus-bubble-code-languages />
