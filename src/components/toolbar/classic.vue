@@ -52,6 +52,7 @@
           <menus-toolbar-base-indent />
           <menus-toolbar-base-outdent />
           <menus-toolbar-base-line-height />
+          <menus-toolbar-base-margin />
           <menus-toolbar-base-align-dropdown />
           <menus-toolbar-base-quote />
           <menus-toolbar-base-code v-if="!disableItem('code')" />

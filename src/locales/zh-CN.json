@@ -80,6 +80,13 @@
       "default": " (默认)"
     },
     "outdent": "减少缩进",
+    "margin": {
+      "text": "上下间距",
+      "top": "上间距",
+      "bottom": "下间距",
+      "default": "默认",
+      "reset": "自动间距"
+    },
     "markdown": {
       "text": "Markdown",
       "enable": "开启 Markdown 模式",

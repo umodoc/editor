@@ -80,6 +80,13 @@
       "default": " (Default)"
     },
     "outdent": "Decrease Indent",
+    "margin": {
+      "text": "Vertical Spacing",
+      "top": "Top",
+      "bottom": "Bottom",
+      "default": "Default",
+      "reset": "Auto Spacing"
+    },
     "markdown": {
       "text": "Markdown",
       "enable": "Enable Markdown",

@@ -55,6 +55,7 @@ import NodeAlign from './extensions/node-align'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import LineHeight from './extensions/line-height'
+import Margin from './extensions/margin'
 import SearchReplace from '@sereneinserenade/tiptap-search-and-replace'
 
 // 插入
@@ -176,6 +177,7 @@ const editorInstance = new Editor({
       types: ['heading', 'paragraph'],
       defaultLineHeight,
     }),
+    Margin,
     SearchReplace,
 
     Link,

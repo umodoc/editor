@@ -49,6 +49,7 @@
               <menus-toolbar-base-indent />
               <menus-toolbar-base-outdent />
               <menus-toolbar-base-line-height />
+              <menus-toolbar-base-margin />
             </div>
             <div class="virtual-group-row">
               <menus-toolbar-base-align-left />
