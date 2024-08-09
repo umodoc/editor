@@ -20,7 +20,7 @@
               <menus-toolbar-base-redo />
             </div>
             <div class="virtual-group-row">
-              <menus-toolbar-base-select-all />
+              <menus-toolbar-base-format-painter />
               <menus-toolbar-base-clear-format />
             </div>
           </div>
@@ -59,6 +59,7 @@
               <menus-toolbar-base-align-distributed />
               <menus-toolbar-base-quote />
               <menus-toolbar-base-code v-if="!disableItem('code')" />
+              <menus-toolbar-base-select-all />
             </div>
           </div>
           <div class="virtual-group">

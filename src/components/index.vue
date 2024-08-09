@@ -667,8 +667,16 @@ provide('setLocale', setLocale)
 provide('reset', reset)
 
 // 快捷键
-useHotkeys('ctrl+s,command+s', saveContent)
-useHotkeys('ctrl+p,command+p', print)
+const unsetFormatPainter = () => editor.value?.commands.unsetFormatPainter()
+useHotkeys('ctrl+s,command+s', () => {
+  saveContent()
+  unsetFormatPainter()
+})
+useHotkeys('ctrl+p,command+p', () => {
+  print()
+  unsetFormatPainter()
+})
+useHotkeys('esc', unsetFormatPainter)
 
 // 工具栏切换时重置编辑器
 watch(

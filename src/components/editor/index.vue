@@ -4,13 +4,14 @@
     class="editor-container"
     :class="{
       'show-line-number': page.showLineNumber,
+      'format-painter': painter.enabled,
     }"
     :style="{ lineHeight: defaultLineHeight }"
     :editor="editor"
   />
   <template v-if="editor && !editorDestroyed">
     <bubble-menu
-      v-show="!blockMenu"
+      v-show="!blockMenu && !painter.enabled"
       class="umo-editor-bubble-menu"
       :class="{ assistant }"
       :editor="editor"
@@ -38,6 +39,7 @@ import Placeholder from '@tiptap/extension-placeholder'
 import Focus from '@tiptap/extension-focus'
 
 // 基本
+import FormatPainter from './extensions/format-painter'
 import FontFamily from '@tiptap/extension-font-family'
 import FontSize from './extensions/font-size'
 import Bold from '@tiptap/extension-bold'
@@ -102,6 +104,7 @@ const {
   options,
   page,
   editor,
+  painter,
   blockMenu,
   assistant,
   tableOfContents,
@@ -149,6 +152,7 @@ const editorInstance = new Editor({
     Focus.configure({
       className: 'node-focused',
     }),
+    FormatPainter,
     FontFamily,
     FontSize,
     Bold.extend({

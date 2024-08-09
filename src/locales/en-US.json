@@ -54,9 +54,9 @@
       "7_5pt": "Sub-sixth Level",
       "6_5pt": "Default"
     },
-    "formatPaint": {
+    "formatPainter": {
       "text": "Format Painter",
-      "tip": "Double click to reuse"
+      "tip": "Format Painter: Double click to reuse, press ESC to exit"
     },
     "heading": {
       "text": "Title {level}",

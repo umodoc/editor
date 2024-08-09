@@ -28,7 +28,7 @@
         <div class="virtual-group">
           <menus-toolbar-base-undo />
           <menus-toolbar-base-redo />
-          <menus-toolbar-base-select-all />
+          <menus-toolbar-base-format-painter />
           <menus-toolbar-base-clear-format />
         </div>
         <div class="virtual-group">
@@ -56,6 +56,7 @@
           <menus-toolbar-base-align-dropdown />
           <menus-toolbar-base-quote />
           <menus-toolbar-base-code v-if="!disableItem('code')" />
+          <menus-toolbar-base-select-all />
         </div>
         <div class="virtual-group">
           <menus-toolbar-base-markdown />

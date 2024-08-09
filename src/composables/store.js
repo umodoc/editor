@@ -6,6 +6,11 @@ export const useStore = createGlobalState(() => {
   const options = ref(defaultOptions)
   const page = ref({})
   const editor = ref(null)
+  const painter = ref({
+    enabled: false,
+    once: true,
+    marks: [],
+  })
   const blockMenu = ref(false)
   const assistant = ref(false)
   const tableOfContents = ref([])
@@ -27,6 +32,12 @@ export const useStore = createGlobalState(() => {
       }, {}),
     )
     return options.value
+  }
+
+  const setPainter = ({ enabled, once, marks }) => {
+    painter.value.enabled = enabled
+    painter.value.once = once
+    painter.value.marks = marks
   }
 
   watch(
@@ -81,6 +92,7 @@ export const useStore = createGlobalState(() => {
     options,
     page,
     editor,
+    painter,
     blockMenu,
     assistant,
     tableOfContents,
@@ -91,6 +103,7 @@ export const useStore = createGlobalState(() => {
     editorDestroyed,
     setOptions,
     setEditor,
+    setPainter,
     resetStore,
   }
 })
