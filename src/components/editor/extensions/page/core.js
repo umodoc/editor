@@ -69,7 +69,7 @@ function calculateNodeOverflowHeightAndPoint (node, dom,splitContex){
       while (calculateLength){
         let calculatetext =text.slice(0,calculateLength)
         //计算高度
-        let htmlNodeHeight = createAndCalculateHeight(node,[...calculateContent,splitContex.schema.text(calculatetext)]);
+        let htmlNodeHeight = createAndCalculateHeight(node,[...calculateContent,splitContex.schema.text(calculatetext,lastChild.marks)]);
         if(height>htmlNodeHeight&&!splitContex.isOverflow(htmlNodeHeight)){
           point={i,calculateLength}
           break;
@@ -87,6 +87,7 @@ function calculateNodeOverflowHeightAndPoint (node, dom,splitContex){
   }
   let isFlag = true;
   let index = 0;
+  if(!point)return index;
   node.descendants((node, pos, _, i) => {
     if (!isFlag) {
       return isFlag;
@@ -316,9 +317,8 @@ function iframeDocAddDiv() {
     const { width, height } = page.value.size
     const {right,left,bottom,top} =page.value.margin;
     const dom = iframeDoc.createElement("div");
-
     dom.setAttribute("class", "page");
-    dom.setAttribute("style", "opacity: 0;position: absolute;width:" + (width-left-right) + "cm;padding-left:"+left+"cm;padding-right:"+right+"cm;padding-top:"+top+"cm;padding-bottom:"+bottom+"cm;");
+    dom.setAttribute("style", "position: absolute;width:" + (width-left-right) + "cm;padding-left:"+left+"cm;padding-right:"+right+"cm;padding-top:"+top+"cm;padding-bottom:"+bottom+"cm;");
     const content = iframeDoc.createElement("div");
     content.classList.add("PageContent");
     content.setAttribute("id", "computeddiv");
@@ -342,23 +342,49 @@ export function removeComputedHtml() {
  */
 export function buildComputedHtml() {
   removeComputedHtml();
-  iframeComputed = document.createElement("iframe");
-  document.body.appendChild(iframeComputed);
-  const { options} = useStore()
-  const defaultLineHeight = () => {
-    return options.value.dicts.lineHeights.find((item) => item.default).value
-  }
-  //获得文档对象
-  iframeDoc = iframeComputed.contentDocument || iframeComputed.contentWindow.document;
-  iframeComputed.setAttribute("id", "computediframe");
-  //iframeComputed.setAttribute("style", "width: 100%;height: 100%;");
-  iframeComputed.setAttribute("style", "width: 100%;height: 100%;opacity: 0;position: absolute;z-index: -89;margin-left:-2003px;");
-  iframeDoc.body.setAttribute("class","editor-container")
-  iframeDoc.body.setAttribute("style","line-height:"+defaultLineHeight())
-  copyStylesToIframe(iframeDoc);
-  iframeDocAddP();
-  iframeDocAddDiv();
+  clonePageToIframe();
 }
+function clonePageToIframe() {
+  const iframe = createIframe();
+  iframeComputed=iframe;
+  iframeComputed.setAttribute("id", "computediframe");
+  iframeComputed.setAttribute("style", "width: 100%;height: 100%;opacity: 0;position: absolute;z-index: -89;margin-left:-2003px;");
+  iframeDoc = iframeComputed.contentDocument || iframeComputed.contentWindow.document;
+  copyStylesToIframe(iframeDoc);
+  filterAndCopyHtmlToIframe(iframe,["header","iframe","footer"])
+  cleanPagecontent(iframe);
+  adddPForProseMirror(iframe);
+}
+function cleanPagecontent(iframe) {
+  const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+  const pageContent = iframeDoc.getElementsByClassName("PageContent")[0];
+  pageContent.setAttribute("id", "computeddiv");
+  pageContent.innerHTML="";
+  let editor = pageContent.parentNode.parentNode;
+  let page =pageContent.parentNode;
+// 使用 while 循环和 firstChild 删除所有子节点
+  while (editor.lastChild!=page) {
+    editor.removeChild(editor.lastChild);
+  }
+
+}
+function adddPForProseMirror(iframe) {
+  const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+  const pageContent = iframeDoc.getElementsByClassName("ProseMirror")[0];
+  const p = iframeDoc.createElement("p");
+  p.setAttribute("id", "computedspan");
+  p.setAttribute("style", "display: inline-block");
+  p.innerHTML = "<br class='ProseMirror-trailingBreak'>";
+  pageContent.appendChild(p);
+  pageContent.setAttribute("contenteditable", "false");
+}
+
+function createIframe() {
+  const iframe = document.createElement('iframe');
+  document.body.appendChild(iframe);
+  return iframe;
+}
+
 function copyStylesToIframe(iframeContentDoc) {
   // 获取当前页面的所有样式表
   const links = document.getElementsByTagName('link');
@@ -386,4 +412,21 @@ function copyStylesToIframe(iframeContentDoc) {
     const clonedElement = iframeContentDoc.createElement(element.tagName);
     clonedElement.setAttribute("style", styleAttr);
   });
+}
+function filterAndCopyHtmlToIframe(iframe, excludedTags) {
+  const body = document.body;
+  const bodyContent = body.innerHTML;
+
+  // 使用正则表达式过滤掉不需要的标签
+  const regex = new RegExp(`<(${excludedTags.join('|')})[^>]*>.*?</\\1>`, 'g');
+  const filteredContent = bodyContent.replace(regex, '');
+  debugger
+  const docFragment = document.createDocumentFragment();
+  const newBody = document.createElement('body');
+  newBody.innerHTML = filteredContent;
+  docFragment.appendChild(newBody);
+
+  const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+  iframeDoc.adoptNode(docFragment);
+  iframeDoc.body.parentNode.replaceChild(docFragment, iframeDoc.body);
 }

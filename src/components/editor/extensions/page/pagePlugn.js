@@ -1,6 +1,6 @@
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { PAGE, TABLE, IMAGE, IFRAME, CODE_BLOCK, TOC, VIDEO } from './nodeNames'
-import { removeAbsentHtmlH, UnitConversion } from './core'
+import { buildComputedHtml, removeAbsentHtmlH, UnitConversion } from './core'
 import { findParentDomRefOfType } from "../../utils/index";
 import { defaultNodesComputed, PageComputedContext } from "./computed";
 import { findParentNode } from "@tiptap/core";
@@ -121,7 +121,7 @@ class PageState {
 
 export const paginationPluginKey = new PluginKey("pagination");
 export const pagePlugin = (editor,nodesComputed) => {
-
+  buildComputedHtml();
   const plugin = new Plugin({
     key: paginationPluginKey,
     view: () => {

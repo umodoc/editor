@@ -63,12 +63,6 @@ export default Node.create({
   renderHTML({ node, HTMLAttributes }) {
     return ["page", mergeAttributes(HTMLAttributes), 0];
   },
-  onBeforeCreate() {
-      buildComputedHtml(this.options);
-  },
-  onDestroy() {
-    removeComputedHtml();
-  },
   addCommands(){
    return{splitBlock,splitListItem,autoPaging:(status=true)=>{
        return ({tr, state, dispatch, editor})=>{
@@ -223,9 +217,9 @@ export default Node.create({
 
   },
   addProseMirrorPlugins() {
-    return [idPlugin(types.concat(this.options.types||[])),pagePlugin(this.editor, this.options.nodesComputed)];
+    return [idPlugin(types.concat(this.options.types||[]))];
   },
-  addNodeView() {
+  addNodeView() {1
     return this.options.View;
   }
 });

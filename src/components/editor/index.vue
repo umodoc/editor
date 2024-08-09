@@ -98,6 +98,7 @@ import FileHandler from './extensions/file-handler'
 import Dropcursor from '@tiptap/extension-dropcursor'
 
 import shortId from '@/utils/short-id'
+import { pagePlugin } from '@/components/editor/extensions/page/pagePlugn'
 
 
 const {
@@ -184,7 +185,6 @@ const editorInstance = new Editor({
       defaultLineHeight,
     }),
     SearchReplace,
-
     Link,
     Image,
     Video,
@@ -248,9 +248,12 @@ const editorInstance = new Editor({
   },
 })
 setEditor(editorInstance)
-setTimeout(() => {
+window.onload = () => {
+
+}
+/*setTimeout(() => {
   editor.value?.view.dispatch(editor.value?.state.tr.setMeta("splitPage", true));
-}, 1000);
+}, 1000);*/
 
 // 动态导入 katex 样式
 onMounted(() => {
@@ -265,8 +268,14 @@ onMounted(() => {
     style.id = 'katex-style'
     document.querySelector('head').append(style)
   }
-})
 
+})
+window.onload=() => {
+  editor.value?.registerPlugin(pagePlugin(editor.value, {}));
+  setTimeout(() => {
+    editor.value?.view.dispatch(editor.value?.state.tr.setMeta("splitPage", true));
+  }, 1000);
+}
 // 气泡菜单
 let tippyInstance = $ref(null)
 const tippyOpitons = $ref({

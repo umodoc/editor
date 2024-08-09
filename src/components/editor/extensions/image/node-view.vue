@@ -67,8 +67,6 @@ import Drager from 'es-drager'
 import { base64ToFile } from 'file64'
 import shortId from '@/utils/short-id'
 
-const { node, updateAttributes } = defineProps(nodeViewProps)
-const { options } = useStore()
 const { node, getPos, updateAttributes } = defineProps(nodeViewProps)
 const { options,editor } = useStore()
 const { imagePreview } = useStore()
