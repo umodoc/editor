@@ -83,7 +83,7 @@ watch(
   () => popupVisible.value,
   (visible) => {
     setMarginValue()
-    if (!visible) {
+    if (!visible && editor.value) {
       editor.value.commands.focus()
     }
   },
