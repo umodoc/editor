@@ -123,6 +123,7 @@
   }
   ol li p {
     margin-left: 0.25em;
+    word-break:break-all;
   }
   blockquote {
     border-left: 3px solid var(--umo-primary-color);
@@ -345,12 +346,16 @@
     }
   }
   .Tiptap-invisible-character {
+    white-space: nowrap;
     text-indent: 0;
+    position: absolute;
     &--break::before {
+      position: absolute;
       content: '↓';
       color: var(--umo-content-invisible-break-color);
     }
     &--paragraph::before {
+      position: absolute;
       content: '↵';
       color: var(--umo-content-invisible-break-color);
     }

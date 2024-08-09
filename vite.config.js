@@ -11,6 +11,7 @@ import pkg from './package.json'
 import copyright from './src/utils/copyright'
 
 export default defineConfig({
+  base: '/umo/',
   plugins: [
     VueMacros({
       plugins: {
@@ -57,7 +58,7 @@ export default defineConfig({
       },
     },
   },
-  build: {
+ /* build: {
     lib: {
       entry: process.cwd() + '/src/components/index.js',
       name: pkg.name,
@@ -75,9 +76,9 @@ export default defineConfig({
         },
       ],
       external: [
-        /@vueuse\/.*/,
-        /@tiptap\/.*/,
-        /nzh\/.*/,
+        /@vueuse\/.*!/,
+        /@tiptap\/.*!/,
+        /nzh\/.*!/,
         'vue',
         '@eslint/object-schema',
         '@imgly/background-removal',
@@ -98,5 +99,5 @@ export default defineConfig({
         'vue-esign',
       ],
     },
-  },
+  },*/
 })
