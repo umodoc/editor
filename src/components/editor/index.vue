@@ -89,10 +89,8 @@ import InvisibleNode from './extensions/invisible-node'
 
 // 其他
 import Selection from './extensions/selection'
-import {
-  TableOfContents,
-  getHierarchicalIndexes,
-} from '@tiptap-pro/extension-table-of-contents'
+import TableOfContents from './extensions/table-of-contents'
+import { getHierarchicalIndexes } from '@tiptap-pro/extension-table-of-contents'
 import Typography from '@tiptap/extension-typography'
 import CharacterCount from '@tiptap/extension-character-count'
 import FileHandler from './extensions/file-handler'
@@ -102,8 +100,9 @@ import shortId from '@/utils/short-id'
 
 const {
   options,
-  page,
+  container,
   editor,
+  page,
   painter,
   blockMenu,
   assistant,
@@ -219,8 +218,8 @@ const editorInstance = new Editor({
       onUpdate: (content) => {
         tableOfContents.value = content
       },
-      // scrollParent: () =>
-      //   document.querySelector(`${container} .zoomable-container`),
+      scrollParent: () =>
+        document.querySelector(`${container} .zoomable-container`),
       getId: () => shortId(6),
     }),
     Typography.configure(options.value.document.typographyRules),
