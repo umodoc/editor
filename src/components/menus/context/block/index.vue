@@ -59,6 +59,7 @@ watch(
 <style lang="less">
 .block-menu-hander {
   position: absolute;
+  z-index: 20;
   .menu-button {
     background-color: transparent;
     .button-content {

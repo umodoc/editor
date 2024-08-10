@@ -145,7 +145,7 @@ watch(
 
 .zoomable-container {
   flex: 1;
-  padding: 30px 50px;
+  padding: 20px 50px;
   scroll-behavior: smooth;
   .zoomable-content {
     margin: 0 auto;

@@ -69,10 +69,10 @@ const pageSize = $computed(() => {
   border: solid 1px var(--umo-border-color);
   box-sizing: border-box;
   &:not(:first-child) {
-    margin-top: 10px;
+    margin-top: 15px;
   }
   &:not(:last-child) {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
   }
   .corner-top-left {
     position: absolute;
