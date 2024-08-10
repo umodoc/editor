@@ -4,13 +4,14 @@
     class="editor-container"
     :class="{
       'show-line-number': page.showLineNumber,
+      'format-painter': painter.enabled,
     }"
     :style="{ lineHeight: defaultLineHeight }"
     :editor="editor"
   />
   <template v-if="editor && !editorDestroyed">
     <bubble-menu
-      v-show="!blockMenu"
+      v-show="!blockMenu && !painter.enabled"
       class="umo-editor-bubble-menu"
       :class="{ assistant }"
       :editor="editor"
@@ -38,6 +39,7 @@ import Placeholder from '@tiptap/extension-placeholder'
 import Focus from '@tiptap/extension-focus'
 
 // 基本
+import FormatPainter from './extensions/format-painter'
 import FontFamily from '@tiptap/extension-font-family'
 import FontSize from './extensions/font-size'
 import Bold from '@tiptap/extension-bold'
@@ -55,6 +57,7 @@ import NodeAlign from './extensions/node-align'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from './extensions/list/tasklist'
 import LineHeight from './extensions/line-height'
+import Margin from './extensions/margin'
 import SearchReplace from '@sereneinserenade/tiptap-search-and-replace'
 
 // 插入
@@ -88,10 +91,8 @@ import Page from './extensions/page'
 import { Document } from '@tiptap/extension-document'
 // 其他
 import Selection from './extensions/selection'
-import {
-  TableOfContents,
-  getHierarchicalIndexes,
-} from '@tiptap-pro/extension-table-of-contents'
+import TableOfContents from './extensions/table-of-contents'
+import { getHierarchicalIndexes } from '@tiptap-pro/extension-table-of-contents'
 import Typography from '@tiptap/extension-typography'
 import CharacterCount from '@tiptap/extension-character-count'
 import FileHandler from './extensions/file-handler'
@@ -100,11 +101,12 @@ import Dropcursor from '@tiptap/extension-dropcursor'
 import shortId from '@/utils/short-id'
 import { pagePlugin } from '@/components/editor/extensions/page/pagePlugn'
 
-
 const {
   options,
-  page,
+  container,
   editor,
+  page,
+  painter,
   blockMenu,
   assistant,
   tableOfContents,
@@ -135,9 +137,8 @@ const editorInstance = new Editor({
   },
   parseOptions: options.value.document.parseOptions,
   extensions: [
-
     StarterKit.configure({
-      document:false,
+      document: false,
       bold: false,
       bulletList: false,
       orderedList: false,
@@ -146,16 +147,17 @@ const editorInstance = new Editor({
       gapcursor: true,
       dropcursor: false,
     }),
-    Document.extend({content:"page+"}),
+    Document.extend({ content: 'page+' }),
     Page,
-/*    Placeholder.configure({
+    /* Placeholder.configure({
       considerAnyAsEmpty: true,
       placeholder: l(options.value.document.placeholder),
     }),*/
-   /*Focus.configure({
+    /* Focus.configure({
       className: 'node-focused',
       mode: 'all',
     }),*/
+    FormatPainter,
     FontFamily,
     FontSize,
     Bold.extend({
@@ -184,6 +186,7 @@ const editorInstance = new Editor({
       types: ['heading', 'paragraph'],
       defaultLineHeight,
     }),
+    Margin,
     SearchReplace,
     Link,
     Image,
@@ -206,7 +209,7 @@ const editorInstance = new Editor({
     // 页面
     Toc,
     PageBreak,
-/*
+    /*
     InvisibleCharacters.configure({
       visible: page.value.showBreakMarks,
       builders: [new HardBreakNode(), new ParagraphNode(), new InvisibleNode()],
@@ -219,8 +222,8 @@ const editorInstance = new Editor({
       onUpdate: (content) => {
         tableOfContents.value = content
       },
-      // scrollParent: () =>
-      //   document.querySelector(`${container} .zoomable-container`),
+      scrollParent: () =>
+        document.querySelector(`${container} .zoomable-container`),
       getId: () => shortId(6),
     }),
     Typography.configure(options.value.document.typographyRules),
@@ -266,13 +269,14 @@ onMounted(() => {
     style.id = 'katex-style'
     document.querySelector('head').append(style)
   }
-
 })
-window.onload=() => {
-  editor.value?.registerPlugin(pagePlugin(editor.value, {}));
+window.onload = () => {
+  editor.value?.registerPlugin(pagePlugin(editor.value, {}))
   setTimeout(() => {
-    editor.value?.view.dispatch(editor.value?.state.tr.setMeta("splitPage", true));
-  }, 1000);
+    editor.value?.view.dispatch(
+      editor.value?.state.tr.setMeta('splitPage', true),
+    )
+  }, 1000)
 }
 // 气泡菜单
 let tippyInstance = $ref(null)

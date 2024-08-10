@@ -76,6 +76,11 @@ const options = $ref({
       size: file.size,
     }
   },
+  async onCustomImportWordMethod(file) {
+    return {
+      value: '<p>测试导入word</p>',
+    }
+  },
 })
 </script>
 

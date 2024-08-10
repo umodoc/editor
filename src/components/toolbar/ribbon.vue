@@ -20,7 +20,7 @@
               <menus-toolbar-base-redo />
             </div>
             <div class="virtual-group-row">
-              <menus-toolbar-base-select-all />
+              <menus-toolbar-base-format-painter />
               <menus-toolbar-base-clear-format />
             </div>
           </div>
@@ -49,6 +49,7 @@
               <menus-toolbar-base-indent />
               <menus-toolbar-base-outdent />
               <menus-toolbar-base-line-height />
+              <menus-toolbar-base-margin />
             </div>
             <div class="virtual-group-row">
               <menus-toolbar-base-align-left />
@@ -58,12 +59,14 @@
               <menus-toolbar-base-align-distributed />
               <menus-toolbar-base-quote />
               <menus-toolbar-base-code v-if="!disableItem('code')" />
+              <menus-toolbar-base-select-all />
             </div>
           </div>
           <div class="virtual-group">
             <menus-toolbar-base-heading />
           </div>
           <div class="virtual-group">
+            <menus-toolbar-base-import-word />
             <menus-toolbar-base-markdown />
             <menus-toolbar-base-search-replace />
           </div>

@@ -64,7 +64,7 @@
           class="bar-button"
           variant="text"
           size="small"
-          href="https://umodoc.com"
+          :href="`https://editor.umodoc.com/${i18n.global.locale.value === 'zh-CN' ? 'cn' : 'en'}/docs`"
           target="_blank"
         >
           <icon name="home-page" />
@@ -236,7 +236,6 @@
 <script setup>
 import i18n from '@/i18n'
 import getShortcut from '@/utils/shortcut'
-import { computed } from 'vue'
 
 const { container, options, page, editor } = useStore()
 const $document = useState('document')

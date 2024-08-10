@@ -3,7 +3,7 @@
     ref="containerRef"
     class="node-view file-node-view"
     :id="node.attrs.id"
-    :style="{ 'justify-content': node.attrs.nodeAlign }"
+    :style="nodeStyle"
   >
     <div class="node-container hover-shadow select-outline file">
       <div class="file-icon">
@@ -47,6 +47,19 @@ const { node, updateAttributes } = defineProps(nodeViewProps)
 const { options } = useStore()
 const containerRef = ref(null)
 let filePath = $ref()
+
+const nodeStyle = $computed(() => {
+  const { nodeAlign, margin } = node.attrs
+  const marginTop =
+    margin?.top && margin?.top !== '' ? margin.top + 'px' : undefined
+  const marginBottom =
+    margin?.bottom && margin?.bottom !== '' ? margin.bottom + 'px' : undefined
+  return {
+    'justify-content': nodeAlign,
+    marginTop,
+    marginBottom,
+  }
+})
 
 onMounted(async () => {
   let fileIcon = getFileIcon(node.attrs.name)

@@ -13,23 +13,29 @@ const { container, editor } = useStore()
 
 let menuScrollTop = $ref(0)
 
+// 更新菜单位置
 const updateMenuPostion = () => {
   const currentBlock = document.querySelector(`${container} .node-focused`)
   if (currentBlock === null) {
     return
   }
-  let top = currentBlock.offsetTop
-  top = currentBlock.tagName === 'DIV' ? top - 8 : top - 5
+  let offsetTop = currentBlock.offsetTop
+
+  // 微修正菜单位置
+  offsetTop = currentBlock.tagName === 'DIV' ? offsetTop - 8 : offsetTop - 5
+  let offsetY = 0
+  if (
+    editor.value.isActive('horizontalRule') ||
+    editor.value.isActive('table')
+  ) {
+    offsetY = 6
+  }
   if (editor.value.isActive('pageBreak')) {
-    top = top - 3
+    offsetY = -4
   }
-  if (editor.value.isActive('hr')) {
-    top = top + 3
-  }
-  if (editor.value.isActive('table')) {
-    top = top + 7
-  }
-  menuScrollTop = top
+
+  // 设置菜单位置
+  menuScrollTop = offsetTop + offsetY
 }
 watch(
   editor,

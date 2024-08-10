@@ -2,8 +2,8 @@
   <node-view-wrapper
     ref="containerRef"
     class="node-view image-node-view"
-    :style="{ 'justify-content': node.attrs.nodeAlign }"
     :id="node.attrs.id"
+    :style="nodeStyle"
     @dblclick="imagePreview = node.attrs.src"
   >
     <div class="node-container hover-shadow select-outline image">
@@ -68,7 +68,7 @@ import { base64ToFile } from 'file64'
 import shortId from '@/utils/short-id'
 
 const { node, getPos, updateAttributes } = defineProps(nodeViewProps)
-const { options,editor } = useStore()
+const { options, editor } = useStore()
 const { imagePreview } = useStore()
 const { isLoading, error } = useImage({ src: node.attrs.src })
 
@@ -76,6 +76,19 @@ const containerRef = ref(null)
 const imageRef = $ref(null)
 let selected = $ref(false)
 let maxWidth = $ref(0)
+
+const nodeStyle = $computed(() => {
+  const { nodeAlign, margin } = node.attrs
+  const marginTop =
+    margin?.top && margin?.top !== '' ? margin.top + 'px' : undefined
+  const marginBottom =
+    margin?.bottom && margin?.bottom !== '' ? margin.bottom + 'px' : undefined
+  return {
+    'justify-content': nodeAlign,
+    marginTop,
+    marginBottom,
+  }
+})
 
 const uploadImage = async () => {
   if (node.attrs.uploaded || !node.attrs.file) {
