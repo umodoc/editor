@@ -20,7 +20,6 @@
             minHeight: pageSize.height + 'cm',
             transform: `scale(${page.zoomLevel / 100})`,
             //padding: `${page.margin.top + 'cm'} ${page.margin.right + 'cm'} ${page.margin.bottom + 'cm'} ${page.margin.left + 'cm'}`,
-            background: page.background,
           }"
         >
           <editor>
@@ -150,14 +149,11 @@ watch(
   scroll-behavior: smooth;
   .zoomable-content {
     margin: 0 auto;
-    box-shadow:
-      rgba(0, 0, 0, 0.06) 0px 0px 10px 0px,
-      rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
-    background-color: var(--umo-color-white);
     .page-content {
       transform-origin: 0 0;
       box-sizing: border-box;
       display: flex;
+      overflow: visible;
       [contenteditable] {
         outline: none;
       }

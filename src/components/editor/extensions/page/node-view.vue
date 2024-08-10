@@ -4,6 +4,7 @@
     class="page page-node-view"
     :style="{
       padding: `${page.margin.top + 'cm'} ${page.margin.right + 'cm'} ${page.margin.bottom + 'cm'} ${page.margin.left + 'cm'}`,
+      background: page.background,
     }"
   >
     <div
@@ -61,11 +62,18 @@ const pageSize = $computed(() => {
 
 <style lang="less">
 .page-node-view {
-  // margin-top:0.5rem;
-  // margin-bottom:0.5rem;
-  //下划线
-  border-bottom: 1px solid #ccc;
-  // position: relative;
+  position: relative;
+  // box-shadow:
+  //   rgba(0, 0, 0, 0.06) 0px 0px 10px 0px,
+  //   rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
+  border: solid 1px var(--umo-border-color);
+  box-sizing: border-box;
+  &:not(:first-child) {
+    margin-top: 10px;
+  }
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
   .corner-top-left {
     position: absolute;
     height: 1cm;
