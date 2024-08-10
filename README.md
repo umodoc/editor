@@ -91,7 +91,7 @@ Or submit bug reports via https://github.com/umodoc/editor/issues.
 
 ### Contributors
 
-The development of Umo Editor would not be possible without contributions from the community. Below is a list of contributors who have contributed code to Umo Editor. We thank and honor them for their contributions:
+The development of Umo Editor could not have been possible without the support of the community. Below is the list of contributors who have contributed code to Umo Editor. We extend our thanks to them:
 
 <p>
 <a href="https://github.com/umodoc/editor/graphs/contributors" target="_blank">
