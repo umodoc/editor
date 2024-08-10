@@ -97,6 +97,16 @@ Nodejs 18.0.0 及以上版本。
 
 ## 贡献代码
 
+### 贡献者名单
+
+Umo Editor 的发展，离不开社区的贡献，以下是为于 Umo Editor 贡献代码的贡献者名单，向他们鸣谢和致敬：
+
+<p>
+<a href="https://github.com/umodoc/editor/graphs/contributors" target="_blank">
+  <img src="https://contrib.rocks/image?repo=umodoc/editor" />
+</a>
+</p>
+
 我们欢迎任何形式的贡献，包括但不限于提交 Bug 报告、功能请求、代码贡献等。
 
 ## 联系我们
