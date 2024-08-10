@@ -171,7 +171,7 @@ const defaultOptions = {
     importWord: {
       enabled: true,
       options: {},
-      useCustomMethod: true,
+      useCustomMethod: false,
     },
   },
   page: {
