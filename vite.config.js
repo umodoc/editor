@@ -77,6 +77,7 @@ export default defineConfig({
       external: [
         /@vueuse\/.*/,
         /@tiptap\/.*/,
+        /mammoth\/.*/,
         /nzh\/.*/,
         'vue',
         '@eslint/object-schema',

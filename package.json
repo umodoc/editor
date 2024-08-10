@@ -92,6 +92,7 @@
     "hotkeys-js": "^3.13.7",
     "jsbarcode": "^3.11.6",
     "katex": "^0.16.11",
+    "mammoth": "^1.8.0",
     "mermaid": "^10.9.1",
     "nzh": "^1.0.12",
     "plyr": "^3.7.8",
@@ -104,25 +105,25 @@
     "vue-i18n": "^9.13.1"
   },
   "devDependencies": {
+    "@intlify/unplugin-vue-i18n": "^4.0.0",
     "@sereneinserenade/tiptap-search-and-replace": "^0.1.1",
     "@tiptap-pro/extension-invisible-characters": "^2.10.5",
     "@tiptap-pro/extension-mathematics": "^2.10.5",
     "@tiptap-pro/extension-table-of-contents": "^2.10.5",
-    "@intlify/unplugin-vue-i18n": "^4.0.0",
     "@vitejs/plugin-vue": "^5.1.1",
     "@vue/eslint-config-prettier": "^9.0.0",
-    "tdesign-vue-next": "^1.9.8",
-    "vue": "^3.4.34",
     "eslint": "^9.8.0",
     "eslint-plugin-vue": "^9.27.0",
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
     "prettier": "^3.3.3",
+    "tdesign-vue-next": "^1.9.8",
     "unplugin-auto-import": "^0.18.2",
     "unplugin-vue-components": "^0.27.3",
     "unplugin-vue-macros": "^2.10.0",
     "vite": "^5.3.5",
-    "vite-plugin-svg-icons": "^2.0.1"
+    "vite-plugin-svg-icons": "^2.0.1",
+    "vue": "^3.4.34"
   },
   "engines": {
     "node": ">=18.0.0"

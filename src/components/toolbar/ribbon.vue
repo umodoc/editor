@@ -66,6 +66,7 @@
             <menus-toolbar-base-heading />
           </div>
           <div class="virtual-group">
+            <menus-toolbar-base-import-word />
             <menus-toolbar-base-markdown />
             <menus-toolbar-base-search-replace />
           </div>

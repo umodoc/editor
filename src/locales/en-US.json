@@ -87,6 +87,13 @@
       "default": "Default",
       "reset": "Auto Spacing"
     },
+    "importWord": {
+      "text": "Import Word",
+      "limitSize": "File size cannot exceed 5MB.",
+      "converting": "Converting Word document, please wait...",
+      "convertError": "Error parsing Word document",
+      "importError": "Error importing Word document"
+    },
     "markdown": {
       "text": "Markdown",
       "enable": "Enable Markdown",
