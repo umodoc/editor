@@ -33,8 +33,8 @@
         :equal-proportion="node.attrs.equalProportion"
         @rotate="onRotate"
         @resize="onResize"
-        @resizeStart="onResizeStart"
-        @resizeEnd="onResizeEnd"
+        @resize-start="onResizeStart"
+        @resize-end="onResizeEnd"
         @drag="onDrag"
         @click="selected = true"
       >

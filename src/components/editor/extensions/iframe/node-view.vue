@@ -15,8 +15,8 @@
         :min-height="100"
         :max-width="maxWidth"
         @resize="onResize"
-        @resizeStart="onResizeStart"
-        @resizeEnd="onResizeEnd"
+        @resize-start="onResizeStart"
+        @resize-end="onResizeEnd"
         @click="selected = true"
       >
         <iframe :src="node.attrs.src"></iframe>
