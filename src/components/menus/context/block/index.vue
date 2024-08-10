@@ -1,7 +1,8 @@
 <template>
   <div
+    v-if="menuVisible"
     class="block-menu-hander"
-    :style="`transform: translate(-68px, ${menuScrollTop}px);`"
+    :style="`transform: translate(54px, ${menuScrollTop}px);`"
   >
     <menus-context-block-node />
     <menus-context-block-common />
@@ -11,11 +12,14 @@
 <script setup>
 const { container, editor } = useStore()
 
+let menuVisible = $ref(false)
 let menuScrollTop = $ref(0)
 
 // 更新菜单位置
 const updateMenuPostion = () => {
-  const currentBlock = document.querySelector(`${container} .node-focused`)
+  const currentBlock = document.querySelector(
+    `${container} .PageContent .node-focused`,
+  )
   if (currentBlock === null) {
     return
   }
@@ -35,6 +39,7 @@ const updateMenuPostion = () => {
   }
 
   // 设置菜单位置
+  menuVisible = true
   menuScrollTop = offsetTop + offsetY
 }
 watch(
@@ -43,6 +48,8 @@ watch(
     if (val) {
       editor.value.on('selectionUpdate', updateMenuPostion)
       editor.value.on('focus', updateMenuPostion)
+    } else {
+      menuVisible = false
     }
   },
   { immediate: true },

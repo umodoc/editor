@@ -153,10 +153,10 @@ const editorInstance = new Editor({
       considerAnyAsEmpty: true,
       placeholder: l(options.value.document.placeholder),
     }),*/
-    /* Focus.configure({
+    Focus.configure({
       className: 'node-focused',
       mode: 'all',
-    }),*/
+    }),
     FormatPainter,
     FontFamily,
     FontSize,
