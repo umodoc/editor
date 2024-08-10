@@ -22,6 +22,26 @@
       }
     }
   }
+  &.show-break-marks {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h5,
+    p {
+      &::after {
+        display: inline;
+        position: absolute;
+        content: '↵';
+        margin-top: 0.15em;
+        color: var(--umo-content-invisible-break-color);
+      }
+    }
+  }
+  .ProseMirror-trailingBreak {
+    display: inline;
+  }
   &.format-painter {
     cursor: url('@/assets/images/format-painter.svg'), text;
   }

@@ -4,6 +4,7 @@
     class="editor-container"
     :class="{
       'show-line-number': page.showLineNumber,
+      'show-break-marks': page.showBreakMarks,
       'format-painter': painter.enabled,
     }"
     :style="{ lineHeight: defaultLineHeight }"
