@@ -236,7 +236,6 @@
 <script setup>
 import i18n from '@/i18n'
 import getShortcut from '@/utils/shortcut'
-import { computed } from 'vue'
 
 const { container, options, page, editor } = useStore()
 const $document = useState('document')

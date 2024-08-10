@@ -47,7 +47,6 @@
 import { toBlob, toJpeg, toPng } from 'dom-to-image-more'
 import i18n from '@/i18n'
 import { propsOptions } from '@/options'
-import { onBeforeUnmount } from 'vue'
 import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
 
