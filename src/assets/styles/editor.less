@@ -6,7 +6,7 @@
   color: var(--umo-content-text-color);
   &.show-line-number {
     .PageContent {
-      > *:not([data-line-number='false']):not(div) {
+      > *:not([data-line-number='false']):not(div):not(.node-focused) {
         position: relative;
         &::before {
           position: absolute;
