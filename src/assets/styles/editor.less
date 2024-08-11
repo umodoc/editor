@@ -55,7 +55,7 @@
           margin-top: var(--umo-content-node-bottom);
         }
         &.node-focused {
-          &:not(hr):not(.page-break):not(.tableWrapper):before {
+          &:not(hr):not(.page-break):not(.tableWrapper):not(table):before {
             content: '';
             display: block;
             position: absolute;
@@ -68,7 +68,6 @@
             pointer-events: none;
             z-index: -1;
           }
-          // background: var(--umo-content-node-selected-background);
           &.page-divider {
             border-radius: var(--umo-radius);
             background: var(--umo-content-node-selected-background);
