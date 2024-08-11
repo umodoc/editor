@@ -92,7 +92,7 @@ import Page from './extensions/page'
 import { Document } from '@tiptap/extension-document'
 // 其他
 import Selection from './extensions/selection'
-import TableOfContents from './extensions/table-of-contents'
+import { TableOfContents } from '@tiptap-pro/extension-table-of-contents'
 import { getHierarchicalIndexes } from '@tiptap-pro/extension-table-of-contents'
 import Typography from '@tiptap/extension-typography'
 import CharacterCount from '@tiptap/extension-character-count'
