@@ -69,6 +69,14 @@ export const useStore = createGlobalState(() => {
     { immediate: true, once: true },
   )
 
+  watch(
+    () => [page.value.size, page.value.margin, page.value.orientation],
+    () => {
+      editor.value.commands.autoPaging()
+    },
+    { deep: true },
+  )
+
   const setEditor = (Editor) => (editor.value = Editor)
   const resetStore = () => {
     editor.value = null
