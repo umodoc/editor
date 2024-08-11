@@ -313,6 +313,9 @@ const getIframeCode = () => {
       .pagedjs_pages .pagedjs_area {
         line-height: ${defaultLineHeight}
       }
+      .pagedjs_pages .pagedjs_area .page-node-view {
+        padding: 0!important;
+      }
 
       /* 打印样式 */
       .pagedjs_pages {

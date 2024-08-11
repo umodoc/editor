@@ -64,6 +64,8 @@ const pageSize = $computed(() => {
 <style lang="less" scoped>
 .page-node-view {
   box-sizing: border-box;
+  // FIXME: 设为相对定位时，块级菜单定位有问题，取消相对定位，页眉页脚标记的显示有问题
+  // position: relative;
   &.no-shadow {
     border: solid 1px var(--umo-border-color);
     box-shadow: unset;

@@ -522,7 +522,7 @@ const changeLang = ({ value }) => {
 }
 .umo-editor-container.preview-mode {
   .zoomable-container {
-    padding: 10px !important;
+    padding: 50px 30px !important;
   }
 }
 .shortcut-drawer-header {

@@ -10,6 +10,7 @@
           minHeight: pageZoomMinHeight,
         }"
       >
+        <!-- FIXME: 水印放到页面组件中，否则可能会在页面缝隙中显示 -->
         <t-watermark
           class="page-content"
           :alpha="page.watermark.alpha"

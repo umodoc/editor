@@ -68,6 +68,12 @@
             pointer-events: none;
             z-index: -1;
           }
+          &:is(div) {
+            &::before {
+              top: -8px !important;
+              bottom: -8px !important;
+            }
+          }
           &.page-divider {
             border-radius: var(--umo-radius);
             background: var(--umo-content-node-selected-background);
@@ -86,10 +92,6 @@
           .select-outline {
             outline: solid 1px var(--umo-primary-color);
           }
-        }
-        + div.node-focused::before {
-          top: -8px !important;
-          bottom: -8px !important;
         }
       }
     }
