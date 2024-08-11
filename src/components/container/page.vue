@@ -48,8 +48,6 @@
 </template>
 
 <script setup>
-import { UnitConversion } from '@/components/editor/extensions/page/core'
-
 const store = useStore()
 const { container, page, imagePreview } = useStore()
 
@@ -153,7 +151,7 @@ watch(
       transform-origin: 0 0;
       box-sizing: border-box;
       display: flex;
-      overflow: visible;
+      overflow: visible !important;
       [contenteditable] {
         outline: none;
       }
