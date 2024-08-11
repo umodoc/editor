@@ -49,6 +49,7 @@ watch(
     if (val) {
       editor.value.on('selectionUpdate', updateMenuPostion)
       editor.value.on('focus', updateMenuPostion)
+      editor.value.on('blur', () => (menuVisible = false))
     } else {
       menuVisible = false
     }
