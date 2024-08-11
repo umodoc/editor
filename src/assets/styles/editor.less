@@ -5,7 +5,7 @@
   width: 100%;
   color: var(--umo-content-text-color);
   &.show-line-number {
-    .umo-editor {
+    .PageContent {
       > *:not([data-line-number='false']):not(div) {
         position: relative;
         &::before {
@@ -38,9 +38,6 @@
         color: var(--umo-content-invisible-break-color);
       }
     }
-  }
-  .ProseMirror-trailingBreak {
-    display: inline;
   }
   &.format-painter {
     cursor: url('@/assets/images/format-painter.svg'), text;
