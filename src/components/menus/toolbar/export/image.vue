@@ -13,7 +13,7 @@
 import { toBlob } from 'dom-to-image-more'
 import { saveAs } from 'file-saver'
 
-const { container, options, page } = useStore()
+const { container, options, page, exportImage } = useStore()
 
 const formats = [
   { content: t('export.image.png'), value: 'png' },
@@ -25,8 +25,10 @@ const saveImage = async ({ content, value }) => {
     return
   }
   const zoomLevel = page.value.zoomLevel
+  exportImage.value = true
   try {
     page.value.zoomLevel = 100
+    await nextTick()
     const node = document.querySelector(`${container} .page-content`)
     const blob = await toBlob(node, { scale: devicePixelRatio })
     const { title } = options.value.document
@@ -47,6 +49,7 @@ const saveImage = async ({ content, value }) => {
     })
   } finally {
     page.value.zoomLevel = zoomLevel
+    exportImage.value = false
   }
 }
 </script>

@@ -18,6 +18,7 @@ export const useStore = createGlobalState(() => {
   const searchReplace = ref(false)
   const savedAt = ref(null)
   const printing = ref(false)
+  const exportImage = ref(false)
   const editorDestroyed = ref(false)
 
   const setOptions = (value) => {
@@ -108,6 +109,7 @@ export const useStore = createGlobalState(() => {
     searchReplace,
     savedAt,
     printing,
+    exportImage,
     editorDestroyed,
     setOptions,
     setEditor,

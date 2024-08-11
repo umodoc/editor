@@ -2,6 +2,7 @@
   <node-view-wrapper
     ref="containerRef"
     class="page page-node-view"
+    :class="{ 'no-shadow': exportImage }"
     :style="{
       padding: `${page.margin.top + 'cm'} ${page.margin.right + 'cm'} ${page.margin.bottom + 'cm'} ${page.margin.left + 'cm'}`,
       background: page.background,
@@ -47,7 +48,7 @@
 </template>
 <script setup>
 import { nodeViewProps, NodeViewWrapper, NodeViewContent } from '@tiptap/vue-3'
-const { page, options, editorDestroyed } = useStore()
+const { page, exportImage } = useStore()
 const { editor } = defineProps(nodeViewProps)
 const containerRef = ref(null)
 
@@ -60,12 +61,18 @@ const pageSize = $computed(() => {
 })
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .page-node-view {
-  box-shadow:
-    rgba(0, 0, 0, 0.06) 0px 0px 10px 0px,
-    rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
   box-sizing: border-box;
+  &.no-shadow {
+    border: solid 1px var(--umo-border-color);
+    box-shadow: unset;
+  }
+  &:not(.no-shadow) {
+    box-shadow:
+      rgba(0, 0, 0, 0.06) 0px 0px 10px 0px,
+      rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
+  }
   &:not(:first-child) {
     margin-top: 15px;
   }
