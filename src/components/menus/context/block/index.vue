@@ -35,6 +35,9 @@ const updateMenuPostion = () => {
   ) {
     offsetY = 5
   }
+  if (editor.value.isActive('pageBreak')) {
+    offsetY = -4
+  }
 
   // 设置菜单位置
   menuVisible = true
