@@ -10,25 +10,13 @@
           minHeight: pageZoomMinHeight,
         }"
       >
-        <!-- FIXME: 水印放到页面组件中，否则可能会在页面缝隙中显示 -->
-        <t-watermark
-          class="page-content"
-          :alpha="page.watermark.alpha"
-          v-bind="watermarkOptions"
-          :watermark-content="page.watermark"
-          :style="{
-            width: pageSize.width + 'cm',
-            minHeight: pageSize.height + 'cm',
-            transform: `scale(${page.zoomLevel / 100})`,
-            //padding: `${page.margin.top + 'cm'} ${page.margin.right + 'cm'} ${page.margin.bottom + 'cm'} ${page.margin.left + 'cm'}`,
-          }"
-        >
+        <div class="page-content">
           <editor>
             <template #bubble_menu="props">
               <slot name="bubble_menu" v-bind="props" />
             </template>
           </editor>
-        </t-watermark>
+        </div>
       </div>
     </div>
     <t-image-viewer
@@ -91,25 +79,6 @@ watch(
   () => setPageZoomHeight(),
 )
 
-// 水印
-const watermarkOptions = $ref({
-  x: 0,
-  height: 0,
-})
-watch(
-  () => page.value.watermark,
-  ({ type }) => {
-    if (type === 'compact') {
-      watermarkOptions.width = 320
-      watermarkOptions.y = 240
-    } else {
-      watermarkOptions.width = 480
-      watermarkOptions.y = 360
-    }
-  },
-  { deep: true, immediate: true },
-)
-
 // 图片预览
 let previewImages = $ref([])
 let currentImageIndex = $ref(0)
@@ -139,7 +108,6 @@ watch(
 .page-container {
   height: 100%;
   display: flex;
-  position: relative;
 }
 
 .zoomable-container {
@@ -152,6 +120,7 @@ watch(
       transform-origin: 0 0;
       box-sizing: border-box;
       display: flex;
+      position: relative;
       overflow: visible !important;
       [contenteditable] {
         outline: none;

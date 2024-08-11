@@ -5,7 +5,7 @@
   width: 100%;
   color: var(--umo-content-text-color);
   &.show-line-number {
-    .PageContent {
+    .page-node-content {
       > *:not([data-line-number='false']):not(div):not(.node-focused) {
         position: relative;
         &::before {
@@ -47,7 +47,7 @@
     width: 100%;
     outline: none;
     counter-reset: title;
-    .PageContent {
+    .page-node-content {
       > * {
         position: relative;
         z-index: 1;

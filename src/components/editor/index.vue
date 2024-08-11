@@ -100,7 +100,7 @@ import FileHandler from './extensions/file-handler'
 import Dropcursor from '@tiptap/extension-dropcursor'
 
 import shortId from '@/utils/short-id'
-import { pagePlugin } from '@/components/editor/extensions/page/pagePlugn'
+import { pagePlugin } from '@/components/editor/extensions/page/page-plugin'
 
 const {
   options,
@@ -259,7 +259,7 @@ setEditor(editorInstance)
 
 // 动态导入 katex 样式
 onMounted(() => {
-  const katexStyleElement = document.getElementById('katex-style')
+  const katexStyleElement = document.querySelector('#katex-style')
   if (
     katexStyleElement === null &&
     !options.value.toolbar.disableMenuItems.includes('math')

@@ -1,49 +1,57 @@
 <template>
   <node-view-wrapper
     ref="containerRef"
-    class="page page-node-view"
+    class="page-node-view"
     :class="{ 'no-shadow': exportImage }"
     :style="{
-      padding: `${page.margin.top + 'cm'} ${page.margin.right + 'cm'} ${page.margin.bottom + 'cm'} ${page.margin.left + 'cm'}`,
       background: page.background,
     }"
   >
-    <div
-      class="corner-top-left"
+    <t-watermark
+      :alpha="page.watermark.alpha"
+      v-bind="watermarkOptions"
+      :watermark-content="page.watermark"
       :style="{
-        left: page.margin.left - 1 + 'cm',
-        top: page.margin.top - 1 + 'cm',
+        width: pageSize.width + 'cm',
+        height: pageSize.height + 'cm',
+        transform: `scale(${page.zoomLevel / 100})`,
       }"
-    ></div>
-    <div
-      class="corner-top-right"
-      :style="{
-        right: page.margin.right - 1 + 'cm',
-        top: page.margin.top - 1 + 'cm',
-      }"
-    ></div>
-    <div
-      class="corner-bottom-left"
-      :style="{
-        left: page.margin.left - 1 + 'cm',
-        bottom: page.margin.bottom - 1 + 'cm',
-      }"
-    ></div>
-    <div
-      class="corner-bottom-right"
-      :style="{
-        right: page.margin.right - 1 + 'cm',
-        bottom: page.margin.bottom - 1 + 'cm',
-      }"
-    ></div>
-    <node-view-content
-      class="PageContent"
-      :style="{
-        width: pageSize.width - page.margin.right - page.margin.left + 'cm',
-        minHeight:
-          pageSize.height - page.margin.top - page.margin.bottom + 'cm',
-      }"
-    />
+    >
+      <div
+        class="page-corner corner-tl"
+        :style="{
+          left: page.margin.left - 1 + 'cm',
+          top: page.margin.top - 1 + 'cm',
+        }"
+      ></div>
+      <div
+        class="page-corner corner-tr"
+        :style="{
+          right: page.margin.right - 1 + 'cm',
+          top: page.margin.top - 1 + 'cm',
+        }"
+      ></div>
+      <div
+        class="page-corner corner-bl"
+        :style="{
+          left: page.margin.left - 1 + 'cm',
+          bottom: page.margin.bottom - 1 + 'cm',
+        }"
+      ></div>
+      <div
+        class="page-corner corner-br"
+        :style="{
+          right: page.margin.right - 1 + 'cm',
+          bottom: page.margin.bottom - 1 + 'cm',
+        }"
+      ></div>
+      <node-view-content
+        class="page-node-content"
+        :style="{
+          padding: `${page.margin.top + 'cm'} ${page.margin.right + 'cm'} ${page.margin.bottom + 'cm'} ${page.margin.left + 'cm'}`,
+        }"
+      />
+    </t-watermark>
   </node-view-wrapper>
 </template>
 <script setup>
@@ -59,13 +67,30 @@ const pageSize = $computed(() => {
     height: page.value.orientation === 'portrait' ? height : width,
   }
 })
+
+// 水印
+const watermarkOptions = $ref({
+  x: 0,
+  height: 0,
+})
+watch(
+  () => page.value.watermark,
+  ({ type }) => {
+    if (type === 'compact') {
+      watermarkOptions.width = 320
+      watermarkOptions.y = 240
+    } else {
+      watermarkOptions.width = 480
+      watermarkOptions.y = 360
+    }
+  },
+  { deep: true, immediate: true },
+)
 </script>
 
 <style lang="less" scoped>
 .page-node-view {
   box-sizing: border-box;
-  // FIXME: 设为相对定位时，块级菜单定位有问题，取消相对定位，页眉页脚标记的显示有问题
-  // position: relative;
   &.no-shadow {
     border: solid 1px var(--umo-border-color);
     box-shadow: unset;
@@ -81,54 +106,32 @@ const pageSize = $computed(() => {
   &:not(:last-child) {
     margin-bottom: 15px;
   }
-  .corner-top-left {
-    position: absolute;
-    height: 1cm;
-    width: 1cm;
-    border-top-width: 0px;
-    border-left-width: 0px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-style: solid;
+  .page-node-content {
     box-sizing: border-box;
-    border-color: #e5e7eb;
+    width: 100%;
+    height: 100%;
   }
-  .corner-top-right {
+  .page-corner {
     position: absolute;
     height: 1cm;
     width: 1cm;
-    border-top-width: 0px;
-    border-left-width: 1px;
-    border-right-width: 0px;
-    border-bottom-width: 1px;
-    border-style: solid;
-    box-sizing: border-box;
-    border-color: #e5e7eb;
-  }
-
-  .corner-bottom-left {
-    position: absolute;
-    height: 1cm;
-    width: 1cm;
-    border-top-width: 1px;
-    border-left-width: 0px;
-    border-right-width: 1px;
-    border-bottom-width: 0px;
-    border-style: solid;
-    box-sizing: border-box;
-    border-color: #e5e7eb;
-  }
-  .corner-bottom-right {
-    position: absolute;
-    height: 1cm;
-    width: 1cm;
-    border-top-width: 1px;
-    border-left-width: 1px;
-    border-right-width: 0px;
-    border-bottom-width: 0px;
-    border-style: solid;
-    box-sizing: border-box;
-    border-color: #e5e7eb;
+    border: solid 1px var(--umo-border-color);
+    &.corner-tl {
+      border-top: none;
+      border-left: none;
+    }
+    &.corner-tr {
+      border-top: none;
+      border-right: none;
+    }
+    &.corner-bl {
+      border-bottom: none;
+      border-left: none;
+    }
+    &.corner-br {
+      border-bottom: none;
+      border-right: none;
+    }
   }
 }
 </style>

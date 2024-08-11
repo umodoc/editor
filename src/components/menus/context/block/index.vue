@@ -17,14 +17,25 @@ let menuScrollTop = $ref(0)
 
 // 更新菜单位置
 const updateMenuPostion = () => {
+  const pages = document.querySelectorAll(`${container} .page-node-view`)
   const currentBlock = document.querySelector(
-    `${container} .PageContent .node-focused`,
+    `${container} .page-node-content .node-focused`,
   )
   if (currentBlock === null) {
     return
   }
 
+  // 当前元素距离页面顶部的距离
   let { offsetTop } = currentBlock
+
+  // 加上页面的高度
+  for (let index = 0; index < pages.length; index++) {
+    const item = pages[index]
+    if (item.contains(currentBlock)) {
+      offsetTop += index * (item.clientHeight + 15)
+      break
+    }
+  }
 
   // 微修正菜单位置
   offsetTop = currentBlock.tagName === 'DIV' ? offsetTop - 8 : offsetTop - 5
