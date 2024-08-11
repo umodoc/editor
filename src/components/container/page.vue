@@ -108,6 +108,7 @@ watch(
 .page-container {
   height: 100%;
   display: flex;
+  position: relative;
 }
 
 .zoomable-container {
