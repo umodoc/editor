@@ -33,10 +33,7 @@ const updateMenuPostion = () => {
     editor.value.isActive('horizontalRule') ||
     editor.value.isActive('table')
   ) {
-    offsetY = 6
-  }
-  if (editor.value.isActive('pageBreak')) {
-    offsetY = -4
+    offsetY = 5
   }
 
   // 设置菜单位置
