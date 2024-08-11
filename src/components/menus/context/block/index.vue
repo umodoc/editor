@@ -23,7 +23,8 @@ const updateMenuPostion = () => {
   if (currentBlock === null) {
     return
   }
-  let offsetTop = currentBlock.offsetTop
+
+  let { offsetTop } = currentBlock
 
   // 微修正菜单位置
   offsetTop = currentBlock.tagName === 'DIV' ? offsetTop - 8 : offsetTop - 5
