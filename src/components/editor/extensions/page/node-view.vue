@@ -5,6 +5,7 @@
     :class="{ 'no-shadow': exportImage }"
     :style="{
       background: page.background,
+      transform: `scale(${page.zoomLevel / 100})`
     }"
   >
     <t-watermark
@@ -14,7 +15,7 @@
       :style="{
         width: pageSize.width + 'cm',
         height: pageSize.height + 'cm',
-        transform: `scale(${page.zoomLevel / 100})`
+
       }"
     >
       <div

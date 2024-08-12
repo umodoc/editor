@@ -82,11 +82,6 @@ import TableRow from '@tiptap/extension-table-row'
 // 页面
 import PageBreak from './extensions/page-break'
 import Toc from './extensions/toc'
-import InvisibleCharacters, {
-  HardBreakNode,
-  ParagraphNode
-} from '@tiptap-pro/extension-invisible-characters'
-import InvisibleNode from './extensions/invisible-node'
 // 分页
 import Page from './extensions/page'
 import { Document } from '@tiptap/extension-document'
@@ -211,12 +206,6 @@ const editorInstance = new Editor({
     // 页面
     Toc,
     PageBreak,
-    /*
-        InvisibleCharacters.configure({
-          visible: page.value.showBreakMarks,
-          builders: [new HardBreakNode(), new ParagraphNode(), new InvisibleNode()],
-        }),
-    */
     // 其他
     Selection,
     TableOfContents.configure({
