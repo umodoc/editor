@@ -10,7 +10,13 @@
           minHeight: pageZoomMinHeight,
         }"
       >
-        <div class="page-content">
+        <div
+          class="page-content"
+          :style="{
+            width: pageSize.width + 'cm',
+            transform: `scale(${page.zoomLevel / 100})`,
+          }"
+        >
           <editor>
             <template #bubble_menu="props">
               <slot name="bubble_menu" v-bind="props" />
