@@ -9,7 +9,7 @@ export const useStore = createGlobalState(() => {
   const painter = ref({
     enabled: false,
     once: true,
-    marks: [],
+    marks: []
   })
   const blockMenu = ref(false)
   const assistant = ref(false)
@@ -30,7 +30,7 @@ export const useStore = createGlobalState(() => {
           acc[key] = opts[key]
         }
         return acc
-      }, {}),
+      }, {})
     )
     return options.value
   }
@@ -44,12 +44,12 @@ export const useStore = createGlobalState(() => {
   watch(
     () => options.value.page,
     ({
-      defaultBackground,
-      defaultMargin,
-      defaultOrientation,
-      watermark,
-      showBreakMarks,
-    }) => {
+       defaultBackground,
+       defaultMargin,
+       defaultOrientation,
+       watermark,
+       showBreakMarks
+     }) => {
       page.value = {
         size: options.value.dicts.pageSizes.find((item) => item.default),
         margin: defaultMargin,
@@ -63,19 +63,19 @@ export const useStore = createGlobalState(() => {
         autoWidth: false,
         preview: {
           enabled: false,
-          laserPointer: true,
-        },
+          laserPointer: true
+        }
       }
     },
-    { immediate: true, once: true },
+    { immediate: true, once: true }
   )
 
   watch(
     () => [page.value.size, page.value.margin, page.value.orientation],
-    () => {
-      editor.value.commands.autoPaging()
+    (value) => {
+      editor.value.commands.resetPageStore()
     },
-    { deep: true },
+    { deep: true }
   )
 
   const setEditor = (Editor) => (editor.value = Editor)
@@ -92,7 +92,7 @@ export const useStore = createGlobalState(() => {
     async (val) => {
       editor.value.setEditable(!val)
       toolbarKey.value = shortId()
-    },
+    }
   )
 
   return {
@@ -114,6 +114,6 @@ export const useStore = createGlobalState(() => {
     setOptions,
     setEditor,
     setPainter,
-    resetStore,
+    resetStore
   }
 })

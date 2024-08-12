@@ -196,6 +196,35 @@ export class UnitConversion {
   }
 }
 
+let unitConversion = null
+
+export function getPageOption(restore = false) {
+  if (!restore && map.has('pageOption')) {
+    return map.get('pageOption')
+  }
+  if (!unitConversion) unitConversion = new UnitConversion()
+  const { page } = useStore()
+  const { right, left, bottom, top } = page.value.margin
+  const pageSize = () => {
+    const { width, height } = page.value.size
+    return {
+      width: page.value.orientation === 'portrait' ? width : height,
+      height: page.value.orientation === 'portrait' ? height : width
+    }
+  }
+  const { width, height } = pageSize()
+  let pageOption = {
+    bodyHeight: unitConversion.cmConversionPx(height - bottom - top),
+    bodyWidth: unitConversion.cmConversionPx(width - right - left),
+    right: unitConversion.cmConversionPx(right),
+    left: unitConversion.cmConversionPx(left),
+    bottom: unitConversion.cmConversionPx(bottom),
+    top: unitConversion.cmConversionPx(top)
+  }
+  map.set('pageOption', pageOption)
+  return pageOption
+}
+
 const map = new Map()
 
 export function computedHeight(html, id, cache = true) {
@@ -318,11 +347,29 @@ export function buildComputedHtml() {
   clonePageToIframe()
 }
 
+export function changeComputedHtml() {
+  getPageOption(true)
+  const { page } = useStore()
+  const pageSize = () => {
+    const { width, height } = page.value.size
+    return {
+      width: page.value.orientation === 'portrait' ? width : height,
+      height: page.value.orientation === 'portrait' ? height : width
+    }
+  }
+  const { width, height } = pageSize()
+  const { right, left, bottom, top } = page.value.margin
+  let pageContent = iframeDoc.getElementById('computeddiv')
+  let watermark = iframeDoc.getElementsByClassName('umo-watermark')[0]
+  watermark.setAttribute('style', `width: ${width + 'cm'};height: ${height + 'cm'}`)
+  pageContent.setAttribute('style', `padding-top: ${top + 'cm'};padding-right:  ${right + 'cm'};padding-bottom: ${bottom + 'cm'} ;padding-left:${left + 'cm'};min-height: ${height - top - bottom + 'cm'}`)
+}
+
 function clonePageToIframe() {
   const iframe = createIframe()
   iframeComputed = iframe
   iframeComputed.setAttribute('id', 'computediframe')
-  iframeComputed.setAttribute('style', 'width: 100%;height: 100%;opacity: 0;position: absolute;z-index: -89;margin-left:-2003px;')
+  iframeComputed.setAttribute('style', 'width: 100%;height: 1000px;')
   iframeDoc = iframeComputed.contentDocument || iframeComputed.contentWindow.document
   copyStylesToIframe(iframeDoc)
   filterAndCopyHtmlToIframe(iframe, ['header', 'iframe', 'footer'])

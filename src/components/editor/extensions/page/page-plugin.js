@@ -13,7 +13,7 @@ import {
   removeAbsentHtmlH,
   UnitConversion,
   findParentDomRefOfType,
-  getId, getDomHeight
+  getId, getDomHeight, getPageOption
 } from './core'
 import { defaultNodesComputed, PageComputedContext } from './computed'
 import { findParentNode } from '@tiptap/core'
@@ -40,30 +40,18 @@ function getTotalChildrenHeight(parentElement) {
 
 class PageDetector {
   #editor
-  #bodyOption
   #pageClass
-  #unitConversion
   #checkPoints = [IMAGE, IFRAME, CODE_BLOCK, TOC, VIDEO]
 
   constructor(editor, pageClass = '.page-node-content') {
     this.#editor = editor
     this.#pageClass = pageClass
-    this.#unitConversion = new UnitConversion()
-    const { page } = useStore()
-    const { width, height } = page.value.size
-    const { right, left, bottom, top } = page.value.margin
-    this.#bodyOption = {
-      bodyHeight: this.#unitConversion.cmConversionPx(height - bottom - top),
-      bodyWidth: this.#unitConversion.cmConversionPx(width - right - left),
-      right: this.#unitConversion.cmConversionPx(right),
-      left: this.#unitConversion.cmConversionPx(left),
-      bottom: this.#unitConversion.cmConversionPx(bottom),
-      top: this.#unitConversion.cmConversionPx(top)
-    }
   }
 
   isOverflown(childrenHeight) {
-    return childrenHeight > this.#bodyOption.bodyHeight
+    const { bodyHeight } = getPageOption()
+    debugger
+    return childrenHeight > bodyHeight
   }
 
   checkCriticalPoint(node) {
@@ -82,7 +70,6 @@ class PageDetector {
   update(view, prevState) {
     if (composition) return
     const { selection, schema, tr } = view.state
-
     if (view.state.doc.eq(prevState.doc)) return
 
     const domAtPos = view.domAtPos.bind(view)
@@ -95,7 +82,6 @@ class PageDetector {
 
     if (!pageDOM) return
     const pageBody = pageDOM.querySelector(this.#pageClass)
-
     if (pageBody) {
       let childrenHeight = getTotalChildrenHeight(pageBody)
       deleting =
@@ -113,7 +99,6 @@ class PageDetector {
         if (deleting) {
           tr.setMeta('deleting', true)
         }
-        tr.setMeta('bodyOption', this.#bodyOption)
       }
       view.dispatch(tr)
     }
@@ -129,14 +114,13 @@ class PageState {
   runState
 
   constructor(
-    bodyOptions,
     deleting,
     inserting,
     splitPage,
     scrollHeight,
     runState = true
   ) {
-    this.bodyOptions = bodyOptions
+    this.bodyOptions = getPageOption()
     this.deleting = deleting
     this.inserting = inserting
     this.splitPage = splitPage
@@ -148,14 +132,12 @@ class PageState {
     const splitPage = tr.getMeta('splitPage') || false
     let deleting = tr.getMeta('deleting') || false
     let inserting = tr.getMeta('inserting') || false
-    const bodyOption = tr.getMeta('bodyOption') || this.bodyOptions
     let runState = tr.getMeta('runState')
     //如果运行状态从false到true时，需要重新计算
     if (this.runState == false && runState == true) inserting = true
     runState = typeof runState == 'undefined' ? this.runState : runState
     const scrollHeight = tr.getMeta('scrollHeight') || this.scrollHeight
     return new PageState(
-      bodyOption,
       deleting,
       inserting,
       splitPage,
@@ -175,19 +157,7 @@ export const pagePlugin = (editor, nodesComputed) => {
     },
     state: {
       init: () => {
-        const unitConversion = new UnitConversion()
-        const { page } = useStore()
-        const { width, height } = page.value.size
-        const { right, left, bottom, top } = page.value.margin
-        let bodyOption = {
-          bodyHeight: unitConversion.cmConversionPx(height - bottom - top),
-          bodyWidth: unitConversion.cmConversionPx(width - right - left),
-          right: unitConversion.cmConversionPx(right),
-          left: unitConversion.cmConversionPx(left),
-          bottom: unitConversion.cmConversionPx(bottom),
-          top: unitConversion.cmConversionPx(top)
-        }
-        return new PageState(bodyOption, false, false, false, 0)
+        return new PageState(false, false, false, false, true)
       },
       /*判断标志位是否存在  如果存在 则修改 state 值
        * Meta数据是一个事务级别的 一个事务结束 meta消失
