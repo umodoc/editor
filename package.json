@@ -109,7 +109,6 @@
   "devDependencies": {
     "@intlify/unplugin-vue-i18n": "^4.0.0",
     "@sereneinserenade/tiptap-search-and-replace": "^0.1.1",
-    "@tiptap-pro/extension-invisible-characters": "^2.10.5",
     "@tiptap-pro/extension-mathematics": "^2.10.5",
     "@tiptap-pro/extension-table-of-contents": "^2.10.5",
     "@vitejs/plugin-vue": "^5.1.1",

@@ -225,7 +225,8 @@
 }
 .umo-image-viewer__modal {
   &-mask {
-    background-color: transparent !important;
+    background-color: var(--umo-color-white) !important;
+    opacity: 0.8 !important;
   }
   &-header {
     border-bottom: solid 1px var(--umo-border-color-light);
@@ -233,6 +234,14 @@
   &-icon {
     opacity: 0.5;
   }
+  &-close-bt {
+    margin-top: -60px;
+  }
+}
+.umo-image-viewer__utils-content {
+  box-shadow: var(--umo-shadow);
+  border: 1px solid var(--umo-border-color);
+  background-color: var(--umo-color-white);
 }
 .umo-message,
 .t-message {

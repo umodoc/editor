@@ -6,14 +6,16 @@ import {
   IFRAME,
   CODE_BLOCK,
   TOC,
-  VIDEO
+  VIDEO,
 } from './node-names'
 import {
   buildComputedHtml,
   removeAbsentHtmlH,
   UnitConversion,
   findParentDomRefOfType,
-  getId, getDomHeight, getPageOption
+  getId,
+  getDomHeight,
+  getPageOption,
 } from './core'
 import { defaultNodesComputed, PageComputedContext } from './computed'
 import { findParentNode } from '@tiptap/core'
@@ -50,7 +52,7 @@ class PageDetector {
 
   isOverflown(childrenHeight) {
     const { bodyHeight } = getPageOption()
-    debugger
+    // debugger
     return childrenHeight > bodyHeight
   }
 
@@ -77,7 +79,7 @@ class PageDetector {
     let deleting = false
     const pageDOM = findParentDomRefOfType(
       schema.nodes[PAGE],
-      domAtPos
+      domAtPos,
     )(selection)
 
     if (!pageDOM) return
@@ -113,13 +115,7 @@ class PageState {
   scrollHeight
   runState
 
-  constructor(
-    deleting,
-    inserting,
-    splitPage,
-    scrollHeight,
-    runState = true
-  ) {
+  constructor(deleting, inserting, splitPage, scrollHeight, runState = true) {
     this.bodyOptions = getPageOption()
     this.deleting = deleting
     this.inserting = inserting
@@ -137,13 +133,7 @@ class PageState {
     if (this.runState == false && runState == true) inserting = true
     runState = typeof runState == 'undefined' ? this.runState : runState
     const scrollHeight = tr.getMeta('scrollHeight') || this.scrollHeight
-    return new PageState(
-      deleting,
-      inserting,
-      splitPage,
-      scrollHeight,
-      runState
-    )
+    return new PageState(deleting, inserting, splitPage, scrollHeight, runState)
   }
 }
 
@@ -165,7 +155,7 @@ export const pagePlugin = (editor, nodesComputed) => {
        * */
       apply: (tr, prevState) => {
         return prevState.transform(tr)
-      }
+      },
     },
     appendTransaction([newTr], _prevState, state) {
       removeAbsentHtmlH()
@@ -173,7 +163,7 @@ export const pagePlugin = (editor, nodesComputed) => {
         editor,
         { ...defaultNodesComputed, ...nodesComputed },
         this.getState(state),
-        state
+        state,
       )
       return page.run()
     },
@@ -185,15 +175,15 @@ export const pagePlugin = (editor, nodesComputed) => {
 
         compositionend(view, event) {
           composition = false
-        }
+        },
       },
       transformPasted(slice, view) {
         slice.content.descendants((node) => {
           node.attrs.id = getId()
         })
         return slice
-      }
-    }
+      },
+    },
   })
   return plugin
 }
@@ -208,7 +198,7 @@ export const idPlugin = (types) => {
       apply: (tr, prevState) => {
         let data = tr.getMeta('splitPage')
         return data
-      }
+      },
     },
     appendTransaction(transactions, _prevState, nextState) {
       const tr = nextState.tr
@@ -224,7 +214,7 @@ export const idPlugin = (types) => {
         })
       }
       return modified ? tr : null
-    }
+    },
   })
   return plugin
 }
