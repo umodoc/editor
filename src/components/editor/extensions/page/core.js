@@ -369,7 +369,7 @@ function clonePageToIframe() {
   const iframe = createIframe()
   iframeComputed = iframe
   iframeComputed.setAttribute('id', 'computediframe')
-  iframeComputed.setAttribute('style', 'width: 100%;height: 1000px;')
+  iframeComputed.setAttribute('style', 'width: 100%;height: 1000px;opacity: 0;position: absolute;z-index: -89;margin-left:-2003px;')
   iframeDoc = iframeComputed.contentDocument || iframeComputed.contentWindow.document
   copyStylesToIframe(iframeDoc)
   filterAndCopyHtmlToIframe(iframe, ['header', 'iframe', 'footer'])
