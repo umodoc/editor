@@ -58,6 +58,7 @@
     "@tiptap/extension-bullet-list": "^2.5.8",
     "@tiptap/extension-character-count": "^2.5.8",
     "@tiptap/extension-color": "^2.5.8",
+    "@tiptap/extension-document": "^2.5.8",
     "@tiptap/extension-dropcursor": "^2.5.8",
     "@tiptap/extension-focus": "^2.5.8",
     "@tiptap/extension-font-family": "^2.5.8",
@@ -102,7 +103,8 @@
     "qrcode-svg": "^1.1.0",
     "svg64": "^2.0.0",
     "vue-esign": "^1.1.4",
-    "vue-i18n": "^9.13.1"
+    "vue-i18n": "^9.13.1",
+    "zeed-dom": "^0.13.3"
   },
   "devDependencies": {
     "@intlify/unplugin-vue-i18n": "^4.0.0",

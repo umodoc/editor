@@ -4,6 +4,7 @@
     class="editor-container"
     :class="{
       'show-line-number': page.showLineNumber,
+      'show-break-marks': page.showBreakMarks,
       'format-painter': painter.enabled,
     }"
     :style="{ lineHeight: defaultLineHeight }"
@@ -55,7 +56,7 @@ import Indent from './extensions/indent'
 import TextAlign from './extensions/text-align'
 import NodeAlign from './extensions/node-align'
 import TaskItem from '@tiptap/extension-task-item'
-import TaskList from '@tiptap/extension-task-list'
+import TaskList from './extensions/list/tasklist'
 import LineHeight from './extensions/line-height'
 import Margin from './extensions/margin'
 import SearchReplace from '@sereneinserenade/tiptap-search-and-replace'
@@ -73,7 +74,7 @@ import Iframe from './extensions/iframe'
 import Mathematics from '@tiptap-pro/extension-mathematics'
 
 // 表格
-import Table from '@tiptap/extension-table'
+import Table from './extensions/list/table'
 import TableCell from './extensions/table-cell'
 import TableHeader from './extensions/table-header'
 import TableRow from '@tiptap/extension-table-row'
@@ -81,15 +82,12 @@ import TableRow from '@tiptap/extension-table-row'
 // 页面
 import PageBreak from './extensions/page-break'
 import Toc from './extensions/toc'
-import InvisibleCharacters, {
-  HardBreakNode,
-  ParagraphNode,
-} from '@tiptap-pro/extension-invisible-characters'
-import InvisibleNode from './extensions/invisible-node'
-
+// 分页
+import Page from './extensions/page'
+import { Document } from '@tiptap/extension-document'
 // 其他
 import Selection from './extensions/selection'
-import TableOfContents from './extensions/table-of-contents'
+import { TableOfContents } from '@tiptap-pro/extension-table-of-contents'
 import { getHierarchicalIndexes } from '@tiptap-pro/extension-table-of-contents'
 import Typography from '@tiptap/extension-typography'
 import CharacterCount from '@tiptap/extension-character-count'
@@ -97,6 +95,7 @@ import FileHandler from './extensions/file-handler'
 import Dropcursor from '@tiptap/extension-dropcursor'
 
 import shortId from '@/utils/short-id'
+import { pagePlugin } from '@/components/editor/extensions/page/page-plugin'
 
 const {
   options,
@@ -108,7 +107,7 @@ const {
   assistant,
   tableOfContents,
   setEditor,
-  editorDestroyed,
+  editorDestroyed
 } = useStore()
 const $document = useState('document')
 
@@ -120,7 +119,6 @@ if (!options.value.document.enableMarkdown || !$document.value.markdown) {
 const defaultLineHeight = $computed(() => {
   return options.value.dicts.lineHeights.find((item) => item.default).value
 })
-
 const editorInstance = new Editor({
   editable: !options.value.document.readOnly,
   autofocus: options.value.document.autofocus,
@@ -129,33 +127,38 @@ const editorInstance = new Editor({
   enablePasteRules: enableRules,
   editorProps: {
     attributes: {
-      class: 'umo-editor',
+      class: 'umo-editor'
     },
-    ...options.value.document.editorProps,
+    ...options.value.document.editorProps
   },
   parseOptions: options.value.document.parseOptions,
   extensions: [
+
     StarterKit.configure({
+      document: false,
       bold: false,
       bulletList: false,
       orderedList: false,
       codeBlock: false,
       horizontalRule: false,
       gapcursor: true,
-      dropcursor: false,
+      dropcursor: false
     }),
-    Placeholder.configure({
+    Document.extend({ content: 'page+' }),
+    Page,
+    /* Placeholder.configure({
       considerAnyAsEmpty: true,
       placeholder: l(options.value.document.placeholder),
-    }),
+    }),*/
     Focus.configure({
       className: 'node-focused',
+      mode: 'all'
     }),
     FormatPainter,
     FontFamily,
     FontSize,
     Bold.extend({
-      renderHTML: ({ HTMLAttributes }) => ['b', HTMLAttributes, 0],
+      renderHTML: ({ HTMLAttributes }) => ['b', HTMLAttributes, 0]
     }),
     Underline,
     Subscript,
@@ -163,7 +166,7 @@ const editorInstance = new Editor({
     Color,
     TextColor,
     Highlight.configure({
-      multicolor: true,
+      multicolor: true
     }),
     BulletList,
     OrderedList,
@@ -173,16 +176,15 @@ const editorInstance = new Editor({
     TaskItem.configure({ nested: true }),
     TaskList.configure({
       HTMLAttributes: {
-        class: 'task-list',
-      },
+        class: 'task-list'
+      }
     }),
     LineHeight.configure({
       types: ['heading', 'paragraph'],
-      defaultLineHeight,
+      defaultLineHeight
     }),
     Margin,
     SearchReplace,
-
     Link,
     Image,
     Video,
@@ -196,21 +198,14 @@ const editorInstance = new Editor({
 
     // 表格
     Table.configure({
-      resizable: true,
-      allowTableNodeSelection: true,
+      allowTableNodeSelection: true
     }),
     TableRow,
     TableHeader,
     TableCell,
-
     // 页面
     Toc,
     PageBreak,
-    InvisibleCharacters.configure({
-      visible: page.value.showBreakMarks,
-      builders: [new HardBreakNode(), new ParagraphNode(), new InvisibleNode()],
-    }),
-
     // 其他
     Selection,
     TableOfContents.configure({
@@ -220,14 +215,14 @@ const editorInstance = new Editor({
       },
       scrollParent: () =>
         document.querySelector(`${container} .zoomable-container`),
-      getId: () => shortId(6),
+      getId: () => shortId(6)
     }),
     Typography.configure(options.value.document.typographyRules),
     CharacterCount.configure({
       limit:
         options.value.document.characterLimit !== 0
           ? options.value.document.characterLimit
-          : undefined,
+          : undefined
     }),
     FileHandler.configure({
       allowedMimeTypes: options.value.file.allowedMimeTypes,
@@ -236,22 +231,25 @@ const editorInstance = new Editor({
       },
       onDrop: (editor, files, pos) => {
         files.forEach((file) => editor.commands.insertFile({ file, pos }))
-      },
+      }
     }),
     Dropcursor.configure({
-      color: 'var(--umo-primary-color)',
+      color: 'var(--umo-primary-color)'
     }),
-    ...options.value.extensions,
+    ...options.value.extensions
   ],
   onUpdate({ editor }) {
     $document.value.content = editor.getHTML()
-  },
+  }
 })
 setEditor(editorInstance)
+/*setTimeout(() => {
+  editor.value?.view.dispatch(editor.value?.state.tr.setMeta("splitPage", true));
+}, 1000);*/
 
 // 动态导入 katex 样式
 onMounted(() => {
-  const katexStyleElement = document.getElementById('katex-style')
+  const katexStyleElement = document.querySelector('#katex-style')
   if (
     katexStyleElement === null &&
     !options.value.toolbar.disableMenuItems.includes('math')
@@ -278,7 +276,7 @@ const tippyOpitons = $ref({
   },
   onDestroy() {
     tippyInstance = null
-  },
+  }
 })
 
 // AI 助手
@@ -286,13 +284,21 @@ watch(
   () => assistant.value,
   (visible) => {
     tippyInstance?.setProps({
-      placement: visible ? 'bottom' : 'top',
+      placement: visible ? 'bottom' : 'top'
     })
-  },
+  }
 )
 
 // 销毁编辑器实例
 onBeforeUnmount(() => editorInstance.destroy())
+window.onload = () => {
+  editor.value?.registerPlugin(pagePlugin(editor.value, {}))
+  setTimeout(() => {
+    editor.value?.view.dispatch(
+      editor.value?.state.tr.setMeta('splitPage', true)
+    )
+  }, 1000)
+}
 </script>
 
 <style lang="less">
@@ -304,12 +310,14 @@ onBeforeUnmount(() => editorInstance.destroy())
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+
   &:not(.assistant) {
     padding: 8px 10px;
     box-shadow: var(--umo-shadow);
     border: 1px solid var(--umo-border-color);
     background-color: var(--umo-color-white);
   }
+
   &:empty {
     display: none;
   }
@@ -317,11 +325,14 @@ onBeforeUnmount(() => editorInstance.destroy())
   .menu-button.show-text .button-content .text {
     display: none !important;
   }
+
   .menu-button.huge {
     height: var(--td-comp-size-xs);
     min-width: unset;
+
     .button-content {
       min-width: unset !important;
+
       .icon {
         font-size: 16px;
         margin-top: 0;
@@ -329,6 +340,7 @@ onBeforeUnmount(() => editorInstance.destroy())
     }
   }
 }
+
 .umo-editor-block-menu {
   .menu-button {
     color: var(--umo-text-color-light) !important;

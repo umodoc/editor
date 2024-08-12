@@ -1,5 +1,9 @@
 <template>
-  <node-view-wrapper class="node-view toc-node-view" :style="nodeStyle">
+  <node-view-wrapper
+    class="node-view toc-node-view"
+    :id="node.attrs.id"
+    :style="nodeStyle"
+  >
     <div class="node-container hover-shadow select-outline toc">
       <p class="toc-head" v-text="t('toc.title')"></p>
       <ul v-if="tableOfContents && tableOfContents.length > 0" class="toc-body">

@@ -1,7 +1,7 @@
 <template>
   <node-view-wrapper
     ref="containerRef"
-    class="node-view text-box-node-view"
+    class="node-view text-box-node-view" :id="node.attrs.id"
     @dblclick.capture="disabled = true"
   >
     <div class="node-container text-box">

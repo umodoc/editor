@@ -2,6 +2,7 @@
   <node-view-wrapper
     ref="containerRef"
     class="node-view file-node-view"
+    :id="node.attrs.id"
     :style="nodeStyle"
   >
     <div class="node-container hover-shadow select-outline file">
@@ -56,7 +57,7 @@ const nodeStyle = $computed(() => {
   return {
     'justify-content': nodeAlign,
     marginTop,
-    marginBottom,
+    marginBottom
   }
 })
 
@@ -86,16 +87,19 @@ onMounted(async () => {
     overflow: hidden;
     background-color: var(--umo-color-white);
     border-radius: var(--umo-content-node-radius);
+
     &-icon {
       width: 32px;
       height: 32px;
       margin-right: 8px;
       flex: 1;
+
       img {
         width: 32px;
         display: block;
       }
     }
+
     &-name {
       font-size: 14px;
       font-weight: 500;
@@ -106,18 +110,21 @@ onMounted(async () => {
       white-space: nowrap;
       width: 200px;
     }
+
     &-meta {
       font-size: 12px;
       color: var(--umo-text-color-light);
       line-height: 1;
       margin-top: 6px;
     }
+
     &-action {
       flex: 1;
       display: flex;
       align-items: center;
       color: var(--umo-text-color-light);
       gap: 5px;
+
       .action-item {
         font-size: 18px;
         display: flex;
@@ -130,10 +137,12 @@ onMounted(async () => {
         cursor: pointer;
         border-radius: 50%;
         color: var(--umo-text-color-light);
+
         &:hover {
           border: solid 1px var(--umo-primary-color);
           color: var(--umo-primary-color);
         }
+
         .loading {
           animation: turn 1s linear infinite;
         }
@@ -141,6 +150,7 @@ onMounted(async () => {
     }
   }
 }
+
 @keyframes turn {
   0% {
     transform: rotate(0deg);

@@ -675,7 +675,10 @@ useHotkeys('ctrl+p,command+p', () => {
   print()
   unsetFormatPainter()
 })
-useHotkeys('esc', unsetFormatPainter)
+useHotkeys('esc', () => {
+  page.value.preview.enabled = false
+  unsetFormatPainter()
+})
 
 // 工具栏切换时重置编辑器
 watch(

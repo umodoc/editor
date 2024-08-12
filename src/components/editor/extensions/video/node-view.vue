@@ -2,6 +2,7 @@
   <node-view-wrapper
     ref="containerRef"
     class="node-view video-node-view"
+    :id="node.attrs.id"
     :style="nodeStyle"
   >
     <div class="node-container hover-shadow video">
@@ -16,6 +17,8 @@
         :max-width="maxWidth"
         equal-proportion
         @resize="onResize"
+        @resize-start="onResizeStart"
+        @resize-end="onResizeEnd"
         @click="selected = true"
       >
         <video
@@ -40,7 +43,7 @@ import Drager from 'es-drager'
 import { mediaPlayer } from '@/utils/player'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
-const { options } = useStore()
+const { options, editor } = useStore()
 
 const containerRef = ref(null)
 let selected = $ref(false)
@@ -57,7 +60,7 @@ const nodeStyle = $computed(() => {
   return {
     'justify-content': nodeAlign,
     marginTop,
-    marginBottom,
+    marginBottom
   }
 })
 
@@ -89,7 +92,12 @@ const onLoad = () => {
 const onResize = ({ width, height }) => {
   updateAttributes({ width, height })
 }
-
+const onResizeStart = () => {
+  editor.value.commands.autoPaging(false)
+}
+const onResizeEnd = () => {
+  editor.value.commands.autoPaging()
+}
 onBeforeUnmount(() => {
   if (player) {
     player?.destroy()
@@ -105,13 +113,16 @@ onClickOutside(containerRef, () => (selected = false))
     max-width: 100%;
     pointer-events: none;
     border-radius: var(--umo-radius);
+
     .es-drager {
       .es-drager-dot {
         pointer-events: auto;
       }
+
       .plyr {
         height: 100%;
       }
+
       video {
         display: block;
         width: 100%;
@@ -122,9 +133,11 @@ onClickOutside(containerRef, () => (selected = false))
         outline: none;
       }
     }
+
     .plyr {
       pointer-events: auto;
     }
+
     .uploading {
       position: absolute;
       right: 0;
@@ -136,6 +149,7 @@ onClickOutside(containerRef, () => (selected = false))
       right: 0;
       border-top-left-radius: var(--umo-radius);
       border-top-right-radius: var(--umo-radius);
+
       &:after {
         content: '';
         display: block;
@@ -146,6 +160,7 @@ onClickOutside(containerRef, () => (selected = false))
     }
   }
 }
+
 @keyframes progress {
   0% {
     width: 0;

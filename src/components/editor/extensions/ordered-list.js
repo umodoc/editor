@@ -2,6 +2,7 @@ import OrderedList from '@tiptap/extension-ordered-list'
 
 // https://www.npmjs.com/package/tiptap-extension-ordered-list
 export default OrderedList.extend({
+  content: 'listItem*',
   addAttributes() {
     return {
       ...this.parent?.(),

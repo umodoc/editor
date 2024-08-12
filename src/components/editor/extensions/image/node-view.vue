@@ -2,6 +2,7 @@
   <node-view-wrapper
     ref="containerRef"
     class="node-view image-node-view"
+    :id="node.attrs.id"
     :style="nodeStyle"
     @dblclick="imagePreview = node.attrs.src"
   >
@@ -32,6 +33,8 @@
         :equal-proportion="node.attrs.equalProportion"
         @rotate="onRotate"
         @resize="onResize"
+        @resizeStart="onResizeStart"
+        @resizeEnd="onResizeEnd"
         @drag="onDrag"
         @click="selected = true"
       >
@@ -64,8 +67,8 @@ import Drager from 'es-drager'
 import { base64ToFile } from 'file64'
 import shortId from '@/utils/short-id'
 
-const { node, updateAttributes } = defineProps(nodeViewProps)
-const { options } = useStore()
+const { node, getPos, updateAttributes } = defineProps(nodeViewProps)
+const { options, editor } = useStore()
 const { imagePreview } = useStore()
 const { isLoading, error } = useImage({ src: node.attrs.src })
 
@@ -83,7 +86,7 @@ const nodeStyle = $computed(() => {
   return {
     'justify-content': nodeAlign,
     marginTop,
-    marginBottom,
+    marginBottom
   }
 })
 
@@ -102,9 +105,9 @@ const uploadImage = async () => {
 }
 onMounted(async () => {
   await nextTick()
-  const width = containerRef.value.$el.clientWidth
-  maxWidth = width
   if (node.attrs.width === null) {
+    const width = containerRef.value.$el.clientWidth
+    maxWidth = width
     updateAttributes({ width })
   }
 })
@@ -121,6 +124,13 @@ const onRotate = ({ angle }) => {
 const onResize = ({ width, height }) => {
   updateAttributes({ width, height })
 }
+const onResizeStart = () => {
+  editor.value.commands.autoPaging(false)
+}
+const onResizeEnd = () => {
+  editor.value.commands.autoPaging()
+}
+
 const onDrag = ({ left, top }) => {
   updateAttributes({ left, top })
 }
@@ -134,7 +144,7 @@ watch(
     const width = imageRef.offsetWidth
     const height = imageRef.offsetHeight
     updateAttributes({ width, height })
-  },
+  }
 )
 watch(
   () => node.attrs.src,
@@ -151,7 +161,7 @@ watch(
         }
         const filename = shortId(10)
         const file = await base64ToFile(src, `${filename}.${ext}`, {
-          type,
+          type
         })
         updateAttributes({ file })
       }
@@ -159,13 +169,13 @@ watch(
       uploadImage()
     }
   },
-  { immediate: true },
+  { immediate: true }
 )
 watch(
   () => error.value,
   ({ type }) => {
     updateAttributes({ error: type === 'error' })
-  },
+  }
 )
 </script>
 
@@ -175,10 +185,12 @@ watch(
     max-width: 100%;
     width: auto;
     display: inline-flex;
+
     img {
       display: block;
       width: 100%;
     }
+
     .loading {
       width: 160px;
       height: 120px;
@@ -189,12 +201,14 @@ watch(
       background: rgba(0, 0, 0, 0.02);
       font-size: 12px;
       gap: 10px;
+
       .loading-icon {
         color: var(--umo-primary-color);
         font-size: 22px;
         animation: turn 1s linear infinite;
       }
     }
+
     .error {
       width: 160px;
       height: 120px;
@@ -205,11 +219,13 @@ watch(
       color: var(--umo-text-color-light);
       background: rgba(0, 0, 0, 0.02);
       font-size: 12px;
+
       .error-icon {
         font-size: 72px;
         margin: -8px 0 2px;
       }
     }
+
     .uploading {
       position: absolute;
       left: 0;
@@ -217,6 +233,7 @@ watch(
       top: 0;
       bottom: 0;
       background-color: rgba(0, 0, 0, 0.1);
+
       span {
         display: block;
         position: absolute;
@@ -228,6 +245,7 @@ watch(
         right: 20%;
         transform: translateY(-50%);
         overflow: hidden;
+
         &:after {
           content: '';
           display: block;
@@ -248,6 +266,7 @@ watch(
     transform: rotate(360deg);
   }
 }
+
 @keyframes progress {
   0% {
     width: 0;

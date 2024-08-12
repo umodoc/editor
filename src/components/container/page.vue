@@ -10,25 +10,13 @@
           minHeight: pageZoomMinHeight,
         }"
       >
-        <t-watermark
-          class="page-content"
-          :alpha="page.watermark.alpha"
-          v-bind="watermarkOptions"
-          :watermark-content="page.watermark"
-          :style="{
-            width: pageSize.width + 'cm',
-            minHeight: pageSize.height + 'cm',
-            transform: `scale(${page.zoomLevel / 100})`,
-            padding: `${page.margin.top + 'cm'} ${page.margin.right + 'cm'} ${page.margin.bottom + 'cm'} ${page.margin.left + 'cm'}`,
-            background: page.background,
-          }"
-        >
+        <div class="page-content">
           <editor>
             <template #bubble_menu="props">
               <slot name="bubble_menu" v-bind="props" />
             </template>
           </editor>
-        </t-watermark>
+        </div>
       </div>
     </div>
     <t-image-viewer
@@ -91,25 +79,6 @@ watch(
   () => setPageZoomHeight(),
 )
 
-// 水印
-const watermarkOptions = $ref({
-  x: 0,
-  height: 0,
-})
-watch(
-  () => page.value.watermark,
-  ({ type }) => {
-    if (type === 'compact') {
-      watermarkOptions.width = 320
-      watermarkOptions.y = 240
-    } else {
-      watermarkOptions.width = 480
-      watermarkOptions.y = 360
-    }
-  },
-  { deep: true, immediate: true },
-)
-
 // 图片预览
 let previewImages = $ref([])
 let currentImageIndex = $ref(0)
@@ -144,18 +113,16 @@ watch(
 
 .zoomable-container {
   flex: 1;
-  padding: 30px 50px;
+  padding: 20px 50px;
   scroll-behavior: smooth;
   .zoomable-content {
     margin: 0 auto;
-    box-shadow:
-      rgba(0, 0, 0, 0.06) 0px 0px 10px 0px,
-      rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
-    background-color: var(--umo-color-white);
     .page-content {
       transform-origin: 0 0;
       box-sizing: border-box;
       display: flex;
+      position: relative;
+      overflow: visible !important;
       [contenteditable] {
         outline: none;
       }
