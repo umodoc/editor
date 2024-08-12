@@ -1,6 +1,20 @@
 import { Plugin, PluginKey } from '@tiptap/pm/state'
-import { PAGE, TABLE, IMAGE, IFRAME, CODE_BLOCK, TOC, VIDEO } from './nodeNames'
-import { buildComputedHtml, removeAbsentHtmlH, UnitConversion, findParentDomRefOfType, getId } from './core'
+import {
+  PAGE,
+  TABLE,
+  IMAGE,
+  IFRAME,
+  CODE_BLOCK,
+  TOC,
+  VIDEO
+} from './node-names'
+import {
+  buildComputedHtml,
+  removeAbsentHtmlH,
+  UnitConversion,
+  findParentDomRefOfType,
+  getId, getDomHeight
+} from './core'
 import { defaultNodesComputed, PageComputedContext } from './computed'
 import { findParentNode } from '@tiptap/core'
 
@@ -15,8 +29,7 @@ function getTotalChildrenHeight(parentElement) {
     const child = children[i]
 
     // 获取子元素的高度
-    const childHeight = child.offsetHeight
-
+    const childHeight = getDomHeight(child)
     // 累加高度
     totalHeight += childHeight
   }
@@ -32,7 +45,7 @@ class PageDetector {
   #unitConversion
   #checkPoints = [IMAGE, IFRAME, CODE_BLOCK, TOC, VIDEO]
 
-  constructor(editor, pageClass = '.PageContent') {
+  constructor(editor, pageClass = '.page-node-content') {
     this.#editor = editor
     this.#pageClass = pageClass
     this.#unitConversion = new UnitConversion()
@@ -55,8 +68,14 @@ class PageDetector {
 
   checkCriticalPoint(node) {
     const { childCount, firstChild } = node
-    if (childCount == 1 && firstChild?.type.name == 'table' && firstChild.childCount == 1) return true
-    if (childCount == 1 && this.#checkPoints.includes(firstChild.type.name)) return true
+    if (
+      childCount == 1 &&
+      firstChild?.type.name == 'table' &&
+      firstChild.childCount == 1
+    )
+      return true
+    if (childCount == 1 && this.#checkPoints.includes(firstChild.type.name))
+      return true
     return false
   }
 
@@ -69,12 +88,20 @@ class PageDetector {
     const domAtPos = view.domAtPos.bind(view)
     const scrollHeight = paginationPluginKey.getState(prevState).scrollHeight
     let deleting = false
-    const pageDOM = findParentDomRefOfType(schema.nodes[PAGE], domAtPos)(selection)
+    const pageDOM = findParentDomRefOfType(
+      schema.nodes[PAGE],
+      domAtPos
+    )(selection)
+
     if (!pageDOM) return
-    const pageBody = (pageDOM).querySelector(this.#pageClass)
+    const pageBody = pageDOM.querySelector(this.#pageClass)
+
     if (pageBody) {
       let childrenHeight = getTotalChildrenHeight(pageBody)
-      deleting = view.state.doc.nodeSize < prevState.doc.nodeSize ? scrollHeight > childrenHeight : false
+      deleting =
+        view.state.doc.nodeSize < prevState.doc.nodeSize
+          ? scrollHeight > childrenHeight
+          : false
       tr.setMeta('scrollHeight', childrenHeight)
       const inserting = this.isOverflown(childrenHeight)
       if (inserting) {
@@ -101,7 +128,14 @@ class PageState {
   scrollHeight
   runState
 
-  constructor(bodyOptions, deleting, inserting, splitPage, scrollHeight, runState = true) {
+  constructor(
+    bodyOptions,
+    deleting,
+    inserting,
+    splitPage,
+    scrollHeight,
+    runState = true
+  ) {
     this.bodyOptions = bodyOptions
     this.deleting = deleting
     this.inserting = inserting
@@ -120,7 +154,14 @@ class PageState {
     if (this.runState == false && runState == true) inserting = true
     runState = typeof runState == 'undefined' ? this.runState : runState
     const scrollHeight = tr.getMeta('scrollHeight') || this.scrollHeight
-    return new PageState(bodyOption, deleting, inserting, splitPage, scrollHeight, runState)
+    return new PageState(
+      bodyOption,
+      deleting,
+      inserting,
+      splitPage,
+      scrollHeight,
+      runState
+    )
   }
 }
 
@@ -158,12 +199,16 @@ export const pagePlugin = (editor, nodesComputed) => {
     },
     appendTransaction([newTr], _prevState, state) {
       removeAbsentHtmlH()
-      const page = new PageComputedContext(editor, { ...defaultNodesComputed, ...nodesComputed }, this.getState(state), state)
+      const page = new PageComputedContext(
+        editor,
+        { ...defaultNodesComputed, ...nodesComputed },
+        this.getState(state),
+        state
+      )
       return page.run()
     },
     props: {
       handleDOMEvents: {
-
         compositionstart(view, event) {
           composition = true
         },
@@ -203,7 +248,7 @@ export const idPlugin = (types) => {
         nextState.doc.descendants((node, pos) => {
           const attrs = node.attrs
           if (types.includes(node.type.name) && !attrs.id) {
-            tr.setNodeMarkup(pos, undefined, { ...attrs, 'id': getId() })
+            tr.setNodeMarkup(pos, undefined, { ...attrs, id: getId() })
             modified = true
           }
         })

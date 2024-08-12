@@ -5,8 +5,8 @@
   width: 100%;
   color: var(--umo-content-text-color);
   &.show-line-number {
-    .umo-editor {
-      > *:not([data-line-number='false']):not(div) {
+    .page-node-content {
+      > *:not([data-line-number='false']):not(div):not(.node-focused) {
         position: relative;
         &::before {
           position: absolute;
@@ -22,6 +22,23 @@
       }
     }
   }
+  &.show-break-marks {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h5,
+    p {
+      &::after {
+        display: inline;
+        position: absolute;
+        content: '↵';
+        margin-top: 0.15em;
+        color: var(--umo-content-invisible-break-color);
+      }
+    }
+  }
   &.format-painter {
     cursor: url('@/assets/images/format-painter.svg'), text;
   }
@@ -30,48 +47,52 @@
     width: 100%;
     outline: none;
     counter-reset: title;
-    > * {
-      position: relative;
-      + * {
-        margin-top: var(--umo-content-node-bottom);
-      }
-      &.node-focused {
-        &:not(hr):not(.page-break):not(.tableWrapper):before {
-          content: '';
-          display: block;
-          position: absolute;
-          left: -8px;
-          top: -5px;
-          right: -8px;
-          bottom: -5px;
-          border-radius: var(--umo-radius);
-          background: var(--umo-content-node-selected-background);
-          pointer-events: none;
-          z-index: -1;
+    .page-node-content {
+      > * {
+        position: relative;
+        z-index: 1;
+        + * {
+          margin-top: var(--umo-content-node-bottom);
         }
-        // background: var(--umo-content-node-selected-background);
-        &.page-divider {
-          border-radius: var(--umo-radius);
-          background: var(--umo-content-node-selected-background);
-          margin-left: -8px;
-          margin-right: -8px;
-          padding-left: 8px;
-          padding-right: 8px;
-        }
-        &.page-break {
-          background-color: var(--umo-primary-color);
-          color: var(--umo-primary-color);
-          &::after {
-            border-color: var(--umo-primary-color);
+        &.node-focused {
+          &:not(hr):not(.page-break):not(.tableWrapper):not(table):before {
+            content: '';
+            display: block;
+            position: absolute;
+            left: -8px;
+            top: -5px;
+            right: -8px;
+            bottom: -5px;
+            border-radius: var(--umo-radius);
+            background: var(--umo-content-node-selected-background);
+            pointer-events: none;
+            z-index: -1;
+          }
+          &:is(div) {
+            &::before {
+              top: -8px !important;
+              bottom: -8px !important;
+            }
+          }
+          &.page-divider {
+            border-radius: var(--umo-radius);
+            background: var(--umo-content-node-selected-background);
+            margin-left: -8px;
+            margin-right: -8px;
+            padding-left: 8px;
+            padding-right: 8px;
+          }
+          &.page-break {
+            background-color: var(--umo-primary-color);
+            color: var(--umo-primary-color);
+            &::after {
+              border-color: var(--umo-primary-color);
+            }
+          }
+          .select-outline {
+            outline: solid 1px var(--umo-primary-color);
           }
         }
-        .select-outline {
-          outline: solid 1px var(--umo-primary-color);
-        }
-      }
-      + div.node-focused::before {
-        top: -8px !important;
-        bottom: -8px !important;
       }
     }
     .is-editor-empty {

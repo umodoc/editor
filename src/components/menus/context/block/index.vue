@@ -1,7 +1,8 @@
 <template>
   <div
+    v-if="menuVisible"
     class="block-menu-hander"
-    :style="`transform: translate(-68px, ${menuScrollTop}px);`"
+    :style="`transform: translate(54px, ${menuScrollTop}px);`"
   >
     <menus-context-block-node />
     <menus-context-block-common />
@@ -11,15 +12,30 @@
 <script setup>
 const { container, editor } = useStore()
 
+let menuVisible = $ref(false)
 let menuScrollTop = $ref(0)
 
 // 更新菜单位置
 const updateMenuPostion = () => {
-  const currentBlock = document.querySelector(`${container} .node-focused`)
+  const pages = document.querySelectorAll(`${container} .page-node-view`)
+  const currentBlock = document.querySelector(
+    `${container} .page-node-content .node-focused`,
+  )
   if (currentBlock === null) {
     return
   }
-  let offsetTop = currentBlock.offsetTop
+
+  // 当前元素距离页面顶部的距离
+  let { offsetTop } = currentBlock
+
+  // 加上页面的高度
+  for (let index = 0; index < pages.length; index++) {
+    const item = pages[index]
+    if (item.contains(currentBlock)) {
+      offsetTop += index * (item.clientHeight + 15)
+      break
+    }
+  }
 
   // 微修正菜单位置
   offsetTop = currentBlock.tagName === 'DIV' ? offsetTop - 8 : offsetTop - 5
@@ -28,13 +44,14 @@ const updateMenuPostion = () => {
     editor.value.isActive('horizontalRule') ||
     editor.value.isActive('table')
   ) {
-    offsetY = 6
+    offsetY = 5
   }
   if (editor.value.isActive('pageBreak')) {
     offsetY = -4
   }
 
   // 设置菜单位置
+  menuVisible = true
   menuScrollTop = offsetTop + offsetY
 }
 watch(
@@ -43,6 +60,9 @@ watch(
     if (val) {
       editor.value.on('selectionUpdate', updateMenuPostion)
       editor.value.on('focus', updateMenuPostion)
+      // editor.value.on('blur', () => (menuVisible = false))
+    } else {
+      menuVisible = false
     }
   },
   { immediate: true },
@@ -52,6 +72,7 @@ watch(
 <style lang="less">
 .block-menu-hander {
   position: absolute;
+  z-index: 20;
   .menu-button {
     background-color: transparent;
     .button-content {

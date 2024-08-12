@@ -11,7 +11,7 @@ import pkg from './package.json'
 import copyright from './src/utils/copyright'
 
 export default defineConfig({
-  //base: '/umo/',
+  base: '/umo/',
   plugins: [
     VueMacros({
       plugins: {
@@ -58,47 +58,47 @@ export default defineConfig({
       }
     }
   },
-  build: {
-    lib: {
-      entry: process.cwd() + '/src/components/index.js',
-      name: pkg.name,
-      fileName: 'umo-editor'
-    },
-    outDir: 'dist',
-    minify: 'esbuild',
-    cssMinify: true,
-    rollupOptions: {
-      output: [
-        {
-          banner: copyright,
-          intro: `import './style.css'`,
-          format: 'es'
-        }
-      ],
-      external: [
-        /@vueuse\/.*/,
-        /@tiptap\/.*/,
-        /mammoth\/.*/,
-        /nzh\/.*/,
-        'vue',
-        '@eslint/object-schema',
-        '@imgly/background-removal',
-        '@vue-monaco/editor',
-        'dom-to-image-more',
-        'es-drager',
-        'file64',
-        'file-saver',
-        'hotkeys-js',
-        'jsbarcode',
-        'katex',
-        'mermaid',
-        'plyr',
-        'pretty-bytes',
-        'qrcode-svg',
-        'svg64',
-        'vue-i18n',
-        'vue-esign'
-      ]
-    }
-  }
+  // build: {
+  //   lib: {
+  //     entry: process.cwd() + '/src/components/index.js',
+  //     name: pkg.name,
+  //     fileName: 'umo-editor',
+  //   },
+  //   outDir: 'dist',
+  //   minify: 'esbuild',
+  //   cssMinify: true,
+  //   rollupOptions: {
+  //     output: [
+  //       {
+  //         banner: copyright,
+  //         intro: `import './style.css'`,
+  //         format: 'es',
+  //       },
+  //     ],
+  //     external: [
+  //       /@vueuse\/.*/,
+  //       /@tiptap\/.*/,
+  //       /mammoth\/.*/,
+  //       /nzh\/.*/,
+  //       'vue',
+  //       '@eslint/object-schema',
+  //       '@imgly/background-removal',
+  //       '@vue-monaco/editor',
+  //       'dom-to-image-more',
+  //       'es-drager',
+  //       'file64',
+  //       'file-saver',
+  //       'hotkeys-js',
+  //       'jsbarcode',
+  //       'katex',
+  //       'mermaid',
+  //       'plyr',
+  //       'pretty-bytes',
+  //       'qrcode-svg',
+  //       'svg64',
+  //       'vue-i18n',
+  //       'vue-esign',
+  //     ],
+  //   },
+  // },
 })

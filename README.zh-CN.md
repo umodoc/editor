@@ -16,16 +16,6 @@ Umo Editor 是一个基于 Vue3 适合于国人使用的本土化开源文档编
 
 作为一个独立的 Vue3 插件，Umo Editor 可以零配置轻松集成到各类 Vue3 项目中，对于非 Vue3 项目，您可以通过 Iframe 将 Umo Editor 嵌入到您的项目中。
 
-## 安装
-
-```bash
-npm config set "@tiptap-pro:registry" https://registry.tiptap.dev/
-npm config set "//registry.tiptap.dev/:_authToken" 9fsQEgp8C8pbxpk8PFAjYn64BtBDq6HfXmI2qgpnI7XYr/OwHaMvOUIE5mfVR49y
-npm install --save @umoteam/editor @umoteam/editor-external
-```
-
-通过其他包管理器安装，如 `yarn`、`pnpm` 等，请参考 [开发文档 - 快速开始](https://editor.umodoc.com/cn/docs/getting-started)。
-
 ## 快速开始
 
 [开发文档](https://editor.umodoc.com/cn/docs) | [在线演示](https://demo.umodoc.com/editor?lang=zh-CN) | [GitHub](https://github.com/umodoc/editor) | [码云(国内镜像)](https://gitee.com/umodoc/editor) | [NPM](https://www.npmjs.com/package/@umoteam/editor)

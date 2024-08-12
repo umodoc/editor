@@ -4,6 +4,7 @@
     class="editor-container"
     :class="{
       'show-line-number': page.showLineNumber,
+      'show-break-marks': page.showBreakMarks,
       'format-painter': painter.enabled,
     }"
     :style="{ lineHeight: defaultLineHeight }"
@@ -91,7 +92,7 @@ import Page from './extensions/page'
 import { Document } from '@tiptap/extension-document'
 // 其他
 import Selection from './extensions/selection'
-import TableOfContents from './extensions/table-of-contents'
+import { TableOfContents } from '@tiptap-pro/extension-table-of-contents'
 import { getHierarchicalIndexes } from '@tiptap-pro/extension-table-of-contents'
 import Typography from '@tiptap/extension-typography'
 import CharacterCount from '@tiptap/extension-character-count'
@@ -99,6 +100,7 @@ import FileHandler from './extensions/file-handler'
 import Dropcursor from '@tiptap/extension-dropcursor'
 
 import shortId from '@/utils/short-id'
+import { pagePlugin } from '@/components/editor/extensions/page/page-plugin'
 
 const {
   options,
@@ -122,7 +124,6 @@ if (!options.value.document.enableMarkdown || !$document.value.markdown) {
 const defaultLineHeight = $computed(() => {
   return options.value.dicts.lineHeights.find((item) => item.default).value
 })
-
 const editorInstance = new Editor({
   editable: !options.value.document.readOnly,
   autofocus: options.value.document.autofocus,
@@ -150,16 +151,15 @@ const editorInstance = new Editor({
     }),
     Document.extend({ content: 'page+' }),
     Page,
-    /*    Placeholder.configure({
-          considerAnyAsEmpty: true,
-          placeholder: l(options.value.document.placeholder),
-        }),
-        Focus.configure({
-          className: 'node-focused',
-        }),
-        FormatPainter,
-          mode: 'all',
-        }),*/
+    /* Placeholder.configure({
+      considerAnyAsEmpty: true,
+      placeholder: l(options.value.document.placeholder),
+    }),*/
+    Focus.configure({
+      className: 'node-focused',
+      mode: 'all'
+    }),
+    FormatPainter,
     FontFamily,
     FontSize,
     Bold.extend({
@@ -260,7 +260,7 @@ setEditor(editorInstance)
 
 // 动态导入 katex 样式
 onMounted(() => {
-  const katexStyleElement = document.getElementById('katex-style')
+  const katexStyleElement = document.querySelector('#katex-style')
   if (
     katexStyleElement === null &&
     !options.value.toolbar.disableMenuItems.includes('math')
@@ -271,14 +271,8 @@ onMounted(() => {
     style.id = 'katex-style'
     document.querySelector('head').append(style)
   }
-
 })
-window.onload = () => {
-  editor.value?.registerPlugin(pagePlugin(editor.value, {}))
-  setTimeout(() => {
-    editor.value?.view.dispatch(editor.value?.state.tr.setMeta('splitPage', true))
-  }, 1000)
-}
+
 // 气泡菜单
 let tippyInstance = $ref(null)
 const tippyOpitons = $ref({
@@ -308,10 +302,19 @@ watch(
 
 // 销毁编辑器实例
 onBeforeUnmount(() => editorInstance.destroy())
+window.onload = () => {
+  editor.value?.registerPlugin(pagePlugin(editor.value, {}))
+  setTimeout(() => {
+    editor.value?.view.dispatch(
+      editor.value?.state.tr.setMeta('splitPage', true)
+    )
+  }, 1000)
+}
 </script>
 
 <style lang="less">
 @import '@/assets/styles/editor.less';
+@import '@/assets/styles/drager.less';
 
 .umo-editor-bubble-menu {
   border-radius: var(--umo-radius);

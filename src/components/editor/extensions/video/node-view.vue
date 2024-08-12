@@ -17,8 +17,8 @@
         :max-width="maxWidth"
         equal-proportion
         @resize="onResize"
-        @resizeStart="onResizeStart"
-        @resizeEnd="onResizeEnd"
+        @resize-start="onResizeStart"
+        @resize-end="onResizeEnd"
         @click="selected = true"
       >
         <video
