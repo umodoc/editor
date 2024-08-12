@@ -87,9 +87,19 @@ You can submit issues or suggestions via https://github.com/umodoc/editor/discus
 
 Or submit bug reports via https://github.com/umodoc/editor/issues.
 
-## Contribute Code
+## Contributing Code
 
-We welcome any form of contribution, including but not limited to submitting bug reports, feature requests, and code contributions.
+### Contributors
+
+The development of Umo Editor could not have been possible without the support of the community. Below is the list of contributors who have contributed code to Umo Editor. We extend our thanks to them:
+
+<p>
+<a href="https://github.com/umodoc/editor/graphs/contributors" target="_blank">
+  <img src="https://contrib.rocks/image?repo=umodoc/editor" />
+</a>
+</p>
+
+We welcome all forms of contributions, including but not limited to submitting bug reports, feature requests, and code contributions.
 
 ## Contact Us
 

@@ -28,7 +28,7 @@
         <div class="virtual-group">
           <menus-toolbar-base-undo />
           <menus-toolbar-base-redo />
-          <menus-toolbar-base-select-all />
+          <menus-toolbar-base-format-painter />
           <menus-toolbar-base-clear-format />
         </div>
         <div class="virtual-group">
@@ -52,11 +52,14 @@
           <menus-toolbar-base-indent />
           <menus-toolbar-base-outdent />
           <menus-toolbar-base-line-height />
+          <menus-toolbar-base-margin />
           <menus-toolbar-base-align-dropdown />
           <menus-toolbar-base-quote />
           <menus-toolbar-base-code v-if="!disableItem('code')" />
+          <menus-toolbar-base-select-all />
         </div>
         <div class="virtual-group">
+          <menus-toolbar-base-import-word />
           <menus-toolbar-base-markdown />
           <menus-toolbar-base-search-replace />
         </div>

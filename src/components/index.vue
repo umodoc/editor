@@ -47,7 +47,6 @@
 import { toBlob, toJpeg, toPng } from 'dom-to-image-more'
 import i18n from '@/i18n'
 import { propsOptions } from '@/options'
-import { onBeforeUnmount } from 'vue'
 import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
 
@@ -667,8 +666,16 @@ provide('setLocale', setLocale)
 provide('reset', reset)
 
 // 快捷键
-useHotkeys('ctrl+s,command+s', saveContent)
-useHotkeys('ctrl+p,command+p', print)
+const unsetFormatPainter = () => editor.value?.commands.unsetFormatPainter()
+useHotkeys('ctrl+s,command+s', () => {
+  saveContent()
+  unsetFormatPainter()
+})
+useHotkeys('ctrl+p,command+p', () => {
+  print()
+  unsetFormatPainter()
+})
+useHotkeys('esc', unsetFormatPainter)
 
 // 工具栏切换时重置编辑器
 watch(

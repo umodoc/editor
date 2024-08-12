@@ -4,6 +4,7 @@
     class="node-view image-node-view"
     :style="{ 'justify-content': node.attrs.nodeAlign }"
     :id="node.attrs.id"
+    :style="nodeStyle"
     @dblclick="imagePreview = node.attrs.src"
   >
     <div class="node-container hover-shadow select-outline image">
@@ -77,6 +78,19 @@ const imageRef = $ref(null)
 let selected = $ref(false)
 let maxWidth = $ref(0)
 
+const nodeStyle = $computed(() => {
+  const { nodeAlign, margin } = node.attrs
+  const marginTop =
+    margin?.top && margin?.top !== '' ? margin.top + 'px' : undefined
+  const marginBottom =
+    margin?.bottom && margin?.bottom !== '' ? margin.bottom + 'px' : undefined
+  return {
+    'justify-content': nodeAlign,
+    marginTop,
+    marginBottom,
+  }
+})
+
 const uploadImage = async () => {
   if (node.attrs.uploaded || !node.attrs.file) {
     return
@@ -92,9 +106,9 @@ const uploadImage = async () => {
 }
 onMounted(async () => {
   await nextTick()
+  const width = containerRef.value.$el.clientWidth
+  maxWidth = width
   if (node.attrs.width === null) {
-    const width = containerRef.value.$el.clientWidth
-    maxWidth = width
     updateAttributes({ width })
   }
 })

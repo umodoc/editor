@@ -3,7 +3,7 @@
     ref="containerRef"
     class="node-view iframe-node-view"
     :id="node.attrs.id"
-    :style="{ 'justify-content': node.attrs.nodeAlign }"
+    :style="nodeStyle"
   >
     <div class="node-container hover-shadow select-outline iframe">
       <drager
@@ -34,6 +34,20 @@ const { editor } = useStore()
 const containerRef = ref(null)
 let selected = $ref(false)
 let maxWidth = $ref(0)
+
+const nodeStyle = $computed(() => {
+  const { nodeAlign, margin } = node.attrs
+  const marginTop =
+    margin?.top && margin?.top !== '' ? margin.top + 'px' : undefined
+  const marginBottom =
+    margin?.bottom && margin?.bottom !== '' ? margin.bottom + 'px' : undefined
+  return {
+    'justify-content': nodeAlign,
+    marginTop,
+    marginBottom,
+  }
+})
+
 onMounted(() => {
   const width = containerRef.value.$el.offsetWidth
   maxWidth = width

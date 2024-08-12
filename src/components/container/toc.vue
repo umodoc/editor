@@ -34,7 +34,6 @@
 
 <script setup>
 import { TextSelection } from '@tiptap/pm/state'
-import { onMounted } from 'vue'
 const { container, editor, tableOfContents } = useStore()
 
 const headingClick = (heading) => {
@@ -58,6 +57,22 @@ const headingClick = (heading) => {
   editor.value.view.dispatch(tr)
   editor.value.view.focus()
 }
+
+watch(
+  () => tableOfContents.value,
+  () => {
+    const activeHeadingEl = document.querySelector(
+      `${container} .toc-item.active`,
+    )
+    if (activeHeadingEl) {
+      activeHeadingEl.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }
+  },
+  { deep: true },
+)
 </script>
 
 <style lang="less" scoped>

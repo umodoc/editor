@@ -168,6 +168,11 @@ const defaultOptions = {
     enableSourceEditor: false,
     menus: ['base', 'insert', 'table', 'tools', 'page', 'export'],
     disableMenuItems: [],
+    importWord: {
+      enabled: true,
+      options: {},
+      useCustomMethod: false,
+    },
   },
   page: {
     defaultMargin: {
@@ -283,6 +288,11 @@ const defaultOptions = {
   },
   async onAssistant(payload, content) {
     throw new Error('Key "onAssistant": Please set the onAssistant method')
+  },
+  async onCustomImportWordMethod(file) {
+    throw new Error(
+      'Key "onCustomImportWordMethod": Please set the onAssistant method',
+    )
   },
 }
 
@@ -514,6 +524,10 @@ const ojbectSchema = new ObjectSchema({
             )
           }
         },
+      },
+      importWord: {
+        merge: 'replace',
+        validate: 'object',
       },
     },
   },
@@ -810,6 +824,16 @@ const ojbectSchema = new ObjectSchema({
     validate(value) {
       if (!isAsyncFunction(value)) {
         throw new Error('Key "onAssistant" must be a async function.')
+      }
+    },
+  },
+  onCustomImportWordMethod: {
+    merge: 'replace',
+    validate(value) {
+      if (!isAsyncFunction(value)) {
+        throw new Error(
+          'Key "onCustomImportWordMethod" must be a async function.',
+        )
       }
     },
   },

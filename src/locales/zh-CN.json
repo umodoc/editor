@@ -54,9 +54,9 @@
       "7_5pt": "小六",
       "6_5pt": "默认"
     },
-    "formatPaint": {
+    "formatPainter": {
       "text": "格式刷",
-      "tip": "格式刷: 双击可重复使用"
+      "tip": "格式刷：双击可重复使用，按 ESC 退出"
     },
     "heading": {
       "text": "标题 {level}",
@@ -80,6 +80,20 @@
       "default": " (默认)"
     },
     "outdent": "减少缩进",
+    "margin": {
+      "text": "上下间距",
+      "top": "上间距",
+      "bottom": "下间距",
+      "default": "默认",
+      "reset": "自动间距"
+    },
+    "importWord": {
+      "text": "导入 Word",
+      "limitSize": "文件大小不能超过 5MB。",
+      "converting": "正在转换Word文档，请稍后...",
+      "convertError": "解析 Word 文档出错",
+      "importError": "导入 Word 文档出错"
+    },
     "markdown": {
       "text": "Markdown",
       "enable": "开启 Markdown 模式",
@@ -534,7 +548,7 @@
     "reset": "立即重置"
   },
   "feedback": "使用感受和建议反馈",
-  "poweredBy": "由「有墨文档」提供技术支持",
+  "poweredBy": "由「Umo Editor」提供技术支持",
   "wordCount": {
     "input": "已输入 {count} 字符，",
     "limit": "总计不能超过 {count} 字符，",

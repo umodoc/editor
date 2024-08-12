@@ -1,5 +1,5 @@
 <template>
-  <node-view-wrapper class="node-view toc-node-view" :id="node.attrs.id">
+  <node-view-wrapper class="node-view toc-node-view" :id="node.attrs.id" :style="nodeStyle">
     <div class="node-container hover-shadow select-outline toc">
       <p class="toc-head" v-text="t('toc.title')"></p>
       <ul v-if="tableOfContents && tableOfContents.length > 0" class="toc-body">
@@ -21,9 +21,21 @@
 import { TextSelection } from '@tiptap/pm/state'
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 
-const {node} = defineProps(nodeViewProps)
+const { node, updateAttributes } = defineProps(nodeViewProps)
 
 const { editor, tableOfContents } = useStore()
+
+const nodeStyle = $computed(() => {
+  const { margin } = node.attrs
+  const marginTop =
+    margin?.top && margin?.top !== '' ? margin.top + 'px' : undefined
+  const marginBottom =
+    margin?.bottom && margin?.bottom !== '' ? margin.bottom + 'px' : undefined
+  return {
+    marginTop,
+    marginBottom,
+  }
+})
 
 const headingClick = (id) => {
   const element = editor.value.view.dom.querySelector(`[data-toc-id="${id}"`)

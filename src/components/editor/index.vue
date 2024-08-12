@@ -4,13 +4,14 @@
     class="editor-container"
     :class="{
       'show-line-number': page.showLineNumber,
+      'format-painter': painter.enabled,
     }"
     :style="{ lineHeight: defaultLineHeight }"
     :editor="editor"
   />
   <template v-if="editor && !editorDestroyed">
     <bubble-menu
-      v-show="!blockMenu"
+      v-show="!blockMenu && !painter.enabled"
       class="umo-editor-bubble-menu"
       :class="{ assistant }"
       :editor="editor"
@@ -38,6 +39,7 @@ import Placeholder from '@tiptap/extension-placeholder'
 import Focus from '@tiptap/extension-focus'
 
 // 基本
+import FormatPainter from './extensions/format-painter'
 import FontFamily from '@tiptap/extension-font-family'
 import FontSize from './extensions/font-size'
 import Bold from '@tiptap/extension-bold'
@@ -55,6 +57,7 @@ import NodeAlign from './extensions/node-align'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from './extensions/list/tasklist'
 import LineHeight from './extensions/line-height'
+import Margin from './extensions/margin'
 import SearchReplace from '@sereneinserenade/tiptap-search-and-replace'
 
 // 插入
@@ -80,7 +83,7 @@ import PageBreak from './extensions/page-break'
 import Toc from './extensions/toc'
 import InvisibleCharacters, {
   HardBreakNode,
-  ParagraphNode,
+  ParagraphNode
 } from '@tiptap-pro/extension-invisible-characters'
 import InvisibleNode from './extensions/invisible-node'
 // 分页
@@ -88,28 +91,26 @@ import Page from './extensions/page'
 import { Document } from '@tiptap/extension-document'
 // 其他
 import Selection from './extensions/selection'
-import {
-  TableOfContents,
-  getHierarchicalIndexes,
-} from '@tiptap-pro/extension-table-of-contents'
+import TableOfContents from './extensions/table-of-contents'
+import { getHierarchicalIndexes } from '@tiptap-pro/extension-table-of-contents'
 import Typography from '@tiptap/extension-typography'
 import CharacterCount from '@tiptap/extension-character-count'
 import FileHandler from './extensions/file-handler'
 import Dropcursor from '@tiptap/extension-dropcursor'
 
 import shortId from '@/utils/short-id'
-import { pagePlugin } from '@/components/editor/extensions/page/pagePlugn'
-
 
 const {
   options,
-  page,
+  container,
   editor,
+  page,
+  painter,
   blockMenu,
   assistant,
   tableOfContents,
   setEditor,
-  editorDestroyed,
+  editorDestroyed
 } = useStore()
 const $document = useState('document')
 
@@ -121,6 +122,7 @@ if (!options.value.document.enableMarkdown || !$document.value.markdown) {
 const defaultLineHeight = $computed(() => {
   return options.value.dicts.lineHeights.find((item) => item.default).value
 })
+
 const editorInstance = new Editor({
   editable: !options.value.document.readOnly,
   autofocus: options.value.document.autofocus,
@@ -129,37 +131,39 @@ const editorInstance = new Editor({
   enablePasteRules: enableRules,
   editorProps: {
     attributes: {
-      class: 'umo-editor',
+      class: 'umo-editor'
     },
-    ...options.value.document.editorProps,
+    ...options.value.document.editorProps
   },
   parseOptions: options.value.document.parseOptions,
   extensions: [
 
     StarterKit.configure({
-      document:false,
+      document: false,
       bold: false,
       bulletList: false,
       orderedList: false,
       codeBlock: false,
       horizontalRule: false,
       gapcursor: true,
-      dropcursor: false,
+      dropcursor: false
     }),
-    Document.extend({content:"page+"}),
+    Document.extend({ content: 'page+' }),
     Page,
-/*    Placeholder.configure({
-      considerAnyAsEmpty: true,
-      placeholder: l(options.value.document.placeholder),
-    }),*/
-   /*Focus.configure({
-      className: 'node-focused',
-      mode: 'all',
-    }),*/
+    /*    Placeholder.configure({
+          considerAnyAsEmpty: true,
+          placeholder: l(options.value.document.placeholder),
+        }),
+        Focus.configure({
+          className: 'node-focused',
+        }),
+        FormatPainter,
+          mode: 'all',
+        }),*/
     FontFamily,
     FontSize,
     Bold.extend({
-      renderHTML: ({ HTMLAttributes }) => ['b', HTMLAttributes, 0],
+      renderHTML: ({ HTMLAttributes }) => ['b', HTMLAttributes, 0]
     }),
     Underline,
     Subscript,
@@ -167,7 +171,7 @@ const editorInstance = new Editor({
     Color,
     TextColor,
     Highlight.configure({
-      multicolor: true,
+      multicolor: true
     }),
     BulletList,
     OrderedList,
@@ -177,13 +181,14 @@ const editorInstance = new Editor({
     TaskItem.configure({ nested: true }),
     TaskList.configure({
       HTMLAttributes: {
-        class: 'task-list',
-      },
+        class: 'task-list'
+      }
     }),
     LineHeight.configure({
       types: ['heading', 'paragraph'],
-      defaultLineHeight,
+      defaultLineHeight
     }),
+    Margin,
     SearchReplace,
     Link,
     Image,
@@ -198,7 +203,7 @@ const editorInstance = new Editor({
 
     // 表格
     Table.configure({
-      allowTableNodeSelection: true,
+      allowTableNodeSelection: true
     }),
     TableRow,
     TableHeader,
@@ -206,12 +211,12 @@ const editorInstance = new Editor({
     // 页面
     Toc,
     PageBreak,
-/*
-    InvisibleCharacters.configure({
-      visible: page.value.showBreakMarks,
-      builders: [new HardBreakNode(), new ParagraphNode(), new InvisibleNode()],
-    }),
-*/
+    /*
+        InvisibleCharacters.configure({
+          visible: page.value.showBreakMarks,
+          builders: [new HardBreakNode(), new ParagraphNode(), new InvisibleNode()],
+        }),
+    */
     // 其他
     Selection,
     TableOfContents.configure({
@@ -219,16 +224,16 @@ const editorInstance = new Editor({
       onUpdate: (content) => {
         tableOfContents.value = content
       },
-      // scrollParent: () =>
-      //   document.querySelector(`${container} .zoomable-container`),
-      getId: () => shortId(6),
+      scrollParent: () =>
+        document.querySelector(`${container} .zoomable-container`),
+      getId: () => shortId(6)
     }),
     Typography.configure(options.value.document.typographyRules),
     CharacterCount.configure({
       limit:
         options.value.document.characterLimit !== 0
           ? options.value.document.characterLimit
-          : undefined,
+          : undefined
     }),
     FileHandler.configure({
       allowedMimeTypes: options.value.file.allowedMimeTypes,
@@ -237,16 +242,16 @@ const editorInstance = new Editor({
       },
       onDrop: (editor, files, pos) => {
         files.forEach((file) => editor.commands.insertFile({ file, pos }))
-      },
+      }
     }),
     Dropcursor.configure({
-      color: 'var(--umo-primary-color)',
+      color: 'var(--umo-primary-color)'
     }),
-    ...options.value.extensions,
+    ...options.value.extensions
   ],
   onUpdate({ editor }) {
     $document.value.content = editor.getHTML()
-  },
+  }
 })
 setEditor(editorInstance)
 /*setTimeout(() => {
@@ -268,11 +273,11 @@ onMounted(() => {
   }
 
 })
-window.onload=() => {
-  editor.value?.registerPlugin(pagePlugin(editor.value, {}));
+window.onload = () => {
+  editor.value?.registerPlugin(pagePlugin(editor.value, {}))
   setTimeout(() => {
-    editor.value?.view.dispatch(editor.value?.state.tr.setMeta("splitPage", true));
-  }, 1000);
+    editor.value?.view.dispatch(editor.value?.state.tr.setMeta('splitPage', true))
+  }, 1000)
 }
 // 气泡菜单
 let tippyInstance = $ref(null)
@@ -288,7 +293,7 @@ const tippyOpitons = $ref({
   },
   onDestroy() {
     tippyInstance = null
-  },
+  }
 })
 
 // AI 助手
@@ -296,9 +301,9 @@ watch(
   () => assistant.value,
   (visible) => {
     tippyInstance?.setProps({
-      placement: visible ? 'bottom' : 'top',
+      placement: visible ? 'bottom' : 'top'
     })
-  },
+  }
 )
 
 // 销毁编辑器实例
@@ -307,19 +312,20 @@ onBeforeUnmount(() => editorInstance.destroy())
 
 <style lang="less">
 @import '@/assets/styles/editor.less';
-@import '@/assets/styles/drager.less';
 
 .umo-editor-bubble-menu {
   border-radius: var(--umo-radius);
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+
   &:not(.assistant) {
     padding: 8px 10px;
     box-shadow: var(--umo-shadow);
     border: 1px solid var(--umo-border-color);
     background-color: var(--umo-color-white);
   }
+
   &:empty {
     display: none;
   }
@@ -327,11 +333,14 @@ onBeforeUnmount(() => editorInstance.destroy())
   .menu-button.show-text .button-content .text {
     display: none !important;
   }
+
   .menu-button.huge {
     height: var(--td-comp-size-xs);
     min-width: unset;
+
     .button-content {
       min-width: unset !important;
+
       .icon {
         font-size: 16px;
         margin-top: 0;
@@ -339,6 +348,7 @@ onBeforeUnmount(() => editorInstance.destroy())
     }
   }
 }
+
 .umo-editor-block-menu {
   .menu-button {
     color: var(--umo-text-color-light) !important;
