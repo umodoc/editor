@@ -16,7 +16,7 @@ Umo Editor 是一个基于 Vue3 适合于国人使用的本土化开源文档编
 
 # Introduction
 
-Umo Editor is an open-source document editor based on Vue3, offering localized functionalities. It provides comprehensive document editing capabilities and AI creation features, supports Markdown syntax, basic rich-text editing features, a variety of node types in multiple formats, a range of practical tools, and customization of page styles. It also supports exporting in various formats, printing and print preview, document block editing, adding custom extensions, i18n settings, and dark mode support.
+Umo Editor is an open-source document editor based on Vue3 and Tiptap, offering localized functionalities. It provides comprehensive document editing capabilities and AI creation features, supports Markdown syntax, basic rich-text editing features, a variety of node types in multiple formats, a range of practical tools, and customization of page styles. It also supports exporting in various formats, printing and print preview, document block editing, adding custom extensions, i18n settings, and dark mode support.
 
 <img src="https://unpkg.com/@umoteam/editor-external@latest/static/umo-editor-en@2x.png" alt="umo editor" />
 
@@ -47,6 +47,7 @@ Umo Editor was created to address the complexity of document editing in web appl
 ## Core Features
 
 - Zero-config out-of-the-box usability
+- Pagination mode similar to that in Microsoft Word
 - Lightweight
 - WYSIWYG (What You See Is What You Get) throughout the process
 - Rich-text editing capabilities
@@ -93,11 +94,9 @@ Or submit bug reports via https://github.com/umodoc/editor/issues.
 
 The development of Umo Editor could not have been possible without the support of the community. Below is the list of contributors who have contributed code to Umo Editor. We extend our thanks to them:
 
-<p>
-<a href="https://github.com/umodoc/editor/graphs/contributors" target="_blank">
-  <img src="https://contrib.rocks/image?repo=umodoc/editor" />
-</a>
-</p>
+- [Umo Team](https://github.com/umodoc): 💻 Core developers
+- [Cassielxd](https://github.com/Cassielxd): 💪Implemented pagination and many important features for Umo Editor
+- [Sherman Xu](https://github.com/xuzhenjun130): 🛠 Contributed code to Umo Editor
 
 We welcome all forms of contributions, including but not limited to submitting bug reports, feature requests, and code contributions.
 

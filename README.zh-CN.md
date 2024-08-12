@@ -10,7 +10,7 @@
 
 ## 基本介绍
 
-Umo Editor 是一个基于 Vue3 适合于国人使用的本土化开源文档编辑器。Umo Editor 提供完善的文档编辑能力和 AI 创作能力，支持 Markdown 语法，支持基础的富文本编辑功能，支持多种插入多种格式的节点类型、提供了多种类型的实用工具，并支持设置页面的样式，支持导出多种类型的格式，支持打印和打印预览，支持文档块编辑，支持添加自定义扩展，支持多语言设置，支持暗色主题。
+Umo Editor 是一个基于 Vue3 和 Tiptap 的适合于国人使用的本土化开源文档编辑器。Umo Editor 提供完善的文档编辑能力和 AI 创作能力，支持 Markdown 语法，支持基础的富文本编辑功能，支持多种插入多种格式的节点类型、提供了多种类型的实用工具，并支持设置页面的样式，支持导出多种类型的格式，支持打印和打印预览，支持文档块编辑，支持添加自定义扩展，支持多语言设置，支持暗色主题。
 
 <img src="https://unpkg.com/@umoteam/editor-external@latest/static/umo-editor-cn@2x.png" alt="umo editor" />
 
@@ -53,6 +53,7 @@ Umo Editor 的诞生，旨在解决 Web 应用中文档编辑的复杂性，为 
 ## 核心特性
 
 - 零配置开箱即用
+- 类似于与 Microsoft Word 的分页模式
 - 轻量级
 - 全过程所见即所得
 - 富文本编辑功能
@@ -101,11 +102,9 @@ Nodejs 18.0.0 及以上版本。
 
 Umo Editor 的发展，离不开社区的支持，以下是为 Umo Editor 贡献过代码的贡献者名单，向他们致谢：
 
-<p>
-<a href="https://github.com/umodoc/editor/graphs/contributors" target="_blank">
-  <img src="https://contrib.rocks/image?repo=umodoc/editor" />
-</a>
-</p>
+- [Umo Team](https://github.com/umodoc)：👨‍💻 核心开发者
+- [Cassielxd](https://github.com/Cassielxd)：💪🏻 为 Umo Editor 实现了分页和很多重要的功能
+- [Sherman Xu](https://github.com/xuzhenjun130)：🛠️ 为 Umo Editor 贡献了部分代码
 
 我们欢迎任何形式的贡献，包括但不限于提交 Bug 报告、功能请求、代码贡献等。
 
