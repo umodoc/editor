@@ -29,6 +29,7 @@
             width: page.margin.left + 'cm',
           }"
         ></div>
+        <div class="page-node-header-content"></div>
         <div
           class="page-corner corner-tr"
           :style="{
@@ -55,6 +56,7 @@
             width: page.margin.left + 'cm',
           }"
         ></div>
+        <div class="page-node-footer-content"></div>
         <div
           class="page-corner corner-br"
           :style="{
@@ -173,6 +175,11 @@ watch(
       top: 0;
       left: 0;
     }
+  }
+  .page-node-header-content,
+  .page-node-footer-content {
+    flex: 1;
+    padding: 10px 0;
   }
   .page-node-content {
     box-sizing: border-box;
