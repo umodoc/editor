@@ -2,7 +2,7 @@ import {
   mergeAttributes,
   findChildrenInRange,
   findParentNode,
-  Node
+  Node,
 } from '@tiptap/core'
 import {
   PAGE,
@@ -25,12 +25,18 @@ import {
   VIDEO,
   HORIZONTALRULE,
   PAGEBREAK,
-  TABLEHEADER
+  TABLEHEADER,
 } from './node-names'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import { Selection, TextSelection } from '@tiptap/pm/state'
 import { Slice } from '@tiptap/pm/model'
-import { buildComputedHtml, changeComputedHtml, getFlag, getPageOption, removeComputedHtml } from './core'
+import {
+  buildComputedHtml,
+  changeComputedHtml,
+  getFlag,
+  getPageOption,
+  removeComputedHtml,
+} from './core'
 import { idPlugin, pagePlugin } from './page-plugin'
 import { splitBlock } from './split-block'
 import { splitListItem } from './split-list-item'
@@ -56,7 +62,7 @@ const types = [
   VIDEO,
   HORIZONTALRULE,
   PAGEBREAK,
-  TABLEHEADER
+  TABLEHEADER,
 ]
 export default Node.create({
   priority: 2,
@@ -71,7 +77,7 @@ export default Node.create({
       SystemAttributes: {},
       nodesComputed: {},
       View: VueNodeViewRenderer(NodeView),
-      types: []
+      types: [],
     }
   },
   /* 自定义操作 */
@@ -79,16 +85,16 @@ export default Node.create({
     return {
       HTMLAttributes: {},
       pageNumber: {
-        default: 1
-      }
+        default: 1,
+      },
     }
   },
 
   parseHTML() {
     return [
       {
-        tag: 'page'
-      }
+        tag: 'page',
+      },
     ]
   },
 
@@ -100,7 +106,6 @@ export default Node.create({
       splitBlock,
       splitListItem,
       resetPageStore: () => {
-
         changeComputedHtml()
         return ({ tr, state, dispatch, editor }) => {
           if (dispatch) {
@@ -116,7 +121,7 @@ export default Node.create({
           }
           return true
         }
-      }
+      },
     }
   },
   addGlobalAttributes() {
@@ -125,13 +130,13 @@ export default Node.create({
         types: types.concat(this.options.types || []),
         attributes: {
           id: {
-            default: null
+            default: null,
           },
           extend: {
-            default: false
-          }
-        }
-      }
+            default: false,
+          },
+        },
+      },
     ]
   },
   addKeyboardShortcuts() {
@@ -168,7 +173,7 @@ export default Node.create({
               return commands.deleteNode(PAGE)
             }
             const pageNode = findParentNode((node) => node.type.name === PAGE)(
-              selection
+              selection,
             )
             if (pageNode) {
               //获取当前页面节点的 第一个子节点类型
@@ -179,7 +184,7 @@ export default Node.create({
               if (isAtStart) {
                 const vm = TextSelection.create(doc, pos - 20, pos - 20)
                 const beforePageNode = findParentNode(
-                  (node) => node.type.name === PAGE
+                  (node) => node.type.name === PAGE,
                 )(vm)
                 if (beforePageNode) {
                   const pos1 =
@@ -202,7 +207,7 @@ export default Node.create({
               }
             }
             return false
-          })
+          }),
       ])
     const handleDelete = () =>
       this.editor.commands.first(({ commands }) => [
@@ -213,7 +218,7 @@ export default Node.create({
             const { $anchor } = selection
             const currentNode = $anchor.node()
             const blockNode = findParentNode(
-              (node) => node.type.name === CASSIE_BLOCK
+              (node) => node.type.name === CASSIE_BLOCK,
             )(selection)
             if (blockNode) {
               const isBlockStart =
@@ -244,7 +249,7 @@ export default Node.create({
             }
             //找到当钱的page
             const pageNode = findParentNode((node) => node.type.name === PAGE)(
-              selection
+              selection,
             )
             if (pageNode) {
               //如果光标在在当前页面 的最后一个位置
@@ -253,7 +258,7 @@ export default Node.create({
               if (isAtEnd) {
                 const vm = TextSelection.create(doc, pos + 6, pos + 6)
                 const afterPageNode = findParentNode(
-                  (node) => node.type.name === PAGE
+                  (node) => node.type.name === PAGE,
                 )(vm)
                 //找到上一个page 获取到最后一个点 然后设置 光标选中
                 if (afterPageNode) {
@@ -263,7 +268,7 @@ export default Node.create({
                   //EXTEND 是扩展类型 是可以删除并合并的
                   const selection1 = TextSelection.create(doc, pos1, pos1)
                   const curBlock = findParentNode((node) => node.attrs.extend)(
-                    selection1
+                    selection1,
                   )
                   if (curBlock) {
                     tr.step(new ReplaceStep(pos, pos1, Slice.empty))
@@ -273,18 +278,18 @@ export default Node.create({
               }
             }
             return false
-          })
+          }),
       ])
     const handleTab = () =>
       this.editor.commands.first(({ commands }) => [
         () => {
           return true
-        }
+        },
       ])
     return {
       Backspace: handleBackspace,
       Delete: handleDelete,
-      Tab: handleTab
+      Tab: handleTab,
     }
   },
   addProseMirrorPlugins() {
@@ -293,13 +298,13 @@ export default Node.create({
   addNodeView() {
     1
     return this.options.View
-  }
+  },
 })
 
 export function getSplittedAttributes(
   extensionAttributes,
   typeName,
-  attributes
+  attributes,
 ) {
   return Object.fromEntries(
     Object.entries(attributes).filter(([name]) => {
@@ -312,7 +317,7 @@ export function getSplittedAttributes(
       }
 
       return extensionAttribute.attribute.keepOnSplit
-    })
+    }),
   )
 }
 
@@ -323,9 +328,9 @@ const deleteSelection = (commands) => {
       doc,
       {
         from: selection.from,
-        to: selection.to
+        to: selection.to,
       },
-      (node) => node.type.name == CASSIE_BLOCK
+      (node) => node.type.name == CASSIE_BLOCK,
     )
     for (let i = 0; i < nodesInChangedRanges.length; i++) {
       const node = nodesInChangedRanges[i]

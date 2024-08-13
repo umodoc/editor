@@ -12,7 +12,7 @@ import {
   BULLETLIST,
   TABLE_CELL,
   TASKITEM,
-  TASKLIST
+  TASKLIST,
 } from './node-names'
 import { Fragment, Slice } from '@tiptap/pm/model'
 import {
@@ -20,7 +20,7 @@ import {
   getBreakPos,
   getDefault,
   getDomHeight,
-  getId
+  getId,
 } from './core'
 import { getNodeType } from '@tiptap/core'
 import { ReplaceStep } from '@tiptap/pm/transform'
@@ -156,7 +156,7 @@ export const defaultNodesComputed = {
     const chunks = splitContex.splitResolve(pos)
     splitContex.setBoundary(pos, chunks.length - 1)
     return false
-  }
+  },
 }
 
 /**
@@ -238,7 +238,7 @@ export class SplitContext {
   setBoundary(pos, depth) {
     this.#pageBoundary = {
       pos,
-      depth
+      depth,
     }
   }
 
@@ -321,7 +321,7 @@ export class PageComputedContext {
     margin-right: 6px;`,
         'color: rgba(0,0,0,.5)',
         `color: #069f69;
-    font-weight: bold`
+    font-weight: bold`,
       )
     }
 
@@ -357,7 +357,7 @@ export class PageComputedContext {
    */
   splitDocument() {
     const { schema } = this.state
-    for (; ;) {
+    for (;;) {
       // 获取最后一个page计算高度，如果返回值存在的话证明需要分割
       const splitInfo = this.getNodeHeight()
       if (!splitInfo) return
@@ -366,7 +366,7 @@ export class PageComputedContext {
         pos: splitInfo.pos,
         depth: splitInfo.depth,
         typesAfter: [{ type }],
-        schema: schema
+        schema: schema,
       })
     }
   }
@@ -456,17 +456,17 @@ export class PageComputedContext {
       after = Fragment.from(
         typeAfter
           ? typeAfter.type.create(
-            {
-              id: getId(),
-              pageNumber: na?.attrs.pageNumber + 1
-            },
-            after
-          )
-          : na
+              {
+                id: getId(),
+                pageNumber: na?.attrs.pageNumber + 1,
+              },
+              after,
+            )
+          : na,
       )
     }
     tr.step(
-      new ReplaceStep(pos, pos, new Slice(before.append(after), depth, depth))
+      new ReplaceStep(pos, pos, new Slice(before.append(after), depth, depth)),
     )
     this.tr = tr
   }
@@ -491,7 +491,7 @@ export class PageComputedContext {
           if (beforeBolck.type == schema.nodes[PARAGRAPH]) {
           } else {
             tr = tr.step(
-              new ReplaceStep(mappedPos - 1, mappedPos + 1, Slice.empty)
+              new ReplaceStep(mappedPos - 1, mappedPos + 1, Slice.empty),
             )
           }
           return false
@@ -520,7 +520,7 @@ export class PageComputedContext {
       this.state.schema,
       doc,
       bodyOptions?.bodyHeight,
-      getDefault()
+      getDefault(),
     )
     const nodesComputed = this.nodesComputed
     const lastNode = doc.lastChild
@@ -541,7 +541,7 @@ export class PageComputedContext {
           node,
           pos,
           parentNode,
-          dom
+          dom,
         )
       }
       return false
