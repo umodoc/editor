@@ -68,6 +68,8 @@
 </template>
 
 <script setup>
+import getId from '@/utils/short-id'
+
 const { container, editor, blockMenu } = useStore()
 
 let menuActive = $ref(false)
@@ -84,16 +86,27 @@ const cutNodeToClipboard = () => {
   document.execCommand('cut')
 }
 const duplicateNode = () => {
-  editor.value.commands.setCurrentNodeSelection()
-  const { $anchor, node } = editor.value.state.selection
-  const selectionNode = $anchor.node(1) || node
-  editor.value
-    .chain()
-    .insertContentAt(
-      $anchor.pos + selectionNode.nodeSize - $anchor.depth,
-      selectionNode.toJSON(),
-    )
-    .run()
+  const selectionNode = editor.value.commands.getSelectionNode()
+  const getPosition = () => {
+    let point = 0
+    editor.value.state.doc.descendants((node, pos) => {
+      if (node == selectionNode) {
+        point = pos + node.nodeSize // 返回节点结束位置
+      }
+    })
+    return point
+  }
+  const tr = editor.value.state.tr
+  const copeNode = selectionNode.type.create(
+    {
+      ...selectionNode.attrs,
+      id: getId(),
+    },
+    selectionNode.content,
+    selectionNode.marks,
+  )
+  tr.insert(getPosition(), copeNode)
+  editor.value.view.dispatch(tr)
 }
 const deleteNode = () => {
   editor.value?.chain().focus().deleteSelectionNode().run()

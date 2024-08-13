@@ -62,6 +62,7 @@ export default Extension.create({
       setCurrentNodeSelection:
         () =>
         ({ editor, chain }) => {
+          debugger
           let parentNode = findParentNode((node) =>
             LIST_TYPE.includes(node.type.name),
           )(editor.state.selection)
