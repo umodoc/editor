@@ -17,7 +17,6 @@ let menuScrollTop = $ref(0)
 
 // 更新菜单位置
 const updateMenuPostion = () => {
-  const pages = document.querySelectorAll(`${container} .page-node-view`)
   const currentBlock = document.querySelector(
     `${container} .page-node-content .node-focused`,
   )

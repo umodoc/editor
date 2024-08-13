@@ -92,6 +92,7 @@ const options = $ref({
   box-sizing: border-box;
   position: relative;
 }
+html,
 body {
   height: 100vh;
   overflow: hidden;
