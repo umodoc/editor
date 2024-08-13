@@ -119,10 +119,11 @@ export function getFlag(cnode, schema) {
     document.getElementById(cnode.attrs.id) ||
     iframeDoc.getElementById(cnode.attrs.id)
   if (!paragraphDOM) return null
-  const height = paragraphDOM.getBoundingClientRect().height
+  const height = getDomHeight(paragraphDOM)
   let lastChild = cnode.lastChild
   let childCount = cnode.childCount
   let content = cnode.content.content.slice(0, childCount)
+  if (!lastChild) return false
   if (lastChild.isText) {
     content.push(schema.text('gg'))
   }

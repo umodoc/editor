@@ -29,13 +29,8 @@
             width: page.margin.left + 'cm',
           }"
         ></div>
+
         <div class="page-node-header-content"></div>
-        <div
-          class="page-corner corner-tr"
-          :style="{
-            width: page.margin.right + 'cm',
-          }"
-        ></div>
       </div>
       <node-view-content
         class="page-node-content"
@@ -130,15 +125,18 @@ watch(
     display: flex;
     flex-direction: column;
   }
+
   .page-node-header,
   .page-node-footer {
     display: flex;
     justify-content: space-between;
   }
+
   .page-corner {
     box-sizing: border-box;
     position: relative;
     z-index: 10;
+
     &::after {
       position: absolute;
       content: '';
@@ -176,11 +174,13 @@ watch(
       left: 0;
     }
   }
+
   .page-node-header-content,
   .page-node-footer-content {
     flex: 1;
     padding: 10px 0;
   }
+
   .page-node-content {
     box-sizing: border-box;
     width: 100%;
