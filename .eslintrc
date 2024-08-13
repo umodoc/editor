@@ -3,23 +3,25 @@
   "extends": [
     "plugin:vue/vue3-essential",
     "eslint:recommended",
-    "@vue/eslint-config-prettier/skip-formatting",
+    "@vue/eslint-config-prettier/skip-formatting"
   ],
   "parserOptions": {
-    "ecmaVersion": "latest",
+    "ecmaVersion": "latest"
   },
-  "ignorePatterns": ["dist/**"],
+  "ignorePatterns": [
+    "dist/**"
+  ],
   "rules": {
     "vue/multi-word-component-names": "off",
     "no-undef": "off",
     "no-unused-vars": "off",
-    "no-empty": "off",
+    "no-empty": "off"
   },
   "globals": {
     "$ref": "readonly",
     "$computed": "readonly",
     "$shallowRef": "readonly",
     "$customRef": "readonly",
-    "$toRef": "readonly",
-  },
+    "$toRef": "readonly"
+  }
 }

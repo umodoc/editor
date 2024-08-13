@@ -215,6 +215,7 @@ export class UnitConversion {
 let unitConversion = null
 
 export function getPageOption(restore = false) {
+  if (restore) map.clear()
   if (!restore && map.has('pageOption')) {
     return map.get('pageOption')
   }
@@ -244,19 +245,25 @@ export function getPageOption(restore = false) {
 const map = new Map()
 
 export function computedHeight(html, id, cache = true) {
+  if (cache && map.has(id)) {
+    return map.get(id)
+  }
   const computeddiv = iframeDoc.getElementById('computeddiv')
   if (computeddiv) {
     computeddiv.innerHTML = '<p>&nbsp;</p>' + html
     const htmldiv = iframeDoc.getElementById(id)
     const { height } = getDomHeight(htmldiv)
     computeddiv.innerHTML = '&nbsp;'
+    if (cache) {
+      map.set(id, height)
+    }
     return height
   }
   return 0
 }
 
 export function computedWidth(html, cache = true) {
-  if (map.has(html)) {
+  if (cache && map.has(html)) {
     return map.get(html)
   }
   const computedspan = iframeDoc.getElementById('computedspan')
