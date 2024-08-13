@@ -20,17 +20,15 @@ import {
   getBreakPos,
   getDefault,
   getDomHeight,
-  getDomPaddingAndMargin,
   getId
 } from './core'
 import { getNodeType } from '@tiptap/core'
 import { ReplaceStep } from '@tiptap/pm/transform'
 
 export const sameListCalculation = (splitContex, node, pos, parent, dom) => {
-  const pHeight = getDomHeight(dom)
+  const { height: pHeight, margin } = getDomHeight(dom)
   if (splitContex.isOverflow(pHeight)) {
-    const h = getDomPaddingAndMargin(dom)
-    splitContex.addHeight(h)
+    splitContex.addHeight(margin)
     return true
   }
   splitContex.addHeight(pHeight)
@@ -40,10 +38,10 @@ let count = 1
 
 export const sameItemCalculation = (splitContex, node, pos, parent, dom) => {
   const chunks = splitContex.splitResolve(pos)
-  const pHeight = getDomHeight(dom)
+  const { height: pHeight, margin } = getDomHeight(dom)
   if (splitContex.isOverflow(pHeight)) {
     if (pHeight > splitContex.getHeight()) {
-      splitContex.addHeight(getDomPaddingAndMargin(dom))
+      splitContex.addHeight(margin)
       return true
     }
     if (parent?.firstChild == node) {
@@ -75,7 +73,7 @@ export const defaultNodesComputed = {
       }
       return false
     }
-    const pHeight = getDomHeight(dom)
+    const { height: pHeight } = getDomHeight(dom)
     if (splitContex.isOverflow(pHeight)) {
       if (pHeight > splitContex.getHeight()) {
         splitContex.addHeight(pHeight)
@@ -94,15 +92,18 @@ export const defaultNodesComputed = {
     return false
   },
   [TABLE]: (splitContex, node, pos, parent, dom) => {
-    const pHeight = getDomHeight(dom)
+    const { height: pHeight, margin } = getDomHeight(dom)
     //如果列表的高度超过分页高度 直接返回继续循环 tr 或者li
-    if (splitContex.isOverflow(pHeight)) return true
+    if (splitContex.isOverflow(pHeight)) {
+      splitContex.addHeight(margin)
+      return true
+    }
     //没有超过分页高度 累加高度
     splitContex.addHeight(pHeight)
     return false
   },
   [HEADING]: (splitContex, node, pos, parent, dom) => {
-    const pHeight = getDomHeight(dom)
+    const { height: pHeight } = getDomHeight(dom)
     if (!splitContex.isOverflow(pHeight)) {
       splitContex.addHeight(pHeight)
       return false
@@ -123,7 +124,7 @@ export const defaultNodesComputed = {
   },
 
   [PARAGRAPH]: (splitContex, node, pos, parent, dom) => {
-    const pHeight = getDomHeight(dom)
+    const { height: pHeight } = getDomHeight(dom)
     if (!splitContex.isOverflow(pHeight)) {
       splitContex.addHeight(pHeight)
       return false
@@ -147,7 +148,7 @@ export const defaultNodesComputed = {
     return node == splitContex.lastPage()
   },
   ['default']: (splitContex, node, pos, parent, dom) => {
-    const pHeight = getDomHeight(dom)
+    const { height: pHeight } = getDomHeight(dom)
     if (!splitContex.isOverflow(pHeight)) {
       splitContex.addHeight(pHeight)
       return false

@@ -48,7 +48,7 @@ function createAndCalculateHeight(node, content) {
  */
 function calculateNodeOverflowHeightAndPoint(node, dom, splitContex) {
   //获得 dom现有高度
-  const height = getDomHeight(dom)
+  const { height } = getDomHeight(dom)
   //拿到最后一个节点
   let lastChild = node.lastChild
   //获取当前需要计算的节点有多少个
@@ -247,7 +247,7 @@ export function computedHeight(html, id, cache = true) {
   if (computeddiv) {
     computeddiv.innerHTML = '<p>&nbsp;</p>' + html
     const htmldiv = iframeDoc.getElementById(id)
-    const height = getDomHeight(htmldiv)
+    const { height } = getDomHeight(htmldiv)
     computeddiv.innerHTML = '&nbsp;'
     return height
   }
@@ -280,23 +280,11 @@ export function getDefault() {
     return map.get('defaultheight')
   }
   const computedspan = iframeDoc.getElementById('computedspan')
-  const defaultheight = getDomHeight(computedspan)
-  map.set('defaultheight', defaultheight)
-  return defaultheight
+  const { height: pHeight } = getDomHeight(computedspan)
+  map.set('defaultheight', pHeight)
+  return pHeight
 }
 
-export function getDomPaddingAndMargin(dom) {
-  const contentStyle =
-    window.getComputedStyle(dom) ||
-    iframeComputed.contentWindow.getComputedStyle(dom)
-  const paddingTop = contentStyle.getPropertyValue('padding-top')
-  const paddingBottom = contentStyle.getPropertyValue('padding-bottom')
-  const marginTop = contentStyle.getPropertyValue('margin-top')
-  const marginBottom = contentStyle.getPropertyValue('margin-bottom')
-  const padding = parseFloat(paddingTop) + parseFloat(paddingBottom)
-  const margin = parseFloat(marginTop) + parseFloat(marginBottom)
-  return padding + margin + parseFloat(contentStyle.borderWidth)
-}
 
 export function getDomHeight(dom) {
   const contentStyle =
@@ -305,7 +293,7 @@ export function getDomHeight(dom) {
   const marginTop = contentStyle.getPropertyValue('margin-top')
   const marginBottom = contentStyle.getPropertyValue('margin-bottom')
   const margin = parseFloat(marginTop) + parseFloat(marginBottom)
-  return 0 + margin + dom.offsetHeight + parseFloat(contentStyle.borderWidth)
+  return { margin, height: (margin + dom.offsetHeight + parseFloat(contentStyle.borderWidth)) }
 }
 
 function findTextblockHacksIds(node) {
