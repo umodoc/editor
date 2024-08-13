@@ -136,6 +136,7 @@ watch(
   .page-corner {
     box-sizing: border-box;
     position: relative;
+    z-index: 10;
     &::after {
       position: absolute;
       content: '';
