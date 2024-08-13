@@ -379,7 +379,7 @@ function clonePageToIframe() {
   iframeComputed.setAttribute('id', 'computediframe')
   iframeComputed.setAttribute(
     'style',
-    'width: 100%;height: 1000px;'
+    'width: 100%;height: 100%;opacity: 0;position: absolute;z-index: -89;margin-left:-2003px;'
   )
   iframeDoc =
     iframeComputed.contentDocument || iframeComputed.contentWindow.document
