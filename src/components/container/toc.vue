@@ -50,7 +50,12 @@ const headingClick = (heading) => {
   const element = editor.value.view.dom.querySelector(
     `[data-toc-id="${heading.id}"`,
   )
-  element.scrollIntoView()
+  const pageContainer = document.querySelector(
+    `${container} .zoomable-container`,
+  )
+  pageContainer.scrollTo({
+    top: element.offsetTop + 10,
+  })
   const pos = editor.value.view.posAtDOM(element, 0)
   const tr = editor.value.view.state.tr
   tr.setSelection(new TextSelection(tr.doc.resolve(pos)))
