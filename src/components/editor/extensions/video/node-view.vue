@@ -60,7 +60,7 @@ const nodeStyle = $computed(() => {
   return {
     'justify-content': nodeAlign,
     marginTop,
-    marginBottom
+    marginBottom,
   }
 })
 

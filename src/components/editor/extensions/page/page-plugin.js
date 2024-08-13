@@ -6,7 +6,7 @@ import {
   IFRAME,
   CODE_BLOCK,
   TOC,
-  VIDEO
+  VIDEO,
 } from './node-names'
 import {
   buildComputedHtml,
@@ -15,7 +15,7 @@ import {
   findParentDomRefOfType,
   getId,
   getDomHeight,
-  getPageOption
+  getPageOption,
 } from './core'
 import { defaultNodesComputed, PageComputedContext } from './computed'
 import { findParentNode } from '@tiptap/core'
@@ -78,7 +78,7 @@ class PageDetector {
     let deleting = false
     const pageDOM = findParentDomRefOfType(
       schema.nodes[PAGE],
-      domAtPos
+      domAtPos,
     )(selection)
 
     if (!pageDOM) return
@@ -154,7 +154,7 @@ export const pagePlugin = (editor, nodesComputed) => {
        * */
       apply: (tr, prevState) => {
         return prevState.transform(tr)
-      }
+      },
     },
     appendTransaction([newTr], _prevState, state) {
       removeAbsentHtmlH()
@@ -162,7 +162,7 @@ export const pagePlugin = (editor, nodesComputed) => {
         editor,
         { ...defaultNodesComputed, ...nodesComputed },
         this.getState(state),
-        state
+        state,
       )
       return page.run()
     },
@@ -174,15 +174,15 @@ export const pagePlugin = (editor, nodesComputed) => {
 
         compositionend(view, event) {
           composition = false
-        }
+        },
       },
       transformPasted(slice, view) {
         slice.content.descendants((node) => {
           node.attrs.id = getId()
         })
         return slice
-      }
-    }
+      },
+    },
   })
   return plugin
 }
@@ -197,7 +197,7 @@ export const idPlugin = (types) => {
       apply: (tr, prevState) => {
         let data = tr.getMeta('splitPage')
         return data
-      }
+      },
     },
     appendTransaction(transactions, _prevState, nextState) {
       const tr = nextState.tr
@@ -213,7 +213,7 @@ export const idPlugin = (types) => {
         })
       }
       return modified ? tr : null
-    }
+    },
   })
   return plugin
 }

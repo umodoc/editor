@@ -86,7 +86,7 @@ const nodeStyle = $computed(() => {
   return {
     'justify-content': nodeAlign,
     marginTop,
-    marginBottom
+    marginBottom,
   }
 })
 
@@ -144,7 +144,7 @@ watch(
     const width = imageRef.offsetWidth
     const height = imageRef.offsetHeight
     updateAttributes({ width, height })
-  }
+  },
 )
 watch(
   () => node.attrs.src,
@@ -161,7 +161,7 @@ watch(
         }
         const filename = shortId(10)
         const file = await base64ToFile(src, `${filename}.${ext}`, {
-          type
+          type,
         })
         updateAttributes({ file })
       }
@@ -169,13 +169,13 @@ watch(
       uploadImage()
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 watch(
   () => error.value,
   ({ type }) => {
     updateAttributes({ error: type === 'error' })
-  }
+  },
 )
 </script>
 

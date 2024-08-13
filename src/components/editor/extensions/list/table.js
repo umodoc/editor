@@ -1,6 +1,4 @@
-import { Table } from "@tiptap/extension-table";
+import { Table } from '@tiptap/extension-table'
 export default Table.extend({
-  content: "tableRow*",
-});
-
-
+  content: 'tableRow*',
+})
