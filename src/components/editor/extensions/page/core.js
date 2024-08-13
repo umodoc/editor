@@ -245,8 +245,8 @@ export function getPageOption(restore = false) {
 const map = new Map()
 
 export function computedHeight(html, id, cache = true) {
-  if (cache && map.has(id)) {
-    return map.get(id)
+  if (cache && map.has(html)) {
+    return map.get(html)
   }
   const computeddiv = iframeDoc.getElementById('computeddiv')
   if (computeddiv) {
@@ -255,7 +255,7 @@ export function computedHeight(html, id, cache = true) {
     const { height } = getDomHeight(htmldiv)
     computeddiv.innerHTML = '&nbsp;'
     if (cache) {
-      map.set(id, height)
+      map.set(html, height)
     }
     return height
   }
