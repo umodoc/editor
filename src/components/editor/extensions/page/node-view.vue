@@ -227,6 +227,7 @@ watch(
   .page-node-view-handler {
     cursor: vertical-text;
     background-color: var(--page-background);
+    margin-top: -10px;
     &::after {
       content: '';
       display: block;
@@ -234,24 +235,24 @@ watch(
       height: 1px;
       position: absolute;
       border-bottom: dashed 1px var(--umo-border-color);
-      top: 18px;
+      top: 9px;
     }
   }
   .page-watermark {
-    padding: var(--umo-content-node-bottom) 0;
+    padding: 20px 0;
     height: calc(
       var(--page-height) - var(--page-margin-top) - var(--page-margin-bottom)
     );
   }
   &:first-child {
     .page-watermark {
-      padding: 0;
+      padding-top: 0;
       height: calc(var(--page-height) - var(--page-margin-top));
     }
   }
   &:last-child {
     .page-watermark {
-      padding-bottom: var(--umo-content-node-bottom);
+      padding-bottom: 0;
       height: calc(var(--page-height) - var(--page-margin-bottom));
     }
   }
