@@ -517,7 +517,8 @@
   },
   "pageBreak": {
     "title": "分页模式",
-    "disable": "退出费用模式"
+    "disable": "退出分页模式",
+    "toggle": "双击切换分页"
   },
   "shortcut": {
     "title": "快捷键列表",

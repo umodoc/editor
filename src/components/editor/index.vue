@@ -5,6 +5,7 @@
     :class="{
       'show-line-number': page.showLineNumber,
       'format-painter': painter.enabled,
+      'disable-page-break': !page.pageBreak,
     }"
     :style="{ lineHeight: defaultLineHeight }"
     :editor="editor"
@@ -94,7 +95,7 @@ import FileHandler from './extensions/file-handler'
 import Dropcursor from '@tiptap/extension-dropcursor'
 
 import shortId from '@/utils/short-id'
-import { pagePlugin } from '@/components/editor/extensions/page/page-plugin'
+import { pagePlugin } from './extensions/page/page-plugin'
 
 const {
   options,
@@ -236,14 +237,18 @@ const editorInstance = new Editor({
     }),
     ...options.value.extensions,
   ],
+  onCreate({ editor }) {
+    editor.registerPlugin(pagePlugin(editor, {}))
+    setTimeout(() => {
+      const tr = editor.state.tr.setMeta('splitPage', true)
+      editor.view.dispatch(tr)
+    }, 500)
+  },
   onUpdate({ editor }) {
     $document.value.content = editor.getHTML()
   },
 })
 setEditor(editorInstance)
-/*setTimeout(() => {
-  editor.value?.view.dispatch(editor.value?.state.tr.setMeta("splitPage", true));
-}, 1000);*/
 
 // 动态导入 katex 样式
 onMounted(() => {
@@ -289,14 +294,6 @@ watch(
 
 // 销毁编辑器实例
 onBeforeUnmount(() => editorInstance.destroy())
-window.onload = () => {
-  editor.value?.registerPlugin(pagePlugin(editor.value, {}))
-  setTimeout(() => {
-    editor.value?.view.dispatch(
-      editor.value?.state.tr.setMeta('splitPage', true),
-    )
-  }, 1000)
-}
 </script>
 
 <style lang="less">

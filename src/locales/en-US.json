@@ -517,7 +517,8 @@
   },
   "pageBreak": {
     "title": "Page Break",
-    "disable": "Exit Page Break"
+    "disable": "Exit Page Break",
+    "toggle": "Double Click to Switch Paging"
   },
   "shortcut": {
     "title": "Keyboard Shortcuts",

@@ -30,19 +30,21 @@
           <icon name="spellcheck" color="red" />
         </t-button>
       </tooltip>
-      <!-- <tooltip
-        :content="page.pageBreak ? t('pageBreak.disable') : t('pageBreak.title')"
+      <tooltip
+        :content="
+          page.pageBreak ? t('pageBreak.disable') : t('pageBreak.title')
+        "
       >
         <t-button
           class="bar-button"
           :class="{ active: page.pageBreak }"
           variant="text"
           size="small"
-          @click="page.pageBreak=!page.pageBreak"
+          @click="togglePageBreak"
         >
           <icon name="page-break" />
         </t-button>
-      </tooltip> -->
+      </tooltip>
       <tooltip :content="t('shortcut.title')">
         <t-button
           class="bar-button"
@@ -244,6 +246,13 @@ const $document = useState('document')
 const showShortcut = $ref(false)
 
 const reset = inject('reset')
+
+// 分页
+const togglePageBreak = () => {
+  page.value.pageBreak = !page.value.pageBreak
+  const tr = editor.value.state.tr.setMeta('splitPage', false)
+  editor.value.view.dispatch(tr)
+}
 
 // 字数统计
 const selectionCharacters = computed(() => {

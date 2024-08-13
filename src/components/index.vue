@@ -138,6 +138,7 @@ const setTheme = (theme) => {
     setTheme(e.matches ? 'dark' : 'light')
   })
 }
+
 onMounted(() => {
   setTheme(options.value.theme)
 })

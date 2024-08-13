@@ -73,7 +73,12 @@ const setPageZoomHeight = () => {
   pageZoomHeight = (el.clientHeight * page.value.zoomLevel) / 100 + 'px'
 }
 watch(
-  () => [page.value.zoomLevel, page.value.size, page.value.orientation],
+  () => [
+    page.value.zoomLevel,
+    page.value.size,
+    page.value.orientation,
+    page.value.pageBreak,
+  ],
   async () => {
     await nextTick()
     setTimeout(() => setPageZoomHeight(), 100)

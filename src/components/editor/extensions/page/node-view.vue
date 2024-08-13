@@ -4,33 +4,37 @@
     class="page-node-view"
     :class="{ 'no-shadow': exportImage }"
     :style="{
-      background: page.background,
+      '--page-background': page.background,
+      '--page-margin-top': page.margin.top + 'cm',
+      '--page-margin-bottom': page.margin.bottom + 'cm',
+      '--page-margin-left': page.margin.left + 'cm',
+      '--page-margin-right': page.margin.right + 'cm',
+      '--page-width': pageSize.width + 'cm',
+      '--page-height': pageSize.height + 'cm',
     }"
   >
+    <div
+      class="page-node-view-handler"
+      :title="t('pageBreak.toggle')"
+      @dblclick="page.pageBreak = !page.pageBreak"
+    ></div>
     <t-watermark
       class="page-watermark"
       :alpha="page.watermark.alpha"
       v-bind="watermarkOptions"
       :watermark-content="page.watermark"
-      :style="{
-        width: pageSize.width + 'cm',
-        height: pageSize.height + 'cm',
-      }"
     >
-      <div
-        class="page-node-header"
-        :style="{
-          height: page.margin.top + 'cm',
-        }"
-      >
+      <div class="page-node-header">
         <div
           class="page-corner corner-tl"
-          :style="{
-            width: page.margin.left + 'cm',
-          }"
+          style="width: var(--page-margin-left)"
         ></div>
 
         <div class="page-node-header-content"></div>
+        <div
+          class="page-corner corner-tr"
+          style="width: var(--page-margin-right)"
+        ></div>
       </div>
       <node-view-content
         class="page-node-content"
@@ -39,24 +43,15 @@
           height: pageSize.height - page.margin.top - page.margin.bottom + 'cm',
         }"
       />
-      <div
-        class="page-node-footer"
-        :style="{
-          height: page.margin.bottom + 'cm',
-        }"
-      >
+      <div class="page-node-footer">
         <div
           class="page-corner corner-bl"
-          :style="{
-            width: page.margin.left + 'cm',
-          }"
+          style="width: var(--page-margin-left)"
         ></div>
         <div class="page-node-footer-content"></div>
         <div
           class="page-corner corner-br"
-          :style="{
-            width: page.margin.right + 'cm',
-          }"
+          style="width: var(--page-margin-right)"
         ></div>
       </div>
     </t-watermark>
@@ -100,6 +95,7 @@ watch(
 <style lang="less" scoped>
 .page-node-view {
   box-sizing: border-box;
+  background-color: var(--page-background);
 
   &.no-shadow {
     border: solid 1px var(--umo-border-color);
@@ -120,12 +116,37 @@ watch(
     margin-bottom: 15px;
   }
 
+  .page-node-view-handler {
+    position: absolute;
+    width: 100%;
+    height: 20px;
+    cursor: row-resize;
+    margin-top: -20px;
+    z-index: 5;
+  }
+  &:first-child {
+    .page-node-view-handler {
+      display: none;
+      margin-top: 0;
+    }
+  }
+
   .page-watermark {
     position: unset !important;
     display: flex;
     flex-direction: column;
+    width: var(--page-width);
+    height: var(--page-height);
   }
 
+  .page-node-header {
+    height: var(--page-margin-top);
+    min-height: var(--page-margin-top);
+  }
+  .page-node-footer {
+    height: var(--page-margin-bottom);
+    min-height: var(--page-margin-bottom);
+  }
   .page-node-header,
   .page-node-footer {
     display: flex;
@@ -185,6 +206,54 @@ watch(
     box-sizing: border-box;
     width: 100%;
     flex: 1;
+  }
+}
+</style>
+
+<style lang="less">
+.disable-page-break .page-node-view {
+  &:not(:first-child) {
+    margin-top: 0 !important;
+    .page-node-header {
+      display: none;
+    }
+  }
+  &:not(:last-child) {
+    margin-bottom: 0 !important;
+    .page-node-footer {
+      display: none;
+    }
+  }
+  .page-node-view-handler {
+    cursor: vertical-text;
+    background-color: var(--page-background);
+    &::after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 1px;
+      position: absolute;
+      border-bottom: dashed 1px var(--umo-border-color);
+      top: 18px;
+    }
+  }
+  .page-watermark {
+    padding: var(--umo-content-node-bottom) 0;
+    height: calc(
+      var(--page-height) - var(--page-margin-top) - var(--page-margin-bottom)
+    );
+  }
+  &:first-child {
+    .page-watermark {
+      padding: 0;
+      height: calc(var(--page-height) - var(--page-margin-top));
+    }
+  }
+  &:last-child {
+    .page-watermark {
+      padding-bottom: var(--umo-content-node-bottom);
+      height: calc(var(--page-height) - var(--page-margin-bottom));
+    }
   }
 }
 </style>
