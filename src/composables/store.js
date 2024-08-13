@@ -52,7 +52,7 @@ export const useStore = createGlobalState(() => {
         watermark,
         showLineNumber: false,
         showToc: false,
-        pageBreak: true,
+        pagination: true,
         zoomLevel: 100,
         autoWidth: false,
         preview: {

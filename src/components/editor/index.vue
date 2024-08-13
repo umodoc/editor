@@ -5,7 +5,7 @@
     :class="{
       'show-line-number': page.showLineNumber,
       'format-painter': painter.enabled,
-      'disable-page-break': !page.pageBreak,
+      'disable-page-break': !page.pagination,
     }"
     :style="{ lineHeight: defaultLineHeight }"
     :editor="editor"

@@ -1,7 +1,7 @@
 import { Node, mergeAttributes } from '@tiptap/core'
 
 export default Node.create({
-  name: 'pageBreak',
+  name: 'pagination',
   group: 'block',
   addOptions() {
     return {

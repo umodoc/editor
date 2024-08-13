@@ -32,15 +32,15 @@
       </tooltip>
       <tooltip
         :content="
-          page.pageBreak ? t('pageBreak.disable') : t('pageBreak.title')
+          page.pagination ? t('pagination.disable') : t('pagination.title')
         "
       >
         <t-button
           class="bar-button"
-          :class="{ active: page.pageBreak }"
+          :class="{ active: page.pagination }"
           variant="text"
           size="small"
-          @click="togglePageBreak"
+          @click="togglePagination"
         >
           <icon name="page-break" />
         </t-button>
@@ -248,8 +248,8 @@ const showShortcut = $ref(false)
 const reset = inject('reset')
 
 // 分页
-const togglePageBreak = () => {
-  page.value.pageBreak = !page.value.pageBreak
+const togglePagination = () => {
+  page.value.pagination = !page.value.pagination
   const tr = editor.value.state.tr.setMeta('splitPage', false)
   editor.value.view.dispatch(tr)
 }

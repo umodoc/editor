@@ -2,7 +2,7 @@
   <template
     v-if="
       editor?.isActive('toc') ||
-      editor?.isActive('pageBreak') ||
+      editor?.isActive('pagination') ||
       editor?.isActive('horizontalRule') ||
       editor?.getAttributes('image').error
     "

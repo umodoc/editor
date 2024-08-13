@@ -37,7 +37,7 @@ const updateMenuPostion = () => {
   ) {
     offsetY = 5
   }
-  if (editor.value.isActive('pageBreak')) {
+  if (editor.value.isActive('pagination')) {
     offsetY = -4
   }
 

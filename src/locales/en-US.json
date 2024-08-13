@@ -515,7 +515,7 @@
     "enable": "Enable Spell Check",
     "disable": "Disable Spell Check"
   },
-  "pageBreak": {
+  "pagination": {
     "title": "Page Break",
     "disable": "Exit Page Break",
     "toggle": "Double Click to Switch Paging"

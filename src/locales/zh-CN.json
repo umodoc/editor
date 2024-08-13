@@ -515,7 +515,7 @@
     "enable": "开启拼写检查",
     "disable": "关闭拼写检查"
   },
-  "pageBreak": {
+  "pagination": {
     "title": "分页模式",
     "disable": "退出分页模式",
     "toggle": "双击切换分页"

@@ -15,8 +15,8 @@
   >
     <div
       class="page-node-view-handler"
-      :title="t('pageBreak.toggle')"
-      @dblclick="page.pageBreak = !page.pageBreak"
+      :title="t('pagination.toggle')"
+      @dblclick="page.pagination = !page.pagination"
     ></div>
     <t-watermark
       class="page-watermark"

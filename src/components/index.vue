@@ -328,6 +328,15 @@ const setContent = (
     .focus(options.focusPosition, options.focusOptions)
     .run()
 }
+const setPagination = (enabled) => {
+  if (!editor.value) {
+    throw new Error('editor is not ready!')
+  }
+  if (typeof enabled !== 'boolean') {
+    throw new Error('"enabled" must be a boolean.')
+  }
+  page.value.pagination = enabled
+}
 const setLocale = (parmas) => {
   if (!['zh-CN', 'en-US'].includes(parmas)) {
     throw new Error('"parmas" must be one of "zh-CN" or "en-US".')
@@ -489,6 +498,7 @@ defineExpose({
   setLocale,
   setTheme,
   getContent,
+  setPagination,
   getImage,
   getText,
   getHTML,

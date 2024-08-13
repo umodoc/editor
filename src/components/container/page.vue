@@ -77,7 +77,7 @@ watch(
     page.value.zoomLevel,
     page.value.size,
     page.value.orientation,
-    page.value.pageBreak,
+    page.value.pagination,
   ],
   async () => {
     await nextTick()
