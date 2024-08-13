@@ -315,13 +315,12 @@ export class PageComputedContext {
       console.info(
         `%cUmo Editor%c${c} %c[分页用时${Math.round(endTime - startTime)}ms]`,
         `background: #015beb;
-    color: #fff;
-    border-radius: 2px;
-    padding: 2px 5px;
-    margin-right: 6px;`,
+         color: #fff;
+         border-radius: 2px;
+         padding: 2px 5px;
+         margin-right: 6px;`,
         'color: rgba(0,0,0,.5)',
-        `color: #069f69;
-    font-weight: bold`,
+        `color: #069f69;font-weight: bold`,
       )
     }
 

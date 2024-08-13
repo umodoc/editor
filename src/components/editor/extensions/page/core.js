@@ -335,7 +335,8 @@ export function removeAbsentHtmlH() {
 }
 
 export function removeComputedHtml() {
-  const iframeComputed1 = document.getElementById('computediframe')
+  const { container } = useStore()
+  const iframeComputed1 = document.querySelector(`${container}-computediframe`)
   if (iframeComputed1) {
     document.body.removeChild(iframeComputed1)
     iframeComputed = null
@@ -378,9 +379,13 @@ export function changeComputedHtml() {
 
 function clonePageToIframe() {
   const iframe = createIframe()
+  const { container } = useStore()
   iframeComputed = iframe
-  iframeComputed.setAttribute('id', 'computediframe')
-  iframeComputed.setAttribute('style', 'width: 100%;height: 1000px;')
+  iframeComputed.setAttribute(
+    'id',
+    `${container.replace('#', '')}-computediframe`,
+  )
+  iframeComputed.setAttribute('class', 'editor-page-computed')
   iframeDoc =
     iframeComputed.contentDocument || iframeComputed.contentWindow.document
   copyStylesToIframe(iframeDoc)
