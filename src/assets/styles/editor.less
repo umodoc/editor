@@ -319,16 +319,18 @@
     height: 1px;
     background: var(--umo-content-node-border);
     break-before: page;
-    margin: 4px 0 0 !important;
+    margin: var(--umo-content-node-bottom) 0 0 !important;
     position: relative;
+    z-index: 2 !important;
     &::after {
       content: attr(data-content);
       font-size: 10px;
       border: solid 1px var(--umo-content-node-border);
-      padding: 1px 8px;
+      padding: 0 8px;
       border-radius: 2px;
       background-color: var(--umo-color-white);
       position: absolute;
+      z-index: 10000;
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
