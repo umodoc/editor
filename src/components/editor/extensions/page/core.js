@@ -13,15 +13,15 @@ export function getHTMLFromFragment(doc, schema, options) {
     DOMSerializer.fromSchema(schema).serializeFragment(
       doc.content,
       { document: options.document },
-      wrap,
+      wrap
     )
     return wrap.innerHTML
   }
   const zeedDocument = DOMSerializer.fromSchema(schema).serializeFragment(
     doc.content,
     {
-      document: createHTMLDocument(),
-    },
+      document: createHTMLDocument()
+    }
   )
 
   return zeedDocument.render()
@@ -76,7 +76,7 @@ function calculateNodeOverflowHeightAndPoint(node, dom, splitContex) {
         //计算高度
         let htmlNodeHeight = createAndCalculateHeight(node, [
           ...calculateContent,
-          splitContex.schema.text(calculatetext, lastChild.marks),
+          splitContex.schema.text(calculatetext, lastChild.marks)
         ])
         if (
           height > htmlNodeHeight &&
@@ -122,13 +122,13 @@ export function getFlag(cnode, schema) {
   const height = paragraphDOM.getBoundingClientRect().height
   let lastChild = cnode.lastChild
   let childCount = cnode.childCount
-  let content = cnode.content.content
+  let content = cnode.content.content.slice(0, childCount)
   if (lastChild.isText) {
     content.push(schema.text('gg'))
   }
   const html = generateHTML(
     getJsonFromDoc(cnode.type.create(cnode.attrs, content, cnode.marks)),
-    schema,
+    schema
   )
   const htmlNodeHeight = computedHeight(html, cnode.attrs.id, false)
   return htmlNodeHeight > height
@@ -155,7 +155,7 @@ export function getBreakPos(cnode, dom, splitContex) {
 export function getJsonFromDoc(node) {
   return {
     type: 'doc',
-    content: [node.toJSON()],
+    content: [node.toJSON()]
   }
 }
 
@@ -224,7 +224,7 @@ export function getPageOption(restore = false) {
     const { width, height } = page.value.size
     return {
       width: page.value.orientation === 'portrait' ? width : height,
-      height: page.value.orientation === 'portrait' ? height : width,
+      height: page.value.orientation === 'portrait' ? height : width
     }
   }
   const { width, height } = pageSize()
@@ -234,7 +234,7 @@ export function getPageOption(restore = false) {
     right: unitConversion.cmConversionPx(right),
     left: unitConversion.cmConversionPx(left),
     bottom: unitConversion.cmConversionPx(bottom),
-    top: unitConversion.cmConversionPx(top),
+    top: unitConversion.cmConversionPx(top)
   }
   map.set('pageOption', pageOption)
   return pageOption
@@ -320,18 +320,17 @@ function findTextblockHacksIds(node) {
 
 export function getAbsentHtmlH(node, schema) {
   if (!node.attrs.id) {
-    // @ts-ignore
     node.attrs.id = getId()
   }
   const html = generateHTML(getJsonFromDoc(node), schema)
   const computeddiv = iframeDoc.getElementById('computeddiv')
   let ids = findTextblockHacksIds(node)
   if (computeddiv) {
-    computeddiv.innerHTML = html
+    computeddiv.innerHTML = '<p><br class=\'ProseMirror-trailingBreak\'></p>' + html
     ids.forEach((id) => {
       const nodeHtml = iframeDoc.getElementById(id)
       if (nodeHtml) {
-        nodeHtml.innerHTML = "<br class='ProseMirror-trailingBreak'>"
+        nodeHtml.innerHTML = '<br class=\'ProseMirror-trailingBreak\'>'
       }
     })
   }
@@ -369,7 +368,7 @@ export function changeComputedHtml() {
     const { width, height } = page.value.size
     return {
       width: page.value.orientation === 'portrait' ? width : height,
-      height: page.value.orientation === 'portrait' ? height : width,
+      height: page.value.orientation === 'portrait' ? height : width
     }
   }
   const { width, height } = pageSize()
@@ -378,11 +377,11 @@ export function changeComputedHtml() {
   let watermark = iframeDoc.getElementsByClassName('umo-watermark')[0]
   watermark.setAttribute(
     'style',
-    `width: ${width + 'cm'};height: ${height + 'cm'}`,
+    `width: ${width + 'cm'};height: ${height + 'cm'}`
   )
   pageContent.setAttribute(
     'style',
-    `padding-top: ${top + 'cm'};padding-right:  ${right + 'cm'};padding-bottom: ${bottom + 'cm'} ;padding-left:${left + 'cm'};min-height: ${height - top - bottom + 'cm'}`,
+    `padding-top: ${top + 'cm'};padding-right:  ${right + 'cm'};padding-bottom: ${bottom + 'cm'} ;padding-left:${left + 'cm'};min-height: ${height - top - bottom + 'cm'}`
   )
 }
 
@@ -392,7 +391,7 @@ function clonePageToIframe() {
   iframeComputed.setAttribute('id', 'computediframe')
   iframeComputed.setAttribute(
     'style',
-    'width: 100%;height: 100%;opacity: 0;position: absolute;z-index: -89;margin-left:-2003px;',
+    'width: 100%;height: 1000px;'
   )
   iframeDoc =
     iframeComputed.contentDocument || iframeComputed.contentWindow.document
@@ -421,7 +420,7 @@ function adddPForProseMirror(iframe) {
   const p = iframeDoc.createElement('p')
   p.setAttribute('id', 'computedspan')
   p.setAttribute('style', 'display: inline-block')
-  p.innerHTML = "<br class='ProseMirror-trailingBreak'>"
+  p.innerHTML = '<br class=\'ProseMirror-trailingBreak\'>'
   pageContent.appendChild(p)
   pageContent.setAttribute('contenteditable', 'false')
 }
@@ -486,7 +485,7 @@ export function getId() {
 export const findParentDomRefOfType = (nodeType, domAtPos) => (selection) => {
   return findParentDomRef(
     (node) => equalNodeType(nodeType, node),
-    domAtPos,
+    domAtPos
   )(selection)
 }
 export const equalNodeType = (nodeType, node) => {
@@ -520,8 +519,8 @@ export const findDomRefAtPos = (position, domAtPos) => {
 
 export const findParentNode =
   (predicate) =>
-  ({ $from }) =>
-    findParentNodeClosestToPos($from, predicate)
+    ({ $from }) =>
+      findParentNodeClosestToPos($from, predicate)
 
 export const findParentNodeClosestToPos = ($pos, predicate) => {
   for (let i = $pos.depth; i > 0; i--) {
@@ -531,7 +530,7 @@ export const findParentNodeClosestToPos = ($pos, predicate) => {
         pos: i > 0 ? $pos.before(i) : 0,
         start: $pos.start(i),
         depth: i,
-        node,
+        node
       }
     }
   }

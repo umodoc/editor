@@ -28,7 +28,11 @@ import { ReplaceStep } from '@tiptap/pm/transform'
 
 export const sameListCalculation = (splitContex, node, pos, parent, dom) => {
   const pHeight = getDomHeight(dom)
-  if (splitContex.isOverflow(pHeight)) return true
+  if (splitContex.isOverflow(pHeight)) {
+    const h = getDomPaddingAndMargin(dom)
+    splitContex.addHeight(h)
+    return true
+  }
   splitContex.addHeight(pHeight)
   return false
 }
