@@ -314,12 +314,12 @@
   }
   .page-break {
     display: block;
+    position: absolute;
     width: 100%;
     height: 1px;
     background: var(--umo-content-node-border);
     break-before: page;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin: 4px 0 0 !important;
     position: relative;
     &::after {
       content: attr(data-content);
