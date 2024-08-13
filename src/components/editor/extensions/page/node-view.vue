@@ -5,7 +5,6 @@
     :class="{ 'no-shadow': exportImage }"
     :style="{
       background: page.background,
-      transform: `scale(${page.zoomLevel / 100})`
     }"
   >
     <t-watermark
@@ -15,7 +14,6 @@
       :style="{
         width: pageSize.width + 'cm',
         height: pageSize.height + 'cm',
-
       }"
     >
       <div
@@ -50,7 +48,8 @@
         class="page-node-content"
         :style="{
           padding: `${page.margin.top + 'cm'} ${page.margin.right + 'cm'} ${page.margin.bottom + 'cm'} ${page.margin.left + 'cm'}`,
-          minHeight: pageSize.height-page.margin.top-page.margin.bottom + 'cm'
+          minHeight:
+            pageSize.height - page.margin.top - page.margin.bottom + 'cm',
         }"
       />
     </t-watermark>
@@ -67,14 +66,14 @@ const pageSize = $computed(() => {
   const { width, height } = page.value.size
   return {
     width: page.value.orientation === 'portrait' ? width : height,
-    height: page.value.orientation === 'portrait' ? height : width
+    height: page.value.orientation === 'portrait' ? height : width,
   }
 })
 
 // 水印
 const watermarkOptions = $ref({
   x: 0,
-  height: 0
+  height: 0,
 })
 watch(
   () => page.value.watermark,
@@ -87,7 +86,7 @@ watch(
       watermarkOptions.y = 360
     }
   },
-  { deep: true, immediate: true }
+  { deep: true, immediate: true },
 )
 </script>
 
@@ -101,8 +100,9 @@ watch(
   }
 
   &:not(.no-shadow) {
-    box-shadow: rgba(0, 0, 0, 0.06) 0px 0px 10px 0px,
-    rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
+    box-shadow:
+      rgba(0, 0, 0, 0.06) 0px 0px 10px 0px,
+      rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
   }
 
   &:not(:first-child) {
