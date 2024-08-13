@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { convertToHtml } from 'mammoth'
+import mammoth from 'mammoth'
 const { editor, options } = useStore()
 
 const importWord = () => {
@@ -61,7 +61,7 @@ const importWord = () => {
 
     // 默认使用 Mammoth 导入
     const arrayBuffer = file.arrayBuffer()
-    const { messages, value } = await convertToHtml(
+    const { messages, value } = await mammoth.convertToHtml(
       { arrayBuffer },
       options.value.toolbar.importWord.options,
     )
