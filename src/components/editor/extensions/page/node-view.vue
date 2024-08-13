@@ -5,10 +5,10 @@
     :class="{ 'no-shadow': exportImage }"
     :style="{
       background: page.background,
-      transform: `scale(${page.zoomLevel / 100})`,
     }"
   >
     <t-watermark
+      class="page-watermark"
       :alpha="page.watermark.alpha"
       v-bind="watermarkOptions"
       :watermark-content="page.watermark"
@@ -18,40 +18,50 @@
       }"
     >
       <div
-        class="page-corner corner-tl"
+        class="page-node-header"
         :style="{
-          left: page.margin.left - 1 + 'cm',
-          top: page.margin.top - 1 + 'cm',
+          height: page.margin.top + 'cm',
         }"
-      ></div>
-      <div
-        class="page-corner corner-tr"
-        :style="{
-          right: page.margin.right - 1 + 'cm',
-          top: page.margin.top - 1 + 'cm',
-        }"
-      ></div>
-      <div
-        class="page-corner corner-bl"
-        :style="{
-          left: page.margin.left - 1 + 'cm',
-          bottom: page.margin.bottom - 1 + 'cm',
-        }"
-      ></div>
-      <div
-        class="page-corner corner-br"
-        :style="{
-          right: page.margin.right - 1 + 'cm',
-          bottom: page.margin.bottom - 1 + 'cm',
-        }"
-      ></div>
+      >
+        <div
+          class="page-corner corner-tl"
+          :style="{
+            width: page.margin.left + 'cm',
+          }"
+        ></div>
+        <div
+          class="page-corner corner-tr"
+          :style="{
+            width: page.margin.right + 'cm',
+          }"
+        ></div>
+      </div>
       <node-view-content
         class="page-node-content"
         :style="{
-          padding: `${page.margin.top + 'cm'} ${page.margin.right + 'cm'} ${page.margin.bottom + 'cm'} ${page.margin.left + 'cm'}`,
+          padding: `0 ${page.margin.right + 'cm'} 0 ${page.margin.left + 'cm'}`,
           height: pageSize.height - page.margin.top - page.margin.bottom + 'cm',
         }"
       />
+      <div
+        class="page-node-footer"
+        :style="{
+          height: page.margin.bottom + 'cm',
+        }"
+      >
+        <div
+          class="page-corner corner-bl"
+          :style="{
+            width: page.margin.left + 'cm',
+          }"
+        ></div>
+        <div
+          class="page-corner corner-br"
+          :style="{
+            width: page.margin.right + 'cm',
+          }"
+        ></div>
+      </div>
     </t-watermark>
   </node-view-wrapper>
 </template>
@@ -113,37 +123,60 @@ watch(
     margin-bottom: 15px;
   }
 
+  .page-watermark {
+    position: unset !important;
+    display: flex;
+    flex-direction: column;
+  }
+  .page-node-header,
+  .page-node-footer {
+    display: flex;
+    justify-content: space-between;
+  }
+  .page-corner {
+    box-sizing: border-box;
+    position: relative;
+    &::after {
+      position: absolute;
+      content: '';
+      display: block;
+      height: 1cm;
+      width: 1cm;
+      border: solid 1px var(--umo-border-color);
+    }
+
+    &.corner-tl::after {
+      border-top: none;
+      border-left: none;
+      bottom: 0;
+      right: 0;
+    }
+
+    &.corner-tr::after {
+      border-top: none;
+      border-right: none;
+      bottom: 0;
+      left: 0;
+    }
+
+    &.corner-bl::after {
+      border-bottom: none;
+      border-left: none;
+      top: 0;
+      right: 0;
+    }
+
+    &.corner-br::after {
+      border-bottom: none;
+      border-right: none;
+      top: 0;
+      left: 0;
+    }
+  }
   .page-node-content {
     box-sizing: border-box;
     width: 100%;
-    height: 100%;
-  }
-
-  .page-corner {
-    position: absolute;
-    height: 1cm;
-    width: 1cm;
-    border: solid 1px var(--umo-border-color);
-
-    &.corner-tl {
-      border-top: none;
-      border-left: none;
-    }
-
-    &.corner-tr {
-      border-top: none;
-      border-right: none;
-    }
-
-    &.corner-bl {
-      border-bottom: none;
-      border-left: none;
-    }
-
-    &.corner-br {
-      border-bottom: none;
-      border-right: none;
-    }
+    flex: 1;
   }
 }
 </style>
