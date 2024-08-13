@@ -34,7 +34,7 @@ Please visit [Documentation](https://editor.umodoc.com/en/docs).
 
 ## Design Philosophy
 
-Umo Editor was created to address the complexity of document editing in web applications, providing web projects with open-source and powerful editing and collaborative capabilities similar to Office Word, while maintaining the convenience of web applications. Whether it's government and enterprise information management systems, academic research writing, team document collaboration, knowledge base management, or personal note organization, Umo Editor can be a powerful assistant.
+The birth of Umo Editor aims to address the complexity of document editing in web applications, providing open-source and free powerful editing capabilities and pagination modes similar to Microsoft Word for web projects, while maintaining the convenience of web applications. Whether it's government and enterprise information management systems, academic research writing, team document collaboration, knowledge base management, or personal note organization, Umo Editor can be your capable assistant.
 
 ## Open Source Advantages
 
