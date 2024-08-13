@@ -115,6 +115,7 @@
     "@vue/eslint-config-prettier": "^9.0.0",
     "eslint": "^9.8.0",
     "eslint-plugin-vue": "^9.27.0",
+    "husky": "^9.1.4",
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
     "prettier": "^3.3.3",
@@ -128,5 +129,10 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run format"
+    }
   }
 }
