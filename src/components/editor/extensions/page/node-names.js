@@ -27,3 +27,4 @@ export const TOC = 'toc'
 export const VIDEO = 'video'
 export const HORIZONTALRULE = 'horizontalrule'
 export const PAGEBREAK = 'pagination'
+export const LIST_TYPE = [TABLE, ORDEREDLIST, BULLETLIST, TASKLIST]

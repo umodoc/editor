@@ -237,13 +237,7 @@ const editorInstance = new Editor({
     }),
     ...options.value.extensions,
   ],
-  onCreate({ editor }) {
-    editor.registerPlugin(pagePlugin(editor, {}))
-    setTimeout(() => {
-      const tr = editor.state.tr.setMeta('splitPage', true)
-      editor.view.dispatch(tr)
-    }, 500)
-  },
+  onCreate({ editor }) {},
   onUpdate({ editor }) {
     $document.value.content = editor.getHTML()
   },
@@ -264,6 +258,13 @@ onMounted(() => {
     document.querySelector('head').append(style)
   }
 })
+window.onload = () => {
+  editorInstance.registerPlugin(pagePlugin(editor, {}))
+  setTimeout(() => {
+    const tr = editorInstance.state.tr.setMeta('splitPage', true)
+    editorInstance.view.dispatch(tr)
+  }, 500)
+}
 
 // 气泡菜单
 let tippyInstance = $ref(null)

@@ -1,6 +1,7 @@
-import { Extension } from '@tiptap/core'
+import { Extension, findParentNode } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
+import { LIST_TYPE } from '@/components/editor/extensions/page/node-names'
 
 export default Extension.create({
   name: 'selection',
@@ -43,29 +44,36 @@ export default Extension.create({
         },
       getSelectionNode:
         () =>
-        ({ editor }) => {
+        ({ editor, chain }) => {
           const { node } = editor.state.selection
           if (node) {
             return node
           }
-          editor.commands.selectParentNode()
+          let parentNode = findParentNode((node) =>
+            LIST_TYPE.includes(node.type.name),
+          )(editor.state.selection)
           const { $anchor } = editor.state.selection
-          return $anchor.node(1) || editor.state.selection.node
+          if (parentNode) {
+            return $anchor.node(parentNode.depth)
+          }
+          editor.commands.selectParentNode()
+          return editor.state.selection.node
         },
       setCurrentNodeSelection:
         () =>
         ({ editor, chain }) => {
-          editor.commands.selectParentNode()
-          const { $anchor } = editor.state.selection
-          return chain()
-            .setNodeSelection($anchor.pos - $anchor.depth)
-            .run()
+          let parentNode = findParentNode((node) =>
+            LIST_TYPE.includes(node.type.name),
+          )(editor.state.selection)
+          if (parentNode) {
+            return chain().setNodeSelection(parentNode.pos).run()
+          }
+          return editor.commands.selectParentNode()
         },
       deleteSelectionNode:
         () =>
         ({ editor, chain }) => {
           const node = editor.commands.getSelectionNode()
-          console.log(node)
           if (!node) {
             return
           }
