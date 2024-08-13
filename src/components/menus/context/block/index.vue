@@ -28,15 +28,6 @@ const updateMenuPostion = () => {
   // 当前元素距离页面顶部的距离
   let { offsetTop } = currentBlock
 
-  // 加上页面的高度
-  for (let index = 0; index < pages.length; index++) {
-    const item = pages[index]
-    if (item.contains(currentBlock)) {
-      offsetTop += index * (item.clientHeight + 15)
-      break
-    }
-  }
-
   // 微修正菜单位置
   offsetTop = currentBlock.tagName === 'DIV' ? offsetTop - 8 : offsetTop - 5
   let offsetY = 0

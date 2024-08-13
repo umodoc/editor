@@ -4,7 +4,6 @@
     class="editor-container"
     :class="{
       'show-line-number': page.showLineNumber,
-      'show-break-marks': page.showBreakMarks,
       'format-painter': painter.enabled,
     }"
     :style="{ lineHeight: defaultLineHeight }"
@@ -107,7 +106,7 @@ const {
   assistant,
   tableOfContents,
   setEditor,
-  editorDestroyed
+  editorDestroyed,
 } = useStore()
 const $document = useState('document')
 
@@ -127,13 +126,12 @@ const editorInstance = new Editor({
   enablePasteRules: enableRules,
   editorProps: {
     attributes: {
-      class: 'umo-editor'
+      class: 'umo-editor',
     },
-    ...options.value.document.editorProps
+    ...options.value.document.editorProps,
   },
   parseOptions: options.value.document.parseOptions,
   extensions: [
-
     StarterKit.configure({
       document: false,
       bold: false,
@@ -142,7 +140,7 @@ const editorInstance = new Editor({
       codeBlock: false,
       horizontalRule: false,
       gapcursor: true,
-      dropcursor: false
+      dropcursor: false,
     }),
     Document.extend({ content: 'page+' }),
     Page,
@@ -152,13 +150,13 @@ const editorInstance = new Editor({
     }),*/
     Focus.configure({
       className: 'node-focused',
-      mode: 'all'
+      mode: 'all',
     }),
     FormatPainter,
     FontFamily,
     FontSize,
     Bold.extend({
-      renderHTML: ({ HTMLAttributes }) => ['b', HTMLAttributes, 0]
+      renderHTML: ({ HTMLAttributes }) => ['b', HTMLAttributes, 0],
     }),
     Underline,
     Subscript,
@@ -166,7 +164,7 @@ const editorInstance = new Editor({
     Color,
     TextColor,
     Highlight.configure({
-      multicolor: true
+      multicolor: true,
     }),
     BulletList,
     OrderedList,
@@ -176,12 +174,12 @@ const editorInstance = new Editor({
     TaskItem.configure({ nested: true }),
     TaskList.configure({
       HTMLAttributes: {
-        class: 'task-list'
-      }
+        class: 'task-list',
+      },
     }),
     LineHeight.configure({
       types: ['heading', 'paragraph'],
-      defaultLineHeight
+      defaultLineHeight,
     }),
     Margin,
     SearchReplace,
@@ -198,7 +196,7 @@ const editorInstance = new Editor({
 
     // 表格
     Table.configure({
-      allowTableNodeSelection: true
+      allowTableNodeSelection: true,
     }),
     TableRow,
     TableHeader,
@@ -215,14 +213,14 @@ const editorInstance = new Editor({
       },
       scrollParent: () =>
         document.querySelector(`${container} .zoomable-container`),
-      getId: () => shortId(6)
+      getId: () => shortId(6),
     }),
     Typography.configure(options.value.document.typographyRules),
     CharacterCount.configure({
       limit:
         options.value.document.characterLimit !== 0
           ? options.value.document.characterLimit
-          : undefined
+          : undefined,
     }),
     FileHandler.configure({
       allowedMimeTypes: options.value.file.allowedMimeTypes,
@@ -231,16 +229,16 @@ const editorInstance = new Editor({
       },
       onDrop: (editor, files, pos) => {
         files.forEach((file) => editor.commands.insertFile({ file, pos }))
-      }
+      },
     }),
     Dropcursor.configure({
-      color: 'var(--umo-primary-color)'
+      color: 'var(--umo-primary-color)',
     }),
-    ...options.value.extensions
+    ...options.value.extensions,
   ],
   onUpdate({ editor }) {
     $document.value.content = editor.getHTML()
-  }
+  },
 })
 setEditor(editorInstance)
 /*setTimeout(() => {
@@ -276,7 +274,7 @@ const tippyOpitons = $ref({
   },
   onDestroy() {
     tippyInstance = null
-  }
+  },
 })
 
 // AI 助手
@@ -284,9 +282,9 @@ watch(
   () => assistant.value,
   (visible) => {
     tippyInstance?.setProps({
-      placement: visible ? 'bottom' : 'top'
+      placement: visible ? 'bottom' : 'top',
     })
-  }
+  },
 )
 
 // 销毁编辑器实例
@@ -295,7 +293,7 @@ window.onload = () => {
   editor.value?.registerPlugin(pagePlugin(editor.value, {}))
   setTimeout(() => {
     editor.value?.view.dispatch(
-      editor.value?.state.tr.setMeta('splitPage', true)
+      editor.value?.state.tr.setMeta('splitPage', true),
     )
   }, 1000)
 }

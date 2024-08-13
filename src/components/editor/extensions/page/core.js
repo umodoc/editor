@@ -10,16 +10,22 @@ import { createHTMLDocument, VHTMLDocument } from 'zeed-dom'
 export function getHTMLFromFragment(doc, schema, options) {
   if (options && options.document) {
     const wrap = options.document.createElement('div')
-    DOMSerializer.fromSchema(schema).serializeFragment(doc.content, { document: options.document }, wrap)
+    DOMSerializer.fromSchema(schema).serializeFragment(
+      doc.content,
+      { document: options.document },
+      wrap,
+    )
     return wrap.innerHTML
   }
-  const zeedDocument = DOMSerializer.fromSchema(schema).serializeFragment(doc.content, {
-    document: createHTMLDocument()
-  })
+  const zeedDocument = DOMSerializer.fromSchema(schema).serializeFragment(
+    doc.content,
+    {
+      document: createHTMLDocument(),
+    },
+  )
 
   return zeedDocument.render()
 }
-
 
 export function generateHTML(doc, schema) {
   const contentNode = Node.fromJSON(schema, doc)
@@ -52,7 +58,7 @@ function calculateNodeOverflowHeightAndPoint(node, dom, splitContex) {
   //获得到所有的节点 倒序遍历
 
   const content = node.content.content
-//倒序遍历content
+  //倒序遍历content
   for (let i = childCount - 1; i >= 0; i--) {
     if (point) break
     // @ts-ignore
@@ -68,15 +74,20 @@ function calculateNodeOverflowHeightAndPoint(node, dom, splitContex) {
       while (calculateLength) {
         let calculatetext = text.slice(0, calculateLength)
         //计算高度
-        let htmlNodeHeight = createAndCalculateHeight(node, [...calculateContent, splitContex.schema.text(calculatetext, lastChild.marks)])
-        if (height > htmlNodeHeight && !splitContex.isOverflow(htmlNodeHeight)) {
+        let htmlNodeHeight = createAndCalculateHeight(node, [
+          ...calculateContent,
+          splitContex.schema.text(calculatetext, lastChild.marks),
+        ])
+        if (
+          height > htmlNodeHeight &&
+          !splitContex.isOverflow(htmlNodeHeight)
+        ) {
           point = { i, calculateLength }
           break
         }
         calculateLength -= 1
       }
     } else {
-
       let htmlNodeHeight = createAndCalculateHeight(node, calculateContent)
       if (height > htmlNodeHeight && !splitContex.isOverflow(htmlNodeHeight)) {
         point = { i, calculateLength: 0 }
@@ -97,7 +108,6 @@ function calculateNodeOverflowHeightAndPoint(node, dom, splitContex) {
     }
   })
   return index
-
 }
 
 /**
@@ -105,7 +115,9 @@ function calculateNodeOverflowHeightAndPoint(node, dom, splitContex) {
  * @param cnode
  */
 export function getFlag(cnode, schema) {
-  const paragraphDOM = document.getElementById(cnode.attrs.id) || iframeDoc.getElementById(cnode.attrs.id)
+  const paragraphDOM =
+    document.getElementById(cnode.attrs.id) ||
+    iframeDoc.getElementById(cnode.attrs.id)
   if (!paragraphDOM) return null
   const height = paragraphDOM.getBoundingClientRect().height
   let lastChild = cnode.lastChild
@@ -114,7 +126,10 @@ export function getFlag(cnode, schema) {
   if (lastChild.isText) {
     content.push(schema.text('gg'))
   }
-  const html = generateHTML(getJsonFromDoc(cnode.type.create(cnode.attrs, content, cnode.marks)), schema)
+  const html = generateHTML(
+    getJsonFromDoc(cnode.type.create(cnode.attrs, content, cnode.marks)),
+    schema,
+  )
   const htmlNodeHeight = computedHeight(html, cnode.attrs.id, false)
   return htmlNodeHeight > height
 }
@@ -140,13 +155,12 @@ export function getBreakPos(cnode, dom, splitContex) {
 export function getJsonFromDoc(node) {
   return {
     type: 'doc',
-    content: [node.toJSON()]
+    content: [node.toJSON()],
   }
 }
 
 let iframeComputed = null
 var iframeDoc = null
-
 
 export class UnitConversion {
   arrDPI = []
@@ -158,7 +172,8 @@ export class UnitConversion {
       arr.push(window.screen.deviceYDPI)
     } else {
       const tmpNode = document.createElement('DIV')
-      tmpNode.style.cssText = 'width:1in;height:1in;position:absolute;left:0px;top:0px;z-index:-99;visibility:hidden'
+      tmpNode.style.cssText =
+        'width:1in;height:1in;position:absolute;left:0px;top:0px;z-index:-99;visibility:hidden'
       document.body.appendChild(tmpNode)
       arr.push(tmpNode.offsetWidth)
       arr.push(tmpNode.offsetHeight)
@@ -190,7 +205,7 @@ export class UnitConversion {
   }
 
   cmConversionPx(value) {
-    const inch = value * 10 / 25.4
+    const inch = (value * 10) / 25.4
     const c_value = inch * this.arrDPI[0]
     return Number(c_value.toFixed())
   }
@@ -209,7 +224,7 @@ export function getPageOption(restore = false) {
     const { width, height } = page.value.size
     return {
       width: page.value.orientation === 'portrait' ? width : height,
-      height: page.value.orientation === 'portrait' ? height : width
+      height: page.value.orientation === 'portrait' ? height : width,
     }
   }
   const { width, height } = pageSize()
@@ -219,7 +234,7 @@ export function getPageOption(restore = false) {
     right: unitConversion.cmConversionPx(right),
     left: unitConversion.cmConversionPx(left),
     bottom: unitConversion.cmConversionPx(bottom),
-    top: unitConversion.cmConversionPx(top)
+    top: unitConversion.cmConversionPx(top),
   }
   map.set('pageOption', pageOption)
   return pageOption
@@ -260,7 +275,6 @@ export function computedWidth(html, cache = true) {
   return 0
 }
 
-
 export function getDefault() {
   if (map.has('defaultheight')) {
     return map.get('defaultheight')
@@ -272,7 +286,9 @@ export function getDefault() {
 }
 
 export function getDomPaddingAndMargin(dom) {
-  const contentStyle = window.getComputedStyle(dom) || iframeComputed.contentWindow.getComputedStyle(dom)
+  const contentStyle =
+    window.getComputedStyle(dom) ||
+    iframeComputed.contentWindow.getComputedStyle(dom)
   const paddingTop = contentStyle.getPropertyValue('padding-top')
   const paddingBottom = contentStyle.getPropertyValue('padding-bottom')
   const marginTop = contentStyle.getPropertyValue('margin-top')
@@ -283,7 +299,9 @@ export function getDomPaddingAndMargin(dom) {
 }
 
 export function getDomHeight(dom) {
-  const contentStyle = window.getComputedStyle(dom) || iframeComputed.contentWindow.getComputedStyle(dom)
+  const contentStyle =
+    window.getComputedStyle(dom) ||
+    iframeComputed.contentWindow.getComputedStyle(dom)
   const marginTop = contentStyle.getPropertyValue('margin-top')
   const marginBottom = contentStyle.getPropertyValue('margin-bottom')
   const margin = parseFloat(marginTop) + parseFloat(marginBottom)
@@ -296,7 +314,6 @@ function findTextblockHacksIds(node) {
     if (node.isTextblock && node.childCount == 0) {
       ids.push(node.attrs.id)
     }
-
   })
   return ids
 }
@@ -314,7 +331,7 @@ export function getAbsentHtmlH(node, schema) {
     ids.forEach((id) => {
       const nodeHtml = iframeDoc.getElementById(id)
       if (nodeHtml) {
-        nodeHtml.innerHTML = '<br class=\'ProseMirror-trailingBreak\'>'
+        nodeHtml.innerHTML = "<br class='ProseMirror-trailingBreak'>"
       }
     })
   }
@@ -326,7 +343,6 @@ export function removeAbsentHtmlH() {
   const computeddiv = iframeDoc.getElementById('computeddiv')
   computeddiv.innerHTML = ''
 }
-
 
 export function removeComputedHtml() {
   const iframeComputed1 = document.getElementById('computediframe')
@@ -353,24 +369,33 @@ export function changeComputedHtml() {
     const { width, height } = page.value.size
     return {
       width: page.value.orientation === 'portrait' ? width : height,
-      height: page.value.orientation === 'portrait' ? height : width
+      height: page.value.orientation === 'portrait' ? height : width,
     }
   }
   const { width, height } = pageSize()
   const { right, left, bottom, top } = page.value.margin
   let pageContent = iframeDoc.getElementById('computeddiv')
   let watermark = iframeDoc.getElementsByClassName('umo-watermark')[0]
-  watermark.setAttribute('style', `width: ${width + 'cm'};height: ${height + 'cm'}`)
-  pageContent.setAttribute('style', `padding-top: ${top + 'cm'};padding-right:  ${right + 'cm'};padding-bottom: ${bottom + 'cm'} ;padding-left:${left + 'cm'};min-height: ${height - top - bottom + 'cm'}`)
+  watermark.setAttribute(
+    'style',
+    `width: ${width + 'cm'};height: ${height + 'cm'}`,
+  )
+  pageContent.setAttribute(
+    'style',
+    `padding-top: ${top + 'cm'};padding-right:  ${right + 'cm'};padding-bottom: ${bottom + 'cm'} ;padding-left:${left + 'cm'};min-height: ${height - top - bottom + 'cm'}`,
+  )
 }
 
 function clonePageToIframe() {
   const iframe = createIframe()
   iframeComputed = iframe
   iframeComputed.setAttribute('id', 'computediframe')
-  //iframeComputed.setAttribute('style', 'width: 100%;height: 1000px;')
-  iframeComputed.setAttribute('style', 'width: 100%;height: 100%;opacity: 0;position: absolute;z-index: -89;margin-left:-2003px;')
-  iframeDoc = iframeComputed.contentDocument || iframeComputed.contentWindow.document
+  iframeComputed.setAttribute(
+    'style',
+    'width: 100%;height: 100%;opacity: 0;position: absolute;z-index: -89;margin-left:-2003px;',
+  )
+  iframeDoc =
+    iframeComputed.contentDocument || iframeComputed.contentWindow.document
   copyStylesToIframe(iframeDoc)
   filterAndCopyHtmlToIframe(iframe, ['header', 'iframe', 'footer'])
   cleanPagecontent(iframe)
@@ -384,11 +409,10 @@ function cleanPagecontent(iframe) {
   pageContent.innerHTML = ''
   let editor = pageContent.parentNode.parentNode
   let page = pageContent.parentNode
-// 使用 while 循环和 firstChild 删除所有子节点
+  // 使用 while 循环和 firstChild 删除所有子节点
   while (editor.lastChild != page) {
     editor.removeChild(editor.lastChild)
   }
-
 }
 
 function adddPForProseMirror(iframe) {
@@ -397,7 +421,7 @@ function adddPForProseMirror(iframe) {
   const p = iframeDoc.createElement('p')
   p.setAttribute('id', 'computedspan')
   p.setAttribute('style', 'display: inline-block')
-  p.innerHTML = '<br class=\'ProseMirror-trailingBreak\'>'
+  p.innerHTML = "<br class='ProseMirror-trailingBreak'>"
   pageContent.appendChild(p)
   pageContent.setAttribute('contenteditable', 'false')
 }
@@ -421,7 +445,7 @@ function copyStylesToIframe(iframeContentDoc) {
     }
   }
   const styles = document.querySelectorAll('style')
-  styles.forEach(style => {
+  styles.forEach((style) => {
     // 创建一个新的<style>标签
     const newStyle = iframeContentDoc.createElement('style')
     // 将样式内容复制到新标签中
@@ -430,7 +454,7 @@ function copyStylesToIframe(iframeContentDoc) {
     iframeContentDoc.head.appendChild(newStyle)
   })
   const elementsWithInlineStyles = document.querySelectorAll('[style]')
-  elementsWithInlineStyles.forEach(element => {
+  elementsWithInlineStyles.forEach((element) => {
     const styleAttr = element.getAttribute('style')
     const clonedElement = iframeContentDoc.createElement(element.tagName)
     clonedElement.setAttribute('style', styleAttr)
@@ -459,12 +483,17 @@ export function getId() {
   return Math.random().toString(36).substring(2, 10)
 }
 
-
 export const findParentDomRefOfType = (nodeType, domAtPos) => (selection) => {
-  return findParentDomRef((node) => equalNodeType(nodeType, node), domAtPos)(selection)
+  return findParentDomRef(
+    (node) => equalNodeType(nodeType, node),
+    domAtPos,
+  )(selection)
 }
 export const equalNodeType = (nodeType, node) => {
-  return (Array.isArray(nodeType) && nodeType.indexOf(node.type) > -1) || node.type === nodeType
+  return (
+    (Array.isArray(nodeType) && nodeType.indexOf(node.type) > -1) ||
+    node.type === nodeType
+  )
 }
 
 export const findParentDomRef = (predicate, domAtPos) => (selection) => {
@@ -491,8 +520,8 @@ export const findDomRefAtPos = (position, domAtPos) => {
 
 export const findParentNode =
   (predicate) =>
-    ({ $from }) =>
-      findParentNodeClosestToPos($from, predicate)
+  ({ $from }) =>
+    findParentNodeClosestToPos($from, predicate)
 
 export const findParentNodeClosestToPos = ($pos, predicate) => {
   for (let i = $pos.depth; i > 0; i--) {
@@ -502,7 +531,7 @@ export const findParentNodeClosestToPos = ($pos, predicate) => {
         pos: i > 0 ? $pos.before(i) : 0,
         start: $pos.start(i),
         depth: i,
-        node
+        node,
       }
     }
   }

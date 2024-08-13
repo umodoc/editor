@@ -202,17 +202,6 @@ const setPage = (parmas) => {
     }
     page.value.background = parmas.background
   }
-  if (parmas.showBreakMarks !== undefined) {
-    if (typeof parmas.showBreakMarks !== 'boolean') {
-      throw new Error('"parmas.showBreakMarks" must be a boolean.')
-    }
-    page.value.showBreakMarks = parmas.showBreakMarks
-    if (parmas.showBreakMarks) {
-      editor.value.commands.showInvisibleCharacters()
-    } else {
-      editor.value.commands.hideInvisibleCharacters()
-    }
-  }
 }
 const setWatermark = (parmas) => {
   if ((!parmas) instanceof Object) {

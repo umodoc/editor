@@ -10,13 +10,13 @@
 
 # 中文介绍
 
-Umo Editor 是一个基于 Vue3 适合于国人使用的本土化开源文档编辑器。Umo Editor 提供完善的文档编辑能力和 AI 创作能力，支持 Markdown 语法，支持基础的富文本编辑功能，支持多种插入多种格式的节点类型、提供了多种类型的实用工具，并支持设置页面的样式，支持导出多种类型的格式，支持打印和打印预览，支持文档块编辑，支持添加自定义扩展，支持多语言设置，支持暗色主题。
+Umo Editor 是一个基于 Vue3 和 Tiptap 的适合于国人使用的本土化开源文档编辑器。Umo Editor 提供完善的文档编辑能力和 AI 创作能力，支持 Markdown 语法，支持基础的富文本编辑功能，支持多种插入多种格式的节点类型、提供了多种类型的实用工具，并支持设置页面的样式，支持导出多种类型的格式，支持打印和打印预览，支持文档块编辑，支持添加自定义扩展，支持多语言设置，支持暗色主题。
 
 详细介绍见： [README.zh-CN.md](https://github.com/umodoc/editor/blob/main/README.zh-CN.md)
 
 # Introduction
 
-Umo Editor is an open-source document editor based on Vue3, offering localized functionalities. It provides comprehensive document editing capabilities and AI creation features, supports Markdown syntax, basic rich-text editing features, a variety of node types in multiple formats, a range of practical tools, and customization of page styles. It also supports exporting in various formats, printing and print preview, document block editing, adding custom extensions, i18n settings, and dark mode support.
+Umo Editor is an open-source document editor based on Vue3 and Tiptap, offering localized functionalities. It provides comprehensive document editing capabilities and AI creation features, supports Markdown syntax, basic rich-text editing features, a variety of node types in multiple formats, a range of practical tools, and customization of page styles. It also supports exporting in various formats, printing and print preview, document block editing, adding custom extensions, i18n settings, and dark mode support.
 
 <img src="https://unpkg.com/@umoteam/editor-external@latest/static/umo-editor-en@2x.png" alt="umo editor" />
 
@@ -34,7 +34,7 @@ Please visit [Documentation](https://editor.umodoc.com/en/docs).
 
 ## Design Philosophy
 
-Umo Editor was created to address the complexity of document editing in web applications, providing web projects with open-source and powerful editing and collaborative capabilities similar to Office Word, while maintaining the convenience of web applications. Whether it's government and enterprise information management systems, academic research writing, team document collaboration, knowledge base management, or personal note organization, Umo Editor can be a powerful assistant.
+The birth of Umo Editor aims to address the complexity of document editing in web applications, providing open-source and free powerful editing capabilities and pagination modes similar to Microsoft Word for web projects, while maintaining the convenience of web applications. Whether it's government and enterprise information management systems, academic research writing, team document collaboration, knowledge base management, or personal note organization, Umo Editor can be your capable assistant.
 
 ## Open Source Advantages
 
@@ -47,6 +47,7 @@ Umo Editor was created to address the complexity of document editing in web appl
 ## Core Features
 
 - Zero-config out-of-the-box usability
+- Pagination mode similar to that in Microsoft Word
 - Lightweight
 - WYSIWYG (What You See Is What You Get) throughout the process
 - Rich-text editing capabilities
@@ -93,11 +94,9 @@ Or submit bug reports via https://github.com/umodoc/editor/issues.
 
 The development of Umo Editor could not have been possible without the support of the community. Below is the list of contributors who have contributed code to Umo Editor. We extend our thanks to them:
 
-<p>
-<a href="https://github.com/umodoc/editor/graphs/contributors" target="_blank">
-  <img src="https://contrib.rocks/image?repo=umodoc/editor" />
-</a>
-</p>
+- [Umo Team](https://github.com/umodoc): 💻 Core developers
+- [Cassielxd](https://github.com/Cassielxd): 💪Implemented pagination and many important features for Umo Editor
+- [Sherman Xu](https://github.com/xuzhenjun130): 🛠 Contributed code to Umo Editor
 
 We welcome all forms of contributions, including but not limited to submitting bug reports, feature requests, and code contributions.
 

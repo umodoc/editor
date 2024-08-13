@@ -183,7 +183,6 @@ const defaultOptions = {
     },
     defaultOrientation: 'portrait',
     defaultBackground: '#fff',
-    showBreakMarks: true,
     watermark: {
       type: 'compact',
       alpha: 0.2,
@@ -566,10 +565,6 @@ const ojbectSchema = new ObjectSchema({
       defaultBackground: {
         merge: 'replace',
         validate: 'string',
-      },
-      showBreakMarks: {
-        merge: 'replace',
-        validate: 'boolean',
       },
       watermark: {
         schema: {
