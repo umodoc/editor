@@ -125,7 +125,6 @@ export const defaultNodesComputed = {
       return false
     }
     const chunks = splitContex.splitResolve(pos)
-
     if (pHeight > splitContex.getDefaultHeight()) {
       const point = getBreakPos(node, dom, splitContex)
       if (point) {

@@ -42,7 +42,7 @@ function createAndCalculateHeight(node, content) {
  */
 function calculateNodeOverflowHeightAndPoint(node, dom, splitContex) {
   //获得 dom现有高度
-  const height = dom.offsetHeight
+  const height = getDomHeight(dom)
   //拿到最后一个节点
   let lastChild = node.lastChild
   //获取当前需要计算的节点有多少个
@@ -228,12 +228,11 @@ export function getPageOption(restore = false) {
 const map = new Map()
 
 export function computedHeight(html, id, cache = true) {
-
   const computeddiv = iframeDoc.getElementById('computeddiv')
   if (computeddiv) {
-    computeddiv.innerHTML = html
+    computeddiv.innerHTML = '<p>&nbsp;</p>' + html
     const htmldiv = iframeDoc.getElementById(id)
-    const height = htmldiv.offsetHeight
+    const height = getDomHeight(htmldiv)
     computeddiv.innerHTML = '&nbsp;'
     return height
   }
@@ -369,7 +368,8 @@ function clonePageToIframe() {
   const iframe = createIframe()
   iframeComputed = iframe
   iframeComputed.setAttribute('id', 'computediframe')
-  iframeComputed.setAttribute('style', 'width: 100%;height: 1000px;opacity: 0;position: absolute;z-index: -89;margin-left:-2003px;')
+  //iframeComputed.setAttribute('style', 'width: 100%;height: 1000px;')
+  iframeComputed.setAttribute('style', 'width: 100%;height: 100%;opacity: 0;position: absolute;z-index: -89;margin-left:-2003px;')
   iframeDoc = iframeComputed.contentDocument || iframeComputed.contentWindow.document
   copyStylesToIframe(iframeDoc)
   filterAndCopyHtmlToIframe(iframe, ['header', 'iframe', 'footer'])

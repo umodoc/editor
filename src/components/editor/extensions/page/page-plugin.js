@@ -50,7 +50,6 @@ class PageDetector {
 
   isOverflown(childrenHeight) {
     const { bodyHeight } = getPageOption()
-    debugger
     return childrenHeight > bodyHeight
   }
 
