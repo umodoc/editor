@@ -78,6 +78,7 @@ export default defineConfig({
       external: [
         /@vueuse\/.*/,
         /@tiptap\/.*/,
+        /mammoth\/.*/,
         /nzh\/.*/,
         'vue',
         '@eslint/object-schema',
@@ -90,7 +91,6 @@ export default defineConfig({
         'hotkeys-js',
         'jsbarcode',
         'katex',
-        'mammoth',
         'mermaid',
         'plyr',
         'pretty-bytes',

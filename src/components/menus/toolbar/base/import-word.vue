@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import mammoth from 'mammoth'
+import mammoth from 'mammoth/mammoth.browser'
 const { editor, options } = useStore()
 
 const importWord = () => {
