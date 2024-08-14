@@ -69,7 +69,6 @@
 
 <script setup>
 import getId from '@/utils/short-id'
-import { ie } from '@/utils/browser'
 
 const { container, editor, blockMenu } = useStore()
 
