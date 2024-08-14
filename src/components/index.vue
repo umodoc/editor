@@ -687,7 +687,7 @@ watch(
 )
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .umo-editor-container {
   --td-brand-color: var(--umo-primary-color);
   --td-warning-color: var(--umo-warning-color);

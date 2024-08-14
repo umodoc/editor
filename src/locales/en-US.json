@@ -370,6 +370,12 @@
       "copy": "Copy Link",
       "copied": "Link copied to clipboard"
     },
+    "pdf": {
+      "text": "PDF Document",
+      "title": "Export PDF Document",
+      "message": "Before exporting the PDF document, make sure that all images on the pages have finished loading. Then, in the print dialog box that appears, select 'Printer - Save as PDF', and click 'Save' button to save the document.",
+      "confirm": "I Understand"
+    },
     "text": "Text"
   },
   "list": {
@@ -617,13 +623,8 @@
   "print": {
     "text": "Print",
     "title": "Print Document",
-    "preview": "Page Preview",
-    "closePreview": "Close Page Preview",
-    "settings": "Print Settings",
-    "singleColumn": "Display in Single Column",
-    "showPageNumber": "Include Page Numbers when Printing",
-    "loading": "Page loading...",
-    "page": "Page 'counter(page)' of 'counter(pages)'"
+    "message": "Before printing the document, please ensure that all images on the pages have finished loading. If node backgrounds are not displayed, please check the 'Background graphics' option in the print dialog box.",
+    "confirm": "Print Now"
   },
   "time": {
     "justNow": "Just now",

@@ -19,6 +19,7 @@ export const useStore = createGlobalState(() => {
   const savedAt = ref(null)
   const printing = ref(false)
   const exportImage = ref(false)
+  const exportPDF = ref(false)
   const editorDestroyed = ref(false)
 
   const setOptions = (value) => {
@@ -104,6 +105,7 @@ export const useStore = createGlobalState(() => {
     savedAt,
     printing,
     exportImage,
+    exportPDF,
     editorDestroyed,
     setOptions,
     setEditor,

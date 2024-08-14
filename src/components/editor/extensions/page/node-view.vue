@@ -96,6 +96,9 @@ watch(
 .page-node-view {
   box-sizing: border-box;
   background-color: var(--page-background);
+  width: var(--page-width);
+  height: var(--page-height);
+  overflow: hidden;
 
   &.no-shadow {
     border: solid 1px var(--umo-border-color);

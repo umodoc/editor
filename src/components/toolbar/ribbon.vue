@@ -222,7 +222,7 @@
         <template v-if="currentMenu === 'export'">
           <div class="virtual-group">
             <menus-toolbar-export-image />
-            <!-- <menus-toolbar-export-pdf /> -->
+            <menus-toolbar-export-pdf />
             <!-- <menus-toolbar-export-html /> -->
             <menus-toolbar-export-text />
           </div>

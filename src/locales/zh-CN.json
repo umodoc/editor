@@ -370,6 +370,12 @@
       "copy": "复制链接",
       "copied": "链接已复制到剪切板"
     },
+    "pdf": {
+      "text": "PDF文档",
+      "title": "导出 PDF 文档",
+      "message": "导出 PDF 文档前，请确保所有页面中的图片已加载完毕。然后在弹出的打印框中选择”打印机 - 另存为PDF“，再点击”保存“按钮即可。",
+      "confirm": "我知道了"
+    },
     "text": "文本文档"
   },
   "list": {
@@ -615,13 +621,8 @@
   "print": {
     "text": "打印",
     "title": "打印文档",
-    "preview": "页面预览",
-    "closePreview": "关闭页面预览",
-    "settings": "打印设置",
-    "singleColumn": "单列显示页面",
-    "showPageNumber": "打印时包含页码",
-    "loading": "页面加载中...",
-    "page": "第 ' counter(page) ' 页 / 共 ' counter(pages) ' 页"
+    "message": "打印文档前，请确保所有页面中的图片已加载完毕。如果遇到节点背景不显示，请在打印框中勾选 “背景图形”选项。",
+    "confirm": "立即打印"
   },
   "time": {
     "justNow": "刚刚",
