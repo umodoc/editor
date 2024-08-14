@@ -177,9 +177,17 @@ export const pagePlugin = (editor, nodesComputed) => {
         },
       },
       transformPasted(slice, view) {
+        let lazy = false
         slice.content.descendants((node) => {
+          if (node.type.name == 'image') lazy = true
           node.attrs.id = getId()
         })
+        if (lazy) {
+          editor.value.commands.autoPaging(false)
+          setTimeout(() => {
+            editor.value.commands.autoPaging()
+          }, 1000)
+        }
         return slice
       },
     },
