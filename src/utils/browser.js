@@ -1,10 +1,10 @@
 const nav = typeof navigator != 'undefined' ? navigator : null
 const doc = typeof document != 'undefined' ? document : null
-const agent = (nav && nav.userAgent) || ''
+export const agent = (nav && nav.userAgent) || ''
 
-const ie_edge = /Edge\/(\d+)/.exec(agent)
-const ie_upto10 = /MSIE \d/.exec(agent)
-const ie_11up = /Trident\/(?:[7-9]|\d{2,})\..*rv:(\d+)/.exec(agent)
+export const ie_edge = /Edg\/(\d+)/.exec(agent)
+export const ie_upto10 = /MSIE \d/.exec(agent)
+export const ie_11up = /Trident\/(?:[7-9]|\d{2,})\..*rv:(\d+)/.exec(agent)
 
 export const ie = !!(ie_upto10 || ie_11up || ie_edge)
 export const ie_version = ie_upto10
