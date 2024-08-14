@@ -69,6 +69,7 @@
 
 <script setup>
 import getId from '@/utils/short-id'
+import { ie } from '@/utils/browser'
 
 const { container, editor, blockMenu } = useStore()
 
@@ -96,7 +97,6 @@ const duplicateNode = () => {
     })
     return point
   }
-  const tr = editor.value.state.tr
   const copeNode = selectionNode.type.create(
     {
       ...selectionNode.attrs,
@@ -105,8 +105,7 @@ const duplicateNode = () => {
     selectionNode.content,
     selectionNode.marks,
   )
-  tr.insert(getPosition(), copeNode)
-  editor.value.view.dispatch(tr)
+  editor.value.commands.insertContentAt(getPosition(), copeNode.toJSON())
 }
 const deleteNode = () => {
   editor.value?.chain().focus().deleteSelectionNode().run()

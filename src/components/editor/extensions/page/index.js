@@ -296,7 +296,6 @@ export default Node.create({
     return [idPlugin(types.concat(this.options.types || []))]
   },
   addNodeView() {
-    1
     return this.options.View
   },
 })
