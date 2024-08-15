@@ -68,7 +68,11 @@ export default Extension.create({
           if (parentNode) {
             return chain().setNodeSelection(parentNode.pos).run()
           }
-          return editor.commands.selectParentNode()
+          const { $anchor, node } = editor.state.selection
+          const pos = node?.attrs?.vnode
+            ? $anchor.pos
+            : $anchor.pos - $anchor.parentOffset - 1
+          return chain().setNodeSelection(pos).run()
         },
       deleteSelectionNode:
         () =>
