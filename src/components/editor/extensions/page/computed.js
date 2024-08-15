@@ -318,16 +318,16 @@ export class PageComputedContext {
       this.checkNodeAndFix()
       const endTime = performance.now()
       const c = new Date().toLocaleTimeString()
-      console.info(
-        `%cUmo Editor%c${c} %c[分页用时${Math.round(endTime - startTime)}ms]`,
-        `background: #015beb;
-         color: #fff;
-         border-radius: 2px;
-         padding: 2px 5px;
-         margin-right: 6px;`,
-        'color: rgba(0,0,0,.5)',
-        `color: #069f69;font-weight: bold`,
-      )
+      // console.info(
+      //   `%cUmo Editor%c${c} %c[分页用时${Math.round(endTime - startTime)}ms]`,
+      //   `background: #015beb;
+      //    color: #fff;
+      //    border-radius: 2px;
+      //    padding: 2px 5px;
+      //    margin-right: 6px;`,
+      //   'color: rgba(0,0,0,.5)',
+      //   `color: #069f69;font-weight: bold`,
+      // )
     }
 
     return this.tr
@@ -352,10 +352,10 @@ export class PageComputedContext {
   initComputed() {
     splitCount1 = 0
     splitCount = 0
-    console.log('初始化分页开始')
+    // console.log('初始化分页开始')
     this.mergeDefaultDocument(1)
     this.splitDocument()
-    console.log('初始化分页结束')
+    // console.log('初始化分页结束')
     return this.tr
   }
 
@@ -493,7 +493,7 @@ export class PageComputedContext {
           beforeBolck = node
           beforePos = pos
         } else {
-          console.log('beforeBolck: ' + beforeBolck)
+          // console.log('beforeBolck: ' + beforeBolck)
           const mappedPos = tr.mapping.map(pos)
           if (beforeBolck.type == schema.nodes[PARAGRAPH]) {
           } else {
