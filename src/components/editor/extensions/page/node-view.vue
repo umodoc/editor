@@ -91,7 +91,6 @@ watch(
   box-sizing: border-box;
   background-color: var(--page-background);
   width: var(--page-width);
-  height: var(--page-height);
   overflow: hidden;
 
   &.no-shadow {

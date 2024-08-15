@@ -989,9 +989,9 @@
   integrity sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==
 
 "@umoteam/editor-external@4.0.0":
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/@umoteam/editor-external/-/editor-external-3.1.2.tgz#fe9d5235cd9792a95f87a705dc67b078aeb03d42"
-  integrity sha512-7xZk9si9QN0yVgWIu/zvzGc2CyvN2KJQq0npeuruHpgiPh9ZTHwArsyNnAg+S3M/XkZhzB+wXFr1rO9N2RJc0Q==
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@umoteam/editor-external/-/editor-external-4.0.0.tgz#3cfa8310c75fb1affeaa26fe909024e3b1ace52b"
+  integrity sha512-NVjwwUvNgGLNTY5xNu0GNIBkErypl8hpuVkEGs2gIeNM7tanptCcjdhP7bBEJTvPIJHokXYyN2NqpgSKgvi+nw==
 
 "@vitejs/plugin-vue@^5.1.1":
   version "5.1.2"
