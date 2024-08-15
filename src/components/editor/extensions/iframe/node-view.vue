@@ -77,6 +77,8 @@ onClickOutside(containerRef, () => (selected = false))
     }
     iframe {
       display: block;
+      min-width: 400px;
+      min-height: 400px;
       width: 100%;
       height: 100%;
       border: none;
