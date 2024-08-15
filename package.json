@@ -1,7 +1,7 @@
 {
   "name": "@umoteam/editor",
   "version": "4.0.0",
-  "description": "Umo Editor is an open-source document editor based on Vue3 and Tiptap, offering localized functionalities. It provides comprehensive document editing capabilities and AI creation features, supports Markdown syntax, basic rich-text editing features, a variety of node types in multiple formats, a range of practical tools, and customization of page styles. It also supports exporting in various formats, printing and print preview, document block editing, adding custom extensions, i18n settings, and dark mode support.",
+  "description": "Umo Editor is open-source document editor based on Vue3 and Tiptap. Umo Editor provides comprehensive document editing capabilities and AI creation features, supports pagination, supports Markdown syntax, offers basic rich text editing functions, allows for the insertion of various node types in multiple formats, provides a variety of practical tools, and supports setting page styles. It also supports exporting in various formats, printing and print preview, block-level document editing, adding custom extensions, multi-language settings, and a dark theme.",
   "keywords": [
     "umo editor",
     "umodoc editor",

@@ -988,10 +988,10 @@
   resolved "https://registry.yarnpkg.com/@types/web-bluetooth/-/web-bluetooth-0.0.20.tgz#f066abfcd1cbe66267cdbbf0de010d8a41b41597"
   integrity sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==
 
-"@umoteam/editor-external@3.1.1":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@umoteam/editor-external/-/editor-external-3.1.1.tgz#e1cf04fb36aba779f5d4bb14a62e6033bed49f30"
-  integrity sha512-MIxU3WamFbrBFv58hzIrig4chY6JnGkEuZNp75Vu+h7ys9imdniy+EAwcOYXBapODQK8z1CrGFd5+9lWxYhjOg==
+"@umoteam/editor-external@4.0.0":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@umoteam/editor-external/-/editor-external-3.1.2.tgz#fe9d5235cd9792a95f87a705dc67b078aeb03d42"
+  integrity sha512-7xZk9si9QN0yVgWIu/zvzGc2CyvN2KJQq0npeuruHpgiPh9ZTHwArsyNnAg+S3M/XkZhzB+wXFr1rO9N2RJc0Q==
 
 "@vitejs/plugin-vue@^5.1.1":
   version "5.1.2"
