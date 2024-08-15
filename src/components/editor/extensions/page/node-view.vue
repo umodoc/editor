@@ -36,14 +36,7 @@
           style="width: var(--page-margin-right)"
         ></div>
       </div>
-      <node-view-content
-        class="page-node-content"
-        :style="{
-          padding: `0 ${page.margin.right + 'cm'} 0 ${page.margin.left + 'cm'}`,
-          minHeight:
-            pageSize.height - page.margin.top - page.margin.bottom + 'cm',
-        }"
-      />
+      <node-view-content class="page-node-content" />
       <div class="page-node-footer">
         <div
           class="page-corner corner-bl"
@@ -212,6 +205,11 @@ watch(
   .page-node-content {
     box-sizing: border-box;
     width: 100%;
+    padding: 0 var(--page-margin-right) 0 var(--page-margin-right);
+    height: calc(
+      var(--page-size-height) - var(--page-margin-top) -
+        var(--page-margin-bottom)
+    );
     flex: 1;
   }
 }
