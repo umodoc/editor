@@ -106,7 +106,6 @@ export default Node.create({
       splitBlock,
       splitListItem,
       resetPageStore: () => {
-        changeComputedHtml()
         return ({ tr, state, dispatch, editor }) => {
           if (dispatch) {
             dispatch(tr.setMeta('splitPage', true))

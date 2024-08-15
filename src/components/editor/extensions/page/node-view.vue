@@ -40,7 +40,8 @@
         class="page-node-content"
         :style="{
           padding: `0 ${page.margin.right + 'cm'} 0 ${page.margin.left + 'cm'}`,
-          height: pageSize.height - page.margin.top - page.margin.bottom + 'cm',
+          minHeight:
+            pageSize.height - page.margin.top - page.margin.bottom + 'cm',
         }"
       />
       <div class="page-node-footer">
@@ -127,6 +128,7 @@ watch(
     margin-top: -20px;
     z-index: 5;
   }
+
   &:first-child {
     .page-node-view-handler {
       display: none;
@@ -146,10 +148,12 @@ watch(
     height: var(--page-margin-top);
     min-height: var(--page-margin-top);
   }
+
   .page-node-footer {
     height: var(--page-margin-bottom);
     min-height: var(--page-margin-bottom);
   }
+
   .page-node-header,
   .page-node-footer {
     display: flex;
@@ -217,20 +221,25 @@ watch(
 .disable-page-break .page-node-view {
   &:not(:first-child) {
     margin-top: 0 !important;
+
     .page-node-header {
       display: none;
     }
   }
+
   &:not(:last-child) {
     margin-bottom: 0 !important;
+
     .page-node-footer {
       display: none;
     }
   }
+
   .page-node-view-handler {
     cursor: vertical-text;
     background-color: var(--page-background);
     margin-top: -10px;
+
     &::after {
       content: '';
       display: block;
@@ -241,18 +250,21 @@ watch(
       top: 9px;
     }
   }
+
   .page-watermark {
     padding: 20px 0;
     height: calc(
       var(--page-height) - var(--page-margin-top) - var(--page-margin-bottom)
     );
   }
+
   &:first-child {
     .page-watermark {
       padding-top: 0;
       height: calc(var(--page-height) - var(--page-margin-top));
     }
   }
+
   &:last-child {
     .page-watermark {
       padding-bottom: 0;

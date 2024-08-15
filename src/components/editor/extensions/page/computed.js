@@ -153,7 +153,13 @@ export const defaultNodesComputed = {
       splitContex.addHeight(pHeight)
       return false
     }
+
     const chunks = splitContex.splitResolve(pos)
+    if (parent?.firstChild == node) {
+      const chunksNext = splitContex.splitResolve(pos + node.nodeSize)
+      splitContex.setBoundary(pos + node.nodeSize, chunksNext.length - 1)
+      return false
+    }
     splitContex.setBoundary(pos, chunks.length - 1)
     return false
   },
@@ -346,8 +352,10 @@ export class PageComputedContext {
   initComputed() {
     splitCount1 = 0
     splitCount = 0
+    console.log('初始化分页开始')
     this.mergeDefaultDocument(1)
     this.splitDocument()
+    console.log('初始化分页结束')
     return this.tr
   }
 

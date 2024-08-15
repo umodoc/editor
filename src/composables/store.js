@@ -1,5 +1,6 @@
 import { defaultOptions, ojbectSchema } from '@/options'
 import shortId from '@/utils/short-id'
+import { changeComputedHtml } from '@/components/editor/extensions/page/core'
 
 export const useStore = createGlobalState(() => {
   const toolbarKey = ref(shortId())
@@ -68,7 +69,11 @@ export const useStore = createGlobalState(() => {
   watch(
     () => [page.value.size, page.value.margin, page.value.orientation],
     (value) => {
-      editor.value.commands.resetPageStore()
+      editor.value.commands.autoPaging(false)
+      changeComputedHtml()
+      setTimeout(() => {
+        editor.value.commands.autoPaging()
+      }, 1000)
     },
     { deep: true },
   )
