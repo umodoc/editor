@@ -16,6 +16,7 @@ import {
   getId,
   getDomHeight,
   getPageOption,
+  checkAllImagesLoadedWithMutationObserver,
 } from './core'
 import { defaultNodesComputed, PageComputedContext } from './computed'
 import { findParentNode } from '@tiptap/core'
@@ -189,27 +190,7 @@ export const pagePlugin = (editor, nodesComputed) => {
       },
     },
   })
-
-  var observer = new MutationObserver(function (mutations) {
-    var allLoaded = true
-    var images = document.images
-    for (var i = 0; i < images.length; i++) {
-      if (!images[i].complete) {
-        allLoaded = false
-        break
-      }
-    }
-    if (allLoaded) {
-      setTimeout(() => {
-        editor.value.commands.autoPaging()
-      }, 100)
-    }
-  })
-  observer.observe(document.getElementsByClassName('editor-container')[0], {
-    childList: true,
-    subtree: true,
-  })
-
+  checkAllImagesLoadedWithMutationObserver(editor.value)
   return plugin
 }
 export const idPluginKey = new PluginKey('attrkey')
