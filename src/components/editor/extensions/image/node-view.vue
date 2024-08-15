@@ -29,7 +29,7 @@
         :min-width="14"
         :min-height="14"
         :max-width="maxWidth"
-        :max-height="maxHeight"
+        :max-height="node.attrs.equalProportion ? maxHeight : undefined"
         :z-index="10"
         :equal-proportion="node.attrs.equalProportion"
         @rotate="onRotate"
@@ -189,10 +189,13 @@ watch(
     max-width: 100%;
     width: auto;
     display: inline-flex;
-
+    .es-drager {
+      max-height: 100%;
+    }
     img {
       display: block;
       width: 100%;
+      max-height: 100%;
     }
 
     .loading {
