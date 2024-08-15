@@ -16,7 +16,7 @@ export default Node.create({
         default: null,
       },
       width: {
-        default: null,
+        default: 300,
       },
       height: {
         default: 300,

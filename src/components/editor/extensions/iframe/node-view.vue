@@ -62,7 +62,6 @@ const onResizeStart = () => {
 const onResizeEnd = () => {
   editor.value.commands.autoPaging()
 }
-
 onClickOutside(containerRef, () => (selected = false))
 </script>
 

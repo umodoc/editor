@@ -16,6 +16,7 @@ import {
   getId,
   getDomHeight,
   getPageOption,
+  checkAllImagesLoadedWithMutationObserver,
 } from './core'
 import { defaultNodesComputed, PageComputedContext } from './computed'
 import { findParentNode } from '@tiptap/core'
@@ -184,14 +185,12 @@ export const pagePlugin = (editor, nodesComputed) => {
         })
         if (lazy) {
           editor.value.commands.autoPaging(false)
-          setTimeout(() => {
-            editor.value.commands.autoPaging()
-          }, 1000)
         }
         return slice
       },
     },
   })
+  checkAllImagesLoadedWithMutationObserver(editor.value)
   return plugin
 }
 export const idPluginKey = new PluginKey('attrkey')
@@ -223,5 +222,6 @@ export const idPlugin = (types) => {
       return modified ? tr : null
     },
   })
+
   return plugin
 }
