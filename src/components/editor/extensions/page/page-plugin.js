@@ -184,14 +184,32 @@ export const pagePlugin = (editor, nodesComputed) => {
         })
         if (lazy) {
           editor.value.commands.autoPaging(false)
-          setTimeout(() => {
-            editor.value.commands.autoPaging()
-          }, 1000)
         }
         return slice
       },
     },
   })
+
+  var observer = new MutationObserver(function (mutations) {
+    var allLoaded = true
+    var images = document.images
+    for (var i = 0; i < images.length; i++) {
+      if (!images[i].complete) {
+        allLoaded = false
+        break
+      }
+    }
+    if (allLoaded) {
+      setTimeout(() => {
+        editor.value.commands.autoPaging()
+      }, 100)
+    }
+  })
+  observer.observe(document.getElementsByClassName('editor-container')[0], {
+    childList: true,
+    subtree: true,
+  })
+
   return plugin
 }
 export const idPluginKey = new PluginKey('attrkey')
@@ -223,5 +241,6 @@ export const idPlugin = (types) => {
       return modified ? tr : null
     },
   })
+
   return plugin
 }

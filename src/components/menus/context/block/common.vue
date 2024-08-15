@@ -104,14 +104,10 @@ const duplicateNode = () => {
     selectionNode.content,
     selectionNode.marks,
   )
-  editor.value.commands.insertContentAt(getPosition(), copeNode.toJSON())
-  if (selectionNode.type.name === 'image') {
-    setTimeout(() => {
-      editor.value.view.dispatch(
-        editor.value.state.tr.setMeta('inserting', true),
-      )
-    }, 1000)
+  if (selectionNode.type.name == 'image') {
+    editor.value.commands.autoPaging(false)
   }
+  editor.value.commands.insertContentAt(getPosition(), copeNode.toJSON())
 }
 const deleteNode = () => {
   editor.value?.chain().focus().deleteSelectionNode().run()
