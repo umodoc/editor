@@ -12,7 +12,7 @@
         :width="node.attrs.width"
         :height="node.attrs.height"
         :min-width="400"
-        :min-height="100"
+        :min-height="200"
         :max-width="maxWidth"
         @resize="onResize"
         @resize-start="onResizeStart"
@@ -77,7 +77,7 @@ onClickOutside(containerRef, () => (selected = false))
     iframe {
       display: block;
       min-width: 400px;
-      min-height: 400px;
+      min-height: 200px;
       width: 100%;
       height: 100%;
       border: none;

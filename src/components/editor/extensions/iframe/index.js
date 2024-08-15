@@ -16,10 +16,10 @@ export default Node.create({
         default: null,
       },
       width: {
-        default: 300,
+        default: 400,
       },
       height: {
-        default: 300,
+        default: 200,
       },
     }
   },
