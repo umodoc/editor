@@ -29,6 +29,7 @@
         :min-width="14"
         :min-height="14"
         :max-width="maxWidth"
+        :max-height="maxHeight"
         :z-index="10"
         :equal-proportion="node.attrs.equalProportion"
         @rotate="onRotate"
@@ -76,6 +77,7 @@ const containerRef = ref(null)
 const imageRef = $ref(null)
 let selected = $ref(false)
 let maxWidth = $ref(0)
+let maxHeight = $ref(0)
 
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs
@@ -106,14 +108,16 @@ const uploadImage = async () => {
 onMounted(async () => {
   await nextTick()
   if (node.attrs.width === null) {
-    const width = containerRef.value.$el.clientWidth
-    maxWidth = width
-    updateAttributes({ width })
+    const { clientWidth, clientHeight } = containerRef.value.$el.clientWidth
+    maxWidth = clientWidth
+    maxHeight = clientHeight
+    updateAttributes({ width: clientWidth, height: clientHeight })
   }
 })
 const onLoad = () => {
   const height = imageRef?.offsetHeight
   if (containerRef.value && height) {
+    maxHeight = height
     updateAttributes({ height })
   }
 }

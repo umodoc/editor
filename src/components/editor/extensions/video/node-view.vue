@@ -12,9 +12,10 @@
         :boundary="false"
         :width="node.attrs.width"
         :height="node.attrs.height"
-        :min-width="200"
+        :min-width="300"
         :min-height="200"
         :max-width="maxWidth"
+        :max-height="maxHeight"
         equal-proportion
         @resize="onResize"
         @resize-start="onResizeStart"
@@ -50,6 +51,7 @@ let selected = $ref(false)
 const videoRef = $ref(null)
 let player = $ref(null)
 let maxWidth = $ref(0)
+let maxHeight = $ref(0)
 
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs
@@ -66,10 +68,11 @@ const nodeStyle = $computed(() => {
 
 onMounted(async () => {
   await nextTick()
-  const width = containerRef.value.$el.clientWidth
-  maxWidth = width
+  const { clientWidth, clientHeight } = containerRef.value.$el
+  maxWidth = clientWidth
+  maxHeight = clientHeight
   if (node.attrs.width === null) {
-    updateAttributes({ width })
+    updateAttributes({ width: clientWidth })
   }
   player = mediaPlayer(videoRef)
   if (node.attrs.uploaded === false && node.attrs.file) {
@@ -86,6 +89,7 @@ onMounted(async () => {
 const onLoad = () => {
   const height = videoRef?.offsetHeight
   if (containerRef.value && height) {
+    maxHeight = height
     updateAttributes({ height })
   }
 }
