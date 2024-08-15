@@ -62,14 +62,17 @@ export default Extension.create({
       setCurrentNodeSelection:
         () =>
         ({ editor, chain }) => {
-          debugger
           let parentNode = findParentNode((node) =>
             LIST_TYPE.includes(node.type.name),
           )(editor.state.selection)
           if (parentNode) {
             return chain().setNodeSelection(parentNode.pos).run()
           }
-          return editor.commands.selectParentNode()
+          const { $anchor, node } = editor.state.selection
+          const pos = node?.attrs?.vnode
+            ? $anchor.pos
+            : $anchor.pos - $anchor.parentOffset - 1
+          return chain().setNodeSelection(pos).run()
         },
       deleteSelectionNode:
         () =>
