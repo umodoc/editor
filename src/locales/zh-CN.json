@@ -583,10 +583,12 @@
       "menu": "菜单栏"
     },
     "image": {
-      "loading": "加载中...",
+      "loading": "正在加载图片...",
       "error": "图片加载错误"
     },
-    "textBox": { "tip": "双击进行编辑" }
+    "textBox": {
+      "tip": "双击进行编辑"
+    }
   },
   "file": {
     "uploading": "文件上传中...",

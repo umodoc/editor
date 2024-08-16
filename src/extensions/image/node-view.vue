@@ -6,12 +6,26 @@
     :style="nodeStyle"
     @dblclick="imagePreview = node.attrs.src"
   >
-    <div class="node-container hover-shadow select-outline image">
-      <div v-if="node.attrs.src && isLoading" class="loading">
+    <div
+      class="node-container hover-shadow select-outline image"
+      :class="{
+        'is-loading': node.attrs.src && isLoading,
+        'is-error': node.attrs.src && error,
+      }"
+    >
+      <div
+        v-if="node.attrs.src && isLoading"
+        class="loading"
+        :style="{ height: `${node.attrs.height}px` }"
+      >
         <icon name="loading" class="loading-icon" />
         {{ t('node.image.loading') }}
       </div>
-      <div class="error" v-else-if="node.attrs.src && error">
+      <div
+        class="error"
+        v-else-if="node.attrs.src && error"
+        :style="{ height: `${node.attrs.height}px` }"
+      >
         <icon name="image-failed" class="error-icon" />
         {{ t('node.image.error') }}
       </div>
@@ -43,7 +57,6 @@
           ref="imageRef"
           :src="node.attrs.src"
           :style="{
-            height: node.attrs.equalProportion ? 'auto' : '100%',
             transform:
               node.attrs.flipX || node.attrs.flipY
                 ? `rotateX(${node.attrs.flipX ? '180' : '0'}deg) rotateY(${node.attrs.flipY ? '180' : '0'}deg)`
@@ -77,7 +90,7 @@ const containerRef = ref(null)
 const imageRef = $ref(null)
 let selected = $ref(false)
 let maxWidth = $ref(0)
-let maxHeight = $ref(0)
+let maxHeight = $ref(200)
 
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs
@@ -105,20 +118,13 @@ const uploadImage = async () => {
     useMessage('error', error.message)
   }
 }
-onMounted(async () => {
-  await nextTick()
-  if (node.attrs.width === null) {
-    const { clientWidth, clientHeight } = containerRef.value.$el.clientWidth
-    maxWidth = clientWidth
-    maxHeight = clientHeight
-    updateAttributes({ width: clientWidth, height: clientHeight })
-  }
-})
 const onLoad = () => {
-  const height = imageRef?.offsetHeight
-  if (containerRef.value && height) {
-    maxHeight = height
-    updateAttributes({ height })
+  if (node.attrs.width === null) {
+    const { clientWidth, clientHeight } = imageRef
+    maxWidth = containerRef.value.$el.clientWidth
+    const ratio = clientWidth / clientHeight
+    maxHeight = containerRef.value.$el.clientWidth / ratio
+    updateAttributes({ width: parseInt(200 * ratio) })
   }
 }
 
@@ -126,7 +132,7 @@ const onRotate = ({ angle }) => {
   updateAttributes({ angle })
 }
 const onResize = ({ width, height }) => {
-  updateAttributes({ width, height })
+  updateAttributes({ width: parseInt(width), height: parseInt(height) })
 }
 const onResizeStart = () => {
   editor.value.commands.autoPaging(false)
@@ -188,24 +194,28 @@ watch(
   .image {
     max-width: 100%;
     width: auto;
-    display: inline-flex;
+    &.is-loading,
+    &.is-error {
+      outline: none !important;
+      box-shadow: none !important;
+    }
     .es-drager {
+      max-width: 100%;
       max-height: 100%;
     }
     img {
       display: block;
-      width: 100%;
+      max-width: 100%;
       max-height: 100%;
+      width: 100%;
+      height: 100%;
     }
 
     .loading {
-      width: 160px;
-      height: 120px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--umo-text-color-light);
-      background: rgba(0, 0, 0, 0.02);
       font-size: 12px;
       gap: 10px;
 
@@ -217,19 +227,18 @@ watch(
     }
 
     .error {
-      width: 160px;
-      height: 120px;
+      width: 200px;
+      height: 200px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
       color: var(--umo-text-color-light);
-      background: rgba(0, 0, 0, 0.02);
       font-size: 12px;
 
       .error-icon {
         font-size: 72px;
-        margin: -8px 0 2px;
+        margin: -8px 0 -2px;
       }
     }
 

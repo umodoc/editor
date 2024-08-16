@@ -583,7 +583,7 @@
       "menu": "Menu"
     },
     "image": {
-      "loading": "Loading...",
+      "loading": "Loading image...",
       "error": "Image load failed"
     },
     "textBox": {

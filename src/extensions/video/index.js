@@ -21,7 +21,7 @@ export default Node.create({
         default: null,
       },
       height: {
-        default: null,
+        default: 200,
       },
       draggable: {
         default: false,

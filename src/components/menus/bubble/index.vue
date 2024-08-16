@@ -1,6 +1,7 @@
 <template>
   <template
     v-if="
+      editor?.isActive('page') ||
       editor?.isActive('toc') ||
       editor?.isActive('pagination') ||
       editor?.isActive('horizontalRule') ||

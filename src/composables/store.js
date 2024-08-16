@@ -1,6 +1,6 @@
 import { defaultOptions, ojbectSchema } from '@/options'
 import shortId from '@/utils/short-id'
-import { changeComputedHtml } from '@/components/editor/extensions/page/core'
+import { changeComputedHtml } from '@/extensions/page/core'
 
 export const useStore = createGlobalState(() => {
   const toolbarKey = ref(shortId())

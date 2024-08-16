@@ -1,7 +1,7 @@
 import { Extension, findParentNode } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
-import { LIST_TYPE } from '@/components/editor/extensions/page/node-names'
+import { LIST_TYPE } from '@/extensions/page/node-names'
 
 export default Extension.create({
   name: 'selection',

@@ -10,13 +10,13 @@
         :selected="selected"
         :rotatable="false"
         :boundary="false"
-        :width="node.attrs.width"
-        :height="node.attrs.height"
+        :width="Number(node.attrs.width)"
+        :height="Number(node.attrs.height)"
         :min-width="300"
         :min-height="200"
         :max-width="maxWidth"
         :max-height="maxHeight"
-        equal-proportion
+        :equal-proportion="true"
         @resize="onResize"
         @resize-start="onResizeStart"
         @resize-end="onResizeEnd"
@@ -68,12 +68,6 @@ const nodeStyle = $computed(() => {
 
 onMounted(async () => {
   await nextTick()
-  const { clientWidth, clientHeight } = containerRef.value.$el
-  maxWidth = clientWidth
-  maxHeight = clientHeight
-  if (node.attrs.width === null) {
-    updateAttributes({ width: clientWidth })
-  }
   player = mediaPlayer(videoRef)
   if (node.attrs.uploaded === false && node.attrs.file) {
     try {
@@ -87,10 +81,12 @@ onMounted(async () => {
   }
 })
 const onLoad = () => {
-  const height = videoRef?.offsetHeight
-  if (containerRef.value && height) {
-    maxHeight = height
-    updateAttributes({ height })
+  if (node.attrs.width === null) {
+    const { clientWidth, clientHeight } = videoRef
+    maxWidth = containerRef.value.$el.clientWidth
+    const ratio = clientWidth / clientHeight
+    maxHeight = containerRef.value.$el.clientWidth / ratio
+    updateAttributes({ width: parseInt(200 * ratio) })
   }
 }
 const onResize = ({ width, height }) => {
@@ -119,6 +115,8 @@ onClickOutside(containerRef, () => (selected = false))
     border-radius: var(--umo-radius);
 
     .es-drager {
+      max-width: 100%;
+      max-height: 100%;
       .es-drager-dot {
         pointer-events: auto;
       }
@@ -129,12 +127,15 @@ onClickOutside(containerRef, () => (selected = false))
 
       video {
         display: block;
-        width: 100%;
         height: auto;
         border-radius: var(--umo-radius);
         overflow: hidden;
         pointer-events: auto;
         outline: none;
+        max-width: 100%;
+        max-height: 100%;
+        width: 100%;
+        height: 100%;
       }
     }
 

@@ -71,6 +71,7 @@ export default Node.create({
   group: 'block',
   isolating: true,
   selectable: false,
+  draggable: false,
   isLeaf: true,
   addOptions() {
     return {

@@ -28,7 +28,7 @@ export default Image.extend({
         default: null,
       },
       height: {
-        default: null,
+        default: 200,
       },
       left: {
         default: 0,

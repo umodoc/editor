@@ -36,7 +36,12 @@
           style="width: var(--page-margin-right)"
         ></div>
       </div>
-      <node-view-content class="page-node-content" />
+      <node-view-content
+        class="page-node-content"
+        :style="{
+          height: pageSize.height - page.margin.top - page.margin.bottom + 'cm',
+        }"
+      />
       <div class="page-node-footer">
         <div
           class="page-corner corner-bl"
@@ -130,8 +135,6 @@ watch(
 
   .page-watermark {
     position: unset !important;
-    display: flex;
-    flex-direction: column;
     width: var(--page-width);
     height: var(--page-height);
   }
@@ -205,11 +208,6 @@ watch(
     box-sizing: border-box;
     width: 100%;
     padding: 0 var(--page-margin-right) 0 var(--page-margin-right);
-    height: calc(
-      var(--page-size-height) - var(--page-margin-top) -
-        var(--page-margin-bottom)
-    );
-    flex: 1;
   }
 }
 </style>
