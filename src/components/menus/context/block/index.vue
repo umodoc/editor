@@ -2,7 +2,7 @@
   <div
     v-if="menuVisible"
     class="block-menu-hander"
-    :style="`transform: translate(54px, ${menuScrollTop}px);`"
+    :style="`transform: translate(${page.margin.left}cm, ${menuScrollTop}px);`"
   >
     <menus-context-block-node />
     <menus-context-block-common />
@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-const { container, editor } = useStore()
+const { container, page, editor } = useStore()
 
 let menuVisible = $ref(false)
 let menuScrollTop = $ref(0)
@@ -63,6 +63,7 @@ watch(
 .block-menu-hander {
   position: absolute;
   z-index: 20;
+  margin-left: -68px;
   .menu-button {
     background-color: transparent;
     .button-content {
