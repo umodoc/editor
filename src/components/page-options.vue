@@ -1,16 +1,19 @@
 <template>
   <modal
     :visible="visible"
-    :footer="false"
     icon="page-margin"
     :header="t('pageOptions.title')"
     width="460px"
     @close="emits('close')"
+    @confirm="onConfirm"
   >
     <div class="page-options-container">
       <t-form label-align="left">
         <t-form-item :label="t('page.orientation.text')">
-          <t-radio-group v-model="page.orientation" variant="default-filled">
+          <t-radio-group
+            v-model="pageOptions.orientation"
+            variant="default-filled"
+          >
             <t-radio-button value="landscape">
               <icon name="page" />
               {{ t('page.orientation.landscape') }}
@@ -31,7 +34,7 @@
             placeholder=""
             @change="selectPageSize"
           >
-            <template #valueDisplay> {{ page.size.label }} </template>
+            <template #valueDisplay> {{ pageOptions.size.label }} </template>
             <t-option
               v-for="(item, index) in options.dicts.pageSizes"
               :key="index"
@@ -50,7 +53,7 @@
             <div class="item">
               <t-input-number
                 class="page-setting-number"
-                v-model="page.size.width"
+                v-model="pageOptions.size.width"
                 theme="normal"
                 align="center"
                 :min="10"
@@ -64,7 +67,7 @@
             <div class="item">
               <t-input-number
                 class="page-setting-number"
-                v-model="page.size.height"
+                v-model="pageOptions.size.height"
                 theme="normal"
                 align="center"
                 :min="10"
@@ -82,13 +85,13 @@
             <div class="page-margin-inbuilt">
               <div
                 class="item"
-                :class="{ active: !page.margin.layout }"
+                :class="{ active: !pageOptions.margin.layout }"
                 v-text="t('pageOptions.margin.default')"
                 @click="selectPageMargin(options.page.defaultMargin)"
               ></div>
               <div
                 class="item narrow"
-                :class="{ active: page.margin.layout === 'narrow' }"
+                :class="{ active: pageOptions.margin.layout === 'narrow' }"
                 v-text="t('pageOptions.margin.narrow')"
                 @click="
                   selectPageMargin({
@@ -102,7 +105,7 @@
               ></div>
               <div
                 class="item moderate"
-                :class="{ active: page.margin.layout === 'moderate' }"
+                :class="{ active: pageOptions.margin.layout === 'moderate' }"
                 v-text="t('pageOptions.margin.moderate')"
                 @click="
                   selectPageMargin({
@@ -116,7 +119,7 @@
               ></div>
               <div
                 class="item wide"
-                :class="{ active: page.margin.layout === 'wide' }"
+                :class="{ active: pageOptions.margin.layout === 'wide' }"
                 v-text="t('pageOptions.margin.wide')"
                 @click="
                   selectPageMargin({
@@ -133,7 +136,7 @@
               <div class="item">
                 <t-input-number
                   class="page-setting-number"
-                  v-model="page.margin.top"
+                  v-model="pageOptions.margin.top"
                   theme="normal"
                   align="center"
                   :min="0"
@@ -148,7 +151,7 @@
               <div class="item">
                 <t-input-number
                   class="page-setting-number"
-                  v-model="page.margin.bottom"
+                  v-model="pageOptions.margin.bottom"
                   theme="normal"
                   align="center"
                   :min="0"
@@ -163,7 +166,7 @@
               <div class="item">
                 <t-input-number
                   class="page-setting-number"
-                  v-model="page.margin.left"
+                  v-model="pageOptions.margin.left"
                   theme="normal"
                   align="center"
                   :min="0"
@@ -178,7 +181,7 @@
               <div class="item">
                 <t-input-number
                   class="page-setting-number"
-                  v-model="page.margin.right"
+                  v-model="pageOptions.margin.right"
                   theme="normal"
                   align="center"
                   :min="0"
@@ -209,29 +212,36 @@ const emits = defineEmits(['close'])
 
 const { container, options, page } = useStore()
 
+let pageOptions = $ref(JSON.parse(JSON.stringify(page.value)))
+
 // 页面大小
 const selectPageSize = (index) => {
-  page.value.size = options.value.dicts.pageSizes[index]
+  pageOptions.size = options.value.dicts.pageSizes[index]
 }
 const inputPageSize = (value, field) => {
   if (!value || value < 10) {
-    page.value.size[field] = 10
+    pageOptions.size[field] = 10
     return
   }
-  page.value.size.label = t('pageOptions.size.custom')
+  pageOptions.size.label = t('pageOptions.size.custom')
 }
 
 // 页边距
 const selectPageMargin = (margin) => {
-  page.value.margin = margin
+  pageOptions.margin = margin
 }
 const inputPageMargin = (value, field) => {
   if (!value || value < 0) {
-    page.value.margin[field] = 0
+    pageOptions.margin[field] = 0
     return
   }
-  page.value.margin.layout = 'custom'
-  selectPageMargin(page.value.margin)
+  pageOptions.margin.layout = 'custom'
+  selectPageMargin(pageOptions.margin)
+}
+
+const onConfirm = () => {
+  page.value = pageOptions
+  emits('close')
 }
 </script>
 
