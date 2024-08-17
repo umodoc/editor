@@ -536,28 +536,3 @@ export const findParentNodeClosestToPos = ($pos, predicate) => {
     }
   }
 }
-
-export function checkAllImagesLoadedWithMutationObserver(editor) {
-  var observer = new MutationObserver(function (mutations) {
-    var allLoaded = true
-    var images = document.images
-    for (var i = 0; i < images.length; i++) {
-      if (!images[i].complete) {
-        allLoaded = false
-        break
-      }
-    }
-    if (allLoaded) {
-      setTimeout(() => {
-        editor.commands.autoPaging()
-      }, 100)
-    }
-  })
-  observer.observe(document.getElementsByClassName('editor-container')[0], {
-    childList: true,
-    subtree: true,
-  })
-  return () => {
-    observer.disconnect()
-  }
-}

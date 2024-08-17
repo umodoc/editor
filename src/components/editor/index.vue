@@ -80,7 +80,6 @@ import TableHeader from '@/extensions/table-header'
 import TableRow from '@tiptap/extension-table-row'
 
 // 页面
-import PageBreak from '@/extensions/page-break'
 import Toc from '@/extensions/toc'
 // 分页
 import Page from '@/extensions/page'
@@ -204,7 +203,6 @@ const editorInstance = new Editor({
     TableCell,
     // 页面
     Toc,
-    PageBreak,
     // 其他
     Selection,
     TableOfContents.configure({
@@ -261,7 +259,7 @@ onMounted(() => {
 window.onload = () => {
   editorInstance.registerPlugin(pagePlugin(editor, {}))
   setTimeout(() => {
-    const tr = editorInstance.state.tr.setMeta('splitPage', true)
+    const tr = editorInstance.state.tr.setMeta('initSplit', true)
     editorInstance.view.dispatch(tr)
   }, 500)
 }

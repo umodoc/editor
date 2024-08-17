@@ -88,6 +88,9 @@ export default Node.create({
       pageNumber: {
         default: 1,
       },
+      force: {
+        default: false,
+      },
     }
   },
 
@@ -118,6 +121,14 @@ export default Node.create({
         return ({ tr, state, dispatch, editor }) => {
           if (dispatch) {
             tr.setMeta('runState', status)
+          }
+          return true
+        }
+      },
+      setPageBreak: () => {
+        return ({ tr, state, dispatch, editor }) => {
+          if (dispatch) {
+            tr.setMeta('splitPage', true)
           }
           return true
         }
@@ -176,6 +187,9 @@ export default Node.create({
               selection,
             )
             if (pageNode) {
+              if (!pageNode.node.firstChild) {
+                return commands.deleteNode(PAGE)
+              }
               //获取当前页面节点的 第一个子节点类型
               const curBlockType = pageNode.node.firstChild.type
               //判断当前的光标位置是否是第一个节点的第一个点
@@ -286,10 +300,18 @@ export default Node.create({
           return true
         },
       ])
+    const handleCopy = () =>
+      this.editor.commands.first(({ commands }) => [
+        () => {
+          debugger
+          return true
+        },
+      ])
     return {
       Backspace: handleBackspace,
       Delete: handleDelete,
       Tab: handleTab,
+      'ctrl+c': handleCopy,
     }
   },
   addProseMirrorPlugins() {

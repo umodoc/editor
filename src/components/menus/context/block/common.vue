@@ -104,9 +104,6 @@ const duplicateNode = () => {
     selectionNode.content,
     selectionNode.marks,
   )
-  if (selectionNode.type.name == 'image') {
-    editor.value.commands.autoPaging(false)
-  }
   editor.value.commands.insertContentAt(getPosition(), copeNode.toJSON())
 }
 const deleteNode = () => {

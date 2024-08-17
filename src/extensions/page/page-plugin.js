@@ -16,7 +16,6 @@ import {
   getId,
   getDomHeight,
   getPageOption,
-  checkAllImagesLoadedWithMutationObserver,
 } from './core'
 import { defaultNodesComputed, PageComputedContext } from './computed'
 import { findParentNode } from '@tiptap/core'
@@ -112,20 +111,30 @@ class PageState {
   deleting
   inserting
   splitPage
+  initSplit
   scrollHeight
   runState
 
-  constructor(deleting, inserting, splitPage, scrollHeight, runState = true) {
+  constructor(
+    deleting,
+    inserting,
+    splitPage,
+    initSplit,
+    scrollHeight,
+    runState = true,
+  ) {
     this.bodyOptions = getPageOption()
     this.deleting = deleting
     this.inserting = inserting
     this.splitPage = splitPage
+    this.initSplit = initSplit
     this.scrollHeight = scrollHeight
     this.runState = runState
   }
 
   transform(tr) {
     const splitPage = tr.getMeta('splitPage') || false
+    const initSplit = tr.getMeta('initSplit') || false
     let deleting = tr.getMeta('deleting') || false
     let inserting = tr.getMeta('inserting') || false
     let runState = tr.getMeta('runState')
@@ -133,7 +142,14 @@ class PageState {
     if (this.runState == false && runState == true) inserting = true
     runState = typeof runState == 'undefined' ? this.runState : runState
     const scrollHeight = tr.getMeta('scrollHeight') || this.scrollHeight
-    return new PageState(deleting, inserting, splitPage, scrollHeight, runState)
+    return new PageState(
+      deleting,
+      inserting,
+      splitPage,
+      initSplit,
+      scrollHeight,
+      runState,
+    )
   }
 }
 
@@ -147,7 +163,7 @@ export const pagePlugin = (editor, nodesComputed) => {
     },
     state: {
       init: () => {
-        return new PageState(false, false, false, false, true)
+        return new PageState(false, false, false, false, 0, true)
       },
       /*判断标志位是否存在  如果存在 则修改 state 值
        * Meta数据是一个事务级别的 一个事务结束 meta消失
@@ -178,19 +194,13 @@ export const pagePlugin = (editor, nodesComputed) => {
         },
       },
       transformPasted(slice, view) {
-        let lazy = false
         slice.content.descendants((node) => {
-          if (node.type.name == 'image') lazy = true
           node.attrs.id = getId()
         })
-        if (lazy) {
-          editor.value.commands.autoPaging(false)
-        }
         return slice
       },
     },
   })
-  checkAllImagesLoadedWithMutationObserver(editor.value)
   return plugin
 }
 export const idPluginKey = new PluginKey('attrkey')
@@ -202,7 +212,7 @@ export const idPlugin = (types) => {
         return false
       },
       apply: (tr, prevState) => {
-        let data = tr.getMeta('splitPage')
+        let data = tr.getMeta('initSplit')
         return data
       },
     },

@@ -307,27 +307,17 @@ export class PageComputedContext {
   //核心执行逻辑
   run() {
     const { selection, doc } = this.state
-    const { inserting, deleting, runState, splitPage } = this.pageState
+    const { inserting, deleting, runState, initSplit, splitPage } =
+      this.pageState
     if (!runState) return null
-    if (splitPage) return this.initComputed()
+    if (splitPage) return this.forceSplit()
+    if (initSplit) return this.initComputed()
     if (!inserting && deleting && selection.$head.node(1) === doc.lastChild)
       return this.tr
     if (inserting || deleting) {
       const startTime = performance.now()
       this.computed()
       this.checkNodeAndFix()
-      const endTime = performance.now()
-      const c = new Date().toLocaleTimeString()
-      // console.info(
-      //   `%cUmo Editor%c${c} %c[分页用时${Math.round(endTime - startTime)}ms]`,
-      //   `background: #015beb;
-      //    color: #fff;
-      //    border-radius: 2px;
-      //    padding: 2px 5px;
-      //    margin-right: 6px;`,
-      //   'color: rgba(0,0,0,.5)',
-      //   `color: #069f69;font-weight: bold`,
-      // )
     }
 
     return this.tr
@@ -378,6 +368,11 @@ export class PageComputedContext {
     }
   }
 
+  mergeDefaultDocumentPro() {
+    const tr = this.tr
+    for (;;) {}
+  }
+
   /**
    * 重第count页开始合并page
    * @param count
@@ -421,9 +416,32 @@ export class PageComputedContext {
   mergeDocument() {
     const tr = this.tr
     const { selection } = this.state
-    const count = tr.doc.content.findIndex(selection.head).index + 1
+    const start = tr.doc.content.findIndex(selection.head).index + 1
+    let end = 0
+    for (let i = start; i < tr.doc.content.childCount; i++) {
+      if (tr.doc.content.child(i).force) {
+        end = i
+        break
+      }
+    }
+
     //把所有的page 合并成一个 page
-    this.mergeDefaultDocument(count)
+    this.mergeDefaultDocument(start)
+  }
+
+  forceSplit() {
+    const { selection, schema } = this.state
+    const { $anchor } = selection
+    const splitInfo = { pos: $anchor.pos, depth: $anchor.depth }
+    const type = getNodeType(PAGE, schema)
+    this.lift({
+      pos: splitInfo.pos,
+      depth: splitInfo.depth,
+      typesAfter: [{ type }],
+      schema: schema,
+      force: true,
+    })
+    return this.tr
   }
 
   /**
@@ -435,7 +453,7 @@ export class PageComputedContext {
    * @param typesAfter
    * @param schema
    */
-  lift({ pos, depth = 1, typesAfter, schema }) {
+  lift({ pos, depth = 1, typesAfter, schema, force = false }) {
     const tr = this.tr
     const $pos = tr.doc.resolve(pos)
     let before = Fragment.empty
@@ -466,6 +484,7 @@ export class PageComputedContext {
               {
                 id: getId(),
                 pageNumber: na?.attrs.pageNumber + 1,
+                force,
               },
               after,
             )

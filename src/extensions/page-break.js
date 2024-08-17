@@ -1,3 +1,4 @@
+/*
 import { Node, mergeAttributes } from '@tiptap/core'
 
 export default Node.create({
@@ -34,3 +35,4 @@ export default Node.create({
     }
   },
 })
+*/
