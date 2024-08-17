@@ -556,9 +556,13 @@
   "feedback": "Feedback",
   "poweredBy": "Powered by Umo Editor",
   "wordCount": {
-    "input": "{count} characters,",
-    "limit": "total should not exceed {count} characters,",
-    "selected": "{count} characters selected"
+    "characters": "Characters",
+    "title": "Document Statistics",
+    "input": "Characters Typed",
+    "selection": "Selected Characters",
+    "limit": "Character Limit",
+    "currentPage": "Current Page",
+    "totalPage": "Total Pages"
   },
   "preview": {
     "title": "Presentation",

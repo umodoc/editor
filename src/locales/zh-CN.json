@@ -556,9 +556,13 @@
   "feedback": "使用感受和建议反馈",
   "poweredBy": "由「Umo Editor」提供技术支持",
   "wordCount": {
-    "input": "已输入 {count} 字符，",
-    "limit": "总计不能超过 {count} 字符，",
-    "selected": "已选中 {count} 字符"
+    "characters": "字符",
+    "title": "文档信息统计",
+    "input": "已输入字数",
+    "selection": "已选中字数",
+    "limit": "字数限制",
+    "currentPage": "当前页码",
+    "totalPage": "总页码数"
   },
   "preview": {
     "title": "演示模式",
