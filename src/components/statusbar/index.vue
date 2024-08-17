@@ -181,6 +181,7 @@
         </tooltip>
         <t-slider
           v-model="page.zoomLevel"
+          class="zoom-level-slider"
           :min="20"
           :max="500"
           :step="10"
@@ -487,13 +488,15 @@ const changeLang = ({ value }) => {
       --td-comp-size-xxxs: 8px;
       --td-size-2: 3px;
       --td-brand-color: var(--umo-text-color);
-      :deep(.umo-slider__button) {
-        background: var(--td-brand-color);
-        border: none;
-        box-shadow: none;
-      }
-      :deep(.umo-slider__track) {
-        background: none;
+      .zoom-level-slider {
+        :deep(.umo-slider__button) {
+          background: var(--td-brand-color);
+          border: none;
+          box-shadow: none;
+        }
+        :deep(.umo-slider__track) {
+          background: none;
+        }
       }
     }
     .lang-button {
@@ -504,6 +507,15 @@ const changeLang = ({ value }) => {
           font-size: 16px;
           margin-right: 3px;
         }
+      }
+    }
+    @media screen and (max-width: 720px) {
+      .zoom-level-bar {
+        width: auto;
+      }
+      .zoom-level-slider,
+      .lang-button {
+        display: none !important;
       }
     }
   }
