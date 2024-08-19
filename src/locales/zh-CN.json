@@ -324,8 +324,14 @@
       "color5": "暗夜黑"
     },
     "break": "分页符",
-    "footer": "页脚",
-    "header": "页眉",
+    "footer": {
+      "show": "显示页脚",
+      "hide": "隐藏页脚"
+    },
+    "header": {
+      "show": "显示页眉",
+      "hide": "隐藏页眉"
+    },
     "lineNumber": "显示行号",
     "margin": "页边距",
     "orientation": {

@@ -52,6 +52,8 @@ export const useStore = createGlobalState(() => {
         background: defaultBackground,
         orientation: defaultOrientation,
         watermark,
+        header: true,
+        footer: true,
         showLineNumber: false,
         showToc: false,
         pagination: true,

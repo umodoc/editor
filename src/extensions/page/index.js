@@ -79,6 +79,7 @@ export default Node.create({
       nodesComputed: {},
       View: VueNodeViewRenderer(NodeView),
       types: [],
+      slots: {},
     }
   },
   /* 自定义操作 */
@@ -87,6 +88,9 @@ export default Node.create({
       HTMLAttributes: {},
       pageNumber: {
         default: 1,
+      },
+      slots: {
+        default: this.options.slots,
       },
     }
   },

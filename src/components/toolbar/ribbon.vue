@@ -202,10 +202,10 @@
               </div>
             </div>
           </div>
-          <!-- <div class="virtual-group">
+          <div class="virtual-group">
             <menus-toolbar-page-header />
             <menus-toolbar-page-footer />
-          </div> -->
+          </div>
           <div class="virtual-group">
             <menus-toolbar-page-break />
             <menus-toolbar-page-line-number />

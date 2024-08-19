@@ -324,8 +324,14 @@
       "color5": "Dark Night\nBlack"
     },
     "break": "Page Break",
-    "footer": "Footer",
-    "header": "Header",
+    "footer": {
+      "show": "Show Footer",
+      "hide": "Hide Footer"
+    },
+    "header": {
+      "show": "Show Header",
+      "hide": "Hide Header"
+    },
     "lineNumber": "Line Numbers",
     "margin": "Margins",
     "orientation": {

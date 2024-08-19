@@ -18,6 +18,12 @@
           }"
         >
           <editor>
+            <template #page_header="props">
+              <slot name="page_header" v-bind="props" />
+            </template>
+            <template #page_footer="props">
+              <slot name="page_footer" v-bind="props" />
+            </template>
             <template #bubble_menu="props">
               <slot name="bubble_menu" v-bind="props" />
             </template>

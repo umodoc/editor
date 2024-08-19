@@ -1,5 +1,12 @@
 <template>
-  <menus-button ico="page-header" :text="t('page.header')" huge />
+  <menus-button
+    ico="page-header"
+    :text="page.header ? t('page.footer.hide') : t('page.footer.show')"
+    huge
+    @menu-click="page.header = !page.header"
+  />
 </template>
 
-<script setup></script>
+<script setup>
+const { page } = useStore()
+</script>
