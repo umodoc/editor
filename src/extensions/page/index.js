@@ -26,6 +26,7 @@ import {
   HORIZONTALRULE,
   PAGEBREAK,
   TABLEHEADER,
+  LIST_TYPE,
 } from './node-names'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import { Selection, TextSelection } from '@tiptap/pm/state'

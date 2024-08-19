@@ -13,6 +13,7 @@ import {
   TABLE_CELL,
   TASKITEM,
   TASKLIST,
+  LIST_TYPE,
 } from './node-names'
 import { Fragment, Slice } from '@tiptap/pm/model'
 import {
@@ -22,7 +23,7 @@ import {
   getDomHeight,
   getId,
 } from './core'
-import { getNodeType } from '@tiptap/core'
+import { findParentNode, getNodeType } from '@tiptap/core'
 import { ReplaceStep } from '@tiptap/pm/transform'
 
 export const sameListCalculation = (splitContex, node, pos, parent, dom) => {
@@ -459,6 +460,13 @@ export class PageComputedContext {
     const { selection, schema } = this.state
     const { $anchor } = selection
     const splitInfo = { pos: $anchor.pos, depth: $anchor.depth }
+    let parentNode = findParentNode((node) =>
+      LIST_TYPE.includes(node.type.name),
+    )(selection)
+    if (parentNode) {
+      splitInfo.pos = parentNode.start
+      splitInfo.depth = parentNode.depth
+    }
     const type = getNodeType(PAGE, schema)
     this.lift({
       pos: splitInfo.pos,
