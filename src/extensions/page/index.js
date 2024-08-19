@@ -300,18 +300,12 @@ export default Node.create({
           return true
         },
       ])
-    const handleCopy = () =>
-      this.editor.commands.first(({ commands }) => [
-        () => {
-          debugger
-          return true
-        },
-      ])
+
     return {
       Backspace: handleBackspace,
       Delete: handleDelete,
       Tab: handleTab,
-      'ctrl+c': handleCopy,
+      'Mod-Enter': () => this.editor.commands.setPageBreak(),
     }
   },
   addProseMirrorPlugins() {
