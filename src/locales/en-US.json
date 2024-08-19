@@ -89,6 +89,10 @@
     },
     "importWord": {
       "text": "Import Word",
+      "loadScript": {
+        "title": "Error Message",
+        "message": "Loading the transformed script, please try again later."
+      },
       "limitSize": "File size cannot exceed 5MB.",
       "converting": "Converting Word document, please wait...",
       "convertError": "Error parsing Word document",
@@ -599,7 +603,7 @@
     "download": "Download File",
     "limit": "File \"{filename}\" exceeds the limit of {size}MB",
     "notAllow": {
-      "title": "Error Prompt",
+      "title": "Error Message",
       "message": "Insertion of this file type is not allowed in the current document."
     }
   },

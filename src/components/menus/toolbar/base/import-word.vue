@@ -9,10 +9,34 @@
 </template>
 
 <script setup>
-import mammoth from 'mammoth/mammoth.browser'
 const { editor, options } = useStore()
 
+// 动态导入 mammoth.js
+onMounted(() => {
+  const mammothScriptElement = document.querySelector('#mammoth-script')
+  if (
+    mammothScriptElement === null &&
+    !options.value.toolbar.disableMenuItems.includes('importWord')
+  ) {
+    const style = document.createElement('script')
+    style.src = `${options.value.cdnUrl}/libs/mammoth/mammoth.browser.min.js`
+    style.id = 'mammoth-script'
+    document.querySelector('head').append(style)
+  }
+})
+
 const importWord = () => {
+  if (!mammoth) {
+    const dialog = useAlert({
+      theme: 'warning',
+      header: t('base.importWord.loadScript.title'),
+      body: t('base.importWord.loadScript.message'),
+      onConfirm() {
+        dialog.destroy()
+      },
+    })
+    return
+  }
   const { open, onChange } = useFileDialog({
     accept: '.docx',
     reset: true,
