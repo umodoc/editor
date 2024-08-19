@@ -16,7 +16,7 @@ onMounted(() => {
   const mammothScriptElement = document.querySelector('#mammoth-script')
   if (
     mammothScriptElement === null &&
-    !options.value.toolbar.disableMenuItems.includes('importWord')
+    options.value.toolbar.importWord.enabled
   ) {
     const style = document.createElement('script')
     style.src = `${options.value.cdnUrl}/libs/mammoth/mammoth.browser.min.js`
