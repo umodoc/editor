@@ -1,7 +1,6 @@
 <template>
   <template
     v-if="
-      editor?.isActive('page') ||
       editor?.isActive('toc') ||
       editor?.isActive('pagination') ||
       editor?.isActive('horizontalRule') ||
@@ -33,7 +32,12 @@
       "
     />
     <menus-bubble-image-preview
-      v-if="editor?.getAttributes('image')?.type === 'image'"
+      v-if="
+        editor?.getAttributes('image')?.type === 'image' ||
+        ['image/png', 'image/jpeg'].includes(
+          editor?.getAttributes('image')?.type,
+        )
+      "
     />
     <menus-bubble-image-open />
     <div class="divider"></div>

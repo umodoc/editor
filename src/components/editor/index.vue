@@ -143,7 +143,9 @@ const editorInstance = new Editor({
       dropcursor: false,
     }),
     Document.extend({ content: 'page+' }),
-    Page,
+    Page.configure({
+      slots: useSlots(),
+    }),
     /* Placeholder.configure({
       considerAnyAsEmpty: true,
       placeholder: l(options.value.document.placeholder),

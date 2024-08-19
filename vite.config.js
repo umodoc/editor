@@ -15,8 +15,8 @@ export default defineConfig({
   plugins: [
     VueMacros({
       plugins: {
-        vue: Vue()
-      }
+        vue: Vue(),
+      },
     }),
     AutoImport({
       dirs: ['./src/composables'],
@@ -24,10 +24,10 @@ export default defineConfig({
       resolvers: [
         TDesignResolver({
           library: 'vue-next',
-          esm: true
-        })
+          esm: true,
+        }),
       ],
-      dts: './imports.d.ts'
+      dts: './imports.d.ts',
     }),
     Components({
       directoryAsNamespace: true,
@@ -35,28 +35,28 @@ export default defineConfig({
       resolvers: [
         TDesignResolver({
           library: 'vue-next',
-          esm: true
-        })
-      ]
+          esm: true,
+        }),
+      ],
     }),
     createSvgIconsPlugin({
-      iconDirs: [process.cwd() + '/src/assets/icons']
-    })
+      iconDirs: [process.cwd() + '/src/assets/icons'],
+    }),
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
   },
   css: {
     preprocessorOptions: {
       less: {
         modifyVars: {
-          '@prefix': 'umo'
+          '@prefix': 'umo',
         },
-        javascriptEnabled: true
-      }
-    }
+        javascriptEnabled: true,
+      },
+    },
   },
   build: {
     lib: {
@@ -78,7 +78,6 @@ export default defineConfig({
       external: [
         /@vueuse\/.*/,
         /@tiptap\/.*/,
-        /mammoth\/.*/,
         /nzh\/.*/,
         'vue',
         '@eslint/object-schema',

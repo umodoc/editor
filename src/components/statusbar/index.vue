@@ -84,17 +84,59 @@
         </t-button>
       </tooltip>
       <div class="bar-split"></div>
-      <div class="simple-text word-count" v-if="editor">
-        {{
-          t('wordCount.input', {
-            count: editor.storage.characterCount.characters(),
-          })
-        }}
-        <template v-if="options.document.characterLimit > 0">{{
-          t('wordCount.limit', { count: options.document.characterLimit })
-        }}</template>
-        {{ t('wordCount.selected', { count: selectionCharacters }) }}
-      </div>
+      <t-popup
+        v-if="editor"
+        v-model="showWordCount"
+        trigger="click"
+        placement="top-left"
+      >
+        <t-button
+          class="bar-button auto-width word-count"
+          variant="text"
+          size="small"
+        >
+          <span v-if="selectionCharacters > 0">
+            {{ selectionCharacters }}/
+          </span>
+          <span> {{ editor.storage.characterCount.characters() }}</span>
+          {{ t('wordCount.characters') }} ▴
+        </t-button>
+        <template #content>
+          <div v-if="showWordCount" class="umo-word-count-detail">
+            <div class="umo-word-count-title">{{ t('wordCount.title') }}</div>
+            <ul>
+              <li>
+                {{ t('wordCount.input') }}
+                <span>
+                  {{ editor.storage.characterCount.characters() }}
+                </span>
+              </li>
+              <li>
+                {{ t('wordCount.selection') }}
+                <span>{{ selectionCharacters }}</span>
+              </li>
+              <li v-if="options.document.characterLimit > 0">
+                {{ t('wordCount.limit') }}
+                <span>
+                  {{ options.document.characterLimit }}
+                </span>
+              </li>
+              <li>
+                {{ t('wordCount.currentPage') }}
+                <span>
+                  {{ editor?.getAttributes('page').pageNumber }}
+                </span>
+              </li>
+              <li>
+                {{ t('wordCount.totalPage') }}
+                <span>
+                  {{ editor.$nodes('page').length }}
+                </span>
+              </li>
+            </ul>
+          </div>
+        </template>
+      </t-popup>
     </div>
     <div class="bar-right">
       <tooltip
@@ -139,6 +181,7 @@
         </tooltip>
         <t-slider
           v-model="page.zoomLevel"
+          class="zoom-level-slider"
           :min="20"
           :max="500"
           :step="10"
@@ -175,7 +218,7 @@
         </tooltip>
         <tooltip :content="`${t('zoom.reset')} (${getShortcut('Ctrl1')})`">
           <t-button
-            class="bar-button zoom-button"
+            class="bar-button auto-width"
             variant="text"
             size="small"
             @click="zoomReset"
@@ -192,7 +235,7 @@
         @click="changeLang"
       >
         <t-button
-          class="bar-button lang-button"
+          class="bar-button auto-width lang-button"
           variant="text"
           size="small"
           v-text="locale"
@@ -255,6 +298,7 @@ const togglePagination = () => {
 }
 
 // 字数统计
+let showWordCount = $ref(false)
 const selectionCharacters = computed(() => {
   const { state } = editor.value
   if (state) {
@@ -409,8 +453,17 @@ const changeLang = ({ value }) => {
     --td-radius-default: 2px;
     font-size: 14px;
     margin: 0 4px;
-    &:not(.zoom) {
+    &:not(.auto-width) {
       width: var(--td-comp-size-xs);
+    }
+    &.auto-width {
+      font-size: var(--umo-font-size-small);
+      padding-left: 6px;
+      padding-right: 6px;
+    }
+    &.word-count {
+      padding-left: 2px;
+      padding-right: 0;
     }
     :deep(.umo-button__text) {
       padding: 0 5px;
@@ -424,11 +477,6 @@ const changeLang = ({ value }) => {
   .bar-left {
     display: flex;
     align-items: center;
-    .word-count {
-      @media screen and (max-width: 1024px) {
-        display: none;
-      }
-    }
   }
 
   .bar-right {
@@ -440,24 +488,18 @@ const changeLang = ({ value }) => {
       --td-comp-size-xxxs: 8px;
       --td-size-2: 3px;
       --td-brand-color: var(--umo-text-color);
-      :deep(.umo-slider__button) {
-        background: var(--td-brand-color);
-        border: none;
-        box-shadow: none;
-      }
-      :deep(.umo-slider__track) {
-        background: none;
+      .zoom-level-slider {
+        :deep(.umo-slider__button) {
+          background: var(--td-brand-color);
+          border: none;
+          box-shadow: none;
+        }
+        :deep(.umo-slider__track) {
+          background: none;
+        }
       }
     }
-
-    .zoom-button {
-      font-size: var(--umo-font-size-small);
-      width: 64px;
-    }
-
     .lang-button {
-      width: auto;
-      font-size: var(--umo-font-size-small);
       :deep(.umo-button__text) {
         display: flex;
         align-items: center;
@@ -465,6 +507,15 @@ const changeLang = ({ value }) => {
           font-size: 16px;
           margin-right: 3px;
         }
+      }
+    }
+    @media screen and (max-width: 720px) {
+      .zoom-level-bar {
+        width: auto;
+      }
+      .zoom-level-slider,
+      .lang-button {
+        display: none !important;
       }
     }
   }
@@ -546,5 +597,28 @@ const changeLang = ({ value }) => {
 }
 .umo-drawer__close-btn {
   margin-right: 3px;
+}
+
+.umo-word-count-detail {
+  padding: 10px 0 8px;
+  width: 160px;
+  font-size: 12px;
+  color: var(--umo-text-color-light);
+  .umo-word-count-title {
+    padding: 0 12px;
+    margin-bottom: 3px;
+  }
+  li {
+    list-style: none;
+    cursor: default;
+    padding: 0 12px;
+    display: flex;
+    justify-content: space-between;
+    line-height: 28px;
+    color: var(--umo-text-color);
+    &:hover {
+      background-color: var(--td-bg-color-container-hover);
+    }
+  }
 }
 </style>

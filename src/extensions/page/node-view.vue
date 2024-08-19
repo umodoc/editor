@@ -31,7 +31,14 @@
           style="width: var(--page-margin-left)"
         ></div>
 
-        <div class="page-node-header-content"></div>
+        <div class="page-node-header-content">
+          <component
+            v-if="page.header"
+            :is="node.attrs.slots.page_header"
+            :page-number="node.attrs.pageNumber"
+            :total-pages="editor.$nodes('page').length"
+          />
+        </div>
         <div
           class="page-corner corner-tr"
           style="width: var(--page-margin-right)"
@@ -48,7 +55,14 @@
           class="page-corner corner-bl"
           style="width: var(--page-margin-left)"
         ></div>
-        <div class="page-node-footer-content"></div>
+        <div class="page-node-footer-content">
+          <component
+            v-if="page.footer"
+            :is="node.attrs.slots.page_header"
+            :page-number="node.attrs.pageNumber"
+            :total-pages="editor.$nodes('page').length"
+          />
+        </div>
         <div
           class="page-corner corner-br"
           style="width: var(--page-margin-right)"

@@ -30,6 +30,12 @@
       </header>
       <main class="umo-main">
         <container-page v-if="$toolbar.mode !== 'source'">
+          <template #page_header="props">
+            <slot name="page_header" v-bind="props" />
+          </template>
+          <template #page_footer="props">
+            <slot name="page_footer" v-bind="props" />
+          </template>
           <template #bubble_menu="props">
             <slot name="bubble_menu" v-bind="props" />
           </template>
@@ -148,6 +154,16 @@ watch(
     setTheme(theme)
   },
 )
+
+// 页眉页脚
+const { hidePageHeader, hidePageFooter } = useStore()
+const slots = useSlots()
+if (slots.page_header) {
+  hidePageHeader.value = false
+}
+if (slots.page_footer) {
+  hidePageFooter.value = false
+}
 
 // 对外暴露的编辑器方法
 const setToolbar = (parmas) => {

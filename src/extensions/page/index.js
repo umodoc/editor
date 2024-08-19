@@ -6,7 +6,6 @@ import {
 } from '@tiptap/core'
 import {
   PAGE,
-  EXTEND,
   BULLETLIST,
   CASSIE_BLOCK,
   HEADING,
@@ -26,19 +25,12 @@ import {
   HORIZONTALRULE,
   PAGEBREAK,
   TABLEHEADER,
-  LIST_TYPE,
 } from './node-names'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import { Selection, TextSelection } from '@tiptap/pm/state'
 import { Slice } from '@tiptap/pm/model'
-import {
-  buildComputedHtml,
-  changeComputedHtml,
-  getFlag,
-  getPageOption,
-  removeComputedHtml,
-} from './core'
-import { idPlugin, pagePlugin } from './page-plugin'
+import { getFlag } from './core'
+import { idPlugin } from './page-plugin'
 import { splitBlock } from './split-block'
 import { splitListItem } from './split-list-item'
 import NodeView from './node-view.vue'
@@ -81,6 +73,7 @@ export default Node.create({
       nodesComputed: {},
       View: VueNodeViewRenderer(NodeView),
       types: [],
+      slots: {},
     }
   },
   /* 自定义操作 */
@@ -95,6 +88,9 @@ export default Node.create({
       },
       force: {
         default: false,
+      },
+      slots: {
+        default: this.options.slots,
       },
     }
   },
@@ -271,7 +267,7 @@ export default Node.create({
               const isAtEnd =
                 pageNode.start + Selection.atEnd(pageNode.node).from === pos
               if (isAtEnd) {
-                const vm = TextSelection.create(doc, pos + 6, pos + 6)
+                const vm = TextSelection.create(doc, pos + 2, pos + 2)
                 const afterPageNode = findParentNode(
                   (node) => node.type.name === PAGE,
                 )(vm)

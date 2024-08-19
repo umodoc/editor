@@ -89,6 +89,10 @@
     },
     "importWord": {
       "text": "导入 Word",
+      "loadScript": {
+        "title": "错误提示",
+        "message": "正在加载转换的脚本，请稍后重试。"
+      },
       "limitSize": "文件大小不能超过 5MB。",
       "converting": "正在转换Word文档，请稍后...",
       "convertError": "解析 Word 文档出错",
@@ -320,8 +324,14 @@
       "color5": "暗夜黑"
     },
     "break": "分页符",
-    "footer": "页脚",
-    "header": "页眉",
+    "footer": {
+      "show": "显示页脚",
+      "hide": "隐藏页脚"
+    },
+    "header": {
+      "show": "显示页眉",
+      "hide": "隐藏页眉"
+    },
     "lineNumber": "显示行号",
     "margin": "页边距",
     "orientation": {
@@ -556,9 +566,13 @@
   "feedback": "使用感受和建议反馈",
   "poweredBy": "由「Umo Editor」提供技术支持",
   "wordCount": {
-    "input": "已输入 {count} 字符，",
-    "limit": "总计不能超过 {count} 字符，",
-    "selected": "已选中 {count} 字符"
+    "characters": "字符",
+    "title": "文档信息统计",
+    "input": "已输入字数",
+    "selection": "已选中字数",
+    "limit": "字数限制",
+    "currentPage": "当前页码",
+    "totalPage": "总页码数"
   },
   "preview": {
     "title": "演示模式",
