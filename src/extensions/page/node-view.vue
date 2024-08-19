@@ -15,6 +15,7 @@
     }"
   >
     <div
+      v-if="node.attrs.pageNumber > 1"
       class="page-node-view-handler"
       :title="t('pagination.toggle')"
       @dblclick="page.pagination = !page.pagination"
@@ -58,7 +59,7 @@
         <div class="page-node-footer-content">
           <component
             v-if="page.footer"
-            :is="node.attrs.slots.page_header"
+            :is="node.attrs.slots.page_footer"
             :page-number="node.attrs.pageNumber"
             :total-pages="editor.$nodes('page').length"
           />
@@ -141,13 +142,6 @@ watch(
     z-index: 5;
   }
 
-  &:first-child {
-    .page-node-view-handler {
-      display: none;
-      margin-top: 0;
-    }
-  }
-
   .page-watermark {
     position: unset !important;
     width: var(--page-width);
@@ -156,12 +150,12 @@ watch(
 
   .page-node-header {
     height: var(--page-margin-top);
-    min-height: var(--page-margin-top);
+    overflow: hidden;
   }
 
   .page-node-footer {
     height: var(--page-margin-bottom);
-    min-height: var(--page-margin-bottom);
+    overflow: hidden;
   }
 
   .page-node-header,
@@ -216,12 +210,12 @@ watch(
   .page-node-header-content,
   .page-node-footer-content {
     flex: 1;
-    padding: 10px 0;
   }
 
   .page-node-content {
     box-sizing: border-box;
     width: 100%;
+    overflow: hidden;
     padding: 0 var(--page-margin-right) 0 var(--page-margin-right);
   }
 }
