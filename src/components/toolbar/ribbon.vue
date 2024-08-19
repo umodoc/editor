@@ -202,9 +202,9 @@
               </div>
             </div>
           </div>
-          <div class="virtual-group">
-            <menus-toolbar-page-header />
-            <menus-toolbar-page-footer />
+          <div class="virtual-group" v-if="!hidePageHeader || !hidePageFooter">
+            <menus-toolbar-page-header v-if="!hidePageHeader" />
+            <menus-toolbar-page-footer v-if="!hidePageFooter" />
           </div>
           <div class="virtual-group">
             <menus-toolbar-page-break />
@@ -252,8 +252,8 @@ const props = defineProps({
 })
 const emits = defineEmits(['menu-change'])
 
+const { options, hidePageHeader, hidePageFooter } = useStore()
 const disableItem = (name) => {
-  const { options } = useStore()
   return options.value.toolbar.disableMenuItems.includes(name)
 }
 

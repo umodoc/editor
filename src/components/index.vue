@@ -155,6 +155,16 @@ watch(
   },
 )
 
+// 页眉页脚
+const { hidePageHeader, hidePageFooter } = useStore()
+const slots = useSlots()
+if (slots.page_header) {
+  hidePageHeader.value = false
+}
+if (slots.page_footer) {
+  hidePageFooter.value = false
+}
+
 // 对外暴露的编辑器方法
 const setToolbar = (parmas) => {
   if ((!parmas) instanceof Object) {
