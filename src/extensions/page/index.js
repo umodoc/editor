@@ -192,7 +192,11 @@ export default Node.create({
               const isAtStart =
                 pageNode.start + Selection.atStart(pageNode.node).from === pos
               if (isAtStart) {
-                const vm = TextSelection.create(doc, pos - 20, pos - 20)
+                const vm = TextSelection.create(
+                  doc,
+                  pageNode.start - 2,
+                  pageNode.start - 2,
+                )
                 const beforePageNode = findParentNode(
                   (node) => node.type.name === PAGE,
                 )(vm)
