@@ -113,14 +113,6 @@ export default Node.create({
     return {
       splitBlock,
       splitListItem,
-      resetPageStore: () => {
-        return ({ tr, state, dispatch, editor }) => {
-          if (dispatch) {
-            dispatch(tr.setMeta('splitPage', true))
-          }
-          return true
-        }
-      },
       autoPaging: (status = true) => {
         return ({ tr, state, dispatch, editor }) => {
           if (dispatch) {

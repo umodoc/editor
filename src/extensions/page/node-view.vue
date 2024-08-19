@@ -25,7 +25,7 @@
       v-bind="watermarkOptions"
       :watermark-content="page.watermark"
     >
-      <div class="page-node-header">
+      <div class="page-node-header" contenteditable="false">
         <div
           class="page-corner corner-tl"
           style="width: var(--page-margin-left)"
@@ -43,7 +43,7 @@
           height: pageSize.height - page.margin.top - page.margin.bottom + 'cm',
         }"
       />
-      <div class="page-node-footer">
+      <div class="page-node-footer" contenteditable="false">
         <div
           class="page-corner corner-bl"
           style="width: var(--page-margin-left)"
