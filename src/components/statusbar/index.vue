@@ -99,7 +99,7 @@
             {{ selectionCharacters }}/
           </span>
           <span> {{ editor.storage.characterCount.characters() }}</span>
-          {{ t('wordCount.characters') }} ▴
+          {{ t('wordCount.characters') }} <icon name="arrow-down" />
         </t-button>
         <template #content>
           <div v-if="showWordCount" class="umo-word-count-detail">
@@ -464,6 +464,14 @@ const changeLang = ({ value }) => {
     &.word-count {
       padding-left: 2px;
       padding-right: 0;
+      :deep(.umo-button__text) {
+        display: flex;
+        align-items: center;
+        .icon {
+          margin-left: 3px;
+          transform: rotate(180deg);
+        }
+      }
     }
     :deep(.umo-button__text) {
       padding: 0 5px;
