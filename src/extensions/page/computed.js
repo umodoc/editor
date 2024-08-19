@@ -144,8 +144,8 @@ export const defaultNodesComputed = {
     splitContex.setBoundary(pos, chunks.length - 1)
     return false
   },
-  [PAGE]: (splitContex, node, pos, parent, dom) => {
-    return node == splitContex.lastPage()
+  [PAGE]: (splitContex, node, pos, parent, dom, startIndex, forcePageId, i) => {
+    return startIndex == i && parent?.type.name == 'doc'
   },
   ['default']: (splitContex, node, pos, parent, dom) => {
     const { height: pHeight } = getDomHeight(dom)
@@ -294,6 +294,8 @@ export class PageComputedContext {
   pageState
   editor
   restDomIds
+  forcePageId
+  startIndex
 
   constructor(editor, nodesComputed, pageState, state) {
     this.editor = editor
@@ -302,6 +304,8 @@ export class PageComputedContext {
     this.state = state
     this.pageState = pageState
     this.restDomIds = []
+    this.forcePageId = null
+    this.startIndex = 0
   }
 
   //核心执行逻辑
@@ -365,12 +369,8 @@ export class PageComputedContext {
         typesAfter: [{ type }],
         schema: schema,
       })
+      this.startIndex += 1
     }
-  }
-
-  mergeDefaultDocumentPro() {
-    const tr = this.tr
-    for (;;) {}
   }
 
   /**
@@ -379,30 +379,54 @@ export class PageComputedContext {
    */
   mergeDefaultDocument(count) {
     const tr = this.tr
-    //把所有的page 合并成一个 page
-    while (tr.doc.content.childCount > count) {
-      const nodesize = tr.doc.content.lastChild
-        ? tr.doc.content.lastChild.nodeSize
-        : 0
-      let depth = 1
-      //如果 前一页的最后一个node 和后一页的node 是同类 则合并
-      if (tr.doc.content.lastChild != tr.doc.content.firstChild) {
-        //获取倒数第二页
-        const prePage = tr.doc.content.child(tr.doc.content.childCount - 2)
-        //获取最后一页
-        const lastPage = tr.doc.content.lastChild
-        //如果最后一页的第一个子标签和前一页的最后一个子标签类型一致 或者是扩展类型(是主类型的拆分类型) 进行合并的时候 深度为2
-
+    if (this.forcePageId) {
+      while (true) {
+        const nodeSize = tr.doc.content.content
+          .slice(0, count)
+          .map((item) => item.nodeSize)
+          .reduce((a, b) => a + b, 0)
+        let depth = 1
+        if (tr.doc.child(count).attrs.id == this.forcePageId) {
+          break
+        }
+        const currentPage = tr.doc.content.child(count - 1)
+        const nextPage = tr.doc.content.child(count)
         if (
-          (lastPage?.firstChild?.type == prePage?.lastChild?.type ||
-            lastPage?.firstChild?.type.name.includes(EXTEND)) &&
-          lastPage?.firstChild?.attrs?.extend
+          (nextPage?.firstChild?.type == currentPage?.lastChild?.type ||
+            nextPage?.firstChild?.type.name.includes(EXTEND)) &&
+          nextPage?.firstChild?.attrs?.extend
         ) {
           depth = 2
-          this.restDomIds.push(prePage?.lastChild?.attrs?.id)
+          this.restDomIds.push(currentPage?.lastChild?.attrs?.id)
         }
+        tr.join(nodeSize, depth)
       }
-      tr.join(tr.doc.content.size - nodesize, depth)
+    } else {
+      //把所有的page 合并成一个 page
+      while (tr.doc.content.childCount > count) {
+        const nodesize = tr.doc.content.lastChild
+          ? tr.doc.content.lastChild.nodeSize
+          : 0
+        let depth = 1
+        //如果 前一页的最后一个node 和后一页的node 是同类 则合并
+        if (tr.doc.content.lastChild != tr.doc.content.firstChild) {
+          //获取倒数第二页
+          const prePage = tr.doc.content.child(tr.doc.content.childCount - 2)
+          //获取最后一页
+          const lastPage = tr.doc.content.lastChild
+          //如果最后一页的第一个子标签和前一页的最后一个子标签类型一致 或者是扩展类型(是主类型的拆分类型) 进行合并的时候 深度为2
+
+          if (
+            (lastPage?.firstChild?.type == prePage?.lastChild?.type ||
+              lastPage?.firstChild?.type.name.includes(EXTEND)) &&
+            lastPage?.firstChild?.attrs?.extend
+          ) {
+            depth = 2
+            this.restDomIds.push(prePage?.lastChild?.attrs?.id)
+          }
+        }
+        tr.join(tr.doc.content.size - nodesize, depth)
+      }
     }
     this.tr = tr
   }
@@ -416,17 +440,19 @@ export class PageComputedContext {
   mergeDocument() {
     const tr = this.tr
     const { selection } = this.state
-    const start = tr.doc.content.findIndex(selection.head).index + 1
-    let end = 0
-    for (let i = start; i < tr.doc.content.childCount; i++) {
-      if (tr.doc.content.child(i).force) {
-        end = i
+    this.startIndex = tr.doc.content.findIndex(selection.head).index
+
+    let id = null
+    for (let i = this.startIndex + 1; i < tr.doc.content.childCount; i++) {
+      const node = tr.doc.content.child(i)
+      if (node.attrs.force) {
+        id = node.attrs.id
         break
       }
     }
-
+    this.forcePageId = id
     //把所有的page 合并成一个 page
-    this.mergeDefaultDocument(start)
+    this.mergeDefaultDocument(this.startIndex + 1)
   }
 
   forceSplit() {
@@ -549,25 +575,33 @@ export class PageComputedContext {
       getDefault(),
     )
     const nodesComputed = this.nodesComputed
-    const lastNode = doc.lastChild
     const restDomIds = this.restDomIds
+    const forcePageId = this.forcePageId
+    const startIndex = this.startIndex
+    let breakDescendants = false
     doc.descendants((node, pos, parentNode, i) => {
-      if (lastNode != node && parentNode?.type.name == 'doc') {
+      if (breakDescendants || node.attrs.id == forcePageId) {
+        breakDescendants = true
         return false
       }
+
       if (!splitContex.pageBoundary()) {
         let dom = document.getElementById(node.attrs.id)
         if (
           restDomIds.includes(node.attrs.id) ||
           (!dom && node.type.name != PAGE)
-        )
+        ) {
           dom = getAbsentHtmlH(node, this.state.schema)
+        }
         return (nodesComputed[node.type.name] || nodesComputed['default'])(
           splitContex,
           node,
           pos,
           parentNode,
           dom,
+          startIndex,
+          forcePageId,
+          i,
         )
       }
       return false

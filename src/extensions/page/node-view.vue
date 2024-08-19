@@ -2,6 +2,7 @@
   <node-view-wrapper
     ref="containerRef"
     class="page-node-view"
+    :id="node.attrs.id"
     :class="{ 'no-shadow': exportImage }"
     :style="{
       '--page-background': page.background,
@@ -60,7 +61,7 @@
 import { nodeViewProps, NodeViewWrapper, NodeViewContent } from '@tiptap/vue-3'
 
 const { page, exportImage } = useStore()
-const { editor } = defineProps(nodeViewProps)
+const { editor, node } = defineProps(nodeViewProps)
 const containerRef = ref(null)
 
 const pageSize = $computed(() => {

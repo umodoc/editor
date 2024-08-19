@@ -63,6 +63,7 @@ const types = [
   HORIZONTALRULE,
   PAGEBREAK,
   TABLEHEADER,
+  PAGE,
 ]
 export default Node.create({
   priority: 2,
@@ -85,6 +86,9 @@ export default Node.create({
   addAttributes() {
     return {
       HTMLAttributes: {},
+      id: {
+        default: null,
+      },
       pageNumber: {
         default: 1,
       },
