@@ -4,7 +4,6 @@
 .idea/
 node_modules/
 dist/
-imports.d.ts
 vite.config.js.timestamp*
 *.log
 .idea
