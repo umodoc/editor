@@ -10,15 +10,15 @@
       icon="diagrams"
       :header="content ? t('tools.diagrams.edit') : t('tools.diagrams.text')"
       :footer="false"
-      class="diagrams-dialog"
+      class="umo-diagrams-dialog"
       mode="full-screen"
       @opened="openDiagramEditor"
       @close="dialogVisible = false"
     >
-      <div v-if="loading" class="diagrams-loading">
+      <div v-if="loading" class="umo-diagrams-loading">
         <t-loading :text="t('tools.diagrams.loading')" size="small" />
       </div>
-      <div class="diagrams-container"></div>
+      <div class="umo-diagrams-container"></div>
     </modal>
   </menus-button>
 </template>
@@ -39,7 +39,7 @@ let loading = $ref(false)
 const diagramEditor = new DiagramEditor({
   domain: options.value.diagrams.domain,
   params: options.value.diagrams.params,
-  container: `${container} .diagrams-container`,
+  container: `${container} .umo-diagrams-container`,
 })
 const openDiagramEditor = () => {
   diagramEditor.edit(props.content || '')
@@ -105,7 +105,7 @@ onBeforeMount(() => {
 </script>
 
 <style lang="less">
-.diagrams-dialog {
+.umo-diagrams-dialog {
   .umo-dialog {
     padding: 0 !important;
   }
@@ -117,7 +117,7 @@ onBeforeMount(() => {
     padding: 0;
   }
 }
-.diagrams-loading {
+.umo-diagrams-loading {
   width: 100%;
   height: calc(100% - var(--td-comp-size-xxxl));
   box-sizing: border-box;
@@ -127,9 +127,9 @@ onBeforeMount(() => {
   position: absolute;
   background-color: var(--umo-container-background);
 }
-.diagrams-container {
+.umo-diagrams-container {
   height: 100%;
-  .diagrams-iframe {
+  .umo-diagrams-iframe {
     width: 100%;
     height: 100%;
     border: none;

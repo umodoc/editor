@@ -1,9 +1,9 @@
 <template>
-  <div class="page-container">
+  <div class="umo-page-container">
     <container-toc v-if="page.showToc" @close="page.showToc = false" />
-    <div class="zoomable-container umo-scrollbar">
+    <div class="umo-zoomable-container umo-scrollbar">
       <div
-        class="zoomable-content"
+        class="umo-zoomable-content"
         :style="{
           width: pageZoomWidth,
           height: pageZoomHeight,
@@ -11,7 +11,7 @@
         }"
       >
         <div
-          class="page-content"
+          class="umo-page-content"
           :style="{
             width: pageSize.width + 'cm',
             transform: `scale(${page.zoomLevel / 100})`,
@@ -38,7 +38,7 @@
       @close="imagePreview = false"
     />
     <t-back-top
-      :container="`${container} .zoomable-container`"
+      :container="`${container} .umo-zoomable-container`"
       :visible-height="800"
       size="small"
       :offset="['25px', '30px']"
@@ -71,9 +71,9 @@ const pageZoomMinHeight = $computed(() => {
 // 页面内容变化后更新页面高度
 let pageZoomHeight = $ref()
 const setPageZoomHeight = () => {
-  const el = document.querySelector(`${container} .page-content`)
+  const el = document.querySelector(`${container} .umo-page-content`)
   if (!el) {
-    console.warn('The element <.page-content> does not exist.')
+    console.warn('The element <.umo-page-content> does not exist.')
     return
   }
   pageZoomHeight = (el.clientHeight * page.value.zoomLevel) / 100 + 'px'
@@ -105,7 +105,7 @@ watch(
   (val) => {
     if (val) {
       document
-        .querySelectorAll(`${container} .page-content img:not(.icon)`)
+        .querySelectorAll(`${container} .umo-page-content img:not(.icon)`)
         .forEach((item) => {
           const src = item.getAttribute('src')
           if (src) previewImages.push(src)
@@ -122,19 +122,19 @@ watch(
 </script>
 
 <style lang="less" scoped>
-.page-container {
+.umo-page-container {
   height: 100%;
   display: flex;
   position: relative;
 }
 
-.zoomable-container {
+.umo-zoomable-container {
   flex: 1;
   padding: 20px 50px;
   scroll-behavior: smooth;
-  .zoomable-content {
+  .umo-zoomable-content {
     margin: 0 auto;
-    .page-content {
+    .umo-page-content {
       transform-origin: 0 0;
       box-sizing: border-box;
       display: flex;

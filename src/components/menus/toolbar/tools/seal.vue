@@ -15,13 +15,13 @@
       @confirm="setSeal"
       @close="dialogVisible = false"
     >
-      <div class="seal-container" @click="selectImage">
-        <div class="tip" v-text="t('tools.seal.tip')"></div>
-        <div class="seal-uploader">
+      <div class="umo-seal-container" @click="selectImage">
+        <div class="umo-seal-tip" v-text="t('tools.seal.tip')"></div>
+        <div class="umo-seal-uploader">
           <span v-if="!sealImg">{{
             converting ? converting : t('tools.seal.insertTip')
           }}</span>
-          <img class="seal-img" v-else :src="sealImg" />
+          <img class="umo-seal-img" v-else :src="sealImg" />
         </div>
       </div>
     </modal>
@@ -104,14 +104,14 @@ const setSeal = () => {
 </script>
 
 <style lang="less" scoped>
-.seal-container {
-  .seal-tip {
+.umo-seal-container {
+  .umo-seal-tip {
     font-size: 12px;
     color: var(--umo-text-color-light);
     margin-bottom: 6px;
     line-height: 1.4;
   }
-  .seal-uploader {
+  .umo-seal-uploader {
     margin-top: 20px;
     height: 240px;
     border: solid 1px var(--umo-primary-color);
@@ -122,7 +122,7 @@ const setSeal = () => {
     overflow: hidden;
     position: relative;
     color: var(--umo-text-color-light);
-    .seal-img {
+    .umo-seal-img {
       max-height: 100%;
       max-width: 100%;
       background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBvcGFjaXR5PSIwLjEiPgo8cmVjdCB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIGZpbGw9IndoaXRlIi8+CjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjgiIHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjQiIHk9IjQiIHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEyIiB5PSI0IiB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSJibGFjayIvPgo8cmVjdCB5PSI4IiB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI0IiB5PSIxMiIgd2lkdGg9IjQiIGhlaWdodD0iNCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTIiIHk9IjEyIiB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSJibGFjayIvPgo8L3N2Zz4K);

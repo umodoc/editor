@@ -12,27 +12,30 @@
     @menu-click="toggleOrderedList(options[0].value)"
   >
     <template #content>
-      <div class="ordered-list-group">
+      <div class="umo-ordered-list-group">
         <tooltip
           v-for="item in options"
           :key="item.value"
           :content="item.label"
         >
           <div
-            class="ordered-list-item"
+            class="umo-ordered-list-item"
             :class="{ active: listType == item.value }"
             @click="toggleOrderedList(item.value)"
           >
             <icon
-              class="icon-ordered-list"
+              class="umo-icon-ordered-list"
               :name="`ordered-list-${item.value}`"
             />
           </div>
         </tooltip>
       </div>
-      <div class="ordered-list-divider"></div>
-      <div class="ordered-list-title" v-text="t('list.ordered.property')"></div>
-      <div class="ordered-list-properties">
+      <div class="umo-ordered-list-divider"></div>
+      <div
+        class="umo-ordered-list-title"
+        v-text="t('list.ordered.property')"
+      ></div>
+      <div class="umo-ordered-list-properties">
         <t-input-number
           v-model="startAt"
           :min="1"
@@ -130,7 +133,7 @@ watch(
 </script>
 
 <style lang="less" scoped>
-.ordered-list-group {
+.umo-ordered-list-group {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -138,7 +141,7 @@ watch(
   gap: 8px;
   width: 248px;
   margin-bottom: 10px;
-  .ordered-list-item {
+  .umo-ordered-list-item {
     cursor: pointer;
     padding: 5px;
     border: solid 1px var(--umo-border-color);
@@ -153,21 +156,21 @@ watch(
       border-color: var(--umo-primary-color);
     }
   }
-  .icon-ordered-list {
+  .umo-icon-ordered-list {
     font-size: 44px;
   }
 }
-.ordered-list-title {
+.umo-ordered-list-title {
   color: var(--umo-text-color-light);
   font-size: 12px;
   margin: 7px 0 4px;
 }
-.ordered-list-divider {
+.umo-ordered-list-divider {
   height: 1px;
   background-color: var(--umo-border-color-light);
   margin: 5px 0 0;
 }
-.ordered-list-properties {
+.umo-ordered-list-properties {
   display: flex;
   flex-direction: column;
   :deep(.umo-input-number) {

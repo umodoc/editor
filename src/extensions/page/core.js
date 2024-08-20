@@ -374,7 +374,7 @@ export function changeComputedHtml() {
   const { width, height } = pageSize()
   const { right, left, bottom, top } = page.value.margin
   let pageContent = iframeDoc.getElementById('computeddiv')
-  let watermark = iframeDoc.getElementsByClassName('umo-watermark')[0]
+  let watermark = iframeDoc.getElementsByClassName('umo-page-watermark')[0]
   watermark.setAttribute(
     'style',
     `width: ${width + 'cm'};height: ${height + 'cm'}`,
@@ -393,7 +393,7 @@ function clonePageToIframe() {
     'id',
     `${container.replace('#', '')}-computediframe`,
   )
-  iframeComputed.setAttribute('class', 'editor-page-computed')
+  iframeComputed.setAttribute('class', 'umo-editor-page-computed')
   iframeDoc =
     iframeComputed.contentDocument || iframeComputed.contentWindow.document
   copyStylesToIframe(iframeDoc)
@@ -404,7 +404,9 @@ function clonePageToIframe() {
 
 function cleanPagecontent(iframe) {
   const iframeDoc = iframe.contentDocument || iframe.contentWindow.document
-  const pageContent = iframeDoc.getElementsByClassName('page-node-content')[0]
+  const pageContent = iframeDoc.getElementsByClassName(
+    'umo-page-node-content',
+  )[0]
   pageContent.setAttribute('id', 'computeddiv')
   pageContent.innerHTML = ''
   let editor = pageContent.parentNode.parentNode

@@ -13,8 +13,8 @@
       @confirm="setQrcode"
       @close="dialogVisible = false"
     >
-      <div class="qrcode-container">
-        <div class="qrcode-toolbar">
+      <div class="umo-qrcode-container">
+        <div class="umo-qrcode-toolbar">
           <menus-button
             style="width: 126px"
             :text="t('tools.qrcode.level')"
@@ -70,7 +70,7 @@
             @change="(value) => (config.background = value)"
           />
         </div>
-        <div class="qrcode-code">
+        <div class="umo-qrcode-code">
           <t-textarea
             v-model="config.content"
             maxlength="200"
@@ -86,15 +86,18 @@
             v-text="t('tools.qrcode.renderError')"
           ></div>
         </div>
-        <div class="qrcode-render">
-          <div class="qrcode-title" v-text="t('tools.qrcode.preview')"></div>
-          <div class="qrcode-svg narrow-scrollbar">
+        <div class="umo-qrcode-render">
+          <div
+            class="umo-qrcode-title"
+            v-text="t('tools.qrcode.preview')"
+          ></div>
+          <div class="umo-qrcode-svg narrow-scrollbar">
             <div
               v-if="!svgCode"
-              class="qrcode-empty"
+              class="umo-qrcode-empty"
               v-text="t('tools.qrcode.notEmpty')"
             ></div>
-            <div class="svg" v-else v-html="svgCode"></div>
+            <div class="umo-svg-render" v-else v-html="svgCode"></div>
           </div>
         </div>
       </div>
@@ -211,42 +214,43 @@ const setQrcode = () => {
 </script>
 
 <style lang="less" scoped>
-.qrcode-container {
+.umo-qrcode-container {
   padding: 2px;
-  .qrcode-toolbar {
+  .umo-qrcode-toolbar {
     margin-bottom: 10px;
     display: flex;
     align-items: center;
   }
-  .qrcode-code {
+  .umo-qrcode-code {
     margin-bottom: 10px;
     :deep(.umo-textarea__inner) {
       height: 100%;
       resize: none;
     }
-    .umo-input__tips {
+    .umo-input__tips,
+    .t-input__tips {
       position: relative;
     }
   }
-  .qrcode-render {
+  .umo-qrcode-render {
     border: solid 1px var(--td-border-level-2-color);
     border-radius: var(--umo-radius);
     position: relative;
     overflow: hidden;
     box-sizing: border-box;
-    .qrcode-title {
+    .umo-qrcode-title {
       background-color: var(--umo-button-hover-background);
       padding: 0 10px;
       position: absolute;
       font-size: 12px;
       border-bottom-right-radius: var(--umo-radius);
     }
-    .qrcode-empty {
+    .umo-qrcode-empty {
       color: var(--umo-text-color-light);
       font-size: 12px;
       margin: 40px;
     }
-    .qrcode-svg {
+    .umo-qrcode-svg {
       box-sizing: border-box;
       padding: 30px 10px;
       min-height: 100px;
@@ -255,7 +259,7 @@ const setQrcode = () => {
       display: flex;
       align-items: center;
       justify-content: center;
-      > .svg {
+      > .umo-svg-render {
         border: solid 1px var(--umo-border-color-light);
         :deep(svg) {
           display: block;

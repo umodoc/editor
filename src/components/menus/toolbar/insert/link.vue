@@ -16,7 +16,7 @@
     @confirm="insertLink"
     @close="dialogVisible = false"
   >
-    <div class="link-container">
+    <div class="umo-link-container">
       <t-form label-align="top">
         <t-form-item :label="t('insert.link.hrefText')">
           <t-input
@@ -85,13 +85,11 @@ watch(
 </script>
 
 <style lang="less" scoped>
-.link {
-  &-container {
-    padding: 2px;
-    :deep(.umo-form__item) {
-      &:not(:last-child) {
-        margin-bottom: 10px;
-      }
+.umo-link-container {
+  padding: 2px;
+  :deep(.umo-form__item) {
+    &:not(:last-child) {
+      margin-bottom: 10px;
     }
   }
 }

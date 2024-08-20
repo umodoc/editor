@@ -3,7 +3,7 @@
     ico="page-size"
     :text="t('page.size.text')"
     menu-type="dropdown"
-    overlay-class-name="page-size-dropdown"
+    overlay-class-name="umo-page-size-dropdown"
   >
     <template #dropmenu>
       <t-dropdown-menu>
@@ -37,7 +37,7 @@ let dialogVisible = $ref(false)
 </script>
 
 <style lang="less">
-.page-size-dropdown {
+.umo-page-size-dropdown {
   .umo-dropdown__item {
     max-width: unset !important;
     &-text {

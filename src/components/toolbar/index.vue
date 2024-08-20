@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$toolbar.show" class="toolbar-container">
+  <div v-if="$toolbar.show" class="umo-toolbar-container">
     <toolbar-ribbon
       v-if="$toolbar.mode === 'ribbon'"
       :menus="toolbarMenus"
@@ -31,7 +31,7 @@
     <toolbar-source
       v-if="$toolbar.mode === 'source' && options.toolbar.enableSourceEditor"
     />
-    <div class="toolbar-actions" :class="$toolbar.mode">
+    <div class="umo-toolbar-actions" :class="$toolbar.mode">
       <t-popup
         v-if="$toolbar.mode !== 'source' && editor?.isEditable"
         v-model="statusPopup"
@@ -41,14 +41,17 @@
         @visible-change="(visible) => (statusPopup = visible)"
       >
         <t-button
-          class="button"
+          class="umo-toolbar-actions-button"
           variant="text"
           size="small"
           :class="{ active: statusPopup }"
         >
-          <span class="status">
-            <span class="status-online" :class="{ offline: !online }"></span>
-            <span class="status-saved button-text">
+          <span class="umo-status">
+            <span
+              class="umo-status-online"
+              :class="{ offline: !online }"
+            ></span>
+            <span class="umo-status-saved button-text">
               <span
                 v-if="savedAt"
                 v-text="t('save.savedAtText', { time: timeAgo(savedAt) })"
@@ -58,7 +61,7 @@
           </span>
         </t-button>
         <template #content>
-          <div class="document-status-container status">
+          <div class="umo-document-status-container umo-status">
             <div>
               {{ t('save.network') }}
               {{ online ? t('save.online') : t('save.offline') }}
@@ -71,7 +74,7 @@
               ></span>
               <span v-else v-text="t('save.unsaved')"></span>
             </div>
-            <div class="document-button-container">
+            <div class="umo-document-button-container">
               <t-button
                 size="small"
                 v-text="t('save.text')"
@@ -98,9 +101,13 @@
         }"
         @click="toggleToolbarMode"
       >
-        <t-button class="button" variant="text" size="small">
+        <t-button
+          class="umo-toolbar-actions-button"
+          variant="text"
+          size="small"
+        >
           <icon name="expand-down" />
-          <span class="button-text">{{ t('toolbar.toggle') }}</span>
+          <span class="umo-button-text">{{ t('toolbar.toggle') }}</span>
         </t-button>
         <template #dropdown>
           <t-dropdown-menu
@@ -120,7 +127,7 @@
     </div>
   </div>
   <tooltip v-else :content="t('toolbar.show')" placement="bottom-right">
-    <div class="show-toolbar" @click="$toolbar.show = true">
+    <div class="umo-show-toolbar" @click="$toolbar.show = true">
       <icon name="arrow-down" />
     </div>
   </tooltip>
@@ -235,14 +242,14 @@ const setContentFromCache = () => {
 </script>
 
 <style lang="less" scoped>
-.toolbar-container {
+.umo-toolbar-container {
   display: flex;
   justify-content: space-between;
   user-select: none;
   border-bottom: solid 1px var(--umo-border-color);
   position: relative;
 }
-.toolbar-actions {
+.umo-toolbar-actions {
   padding: 6px 10px;
   display: flex;
   align-items: center;
@@ -251,7 +258,7 @@ const setContentFromCache = () => {
     right: 0;
     top: 1px;
   }
-  .button {
+  &-button {
     &.active {
       background-color: var(--umo-button-hover-background);
     }
@@ -261,22 +268,22 @@ const setContentFromCache = () => {
     :deep(.umo-button__text) {
       display: flex;
       align-items: center;
-      .icon {
+      .umo-icon {
         margin-right: 3px;
       }
     }
   }
   @media screen and (max-width: 640px) {
     padding-left: 0;
-    .status-online {
+    .umo-status-online {
       margin-right: 0;
     }
-    .button-text {
+    .umo-button-text {
       display: none;
     }
   }
 }
-.show-toolbar {
+.umo-show-toolbar {
   cursor: pointer;
   position: absolute;
   right: 20px;
@@ -294,7 +301,7 @@ const setContentFromCache = () => {
     color: var(--umo-primary-color);
   }
 }
-.status {
+.umo-status {
   font-size: 12px;
   display: flex;
   align-items: center;
@@ -316,14 +323,14 @@ const setContentFromCache = () => {
     }
   }
 }
-.document-status-container {
+.umo-document-status-container {
   flex-direction: column;
   align-items: unset;
   padding: 12px 16px;
   color: var(--umo-text-color);
   min-width: 150px;
   cursor: default;
-  .document-button-container {
+  .umo-document-button-container {
     margin: 8px 0 4px;
     display: flex;
     gap: 8px;

@@ -1,11 +1,13 @@
 <template>
   <node-view-wrapper
     ref="containerRef"
-    class="node-view iframe-node-view"
+    class="umo-node-view"
     :id="node.attrs.id"
     :style="nodeStyle"
   >
-    <div class="node-container hover-shadow select-outline iframe">
+    <div
+      class="umo-node-container umo-hover-shadow umo-select-outline umo-node-iframe"
+    >
       <drager
         :selected="selected"
         :rotatable="false"
@@ -66,8 +68,8 @@ onClickOutside(containerRef, () => (selected = false))
 </script>
 
 <style lang="less">
-.node-view {
-  .iframe {
+.umo-node-view {
+  .umo-node-iframe {
     max-width: 100%;
     .es-drager {
       &:not(.selected) {

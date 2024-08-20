@@ -9,7 +9,7 @@
     @menu-click="removeBg"
   >
     <icon v-if="!converting" name="image-remove-background" />
-    <icon v-else class="loading" name="loading" />
+    <icon v-else class="umo-image-loading" name="loading" />
   </menus-button>
 </template>
 
@@ -39,7 +39,7 @@ const removeBg = async () => {
 </script>
 
 <style lang="less" scoped>
-.loading {
+.umo-image-loading {
   animation: turn 1s linear infinite;
 }
 @keyframes turn {

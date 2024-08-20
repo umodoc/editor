@@ -45,7 +45,7 @@ class PageDetector {
   #pageClass
   #checkPoints = [IMAGE, IFRAME, CODE_BLOCK, TOC, VIDEO]
 
-  constructor(editor, pageClass = '.page-node-content') {
+  constructor(editor, pageClass = '.umo-page-node-content') {
     this.#editor = editor
     this.#pageClass = pageClass
   }

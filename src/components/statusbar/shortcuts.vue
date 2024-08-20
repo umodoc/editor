@@ -175,7 +175,7 @@ if ($document.value.markdown) {
         label: `1. ${t('list.ordered.text')}`,
         keys: ['1.', '⎵'],
       },
-      { icon: 'task-list', label: t('list.task.text'), keys: ['[ ]', '⎵'] },
+      { icon: 'umo-task-list', label: t('list.task.text'), keys: ['[ ]', '⎵'] },
       {
         icon: 'quote',
         tag: 'blockquote',
@@ -233,7 +233,7 @@ if ($document.value.markdown) {
     span {
       display: flex;
       align-items: center;
-      .icon {
+      .umo-icon {
         margin: 0 10px 0 -2px;
       }
       sub {
@@ -242,7 +242,7 @@ if ($document.value.markdown) {
       sup {
         transform: translateY(-3px);
       }
-      span.icon {
+      span.umo-icon {
         font-weight: 700;
         margin-right: 8px;
         :deep(sub) {

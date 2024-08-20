@@ -29,7 +29,7 @@ const saveImage = async ({ content, value }) => {
   try {
     page.value.zoomLevel = 100
     await nextTick()
-    const node = document.querySelector(`${container} .page-content`)
+    const node = document.querySelector(`${container} .umo-page-content`)
     const blob = await toBlob(node, { scale: devicePixelRatio })
     const { title } = options.value.document
     const filename =

@@ -13,7 +13,7 @@
       @confirm="setSignature"
       @close="dialogVisible = false"
     >
-      <div class="signature-toolbar">
+      <div class="umo-signature-toolbar">
         <menus-button :text="t('tools.signature.clear')" @menu-click="reset">
           <icon name="clear-format" />
         </menus-button>
@@ -31,7 +31,7 @@
           <icon name="highlight" />
         </menus-button>
       </div>
-      <div class="signature-container" :data-tip="t('tools.signature.tip')">
+      <div class="umo-signature-container" :data-tip="t('tools.signature.tip')">
         <signature
           ref="signatureRef"
           :line-color="lineColor"
@@ -105,15 +105,10 @@ watch(
 </script>
 
 <style lang="less" scoped>
-.desc {
-  font-size: 12px;
-  color: var(--umo-text-color-light);
-  margin-left: 10px;
-}
-.signature-toolbar {
+.umo-signature-toolbar {
   margin-bottom: 10px;
 }
-.signature-container {
+.umo-signature-container {
   border: solid 1px var(--umo-primary-color);
   box-sizing: border-box;
   border-radius: var(--umo-radius);

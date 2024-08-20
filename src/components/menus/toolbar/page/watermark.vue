@@ -8,8 +8,8 @@
     @toggle-popup="togglePopup"
   >
     <template #content>
-      <div class="watermark-container">
-        <div class="watermark-toolbar">
+      <div class="umo-watermark-container">
+        <div class="umo-watermark-toolbar">
           <menus-button
             style="width: 140px"
             :tooltip="t('page.watermark.fontFamily')"
@@ -57,10 +57,10 @@
           :placeholder="t('page.watermark.content')"
         />
         <div
-          class="watermark-type-title"
+          class="umo-watermark-type-title"
           v-text="t('page.watermark.type')"
         ></div>
-        <div class="watermark-type">
+        <div class="umo-watermark-type">
           <div
             class="item compact"
             :class="{ active: page.watermark.type === 'compact' }"
@@ -79,7 +79,7 @@
           </div>
         </div>
         <t-button
-          class="clear-button"
+          class="umo-clear-button"
           v-if="page.watermark.text !== ''"
           block
           variant="outline"
@@ -110,17 +110,14 @@ const clearWatermark = () => {
 </script>
 
 <style lang="less" scoped>
-.watermark-container {
+.umo-watermark-container {
   width: 320px;
-  .watermark-switch {
-    margin-bottom: 15px;
-  }
-  .watermark-toolbar {
+  .umo-watermark-toolbar {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
   }
-  .watermark-type {
+  .umo-watermark-type {
     display: flex;
     &-title {
       color: var(--umo-text-color-light);
@@ -168,7 +165,7 @@ const clearWatermark = () => {
       }
     }
   }
-  .clear-button {
+  .umo-clear-button {
     margin-top: 20px;
   }
 }

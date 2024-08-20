@@ -381,7 +381,7 @@ const getImage = async (format = 'blob') => {
   const zoomLevel = page.value.zoomLevel
   try {
     page.value.zoomLevel = 100
-    const node = document.querySelector(`${container} .page-content`)
+    const node = document.querySelector(`${container} .umo-page-content`)
     if ((format = 'blob')) {
       const blob = await toBlob(node)
       return blob
@@ -718,8 +718,6 @@ watch(
   color: var(--umo-text-color);
   font-family: var(--umo-font-family);
   position: relative !important;
-  background-color: var(--umo-color-white);
-  overflow: hidden;
   .umo-main {
     flex: 1;
     background-color: var(--umo-container-background);

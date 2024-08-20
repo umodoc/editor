@@ -9,7 +9,7 @@
     @toggle-popup="togglePopup"
   >
     <template #content>
-      <div class="table-grid" @mouseleave="resetTable">
+      <div class="umo-table-grid" @mouseleave="resetTable">
         <div v-for="(row, rowIndex) in table" :key="rowIndex" class="row">
           <div
             v-for="(cell, colIndex) in row"
@@ -21,9 +21,9 @@
           ></div>
         </div>
       </div>
-      <div class="table-custom">
+      <div class="umo-table-custom">
         <div
-          class="table-custom-title"
+          class="umo-table-custom-title"
           v-text="t('table.insert.property')"
         ></div>
         <t-input-number
@@ -46,7 +46,7 @@
           {{ t('table.insert.withHeader') }}
         </t-checkbox>
         <t-button
-          class="insert-button"
+          class="umo-insert-button"
           block
           theme="primary"
           variant="base"
@@ -96,7 +96,7 @@ const insertTable = () => {
 </script>
 
 <style lang="less" scoped>
-.table-grid {
+.umo-table-grid {
   .row {
     display: flex;
     gap: 4px;
@@ -114,7 +114,7 @@ const insertTable = () => {
   }
 }
 
-.table-custom {
+.umo-table-custom {
   :deep(.umo-input-number) {
     width: 196px;
     display: block;
@@ -125,7 +125,7 @@ const insertTable = () => {
     font-size: 12px;
     margin: 8px 0 2px;
   }
-  .insert-button {
+  .umo-insert-button {
     margin-top: 5px;
   }
 }

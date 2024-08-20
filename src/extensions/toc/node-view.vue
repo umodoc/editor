@@ -1,14 +1,19 @@
 <template>
   <node-view-wrapper
-    class="node-view toc-node-view"
+    class="umo-node-view"
     :id="node.attrs.id"
     :style="nodeStyle"
   >
-    <div class="node-container hover-shadow select-outline toc">
-      <p class="toc-head" v-text="t('toc.title')"></p>
-      <ul v-if="tableOfContents && tableOfContents.length > 0" class="toc-body">
+    <div
+      class="umo-node-container umo-hover-shadow umo-select-outline umo-node-toc"
+    >
+      <p class="umo-node-toc-head" v-text="t('toc.title')"></p>
+      <ul
+        v-if="tableOfContents && tableOfContents.length > 0"
+        class="umo-node-toc-body"
+      >
         <li
-          class="toc-item"
+          class="umo-node-toc-item"
           :class="`level-${heading.level}`"
           v-for="heading in tableOfContents"
           :key="heading.id"
@@ -16,7 +21,7 @@
           <a @click="headingClick(heading.id)">{{ heading.textContent }}</a>
         </li>
       </ul>
-      <div v-else class="toc-empty" v-text="t('toc.empty')"></div>
+      <div v-else class="umo-node-toc-empty" v-text="t('toc.empty')"></div>
     </div>
   </node-view-wrapper>
 </template>
@@ -53,8 +58,8 @@ const headingClick = (id) => {
 </script>
 
 <style lang="less">
-.node-view {
-  .toc {
+.umo-node-view {
+  .umo-node-toc {
     padding: 35px 20px 20px;
     position: relative;
     outline: solid 1px var(--umo-content-node-border);

@@ -1,14 +1,14 @@
 <template>
-  <node-view-wrapper class="node-view code-block-node-view" :style="nodeStyle">
+  <node-view-wrapper class="umo-node-view" :style="nodeStyle">
     <div
-      class="node-container hover-shadow select-outline code-block"
+      class="umo-node-container umo-hover-shadow umo-select-outline umo-node-code-block"
       :class="node.attrs.theme"
       :id="node.attrs.id"
       ref="containerRef"
     >
       <div
         v-if="!options.document.readOnly"
-        class="show-toolbar"
+        class="umo-show-code-block-toolbar"
         v-text="t('node.codeBlock.menu')"
       ></div>
     </div>
@@ -131,14 +131,14 @@ watch(
 <style lang="less">
 @import '@/assets/styles/_mixins.less';
 
-.node-view {
-  .code-block {
+.umo-node-view {
+  .umo-node-code-block {
     width: 100%;
     outline: solid 1px var(--umo-content-node-border);
     overflow: hidden;
     border-radius: var(--umo-content-node-radius);
     position: relative;
-    .show-toolbar {
+    .umo-show-code-block-toolbar {
       position: absolute;
       right: 5px;
       top: 5px;
@@ -152,13 +152,13 @@ watch(
       display: none;
     }
     &.dark {
-      .show-toolbar {
+      .umo-show-code-block-toolbar {
         color: #999;
         background-color: var(--umo-color-black);
       }
     }
     &:hover {
-      .show-toolbar {
+      .umo-show-code-block-toolbar {
         display: block;
         &:hover {
           opacity: 1;
@@ -171,7 +171,7 @@ watch(
 .prism-code-editor {
   max-height: 560px;
   font-size: 14px;
-  .scrollbar();
+  .umo-scrollbar();
   textarea[aria-readonly='true'] {
     caret-color: transparent;
   }
@@ -507,7 +507,7 @@ watch(
   }
 }
 [contenteditable='false'] {
-  .code-block {
+  .umo-node-code-block {
     outline: solid 1px var(--umo-content-node-border);
   }
 }

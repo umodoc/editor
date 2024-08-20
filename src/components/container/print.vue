@@ -21,7 +21,7 @@ const getPlyrSprite = () => {
 
 const getContentHtml = () => {
   let html = ''
-  const pages = document.querySelectorAll(`${container} .page-node-view`)
+  const pages = document.querySelectorAll(`${container} .umo-page-node-view`)
   pages.forEach((page) => {
     html += page.outerHTML
   })
@@ -49,11 +49,11 @@ const getIframeCode = () => {
       }
       </style>
     </head>
-    <body class="umo-editor-container is-print">
+    <body class="is-print">
       <div id="sprite-plyr" style="display: none;">
       ${getPlyrSprite()}
       </div>
-      <div class="editor-container" style="line-height: ${defaultLineHeight};" aria-expanded="false">
+      <div class="umo-editor-container" style="line-height: ${defaultLineHeight};" aria-expanded="false">
         <div class="tiptap umo-editor" translate="no">
           ${getContentHtml()}
         </div>

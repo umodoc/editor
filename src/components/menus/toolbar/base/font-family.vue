@@ -15,7 +15,7 @@
       :divider="false"
     >
       <t-option
-        class="font-family-item"
+        class="umo-font-family-item"
         v-for="item in group.children"
         :value="item.value"
         :key="item.value"
@@ -152,7 +152,7 @@ watch(
 </script>
 
 <style lang="less">
-.font-family-item {
+.umo-font-family-item {
   > span {
     display: flex;
     align-items: center;

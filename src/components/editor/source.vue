@@ -1,5 +1,5 @@
 <template>
-  <div class="source-editor">
+  <div class="umo-source-editor">
     <monaco-editor
       v-model:value="code"
       :options="config"
@@ -8,7 +8,10 @@
       @change="codeChange"
     >
       <template #loading>
-        <span class="loading" v-text="t('source.loading')"></span>
+        <span
+          class="umo-source-editor-loading"
+          v-text="t('source.loading')"
+        ></span>
       </template>
     </monaco-editor>
   </div>
@@ -58,7 +61,7 @@ const codeChange = () => {
 </script>
 
 <style lang="less" scoped>
-.source-editor {
+.umo-source-editor {
   height: 100%;
   :deep(.monaco-editor) {
     .decorationsOverviewRuler {
@@ -68,9 +71,9 @@ const codeChange = () => {
       border-radius: 3px;
     }
   }
-}
-.loading {
-  font-size: 12px;
-  color: var(--umo-text-color-light);
+  .umo-source-editor-loading {
+    font-size: 12px;
+    color: var(--umo-text-color-light);
+  }
 }
 </style>

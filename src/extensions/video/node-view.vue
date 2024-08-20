@@ -1,11 +1,11 @@
 <template>
   <node-view-wrapper
     ref="containerRef"
-    class="node-view video-node-view"
+    class="umo-node-view"
     :id="node.attrs.id"
     :style="nodeStyle"
   >
-    <div class="node-container hover-shadow video">
+    <div class="umo-node-container umo-hover-shadow umo-node-video">
       <drager
         :selected="selected"
         :rotatable="false"
@@ -108,8 +108,8 @@ onClickOutside(containerRef, () => (selected = false))
 </script>
 
 <style lang="less">
-.node-view {
-  .video {
+.umo-node-view {
+  .umo-node-video {
     max-width: 100%;
     pointer-events: none;
     border-radius: var(--umo-radius);

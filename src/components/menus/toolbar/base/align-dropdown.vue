@@ -9,7 +9,7 @@
     @toggle-popup="togglePopup"
   >
     <template #content>
-      <div class="text-align-group">
+      <div class="umo-text-align-group">
         <menus-toolbar-base-align-left />
         <menus-toolbar-base-align-center />
         <menus-toolbar-base-align-right />
@@ -46,10 +46,8 @@ const textAlign = computed(() => {
 </script>
 
 <style lang="less" scoped>
-.text-align {
-  &-group {
-    padding-top: 2px;
-    margin: -5px 0;
-  }
+.umo-text-align-group {
+  padding-top: 2px;
+  margin: -5px 0;
 }
 </style>

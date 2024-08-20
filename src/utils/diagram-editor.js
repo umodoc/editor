@@ -60,7 +60,7 @@ class DiagramEditor {
       .join('&')
     const lang = locales[i18n.global.locale.value]
     const frame = document.createElement('iframe')
-    frame.setAttribute('class', 'diagrams-iframe')
+    frame.setAttribute('class', 'umo-diagrams-iframe')
     frame.setAttribute('src', `${this.domain}?${params}&lang=${lang}`)
     return frame
   }

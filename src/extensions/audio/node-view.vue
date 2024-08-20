@@ -1,11 +1,13 @@
 <template>
   <node-view-wrapper
     ref="containerRef"
-    class="node-view audio-node-view"
+    class="umo-node-view"
     :id="node.attrs.id"
     :style="nodeStyle"
   >
-    <div class="node-container hover-shadow select-outline audio">
+    <div
+      class="umo-node-container umo-hover-shadow umo-select-outline umo-node-audio"
+    >
       <audio ref="audiorRef" :src="node.attrs.src" controls crossorigin></audio>
       <div
         v-if="!node.attrs.uploaded && node.attrs.file !== null"
@@ -64,8 +66,8 @@ onClickOutside(containerRef, () => (selected = false))
 </script>
 
 <style lang="less">
-.node-view {
-  .audio {
+.umo-node-view {
+  .umo-node-audio {
     max-width: 100%;
     width: 360px;
     position: relative;

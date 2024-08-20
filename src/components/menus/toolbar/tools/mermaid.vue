@@ -13,17 +13,20 @@
       @confirm="setMermaid"
       @close="dialogVisible = flase"
     >
-      <div class="mermaid-container">
+      <div class="umo-mermaid-container">
         <t-textarea
-          class="mermaid-code"
+          class="umo-mermaid-code"
           v-model="mermaidCode"
           autofocus
           :placeholder="t('tools.mermaid.placeholder')"
         />
-        <div class="mermaid-render">
-          <div class="mermaid-title" v-text="t('tools.mermaid.preview')"></div>
+        <div class="umo-mermaid-render">
           <div
-            class="mermaid-svg narrow-scrollbar"
+            class="umo-mermaid-title"
+            v-text="t('tools.mermaid.preview')"
+          ></div>
+          <div
+            class="umo-mermaid-svg narrow-scrollbar"
             ref="mermaidRef"
             v-html="svgCode"
           ></div>
@@ -126,9 +129,9 @@ const setMermaid = () => {
 </script>
 
 <style lang="less" scoped>
-.mermaid-container {
+.umo-mermaid-container {
   display: flex;
-  .mermaid-code {
+  .umo-mermaid-code {
     width: 320px;
     margin-left: 2px;
     :deep(.umo-textarea__inner) {
@@ -136,7 +139,7 @@ const setMermaid = () => {
       resize: none;
     }
   }
-  .mermaid-render {
+  .umo-mermaid-render {
     flex: 1;
     margin-left: 20px;
     border: solid 1px var(--td-border-level-2-color);
@@ -144,14 +147,14 @@ const setMermaid = () => {
     position: relative;
     overflow: hidden;
     box-sizing: border-box;
-    .mermaid-title {
+    .umo-mermaid-title {
       background-color: var(--umo-button-hover-background);
       padding: 0 10px;
       position: absolute;
       font-size: 12px;
       border-bottom-right-radius: var(--umo-radius);
     }
-    .mermaid-svg {
+    .umo-mermaid-svg {
       box-sizing: border-box;
       height: 320px;
       padding: 40px 20px 20px;

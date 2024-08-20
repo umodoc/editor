@@ -13,8 +13,8 @@
       @confirm="setBarcode"
       @close="dialogVisible = false"
     >
-      <div class="barcode-container">
-        <div class="barcode-toolbar">
+      <div class="umo-barcode-container">
+        <div class="umo-barcode-toolbar">
           <menus-button
             style="width: 126px"
             :text="t('tools.barcode.format')"
@@ -76,7 +76,7 @@
           >
             <icon name="setting" />
             <template #content>
-              <div class="barcode-toolbar-more">
+              <div class="umo-barcode-toolbar-more">
                 <t-form size="small" label-align="left">
                   <t-form-item :label="t('tools.barcode.width')">
                     <t-slider
@@ -170,7 +170,7 @@
             </template>
           </menus-button>
         </div>
-        <div class="barcode-code">
+        <div class="umo-barcode-code">
           <t-input
             v-model="config.content"
             maxlength="44"
@@ -190,12 +190,15 @@
             v-text="t('tools.barcode.error')"
           ></div>
         </div>
-        <div class="barcode-render">
-          <div class="barcode-title" v-text="t('tools.barcode.preview')"></div>
-          <div class="barcode-svg narrow-scrollbar">
+        <div class="umo-barcode-render">
+          <div
+            class="umo-barcode-title"
+            v-text="t('tools.barcode.preview')"
+          ></div>
+          <div class="umo-barcode-svg narrow-scrollbar">
             <div
               v-if="renderError"
-              class="barcode-empty"
+              class="umo-barcode-empty"
               v-text="t('tools.barcode.renderError')"
             ></div>
             <svg ref="barcodeSvgRef" id="barcode" v-show="!renderError"></svg>
@@ -346,37 +349,38 @@ const setBarcode = () => {
 </script>
 
 <style lang="less" scoped>
-.barcode-container {
+.umo-barcode-container {
   padding: 2px;
-  .barcode-toolbar {
+  .umo-barcode-toolbar {
     margin-bottom: 10px;
     display: flex;
     align-items: center;
   }
-  .barcode-code {
+  .umo-barcode-code {
     margin-bottom: 10px;
     :deep(.umo-textarea__inner) {
       height: 100%;
       resize: none;
     }
+    .umo-input__tips,
     .umo-input__tips {
       position: relative;
     }
   }
-  .barcode-render {
+  .umo-barcode-render {
     border: solid 1px var(--td-border-level-2-color);
     border-radius: var(--umo-radius);
     position: relative;
     overflow: hidden;
     box-sizing: border-box;
-    .barcode-title {
+    .umo-barcode-title {
       background-color: var(--umo-button-hover-background);
       padding: 0 10px;
       position: absolute;
       font-size: 12px;
       border-bottom-right-radius: var(--umo-radius);
     }
-    .barcode-svg {
+    .umo-barcode-svg {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -389,7 +393,7 @@ const setBarcode = () => {
         border: solid 1px var(--umo-border-color-light);
       }
     }
-    .barcode-empty {
+    .umo-barcode-empty {
       color: var(--umo-text-color-light);
       font-size: 12px;
       margin: 20px;

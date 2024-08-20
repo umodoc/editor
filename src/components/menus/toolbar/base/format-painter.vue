@@ -15,7 +15,6 @@
 const { editor, painter } = useStore()
 
 const setFormatPainter = (once) => {
-  console.log(editor.value)
   painter.value.enabled = !painter.value.enabled
   if (painter.value.enabled) {
     editor.value.chain().focus().setFormatPainter(once).run()

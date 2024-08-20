@@ -1,5 +1,5 @@
 <template>
-  <svg class="icon" aria-hidden="true" :width="size" :height="size">
+  <svg class="umo-icon" aria-hidden="true" :width="size" :height="size">
     <use :xlink:href="`#icon-${props.name}`" :fill="color" />
   </svg>
 </template>
@@ -22,7 +22,7 @@ const props = defineProps({
 </script>
 
 <style lang="less">
-.icon {
+.umo-icon {
   display: flex;
 }
 </style>

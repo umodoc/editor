@@ -14,10 +14,10 @@
     @confirm="copyLink"
     @close="dialogVisible = false"
   >
-    <div class="share-container">
-      <div class="share-tip" v-text="t('export.share.tip')"></div>
+    <div class="umo-share-container">
+      <div class="umo-share-tip" v-text="t('export.share.tip')"></div>
       <t-textarea
-        class="share-textarea"
+        class="umo-share-textarea"
         :value="options.shareUrl"
         readonly
         autosize
@@ -39,15 +39,15 @@ const copyLink = () => {
 </script>
 
 <style lang="less" scoped>
-.share-container {
+.umo-share-container {
   padding: 2px;
-  .share-tip {
+  .umo-share-tip {
     font-size: 12px;
     color: var(--umo-text-color-light);
     margin-bottom: 6px;
     line-height: 1.4;
   }
-  .share-textarea {
+  .umo-share-textarea {
     :deep(textarea) {
       word-break: break-all;
       word-wrap: break-word;

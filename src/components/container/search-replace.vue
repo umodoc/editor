@@ -4,14 +4,14 @@
     icon="search-replace"
     :header="t('search.title')"
     :footer="false"
-    class="search-replace-dialog"
+    class="umo-search-replace-dialog"
     width="420px"
     mode="modeless"
     :z-index="200"
     @close="searchReplace = false"
   >
-    <div class="search-replace-container">
-      <div class="search-text">
+    <div class="umo-search-replace-container">
+      <div class="umo-search-text">
         <t-input
           v-model="searchText"
           :placeholder="t('search.searchText')"
@@ -46,19 +46,19 @@
           <icon name="arrow-down" class="icon-prev" />
         </t-button>
       </div>
-      <div class="replace-text">
+      <div class="umo-replace-text">
         <t-input
           v-model="replaceText"
           :placeholder="t('search.replaceText')"
           clearable
         />
       </div>
-      <div class="advanced-options">
+      <div class="umo-advanced-options">
         <t-checkbox v-model="caseSensitive">
           {{ t('search.caseSensitive') }}
         </t-checkbox>
       </div>
-      <div class="button-actions">
+      <div class="umo-button-actions">
         <t-button
           :disabled="resultLength === 0"
           theme="default"
@@ -177,7 +177,7 @@ watch(
 </script>
 
 <style lang="less" scoped>
-.search-text {
+.umo-search-text {
   margin-top: 5px;
   display: flex;
   :deep(.umo-input__wrap) {
@@ -189,7 +189,7 @@ watch(
     }
   }
   :deep(.umo-button) {
-    .icon {
+    .umo-icon {
       font-size: 20px;
       &.icon-prev {
         transform: rotate(-180deg);
@@ -197,16 +197,16 @@ watch(
     }
   }
 }
-.replace-text {
+.umo-replace-text {
   margin-top: 12px;
 }
-.advanced-options {
+.umo-advanced-options {
   margin-top: 12px;
   :deep(.umo-checkbox) {
     margin-right: 15px;
   }
 }
-.button-actions {
+.umo-button-actions {
   margin: 12px 0 -15px;
   text-align: right;
   :deep(.umo-button) {
@@ -215,18 +215,18 @@ watch(
 }
 </style>
 <style lang="less">
-.search-replace-dialog {
+.umo-search-replace-dialog {
   .umo-dialog {
     position: absolute;
     right: 25px;
-    top: 141px;
+    top: 131px;
     user-select: none;
   }
 }
 .umo-editor-container.toolbar-classic {
-  .search-replace-dialog {
+  .umo-search-replace-dialog {
     .umo-dialog {
-      top: 75px;
+      top: 65px;
     }
   }
 }

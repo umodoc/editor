@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="menuVisible"
-    class="block-menu-hander"
+    class="umo-block-menu-hander"
     :style="`transform: translate(${page.margin.left}cm, ${menuScrollTop}px);`"
   >
     <menus-context-block-node />
@@ -18,7 +18,7 @@ let menuScrollTop = $ref(0)
 // 更新菜单位置
 const updateMenuPostion = () => {
   const currentBlock = document.querySelector(
-    `${container} .page-node-content .node-focused`,
+    `${container} .umo-page-node-content .umo-node-focused`,
   )
   if (currentBlock === null) {
     return
@@ -60,13 +60,13 @@ watch(
 </script>
 
 <style lang="less">
-.block-menu-hander {
+.umo-block-menu-hander {
   position: absolute;
   z-index: 20;
   margin-left: -68px;
-  .menu-button {
+  .umo-menu-button {
     background-color: transparent;
-    .button-content {
+    .umo-button-content {
       color: rgba(0, 0, 0, 0.5);
     }
     &:not(.active):hover {
@@ -76,15 +76,15 @@ watch(
       &:hover {
         opacity: 0.8;
       }
-      .button-content {
+      .umo-button-content {
         color: var(--umo-text-color-light);
       }
     }
   }
 }
-.block-menu-dropdown {
+.umo-block-menu-dropdown {
   max-height: 300px;
-  .block-menu-group-name {
+  .umo-block-menu-group-name {
     // padding-top: 8px !important;
     // line-height: 1;
     padding-left: 15px !important;
@@ -100,7 +100,7 @@ watch(
     .umo-dropdown__item {
       padding: 2px 0;
       min-width: 180px !important;
-      .menu-button {
+      .umo-menu-button {
         background-color: transparent;
         padding: 0 15px;
         box-sizing: border-box;
@@ -113,13 +113,13 @@ watch(
           width: 100%;
         }
       }
-      .button-content {
+      .umo-button-content {
         width: 100%;
         justify-content: flex-start;
         .text {
           color: var(--umo-text-color);
         }
-        .icon {
+        .umo-icon {
           margin-right: 3px;
           font-size: 16px;
           color: #666;
@@ -134,7 +134,7 @@ watch(
         .heading {
           display: flex;
           color: var(--umo-text-color);
-          .icon {
+          .umo-icon {
             font-size: 12px;
             display: inline-block;
             width: 2em;
@@ -142,7 +142,7 @@ watch(
         }
       }
       &--disabled {
-        .button-content {
+        .umo-button-content {
           opacity: 0.6;
         }
       }
@@ -151,7 +151,7 @@ watch(
         font-size: 12px !important;
         margin-right: 8px;
       }
-      .dropdown-item-label {
+      .umo-dropdown-item-label {
         padding: 1px 15px;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -173,7 +173,7 @@ watch(
     }
   }
 }
-.block-submenu-dropdown {
+.umo-block-submenu-dropdown {
   margin-left: 10px;
 }
 </style>

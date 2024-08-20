@@ -1,13 +1,13 @@
 <template>
   <node-view-wrapper
     ref="containerRef"
-    class="node-view image-node-view"
+    class="umo-node-view"
     :id="node.attrs.id"
     :style="nodeStyle"
     @dblclick="imagePreview = node.attrs.src"
   >
     <div
-      class="node-container hover-shadow select-outline image"
+      class="umo-node-container umo-hover-shadow umo-select-outline umo-node-image"
       :class="{
         'is-loading': node.attrs.src && isLoading,
         'is-error': node.attrs.src && error,
@@ -190,8 +190,8 @@ watch(
 </script>
 
 <style lang="less">
-.node-view {
-  .image {
+.umo-node-view {
+  .umo-node-image {
     max-width: 100%;
     width: auto;
     &.is-loading,

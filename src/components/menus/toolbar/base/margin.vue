@@ -10,7 +10,7 @@
     @menu-click="resetMargin()"
   >
     <template #content>
-      <div class="node-margin-input">
+      <div class="umo-node-margin-input">
         <t-input-number
           v-model="marginTop"
           theme="column"
@@ -96,7 +96,7 @@ const resetMargin = () => {
 </script>
 
 <style lang="less" scoped>
-.node-margin-input {
+.umo-node-margin-input {
   display: flex;
   flex-direction: column;
   gap: 10px;

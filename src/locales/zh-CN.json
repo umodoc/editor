@@ -214,7 +214,7 @@
       "text": "插入表格",
       "tip": "插入新表格",
       "property": "表格属性",
-      "withHeader": "包含表格",
+      "withHeader": "包含表头",
       "rows": "行数:",
       "cols": "列数:",
       "create": "创建表格"

@@ -1,14 +1,14 @@
 <template>
   <editor-content
-    :spellcheck="options.document.enableSpellcheck && $document.spellcheck"
-    class="editor-container"
+    class="umo-editor-container"
     :class="{
       'show-line-number': page.showLineNumber,
       'format-painter': painter.enabled,
       'disable-page-break': !page.pagination,
     }"
-    :style="{ lineHeight: defaultLineHeight }"
     :editor="editor"
+    :style="{ lineHeight: defaultLineHeight }"
+    :spellcheck="options.document.enableSpellcheck && $document.spellcheck"
   />
   <template v-if="editor && !editorDestroyed">
     <bubble-menu
@@ -151,7 +151,7 @@ const editorInstance = new Editor({
       placeholder: l(options.value.document.placeholder),
     }),*/
     Focus.configure({
-      className: 'node-focused',
+      className: 'umo-node-focused',
       mode: 'all',
     }),
     FormatPainter,
@@ -176,7 +176,7 @@ const editorInstance = new Editor({
     TaskItem.configure({ nested: true }),
     TaskList.configure({
       HTMLAttributes: {
-        class: 'task-list',
+        class: 'umo-task-list',
       },
     }),
     LineHeight.configure({
@@ -184,7 +184,9 @@ const editorInstance = new Editor({
       defaultLineHeight,
     }),
     Margin,
-    SearchReplace,
+    SearchReplace.configure({
+      searchResultClass: 'umo-search-result',
+    }),
     Link,
     Image,
     Video,
@@ -213,7 +215,7 @@ const editorInstance = new Editor({
         tableOfContents.value = content
       },
       scrollParent: () =>
-        document.querySelector(`${container} .zoomable-container`),
+        document.querySelector(`${container} .umo-zoomable-container`),
       getId: () => shortId(6),
     }),
     Typography.configure(options.value.document.typographyRules),
@@ -318,18 +320,18 @@ onBeforeUnmount(() => editorInstance.destroy())
     display: none;
   }
 
-  .menu-button.show-text .button-content .text {
+  .umo-menu-button.show-text .umo-button-content .text {
     display: none !important;
   }
 
-  .menu-button.huge {
+  .umo-menu-button.huge {
     height: var(--td-comp-size-xs);
     min-width: unset;
 
-    .button-content {
+    .umo-button-content {
       min-width: unset !important;
 
-      .icon {
+      .umo-icon {
         font-size: 16px;
         margin-top: 0;
       }
@@ -338,7 +340,7 @@ onBeforeUnmount(() => editorInstance.destroy())
 }
 
 .umo-editor-block-menu {
-  .menu-button {
+  .umo-menu-button {
     color: var(--umo-text-color-light) !important;
   }
 }

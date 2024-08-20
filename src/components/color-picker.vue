@@ -1,6 +1,6 @@
 <template>
-  <div class="color-picker-container">
-    <div class="color-picker-default-button">
+  <div class="umo-color-picker-container">
+    <div class="umo-color-picker-default-button">
       <t-button
         theme="default"
         variant="outline"
@@ -11,9 +11,9 @@
       >
       </t-button>
     </div>
-    <div class="color-picker-group">
+    <div class="umo-color-picker-group">
       <div
-        class="color-picker-item"
+        class="umo-color-picker-item"
         v-for="(item, index) in options.dicts.colors"
         :key="index"
         :style="{ backgroundColor: item }"
@@ -21,12 +21,12 @@
       ></div>
     </div>
     <div
-      class="color-picker-group-title"
+      class="umo-color-picker-group-title"
       v-text="t('colorPicker.standard')"
     ></div>
-    <div class="color-picker-group">
+    <div class="umo-color-picker-group">
       <div
-        class="color-picker-item"
+        class="umo-color-picker-item"
         v-for="(item, index) in standardColors"
         :key="index"
         :style="{ backgroundColor: item }"
@@ -34,32 +34,32 @@
       ></div>
     </div>
     <div
-      class="color-picker-group-title"
+      class="umo-color-picker-group-title"
       v-if="$recent.colors.length > 0"
       v-text="t('colorPicker.recent')"
     ></div>
-    <div class="color-picker-group" v-if="$recent.colors.length > 0">
+    <div class="umo-color-picker-group" v-if="$recent.colors.length > 0">
       <div
-        class="color-picker-item"
+        class="umo-color-picker-item"
         v-for="(item, index) in $recent.colors"
         :key="index"
         :style="{ backgroundColor: item }"
         @click="selectColor(item)"
       ></div>
     </div>
-    <div class="color-picker-divider"></div>
+    <div class="umo-color-picker-divider"></div>
     <t-popup
       :attach="container"
       trigger="click"
       placement="right-bottom"
       @visible-change="(visible) => (moreColorPicker = visible)"
     >
-      <div class="color-picker-more" :class="{ active: moreColorPicker }">
-        <div class="color-picker-more-menu">
+      <div class="umo-color-picker-more" :class="{ active: moreColorPicker }">
+        <div class="umo-color-picker-more-menu">
           <icon :style="{ color }" name="palette-color" />
           <span v-text="t('colorPicker.more')"></span>
         </div>
-        <div class="color-picker-more-arrow">
+        <div class="umo-color-picker-more-arrow">
           <icon name="arrow-down" />
         </div>
       </div>
@@ -127,7 +127,7 @@ const selectColor = (color) => {
 </script>
 
 <style lang="less" scoped>
-.color-picker {
+.umo-color-picker {
   &-container {
     width: 236px;
   }
@@ -184,13 +184,13 @@ const selectColor = (color) => {
       font-size: 12px;
       color: var(--umo-text-color-light);
       cursor: pointer;
-      .icon {
+      .umo-icon {
         margin-right: 5px;
         font-size: 18px;
       }
     }
     &-arrow {
-      .icon {
+      .umo-icon {
         transform: rotate(-90deg);
       }
     }

@@ -6,7 +6,7 @@ export default hr.extend({
   addOptions() {
     return {
       HTMLAttributes: {
-        class: 'page-divider',
+        class: 'umo-page-divider',
         'data-line-number': false,
       },
     }

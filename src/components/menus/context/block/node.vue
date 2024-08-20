@@ -1,8 +1,8 @@
 <template>
   <t-dropdown
-    :attach="`${container} .page-container`"
+    :attach="`${container} .umo-page-container`"
     placement="bottom-right"
-    overlay-class-name="block-menu-dropdown"
+    overlay-class-name="umo-block-menu-dropdown"
     trigger="click"
     :destroy-on-close="false"
     :popup-props="{
@@ -14,7 +14,7 @@
     }"
   >
     <menus-button
-      class="block-menu-button"
+      class="umo-block-menu-button"
       :menu-active="menuActive"
       ico="block-add"
       hide-text
@@ -35,7 +35,7 @@
           @menu-click="openAssistant"
         />
       </t-dropdown-item>
-      <t-dropdown-item class="block-menu-group-name" disabled>
+      <t-dropdown-item class="umo-block-menu-group-name" disabled>
         {{ t('blockMenu.insert') }}
       </t-dropdown-item>
       <t-dropdown-item :divider="options.templates?.length === 0">
@@ -44,7 +44,7 @@
           :text="t('blockMenu.select')"
           :tooltip="false"
         />
-        <t-dropdown-menu overlay-class-name="block-menu-dropdown">
+        <t-dropdown-menu overlay-class-name="umo-block-menu-dropdown">
           <t-dropdown-item>
             <menus-button
               ico="table"
@@ -146,7 +146,7 @@
           :text="t('blockMenu.template')"
           :tooltip="false"
         />
-        <t-dropdown-menu overlay-class-name="block-menu-dropdown">
+        <t-dropdown-menu overlay-class-name="umo-block-menu-dropdown">
           <t-dropdown-item
             v-for="item in options.templates"
             :key="item.value"
@@ -154,11 +154,11 @@
             :divider="item.divider"
             @click="setTemplate(item)"
           >
-            <div class="dropdown-item-label">{{ item.title }}</div>
+            <div class="umo-dropdown-item-label">{{ item.title }}</div>
           </t-dropdown-item>
         </t-dropdown-menu>
       </t-dropdown-item>
-      <t-dropdown-item class="block-menu-group-name" disabled>
+      <t-dropdown-item class="umo-block-menu-group-name" disabled>
         {{ t('blockMenu.toogleNode') }}
       </t-dropdown-item>
       <t-dropdown-item :disabled="editor?.isActive('paragraph')">
@@ -176,7 +176,7 @@
           :text="t('base.heading.text')"
           :tooltip="false"
         />
-        <t-dropdown-menu overlay-class-name="block-menu-dropdown">
+        <t-dropdown-menu overlay-class-name="umo-block-menu-dropdown">
           <t-dropdown-item
             v-for="item in headings"
             :key="item.level"
@@ -217,7 +217,7 @@
       </t-dropdown-item>
       <t-dropdown-item>
         <menus-button
-          ico="task-list-2"
+          ico="umo-task-list-2"
           :text="t('list.task.text')"
           :tooltip="false"
           shortcut-text="Ctrl+Shift+9"

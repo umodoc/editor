@@ -1,8 +1,8 @@
 <template>
   <t-dropdown
-    :attach="`${container} .page-container`"
+    :attach="`${container} .umo-page-container`"
     placement="bottom-right"
-    overlay-class-name="block-menu-dropdown"
+    overlay-class-name="umo-block-menu-dropdown"
     trigger="click"
     :destroy-on-close="false"
     :popup-props="{
@@ -14,13 +14,13 @@
     }"
   >
     <menus-button
-      class="block-menu-button"
+      class="umo-block-menu-button"
       :menu-active="menuActive"
       ico="block-menu"
       hide-text
     />
     <t-dropdown-menu>
-      <t-dropdown-item class="block-menu-group-name" disabled>
+      <t-dropdown-item class="umo-block-menu-group-name" disabled>
         {{ t('blockMenu.common') }}
       </t-dropdown-item>
       <t-dropdown-item>

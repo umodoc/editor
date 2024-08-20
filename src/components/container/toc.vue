@@ -1,20 +1,20 @@
 <template>
-  <div class="toc-container">
-    <div class="toc-title">
+  <div class="umo-toc-container">
+    <div class="umo-toc-title">
       <icon class="icon-toc" name="toc" /> {{ t('toc.title') }}
       <div class="umo-dialog__close" @click="$emit('close')">
         <icon name="close" />
       </div>
     </div>
-    <div class="toc-content umo-scrollbar">
+    <div class="umo-toc-content umo-scrollbar">
       <div
         v-if="tableOfContents.length === 0"
-        class="toc-empty"
+        class="umo-toc-empty"
         v-text="t('toc.empty')"
       ></div>
       <div
         v-else
-        class="toc-item"
+        class="umo-toc-item"
         v-for="(item, index) in tableOfContents"
         :key="item.id"
         :class="{
@@ -24,7 +24,7 @@
         :data-heading="'H' + item.originalLevel"
         @click="headingClick(item, index)"
       >
-        <div class="toc-text">
+        <div class="umo-toc-text">
           {{ item.textContent }}
         </div>
       </div>
@@ -51,7 +51,7 @@ const headingClick = (heading) => {
     `[data-toc-id="${heading.id}"`,
   )
   const pageContainer = document.querySelector(
-    `${container} .zoomable-container`,
+    `${container} .umo-zoomable-container`,
   )
   pageContainer.scrollTo({
     top: element.offsetTop + 10,
@@ -65,14 +65,14 @@ const headingClick = (heading) => {
 </script>
 
 <style lang="less" scoped>
-.toc-container {
+.umo-toc-container {
   background-color: var(--umo-color-white);
   border-right: solid 1px var(--umo-border-color);
   width: 360px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  .toc-title {
+  .umo-toc-title {
     border-bottom: solid 1px var(--umo-border-color-light);
     display: flex;
     align-items: center;
@@ -90,13 +90,13 @@ const headingClick = (heading) => {
       justify-content: center;
     }
   }
-  .toc-content {
+  .umo-toc-content {
     list-style: none;
     flex: 1;
     display: flex;
     padding: 10px;
     flex-direction: column;
-    .toc-empty {
+    .umo-toc-empty {
       font-size: 14px;
       flex: 1;
       display: flex;
@@ -104,7 +104,7 @@ const headingClick = (heading) => {
       justify-content: center;
       color: var(--umo-text-color-light);
     }
-    .toc-item {
+    .umo-toc-item {
       border-radius: 3px;
       padding: 5px 7px 5px 37px;
       box-sizing: border-box;
@@ -165,7 +165,7 @@ const headingClick = (heading) => {
         padding-left: 75px;
         width: calc(100% - 75px);
       }
-      .toc-text {
+      .umo-toc-text {
         text-overflow: ellipsis;
         word-break: break-all;
         white-space: nowrap;

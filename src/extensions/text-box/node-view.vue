@@ -1,11 +1,11 @@
 <template>
   <node-view-wrapper
     ref="containerRef"
-    class="node-view text-box-node-view"
+    class="umo-node-view"
     :id="node.attrs.id"
     @dblclick.capture="disabled = true"
   >
-    <div class="node-container text-box">
+    <div class="umo-node-container umo-nodetext-box">
       <drager
         :selected="selected"
         :disabled="disabled"
@@ -26,7 +26,7 @@
         @blur="disabled = false"
         @click="selected = true"
       >
-        <node-view-content class="content" />
+        <node-view-content class="umo-node-text-box-content" />
       </drager>
     </div>
   </node-view-wrapper>
@@ -58,8 +58,8 @@ onClickOutside(containerRef, () => (selected = false))
 </script>
 
 <style lang="less">
-.node-view {
-  .text-box {
+.umo-node-view {
+  .umo-node-text-box {
     position: relative;
     z-index: 90;
     .es-drager {
@@ -82,7 +82,7 @@ onClickOutside(containerRef, () => (selected = false))
         }
       }
     }
-    .content {
+    .umo-node-text-box-content {
       outline: solid 1px var(--umo-text-color);
       height: 100%;
       padding: 5px;

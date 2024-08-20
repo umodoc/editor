@@ -9,14 +9,14 @@
     destroy-on-close
   >
     <div
-      class="menu-button-wrap"
+      class="umo-menu-button-wrap"
       @click="tooltipVisible = false"
       @mouseover="tooltipVisible = true"
       @mouseleave="tooltipVisible = false"
     >
       <template v-if="menuType === 'button'">
         <t-button
-          class="menu-button"
+          class="umo-menu-button"
           :class="{
             huge: huge && $toolbar.mode === 'ribbon',
             'show-text': !hideText,
@@ -29,7 +29,7 @@
           @click="menuClick"
           v-bind="attrs"
         >
-          <div class="button-content">
+          <div class="umo-button-content">
             <slot />
             <template v-if="ico">
               <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
@@ -46,7 +46,7 @@
       <template v-else-if="menuType === 'dropdown'">
         <template v-if="popupHandle === 'arrow'">
           <t-button
-            class="menu-button has-arrow"
+            class="umo-menu-button has-arrow"
             :class="{
               huge: huge && $toolbar.mode === 'ribbon',
               'show-text': !hideText,
@@ -57,7 +57,7 @@
             v-bind="attrs"
             :disabled="disabled || editor?.isEditable === false"
           >
-            <div class="button-content" @click="menuClick">
+            <div class="umo-button-content" @click="menuClick">
               <slot />
               <template v-if="ico">
                 <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
@@ -87,7 +87,7 @@
               }"
               @click="attrs.onChange"
             >
-              <span class="icon-arrow handle">
+              <span class="icon-arrow umo-button-handle">
                 <icon name="arrow-down" />
               </span>
               <slot v-if="!selectOptions" name="dropmenu" />
@@ -109,7 +109,7 @@
             @click="attrs.onChange"
           >
             <t-button
-              class="menu-button has-arrow"
+              class="umo-menu-button has-arrow"
               :class="{
                 huge: huge && $toolbar.mode === 'ribbon',
                 'show-text': !hideText,
@@ -120,7 +120,7 @@
               v-bind="attrs"
               :disabled="disabled || editor?.isEditable === false"
             >
-              <div class="button-content" @click="menuClick">
+              <div class="umo-button-content" @click="menuClick">
                 <slot />
                 <template v-if="ico">
                   <span
@@ -168,7 +168,7 @@
       <template v-else-if="menuType === 'popup'">
         <template v-if="popupHandle === 'arrow'">
           <t-button
-            class="menu-button has-arrow"
+            class="umo-menu-button has-arrow"
             :class="{
               'show-text': !hideText,
               active: popupVisible,
@@ -178,7 +178,7 @@
             v-bind="attrs"
             :disabled="disabled || editor?.isEditable === false"
           >
-            <div class="button-content" @click="menuClick">
+            <div class="umo-button-content" @click="menuClick">
               <slot />
               <template v-if="ico">
                 <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
@@ -203,7 +203,7 @@
               <span
                 v-if="$toolbar.mode === 'ribbon'"
                 ref="popupHandleRef"
-                class="icon-arrow handle"
+                class="icon-arrow umo-button-handle"
                 @click="togglePopup()"
               >
                 <icon name="arrow-down" />
@@ -216,7 +216,7 @@
               <span
                 v-if="$toolbar.mode === 'classic'"
                 ref="popupHandleRef"
-                class="icon-arrow handle"
+                class="icon-arrow umo-button-handle"
                 @click="togglePopup()"
               >
                 <icon name="arrow-down" />
@@ -233,7 +233,7 @@
           >
             <t-button
               ref="popupHandleRef"
-              class="menu-button has-arrow"
+              class="umo-menu-button has-arrow"
               :class="{
                 huge: huge && $toolbar.mode === 'ribbon',
                 'show-text': !hideText,
@@ -245,7 +245,7 @@
               :disabled="disabled || editor?.isEditable === false"
               @click="togglePopup()"
             >
-              <div class="button-content">
+              <div class="umo-button-content">
                 <slot />
                 <template v-if="ico">
                   <span
@@ -410,7 +410,7 @@ onClickOutside(
 </script>
 
 <style lang="less" scoped>
-.menu-button {
+.umo-menu-button {
   --td-comp-paddingLR-s: 5px;
   --td-radius-default: var(--umo-radius);
   border: none;
@@ -418,7 +418,7 @@ onClickOutside(
     width: auto;
     padding-left: var(--td-comp-paddingLR-s);
     padding-right: var(--td-comp-paddingLR-s);
-    .button-content .text {
+    .umo-button-content .text {
       display: block !important;
       margin-left: 3px;
     }
@@ -444,14 +444,14 @@ onClickOutside(
       background-color: rgba(0, 0, 0, 0.05);
     }
   }
-  .button-content {
+  .umo-button-content {
     display: flex;
     align-items: center;
     display: flex;
     align-items: center;
     justify-content: center;
     .icon,
-    :deep(.icon) {
+    :deep(.umo-icon) {
       font-size: 16px;
     }
     .icon-svg {
@@ -478,7 +478,7 @@ onClickOutside(
       font-size: 10px;
       color: var(--umo-text-color-light);
     }
-    &.handle {
+    &.umo-button-handle {
       margin: 0 -4px 0 2px;
       &:hover {
         background-color: var(--td-bg-color-container-active);
@@ -492,7 +492,7 @@ onClickOutside(
     height: 56px;
     margin-bottom: 0;
     flex-direction: column;
-    .button-content {
+    .umo-button-content {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -523,7 +523,7 @@ onClickOutside(
       }
     }
     &.has-arrow {
-      .button-content {
+      .umo-button-content {
         min-width: 40px;
       }
     }

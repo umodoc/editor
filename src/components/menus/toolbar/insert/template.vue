@@ -5,7 +5,7 @@
     :text="t('insert.template')"
     menu-type="dropdown"
     huge
-    overlay-class-name="templates-dropdown"
+    overlay-class-name="umo-templates-dropdown"
   >
     <template #dropmenu>
       <t-dropdown-menu>
@@ -44,7 +44,7 @@ const setTemplate = ({ content }) => {
 </script>
 
 <style lang="less">
-.templates-dropdown {
+.umo-templates-dropdown {
   .umo-dropdown__item-text {
     padding: 5px 5px;
     min-width: 200px;

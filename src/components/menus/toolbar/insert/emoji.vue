@@ -8,12 +8,12 @@
     @toggle-popup="togglePopup"
   >
     <template #content>
-      <div class="emojis-container narrow-scrollbar">
+      <div class="umo-emojis-container narrow-scrollbar">
         <template v-for="(group, index) in options.dicts.emojis" :key="index">
-          <div class="emojis-group-title" v-text="l(group.label)"></div>
-          <div class="emojis-group-container">
+          <div class="umo-emojis-group-title" v-text="l(group.label)"></div>
+          <div class="umo-emojis-group-container">
             <div
-              class="emojis-group-item"
+              class="umo-emojis-group-item"
               v-for="(item, i) in group.items.split(' ')"
               :key="i"
               @click="selectEmoji(item)"
@@ -38,7 +38,7 @@ const selectEmoji = (emoji) => {
 </script>
 
 <style lang="less" scoped>
-.emojis-container {
+.umo-emojis-container {
   width: 404px;
   max-height: var(--umo-popup-max-height);
   min-height: 320px;
@@ -46,7 +46,7 @@ const selectEmoji = (emoji) => {
   margin: calc(var(--umo-popup-content-padding) * -1);
 }
 
-.emojis-group {
+.umo-emojis-group {
   position: relative;
   &-title {
     color: var(--umo-text-color-light);

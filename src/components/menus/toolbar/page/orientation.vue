@@ -3,7 +3,7 @@
     ico="page-orientation"
     :text="t('page.orientation.text')"
     menu-type="dropdown"
-    overlay-class-name="page-orientation-dropdown"
+    overlay-class-name="umo-page-orientation-dropdown"
   >
     <template #dropmenu>
       <t-dropdown-menu>
@@ -34,13 +34,13 @@ const orientations = [
 </script>
 
 <style lang="less">
-.page-orientation-dropdown {
+.umo-page-orientation-dropdown {
   .umo-dropdown__item {
     max-width: unset !important;
     &-text {
       display: flex;
       padding: 5px 8px;
-      .icon {
+      .umo-icon {
         font-size: 20px;
         margin-right: 5px;
         &.rotate {

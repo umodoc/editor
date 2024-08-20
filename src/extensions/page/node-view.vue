@@ -1,38 +1,38 @@
 <template>
   <node-view-wrapper
     ref="containerRef"
-    class="page-node-view"
+    class="umo-page-node-view"
     :id="node.attrs.id"
     :class="{ 'no-shadow': exportImage }"
     :style="{
-      '--page-background': page.background,
-      '--page-margin-top': page.margin.top + 'cm',
-      '--page-margin-bottom': page.margin.bottom + 'cm',
-      '--page-margin-left': page.margin.left + 'cm',
-      '--page-margin-right': page.margin.right + 'cm',
-      '--page-width': pageSize.width + 'cm',
-      '--page-height': pageSize.height + 'cm',
+      '--umo-page-background': page.background,
+      '--umo-page-margin-top': page.margin.top + 'cm',
+      '--umo-page-margin-bottom': page.margin.bottom + 'cm',
+      '--umo-page-margin-left': page.margin.left + 'cm',
+      '--umo-page-margin-right': page.margin.right + 'cm',
+      '--umo-page-width': pageSize.width + 'cm',
+      '--umo-page-height': pageSize.height + 'cm',
     }"
   >
     <div
       v-if="node.attrs.pageNumber > 1"
-      class="page-node-view-handler"
+      class="umo-page-node-view-handler"
       :title="t('pagination.toggle')"
       @dblclick="page.pagination = !page.pagination"
     ></div>
     <t-watermark
-      class="page-watermark"
+      class="umo-page-watermark"
       :alpha="page.watermark.alpha"
       v-bind="watermarkOptions"
       :watermark-content="page.watermark"
     >
-      <div class="page-node-header" contenteditable="false">
+      <div class="umo-page-node-header" contenteditable="false">
         <div
-          class="page-corner corner-tl"
-          style="width: var(--page-margin-left)"
+          class="umo-page-corner corner-tl"
+          style="width: var(--umo-page-margin-left)"
         ></div>
 
-        <div class="page-node-header-content">
+        <div class="umo-page-node-header-content">
           <component
             v-if="page.header"
             :is="node.attrs.slots.page_header"
@@ -41,22 +41,22 @@
           />
         </div>
         <div
-          class="page-corner corner-tr"
-          style="width: var(--page-margin-right)"
+          class="umo-page-corner corner-tr"
+          style="width: var(--umo-page-margin-right)"
         ></div>
       </div>
       <node-view-content
-        class="page-node-content"
+        class="umo-page-node-content"
         :style="{
           height: pageSize.height - page.margin.top - page.margin.bottom + 'cm',
         }"
       />
-      <div class="page-node-footer" contenteditable="false">
+      <div class="umo-page-node-footer" contenteditable="false">
         <div
-          class="page-corner corner-bl"
-          style="width: var(--page-margin-left)"
+          class="umo-page-corner corner-bl"
+          style="width: var(--umo-page-margin-left)"
         ></div>
-        <div class="page-node-footer-content">
+        <div class="umo-page-node-footer-content">
           <component
             v-if="page.footer"
             :is="node.attrs.slots.page_footer"
@@ -65,8 +65,8 @@
           />
         </div>
         <div
-          class="page-corner corner-br"
-          style="width: var(--page-margin-right)"
+          class="umo-page-corner corner-br"
+          style="width: var(--umo-page-margin-right)"
         ></div>
       </div>
     </t-watermark>
@@ -108,10 +108,10 @@ watch(
 </script>
 
 <style lang="less" scoped>
-.page-node-view {
+.umo-page-node-view {
   box-sizing: border-box;
-  background-color: var(--page-background);
-  width: var(--page-width);
+  background-color: var(--umo-page-background);
+  width: var(--umo-page-width);
   overflow: hidden;
 
   &.no-shadow {
@@ -133,7 +133,7 @@ watch(
     margin-bottom: 15px;
   }
 
-  .page-node-view-handler {
+  .umo-page-node-view-handler {
     position: absolute;
     width: 100%;
     height: 20px;
@@ -142,29 +142,29 @@ watch(
     z-index: 5;
   }
 
-  .page-watermark {
+  .umo-page-watermark {
     position: unset !important;
-    width: var(--page-width);
-    height: var(--page-height);
+    width: var(--umo-page-width);
+    height: var(--umo-page-height);
   }
 
-  .page-node-header {
-    height: var(--page-margin-top);
+  .umo-page-node-header {
+    height: var(--umo-page-margin-top);
     overflow: hidden;
   }
 
-  .page-node-footer {
-    height: var(--page-margin-bottom);
+  .umo-page-node-footer {
+    height: var(--umo-page-margin-bottom);
     overflow: hidden;
   }
 
-  .page-node-header,
-  .page-node-footer {
+  .umo-page-node-header,
+  .umo-page-node-footer {
     display: flex;
     justify-content: space-between;
   }
 
-  .page-corner {
+  .umo-page-corner {
     box-sizing: border-box;
     position: relative;
     z-index: 10;
@@ -207,26 +207,26 @@ watch(
     }
   }
 
-  .page-node-header-content,
-  .page-node-footer-content {
+  .umo-page-node-header-content,
+  .umo-page-node-footer-content {
     flex: 1;
   }
 
-  .page-node-content {
+  .umo-page-node-content {
     box-sizing: border-box;
     width: 100%;
     overflow: hidden;
-    padding: 0 var(--page-margin-right) 0 var(--page-margin-right);
+    padding: 0 var(--umo-page-margin-right) 0 var(--umo-page-margin-right);
   }
 }
 </style>
 
 <style lang="less">
-.disable-page-break .page-node-view {
+.disable-page-break .umo-page-node-view {
   &:not(:first-child) {
     margin-top: 0 !important;
 
-    .page-node-header {
+    .umo-page-node-header {
       display: none;
     }
   }
@@ -234,14 +234,14 @@ watch(
   &:not(:last-child) {
     margin-bottom: 0 !important;
 
-    .page-node-footer {
+    .umo-page-node-footer {
       display: none;
     }
   }
 
-  .page-node-view-handler {
+  .umo-page-node-view-handler {
     cursor: vertical-text;
-    background-color: var(--page-background);
+    background-color: var(--umo-page-background);
     margin-top: -10px;
 
     &::after {
@@ -255,24 +255,25 @@ watch(
     }
   }
 
-  .page-watermark {
+  .umo-page-watermark {
     padding: 20px 0;
     height: calc(
-      var(--page-height) - var(--page-margin-top) - var(--page-margin-bottom)
+      var(--umo-page-height) - var(--umo-page-margin-top) -
+        var(--umo-page-margin-bottom)
     );
   }
 
   &:first-child {
-    .page-watermark {
+    .umo-page-watermark {
       padding-top: 0;
-      height: calc(var(--page-height) - var(--page-margin-top));
+      height: calc(var(--umo-page-height) - var(--umo-page-margin-top));
     }
   }
 
   &:last-child {
-    .page-watermark {
+    .umo-page-watermark {
       padding-bottom: 0;
-      height: calc(var(--page-height) - var(--page-margin-bottom));
+      height: calc(var(--umo-page-height) - var(--umo-page-margin-bottom));
     }
   }
 }

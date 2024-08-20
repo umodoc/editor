@@ -5,18 +5,18 @@
     menu-type="dropdown"
     popup-handle="arrow"
     hide-text
-    overlay-class-name="highlight-dropdown"
+    overlay-class-name="umo-highlight-dropdown"
     @menu-click="highlightChange(highlight)"
   >
     <icon
       name="highlight"
-      class="icon-highlight"
+      class="umo-icon-highlight"
       :style="{ backgroundColor: highlight.bgcolor, color: highlight.color }"
     />
     <template #dropmenu>
       <t-dropdown-menu>
         <t-dropdown-item
-          class="text-highlight-menu"
+          class="umo-text-highlight-menu"
           v-for="item in options"
           :key="item.value"
           :value="item.value"
@@ -28,7 +28,7 @@
           <span>{{ item.label }}</span>
         </t-dropdown-item>
         <t-dropdown-item
-          class="text-highlight-menu clear-format-menu"
+          class="umo-text-highlight-menu umo-clear-format-menu"
           @click="clearFormat()"
         >
           <icon name="clear-format" />
@@ -78,13 +78,13 @@ const clearFormat = () => {
 </script>
 
 <style lang="less" scoped>
-.icon-highlight {
+.umo-icon-highlight {
   border-radius: 2px;
 }
 </style>
 
 <style lang="less">
-.text-highlight-dropdown {
+.umo-text-highlight-dropdown {
   .umo-popup__content {
     .umo-divider {
       margin-top: 8px;
@@ -92,11 +92,11 @@ const clearFormat = () => {
     }
   }
 }
-.text-highlight-menu {
+.umo-text-highlight-menu {
   width: 140px;
   margin-bottom: 6px;
   border: solid 1px transparent;
-  &.clear-format-menu {
+  &.umo-clear-format-menu {
     margin-bottom: 0;
   }
   &:hover {
@@ -107,7 +107,7 @@ const clearFormat = () => {
     display: flex;
     align-items: center;
     padding: 2px;
-    .icon {
+    .umo-icon {
       font-size: 16px;
       margin-right: 5px;
     }

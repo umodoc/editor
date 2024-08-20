@@ -1,6 +1,6 @@
 <template>
-  <div class="assistant-container">
-    <div class="assistant-input">
+  <div class="umo-assistant-container">
+    <div class="umo-assistant-input">
       <div class="ai-icon">
         <icon name="assistant" />
       </div>
@@ -25,7 +25,7 @@
         </t-button>
       </div>
     </div>
-    <div class="assistant-result">
+    <div class="umo-assistant-result">
       <div class="close">
         <tooltip :content="t('assistant.exit')">
           <t-button
@@ -57,7 +57,7 @@
       <div class="result-container" v-if="result.content !== ''">
         <div class="title" v-text="t('assistant.result')"></div>
         <div
-          class="result editor-container"
+          class="result umo-editor-container"
           :class="{ error: result.error }"
           v-html="result.content"
         ></div>
@@ -259,7 +259,7 @@ const deleteResult = () => {
 </script>
 
 <style lang="less" scoped>
-.assistant-input {
+.umo-assistant-input {
   width: 480px;
   position: relative;
   .ai-icon {
@@ -317,7 +317,7 @@ const deleteResult = () => {
   }
 }
 
-.assistant-result {
+.umo-assistant-result {
   margin-top: 10px;
   padding: 15px;
   box-shadow: var(--umo-shadow);
@@ -368,7 +368,7 @@ const deleteResult = () => {
       :deep(.umo-button__text) {
         font-size: 16px;
         opacity: 0.6;
-        .icon {
+        .umo-icon {
           margin-right: 0 !important;
         }
       }
@@ -384,7 +384,7 @@ const deleteResult = () => {
       .umo-button__text {
         display: flex;
         align-items: center;
-        .icon {
+        .umo-icon {
           font-size: 14px;
           margin-right: 3px;
         }

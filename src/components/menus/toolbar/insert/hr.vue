@@ -8,12 +8,12 @@
     @toggle-popup="togglePopup"
   >
     <template #content>
-      <div class="page-divider-dropdown">
-        <div class="page-divider-item-title">
+      <div class="umo-page-divider-dropdown">
+        <div class="umo-page-divider-item-title">
           <span v-text="t('insert.hr.title')"></span>
         </div>
         <div
-          class="page-divider-item"
+          class="umo-page-divider-item"
           v-for="item in options"
           :key="item.value"
           :value="item.value"
@@ -33,7 +33,7 @@
           trigger="click"
         >
           <div
-            class="page-divider-item open-color-picker"
+            class="umo-page-divider-item umo-open-color-picker"
             :class="{ active: colorPickerVisible }"
           >
             <span v-text="t('insert.hr.color')"></span>
@@ -42,7 +42,7 @@
             </div>
           </div>
           <template #content>
-            <div class="page-divider-color-picker">
+            <div class="umo-page-divider-color-picker">
               <color-picker default-color="#000" @change="colorChange" />
             </div>
           </template>
@@ -87,16 +87,16 @@ const setHr = ({ value }) => {
 <style lang="less" scoped>
 @import '@/assets/styles/_mixins.less';
 
-.page-divider-dropdown {
+.umo-page-divider-dropdown {
   width: 200px;
-  .page-divider-item {
+  .umo-page-divider-item {
     padding: 2px 5px;
     cursor: pointer;
     border-radius: var(--umo-radius);
     &:hover {
       background-color: var(--td-bg-color-container-hover);
     }
-    &.open-color-picker {
+    &.umo-open-color-picker {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -109,7 +109,7 @@ const setHr = ({ value }) => {
         border-radius: var(--umo-radius);
       }
       .arrow {
-        .icon {
+        .umo-icon {
           transform: rotate(-90deg);
         }
       }
@@ -120,12 +120,12 @@ const setHr = ({ value }) => {
     }
   }
   .umo-page-divider {
-    .page-divider();
+    .umo-page-divider();
     margin: 3px;
     width: auto;
   }
 }
-:global(.page-divider-color-picker) {
+:global(.umo-page-divider-color-picker) {
   padding: 12px;
 }
 </style>

@@ -1,12 +1,20 @@
 <template>
-  <div ref="wraperRef" class="scrollable-container">
-    <div v-if="!hidePrev" class="scrollable-control left" @click="scrollLeft">
+  <div ref="wraperRef" class="umo-scrollable-container">
+    <div
+      v-if="!hidePrev"
+      class="umo-scrollable-control scrollable-left"
+      @click="scrollLeft"
+    >
       <icon name="arrow-down" />
     </div>
-    <div ref="contentRef" class="scrollable-content">
+    <div ref="contentRef" class="umo-scrollable-content">
       <slot />
     </div>
-    <div v-if="!hideNext" class="scrollable-control right" @click="scrollRight">
+    <div
+      v-if="!hideNext"
+      class="umo-scrollable-control scrollable-right"
+      @click="scrollRight"
+    >
       <icon name="arrow-down" />
     </div>
   </div>
@@ -51,11 +59,11 @@ defineExpose({
 </script>
 
 <style lang="less" scoped>
-.scrollable-container {
+.umo-scrollable-container {
   width: 100%;
   overflow: hidden;
   display: flex;
-  .scrollable-control {
+  .umo-scrollable-control {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -73,9 +81,9 @@ defineExpose({
       background-color: var(--umo-primary-color);
       color: var(--umo-color-white);
     }
-    &.left {
+    &.scrollable-left {
       margin-right: 5px;
-      :deep(.icon) {
+      :deep(.umo-icon) {
         transform: rotate(90deg);
       }
       &::before {
@@ -94,9 +102,9 @@ defineExpose({
         pointer-events: none;
       }
     }
-    &.right {
+    &.scrollable-right {
       margin-left: 5px;
-      :deep(.icon) {
+      :deep(.umo-icon) {
         transform: rotate(-90deg);
       }
       &::before {
@@ -116,7 +124,7 @@ defineExpose({
       }
     }
   }
-  .scrollable-content {
+  .umo-scrollable-content {
     overflow-x: auto;
     overflow-y: hidden;
     scroll-behavior: smooth;

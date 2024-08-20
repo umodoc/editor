@@ -1,24 +1,26 @@
 <template>
   <node-view-wrapper
     ref="containerRef"
-    class="node-view file-node-view"
+    class="umo-node-view"
     :id="node.attrs.id"
     :style="nodeStyle"
   >
-    <div class="node-container hover-shadow select-outline file">
-      <div class="file-icon">
+    <div
+      class="umo-node-container hover-shadow umo-select-outline umo-node-file"
+    >
+      <div class="umo-file-icon">
         <img :src="filePath" class="icon" />
       </div>
-      <div class="file-info">
-        <div class="file-name" :title="node.attrs.name">
+      <div class="umo-file-info">
+        <div class="umo-file-name" :title="node.attrs.name">
           {{ node.attrs.name }}
         </div>
-        <div class="file-meta">{{ prettyBytes(node.attrs.size) }}</div>
+        <div class="umo-file-meta">{{ prettyBytes(node.attrs.size) }}</div>
       </div>
-      <div class="file-action">
+      <div class="umo-file-action">
         <div
           v-if="!node.attrs.uploaded && node.attrs.file !== null"
-          class="action-item"
+          class="umo-action-item"
           :title="t('file.uploading')"
         >
           <icon class="loading" name="loading" />
@@ -28,7 +30,7 @@
           :href="node.attrs.url"
           :download="node.attrs.name"
           target="_blank"
-          class="action-item"
+          class="umo-action-item"
           :title="t('file.download')"
         >
           <icon name="download" />
@@ -78,8 +80,8 @@ onMounted(async () => {
 </script>
 
 <style lang="less">
-.node-view {
-  .file {
+.umo-node-view {
+  .umo-node-file {
     display: inline-flex;
     align-items: center;
     padding: 12px;
@@ -88,20 +90,19 @@ onMounted(async () => {
     background-color: var(--umo-color-white);
     border-radius: var(--umo-content-node-radius);
 
-    &-icon {
+    .umo-file-icon {
       width: 32px;
       height: 32px;
       margin-right: 8px;
       flex: 1;
-
       img {
         width: 32px;
         display: block;
       }
     }
 
-    &-name {
-      font-size: 14px;
+    .umo-file-name {
+      font-size: 12px;
       font-weight: 500;
       line-height: 1;
       text-overflow: ellipsis;
@@ -109,23 +110,24 @@ onMounted(async () => {
       word-break: break-all;
       white-space: nowrap;
       width: 200px;
+      margin-right: 10px;
     }
 
-    &-meta {
+    .umo-file-meta {
       font-size: 12px;
       color: var(--umo-text-color-light);
       line-height: 1;
       margin-top: 6px;
     }
 
-    &-action {
+    .umo-file-action {
       flex: 1;
       display: flex;
       align-items: center;
       color: var(--umo-text-color-light);
       gap: 5px;
 
-      .action-item {
+      .umo-action-item {
         font-size: 18px;
         display: flex;
         align-items: center;

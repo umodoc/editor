@@ -8,9 +8,9 @@
     @toggle-popup="togglePopup"
   >
     <template #content>
-      <div class="background-container">
+      <div class="umo-background-container">
         <div
-          class="background-item"
+          class="umo-background-item"
           :class="{ active: page.background === item.value }"
           :style="{ backgroundColor: item.value }"
           v-for="(item, index) in backgrounds"
@@ -26,12 +26,12 @@
         placement="right-bottom"
         @visible-change="(visible) => (moreColorPicker = visible)"
       >
-        <div class="background-more" :class="{ active: moreColorPicker }">
-          <div class="background-more-menu">
+        <div class="umo-background-more" :class="{ active: moreColorPicker }">
+          <div class="umo-background-more-menu">
             <icon name="palette-color" />
             <span v-text="t('page.bg.custom')"></span>
           </div>
-          <div class="background-more-arrow">
+          <div class="umo-background-more-arrow">
             <icon name="arrow-down" />
           </div>
         </div>
@@ -70,14 +70,14 @@ const backgroundChange = (color) => {
 </script>
 
 <style lang="less" scoped>
-.background-container {
+.umo-background-container {
   display: flex;
   flex-wrap: wrap;
   width: 234px;
   justify-content: space-between;
   gap: 9px;
   user-select: none;
-  .background-item {
+  .umo-background-item {
     width: 70px;
     height: 90px;
     border: solid 1px rgba(0, 0, 0, 0.1);
@@ -101,7 +101,7 @@ const backgroundChange = (color) => {
     }
   }
 }
-.background-more {
+.umo-background-more {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -118,13 +118,13 @@ const backgroundChange = (color) => {
     align-items: center;
     font-size: 12px;
     cursor: pointer;
-    .icon {
+    .umo-icon {
       margin-right: 5px;
       font-size: 16px;
     }
   }
   &-arrow {
-    .icon {
+    .umo-icon {
       transform: rotate(-90deg);
     }
   }

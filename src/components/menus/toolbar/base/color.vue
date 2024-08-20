@@ -10,7 +10,7 @@
     @menu-click="colorChange(currentColor)"
   >
     <div
-      class="current-color"
+      class="umo-current-color"
       :style="{
         background: editor?.getAttributes('textStyle')?.color || currentColor,
       }"
@@ -60,7 +60,7 @@ const colorChange = (color) => {
 </script>
 
 <style lang="less" scoped>
-.current-color {
+.umo-current-color {
   width: 12px;
   height: 2px;
   position: absolute;

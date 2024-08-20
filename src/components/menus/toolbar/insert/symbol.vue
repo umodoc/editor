@@ -8,12 +8,12 @@
     @toggle-popup="togglePopup"
   >
     <template #content>
-      <div class="symbols-container narrow-scrollbar">
+      <div class="umo-symbols-container narrow-scrollbar">
         <template v-for="(group, index) in options.dicts.symbols" :key="index">
-          <div class="symbols-group-title" v-text="l(group.label)"></div>
-          <div class="symbols-group-container">
+          <div class="umo-symbols-group-title" v-text="l(group.label)"></div>
+          <div class="umo-symbols-group-container">
             <div
-              class="symbols-group-item"
+              class="umo-symbols-group-item"
               v-for="(item, i) in group.items.split('')"
               :key="i"
               @click="selectSymbol(item)"
@@ -38,7 +38,7 @@ const selectSymbol = (char) => {
 </script>
 
 <style lang="less" scoped>
-.symbols-container {
+.umo-symbols-container {
   width: 336px;
   max-height: var(--umo-popup-max-height);
   min-height: 300px;
@@ -47,7 +47,7 @@ const selectSymbol = (char) => {
   padding: calc(var(--umo-popup-content-padding) - 2px);
 }
 
-.symbols-group {
+.umo-symbols-group {
   &-title {
     color: var(--umo-text-color-light);
     font-size: 12px;

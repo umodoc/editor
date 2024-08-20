@@ -7,7 +7,7 @@
     @close="emits('close')"
     @confirm="onConfirm"
   >
-    <div class="page-options-container">
+    <div class="umo-page-options-container">
       <t-form label-align="left">
         <t-form-item :label="t('page.orientation.text')">
           <t-radio-group
@@ -27,7 +27,7 @@
         <t-form-item :label="t('page.size.text')">
           <t-select
             :popup-props="{
-              overlayClassName: 'page-size-select',
+              overlayClassName: 'umo-page-size-select',
               destroyOnClose: true,
               attach: container,
             }"
@@ -49,10 +49,10 @@
           </t-select>
         </t-form-item>
         <t-form-item :label="t('pageOptions.size.text')">
-          <div class="page-setting">
+          <div class="umo-page-setting">
             <div class="item">
               <t-input-number
-                class="page-setting-number"
+                class="umo-page-setting-number"
                 v-model="pageOptions.size.width"
                 theme="normal"
                 align="center"
@@ -66,7 +66,7 @@
             </div>
             <div class="item">
               <t-input-number
-                class="page-setting-number"
+                class="umo-page-setting-number"
                 v-model="pageOptions.size.height"
                 theme="normal"
                 align="center"
@@ -82,7 +82,7 @@
         </t-form-item>
         <t-form-item :label="t('pageOptions.margin.text')" name="name">
           <div>
-            <div class="page-margin-inbuilt">
+            <div class="umo-page-margin-inbuilt">
               <div
                 class="item"
                 :class="{ active: !pageOptions.margin.layout }"
@@ -132,10 +132,10 @@
                 "
               ></div>
             </div>
-            <div class="page-setting">
+            <div class="umo-page-setting">
               <div class="item">
                 <t-input-number
-                  class="page-setting-number"
+                  class="umo-page-setting-number"
                   v-model="pageOptions.margin.top"
                   theme="normal"
                   align="center"
@@ -150,7 +150,7 @@
               </div>
               <div class="item">
                 <t-input-number
-                  class="page-setting-number"
+                  class="umo-page-setting-number"
                   v-model="pageOptions.margin.bottom"
                   theme="normal"
                   align="center"
@@ -165,7 +165,7 @@
               </div>
               <div class="item">
                 <t-input-number
-                  class="page-setting-number"
+                  class="umo-page-setting-number"
                   v-model="pageOptions.margin.left"
                   theme="normal"
                   align="center"
@@ -180,7 +180,7 @@
               </div>
               <div class="item">
                 <t-input-number
-                  class="page-setting-number"
+                  class="umo-page-setting-number"
                   v-model="pageOptions.margin.right"
                   theme="normal"
                   align="center"
@@ -246,13 +246,13 @@ const onConfirm = () => {
 </script>
 
 <style lang="less" scoped>
-.page-options-container {
+.umo-page-options-container {
   width: 400px;
   margin-top: 15px;
   :deep(.umo-radio-button__label) {
     display: flex;
     align-items: center;
-    .icon {
+    .umo-icon {
       margin-right: 5px;
       font-size: 20px;
       &.rotate {
@@ -262,7 +262,7 @@ const onConfirm = () => {
   }
 }
 
-.page-margin-inbuilt {
+.umo-page-margin-inbuilt {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
@@ -308,7 +308,7 @@ const onConfirm = () => {
     }
   }
 }
-.page-setting {
+.umo-page-setting {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -333,8 +333,9 @@ const onConfirm = () => {
 </style>
 
 <style lang="less">
-.page-size-select {
+.umo-page-size-select {
   .umo-select-option {
+    padding: 0 8px;
     > span {
       display: flex;
       justify-content: space-between;

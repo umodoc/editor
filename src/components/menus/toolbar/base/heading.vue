@@ -1,11 +1,11 @@
 <template>
   <div
     v-if="$toolbar.mode !== 'classic'"
-    class="toolbar-headding"
+    class="umo-toolbar-headding"
     :class="{ unfold: popupVisible }"
     :disabled="!editor?.isEditable"
   >
-    <div class="heading-container">
+    <div class="umo-heading-container">
       <template v-for="(item, index) in options" :key="item.value">
         <div
           class="card"
@@ -21,7 +21,7 @@
         :attach="container"
         trigger="click"
         placement="bottom-right"
-        overlay-class-name="heading-container-popup"
+        overlay-class-name="umo-heading-container-popup"
         destroy-on-close
         :visible="popupVisible"
       >
@@ -29,7 +29,7 @@
           <icon name="arrow-down" />
         </div>
         <template #content>
-          <div ref="popupContentRef" class="heading-container">
+          <div ref="popupContentRef" class="umo-heading-container">
             <template v-for="(item, index) in options" :key="item.value">
               <div
                 class="card"
@@ -61,7 +61,7 @@
   >
     <t-option
       v-for="item in options"
-      class="editor-heading-select-option"
+      class="umo-heading-select-option"
       :key="item.value"
       :value="item.value"
       :label="item.label"
@@ -138,7 +138,7 @@ onClickOutside(
 </script>
 
 <style lang="less" scoped>
-.toolbar-headding {
+.umo-toolbar-headding {
   width: 318px;
   height: 56px;
   position: relative;
@@ -153,7 +153,7 @@ onClickOutside(
   }
   &.unfold {
     overflow: visible;
-    .heading-container {
+    .umo-heading-container {
       border-color: var(--umo-border-color-light);
       border-bottom: none;
       border-bottom-left-radius: 0;
@@ -161,7 +161,7 @@ onClickOutside(
     }
   }
 }
-.heading-container {
+.umo-heading-container {
   display: flex;
   background-color: var(--umo-button-hover-background);
   padding: 2px 5px;
@@ -235,7 +235,7 @@ onClickOutside(
     &:hover {
       background-color: rgba(0, 0, 0, 0.05);
     }
-    .icon {
+    .umo-icon {
       font-size: 12px;
       color: var(--umo-text-color-light);
     }
@@ -243,7 +243,7 @@ onClickOutside(
 }
 .unfold {
   .arrow {
-    :deep(.icon) {
+    :deep(.umo-icon) {
       transform: rotate(-180deg);
     }
   }
@@ -251,7 +251,7 @@ onClickOutside(
 </style>
 
 <style lang="less">
-.heading-container-popup {
+.umo-heading-container-popup {
   .umo-popup__content {
     box-shadow: none;
     border: solid 1px var(--umo-border-color);
@@ -267,7 +267,7 @@ onClickOutside(
     }
   }
 }
-.editor-heading-select-option {
+.umo-heading-select-option {
   height: auto !important;
   .heading-size {
     line-height: 2em;

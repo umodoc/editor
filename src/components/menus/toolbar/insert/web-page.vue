@@ -14,8 +14,8 @@
       @confirm="insertWebPage"
       @close="dialogVisible = false"
     >
-      <div class="web-page-container">
-        <div class="web-page-tip" v-text="t('insert.web.tip')"></div>
+      <div class="umo-web-page-container">
+        <div class="umo-web-page-tip" v-text="t('insert.web.tip')"></div>
         <t-input
           v-model.trim="url"
           :status="error ? 'error' : 'default'"
@@ -69,7 +69,7 @@ watch(
 </script>
 
 <style lang="less" scoped>
-.web-page {
+.umo-web-page {
   &-container {
     padding: 2px;
   }
