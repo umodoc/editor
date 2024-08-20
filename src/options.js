@@ -51,7 +51,7 @@ const defaultOptions = {
     ],
     // prettier-ignore
     colors: [
-      '#FFF','#000','#4A5366','#3B74EC','#45A2EF','#529867','#CD4A3F','#EA8D40','#EEC543', '#8E45D0','#F2F2F2','#7F7F7F','#F4F5F7','#CBDCFC','#E8F6FE','#EDFAF2','#FCEAE9','#FDF3EC','#FEF9E5','#FAECFE','#EEE','#595959','#C6CAD2','#CEEBFD','#CBDCFC','#CBE9D7','#F7CBC9','#FADDC7','#FDEEB5','#EBCAFC', '#BFBFBF','#3F3F3F','#828B9D','#A0BEFA','#A7DCFC','#A6D5B8','#F2A19C','#F5BC8C','#FBE281','#CB94F9','#A5A5A5','#262626','#363B44','#2452B2','#3473A1','#417A53','#922B22','#AD642A','#9E8329','#57297D','#939393','#0D0D0D','#25272E','#15316A','#1C415A','#284D34','#511712','#573213','#635217','#36194E',
+      '#FFF', '#000', '#4A5366', '#3B74EC', '#45A2EF', '#529867', '#CD4A3F', '#EA8D40', '#EEC543', '#8E45D0', '#F2F2F2', '#7F7F7F', '#F4F5F7', '#CBDCFC', '#E8F6FE', '#EDFAF2', '#FCEAE9', '#FDF3EC', '#FEF9E5', '#FAECFE', '#EEE', '#595959', '#C6CAD2', '#CEEBFD', '#CBDCFC', '#CBE9D7', '#F7CBC9', '#FADDC7', '#FDEEB5', '#EBCAFC', '#BFBFBF', '#3F3F3F', '#828B9D', '#A0BEFA', '#A7DCFC', '#A6D5B8', '#F2A19C', '#F5BC8C', '#FBE281', '#CB94F9', '#A5A5A5', '#262626', '#363B44', '#2452B2', '#3473A1', '#417A53', '#922B22', '#AD642A', '#9E8329', '#57297D', '#939393', '#0D0D0D', '#25272E', '#15316A', '#1C415A', '#284D34', '#511712', '#573213', '#635217', '#36194E'
     ],
     lineHeights: [
       { label: { en_US: 'Single', zh_CN: '单倍行距' }, value: 1 },
@@ -191,6 +191,26 @@ const defaultOptions = {
       fontFamily: 'SimSun',
       fontWeight: 'normal',
       text: '',
+    },
+    /*
+     *新添加的 bolck 自定义节点 需要参与的情况这里需要  types添加对应的类型types: ["myBlock"],
+     * 如果是是用nodeView 实现的节点需要  自定义节点外层添加代码  :id="node.attrs.id" 参考image
+     * 如果需要添加自定义计算方法 需要在  nodesComputedOption 添加计算方法
+     * 列如: 新添加节点名字为 'myBlock'
+     * 添加计算方法
+     *  nodesComputedOption:{
+     *   types: ["myBlock"],
+     *   nodesComputed: {
+     *   'myBlock':(splitContex, node, pos, parent, dom)=>{
+     *    //计算代码
+     *   }
+     * }
+     *
+     * } 否则走默认的计算
+     * */
+    nodesComputedOption: {
+      types: [],
+      nodesComputed: {},
     },
   },
   document: {
@@ -607,6 +627,18 @@ const ojbectSchema = new ObjectSchema({
           text: {
             merge: 'replace',
             validate: 'string',
+          },
+        },
+      },
+      nodesComputedOption: {
+        schema: {
+          types: {
+            merge: 'replace',
+            validate(value) {},
+          },
+          nodesComputed: {
+            merge: 'replace',
+            validate(value) {},
           },
         },
       },
