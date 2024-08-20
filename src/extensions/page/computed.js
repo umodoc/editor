@@ -282,9 +282,6 @@ export class SplitContext {
   }
 }
 
-let splitCount = 0
-let splitCount1 = 0
-
 /*
  * PageComputedContext 分页核心计算class
  * */
@@ -315,6 +312,7 @@ export class PageComputedContext {
     const { inserting, deleting, runState, initSplit, splitPage } =
       this.pageState
     if (!runState) return null
+    this.prepare()
     if (splitPage) return this.forceSplit()
     if (initSplit) return this.initComputed()
     if (!inserting && deleting && selection.$head.node(1) === doc.lastChild)
@@ -328,16 +326,18 @@ export class PageComputedContext {
     return this.tr
   }
 
-  computed() {
+  prepare() {
     const tr = this.tr
     const { selection } = this.state
     this.startIndex = tr.doc.content.findIndex(selection.head).index
+  }
+
+  computed() {
+    const tr = this.tr
     const curNunmber = this.startIndex + 1
     if (tr.doc.childCount > 1 && tr.doc.content.childCount != curNunmber) {
       this.mergeDocument()
     }
-    splitCount1 = 0
-    splitCount = 0
     this.splitDocument()
     return this.tr
   }
@@ -346,12 +346,8 @@ export class PageComputedContext {
    * 文档开始加载的时候进行初始化分页
    */
   initComputed() {
-    splitCount1 = 0
-    splitCount = 0
-    // console.log('初始化分页开始')
     this.mergeDefaultDocument(1)
     this.splitDocument()
-    // console.log('初始化分页结束')
     return this.tr
   }
 
