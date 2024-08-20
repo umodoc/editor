@@ -199,13 +199,19 @@ const defaultOptions = {
      * 列如: 新添加节点名字为 'myBlock'
      * 添加计算方法
      *  nodesComputedOption:{
-     *  'myBlock':(splitContex, node, pos, parent, dom)=>{
+     *   types: ["myBlock"],
+     *   nodesComputed: {
+     *   'myBlock':(splitContex, node, pos, parent, dom)=>{
      *    //计算代码
      *   }
+     * }
+     *
      * } 否则走默认的计算
      * */
-    nodesComputedOption: null,
-    types: [],
+    nodesComputedOption: {
+      types: [],
+      nodesComputed: {},
+    },
   },
   document: {
     title: '',
@@ -621,6 +627,18 @@ const ojbectSchema = new ObjectSchema({
           text: {
             merge: 'replace',
             validate: 'string',
+          },
+        },
+      },
+      nodesComputedOption: {
+        schema: {
+          types: {
+            merge: 'replace',
+            validate(value) {},
+          },
+          nodesComputed: {
+            merge: 'replace',
+            validate(value) {},
           },
         },
       },

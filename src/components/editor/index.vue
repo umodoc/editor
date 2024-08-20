@@ -118,6 +118,7 @@ if (!options.value.document.enableMarkdown || !$document.value.markdown) {
 const defaultLineHeight = $computed(() => {
   return options.value.dicts.lineHeights.find((item) => item.default).value
 })
+
 const editorInstance = new Editor({
   editable: !options.value.document.readOnly,
   autofocus: options.value.document.autofocus,
@@ -144,7 +145,7 @@ const editorInstance = new Editor({
     }),
     Document.extend({ content: 'page+' }),
     Page.configure({
-      types:options.value.page.types ||[]
+      types: options.value.page.nodesComputedOption.types || [],
       slots: useSlots(),
     }),
     /* Placeholder.configure({
@@ -261,7 +262,10 @@ onMounted(() => {
 })
 window.addEventListener('load', function () {
   editorInstance.registerPlugin(
-    pagePlugin(editor, options.value.page.nodesComputedOption || {}),
+    pagePlugin(
+      editor,
+      options.value.page.nodesComputedOption.nodesComputed || {},
+    ),
   )
   setTimeout(() => {
     const tr = editorInstance.state.tr.setMeta('initSplit', true)
