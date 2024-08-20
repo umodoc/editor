@@ -258,13 +258,13 @@ onMounted(() => {
     document.querySelector('head').append(style)
   }
 })
-window.onload = () => {
+window.addEventListener('load', function () {
   editorInstance.registerPlugin(pagePlugin(editor, {}))
   setTimeout(() => {
     const tr = editorInstance.state.tr.setMeta('initSplit', true)
     editorInstance.view.dispatch(tr)
   }, 500)
-}
+})
 
 // 气泡菜单
 let tippyInstance = $ref(null)

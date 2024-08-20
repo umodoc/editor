@@ -79,8 +79,6 @@ const { page, exportImage } = useStore()
 const { editor, node } = defineProps(nodeViewProps)
 const containerRef = ref(null)
 
-console.log(node.attrs.slots)
-
 const pageSize = $computed(() => {
   const { width, height } = page.value.size
   return {
