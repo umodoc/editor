@@ -383,7 +383,7 @@
     "pdf": {
       "text": "PDF Document",
       "title": "Export PDF Document",
-      "message": "Before exporting the PDF document, make sure that all images on the pages have finished loading. Then, in the print dialog box that appears, select 'Printer - Save as PDF', and click 'Save' button to save the document.",
+      "message": "Before exporting the PDF document, make sure that all images on the pages have finished loading. Then, in the print dialog box that appears, select 'Printer - Save as PDF', and click 'Save' button to save the document. If node backgrounds are not displayed, please check the 'Background graphics' option in the print dialog box.",
       "confirm": "I Understand"
     },
     "text": "Text"
