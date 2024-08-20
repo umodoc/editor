@@ -144,6 +144,7 @@ const editorInstance = new Editor({
     }),
     Document.extend({ content: 'page+' }),
     Page.configure({
+      types:options.value.page.types ||[]
       slots: useSlots(),
     }),
     /* Placeholder.configure({
@@ -259,7 +260,9 @@ onMounted(() => {
   }
 })
 window.addEventListener('load', function () {
-  editorInstance.registerPlugin(pagePlugin(editor, {}))
+  editorInstance.registerPlugin(
+    pagePlugin(editor, options.value.page.nodesComputedOption || {}),
+  )
   setTimeout(() => {
     const tr = editorInstance.state.tr.setMeta('initSplit', true)
     editorInstance.view.dispatch(tr)
