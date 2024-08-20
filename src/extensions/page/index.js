@@ -91,9 +91,27 @@ export default Node.create({
       },
       slots: {
         default: this.options.slots,
+        renderHTML: () => {
+          return {}
+        },
       },
     }
   },
+  // addGlobalAttributes() {
+  //   return [
+  //     {
+  //       attributes: {
+  //         slots: {
+  //           default: this.options.slots,
+  //           parseHTML: (element) => '',
+  //           renderHTML: (attributes) => {
+  //             return { x: 1 }
+  //           },
+  //         },
+  //       },
+  //     },
+  //   ]
+  // },
 
   parseHTML() {
     return [
