@@ -331,7 +331,8 @@ export class PageComputedContext {
   computed() {
     const tr = this.tr
     const { selection } = this.state
-    const curNunmber = tr.doc.content.findIndex(selection.head).index + 1
+    this.startIndex = tr.doc.content.findIndex(selection.head).index
+    const curNunmber = this.startIndex + 1
     if (tr.doc.childCount > 1 && tr.doc.content.childCount != curNunmber) {
       this.mergeDocument()
     }
@@ -440,8 +441,6 @@ export class PageComputedContext {
    */
   mergeDocument() {
     const tr = this.tr
-    const { selection } = this.state
-    this.startIndex = tr.doc.content.findIndex(selection.head).index
 
     let id = null
     for (let i = this.startIndex + 1; i < tr.doc.content.childCount; i++) {
