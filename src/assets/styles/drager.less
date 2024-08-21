@@ -31,7 +31,13 @@
     }
     .es-drager-dot {
       display: block;
+      @media print {
+        display: none;
+      }
     }
+  }
+  @media print {
+    outline: unset;
   }
   &-dot {
     display: none;

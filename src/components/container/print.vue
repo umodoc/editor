@@ -42,6 +42,10 @@ const getIframeCode = () => {
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       ${getStylesHtml()}
       <style>
+      body{
+        overflow: auto;
+        height: auto;
+      }
       @page {
         size: ${orientation === 'portrait' ? size.width : size.height}cm ${orientation === 'portrait' ? size.height : size.width}cm; 
         margin:0;

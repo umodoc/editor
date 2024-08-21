@@ -5,6 +5,11 @@
   width: 100%;
   color: var(--umo-content-text-color);
 
+  @media print {
+    overflow: auto;
+    height: auto;
+  }
+
   &.show-line-number {
     .umo-page-node-content {
       > *:not([data-line-number='false']):not(div):not(.umo-node-focused) {
@@ -34,6 +39,11 @@
     width: 100%;
     outline: none;
     counter-reset: title;
+
+    @media print {
+      height: auto;
+      width: auto;
+    }
 
     .umo-page-node-content {
       > * {

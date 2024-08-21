@@ -133,6 +133,14 @@ watch(
     margin-bottom: 15px;
   }
 
+  @media print {
+    position: relative;
+    box-shadow: unset !important;
+    margin: 0 !important;
+    page-break-after: always;
+    overflow: hidden;
+  }
+
   .umo-page-node-view-handler {
     position: absolute;
     width: 100%;
@@ -168,6 +176,10 @@ watch(
     box-sizing: border-box;
     position: relative;
     z-index: 10;
+
+    @media print {
+      opacity: 0;
+    }
 
     &::after {
       position: absolute;
