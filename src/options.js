@@ -193,21 +193,19 @@ const defaultOptions = {
       text: '',
     },
     /*
-     *新添加的 bolck 自定义节点 需要参与的情况这里需要  types添加对应的类型types: ["myBlock"],
-     * 如果是是用nodeView 实现的节点需要  自定义节点外层添加代码  :id="node.attrs.id" 参考image
-     * 如果需要添加自定义计算方法 需要在  nodesComputedOption 添加计算方法
-     * 列如: 新添加节点名字为 'myBlock'
-     * 添加计算方法
-     *  nodesComputedOption:{
+     * 新添加的 bolck 自定义节点如果需要参与分页，需要给 types 添加对应的类型 types:["myBlock"],
+     * 如果是用 nodeView 实现的节点，需要自定义节点外层添加代码 :id="node.attrs.id"，可以参考 image 扩展
+     * 如果需要添加自定义计算方法，请在 nodesComputedOption 中添加
+     * 例如新添加节点名字为 'myBlock'
+     * nodesComputedOption:{
      *   types: ["myBlock"],
      *   nodesComputed: {
-     *   'myBlock':(splitContex, node, pos, parent, dom)=>{
-     *    //计算代码
-     *   }
-     * }
-     *
+     *    'myBlock': (splitContex, node, pos, parent, dom) => {
+     *      //分页计算代码
+     *    }
+     *  }
      * } 否则走默认的计算
-     * */
+     **/
     nodesComputedOption: {
       types: [],
       nodesComputed: {},
