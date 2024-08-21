@@ -5,7 +5,7 @@
     :id="node.attrs.id"
     @dblclick.capture="disabled = true"
   >
-    <div class="umo-node-container umo-nodetext-box">
+    <div class="umo-node-container umo-node-text-box">
       <drager
         :selected="selected"
         :disabled="disabled"
