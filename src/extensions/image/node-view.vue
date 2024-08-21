@@ -62,6 +62,7 @@
                 ? `rotateX(${node.attrs.flipX ? '180' : '0'}deg) rotateY(${node.attrs.flipY ? '180' : '0'}deg)`
                 : 'none',
           }"
+          loading="lazy"
           @load="onLoad"
         />
         <div

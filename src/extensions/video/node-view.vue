@@ -25,6 +25,7 @@
         <video
           ref="videoRef"
           :src="node.attrs.src"
+          preload="metadata"
           controls
           crossorigin
           @canplay="onLoad"
