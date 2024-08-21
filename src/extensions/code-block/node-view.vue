@@ -1,9 +1,9 @@
 <template>
-  <node-view-wrapper class="umo-node-view" :style="nodeStyle">
+  <node-view-wrapper class="umo-node-view" :style="nodeStyle" :id="node.attrs.id">
     <div
       class="umo-node-container umo-hover-shadow umo-select-outline umo-node-code-block"
       :class="node.attrs.theme"
-      :id="node.attrs.id"
+
       ref="containerRef"
     >
       <div
