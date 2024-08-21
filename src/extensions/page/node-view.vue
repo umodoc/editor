@@ -154,6 +154,8 @@ watch(
     position: unset !important;
     width: var(--umo-page-width);
     height: var(--umo-page-height);
+    display: flex;
+    flex-direction: column;
   }
 
   .umo-page-node-header {
@@ -225,9 +227,8 @@ watch(
   }
 
   .umo-page-node-content {
+    flex: 1;
     box-sizing: border-box;
-    width: 100%;
-    overflow: hidden;
     padding: 0 var(--umo-page-margin-right) 0 var(--umo-page-margin-right);
   }
 }
