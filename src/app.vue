@@ -50,6 +50,7 @@ const onSave = async (content, page, document) => {
   })
 }
 const options = $ref({
+  theme: 'dark',
   toolbar: {
     // defaultMode: 'classic',
     // menus: ['base'],
