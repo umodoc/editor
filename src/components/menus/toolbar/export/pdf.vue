@@ -1,12 +1,5 @@
 <template>
-  <menus-button
-    text="PDF"
-    ico="pdf"
-    shortcut="Ctrl+P"
-    huge
-    @menu-click="exportPDF = true"
-  >
-  </menus-button>
+  <menus-button text="PDF" ico="pdf" huge @menu-click="exportPDF = true" />
 </template>
 
 <script setup>
