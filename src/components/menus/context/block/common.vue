@@ -55,7 +55,7 @@
           @menu-click="cutNodeToClipboard"
         />
       </t-dropdown-item>
-      <t-dropdown-item class="delete-node">
+      <t-dropdown-item class="umo-delete-node">
         <menus-button
           ico="node-delete-2"
           :text="t('blockMenu.delete')"

@@ -8,7 +8,12 @@
             :class="item.className ? 'keyboard-shortcut-' + item.className : ''"
           >
             <icon v-if="item.icon" :name="item.icon" />
-            <span v-else-if="item.html" class="icon" v-html="item.html"> </span>
+            <span
+              v-else-if="item.html"
+              class="shortcut-icon"
+              v-html="item.html"
+            >
+            </span>
             <component v-if="item.tag" :is="item.tag">{{
               item.label
             }}</component>
@@ -175,7 +180,7 @@ if ($document.value.markdown) {
         label: `1. ${t('list.ordered.text')}`,
         keys: ['1.', '⎵'],
       },
-      { icon: 'umo-task-list', label: t('list.task.text'), keys: ['[ ]', '⎵'] },
+      { icon: 'task-list', label: t('list.task.text'), keys: ['[ ]', '⎵'] },
       {
         icon: 'quote',
         tag: 'blockquote',
@@ -233,7 +238,8 @@ if ($document.value.markdown) {
     span {
       display: flex;
       align-items: center;
-      .umo-icon {
+      .umo-icon,
+      .shortcut-icon {
         margin: 0 10px 0 -2px;
       }
       sub {

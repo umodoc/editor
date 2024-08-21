@@ -82,7 +82,7 @@
           </t-textarea>
           <div
             v-if="renderError && config.content !== ''"
-            class="t-input__tips t-tips t-is-error"
+            class="umo-barcode-error"
             v-text="t('tools.qrcode.renderError')"
           ></div>
         </div>
@@ -227,9 +227,9 @@ const setQrcode = () => {
       height: 100%;
       resize: none;
     }
-    .umo-input__tips,
-    .t-input__tips {
-      position: relative;
+    .umo-barcode-error {
+      font-size: 12px;
+      color: var(--umo-error-color);
     }
   }
   .umo-qrcode-render {

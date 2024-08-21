@@ -19,7 +19,7 @@
               {{ t('page.orientation.landscape') }}
             </t-radio-button>
             <t-radio-button value="portrait">
-              <icon class="rotate" name="page" />
+              <icon class="icon-rotate" name="page" />
               {{ t('page.orientation.portrait') }}
             </t-radio-button>
           </t-radio-group>
@@ -255,7 +255,7 @@ const onConfirm = () => {
     .umo-icon {
       margin-right: 5px;
       font-size: 20px;
-      &.rotate {
+      &.icon-rotate {
         transform: rotate(90deg) rotateY(180deg);
       }
     }

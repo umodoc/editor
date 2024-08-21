@@ -186,7 +186,7 @@
           </t-input>
           <div
             v-if="renderError && config.content"
-            class="t-input__tips t-tips t-is-error"
+            class="umo-barcode-error"
             v-text="t('tools.barcode.error')"
           ></div>
         </div>
@@ -362,9 +362,9 @@ const setBarcode = () => {
       height: 100%;
       resize: none;
     }
-    .umo-input__tips,
-    .umo-input__tips {
-      position: relative;
+    .umo-barcode-error {
+      font-size: 12px;
+      color: var(--umo-error-color);
     }
   }
   .umo-barcode-render {

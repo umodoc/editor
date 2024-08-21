@@ -34,10 +34,10 @@
             <template v-if="ico">
               <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
               </span>
-              <icon class="icon" v-else :name="ico" />
+              <icon class="umo-button-icon" v-else :name="ico" />
             </template>
-            <p class="text">{{ text }}</p>
-            <kbd class="kbd" v-if="shortcutText">
+            <p class="umo-button-text">{{ text }}</p>
+            <kbd class="umo-button-kbd" v-if="shortcutText">
               {{ getShortcut(shortcutText) }}
             </kbd>
           </div>
@@ -62,10 +62,10 @@
               <template v-if="ico">
                 <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
                 </span>
-                <icon class="icon" v-else :name="ico" />
+                <icon class="umo-button-icon" v-else :name="ico" />
               </template>
-              <p class="text">{{ text }}</p>
-              <kbd class="kbd" v-if="shortcutText">
+              <p class="umo-button-text">{{ text }}</p>
+              <kbd class="umo-button-kbd" v-if="shortcutText">
                 {{ getShortcut(shortcutText) }}
               </kbd>
             </div>
@@ -87,7 +87,7 @@
               }"
               @click="attrs.onChange"
             >
-              <span class="icon-arrow umo-button-handle">
+              <span class="umo-button-icon-arrow umo-button-handle">
                 <icon name="arrow-down" />
               </span>
               <slot v-if="!selectOptions" name="dropmenu" />
@@ -129,17 +129,23 @@
                     v-html="ico"
                   >
                   </span>
-                  <icon class="icon" v-else :name="ico" />
+                  <icon class="umo-button-icon" v-else :name="ico" />
                 </template>
-                <p class="text">{{ text }}</p>
-                <kbd class="kbd" v-if="shortcutText">{{
+                <p class="umo-button-text">{{ text }}</p>
+                <kbd class="umo-button-kbd" v-if="shortcutText">{{
                   getShortcut(shortcutText)
                 }}</kbd>
-                <span v-if="$toolbar.mode === 'ribbon'" class="icon-arrow">
+                <span
+                  v-if="$toolbar.mode === 'ribbon'"
+                  class="umo-button-icon-arrow"
+                >
                   <icon name="arrow-down" />
                 </span>
               </div>
-              <span v-if="$toolbar.mode === 'classic'" class="icon-arrow">
+              <span
+                v-if="$toolbar.mode === 'classic'"
+                class="umo-button-icon-arrow"
+              >
                 <icon name="arrow-down" />
               </span>
             </t-button>
@@ -183,10 +189,10 @@
               <template v-if="ico">
                 <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
                 </span>
-                <icon class="icon" v-else :name="ico" />
+                <icon class="umo-button-icon" v-else :name="ico" />
               </template>
-              <p class="text">{{ text }}</p>
-              <kbd class="kbd" v-if="shortcutText">
+              <p class="umo-button-text">{{ text }}</p>
+              <kbd class="umo-button-kbd" v-if="shortcutText">
                 {{ getShortcut(shortcutText) }}
               </kbd>
             </div>
@@ -203,7 +209,7 @@
               <span
                 v-if="$toolbar.mode === 'ribbon'"
                 ref="popupHandleRef"
-                class="icon-arrow umo-button-handle"
+                class="umo-button-icon-arrow umo-button-handle"
                 @click="togglePopup()"
               >
                 <icon name="arrow-down" />
@@ -216,7 +222,7 @@
               <span
                 v-if="$toolbar.mode === 'classic'"
                 ref="popupHandleRef"
-                class="icon-arrow umo-button-handle"
+                class="umo-button-icon-arrow umo-button-handle"
                 @click="togglePopup()"
               >
                 <icon name="arrow-down" />
@@ -254,17 +260,23 @@
                     v-html="ico"
                   >
                   </span>
-                  <icon class="icon" v-else :name="ico" />
+                  <icon class="umo-button-icon" v-else :name="ico" />
                 </template>
-                <p class="text">{{ text }}</p>
-                <kbd class="kbd" v-if="shortcutText">{{
+                <p class="umo-button-text">{{ text }}</p>
+                <kbd class="umo-button-kbd" v-if="shortcutText">{{
                   getShortcut(shortcutText)
                 }}</kbd>
-                <span v-if="$toolbar.mode === 'ribbon'" class="icon-arrow">
+                <span
+                  v-if="$toolbar.mode === 'ribbon'"
+                  class="umo-button-icon-arrow"
+                >
                   <icon name="arrow-down" />
                 </span>
               </div>
-              <span v-if="$toolbar.mode === 'classic'" class="icon-arrow">
+              <span
+                v-if="$toolbar.mode === 'classic'"
+                class="umo-button-icon-arrow"
+              >
                 <icon name="arrow-down" />
               </span>
             </t-button>
@@ -369,9 +381,6 @@ let tooltipForceHide = $ref(false)
 const popupVisileChange = (visible) => {
   // 隐藏 Tooltip，适用于 select、dropdown、popup 等子组件展开时，隐藏 Tooltip
   tooltipForceHide = visible
-  try {
-    editor.value.commands.focus()
-  } catch {}
 }
 const getTooltipContent = () => {
   if (props.tooltip === false) {
@@ -418,17 +427,17 @@ onClickOutside(
     width: auto;
     padding-left: var(--td-comp-paddingLR-s);
     padding-right: var(--td-comp-paddingLR-s);
-    .umo-button-content .text {
+    .umo-button-content .umo-button-text {
       display: block !important;
       margin-left: 3px;
     }
   }
   &[disabled] {
-    .icon {
+    .umo-button-icon {
       --umo-primary-color: var(--umo-text-color-disabled);
       color: var(--umo-text-color-disabled) !important;
     }
-    .text {
+    .umo-button-text {
       color: var(--umo-text-color-disabled) !important;
     }
   }
@@ -440,7 +449,7 @@ onClickOutside(
   }
   &.active {
     background-color: var(--umo-button-hover-background);
-    .icon-arrow.handle {
+    .umo-button-icon-arrow.umo-button-handle {
       background-color: rgba(0, 0, 0, 0.05);
     }
   }
@@ -450,22 +459,22 @@ onClickOutside(
     display: flex;
     align-items: center;
     justify-content: center;
-    .icon,
+    .umo-button-icon,
     :deep(.umo-icon) {
       font-size: 16px;
     }
-    .icon-svg {
+    .umo-button-icon-svg {
       display: flex;
       :deep(svg) {
         width: 16px;
         height: 16px;
       }
     }
-    .text {
+    .umo-button-text {
       display: none;
     }
   }
-  .icon-arrow {
+  .umo-button-icon-arrow {
     display: flex;
     border-top-right-radius: var(--td-radius-default);
     border-bottom-right-radius: var(--td-radius-default);
@@ -474,7 +483,7 @@ onClickOutside(
     align-items: center;
     justify-content: center;
     margin-right: -3px;
-    .icon {
+    .umo-button-icon {
       font-size: 10px;
       color: var(--umo-text-color-light);
     }
@@ -498,12 +507,12 @@ onClickOutside(
       justify-content: center;
       flex-direction: column;
       min-width: 32px;
-      .icon {
+      .umo-button-icon {
         display: block;
         font-size: 24px;
         margin-top: 3px;
       }
-      .icon-svg {
+      .umo-button-icon-svg {
         display: flex;
         margin-top: 3px;
         :deep(svg) {
@@ -511,12 +520,12 @@ onClickOutside(
           height: 24px;
         }
       }
-      .text {
+      .umo-button-text {
         display: block;
         font-size: 12px;
         color: var(--umo-text-color);
       }
-      .icon-arrow {
+      .umo-button-icon-arrow {
         position: absolute;
         left: calc(50% + 12px);
         top: 2px;

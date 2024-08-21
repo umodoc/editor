@@ -24,7 +24,7 @@
         <span :style="{ fontFamily: item.value }" v-text="l(item.label)"></span>
         <span
           v-if="!fontDetect(item.value)"
-          class="unsupport"
+          class="umo-font-family-unsupport"
           :title="t('base.fontFamily.unsupport')"
           >!</span
         >
@@ -159,7 +159,7 @@ watch(
     justify-content: space-between;
     font-size: 14px;
     width: 100%;
-    .unsupport {
+    .umo-font-family-unsupport {
       color: var(--umo-error-color);
       font-size: 14px;
     }

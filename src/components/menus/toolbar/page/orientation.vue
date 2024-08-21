@@ -14,7 +14,10 @@
           :active="page.orientation === item.value"
           @click="page.orientation = item.value"
         >
-          <div class="icon" :class="{ rotate: item.value === 'vertical' }">
+          <div
+            class="icon-orientation"
+            :class="{ rotate: item.value === 'landscape' }"
+          >
             <icon name="page" />
           </div>
           <div class="label">{{ item.label }}</div>
@@ -40,11 +43,11 @@ const orientations = [
     &-text {
       display: flex;
       padding: 5px 8px;
-      .umo-icon {
+      .icon-orientation {
         font-size: 20px;
         margin-right: 5px;
         &.rotate {
-          transform: rotate(90deg) rotateY(180deg) translate(3px, 3px);
+          transform: rotate(90deg) rotateY(180deg) translate(0, 3px);
         }
       }
       .label {

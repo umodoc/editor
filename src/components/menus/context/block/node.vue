@@ -187,8 +187,8 @@
               :shortcut-text="`ctrl+alt+${item}`"
               @menu-click="toggleNodeType('heading', { level: item })"
             >
-              <span class="heading">
-                <span class="icon">H{{ item }}</span>
+              <span class="umo-heading">
+                <span class="icon-heading">H{{ item }}</span>
                 {{ t('base.heading.text', { level: item }) }}
               </span>
             </menus-button>
@@ -217,7 +217,7 @@
       </t-dropdown-item>
       <t-dropdown-item>
         <menus-button
-          ico="umo-task-list-2"
+          ico="task-list-2"
           :text="t('list.task.text')"
           :tooltip="false"
           shortcut-text="Ctrl+Shift+9"
@@ -243,12 +243,6 @@
 const { container, options, editor, blockMenu, assistant } = useStore()
 
 let menuActive = $ref(false)
-const menuVisibleChange = (visible) => {
-  editor.value.commands.focus()
-  console.log(visible)
-  blockMenu.value = visible
-  // menuActive = visible
-}
 
 const headings = $ref([1, 2, 3, 4, 5, 6])
 

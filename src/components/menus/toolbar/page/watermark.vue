@@ -35,6 +35,12 @@
             >
             </t-input-number>
           </menus-button>
+          <menus-toolbar-base-color
+            :text="t('page.watermark.fontColor')"
+            :default-color="page.watermark.fontColor"
+            modeless
+            @change="(value) => (page.watermark.fontColor = value)"
+          />
           <menus-toolbar-base-bold
             :menu-active="page.watermark.fontWeight === 'bold'"
             @menu-click-through="
@@ -42,12 +48,6 @@
                 ? (page.watermark.fontWeight = 'normal')
                 : (page.watermark.fontWeight = 'bold')
             "
-          />
-          <menus-toolbar-base-color
-            :text="t('page.watermark.fontColor')"
-            :default-color="page.watermark.fontColor"
-            modeless
-            @change="(value) => (page.watermark.fontColor = value)"
           />
         </div>
         <t-input

@@ -1,7 +1,7 @@
 <template>
   <div class="umo-source-container">
     <h3 class="umo-source-title">
-      <icon name="code" class="icon"></icon> {{ t('toolbar.source') }}
+      <icon name="code" class="icon-source" /> {{ t('toolbar.source') }}
     </h3>
   </div>
 </template>
@@ -18,7 +18,7 @@
     font-weight: 400;
     display: flex;
     align-items: center;
-    .umo-icon {
+    .icon-source {
       margin-right: 5px;
     }
   }

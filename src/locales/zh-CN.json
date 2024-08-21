@@ -297,8 +297,8 @@
       "insert": "插入",
       "tip": "选择纯色背景电子章的影印件或者照片，将自动扣取电子章，所有操作在本地完成，不会向服务器发送数据，请放心使用。",
       "insertTip": "点击此处选择电子章图片",
-      "converting1": "正在加载组件...",
-      "converting2": "正在加载组件: {ppercentage}%",
+      "converting1": "正在加载抠图组件...",
+      "converting2": "正在加载抠图组件: {ppercentage}%",
       "converting3": "正在抠图中，请稍后...",
       "convertError": "电子章抠取失败，请重试",
       "notEmpty": "请选择电子章"

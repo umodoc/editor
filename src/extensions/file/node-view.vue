@@ -9,7 +9,7 @@
       class="umo-node-container hover-shadow umo-select-outline umo-node-file"
     >
       <div class="umo-file-icon">
-        <img :src="filePath" class="icon" />
+        <img :src="filePath" class="icon-file" />
       </div>
       <div class="umo-file-info">
         <div class="umo-file-name" :title="node.attrs.name">
@@ -95,7 +95,7 @@ onMounted(async () => {
       height: 32px;
       margin-right: 8px;
       flex: 1;
-      img {
+      .icon-file {
         width: 32px;
         display: block;
       }

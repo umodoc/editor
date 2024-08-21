@@ -116,25 +116,25 @@ watch(
       .umo-button-content {
         width: 100%;
         justify-content: flex-start;
-        .text {
+        .umo-button-text {
           color: var(--umo-text-color);
         }
-        .umo-icon {
+        .umo-button-icon {
           margin-right: 3px;
           font-size: 16px;
           color: #666;
         }
-        .kbd {
+        .umo-button-kbd {
           flex: 1;
           text-align: right;
           color: var(--umo-text-color-light);
           font-family: Arial, Helvetica, sans-serif;
           font-size: 9px;
         }
-        .heading {
+        .umo-heading {
           display: flex;
           color: var(--umo-text-color);
-          .umo-icon {
+          .icon-heading {
             font-size: 12px;
             display: inline-block;
             width: 2em;
@@ -165,7 +165,7 @@ watch(
     margin-left: 10px;
   }
 
-  .delete-node {
+  .umo-delete-node {
     .umo-button {
       * {
         color: var(--umo-error-color) !important;

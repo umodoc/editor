@@ -10,7 +10,7 @@
     :style="{ lineHeight: defaultLineHeight }"
     :spellcheck="options.document.enableSpellcheck && $document.spellcheck"
   />
-  <template v-if="editor && !editorDestroyed">
+  <template v-if="editor && !page.preview.enabled && !editorDestroyed">
     <bubble-menu
       v-show="!blockMenu && !painter.enabled"
       class="umo-editor-bubble-menu"
@@ -327,7 +327,7 @@ onBeforeUnmount(() => editorInstance.destroy())
     display: none;
   }
 
-  .umo-menu-button.show-text .umo-button-content .text {
+  .umo-menu-button.show-text .umo-button-content .umo-button-text {
     display: none !important;
   }
 
