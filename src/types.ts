@@ -1,6 +1,5 @@
 import { NodesComputed } from '@/extensions/page/types'
 import { Extension } from '@tiptap/core'
-import { b } from 'vite/dist/node/types.d-aGj9QkWt'
 
 export interface MarginOption{
   left: number,

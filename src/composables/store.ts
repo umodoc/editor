@@ -3,6 +3,7 @@ import shortId from '@/utils/short-id'
 import { changeComputedHtml } from '@/extensions/page/core'
 import { Editor } from '@tiptap/vue-3'
 import { PageOption, UmoEditorOptions } from '@/types'
+type KeyValuePair<T> = { [K in keyof T]?: T[K] };
 export const useStore = createGlobalState(() => {
   const toolbarKey = ref<string>(shortId())
   const options = ref<UmoEditorOptions>(defaultOptions)
@@ -26,7 +27,6 @@ export const useStore = createGlobalState(() => {
   const hidePageHeader = ref(true)
   const hidePageFooter = ref(true)
   const editorDestroyed = ref(false)
-
   const setOptions = (value:any) => {
     const opts = value?.value || value
     options.value = ojbectSchema.merge(
@@ -96,7 +96,7 @@ export const useStore = createGlobalState(() => {
   watch(
     () => options.value.document?.readOnly,
     async (val) => {
-      editor.value.setEditable(!val)
+      editor.value?.setEditable(!val)
       toolbarKey.value = shortId()
     },
   )
