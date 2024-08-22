@@ -55,7 +55,7 @@ const submitComment = () => {
 }
 const closeComment = () => {
   commentBox.value = false
-  editor.value.focus()
+  editor.value.commands.focus()
 }
 </script>
 
