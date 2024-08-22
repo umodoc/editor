@@ -1,13 +1,13 @@
 import { defaultOptions, ojbectSchema } from '@/options'
 import shortId from '@/utils/short-id'
 import { changeComputedHtml } from '@/extensions/page/core'
-
+import { Editor } from '@tiptap/vue-3'
 export const useStore = createGlobalState(() => {
-  const toolbarKey = ref(shortId())
-  const options = ref(defaultOptions)
-  const page = ref({})
-  const editor = ref(null)
-  const painter = ref({
+  const toolbarKey = ref<string>(shortId())
+  const options = ref<any>(defaultOptions)
+  const page = ref<any>({})
+  const editor = ref<any>()
+  const painter = ref<any>({
     enabled: false,
     once: true,
     marks: [],
@@ -26,11 +26,11 @@ export const useStore = createGlobalState(() => {
   const hidePageFooter = ref(true)
   const editorDestroyed = ref(false)
 
-  const setOptions = (value) => {
+  const setOptions = (value:any) => {
     const opts = value?.value || value
     options.value = ojbectSchema.merge(
       options.value,
-      Object.keys(opts).reduce((acc, key) => {
+      Object.keys(opts).reduce((acc:any, key) => {
         if (opts[key] !== undefined) {
           acc[key] = opts[key]
         }
@@ -39,7 +39,7 @@ export const useStore = createGlobalState(() => {
     )
     return options.value
   }
-
+//@ts-ignore
   const setPainter = ({ enabled, once, marks }) => {
     painter.value.enabled = enabled
     painter.value.once = once
@@ -50,7 +50,7 @@ export const useStore = createGlobalState(() => {
     () => options.value.page,
     ({ defaultBackground, defaultMargin, defaultOrientation, watermark }) => {
       page.value = {
-        size: options.value.dicts.pageSizes.find((item) => item.default),
+        size: options.value.dicts.pageSizes.find((item:any) => item.default),
         margin: defaultMargin,
         background: defaultBackground,
         orientation: defaultOrientation,
@@ -74,16 +74,16 @@ export const useStore = createGlobalState(() => {
   watch(
     () => [page.value.size, page.value.margin, page.value.orientation],
     (value) => {
-      editor.value.commands.autoPaging(false)
+      editor.value?.commands.autoPaging(false)
       changeComputedHtml()
       setTimeout(() => {
-        editor.value.commands.autoPaging()
+        editor.value?.commands.autoPaging(true)
       }, 1000)
     },
     { deep: true },
   )
 
-  const setEditor = (Editor) => (editor.value = Editor)
+  const setEditor = (editorInstance:Editor) => (editor.value = editorInstance)
   const resetStore = () => {
     editor.value = null
     tableOfContents.value = []
