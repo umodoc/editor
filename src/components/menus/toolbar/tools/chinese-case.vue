@@ -26,6 +26,7 @@
 
 <script setup>
 import nzh from 'nzh/cn'
+import { getSelectionText } from '@/extensions/selection'
 const { editor } = useStore()
 
 const options = [
@@ -88,7 +89,7 @@ const setChineseCase = (func) => {
     if (!editor.value) {
       return
     }
-    const text = editor.value.commands.getSelectionText()
+    const text = getSelectionText(editor.value)
     if (text === '') {
       return
     }

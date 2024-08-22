@@ -1,5 +1,16 @@
 import { Extension } from '@tiptap/core'
 
+declare module "@tiptap/core" {
+  interface Commands<ReturnType> {
+    setLineHeight: {
+      setLineHeight: (lineHeight:any) => ReturnType;
+    };
+    unsetLineHeight:{
+      unsetLineHeight: () => ReturnType;
+    }
+  }
+}
+
 export default Extension.create({
   name: 'lineHeight',
   addOptions() {
@@ -33,14 +44,14 @@ export default Extension.create({
       setLineHeight:
         (lineHeight) =>
         ({ commands }) => {
-          return this.options.types.every((type) =>
+          return this.options.types.every((type:string) =>
             commands.updateAttributes(type, { lineHeight }),
           )
         },
       unsetLineHeight:
         () =>
         ({ commands }) => {
-          return this.options.types.every((type) =>
+          return this.options.types.every((type:string) =>
             commands.resetAttributes(type, 'lineHeight'),
           )
         },

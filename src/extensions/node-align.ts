@@ -1,5 +1,14 @@
 import { Extension } from '@tiptap/core'
-
+declare module "@tiptap/core" {
+  interface Commands<ReturnType> {
+    setNodeAlign: {
+      setNodeAlign: (options:any) => ReturnType;
+    };
+    unsetNodeAlign:{
+      unsetNodeAlign: () => ReturnType;
+    }
+  }
+}
 export default Extension.create({
   name: 'nodeAlign',
   addOptions() {
@@ -40,14 +49,14 @@ export default Extension.create({
           if (!this.options.alignments.includes(alignment)) {
             return false
           }
-          return this.options.types.every((type) =>
+          return this.options.types.every((type:string) =>
             commands.updateAttributes(type, { nodeAlign: alignment }),
           )
         },
       unsetNodeAlign:
         () =>
         ({ commands }) => {
-          return this.options.types.every((type) =>
+          return this.options.types.every((type:string) =>
             commands.resetAttributes(type, 'nodeAlign'),
           )
         },

@@ -44,6 +44,8 @@
 </template>
 
 <script setup>
+import { getSelectionNode } from '@/extensions/selection'
+
 let { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
@@ -52,7 +54,7 @@ let marginBottom = $ref('')
 
 const setMarginValue = () => {
   if (popupVisible.value) {
-    const node = editor.value.commands.getSelectionNode()
+    const node = getSelectionNode(editor.value)
     if (!node?.attrs?.margin) {
       return
     }

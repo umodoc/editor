@@ -16,12 +16,13 @@
 <script setup>
 import { removeBackground } from '@imgly/background-removal'
 import shortId from '@/utils/short-id'
+import { getSelectionNode } from '@/extensions/selection'
 
 const { options, editor } = useStore()
 
 let converting = $ref(false)
 const removeBg = async () => {
-  const image = editor.value.commands.getSelectionNode()
+  const image = getSelectionNode(editor.value)
   const { src } = image.attrs
   converting = true
   const blob = await removeBackground(src, {

@@ -7,10 +7,12 @@
 </template>
 
 <script setup>
+import { getSelectionNode } from '@/extensions/selection'
+
 const { editor } = useStore()
 
 const copyCode = () => {
-  const codeBlock = editor.value.commands.getSelectionNode()
+  const codeBlock = getSelectionNode(editor.value)
   const { copy } = useClipboard({
     source: ref(codeBlock.attrs.code),
   })

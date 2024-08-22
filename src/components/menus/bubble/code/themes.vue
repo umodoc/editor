@@ -10,6 +10,8 @@
 </template>
 
 <script setup>
+import { getSelectionNode } from '@/extensions/selection'
+
 const { editor } = useStore()
 
 const themes = [
@@ -18,7 +20,7 @@ const themes = [
 ]
 
 const setTheme = (theme) => {
-  const codeBlock = editor.value.commands.getSelectionNode()
+  const codeBlock = getSelectionNode(editor.value)
   editor.value.commands.updateAttributes(codeBlock.type, { theme })
 }
 </script>

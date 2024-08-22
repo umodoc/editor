@@ -1,7 +1,8 @@
 import { ObjectDefinition, ObjectSchema } from '@eslint/object-schema'
+import { UmoEditorOptions } from '@/types'
 
 // 默认配置
-const defaultOptions:any = {
+const defaultOptions:UmoEditorOptions = {
   editorKey: 'default',
   locale: 'zh-CN',
   theme: 'light',
@@ -353,7 +354,7 @@ const ojbectSchema = new ObjectSchema({
   editorKey: {
     merge: 'replace',
     validate: 'string!',
-  },
+  } ,
   locale: {
     merge: 'replace',
     validate(value) {
@@ -872,6 +873,6 @@ const ojbectSchema = new ObjectSchema({
       }
     },
   },
-} as unknown as  ObjectDefinition)
+})
 
 export { defaultOptions, propsOptions, ojbectSchema }

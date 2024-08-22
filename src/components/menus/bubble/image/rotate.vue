@@ -13,10 +13,12 @@
 </template>
 
 <script setup>
+import { getSelectionNode } from '@/extensions/selection'
+
 const { editor } = useStore()
 
 const setRotate = (rotate) => {
-  const image = editor.value.commands.getSelectionNode()
+  const image = getSelectionNode(editor.value)
   const { angle } = image.attrs
   editor.value.commands.updateAttributes(image.type, {
     angle: angle ? angle + rotate : rotate,

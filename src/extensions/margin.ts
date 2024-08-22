@@ -1,5 +1,14 @@
 import { Extension } from '@tiptap/core'
-
+declare module "@tiptap/core" {
+  interface Commands<ReturnType> {
+    setMargin: {
+      setMargin: (options:any) => ReturnType;
+    };
+    unsetMargin:{
+      unsetMargin: () => ReturnType;
+    }
+  }
+}
 export default Extension.create({
   name: 'margin',
   addOptions() {
@@ -20,7 +29,7 @@ export default Extension.create({
         'orderedList',
         'taskList',
       ],
-      margin: {},
+      margin: {top:0, bottom:0},
     }
   },
   addGlobalAttributes() {
@@ -38,7 +47,7 @@ export default Extension.create({
               ) {
                 return {}
               }
-              const styleMargin = {}
+              let styleMargin = {top:"0px", bottom:"0px"}
               if (marginTop && marginTop !== '0px') {
                 styleMargin.top = marginTop.replace(/px/g, '')
               }
@@ -71,7 +80,7 @@ export default Extension.create({
       setMargin:
         (options) =>
         ({ editor, commands }) => {
-          return this.options.types.every((type) => {
+          return this.options.types.every((type:string) => {
             const { margin } = editor.getAttributes(type)
             return commands.updateAttributes(type, {
               margin: Object.assign({}, margin, options),
@@ -81,7 +90,7 @@ export default Extension.create({
       unsetMargin:
         () =>
         ({ commands }) => {
-          return this.options.types.every((type) =>
+          return this.options.types.every((type:string) =>
             commands.resetAttributes(type, 'margin'),
           )
         },

@@ -41,6 +41,8 @@
 </template>
 
 <script setup>
+import { getSelectionText } from '@/extensions/selection'
+
 const { editor } = useStore()
 let dialogVisible = $ref(false)
 
@@ -72,7 +74,7 @@ watch(
   () => dialogVisible,
   (val) => {
     if (val) {
-      text = editor.value.commands.getSelectionText()
+      text = getSelectionText(editor.value)
       href = editor.value.getAttributes('link').href || ''
     } else {
       text = ''

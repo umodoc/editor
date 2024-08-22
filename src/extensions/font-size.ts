@@ -1,6 +1,21 @@
 import { Extension } from '@tiptap/core'
 
-export default Extension.create({
+declare module "@tiptap/core" {
+  interface Commands<ReturnType> {
+    setFontSize: {
+      setFontSize: (fontSize:any) => ReturnType;
+    };
+    unsetFontSize: {
+      unsetFontSize: () => ReturnType;
+    };
+
+  }
+}
+export interface FontSizeOption{
+  types:string[],
+  defaultFontSize:string
+}
+export default Extension.create<FontSizeOption>({
   name: 'fontSize',
   addOptions() {
     return {

@@ -57,6 +57,7 @@ import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
 
 import '@/assets/styles/index.less'
+import { getSelectionNode, getSelectionText } from '@/extensions/selection'
 
 defineOptions({ name: 'UmoEditor' })
 
@@ -523,8 +524,8 @@ defineExpose({
   getContentExcerpt,
   getEditor: () => editor,
   getTableOfContents: () => tableOfContents.value,
-  getSelectionText: () => editor.value?.commands.getSelectionText(),
-  getSelectionNode: () => editor.value?.commands.getSelectionNode(),
+  getSelectionText: () => getSelectionText(editor.value),
+  getSelectionNode: () => getSelectionNode(editor.value),
   deleteSelectionNode: () => editor.value?.commands.deleteSelectionNode(),
   setCurrentNodeSelection: () =>
     editor.value?.commands.setCurrentNodeSelection(),

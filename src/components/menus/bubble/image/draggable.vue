@@ -8,10 +8,12 @@
 </template>
 
 <script setup>
+import { getSelectionNode } from '@/extensions/selection'
+
 const { editor } = useStore()
 
 const toggleDraggable = () => {
-  const image = editor.value.commands.getSelectionNode()
+  const image = getSelectionNode(editor.value)
   editor.value.commands.updateAttributes(image.type, {
     draggable: !image.attrs.draggable,
   })

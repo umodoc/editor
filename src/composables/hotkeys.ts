@@ -1,6 +1,6 @@
 import hotkeys from 'hotkeys-js'
 
-export const useHotkeys = (keys, callback) => {
+export const useHotkeys = (keys:string, callback:Function) => {
   hotkeys.filter = () => true
   hotkeys(keys, (e) => {
     e.preventDefault()
