@@ -1,7 +1,13 @@
 import { Node, mergeAttributes } from '@tiptap/core'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import NodeView from './node-view.vue'
-
+declare module "@tiptap/core" {
+  interface Commands<ReturnType> {
+    setIframe: {
+      setIframe: (options: any) => ReturnType;
+    };
+  }
+}
 export default Node.create({
   name: 'iframe',
   inline: false,

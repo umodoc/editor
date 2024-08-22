@@ -1,7 +1,13 @@
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import Image from '@tiptap/extension-image'
 import NodeView from './node-view.vue'
-
+declare module "@tiptap/core" {
+  interface Commands<ReturnType> {
+    setImage: {
+      setImage: (options: any,replace:any) => ReturnType;
+    };
+  }
+}
 export default Image.extend({
   atom: true,
   addAttributes() {
