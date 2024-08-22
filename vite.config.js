@@ -44,6 +44,7 @@ export default defineConfig({
     }),
   ],
   resolve: {
+    extensions: ['.ts', '.js', '.vue'],
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
