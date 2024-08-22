@@ -2,14 +2,14 @@
   <menus-button
     ico="assistant"
     :text="t('assistant.text')"
-    @menu-click="openAssistant"
+    @menu-click="openAssistantBox"
   />
 </template>
 
 <script setup>
-const { editor, assistant } = useStore()
-const openAssistant = () => {
-  assistant.value = true
+const { editor, assistantBox } = useStore()
+const openAssistantBox = () => {
+  assistantBox.value = true
   editor.value.commands.focus()
 }
 </script>

@@ -124,7 +124,7 @@
 <script setup>
 import i18n from '@/i18n'
 
-const { options, editor, assistant } = useStore()
+const { options, editor, assistantBox } = useStore()
 
 const inputRef = $ref(null)
 let command = $ref('')
@@ -201,7 +201,7 @@ const send = async () => {
         dialog.destroy()
       },
     })
-    assistant.value = false
+    assistantBox.value = false
   }
 }
 
@@ -216,7 +216,7 @@ const insertCommand = ({ value, autoSend }) => {
 }
 
 const exitAssistant = () => {
-  assistant.value = false
+  assistantBox.value = false
   editor.value.commands.focus()
 }
 

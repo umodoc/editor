@@ -14,16 +14,16 @@
     <bubble-menu
       v-show="!blockMenu && !painter.enabled"
       class="umo-editor-bubble-menu"
-      :class="{ assistant }"
+      :class="{ assistant: assistantBox }"
       :editor="editor"
       :tippy-options="tippyOpitons"
     >
-      <menus-bubble v-if="options.document.enableBubbleMenu && !assistant">
+      <menus-bubble v-if="options.document.enableBubbleMenu && !assistantBox">
         <template #bubble_menu="props">
           <slot name="bubble_menu" v-bind="props" />
         </template>
       </menus-bubble>
-      <assistant-input v-if="options.assistant.enabled && assistant" />
+      <assistant-input v-if="options.assistant.enabled && assistantBox" />
     </bubble-menu>
   </template>
   <template
@@ -103,7 +103,7 @@ const {
   page,
   painter,
   blockMenu,
-  assistant,
+  assistantBox,
   tableOfContents,
   setEditor,
   editorDestroyed,
@@ -285,7 +285,7 @@ const tippyOpitons = $ref({
     tippyInstance = instance
   },
   onHide() {
-    assistant.value = false
+    assistantBox.value = false
   },
   onDestroy() {
     tippyInstance = null
@@ -294,7 +294,7 @@ const tippyOpitons = $ref({
 
 // AI 助手
 watch(
-  () => assistant.value,
+  () => assistantBox.value,
   (visible) => {
     tippyInstance?.setProps({
       placement: visible ? 'bottom' : 'top',
