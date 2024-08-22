@@ -1,7 +1,7 @@
 import { ObjectSchema } from '@eslint/object-schema'
 
 // 默认配置
-const defaultOptions = {
+const defaultOptions:any = {
   editorKey: 'default',
   locale: 'zh-CN',
   theme: 'light',
@@ -289,24 +289,24 @@ const defaultOptions = {
     en_US: {},
     zh_CN: {},
   },
-  async onSave(content, page, document) {
+  async onSave(content:any, page:any, document:any) {
     throw new Error('Key "onSave": Please set the save method')
   },
-  async onFileUpload(file) {
+  async onFileUpload(file:any) {
     if (!file) {
       throw new Error('File not found')
     }
     throw new Error('Key "onFileUpload": Please set the upload method')
   },
-  onFileDelete(id, src) {
+  onFileDelete(id:any, src:any) {
     console.error(
       'The file has been deleted. Please configure the onFileDelete to completely delete the file from the server.',
     )
   },
-  async onAssistant(payload, content) {
+  async onAssistant(payload:any, content:any) {
     throw new Error('Key "onAssistant": Please set the onAssistant method')
   },
-  async onCustomImportWordMethod(file) {
+  async onCustomImportWordMethod(file:any) {
     throw new Error(
       'Key "onCustomImportWordMethod": Please set the onAssistant method',
     )
@@ -316,7 +316,7 @@ const defaultOptions = {
 // 组件 props 所需格式
 const propsOptions = Object.keys(defaultOptions)
 
-const isNumber = (value) => {
+const isNumber = (value:any) => {
   if (typeof value === 'number') {
     return isFinite(value)
   }
@@ -326,7 +326,7 @@ const isNumber = (value) => {
   }
   return false
 }
-const isLocale = (value) => {
+const isLocale = (value:any) => {
   if (typeof value === 'string' && value.length > 0) {
     return true
   }
@@ -340,7 +340,7 @@ const isLocale = (value) => {
   }
   return false
 }
-const isAsyncFunction = (value) => {
+const isAsyncFunction = (value:any) => {
   return (
     value.constructor.name === 'AsyncFunction' ||
     Promise.resolve(value) instanceof Promise
