@@ -14,6 +14,7 @@ export const useStore = createGlobalState(() => {
   })
   const blockMenu = ref(false)
   const assistantBox = ref(false)
+  const commentBox = ref(false)
   const tableOfContents = ref([])
   const imagePreview = ref(false)
   const searchReplace = ref(false)
@@ -108,6 +109,7 @@ export const useStore = createGlobalState(() => {
     painter,
     blockMenu,
     assistantBox,
+    commentBox,
     tableOfContents,
     imagePreview,
     searchReplace,

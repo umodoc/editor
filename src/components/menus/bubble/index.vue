@@ -1,130 +1,92 @@
 <template>
-  <template
-    v-if="
-      editor?.isActive('toc') ||
-      editor?.isActive('pagination') ||
-      editor?.isActive('horizontalRule') ||
-      editor?.getAttributes('image').error
-    "
+  <bubble-menu
+    v-show="!blockMenu && !painter.enabled"
+    class="umo-editor-bubble-menu"
+    :class="{ assistant: assistantBox }"
+    :editor="editor"
+    :tippy-options="tippyOpitons"
   >
-    <!-- <menus-bubble-node-delete /> -->
-  </template>
-  <template
-    v-else-if="
-      editor?.isActive('image') && !editor?.getAttributes('image').error
-    "
-  >
-    <menus-toolbar-base-align-left />
-    <menus-toolbar-base-align-center />
-    <menus-toolbar-base-align-right />
-    <div class="umo-bubble-menu-divider"></div>
-    <menus-bubble-image-flip />
-    <menus-bubble-image-proportion />
-    <menus-bubble-image-draggable />
-    <menus-bubble-image-reset />
-    <div class="umo-bubble-menu-divider"></div>
-    <menus-bubble-image-remove-background
-      v-if="
-        editor?.getAttributes('image')?.type === 'image' ||
-        ['image/png', 'image/jpeg'].includes(
-          editor?.getAttributes('image')?.type,
-        )
-      "
-    />
-    <menus-bubble-image-preview
-      v-if="
-        editor?.getAttributes('image')?.type === 'image' ||
-        ['image/png', 'image/jpeg'].includes(
-          editor?.getAttributes('image')?.type,
-        )
-      "
-    />
-    <menus-bubble-image-open />
-    <div class="umo-bubble-menu-divider"></div>
-    <menus-bubble-image-edit />
-    <menus-bubble-node-delete />
-  </template>
-  <template
-    v-else-if="
-      editor?.isActive('video') ||
-      editor?.isActive('audio') ||
-      editor?.isActive('file') ||
-      editor?.isActive('iframe')
-    "
-  >
-    <menus-toolbar-base-align-left />
-    <menus-toolbar-base-align-center />
-    <menus-toolbar-base-align-right />
-    <div class="umo-bubble-menu-divider"></div>
-    <menus-bubble-file-download
-      v-if="
-        editor?.isActive('file') ||
-        editor?.isActive('video') ||
-        editor?.isActive('audio')
-      "
-    />
-    <menus-bubble-node-delete />
-  </template>
-  <template v-else-if="editor?.isActive('table')">
-    <menus-toolbar-table-cells-align />
-    <menus-toolbar-table-cells-background />
-    <!-- <menus-toolbar-table-border-color  /> -->
-    <div class="umo-bubble-menu-divider"></div>
-    <menus-toolbar-table-add-row-before />
-    <menus-toolbar-table-add-row-after />
-    <menus-toolbar-table-add-column-before />
-    <menus-toolbar-table-add-column-after />
-    <div class="umo-bubble-menu-divider"></div>
-    <menus-toolbar-table-delete-row />
-    <menus-toolbar-table-delete-column />
-    <div class="umo-bubble-menu-divider"></div>
-    <menus-toolbar-table-merge-cells />
-    <menus-toolbar-table-split-cell />
-  </template>
-  <template v-else-if="editor?.isActive('codeBlock')">
-    <menus-bubble-code-languages />
-    <menus-bubble-code-themes />
-    <div class="umo-bubble-menu-divider"></div>
-    <menus-bubble-code-line-numbers />
-    <menus-bubble-code-word-wrap />
-    <div class="umo-bubble-menu-divider"></div>
-    <menus-bubble-code-copy />
-    <menus-bubble-node-delete />
-  </template>
-  <template v-else>
-    <template v-if="options.assistant.enabled">
-      <menus-bubble-assistant />
-      <div class="umo-bubble-menu-divider"></div>
-    </template>
-    <menus-toolbar-base-font-size :select="false" />
-    <div class="umo-bubble-menu-divider"></div>
-    <menus-toolbar-base-bold />
-    <menus-toolbar-base-italic />
-    <menus-toolbar-base-underline />
-    <menus-toolbar-base-strike />
-    <div class="umo-bubble-menu-divider"></div>
-    <menus-toolbar-base-align-dropdown />
-    <div class="umo-bubble-menu-divider"></div>
-    <menus-toolbar-base-color />
-    <menus-toolbar-base-background-color />
-    <menus-toolbar-base-highlight />
-    <div class="umo-bubble-menu-divider"></div>
-    <slot name="bubble_menu" />
-  </template>
+    <menus-bubble-menus
+      v-if="options.document.enableBubbleMenu && !assistantBox && !commentBox"
+    >
+      <template #bubble_menu="props">
+        <slot name="bubble_menu" v-bind="props" />
+      </template>
+    </menus-bubble-menus>
+    <assistant-input v-if="options.assistant.enabled && assistantBox" />
+    <comment-input v-if="options.document.enableComment && commentBox" />
+  </bubble-menu>
 </template>
 
 <script setup>
-const { options, editor } = useStore()
+import { BubbleMenu } from '@tiptap/vue-3'
+
+const { options, editor, painter, blockMenu, assistantBox, commentBox } =
+  useStore()
+
+// 气泡菜单
+let tippyInstance = $ref(null)
+const tippyOpitons = $ref({
+  appendTo: 'parent',
+  maxWidth: 580,
+  zIndex: 99,
+  onShow(instance) {
+    tippyInstance = instance
+  },
+  onHide() {
+    assistantBox.value = false
+    commentBox.value = false
+  },
+  onDestroy() {
+    tippyInstance = null
+  },
+})
+
+// AI 助手
+watch(
+  () => [assistantBox.value, commentBox.value],
+  (visible) => {
+    tippyInstance?.setProps({
+      placement: visible.includes(true) ? 'bottom' : 'top',
+    })
+  },
+)
 </script>
 
-<style lang="less" scoped>
-.umo-bubble-menu-umo-bubble-menu-divider {
-  width: 1;
-  border-right: solid 1px var(--umo-border-color-light);
-  height: 16px;
-  margin: 0 10px 0 5px;
-  &:last-child:is(.umo-bubble-menu-divider) {
+<style lang="less">
+.umo-editor-bubble-menu {
+  border-radius: var(--umo-radius);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  &:not(.assistant) {
+    padding: 8px 10px;
+    box-shadow: var(--umo-shadow);
+    border: 1px solid var(--umo-border-color);
+    background-color: var(--umo-color-white);
+  }
+
+  &:empty {
     display: none;
+  }
+
+  .umo-menu-button.show-text .umo-button-content .umo-button-text {
+    display: none !important;
+  }
+
+  .umo-menu-button.huge {
+    height: var(--td-comp-size-xs);
+    min-width: unset;
+
+    .umo-button-content {
+      min-width: unset !important;
+
+      .umo-icon {
+        font-size: 16px;
+        margin-top: 0;
+      }
+    }
   }
 }
 </style>
