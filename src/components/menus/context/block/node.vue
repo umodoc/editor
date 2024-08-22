@@ -32,7 +32,7 @@
           ico="assistant"
           :text="t('assistant.text')"
           :tooltip="false"
-          @menu-click="openAssistant"
+          @menu-click="openAssistantBox"
         />
       </t-dropdown-item>
       <t-dropdown-item class="umo-block-menu-group-name" disabled>
@@ -240,7 +240,7 @@
 </template>
 
 <script setup>
-const { container, options, editor, blockMenu, assistant } = useStore()
+const { container, options, editor, blockMenu, assistantBox } = useStore()
 
 let menuActive = $ref(false)
 
@@ -250,8 +250,8 @@ const disableItem = (name) => {
   return options.value.toolbar.disableMenuItems.includes(name)
 }
 
-const openAssistant = () => {
-  assistant.value = true
+const openAssistantBox = () => {
+  assistantBox.value = true
   editor.value.commands.selectParentNode()
   editor.value.commands.focus()
   const { from, to } = editor.value.state.selection

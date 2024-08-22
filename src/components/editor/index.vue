@@ -10,31 +10,19 @@
     :style="{ lineHeight: defaultLineHeight }"
     :spellcheck="options.document.enableSpellcheck && $document.spellcheck"
   />
-  <template v-if="editor && !page.preview.enabled && !editorDestroyed">
-    <bubble-menu
-      v-show="!blockMenu && !painter.enabled"
-      class="umo-editor-bubble-menu"
-      :class="{ assistant }"
-      :editor="editor"
-      :tippy-options="tippyOpitons"
-    >
-      <menus-bubble v-if="options.document.enableBubbleMenu && !assistant">
-        <template #bubble_menu="props">
-          <slot name="bubble_menu" v-bind="props" />
-        </template>
-      </menus-bubble>
-      <assistant-input v-if="options.assistant.enabled && assistant" />
-    </bubble-menu>
-  </template>
-  <template
-    v-if="options.document.enableBlockMenu && editor && !editorDestroyed"
-  >
-    <menus-context-block />
-  </template>
+  <menus-bubble v-if="editor && !page.preview.enabled && !editorDestroyed" />
+  <menus-context-block
+    v-if="
+      options.document.enableBlockMenu &&
+      !page.preview.enabled &&
+      editor &&
+      !editorDestroyed
+    "
+  />
 </template>
 
 <script setup>
-import { Editor, EditorContent, BubbleMenu } from '@tiptap/vue-3'
+import { Editor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import Focus from '@tiptap/extension-focus'
@@ -103,7 +91,6 @@ const {
   page,
   painter,
   blockMenu,
-  assistant,
   tableOfContents,
   setEditor,
   editorDestroyed,
@@ -275,33 +262,6 @@ window.addEventListener('load', function () {
   }, 500)
 })
 
-// 气泡菜单
-let tippyInstance = $ref(null)
-const tippyOpitons = $ref({
-  appendTo: 'parent',
-  maxWidth: 580,
-  zIndex: 99,
-  onShow(instance) {
-    tippyInstance = instance
-  },
-  onHide() {
-    assistant.value = false
-  },
-  onDestroy() {
-    tippyInstance = null
-  },
-})
-
-// AI 助手
-watch(
-  () => assistant.value,
-  (visible) => {
-    tippyInstance?.setProps({
-      placement: visible ? 'bottom' : 'top',
-    })
-  },
-)
-
 // 销毁编辑器实例
 onBeforeUnmount(() => editorInstance.destroy())
 </script>
@@ -309,46 +269,4 @@ onBeforeUnmount(() => editorInstance.destroy())
 <style lang="less">
 @import '@/assets/styles/editor.less';
 @import '@/assets/styles/drager.less';
-
-.umo-editor-bubble-menu {
-  border-radius: var(--umo-radius);
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-
-  &:not(.assistant) {
-    padding: 8px 10px;
-    box-shadow: var(--umo-shadow);
-    border: 1px solid var(--umo-border-color);
-    background-color: var(--umo-color-white);
-  }
-
-  &:empty {
-    display: none;
-  }
-
-  .umo-menu-button.show-text .umo-button-content .umo-button-text {
-    display: none !important;
-  }
-
-  .umo-menu-button.huge {
-    height: var(--td-comp-size-xs);
-    min-width: unset;
-
-    .umo-button-content {
-      min-width: unset !important;
-
-      .umo-icon {
-        font-size: 16px;
-        margin-top: 0;
-      }
-    }
-  }
-}
-
-.umo-editor-block-menu {
-  .umo-menu-button {
-    color: var(--umo-text-color-light) !important;
-  }
-}
 </style>

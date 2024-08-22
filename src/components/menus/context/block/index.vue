@@ -42,6 +42,11 @@ watch(() => page.value.pagination, updateMenuPostion)
 </script>
 
 <style lang="less">
+.umo-editor-block-menu {
+  .umo-menu-button {
+    color: var(--umo-text-color-light) !important;
+  }
+}
 .umo-block-menu-hander {
   position: absolute;
   z-index: 20;
