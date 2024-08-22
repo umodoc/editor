@@ -8,6 +8,7 @@ export const ie_11up = /Trident\/(?:[7-9]|\d{2,})\..*rv:(\d+)/.exec(agent)
 
 export const ie = !!(ie_upto10 || ie_11up || ie_edge)
 export const ie_version = ie_upto10
+  //@ts-ignore
   ? document.documentMode
   : ie_11up
     ? +ie_11up[1]
