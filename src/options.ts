@@ -285,6 +285,7 @@ const defaultOptions:any = {
     allowedMimeTypes: [],
     maxSize: 1024 * 1024 * 100, // 100M
   },
+  user: {},
   extensions: [],
   translations: {
     en_US: {},
@@ -813,6 +814,10 @@ const ojbectSchema = new ObjectSchema({
         validate: 'number',
       },
     },
+  },
+  user: {
+    merge: 'assign',
+    validate: 'object',
   },
   extensions: {
     merge: 'replace',

@@ -73,6 +73,11 @@ const options = $ref({
   assistant: {
     enabled: true,
   },
+  user: {
+    userId: 'umoeditor',
+    nickName: 'Umo Editor',
+    avatarUrl: 'https://tdesign.gtimg.com/site/avatar.jpg',
+  },
   async onFileUpload(file) {
     if (!file) throw new Error('没有找到要上传的文件')
     console.log('onUpload', file)
