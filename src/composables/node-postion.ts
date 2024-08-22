@@ -6,7 +6,7 @@ export const useNodePostion = () => {
     `${container} .umo-page-node-content .umo-node-focused`,
   )
   if (currentNode === null) {
-    return null
+    return { offsetTop: null, offsetLeft: null }
   }
 
   // 当前元素距离页面顶部的距离
