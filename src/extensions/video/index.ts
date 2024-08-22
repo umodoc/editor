@@ -1,54 +1,57 @@
 import { Node, mergeAttributes } from '@tiptap/core'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import NodeView from './node-view.vue'
-
+declare module "@tiptap/core" {
+  interface Commands<ReturnType> {
+    setVideo: {
+      setVideo: (options:any) => ReturnType;
+    };
+  }
+}
 export default Node.create({
-  name: 'textBox',
+  name: 'video',
   group: 'block',
-  content: 'inline*',
+  atom: true,
   addAttributes() {
     return {
-      vnode: {
-        default: true,
-      },
-      width: {
-        default: 200,
-      },
-      height: {
-        default: 40,
-      },
-      angle: {
+      id: {
         default: null,
       },
-      left: {
-        default: 0,
+      file: {
+        default: null,
       },
-      top: {
-        default: 0,
+      src: {
+        default: null,
+      },
+      width: {
+        default: null,
+      },
+      height: {
+        default: 200,
       },
       draggable: {
-        default: true,
+        default: false,
       },
-      rotatable: {
-        default: true,
+      uploaded: {
+        default: false,
       },
     }
   },
   parseHTML() {
-    return [{ tag: 'text-box' }]
+    return [{ tag: 'video' }]
   },
   renderHTML({ HTMLAttributes }) {
-    return ['text-box', mergeAttributes(HTMLAttributes), 0]
+    return ['video', mergeAttributes(HTMLAttributes)]
   },
   addNodeView() {
     return VueNodeViewRenderer(NodeView)
   },
   addCommands() {
     return {
-      setTextBox:
+      setVideo:
         (options) =>
-        ({ commands }) => {
-          return commands.insertContent({
+        ({ commands, editor }) => {
+          return commands.insertContentAt(editor.state.selection.anchor, {
             type: this.name,
             attrs: options,
           })

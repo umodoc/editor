@@ -74,6 +74,7 @@ export default Image.extend({
   addNodeView() {
     return VueNodeViewRenderer(NodeView)
   },
+  //@ts-ignore
   addCommands() {
     return {
       setImage:
