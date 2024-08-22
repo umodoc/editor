@@ -1,4 +1,5 @@
-import { ObjectSchema } from '@eslint/object-schema'
+import { ObjectDefinition, ObjectSchema } from '@eslint/object-schema'
+import { PropertyDefinition } from '@eslint/object-schema/dist/cjs/types'
 
 // 默认配置
 const defaultOptions:any = {
@@ -867,6 +868,6 @@ const ojbectSchema = new ObjectSchema({
       }
     },
   },
-})
+} as ObjectDefinition)
 
 export { defaultOptions, propsOptions, ojbectSchema }
