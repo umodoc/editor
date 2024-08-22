@@ -1,11 +1,11 @@
 import { EditorState, NodeSelection, TextSelection } from '@tiptap/pm/state'
 import { canSplit } from '@tiptap/pm/transform'
 
-import { defaultBlockAt } from '@tiptap/vue-3'
+import { defaultBlockAt,RawCommands } from '@tiptap/vue-3'
 import { getId } from './core'
 import { getSplittedAttributes } from './index'
 
-function ensureMarks(state, splittableMarks) {
+function ensureMarks(state: EditorState, splittableMarks?: string[]) {
   const marks =
     state.storedMarks ||
     (state.selection.$to.parentOffset && state.selection.$from.marks())
@@ -23,7 +23,7 @@ function ensureMarks(state, splittableMarks) {
  * 需要重新生成 因为id 在 html里面是唯一的 只有 其他的属性 可以被继承到 下一个 block
  * */
 
-export const splitBlock =
+export const splitBlock : RawCommands["splitBlock"]=
   ({ keepMarks = true } = {}) =>
   ({ tr, state, dispatch, editor }) => {
     const { selection, doc } = tr

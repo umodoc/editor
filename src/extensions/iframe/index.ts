@@ -1,9 +1,16 @@
 import { Node, mergeAttributes } from '@tiptap/core'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import NodeView from './node-view.vue'
-
+declare module "@tiptap/core" {
+  interface Commands<ReturnType> {
+    setIframe: {
+      setIframe: (options: any) => ReturnType;
+    };
+  }
+}
 export default Node.create({
-  name: 'audio',
+  name: 'iframe',
+  inline: false,
   group: 'block',
   atom: true,
   addAttributes() {
@@ -11,35 +18,35 @@ export default Node.create({
       vnode: {
         default: true,
       },
-      id: {
-        default: null,
-      },
-      file: {
-        default: null,
-      },
       src: {
         default: null,
       },
-      uploaded: {
-        default: false,
+      width: {
+        default: 400,
+      },
+      height: {
+        default: 200,
       },
     }
   },
   parseHTML() {
-    return [{ tag: 'audio' }]
+    return [{ tag: 'iframe' }]
   },
   renderHTML({ HTMLAttributes }) {
-    return ['audio', mergeAttributes(HTMLAttributes)]
+    return [
+      'iframe',
+      mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
+    ]
   },
   addNodeView() {
     return VueNodeViewRenderer(NodeView)
   },
   addCommands() {
     return {
-      setAudio:
+      setIframe:
         (options) =>
-        ({ commands, editor }) => {
-          return commands.insertContentAt(editor.state.selection.anchor, {
+        ({ commands }) => {
+          return commands.insertContent({
             type: this.name,
             attrs: options,
           })

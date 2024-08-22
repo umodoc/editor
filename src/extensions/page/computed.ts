@@ -15,7 +15,7 @@ import {
   TASKLIST,
   LIST_TYPE,
 } from './node-names'
-import { Fragment, Slice } from '@tiptap/pm/model'
+import { Fragment, Slice, Node, Schema } from '@tiptap/pm/model'
 import {
   getAbsentHtmlH,
   getBreakPos,
@@ -23,10 +23,12 @@ import {
   getDomHeight,
   getId,
 } from './core'
-import { findParentNode, getNodeType } from '@tiptap/core'
+import { findParentNode, getNodeType,Editor } from '@tiptap/core'
+import { EditorState, Transaction } from "@tiptap/pm/state";
 import { ReplaceStep } from '@tiptap/pm/transform'
+import { ComputedFn, NodesComputed, PageState, SplitInfo, SplitParams } from '@/extensions/page/types'
 
-export const sameListCalculation = (splitContex, node, pos, parent, dom) => {
+export const sameListCalculation:ComputedFn = (splitContex, node, pos, parent, dom) => {
   const { height: pHeight, margin } = getDomHeight(dom)
   if (splitContex.isOverflow(pHeight)) {
     splitContex.addHeight(margin)
@@ -37,7 +39,7 @@ export const sameListCalculation = (splitContex, node, pos, parent, dom) => {
 }
 let count = 1
 
-export const sameItemCalculation = (splitContex, node, pos, parent, dom) => {
+export const sameItemCalculation:ComputedFn = (splitContex, node, pos, parent, dom) => {
   const chunks = splitContex.splitResolve(pos)
   const { height: pHeight, margin } = getDomHeight(dom)
   if (splitContex.isOverflow(pHeight)) {
@@ -56,7 +58,7 @@ export const sameItemCalculation = (splitContex, node, pos, parent, dom) => {
   return false
 }
 
-export const defaultNodesComputed = {
+export const defaultNodesComputed:NodesComputed = {
   [ORDEREDLIST]: sameListCalculation,
   [BULLETLIST]: sameListCalculation,
   [LISTITEM]: sameItemCalculation,
@@ -170,13 +172,13 @@ export const defaultNodesComputed = {
  * 分页上下文类
  */
 export class SplitContext {
-  #doc //文档
+  #doc:Node //文档
   #accumolatedHeight = 0 //累加高度
-  #pageBoundary = null //返回的切割点
+  #pageBoundary: SplitInfo | null = null; //返回的切割点
   #height = 0 //分页的高度
   #paragraphDefaultHeight = 0 //p标签的默认高度
-  attributes = {}
-  schema
+  attributes:Record<string, any> = {}
+  schema:Schema;
 
   /**
    * 获取文档
@@ -192,7 +194,7 @@ export class SplitContext {
    * @param height 分页高度
    * @param paragraphDefaultHeight p标签的默认高度
    */
-  constructor(schema, doc, height, paragraphDefaultHeight) {
+  constructor(schema:Schema, doc:Node, height:number, paragraphDefaultHeight:number) {
     this.#doc = doc
     this.#height = height
     this.#paragraphDefaultHeight = paragraphDefaultHeight
@@ -216,24 +218,17 @@ export class SplitContext {
    * @param height 增加的高度
    * @returns 是否溢出
    */
-  isOverflow(height) {
+  isOverflow(height:number) {
     return this.#accumolatedHeight + height >= this.#height
   }
 
-  isOverflowTest(height) {
-    //优化高度差值的统一算法
-    let cha = this.#accumolatedHeight + height - this.#height
-    return (
-      this.#accumolatedHeight + height > this.#height &&
-      cha >= this.#paragraphDefaultHeight
-    )
-  }
+
 
   /**
    * 增加高度
    * @param height 增加的高度
    */
-  addHeight(height) {
+  addHeight(height:number) {
     this.#accumolatedHeight += height
   }
 
@@ -242,7 +237,7 @@ export class SplitContext {
    * @param pos 切割点位置
    * @param depth 切割点深度
    */
-  setBoundary(pos, depth) {
+  setBoundary(pos:number, depth:number) {
     this.#pageBoundary = {
       pos,
       depth,
@@ -262,7 +257,8 @@ export class SplitContext {
    * @param pos 切割点位置
    * @returns 解析结果
    */
-  splitResolve(pos) {
+  splitResolve(pos:number) {
+    // @ts-ignore
     const array = this.#doc.resolve(pos).path
     const chunks = []
     if (array.length <= 3) return array
@@ -286,16 +282,16 @@ export class SplitContext {
  * PageComputedContext 分页核心计算class
  * */
 export class PageComputedContext {
-  nodesComputed
-  state
-  tr
-  pageState
-  editor
-  restDomIds
-  forcePageId
-  startIndex
+  nodesComputed: NodesComputed;
+  state: EditorState;
+  tr: Transaction;
+  pageState: PageState;
+  editor: Editor;
+  restDomIds: string[]=[]
+  forcePageId:string|null
+  startIndex:number
 
-  constructor(editor, nodesComputed, pageState, state) {
+  constructor(editor:Editor, nodesComputed:NodesComputed, pageState:PageState, state:EditorState) {
     this.editor = editor
     this.nodesComputed = nodesComputed
     this.tr = state.tr
@@ -327,9 +323,10 @@ export class PageComputedContext {
   }
 
   prepare() {
-    const tr = this.tr
+    const {doc} = this.tr
     const { selection } = this.state
-    this.startIndex = tr.doc.content.findIndex(selection.head).index
+    // @ts-ignore
+    this.startIndex = doc.content.findIndex(selection.head).index
   }
 
   computed() {
@@ -366,7 +363,7 @@ export class PageComputedContext {
         depth: splitInfo.depth,
         typesAfter: [{ type }],
         schema: schema,
-      })
+      }as SplitParams)
       this.startIndex += 1
     }
   }
@@ -375,14 +372,15 @@ export class PageComputedContext {
    * 重第count页开始合并page
    * @param count
    */
-  mergeDefaultDocument(count) {
+  mergeDefaultDocument(count:number) {
     const tr = this.tr
     if (this.forcePageId) {
       while (true) {
+        // @ts-ignore
         const nodeSize = tr.doc.content.content
           .slice(0, count)
-          .map((item) => item.nodeSize)
-          .reduce((a, b) => a + b, 0)
+          .map((item:Node) => item.nodeSize)
+          .reduce((a:number, b:number) => a + b, 0)
         let depth = 1
         if (tr.doc.child(count).attrs.id == this.forcePageId) {
           break
@@ -482,7 +480,7 @@ export class PageComputedContext {
    * @param typesAfter
    * @param schema
    */
-  lift({ pos, depth = 1, typesAfter, schema, force = false }) {
+  lift({ pos, depth = 1, typesAfter, schema, force = false }:SplitParams) {
     const tr = this.tr
     const $pos = tr.doc.resolve(pos)
     let before = Fragment.empty
@@ -505,6 +503,7 @@ export class PageComputedContext {
         }
         //重新生成id
         const attr = Object.assign({}, n.attrs, { id: getId(), ...extend })
+        // @ts-ignore
         na = schema.nodes[n.type.name].createAndFill(attr, after)
       }
       after = Fragment.from(
@@ -533,7 +532,7 @@ export class PageComputedContext {
     let tr = this.tr
     const { doc } = tr
     const { schema } = this.state
-    let beforeBolck = null
+    let beforeBolck:Node|null = null
     let beforePos = 0
     doc.descendants((node, pos, parentNode, i) => {
       if (node.type === schema.nodes[PARAGRAPH] && node.attrs.extend == true) {
@@ -601,6 +600,7 @@ export class PageComputedContext {
           node,
           pos,
           parentNode,
+          // @ts-ignore
           dom,
           startIndex,
           forcePageId,

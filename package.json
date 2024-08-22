@@ -86,6 +86,7 @@
     "@umoteam/editor-external": "4.2.0",
     "@vue-monaco/editor": "^0.0.6",
     "@vueuse/core": "^10.11.0",
+    "docx": "^8.5.0",
     "dom-to-image-more": "^3.3.1",
     "es-drager": "^1.2.11",
     "file-saver": "^2.0.5",

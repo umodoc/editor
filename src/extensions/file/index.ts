@@ -1,10 +1,11 @@
 import { Node, mergeAttributes } from '@tiptap/core'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import NodeView from './node-view.vue'
+import { re } from 'prism-code-editor/prism/utils/shared'
 
 const { options } = useStore()
 
-const mimeTypes = {
+const mimeTypes:any = {
   image: [
     'image/jpeg',
     'image/png',
@@ -17,7 +18,7 @@ const mimeTypes = {
   audio: ['audio/mp3', 'audio/wav', 'audio/ogg', 'audio/aac', 'audio/flac'],
 }
 
-const getAccept = (type) => {
+const getAccept = (type:string) => {
   const accept = options.value.file.allowedMimeTypes
   if (type === 'file' && accept.length === 0) {
     return ''
@@ -29,13 +30,26 @@ const getAccept = (type) => {
   if (acceptArray.includes(`${type}/*`) || accept.length === 0) {
     acceptArray = mimeTypes[type]
   } else if (acceptArray.filter((item) => item.startsWith(type)).length > 0) {
-    acceptArray = accept.filter((item) => mimeTypes[type].includes(item))
+    acceptArray = accept.filter((item:any) => mimeTypes[type].includes(item))
   } else {
     acceptArray = ['notAllow']
   }
   return acceptArray.length === 0 ? '' : acceptArray.toString()
 }
+declare module "@tiptap/core" {
+  interface Commands<ReturnType> {
+    setFile: {
+      setFile: (options: any) => ReturnType;
+    };
+    insertFile: {
+      insertFile: (options: any) => ReturnType;
+    };
+    selectFiles: {
+      selectFiles: (options: any) => ReturnType;
+    };
 
+  }
+}
 export default Node.create({
   name: 'file',
   group: 'block',
@@ -103,7 +117,7 @@ export default Node.create({
                 size: maxSize / 1024 / 1024,
               }),
             )
-            return
+            return false
           }
           const position = pos || editor.state.selection.anchor
           let nodeType = 'file'
@@ -120,7 +134,7 @@ export default Node.create({
             nodeType = 'audio'
           }
           // 插入节点
-          commands.insertContentAt(position, {
+         return  commands.insertContentAt(position, {
             type: nodeType,
             attrs: {
               [nodeType === 'file' ? 'url' : 'src']: URL.createObjectURL(file),
@@ -145,7 +159,7 @@ export default Node.create({
                 dialog.destroy()
               },
             })
-            return
+            return false
           }
           const { open, onChange } = useFileDialog({
             accept,
@@ -153,16 +167,18 @@ export default Node.create({
           })
           // 打开文件对话框
           open()
+          let bool = false
           // 插入文件
           onChange((fileList) => {
-            const files = Array.from(fileList)
+            const files = Array.from(fileList||[])
             if (!files) {
               return
             }
             files.forEach((file) => {
-              editor.chain().focus().insertFile({ file }).run()
+              bool = editor.chain().focus().insertFile({ file }).run()
             })
           })
+          return bool
         },
     }
   },
