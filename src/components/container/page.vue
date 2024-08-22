@@ -7,7 +7,6 @@
         :style="{
           width: pageZoomWidth,
           height: pageZoomHeight,
-          minHeight: pageZoomMinHeight,
         }"
       >
         <div
@@ -29,6 +28,7 @@
             </template>
           </editor>
         </div>
+        <container-comments />
       </div>
     </div>
     <t-image-viewer
@@ -63,9 +63,6 @@ const pageSize = $computed(() => {
 // 页面缩放后的大小
 const pageZoomWidth = $computed(() => {
   return `calc(${pageSize.width + 'cm'} * ${page.value.zoomLevel / 100})`
-})
-const pageZoomMinHeight = $computed(() => {
-  return `calc(${pageSize.height + 'cm'} * ${page.value.zoomLevel / 100})`
 })
 
 // 页面内容变化后更新页面高度
@@ -134,6 +131,7 @@ watch(
   scroll-behavior: smooth;
   .umo-zoomable-content {
     margin: 0 auto;
+    position: relative;
     .umo-page-content {
       transform-origin: 0 0;
       box-sizing: border-box;

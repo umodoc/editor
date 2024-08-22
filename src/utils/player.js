@@ -10,7 +10,6 @@ const locales = {
     play: '播放',
     pause: '暂停',
     fastForward: '快进 {seektime} 秒',
-    seek: '搜索',
     seekLabel: '{currentTime} / {duration}',
     played: '已播放',
     buffered: '已缓冲',

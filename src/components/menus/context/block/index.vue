@@ -1,8 +1,8 @@
 <template>
   <div
-    v-if="menuVisible"
+    v-if="visible"
     class="umo-block-menu-hander"
-    :style="`transform: translate(${page.margin.left}cm, ${menuScrollTop}px);`"
+    :style="`transform: translate(${page.margin.left}cm, ${scrollTop}px);`"
   >
     <menus-context-block-node />
     <menus-context-block-common />
@@ -12,8 +12,8 @@
 <script setup>
 const { page, editor } = useStore()
 
-let menuVisible = $ref(false)
-let menuScrollTop = $ref(0)
+let visible = $ref(false)
+let scrollTop = $ref(0)
 
 // 更新菜单位置
 const updateMenuPostion = () => {
@@ -22,8 +22,8 @@ const updateMenuPostion = () => {
     return
   }
   // 设置菜单位置
-  menuVisible = true
-  menuScrollTop = offsetTop
+  visible = true
+  scrollTop = offsetTop
 }
 watch(
   editor,
@@ -31,9 +31,9 @@ watch(
     if (val) {
       editor.value.on('selectionUpdate', updateMenuPostion)
       editor.value.on('focus', updateMenuPostion)
-      // editor.value.on('blur', () => (menuVisible = false))
+      // editor.value.on('blur', () => (visible = false))
     } else {
-      menuVisible = false
+      visible = false
     }
   },
   { immediate: true },
