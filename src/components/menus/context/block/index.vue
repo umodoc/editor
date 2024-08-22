@@ -10,39 +10,20 @@
 </template>
 
 <script setup>
-const { container, page, editor } = useStore()
+const { page, editor } = useStore()
 
 let menuVisible = $ref(false)
 let menuScrollTop = $ref(0)
 
 // 更新菜单位置
 const updateMenuPostion = () => {
-  const currentBlock = document.querySelector(
-    `${container} .umo-page-node-content .umo-node-focused`,
-  )
-  if (currentBlock === null) {
+  const { offsetTop } = useNodePostion()
+  if (offsetTop === null) {
     return
   }
-
-  // 当前元素距离页面顶部的距离
-  let { offsetTop } = currentBlock
-
-  // 微修正菜单位置
-  offsetTop = currentBlock.tagName === 'DIV' ? offsetTop - 8 : offsetTop - 5
-  let offsetY = 0
-  if (
-    editor.value.isActive('horizontalRule') ||
-    editor.value.isActive('table')
-  ) {
-    offsetY = 5
-  }
-  if (editor.value.isActive('pagination')) {
-    offsetY = -4
-  }
-
   // 设置菜单位置
   menuVisible = true
-  menuScrollTop = offsetTop + offsetY
+  menuScrollTop = offsetTop
 }
 watch(
   editor,
@@ -57,6 +38,7 @@ watch(
   },
   { immediate: true },
 )
+watch(() => page.value.pagination, updateMenuPostion)
 </script>
 
 <style lang="less">
