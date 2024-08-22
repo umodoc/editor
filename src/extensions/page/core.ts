@@ -1,5 +1,7 @@
-import { DOMSerializer, Node, Schema } from '@tiptap/pm/model'
+import { DOMSerializer, Node, NodeType, Schema } from '@tiptap/pm/model'
 import { createHTMLDocument, VHTMLDocument } from 'zeed-dom'
+import { JSONContent } from '@tiptap/core'
+import { SplitContext } from '@/extensions/page/computed'
 
 /**
  * 根据schema doc生成html
@@ -7,7 +9,7 @@ import { createHTMLDocument, VHTMLDocument } from 'zeed-dom'
  * @param schema
  * @param options
  */
-export function getHTMLFromFragment(doc, schema, options) {
+export function getHTMLFromFragment(doc:Node, schema:Schema, options?: { document?: Document }) {
   if (options && options.document) {
     const wrap = options.document.createElement('div')
     DOMSerializer.fromSchema(schema).serializeFragment(
@@ -20,20 +22,20 @@ export function getHTMLFromFragment(doc, schema, options) {
   const zeedDocument = DOMSerializer.fromSchema(schema).serializeFragment(
     doc.content,
     {
-      document: createHTMLDocument(),
+      document: createHTMLDocument()as unknown as Document,
     },
-  )
+  )  as unknown as VHTMLDocument
 
   return zeedDocument.render()
 }
 
-export function generateHTML(doc, schema) {
+export function generateHTML(doc: JSONContent, schema:Schema) {
   const contentNode = Node.fromJSON(schema, doc)
 
   return getHTMLFromFragment(contentNode, schema)
 }
 
-function createAndCalculateHeight(node, content) {
+function createAndCalculateHeight(node:Node, content:Node[]) {
   //生成需要计算的节点
   let calculateNode = node.type.create(node.attrs, content, node.marks)
   //生成对应的html
@@ -46,7 +48,7 @@ function createAndCalculateHeight(node, content) {
 /**
  * 计算节点高度超出的位置
  */
-function calculateNodeOverflowHeightAndPoint(node, dom, splitContex) {
+function calculateNodeOverflowHeightAndPoint(node:Node, dom:HTMLElement, splitContex:SplitContext) {
   //获得 dom现有高度
   const { height } = getDomHeight(dom)
   //拿到最后一个节点
@@ -56,27 +58,28 @@ function calculateNodeOverflowHeightAndPoint(node, dom, splitContex) {
   //最终计算的点有多少
   let point = null
   //获得到所有的节点 倒序遍历
-
+  // @ts-ignore
   const content = node.content.content
   //倒序遍历content
   for (let i = childCount - 1; i >= 0; i--) {
     if (point) break
-    // @ts-ignore
     lastChild = content[i]
     //分割节点 永远保留最后一个节点用作计算
     let calculateContent = i ? content.slice(0, i) : []
     //节点如果是文本的处理方式
-    if (lastChild.isText) {
+
+    if (lastChild?.isText) {
       let text = lastChild.text
       // @ts-ignore
       let calculateLength = text.length - 1
       //计算每一个节点带来的影响
       while (calculateLength) {
-        let calculatetext = text.slice(0, calculateLength)
+        let calculatetext = text?.slice(0, calculateLength)
         //计算高度
         let htmlNodeHeight = createAndCalculateHeight(node, [
           ...calculateContent,
-          splitContex.schema.text(calculatetext, lastChild.marks),
+          // @ts-ignore
+          splitContex.schema.text(calculatetext, lastChild?.marks),
         ])
         if (
           height > htmlNodeHeight &&
@@ -114,7 +117,7 @@ function calculateNodeOverflowHeightAndPoint(node, dom, splitContex) {
  * 计算最后一行是否填满
  * @param cnode
  */
-export function getFlag(cnode, schema) {
+export function getFlag(cnode:Node, schema:Schema) {
   const paragraphDOM =
     document.getElementById(cnode.attrs.id) ||
     iframeDoc.getElementById(cnode.attrs.id)
@@ -122,6 +125,7 @@ export function getFlag(cnode, schema) {
   const height = getDomHeight(paragraphDOM)
   let lastChild = cnode.lastChild
   let childCount = cnode.childCount
+  // @ts-ignore
   let content = cnode.content.content.slice(0, childCount)
   if (!lastChild) return false
   if (lastChild.isText) {
@@ -135,7 +139,7 @@ export function getFlag(cnode, schema) {
   return htmlNodeHeight > height
 }
 
-export function getBreakPos(cnode, dom, splitContex) {
+export function getBreakPos(cnode:Node, dom:HTMLElement, splitContex:SplitContext) {
   const paragraphDOM = dom
   if (!paragraphDOM) return null
   const width = paragraphDOM.offsetWidth
@@ -153,23 +157,26 @@ export function getBreakPos(cnode, dom, splitContex) {
  * 工具类
  * @param node
  */
-export function getJsonFromDoc(node) {
+export function getJsonFromDoc(node: Node) {
   return {
     type: 'doc',
     content: [node.toJSON()],
   }
 }
 
-let iframeComputed = null
-var iframeDoc = null
+let iframeComputed:any = null
+var iframeDoc:any = null
 
 export class UnitConversion {
-  arrDPI = []
+  arrDPI: any[] = [];
 
   constructor() {
     const arr = []
+    // @ts-ignore
     if (window.screen.deviceXDPI) {
+      // @ts-ignore
       arr.push(window.screen.deviceXDPI)
+      // @ts-ignore
       arr.push(window.screen.deviceYDPI)
     } else {
       const tmpNode = document.createElement('DIV')
@@ -189,7 +196,7 @@ export class UnitConversion {
    * @description px to mm
    * @param value px值
    */
-  pxConversionMm(value) {
+  pxConversionMm(value: number) {
     const inch = value / this.arrDPI[0]
     const c_value = inch * 25.4
     return Number(c_value.toFixed())
@@ -199,20 +206,20 @@ export class UnitConversion {
    * @description mm to px
    * @param value px值
    */
-  mmConversionPx(value) {
+  mmConversionPx(value: number) {
     const inch = value / 25.4
     const c_value = inch * this.arrDPI[0]
     return Number(c_value.toFixed())
   }
 
-  cmConversionPx(value) {
+  cmConversionPx(value: number) {
     const inch = (value * 10) / 25.4
     const c_value = inch * this.arrDPI[0]
     return Number(c_value.toFixed())
   }
 }
 
-let unitConversion = null
+let unitConversion:UnitConversion|null = null
 
 export function getPageOption(restore = false) {
   if (restore) map.clear()
@@ -221,11 +228,15 @@ export function getPageOption(restore = false) {
   }
   if (!unitConversion) unitConversion = new UnitConversion()
   const { page } = useStore()
+  // @ts-ignore
   const { right, left, bottom, top } = page.value.margin
   const pageSize = () => {
+    // @ts-ignore
     const { width, height } = page.value.size
     return {
+      // @ts-ignore
       width: page.value.orientation === 'portrait' ? width : height,
+      // @ts-ignore
       height: page.value.orientation === 'portrait' ? height : width,
     }
   }
@@ -244,7 +255,7 @@ export function getPageOption(restore = false) {
 
 const map = new Map()
 
-export function computedHeight(html, id, cache = true) {
+export function computedHeight(html:string, id:string, cache = true) {
   if (cache && map.has(html)) {
     return map.get(html)
   }
@@ -262,7 +273,7 @@ export function computedHeight(html, id, cache = true) {
   return 0
 }
 
-export function computedWidth(html, cache = true) {
+export function computedWidth(html:string, cache = true) {
   if (cache && map.has(html)) {
     return map.get(html)
   }
@@ -293,7 +304,7 @@ export function getDefault() {
   return pHeight
 }
 
-export function getDomHeight(dom) {
+export function getDomHeight(dom:HTMLElement) {
   const contentStyle =
     window.getComputedStyle(dom) ||
     iframeComputed.contentWindow.getComputedStyle(dom)
@@ -306,8 +317,8 @@ export function getDomHeight(dom) {
   }
 }
 
-function findTextblockHacksIds(node) {
-  let ids = []
+function findTextblockHacksIds(node:Node) {
+  let ids: any[] =[];
   node.descendants((node) => {
     if (node.isTextblock && node.childCount == 0) {
       ids.push(node.attrs.id)
@@ -316,8 +327,9 @@ function findTextblockHacksIds(node) {
   return ids
 }
 
-export function getAbsentHtmlH(node, schema) {
+export function getAbsentHtmlH(node:Node, schema:Schema) {
   if (!node.attrs.id) {
+    // @ts-ignore
     node.attrs.id = getId()
   }
   const html = generateHTML(getJsonFromDoc(node), schema)
@@ -365,13 +377,17 @@ export function changeComputedHtml() {
   getPageOption(true)
   const { page } = useStore()
   const pageSize = () => {
+    //  @ts-ignore
     const { width, height } = page.value.size
     return {
+      //  @ts-ignore
       width: page.value.orientation === 'portrait' ? width : height,
+      //  @ts-ignore
       height: page.value.orientation === 'portrait' ? height : width,
     }
   }
   const { width, height } = pageSize()
+  //  @ts-ignore
   const { right, left, bottom, top } = page.value.margin
   let pageContent = iframeDoc.getElementById('computeddiv')
   let watermark = iframeDoc.getElementsByClassName('umo-page-watermark')[0]
@@ -402,7 +418,7 @@ function clonePageToIframe() {
   adddPForProseMirror(iframe)
 }
 
-function cleanPagecontent(iframe) {
+function cleanPagecontent(iframe:any) {
   const iframeDoc = iframe.contentDocument || iframe.contentWindow.document
   const pageContent = iframeDoc.getElementsByClassName(
     'umo-page-node-content',
@@ -417,7 +433,7 @@ function cleanPagecontent(iframe) {
   }
 }
 
-function adddPForProseMirror(iframe) {
+function adddPForProseMirror(iframe:any) {
   const iframeDoc = iframe.contentDocument || iframe.contentWindow.document
   const pageContent = iframeDoc.getElementsByClassName('ProseMirror')[0]
   const p = iframeDoc.createElement('p')
@@ -434,7 +450,7 @@ function createIframe() {
   return iframe
 }
 
-function copyStylesToIframe(iframeContentDoc) {
+function copyStylesToIframe(iframeContentDoc:Document) {
   // 获取当前页面的所有样式表
   const links = document.getElementsByTagName('link')
   for (let i = 0; i < links.length; i++) {
@@ -457,13 +473,13 @@ function copyStylesToIframe(iframeContentDoc) {
   })
   const elementsWithInlineStyles = document.querySelectorAll('[style]')
   elementsWithInlineStyles.forEach((element) => {
-    const styleAttr = element.getAttribute('style')
+    const styleAttr = element.getAttribute('style')||""
     const clonedElement = iframeContentDoc.createElement(element.tagName)
     clonedElement.setAttribute('style', styleAttr)
   })
 }
 
-function filterAndCopyHtmlToIframe(iframe, excludedTags) {
+function filterAndCopyHtmlToIframe(iframe:any, excludedTags:string[]) {
   const body = document.body
   const bodyContent = body.innerHTML
 
@@ -484,35 +500,34 @@ function filterAndCopyHtmlToIframe(iframe, excludedTags) {
 export function getId() {
   return Math.random().toString(36).substring(2, 10)
 }
-
+// @ts-ignore
 export const findParentDomRefOfType = (nodeType, domAtPos) => (selection) => {
-  return findParentDomRef(
-    (node) => equalNodeType(nodeType, node),
-    domAtPos,
-  )(selection)
+  // @ts-ignore
+  return findParentDomRef((node) => equalNodeType(nodeType, node),domAtPos,)(selection)
 }
+// @ts-ignore
 export const equalNodeType = (nodeType, node) => {
   return (
     (Array.isArray(nodeType) && nodeType.indexOf(node.type) > -1) ||
     node.type === nodeType
   )
 }
-
+// @ts-ignore
 export const findParentDomRef = (predicate, domAtPos) => (selection) => {
   const parent = findParentNode(predicate)(selection)
   if (parent) {
     return findDomRefAtPos(parent.pos, domAtPos)
   }
 }
-
+// @ts-ignore
 export const findDomRefAtPos = (position, domAtPos) => {
   const dom = domAtPos(position)
   const node = dom.node.childNodes[dom.offset]
-
+// @ts-ignore
   if (dom.node.nodeType === Node.TEXT_NODE) {
     return dom.node.parentNode
   }
-
+// @ts-ignore
   if (!node || node.nodeType === Node.TEXT_NODE) {
     return dom.node
   }
@@ -521,10 +536,12 @@ export const findDomRefAtPos = (position, domAtPos) => {
 }
 
 export const findParentNode =
+  // @ts-ignore
   (predicate) =>
+    // @ts-ignore
   ({ $from }) =>
     findParentNodeClosestToPos($from, predicate)
-
+// @ts-ignore
 export const findParentNodeClosestToPos = ($pos, predicate) => {
   for (let i = $pos.depth; i > 0; i--) {
     const node = $pos.node(i)

@@ -1,4 +1,6 @@
-import { Plugin, PluginKey } from '@tiptap/pm/state'
+import { Plugin, PluginKey,EditorState } from '@tiptap/pm/state'
+import {  EditorView } from "@tiptap/pm/view";
+import { Node } from '@tiptap/pm/model'
 import {
   PAGE,
   TABLE,
@@ -18,11 +20,12 @@ import {
   getPageOption,
 } from './core'
 import { defaultNodesComputed, PageComputedContext } from './computed'
-import { findParentNode } from '@tiptap/core'
+import { findParentNode,Editor } from '@tiptap/core'
+import { NodesComputed, PageState } from '@/extensions/page/types'
 
 let composition = false
 
-function getTotalChildrenHeight(parentElement) {
+function getTotalChildrenHeight(parentElement:Element) {
   let totalHeight = 0
 
   // 遍历所有的子元素
@@ -31,6 +34,7 @@ function getTotalChildrenHeight(parentElement) {
     const child = children[i]
 
     // 获取子元素的高度
+    // @ts-ignore
     const { height } = getDomHeight(child)
     // 累加高度
     totalHeight += height
@@ -41,21 +45,21 @@ function getTotalChildrenHeight(parentElement) {
 }
 
 class PageDetector {
-  #editor
-  #pageClass
+  #editor:Editor
+  #pageClass:string
   #checkPoints = [IMAGE, IFRAME, CODE_BLOCK, TOC, VIDEO]
 
-  constructor(editor, pageClass = '.umo-page-node-content') {
+  constructor(editor:Editor, pageClass = '.umo-page-node-content') {
     this.#editor = editor
     this.#pageClass = pageClass
   }
 
-  isOverflown(childrenHeight) {
+  isOverflown(childrenHeight:number) {
     const { bodyHeight } = getPageOption()
     return childrenHeight > bodyHeight
   }
 
-  checkCriticalPoint(node) {
+  checkCriticalPoint(node:Node) {
     const { childCount, firstChild } = node
     if (
       childCount == 1 &&
@@ -63,12 +67,12 @@ class PageDetector {
       firstChild.childCount == 1
     )
       return true
-    if (childCount == 1 && this.#checkPoints.includes(firstChild.type.name))
+    if (firstChild&&childCount == 1 && this.#checkPoints.includes(firstChild.type.name))
       return true
     return false
   }
 
-  update(view, prevState) {
+  update(view: EditorView, prevState:EditorState) {
     if (composition) return
     const { selection, schema, tr } = view.state
     if (view.state.doc.eq(prevState.doc)) return
@@ -82,7 +86,7 @@ class PageDetector {
     )(selection)
 
     if (!pageDOM) return
-    const pageBody = pageDOM.querySelector(this.#pageClass)
+    const pageBody = (pageDOM as HTMLElement).querySelector(this.#pageClass)
     if (pageBody) {
       let childrenHeight = getTotalChildrenHeight(pageBody)
       deleting =
@@ -106,55 +110,10 @@ class PageDetector {
   }
 }
 
-class PageState {
-  bodyOptions
-  deleting
-  inserting
-  splitPage
-  initSplit
-  scrollHeight
-  runState
 
-  constructor(
-    deleting,
-    inserting,
-    splitPage,
-    initSplit,
-    scrollHeight,
-    runState = true,
-  ) {
-    this.bodyOptions = getPageOption()
-    this.deleting = deleting
-    this.inserting = inserting
-    this.splitPage = splitPage
-    this.initSplit = initSplit
-    this.scrollHeight = scrollHeight
-    this.runState = runState
-  }
-
-  transform(tr) {
-    const splitPage = tr.getMeta('splitPage') || false
-    const initSplit = tr.getMeta('initSplit') || false
-    let deleting = tr.getMeta('deleting') || false
-    let inserting = tr.getMeta('inserting') || false
-    let runState = tr.getMeta('runState')
-    //如果运行状态从false到true时，需要重新计算
-    if (this.runState == false && runState == true) inserting = true
-    runState = typeof runState == 'undefined' ? this.runState : runState
-    const scrollHeight = tr.getMeta('scrollHeight') || this.scrollHeight
-    return new PageState(
-      deleting,
-      inserting,
-      splitPage,
-      initSplit,
-      scrollHeight,
-      runState,
-    )
-  }
-}
 
 export const paginationPluginKey = new PluginKey('pagination')
-export const pagePlugin = (editor, nodesComputed) => {
+export const pagePlugin = (editor: Editor, nodesComputed:NodesComputed) => {
   buildComputedHtml()
   const plugin = new Plugin({
     key: paginationPluginKey,
@@ -195,6 +154,7 @@ export const pagePlugin = (editor, nodesComputed) => {
       },
       transformPasted(slice, view) {
         slice.content.descendants((node) => {
+          // @ts-ignore
           node.attrs.id = getId()
         })
         return slice
@@ -204,7 +164,7 @@ export const pagePlugin = (editor, nodesComputed) => {
   return plugin
 }
 export const idPluginKey = new PluginKey('attrkey')
-export const idPlugin = (types) => {
+export const idPlugin = (types:string[]) => {
   const plugin = new Plugin({
     key: idPluginKey,
     state: {
