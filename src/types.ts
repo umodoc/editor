@@ -1,5 +1,6 @@
 import { NodesComputed } from '@/extensions/page/types'
 import { Extension } from '@tiptap/core'
+import { b } from 'vite/dist/node/types.d-aGj9QkWt'
 
 export interface MarginOption{
   left: number,
@@ -22,12 +23,26 @@ export interface NodesComputedOption{
 }
 
 export interface PageOption{
-  defaultMargin: MarginOption;
-  defaultOrientation: string;
-  defaultBackground: string;
-  watermark:WatermarkOption,
-  nodesComputedOption: NodesComputedOption,
-
+  defaultMargin?: MarginOption;
+  defaultOrientation?: string;
+  defaultBackground?: string;
+  watermark?:WatermarkOption,
+  nodesComputedOption?: NodesComputedOption,
+  size?:any;
+  margin?:any;
+  orientation?: string;
+  background?:string;
+  header?:boolean
+  footer?:boolean;
+  showLineNumber?: boolean,
+  showToc?: boolean,
+  pagination?: boolean,
+  zoomLevel?: number,
+  autoWidth?: boolean,
+  preview?: {
+    enabled?: boolean,
+    laserPointer?: boolean,
+  },
 }
 export interface ToolbarOptions  {
   defaultMode: string,
@@ -72,7 +87,7 @@ export type UmoEditorOptions = {
   height: string;
   dicts?:any;
   toolbar?: ToolbarOptions;
-  page?:PageOption;
+  page:PageOption;
   document?:DocumentOptions;
   assistant?:Dictionary;
   templates?:any[];

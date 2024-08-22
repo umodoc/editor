@@ -2,10 +2,11 @@ import { defaultOptions, ojbectSchema } from '@/options'
 import shortId from '@/utils/short-id'
 import { changeComputedHtml } from '@/extensions/page/core'
 import { Editor } from '@tiptap/vue-3'
+import { PageOption, UmoEditorOptions } from '@/types'
 export const useStore = createGlobalState(() => {
   const toolbarKey = ref<string>(shortId())
-  const options = ref<any>(defaultOptions)
-  const page = ref<any>({})
+  const options = ref<UmoEditorOptions>(defaultOptions)
+  const page = ref<PageOption>(defaultOptions.page)
   const editor = ref<any>()
   const painter = ref<any>({
     enabled: false,
@@ -93,7 +94,7 @@ export const useStore = createGlobalState(() => {
   }
 
   watch(
-    () => options.value.document.readOnly,
+    () => options.value.document?.readOnly,
     async (val) => {
       editor.value.setEditable(!val)
       toolbarKey.value = shortId()
