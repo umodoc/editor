@@ -137,7 +137,6 @@ watch(
     position: relative;
     box-shadow: unset !important;
     margin: 0 !important;
-    page-break-after: always;
     overflow: hidden;
   }
 
@@ -148,6 +147,9 @@ watch(
     cursor: row-resize;
     margin-top: -20px;
     z-index: 5;
+    @media print {
+      display: none;
+    }
   }
 
   .umo-page-watermark {
