@@ -1,8 +1,18 @@
-import { Extension, findParentNode } from '@tiptap/core'
+import { Editor, Extension, findParentNode } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
 import { LIST_TYPE } from '@/extensions/page/node-names'
+declare module "@tiptap/core" {
+  interface Commands<ReturnType> {
+    setCurrentNodeSelection:{
+      setCurrentNodeSelection:()=>ReturnType;
+    };
+    deleteSelectionNode:{
+      deleteSelectionNode:()=>ReturnType;
+    }
 
+  }
+}
 export default Extension.create({
   name: 'selection',
   addProseMirrorPlugins() {
@@ -33,32 +43,6 @@ export default Extension.create({
   },
   addCommands() {
     return {
-      getSelectionText:
-        () =>
-        ({ editor }) => {
-          const { from, to, empty } = editor.state.selection
-          if (empty) {
-            return ''
-          }
-          return editor.state.doc.textBetween(from, to, '')
-        },
-      getSelectionNode:
-        () =>
-        ({ editor, chain }) => {
-          const { node } = editor.state.selection
-          if (node) {
-            return node
-          }
-          let parentNode = findParentNode((node) =>
-            LIST_TYPE.includes(node.type.name),
-          )(editor.state.selection)
-          const { $anchor } = editor.state.selection
-          if (parentNode) {
-            return $anchor.node(parentNode.depth)
-          }
-          editor.commands.selectParentNode()
-          return editor.state.selection.node
-        },
       setCurrentNodeSelection:
         () =>
         ({ editor, chain }) => {
@@ -68,6 +52,7 @@ export default Extension.create({
           if (parentNode) {
             return chain().setNodeSelection(parentNode.pos).run()
           }
+          // @ts-ignore
           const { $anchor, node } = editor.state.selection
           const pos = node?.attrs?.vnode
             ? $anchor.pos
@@ -77,9 +62,9 @@ export default Extension.create({
       deleteSelectionNode:
         () =>
         ({ editor, chain }) => {
-          const node = editor.commands.getSelectionNode()
+          const node = getSelectionNode(editor)
           if (!node) {
-            return
+            return false
           }
           if (node.attrs.vnode) {
             if (
@@ -93,14 +78,41 @@ export default Extension.create({
               options.value.onFileDelete(id, src)
             }
             chain().focus().deleteSelection().run()
-            return
+            return true
           }
           if (editor.isActive('table')) {
             chain().focus().deleteTable().run()
-            return
+            return  true
           }
-          chain().focus().deleteNode(node.type.name).run()
+          return  chain().focus().deleteNode(node.type.name).run()
         },
     }
   },
 })
+export function getSelectionNode(editor:Editor){
+  // @ts-ignore
+  const { node } = editor.state.selection
+  if (node) {
+    return node
+  }
+  let parentNode = findParentNode((node) =>
+    LIST_TYPE.includes(node.type.name),
+  )(editor.state.selection)
+  const { $anchor } = editor.state.selection
+  if (parentNode) {
+    return $anchor.node(parentNode.depth)
+  }
+  editor.commands.selectParentNode()
+  // @ts-ignore
+  return editor.state.selection.node
+
+}
+export function getSelectionText(editor:Editor){
+
+  const { from, to, empty } = editor.state.selection
+  if (empty) {
+    return ''
+  }
+  return editor.state.doc.textBetween(from, to, '')
+
+}

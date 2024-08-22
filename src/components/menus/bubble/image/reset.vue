@@ -7,10 +7,12 @@
 </template>
 
 <script setup>
+import { getSelectionNode } from '@/extensions/selection'
+
 const { editor } = useStore()
 
 const resetPosition = () => {
-  const image = editor.value.commands.getSelectionNode()
+  const image = getSelectionNode(editor.value)
   editor.value.commands.updateAttributes(image.type, {
     top: 0,
     left: 0,

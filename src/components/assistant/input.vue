@@ -123,6 +123,7 @@
 
 <script setup>
 import i18n from '@/i18n'
+import { getSelectionText } from '@/extensions/selection'
 
 const { options, editor, assistantBox } = useStore()
 
@@ -143,7 +144,7 @@ const send = async () => {
 
   const payload = {
     lang: i18n.global.locale.value,
-    input: editor.value.commands.getSelectionText(),
+    input: getSelectionText(editor.value),
     command,
     output: 'rich-text',
   }

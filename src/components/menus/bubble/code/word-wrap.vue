@@ -8,10 +8,12 @@
 </template>
 
 <script setup>
+import { getSelectionNode } from '@/extensions/selection'
+
 const { editor } = useStore()
 
 const toggleWordWrap = () => {
-  const codeBlock = editor.value.commands.getSelectionNode()
+  const codeBlock = getSelectionNode(editor.value)
   editor.value.commands.updateAttributes(codeBlock.type, {
     wordWrap: !codeBlock.attrs.wordWrap,
   })

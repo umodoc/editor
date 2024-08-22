@@ -7,10 +7,12 @@
 </template>
 
 <script setup>
+import { getSelectionNode } from '@/extensions/selection'
+
 const { editor } = useStore()
 
 const downloadFile = () => {
-  const node = editor.value?.commands.getSelectionNode()
+  const node = getSelectionNode(editor.value)
   const a = document.createElement('a')
   a.href = node.attrs.url
   a.download = node.attrs.name

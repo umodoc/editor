@@ -69,6 +69,7 @@
 
 <script setup>
 import getId from '@/utils/short-id'
+import { getSelectionNode } from '@/extensions/selection'
 
 const { container, editor, blockMenu } = useStore()
 
@@ -86,7 +87,7 @@ const cutNodeToClipboard = () => {
   document.execCommand('cut')
 }
 const duplicateNode = () => {
-  const selectionNode = editor.value.commands.getSelectionNode()
+  const selectionNode = getSelectionNode(editor.value)
   const getPosition = () => {
     let point = 0
     editor.value.state.doc.descendants((node, pos) => {

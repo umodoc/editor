@@ -13,6 +13,7 @@
 
 <script setup>
 import { languages } from 'prism-code-editor/prism'
+import { getSelectionNode } from '@/extensions/selection'
 
 const { editor } = useStore()
 
@@ -21,7 +22,7 @@ const languageOptions = Object.keys(languages).map((item) => {
 })
 
 const setLanguage = (language) => {
-  const codeBlock = editor.value.commands.getSelectionNode()
+  const codeBlock = getSelectionNode(editor.value)
   editor.value.commands.updateAttributes(codeBlock.type, { language })
 }
 </script>

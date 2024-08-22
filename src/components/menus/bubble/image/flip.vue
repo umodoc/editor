@@ -15,10 +15,12 @@
 </template>
 
 <script setup>
+import { getSelectionNode } from '@/extensions/selection'
+
 const { editor } = useStore()
 
 const setFlip = (flip) => {
-  const image = editor.value.commands.getSelectionNode()
+  const image = getSelectionNode(editor.value)
   const { flipX, flipY } = image.attrs
   if (flip === 'flipX') {
     editor.value.commands.updateAttributes(image.type, {

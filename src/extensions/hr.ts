@@ -2,6 +2,13 @@ import { nodeInputRule } from '@tiptap/core'
 import hr from '@tiptap/extension-horizontal-rule'
 import { TextSelection, NodeSelection } from '@tiptap/pm/state'
 
+declare module "@tiptap/core" {
+  interface Commands<ReturnType> {
+    setHr: {
+      setHr: (option:any) => ReturnType;
+    };
+  }
+}
 export default hr.extend({
   addOptions() {
     return {
@@ -15,9 +22,9 @@ export default hr.extend({
     return [
       {
         tag: 'hr',
-        getAttrs: (element) => {
+      /*  getAttrs: (element) => {
           element.getAttribute('data-type'), element.style.color
-        },
+        },*/
       },
     ]
   },
