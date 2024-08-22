@@ -1,5 +1,4 @@
 import { ObjectDefinition, ObjectSchema } from '@eslint/object-schema'
-import { PropertyDefinition } from '@eslint/object-schema/dist/cjs/types'
 
 // 默认配置
 const defaultOptions:any = {
@@ -286,6 +285,7 @@ const defaultOptions:any = {
     allowedMimeTypes: [],
     maxSize: 1024 * 1024 * 100, // 100M
   },
+  user: {},
   extensions: [],
   translations: {
     en_US: {},
@@ -815,6 +815,10 @@ const ojbectSchema = new ObjectSchema({
       },
     },
   },
+  user: {
+    merge: 'assign',
+    validate: 'object',
+  },
   extensions: {
     merge: 'replace',
     validate: 'array',
@@ -868,6 +872,6 @@ const ojbectSchema = new ObjectSchema({
       }
     },
   },
-} as ObjectDefinition)
+} as unknown as  ObjectDefinition)
 
 export { defaultOptions, propsOptions, ojbectSchema }
