@@ -7,7 +7,7 @@ const { options } = useStore()
 const getLocale = (lang: 'en_US' | 'zh_CN') => {
   const translations = options.value.translations[lang]
   if (typeof translations === 'object') {
-    return translations  
+    return translations
   }
   return {}
 }
