@@ -1,4 +1,4 @@
-export default (shortcut:string) => {
+export default (shortcut: string) => {
   if (!shortcut) {
     return ''
   }

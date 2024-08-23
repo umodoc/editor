@@ -3,21 +3,15 @@ import { Plugin, PluginKey } from '@tiptap/pm/state'
 
 // @tiptap-pro/extension-file-handler
 
-export interface FileHandlePluginOption{
-  key: PluginKey;
-  editor: Editor;
-  onPaste: any;
-  onDrop:  any  ;
-  allowedMimeTypes: string[];
+export interface FileHandlePluginOption {
+  key: PluginKey
+  editor: Editor
+  onPaste: any
+  onDrop: any
+  allowedMimeTypes: string[]
 }
-const FileHandlePlugin = (option: FileHandlePluginOption ) => {
-  const {
-    key,
-      editor,
-      onPaste,
-      onDrop,
-      allowedMimeTypes,
-  }= option
+const FileHandlePlugin = (option: FileHandlePluginOption) => {
+  const { key, editor, onPaste, onDrop, allowedMimeTypes } = option
   return new Plugin({
     key: key || new PluginKey('fileHandler'),
     props: {
@@ -81,10 +75,10 @@ const FileHandlePlugin = (option: FileHandlePluginOption ) => {
     },
   })
 }
-export interface FileHandlerOption{
-  onPaste: any;
-  onDrop: any;
-  allowedMimeTypes: string[];
+export interface FileHandlerOption {
+  onPaste: any
+  onDrop: any
+  allowedMimeTypes: string[]
 }
 const FileHandler = Extension.create<FileHandlerOption>({
   name: 'fileHandler',

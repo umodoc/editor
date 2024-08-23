@@ -33,7 +33,7 @@ const options = {
     },
   ],
   shareUrl: 'https://umodoc.com',
-  onSave(content:any, page:any, document:any) {
+  onSave(content: any, page: any, document: any) {
     console.log('onSave', { content, page, document })
     localStorage.setItem('document.content', document.content)
     return new Promise((resolve, reject) => {
@@ -47,7 +47,7 @@ const options = {
     })
   },
 
-  async onFileUpload(file:any) {
+  async onFileUpload(file: any) {
     if (!file) throw new Error('没有找到要上传的文件')
     console.log('onUpload', file)
     await new Promise((resolve) => setTimeout(resolve, 3000))

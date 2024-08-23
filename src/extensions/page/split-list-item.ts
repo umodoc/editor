@@ -9,14 +9,14 @@ import { canSplit } from '@tiptap/pm/transform'
 import { getNodeType } from '@tiptap/core'
 import { getSplittedAttributes } from './index'
 import { getId } from './core'
-import { RawCommands } from "@tiptap/vue-3";
+import { RawCommands } from '@tiptap/vue-3'
 
 /**
  * 覆盖系统默认分割方法
  * @param typeOrName
  */
-export const splitListItem: RawCommands["splitListItem"]  =
-  (typeOrName:string | NodeType) =>
+export const splitListItem: RawCommands['splitListItem'] =
+  (typeOrName: string | NodeType) =>
   ({ tr, state, dispatch, editor }) => {
     const type = getNodeType(typeOrName, state.schema)
     const { $from, $to } = state.selection
@@ -66,7 +66,9 @@ export const splitListItem: RawCommands["splitListItem"]  =
           $from.node().attrs,
         )
         // @ts-ignore
-        const nextType =type.contentMatch.defaultType.createAndFill(newNextTypeAttributes) || undefined
+        const nextType =
+          type.contentMatch.defaultType.createAndFill(newNextTypeAttributes) ||
+          undefined
 
         wrap = wrap.append(
           Fragment.from(type.createAndFill(null, nextType) || undefined),

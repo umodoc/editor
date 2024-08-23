@@ -2,9 +2,10 @@ import {
   mergeAttributes,
   findChildrenInRange,
   findParentNode,
-  Node, SingleCommands
+  Node,
+  SingleCommands,
 } from '@tiptap/core'
-import { ExtensionAttribute } from "@tiptap/vue-3";
+import { ExtensionAttribute } from '@tiptap/vue-3'
 import {
   PAGE,
   BULLETLIST,
@@ -38,24 +39,22 @@ import NodeView from './node-view.vue'
 import { ReplaceStep } from '@tiptap/pm/transform'
 import { PageOptions } from '@/extensions/page/types'
 
-declare module "@tiptap/core" {
+declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     setPageBreak: {
       /**
        * Splits one list item into two list items.
        */
-      setPageBreak: () => ReturnType;
-    };
+      setPageBreak: () => ReturnType
+    }
     autoPaging: {
       /**
        * Splits one list item into two list items.
        */
-      autoPaging: (status:boolean|undefined) => ReturnType;
-    };
-
+      autoPaging: (status: boolean | undefined) => ReturnType
+    }
   }
 }
-
 
 const types = [
   HEADING,
@@ -233,7 +232,7 @@ export default Node.create<PageOptions>({
                   pageNode.start - 2,
                   pageNode.start - 2,
                 )
-                const beforePageNode:any = findParentNode(
+                const beforePageNode: any = findParentNode(
                   (node) => node.type.name === PAGE,
                 )(vm)
                 if (beforePageNode) {
@@ -353,10 +352,10 @@ export default Node.create<PageOptions>({
 })
 
 export function getSplittedAttributes(
-  extensionAttributes:ExtensionAttribute[],
+  extensionAttributes: ExtensionAttribute[],
   typeName: string,
   attributes: Record<string, any>,
-): Record<string, any>  {
+): Record<string, any> {
   return Object.fromEntries(
     Object.entries(attributes).filter(([name]) => {
       const extensionAttribute = extensionAttributes.find((item) => {
@@ -372,7 +371,7 @@ export function getSplittedAttributes(
   )
 }
 
-const deleteSelection = (commands:SingleCommands) => {
+const deleteSelection = (commands: SingleCommands) => {
   return commands.command(({ tr }) => {
     const { selection, doc } = tr
     const nodesInChangedRanges = findChildrenInRange(

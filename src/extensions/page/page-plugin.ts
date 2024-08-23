@@ -1,5 +1,5 @@
-import { Plugin, PluginKey,EditorState } from '@tiptap/pm/state'
-import {  EditorView } from "@tiptap/pm/view";
+import { Plugin, PluginKey, EditorState } from '@tiptap/pm/state'
+import { EditorView } from '@tiptap/pm/view'
 import { Node } from '@tiptap/pm/model'
 import {
   PAGE,
@@ -20,12 +20,12 @@ import {
   getPageOption,
 } from './core'
 import { defaultNodesComputed, PageComputedContext } from './computed'
-import { findParentNode,Editor } from '@tiptap/core'
+import { findParentNode, Editor } from '@tiptap/core'
 import { NodesComputed, PageState } from '@/extensions/page/types'
 
 let composition = false
 
-function getTotalChildrenHeight(parentElement:Element) {
+function getTotalChildrenHeight(parentElement: Element) {
   let totalHeight = 0
 
   // 遍历所有的子元素
@@ -45,21 +45,21 @@ function getTotalChildrenHeight(parentElement:Element) {
 }
 
 class PageDetector {
-  #editor:Editor
-  #pageClass:string
+  #editor: Editor
+  #pageClass: string
   #checkPoints = [IMAGE, IFRAME, CODE_BLOCK, TOC, VIDEO]
 
-  constructor(editor:Editor, pageClass = '.umo-page-node-content') {
+  constructor(editor: Editor, pageClass = '.umo-page-node-content') {
     this.#editor = editor
     this.#pageClass = pageClass
   }
 
-  isOverflown(childrenHeight:number) {
+  isOverflown(childrenHeight: number) {
     const { bodyHeight } = getPageOption()
     return childrenHeight > bodyHeight
   }
 
-  checkCriticalPoint(node:Node) {
+  checkCriticalPoint(node: Node) {
     const { childCount, firstChild } = node
     if (
       childCount == 1 &&
@@ -67,12 +67,16 @@ class PageDetector {
       firstChild.childCount == 1
     )
       return true
-    if (firstChild&&childCount == 1 && this.#checkPoints.includes(firstChild.type.name))
+    if (
+      firstChild &&
+      childCount == 1 &&
+      this.#checkPoints.includes(firstChild.type.name)
+    )
       return true
     return false
   }
 
-  update(view: EditorView, prevState:EditorState) {
+  update(view: EditorView, prevState: EditorState) {
     if (composition) return
     const { selection, schema, tr } = view.state
     if (view.state.doc.eq(prevState.doc)) return
@@ -110,10 +114,8 @@ class PageDetector {
   }
 }
 
-
-
 export const paginationPluginKey = new PluginKey('pagination')
-export const pagePlugin = (editor: Editor, nodesComputed:NodesComputed) => {
+export const pagePlugin = (editor: Editor, nodesComputed: NodesComputed) => {
   buildComputedHtml()
   const plugin = new Plugin({
     key: paginationPluginKey,
@@ -164,7 +166,7 @@ export const pagePlugin = (editor: Editor, nodesComputed:NodesComputed) => {
   return plugin
 }
 export const idPluginKey = new PluginKey('attrkey')
-export const idPlugin = (types:string[]) => {
+export const idPlugin = (types: string[]) => {
   const plugin = new Plugin({
     key: idPluginKey,
     state: {

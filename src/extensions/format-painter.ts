@@ -3,15 +3,14 @@ import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Mark } from '@tiptap/pm/model'
 const { painter, setPainter } = useStore()
 
-declare module "@tiptap/core" {
+declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     setFormatPainter: {
-      setFormatPainter: (once:any) => ReturnType;
-    };
+      setFormatPainter: (once: any) => ReturnType
+    }
     unsetFormatPainter: {
-      unsetFormatPainter: () => ReturnType;
-    };
-
+      unsetFormatPainter: () => ReturnType
+    }
   }
 }
 
@@ -43,7 +42,7 @@ export default Extension.create({
             once: true,
             marks: [],
           })
-           view.dispatch(tr.setMeta('painterAction', { type: 'end' }))
+          view.dispatch(tr.setMeta('painterAction', { type: 'end' }))
           return true
         },
     }
@@ -68,7 +67,7 @@ export default Extension.create({
         props: {
           handleDOMEvents: {
             mousedown(view, event) {
-              const marks:Mark[]|undefined = this.getState(view.state)
+              const marks: Mark[] | undefined = this.getState(view.state)
               if (!marks || marks.length === 0) {
                 return false // 如果没有标记，则不执行任何操作
               }

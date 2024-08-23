@@ -5,7 +5,7 @@ import { re } from 'prism-code-editor/prism/utils/shared'
 
 const { options } = useStore()
 
-const mimeTypes:any = {
+const mimeTypes: any = {
   image: [
     'image/jpeg',
     'image/png',
@@ -18,7 +18,7 @@ const mimeTypes:any = {
   audio: ['audio/mp3', 'audio/wav', 'audio/ogg', 'audio/aac', 'audio/flac'],
 }
 
-const getAccept = (type:string) => {
+const getAccept = (type: string) => {
   const accept = options.value.file.allowedMimeTypes
   if (type === 'file' && accept.length === 0) {
     return ''
@@ -30,24 +30,23 @@ const getAccept = (type:string) => {
   if (acceptArray.includes(`${type}/*`) || accept.length === 0) {
     acceptArray = mimeTypes[type]
   } else if (acceptArray.filter((item) => item.startsWith(type)).length > 0) {
-    acceptArray = accept.filter((item:any) => mimeTypes[type].includes(item))
+    acceptArray = accept.filter((item: any) => mimeTypes[type].includes(item))
   } else {
     acceptArray = ['notAllow']
   }
   return acceptArray.length === 0 ? '' : acceptArray.toString()
 }
-declare module "@tiptap/core" {
+declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     setFile: {
-      setFile: (options: any) => ReturnType;
-    };
+      setFile: (options: any) => ReturnType
+    }
     insertFile: {
-      insertFile: (options: any) => ReturnType;
-    };
+      insertFile: (options: any) => ReturnType
+    }
     selectFiles: {
-      selectFiles: (options: any) => ReturnType;
-    };
-
+      selectFiles: (options: any) => ReturnType
+    }
   }
 }
 export default Node.create({
@@ -134,7 +133,7 @@ export default Node.create({
             nodeType = 'audio'
           }
           // 插入节点
-         return  commands.insertContentAt(position, {
+          return commands.insertContentAt(position, {
             type: nodeType,
             attrs: {
               [nodeType === 'file' ? 'url' : 'src']: URL.createObjectURL(file),
@@ -170,7 +169,7 @@ export default Node.create({
           let bool = false
           // 插入文件
           onChange((fileList) => {
-            const files = Array.from(fileList||[])
+            const files = Array.from(fileList || [])
             if (!files) {
               return
             }

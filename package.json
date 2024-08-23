@@ -117,9 +117,9 @@
     "@vue/eslint-config-prettier": "^9.0.0",
     "eslint": "^9.8.0",
     "eslint-plugin-vue": "^9.27.0",
-    "husky": "^9.1.4",
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
+    "pre-commit": "^1.2.2",
     "prettier": "^3.3.3",
     "tdesign-vue-next": "^1.9.8",
     "typescript": "^5.5.4",
@@ -133,9 +133,7 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run format"
-    }
-  }
+  "pre-commit": [
+    "format"
+  ]
 }

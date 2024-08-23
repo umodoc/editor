@@ -4,7 +4,7 @@ import en_US from './locales/en-US.json'
 
 const { options } = useStore()
 
-const getLocale = (lang:"en_US"|"zh_CN") => {
+const getLocale = (lang: 'en_US' | 'zh_CN') => {
   const translations = options.value.translations[lang]
   if (typeof translations === 'object') {
     return translations
@@ -12,11 +12,11 @@ const getLocale = (lang:"en_US"|"zh_CN") => {
   return {}
 }
 
-const deepMerge = (target:any, ...sources:any) => {
+const deepMerge = (target: any, ...sources: any) => {
   if (typeof target !== 'object' || target === null) {
     target = {}
   }
-  sources.forEach((source:any) => {
+  sources.forEach((source: any) => {
     if (source !== null && typeof source === 'object') {
       Object.keys(source).forEach((key) => {
         if (source[key] && typeof source[key] === 'object') {

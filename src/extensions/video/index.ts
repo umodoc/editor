@@ -1,11 +1,11 @@
 import { Node, mergeAttributes } from '@tiptap/core'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import NodeView from './node-view.vue'
-declare module "@tiptap/core" {
+declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     setVideo: {
-      setVideo: (options:any) => ReturnType;
-    };
+      setVideo: (options: any) => ReturnType
+    }
   }
 }
 export default Node.create({

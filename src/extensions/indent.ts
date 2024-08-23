@@ -1,15 +1,14 @@
 import { Extension } from '@tiptap/core'
 import { TextSelection, AllSelection, Transaction } from '@tiptap/pm/state'
 
-declare module "@tiptap/core" {
+declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     indent: {
-      indent: () => ReturnType;
-    };
+      indent: () => ReturnType
+    }
     outdent: {
-      outdent: () => ReturnType;
-    };
-
+      outdent: () => ReturnType
+    }
   }
 }
 // @weiruo/tiptap-extension-indent Version:2.0.4-1
@@ -63,7 +62,11 @@ export default Extension.create({
     ]
   },
   addCommands() {
-    const setNodeIndentMarkup = (tr:Transaction, pos:number, delta:number) => {
+    const setNodeIndentMarkup = (
+      tr: Transaction,
+      pos: number,
+      delta: number,
+    ) => {
       const node = tr?.doc?.nodeAt(pos) || null
       if (node) {
         const nextLevel = (node.attrs.indent || 0) + delta
@@ -83,7 +86,7 @@ export default Extension.create({
       }
       return tr
     }
-    const updateIndentLevel = (tr:Transaction, delta:number) => {
+    const updateIndentLevel = (tr: Transaction, delta: number) => {
       const { doc, selection } = tr
       if (
         doc &&
@@ -103,9 +106,9 @@ export default Extension.create({
       return tr
     }
     const applyIndent =
-      (direction:number) =>
+      (direction: number) =>
       () =>
-        //@ts-ignore
+      //@ts-ignore
       ({ tr, state, dispatch }) => {
         const { selection } = state
         tr = tr.setSelection(selection)

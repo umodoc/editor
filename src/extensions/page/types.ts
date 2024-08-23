@@ -1,49 +1,58 @@
 import { NodeViewRenderer } from '@tiptap/core'
-import { Node, NodeType, Schema,Attrs } from '@tiptap/pm/model'
+import { Node, NodeType, Schema, Attrs } from '@tiptap/pm/model'
 import { SplitContext } from '@/extensions/page/computed'
 import { getPageOption } from '@/extensions/page/core'
 import { Transaction } from '@tiptap/pm/state'
 
-export type ComputedFn = (splitContex: SplitContext, node: Node, pos: number, parent: Node | null, dom: HTMLElement,startIndex:number, forcePageId:string, i:number) => boolean;
-export type NodesComputed = Record<string, ComputedFn>;
+export type ComputedFn = (
+  splitContex: SplitContext,
+  node: Node,
+  pos: number,
+  parent: Node | null,
+  dom: HTMLElement,
+  startIndex: number,
+  forcePageId: string,
+  i: number,
+) => boolean
+export type NodesComputed = Record<string, ComputedFn>
 
 export type PageOptions = {
-  SystemAttributes: Record<string, any>;
-  nodesComputed: NodesComputed,
-  View: NodeViewRenderer,
-  types: string[],
-  slots: any,
+  SystemAttributes: Record<string, any>
+  nodesComputed: NodesComputed
+  View: NodeViewRenderer
+  types: string[]
+  slots: any
 }
 
 export type SplitInfo = {
-  pos: number;
-  depth: number;
-  attributes?: Record<string, any>;
-};
+  pos: number
+  depth: number
+  attributes?: Record<string, any>
+}
 
 export type SplitParams = {
-  pos: number;
-  depth?: number;
-  typesAfter?: ({ type: NodeType; attrs?: Attrs | null } | null)[];
-  schema: Schema<any, any>;
-  force:boolean
-};
+  pos: number
+  depth?: number
+  typesAfter?: ({ type: NodeType; attrs?: Attrs | null } | null)[]
+  schema: Schema<any, any>
+  force: boolean
+}
 
 export class PageState {
-  bodyOptions:any;
-  deleting:boolean;
-  inserting:boolean;
-  splitPage:boolean;
-  initSplit:boolean;
-  scrollHeight:number=0;
-  runState:boolean;
+  bodyOptions: any
+  deleting: boolean
+  inserting: boolean
+  splitPage: boolean
+  initSplit: boolean
+  scrollHeight: number = 0
+  runState: boolean
 
   constructor(
-    deleting:boolean,
-    inserting:boolean,
-    splitPage:boolean,
-    initSplit:boolean,
-    scrollHeight:number,
+    deleting: boolean,
+    inserting: boolean,
+    splitPage: boolean,
+    initSplit: boolean,
+    scrollHeight: number,
     runState = true,
   ) {
     this.bodyOptions = getPageOption()
@@ -55,7 +64,7 @@ export class PageState {
     this.runState = runState
   }
 
-  transform(tr:Transaction) {
+  transform(tr: Transaction) {
     const splitPage = tr.getMeta('splitPage') || false
     const initSplit = tr.getMeta('initSplit') || false
     let deleting = tr.getMeta('deleting') || false

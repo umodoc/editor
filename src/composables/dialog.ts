@@ -1,14 +1,14 @@
 import { DialogPlugin, MessagePlugin } from 'tdesign-vue-next'
 const { container } = useStore()
 
-export const useAlert = (parmas:any) => {
+export const useAlert = (parmas: any) => {
   return DialogPlugin.alert({
     attach: container,
     placement: 'center',
     ...parmas,
   })
 }
-export const useConfirm = (parmas:any) => {
+export const useConfirm = (parmas: any) => {
   return DialogPlugin.confirm({
     attach: container,
     placement: 'center',

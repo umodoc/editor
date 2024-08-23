@@ -5,7 +5,7 @@ import UmoTooltip from './tooltip.vue'
 import UmoDialog from './modal.vue'
 
 const useUmoEditor = {
-  install: (app:any, options:any) => {
+  install: (app: any, options: any) => {
     // 组件配置
     const { setOptions } = useStore()
     setOptions(options)

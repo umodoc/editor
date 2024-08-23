@@ -3,7 +3,7 @@ import shortId from '@/utils/short-id'
 import { changeComputedHtml } from '@/extensions/page/core'
 import { Editor } from '@tiptap/vue-3'
 import { PageOption, UmoEditorOptions } from '@/types'
-type KeyValuePair<T> = { [K in keyof T]?: T[K] };
+type KeyValuePair<T> = { [K in keyof T]?: T[K] }
 export const useStore = createGlobalState(() => {
   const toolbarKey = ref<string>(shortId())
   const options = ref<UmoEditorOptions>(defaultOptions)
@@ -27,11 +27,11 @@ export const useStore = createGlobalState(() => {
   const hidePageHeader = ref(true)
   const hidePageFooter = ref(true)
   const editorDestroyed = ref(false)
-  const setOptions = (value:any) => {
+  const setOptions = (value: any) => {
     const opts = value?.value || value
     options.value = ojbectSchema.merge(
       options.value,
-      Object.keys(opts).reduce((acc:any, key) => {
+      Object.keys(opts).reduce((acc: any, key) => {
         if (opts[key] !== undefined) {
           acc[key] = opts[key]
         }
@@ -40,7 +40,7 @@ export const useStore = createGlobalState(() => {
     )
     return options.value
   }
-//@ts-ignore
+  //@ts-ignore
   const setPainter = ({ enabled, once, marks }) => {
     painter.value.enabled = enabled
     painter.value.once = once
@@ -51,7 +51,7 @@ export const useStore = createGlobalState(() => {
     () => options.value.page,
     ({ defaultBackground, defaultMargin, defaultOrientation, watermark }) => {
       page.value = {
-        size: options.value.dicts.pageSizes.find((item:any) => item.default),
+        size: options.value.dicts.pageSizes.find((item: any) => item.default),
         margin: defaultMargin,
         background: defaultBackground,
         orientation: defaultOrientation,
@@ -84,7 +84,7 @@ export const useStore = createGlobalState(() => {
     { deep: true },
   )
 
-  const setEditor = (editorInstance:Editor) => (editor.value = editorInstance)
+  const setEditor = (editorInstance: Editor) => (editor.value = editorInstance)
   const resetStore = () => {
     editor.value = null
     tableOfContents.value = []
