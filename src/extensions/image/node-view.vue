@@ -197,7 +197,7 @@ watch(
     max-width: 100%;
     width: auto;
     position: relative;
-    z-index: 20s;
+    z-index: 20;
     &.is-loading,
     &.is-error {
       outline: none !important;
