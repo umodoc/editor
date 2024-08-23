@@ -139,8 +139,8 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,vue,less,css}": [
-      "npm run lint",
-      "npm run format"
+      "eslint --fix src/",
+      "prettier --write src/"
     ]
   },
   "husky": {
