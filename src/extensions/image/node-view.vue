@@ -11,6 +11,7 @@
       :class="{
         'is-loading': node.attrs.src && isLoading,
         'is-error': node.attrs.src && error,
+        'is-draggable': node.attrs.draggable,
       }"
     >
       <div
@@ -195,12 +196,14 @@ watch(
   .umo-node-image {
     max-width: 100%;
     width: auto;
+    position: relative;
+    z-index: 20s;
     &.is-loading,
     &.is-error {
       outline: none !important;
       box-shadow: none !important;
     }
-    .es-drager {
+    &:not(.is-draggable) .es-drager {
       max-width: 100%;
       max-height: 100%;
     }
