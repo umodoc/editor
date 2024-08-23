@@ -314,7 +314,7 @@ const defaultOptions: UmoEditorOptions = {
       'Key "onCustomImportWordMethod": Please set the onAssistant method',
     )
   },
-} 
+}
 
 // 组件 props 所需格式
 const propsOptions = Object.keys(defaultOptions)
