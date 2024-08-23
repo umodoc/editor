@@ -44,7 +44,7 @@
   },
   "scripts": {
     "dev": "vite --port 9000 --open --force",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx,.vue --fix --ignore-path .gitignore",
+    "lint": "eslint --fix src/",
     "format": "prettier --write src/",
     "build": "vite build",
     "prepare": "husky install",
@@ -109,6 +109,8 @@
     "zeed-dom": "^0.13.3"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.9.0",
     "@intlify/unplugin-vue-i18n": "^4.0.0",
     "@sereneinserenade/tiptap-search-and-replace": "^0.1.1",
     "@tiptap-pro/extension-mathematics": "^2.10.5",
@@ -136,9 +138,14 @@
     "node": ">=18.0.0"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,vue}": [
-      "eslint --fix",
-      "prettier --write"
+    "*.{js,jsx,ts,tsx,vue,less,css}": [
+      "npm run lint",
+      "npm run format"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }

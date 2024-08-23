@@ -383,15 +383,15 @@ const getImage = async (format = 'blob') => {
   try {
     page.value.zoomLevel = 100
     const node = document.querySelector(`${container} .umo-page-content`)
-    if ((format = 'blob')) {
+    if (format === 'blob') {
       const blob = await toBlob(node)
       return blob
     }
-    if ((format = 'jpeg')) {
+    if (format === 'jpeg') {
       const image = await toJpeg(node)
       return image
     }
-    if ((format = 'png')) {
+    if (format === 'png') {
       const image = await toPng(node)
       return image
     }
