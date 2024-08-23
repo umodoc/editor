@@ -7,7 +7,7 @@ import { useUmoEditor, UmoEditor } from './components'
 // 插件打包测试
 // import UmoEditor from '../dist/umo-editor'
 
-const app = createApp(App)
+const app = createApp(App) 
 
 // @umoteam/editor
 const options = {
