@@ -1,9 +1,5 @@
 <template>
-  <node-view-wrapper
-    class="umo-node-view"
-    :style="nodeStyle"
-    :id="node.attrs.id"
-  >
+  <node-view-wrapper class="umo-node-view" :id="node.attrs.id">
     <div
       class="umo-node-container umo-hover-shadow umo-select-outline umo-node-code-block"
       :class="node.attrs.theme"
@@ -97,6 +93,7 @@ onMounted(() => {
     lineNumbers: node.attrs.lineNumbers,
     wordWrap: node.attrs.wordWrap,
     value: code,
+    focusd: true,
     onUpdate(value) {
       updateAttributes({ code: value })
     },
@@ -148,7 +145,7 @@ watch(
       font-size: 12px;
       padding: 3px 6px;
       cursor: pointer;
-      background-color: #fff;
+      background-color: var(--umo-color-white);
       border: solid 1px var(--umo-border-color);
       z-index: 10;
       border-radius: var(--umo-radius);
@@ -175,13 +172,15 @@ watch(
   max-height: 560px;
   font-size: 14px;
   .umo-scrollbar();
+  textarea {
+    caret-color: var(--umo-color-black);
+  }
   textarea[aria-readonly='true'] {
     caret-color: transparent;
   }
 }
 .dark > {
   .prism-code-editor {
-    caret-color: #2f81f7;
     font-family: var(--umo-content-code-family);
     --editor__bg: #0d1117;
     --widget__border: #303741;
@@ -205,9 +204,12 @@ watch(
     color-scheme: dark;
     color: #fff;
   }
-  textarea::selection {
-    color: #0000;
-    background: #264f78;
+  textarea {
+    caret-color: var(--umo-color-white);
+    &::selection {
+      color: #0000;
+      background: #264f78;
+    }
   }
   .pce-matches .match {
     --search__bg-find: #8c8d6c;
