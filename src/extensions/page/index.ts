@@ -117,21 +117,6 @@ export default Node.create<PageOptions>({
       },
     }
   },
-  // addGlobalAttributes() {
-  //   return [
-  //     {
-  //       attributes: {
-  //         slots: {
-  //           default: this.options.slots,
-  //           parseHTML: (element) => '',
-  //           renderHTML: (attributes) => {
-  //             return { x: 1 }
-  //           },
-  //         },
-  //       },
-  //     },
-  //   ]
-  // },
 
   parseHTML() {
     return [
