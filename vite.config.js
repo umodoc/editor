@@ -61,7 +61,7 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: process.cwd() + '/src/components/index.js',
+      entry: process.cwd() + '/src/components/index.ts',
       name: pkg.name,
       fileName: 'umo-editor',
     },
