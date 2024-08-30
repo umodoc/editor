@@ -9,3 +9,4 @@ imports.d.ts
 vite.config.js.timestamp*
 *.log
 .idea
+pnpm-lock.yaml
