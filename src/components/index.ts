@@ -1,8 +1,9 @@
 import 'virtual:svg-icons-register'
+
 import UmoEditor from './index.vue'
 import UmoMenuButton from './menus/button.vue'
-import UmoTooltip from './tooltip.vue'
 import UmoDialog from './modal.vue'
+import UmoTooltip from './tooltip.vue'
 
 const useUmoEditor = {
   install: (app: any, options: any) => {
@@ -16,9 +17,9 @@ const useUmoEditor = {
 
 export {
   UmoEditor as default,
-  useUmoEditor,
+  UmoDialog,
   UmoEditor,
   UmoMenuButton,
   UmoTooltip,
-  UmoDialog,
+  useUmoEditor,
 }

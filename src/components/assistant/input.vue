@@ -6,9 +6,9 @@
       </div>
       <t-textarea
         ref="inputRef"
-        class="input"
         v-model="command"
-        :maxlength="options.assistant.maxlength"
+        class="input"
+        :maxlength="options.assistant?.maxlength"
         :readonly="generating"
         autocomplete="false"
         :placeholder="t('assistant.placeholder')"
@@ -44,17 +44,17 @@
         <div class="title" v-text="t('assistant.commands')"></div>
         <div class="commands">
           <t-button
-            v-for="(item, index) in options.assistant.commands"
+            v-for="(item, index) in options.assistant?.commands"
             :key="index"
             size="small"
             variant="outline"
             theme="default"
-            v-text="l(item.label)"
             @click="insertCommand(item)"
+            v-text="l(item.label)"
           ></t-button>
         </div>
       </div>
-      <div class="result-container" v-if="result.content !== ''">
+      <div v-if="result.content !== ''" class="result-container">
         <div class="title" v-text="t('assistant.result')"></div>
         <div
           class="result umo-editor-container"
@@ -121,74 +121,98 @@
   </div>
 </template>
 
-<script setup>
-import i18n from '@/i18n'
+<script setup lang="ts">
+import { ref } from 'vue'
+
 import { getSelectionText } from '@/extensions/selection'
+
+interface Result {
+  prompt: string
+  content: string
+  error: boolean
+}
+
+interface CommandItem {
+  label: string
+  value: string
+  autoSend?: boolean
+}
+
+interface Payload {
+  lang: string
+  input: string
+  command: string
+  output: string
+}
+
+interface Content {
+  html: string
+  text: string
+  json: unknown
+}
 
 const { options, editor, assistantBox } = useStore()
 
-const inputRef = $ref(null)
-let command = $ref('')
-let result = $ref({
+const inputRef = ref<HTMLElement | null>(null)
+const command = ref<string>('')
+const result = ref<Result>({
   prompt: '',
   content: '',
   error: false,
 })
-let generating = $ref(false)
+const generating = ref<boolean>(false)
 
 const send = async () => {
-  generating = true
-  result.error = false
-  result.prompt = ''
-  result.content = ''
+  generating.value = true
+  result.value.error = false
+  result.value.prompt = ''
+  result.value.content = ''
 
-  const payload = {
+  const payload: Payload = {
     lang: i18n.global.locale.value,
     input: getSelectionText(editor.value),
-    command,
+    command: command.value,
     output: 'rich-text',
   }
-  const content = {
+
+  const content: Content = {
     html: editor.value.getHTML(),
     text: editor.value.getText(),
     json: editor.value.getJSON(),
   }
 
-  // 获取 onAssistant 返回的数据
   try {
-    const data = await options.value.onAssistant(payload, content)
-    // 错误处理
+    const data = await options.value.onAssistant?.(payload, content)
     const errorHandler = () => {
-      if (result.content.startsWith('[ERROR]: ')) {
-        result.error = true
-        result.content = result.content.replace('[ERROR]: ', '')
+      if (result.value.content.startsWith('[ERROR]: ')) {
+        result.value.error = true
+        result.value.content = result.value.content.replace('[ERROR]: ', '')
       }
     }
-    // 如果是可读流
+
     if (data instanceof ReadableStream) {
-      // 创建可写流
       const stream = new WritableStream({
         write(chunk) {
           errorHandler()
-          result.content += chunk
+          result.value.content += chunk
         },
         close() {
-          generating = false
-          result.command = command
+          generating.value = false
+          result.value.command = command.value
         },
       })
-      // 将可读流写入可写流
       data.pipeTo(stream)
       return
     }
-    // 如果是纯文本
+
     if (typeof data === 'string') {
-      generating = false
-      result.command = command
+      generating.value = false
+      result.value.command = command.value
       errorHandler()
-      result.content = data
+      result.value.content = data
       return
     }
+
     console.error(
       'onAssistant method returns data in an incorrect format, it can be a ReadableStream or plain text.',
     )
@@ -206,11 +230,11 @@ const send = async () => {
   }
 }
 
-const insertCommand = ({ value, autoSend }) => {
-  command = l(value)
-  result.command = l(value)
-  result.content = ''
-  inputRef.focus()
+const insertCommand = ({ value, autoSend }: CommandItem) => {
+  command.value = l(value)
+  result.value.command = l(value)
+  result.value.content = ''
+  inputRef.value?.focus()
   if (autoSend !== false) {
     send()
   }
@@ -222,40 +246,40 @@ const exitAssistant = () => {
 }
 
 const replaceContent = () => {
-  editor.value.chain().insertContent(result.content).run()
+  editor.value.chain().insertContent(result.value.content).run()
   exitAssistant()
 }
 
 const insertContentAtAfter = () => {
   const { to } = editor.value.state.selection
-  editor.value.chain().insertContentAt(to, result.content).focus().run()
+  editor.value.chain().insertContentAt(to, result.value.content).focus().run()
   exitAssistant()
 }
 
 const insertContentAtBelow = () => {
   editor.value.commands.selectParentNode()
   const { to } = editor.value.state.selection
-  editor.value.chain().insertContentAt(to, result.content).focus().run()
+  editor.value.chain().insertContentAt(to, result.value.content).focus().run()
   exitAssistant()
 }
 
 const copyResult = () => {
   const { copy } = useClipboard({
-    source: ref(result.content),
+    source: ref(result.value.content),
   })
   copy()
   useMessage('success', t('assistant.copySuccess'))
 }
 
 const rewrite = () => {
-  command = result.command
+  command.value = result.value.command
   send()
 }
 
 const deleteResult = () => {
-  command = ''
-  result.prompt = ''
-  result.content = ''
+  command.value = ''
+  result.value.prompt = ''
+  result.value.content = ''
 }
 </script>
 

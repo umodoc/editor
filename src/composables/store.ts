@@ -1,15 +1,16 @@
-import { defaultOptions, ojbectSchema } from '@/options'
-import shortId from '@/utils/short-id'
+import type { Editor } from '@tiptap/vue-3'
+
 import { changeComputedHtml } from '@/extensions/page/core'
-import { Editor } from '@tiptap/vue-3'
-import { PageOption, UmoEditorOptions } from '@/types'
+import { defaultOptions, ojbectSchema } from '@/options'
+import type { PageOption, UmoEditorOptions } from '@/types'
+import shortId from '@/utils/short-id'
 
 export const useStore = createGlobalState(() => {
   const toolbarKey = ref<string>(shortId())
   const options = ref<UmoEditorOptions>(defaultOptions)
   const page = ref<PageOption>(defaultOptions.page)
-  const editor = ref<any>()
-  const painter = ref<any>({
+  const editor = ref<Editor>()
+  const painter = ref({
     enabled: false,
     once: true,
     marks: [],
@@ -40,7 +41,6 @@ export const useStore = createGlobalState(() => {
     )
     return options.value
   }
-  //@ts-ignore
   const setPainter = ({ enabled, once, marks }) => {
     painter.value.enabled = enabled
     painter.value.once = once

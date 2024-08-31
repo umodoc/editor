@@ -3,7 +3,7 @@ import TextAlign from '@tiptap/extension-text-align'
 export default TextAlign.extend({
   addOptions() {
     return {
-      ...this.parent?.(),
+      ...this.parent(),
       types: ['heading', 'paragraph'],
       alignments: ['left', 'center', 'right', 'justify', 'distributed'],
     }

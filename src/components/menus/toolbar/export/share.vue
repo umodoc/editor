@@ -10,7 +10,7 @@
     icon="share"
     :header="t('export.share.text')"
     width="420px"
-    :confirmBtn="t('export.share.copy')"
+    :confirm-btn="t('export.share.copy')"
     @confirm="copyLink"
     @close="dialogVisible = false"
   >

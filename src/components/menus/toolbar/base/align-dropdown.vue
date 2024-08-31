@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-let { popupVisible, togglePopup } = usePopup()
+const { popupVisible, togglePopup } = usePopup()
 
 const { editor } = useStore()
 

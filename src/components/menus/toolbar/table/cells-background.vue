@@ -18,7 +18,7 @@
 <script setup>
 const emits = defineEmits(['change'])
 
-let { popupVisible, togglePopup } = usePopup()
+const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
 const colorChange = (color) => {

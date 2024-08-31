@@ -14,7 +14,7 @@
               v-html="item.html"
             >
             </span>
-            <component v-if="item.tag" :is="item.tag">{{
+            <component :is="item.tag" v-if="item.tag">{{
               item.label
             }}</component>
             <span v-else :class="item.className || ''">{{ item.label }}</span>
@@ -32,8 +32,7 @@
 </template>
 
 <script setup>
-// https://ckeditor.com/docs/ckeditor5/latest/features/keyboard-support.html#related-productivity-features
-import getShortcut from '@/utils/shortcut'
+
 
 const $document = useState('document')
 

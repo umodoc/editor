@@ -32,13 +32,13 @@ const formatDateToChinese = (dateStr) => {
       const num1 = match.charAt(0)
       const num2 = match.charAt(1)
       if (num1 === '0') {
-        return replaceDigits(num1) + '十'
+        return `${replaceDigits(num1)}十`
       } else if (num1 === '1') {
-        return '十' + replaceDigits(num2)
+        return `十${replaceDigits(num2)}`
       } else if (num2 === '0') {
-        return replaceDigits(num1) + '十'
+        return `${replaceDigits(num1)}十`
       } else {
-        return replaceDigits(num1) + '十' + replaceDigits(num2)
+        return `${replaceDigits(num1)}十${replaceDigits(num2)}`
       }
     }
     return match // 其他情况不处理

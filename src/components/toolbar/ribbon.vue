@@ -2,10 +2,10 @@
   <div class="umo-ribbon-menu">
     <div v-if="menus.length > 1" class="umo-ribbon-tabs">
       <div
-        class="umo-ribbon-tabs-item"
-        :class="{ active: currentMenu === item.value }"
         v-for="item in menus"
         :key="item.value"
+        class="umo-ribbon-tabs-item"
+        :class="{ active: currentMenu === item.value }"
         @click="changeMenu(item.value)"
       >
         {{ item.label }}
@@ -203,8 +203,8 @@
             </div>
           </div>
           <div
-            class="umo-virtual-group"
             v-if="!hidePageHeader || !hidePageFooter"
+            class="umo-virtual-group"
           >
             <menus-toolbar-page-header v-if="!hidePageHeader" />
             <menus-toolbar-page-footer v-if="!hidePageFooter" />

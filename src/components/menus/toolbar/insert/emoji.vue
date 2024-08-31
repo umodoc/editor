@@ -13,9 +13,9 @@
           <div class="umo-emojis-group-title" v-text="l(group.label)"></div>
           <div class="umo-emojis-group-container">
             <div
-              class="umo-emojis-group-item"
               v-for="(item, i) in group.items.split(' ')"
               :key="i"
+              class="umo-emojis-group-item"
               @click="selectEmoji(item)"
             >
               {{ item }}
@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-let { popupVisible, togglePopup } = usePopup()
+const { popupVisible, togglePopup } = usePopup()
 const { options, editor } = useStore()
 
 const selectEmoji = (emoji) => {

@@ -1,5 +1,4 @@
-//@ts-nocheck
-import i18n from '@/i18n'
+import { i18n } from '@/i18n'
 
 const locales = {
   'zh-CN': 'zh',
@@ -57,7 +56,7 @@ class DiagramEditor {
   // 创建 iframe
   createFrame() {
     const params = Object.keys(this.params)
-      .map((key) => key + '=' + this.params[key])
+      .map((key) => `${key}=${this.params[key]}`)
       .join('&')
     const lang = locales[i18n.global.locale.value]
     const frame = document.createElement('iframe')

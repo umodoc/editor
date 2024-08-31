@@ -1,6 +1,7 @@
-import { Editor, Extension, findParentNode } from '@tiptap/core'
+import { type Editor, Extension, findParentNode } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
+
 import { LIST_TYPE } from '@/extensions/page/node-names'
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -26,7 +27,7 @@ export default Extension.create({
               return null
             }
 
-            if (editor.isFocused === true) {
+            if (editor.isFocused) {
               return null
             }
 
@@ -45,13 +46,12 @@ export default Extension.create({
       setCurrentNodeSelection:
         () =>
         ({ editor, chain }) => {
-          let parentNode = findParentNode((node) =>
+          const parentNode = findParentNode((node) =>
             LIST_TYPE.includes(node.type.name),
           )(editor.state.selection)
           if (parentNode) {
             return chain().setNodeSelection(parentNode.pos).run()
           }
-          // @ts-ignore
           const { $anchor, node } = editor.state.selection
           const pos = node?.attrs?.vnode
             ? $anchor.pos
@@ -90,20 +90,18 @@ export default Extension.create({
   },
 })
 export function getSelectionNode(editor: Editor) {
-  // @ts-ignore
   const { node } = editor.state.selection
   if (node) {
     return node
   }
-  let parentNode = findParentNode((node) => LIST_TYPE.includes(node.type.name))(
-    editor.state.selection,
-  )
+  const parentNode = findParentNode((node) =>
+    LIST_TYPE.includes(node.type.name),
+  )(editor.state.selection)
   const { $anchor } = editor.state.selection
   if (parentNode) {
     return $anchor.node(parentNode.depth)
   }
   editor.commands.selectParentNode()
-  // @ts-ignore
   return editor.state.selection.node
 }
 export function getSelectionText(editor: Editor) {

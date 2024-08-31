@@ -15,10 +15,10 @@
       :divider="false"
     >
       <t-option
-        class="umo-font-family-item"
         v-for="item in group.children"
-        :value="item.value"
         :key="item.value"
+        class="umo-font-family-item"
+        :value="item.value"
         :label="l(item.label)"
       >
         <span :style="{ fontFamily: item.value }" v-text="l(item.label)"></span>
@@ -38,7 +38,7 @@ const { options, editor } = useStore()
 const $toolbar = useState('toolbar')
 const $recent = useState('recent')
 
-let usedFonts = $ref([])
+const usedFonts = $ref([])
 // https://www.cnblogs.com/gaidalou/p/8479452.html
 const fontDetect = (font) => {
   if (!font) {

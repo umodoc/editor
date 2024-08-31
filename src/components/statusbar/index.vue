@@ -243,8 +243,8 @@
           class="umo-status-bar-button auto-width umo-lang-button"
           variant="text"
           size="small"
-          v-text="locale"
           @click="zoomReset"
+          v-text="locale"
         >
         </t-button>
       </t-dropdown>
@@ -285,7 +285,6 @@
 
 <script setup>
 import i18n from '@/i18n'
-import getShortcut from '@/utils/shortcut'
 
 const { container, options, page, editor } = useStore()
 const $document = useState('document')
@@ -303,7 +302,7 @@ const togglePagination = () => {
 }
 
 // 字数统计
-let showWordCount = $ref(false)
+const showWordCount = $ref(false)
 const selectionCharacters = computed(() => {
   const { state } = editor.value
   if (state) {
@@ -329,7 +328,9 @@ const togglePreview = async () => {
     document.querySelector(`${container} .umo-zoomable-container`).scrollTop = 0
   }
 }
-onMounted(() => useHotkeys('f5', togglePreview))
+onMounted(() => {
+  useHotkeys('f5', togglePreview)
+})
 watch(
   () => page.value.preview.enabled,
   (val) => {
@@ -386,7 +387,7 @@ const autoWidth = (auto, padding = 50) => {
     const pageEl = editorEl.querySelector('.umo-page-content')
     const editorWidth = editorEl.clientWidth
     const pageWidth = pageEl.clientWidth
-    page.value.zoomLevel = parseInt(
+    page.value.zoomLevel = Number.parseInt(
       ((editorWidth - padding * 2) / pageWidth) * 100,
     )
     page.value.autoWidth = true
@@ -401,7 +402,9 @@ useHotkeys('ctrl+0,command+0', autoWidth)
 watch(
   () => page.value.showToc,
   () => {
-    if (page.value.autoWidth) autoWidth()
+    if (page.value.autoWidth) {
+      autoWidth()
+    }
   },
 )
 

@@ -37,7 +37,7 @@ const props = defineProps({
 })
 const emits = defineEmits(['change'])
 
-let { popupVisible, togglePopup } = usePopup()
+const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
 let currentColor = $ref()

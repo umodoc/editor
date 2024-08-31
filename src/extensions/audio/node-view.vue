@@ -1,8 +1,8 @@
 <template>
   <node-view-wrapper
+    :id="node.attrs.id"
     ref="containerRef"
     class="umo-node-view"
-    :id="node.attrs.id"
     :style="nodeStyle"
   >
     <div
@@ -18,7 +18,8 @@
 </template>
 
 <script setup>
-import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
+import { nodeViewProps, } from '@tiptap/vue-3'
+
 import { mediaPlayer } from '@/utils/player'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
@@ -32,9 +33,9 @@ let selected = $ref(false)
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs
   const marginTop =
-    margin?.top && margin?.top !== '' ? margin.top + 'px' : undefined
+    margin?.top && margin?.top !== '' ? `${margin.top}px` : undefined
   const marginBottom =
-    margin?.bottom && margin?.bottom !== '' ? margin.bottom + 'px' : undefined
+    margin?.bottom && margin?.bottom !== '' ? `${margin.bottom}px` : undefined
   return {
     'justify-content': nodeAlign,
     marginTop,

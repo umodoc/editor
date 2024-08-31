@@ -97,7 +97,7 @@
               class="umo-qrcode-empty"
               v-text="t('tools.qrcode.notEmpty')"
             ></div>
-            <div class="umo-svg-render" v-else v-html="svgCode"></div>
+            <div v-else class="umo-svg-render" v-html="svgCode"></div>
           </div>
         </div>
       </div>

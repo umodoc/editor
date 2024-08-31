@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import defaultAvatar from '@/assets/images/avatar.svg'
+
 
 const { options, editor, commentBox } = useStore()
 
@@ -48,7 +48,7 @@ const props = defineProps({
   },
 })
 
-let comment = $ref('')
+const comment = $ref('')
 const submitComment = () => {
   console.log(comment)
   closeComment()

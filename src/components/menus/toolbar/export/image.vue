@@ -24,7 +24,7 @@ const saveImage = async ({ content, value }) => {
   if (!content) {
     return
   }
-  const zoomLevel = page.value.zoomLevel
+  const { zoomLevel } = page.value
   exportImage.value = true
   try {
     page.value.zoomLevel = 100
@@ -36,7 +36,7 @@ const saveImage = async ({ content, value }) => {
       title !== '' ? options.value.document.title : t('document.untitled')
     saveAs(
       blob,
-      `${filename}${devicePixelRatio > 1 ? '@' + devicePixelRatio + 'x' : ''}.${value}`,
+      `${filename}${devicePixelRatio > 1 ? `@${devicePixelRatio}x` : ''}.${value}`,
     )
   } catch {
     const dialog = useAlert({

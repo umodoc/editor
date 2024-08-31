@@ -8,9 +8,9 @@
     <div class="umo-heading-container">
       <template v-for="(item, index) in options" :key="item.value">
         <div
+          v-if="index < 4"
           class="card"
           :class="{ active: item.value === currentValue && editor?.isEditable }"
-          v-if="index < 4"
           @click="setHeading(item.value)"
         >
           <div class="title" :class="item.desc">{{ item.label }}</div>
@@ -32,11 +32,11 @@
           <div ref="popupContentRef" class="umo-heading-container">
             <template v-for="(item, index) in options" :key="item.value">
               <div
+                v-if="index >= 4"
                 class="card"
                 :class="{
                   active: item.value === currentValue && editor?.isEditable,
                 }"
-                v-if="index >= 4"
                 @click="setHeading(item.value)"
               >
                 <div class="title" :class="item.desc">{{ item.label }}</div>
@@ -61,8 +61,8 @@
   >
     <t-option
       v-for="item in options"
-      class="umo-heading-select-option"
       :key="item.value"
+      class="umo-heading-select-option"
       :value="item.value"
       :label="item.label"
     >
@@ -72,7 +72,7 @@
 </template>
 
 <script setup>
-let { popupVisible } = usePopup()
+const { popupVisible } = usePopup()
 const { container, editor } = useStore()
 const $toolbar = useState('toolbar')
 const popupContentRef = ref(null)
@@ -80,10 +80,10 @@ const popupContentRef = ref(null)
 const options = $ref([
   { label: t('base.heading.paragraph'), desc: 'text', value: 'paragraph' },
 ])
-for (let i in Array.from({ length: 6 })) {
+for (const i in Array.from({ length: 6 })) {
   const level = Number(i) + 1
   options.push({
-    label: `${t('base.heading.text', { level })}`,
+    label: t('base.heading.text', { level }),
     desc: `h${level}`,
     value: level,
   })
@@ -92,7 +92,7 @@ for (let i in Array.from({ length: 6 })) {
 const currentValue = computed(() => {
   const heading = (level) => editor.value?.isActive('heading', { level })
   if (editor.value) {
-    if (editor.value?.isActive('paragraph')) {
+    if (editor.value.isActive('paragraph')) {
       return 'paragraph'
     }
     if (heading(1)) {

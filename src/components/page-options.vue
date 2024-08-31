@@ -52,29 +52,29 @@
           <div class="umo-page-setting">
             <div class="item">
               <t-input-number
-                class="umo-page-setting-number"
                 v-model="pageOptions.size.width"
+                class="umo-page-setting-number"
                 theme="normal"
                 align="center"
                 :min="10"
                 :label="t('pageOptions.size.width')"
                 :suffix="t('page.size.cm')"
                 placeholder=""
-                :allow-input-overLimit="false"
+                :allow-input-over-limit="false"
                 @blur="(val) => inputPageSize(val, 'width')"
               />
             </div>
             <div class="item">
               <t-input-number
-                class="umo-page-setting-number"
                 v-model="pageOptions.size.height"
+                class="umo-page-setting-number"
                 theme="normal"
                 align="center"
                 :min="10"
                 :label="t('pageOptions.size.height')"
                 :suffix="t('page.size.cm')"
                 placeholder=""
-                :allow-input-overLimit="false"
+                :allow-input-over-limit="false"
                 @blur="(val) => inputPageSize(val, 'height')"
               />
             </div>
@@ -86,13 +86,12 @@
               <div
                 class="item"
                 :class="{ active: !pageOptions.margin.layout }"
-                v-text="t('pageOptions.margin.default')"
                 @click="selectPageMargin(options.page.defaultMargin)"
+                v-text="t('pageOptions.margin.default')"
               ></div>
               <div
                 class="item narrow"
                 :class="{ active: pageOptions.margin.layout === 'narrow' }"
-                v-text="t('pageOptions.margin.narrow')"
                 @click="
                   selectPageMargin({
                     left: 1.27,
@@ -102,11 +101,11 @@
                     layout: 'narrow',
                   })
                 "
+                v-text="t('pageOptions.margin.narrow')"
               ></div>
               <div
                 class="item moderate"
                 :class="{ active: pageOptions.margin.layout === 'moderate' }"
-                v-text="t('pageOptions.margin.moderate')"
                 @click="
                   selectPageMargin({
                     left: 1.91,
@@ -116,11 +115,11 @@
                     layout: 'moderate',
                   })
                 "
+                v-text="t('pageOptions.margin.moderate')"
               ></div>
               <div
                 class="item wide"
                 :class="{ active: pageOptions.margin.layout === 'wide' }"
-                v-text="t('pageOptions.margin.wide')"
                 @click="
                   selectPageMargin({
                     top: 2.54,
@@ -130,13 +129,14 @@
                     layout: 'wide',
                   })
                 "
+                v-text="t('pageOptions.margin.wide')"
               ></div>
             </div>
             <div class="umo-page-setting">
               <div class="item">
                 <t-input-number
-                  class="umo-page-setting-number"
                   v-model="pageOptions.margin.top"
+                  class="umo-page-setting-number"
                   theme="normal"
                   align="center"
                   :min="0"
@@ -144,14 +144,14 @@
                   :label="t('pageOptions.margin.top')"
                   :suffix="t('page.size.cm')"
                   placeholder=""
-                  :allow-input-overLimit="false"
+                  :allow-input-over-limit="false"
                   @blur="(val) => inputPageMargin(val, 'top')"
                 />
               </div>
               <div class="item">
                 <t-input-number
-                  class="umo-page-setting-number"
                   v-model="pageOptions.margin.bottom"
+                  class="umo-page-setting-number"
                   theme="normal"
                   align="center"
                   :min="0"
@@ -159,14 +159,14 @@
                   :label="t('pageOptions.margin.bottom')"
                   :suffix="t('page.size.cm')"
                   placeholder=""
-                  :allow-input-overLimit="false"
+                  :allow-input-over-limit="false"
                   @blur="(val) => inputPageMargin(val, 'bottom')"
                 />
               </div>
               <div class="item">
                 <t-input-number
-                  class="umo-page-setting-number"
                   v-model="pageOptions.margin.left"
+                  class="umo-page-setting-number"
                   theme="normal"
                   align="center"
                   :min="0"
@@ -174,14 +174,14 @@
                   :label="t('pageOptions.margin.left')"
                   :suffix="t('page.size.cm')"
                   placeholder=""
-                  :allow-input-overLimit="false"
+                  :allow-input-over-limit="false"
                   @blur="(val) => inputPageMargin(val, 'left')"
                 />
               </div>
               <div class="item">
                 <t-input-number
-                  class="umo-page-setting-number"
                   v-model="pageOptions.margin.right"
+                  class="umo-page-setting-number"
                   theme="normal"
                   align="center"
                   :min="0"
@@ -189,7 +189,7 @@
                   :label="t('pageOptions.margin.right')"
                   :suffix="t('page.size.cm')"
                   placeholder=""
-                  :allow-input-overLimit="false"
+                  :allow-input-over-limit="false"
                   @blur="(val) => inputPageMargin(val, 'right')"
                 />
               </div>
@@ -212,7 +212,7 @@ const emits = defineEmits(['close'])
 
 const { container, options, page } = useStore()
 
-let pageOptions = $ref(JSON.parse(JSON.stringify(page.value)))
+const pageOptions = $ref(JSON.parse(JSON.stringify(page.value)))
 
 // 页面大小
 const selectPageSize = (index) => {

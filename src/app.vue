@@ -79,7 +79,9 @@ const options = $ref({
     avatarUrl: 'https://tdesign.gtimg.com/site/avatar.jpg',
   },
   async onFileUpload(file) {
-    if (!file) throw new Error('没有找到要上传的文件')
+    if (!file) {
+      throw new Error('没有找到要上传的文件')
+    }
     console.log('onUpload', file)
     await new Promise((resolve) => setTimeout(resolve, 3000))
     return {

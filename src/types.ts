@@ -1,5 +1,6 @@
-import { NodesComputed } from '@/extensions/page/types'
-import { Extension } from '@tiptap/core'
+import type { Extension } from '@tiptap/core'
+
+import type { NodesComputed } from '@/extensions/page/types'
 
 export interface MarginOption {
   left: number
@@ -54,9 +55,7 @@ export interface ToolbarOptions {
     useCustomMethod: boolean
   }
 }
-export interface Dictionary {
-  [key: string]: any
-}
+export type Dictionary = Record<string, any>
 
 export interface DocumentOptions {
   title: string
@@ -79,7 +78,7 @@ export interface DocumentOptions {
 //定义一个 异步方法
 export type AsyncMethod = (...args: any[]) => Promise<void>
 export type Method = (...args: any[]) => void
-export type UmoEditorOptions = {
+export interface UmoEditorOptions {
   editorKey: string
   locale: 'en-US' | 'zh-CN'
   theme: 'light' | 'dark'

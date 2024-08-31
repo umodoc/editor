@@ -81,7 +81,7 @@
             <menus-toolbar-insert-code-block
               v-if="!disableItem('code-block')"
               :huge="false"
-              shortcutText="Ctrl+Alt+C"
+              shortcut-text="Ctrl+Alt+C"
               :tooltip="false"
             />
           </t-dropdown-item>
@@ -112,9 +112,9 @@
           </t-dropdown-item>
           <t-dropdown-item>
             <menus-toolbar-tools-signature
+              v-if="!disableItem('signature')"
               :huge="false"
               :tooltip="false"
-              v-if="!disableItem('signature')"
             />
           </t-dropdown-item>
           <t-dropdown-item>
@@ -242,7 +242,7 @@
 <script setup>
 const { container, options, editor, blockMenu, assistantBox } = useStore()
 
-let menuActive = $ref(false)
+const menuActive = $ref(false)
 
 const headings = $ref([1, 2, 3, 4, 5, 6])
 

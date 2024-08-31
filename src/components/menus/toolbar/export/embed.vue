@@ -10,7 +10,7 @@
     icon="embed"
     :header="t('export.embed.title')"
     width="460px"
-    :confirmBtn="t('export.embed.copy')"
+    :confirm-btn="t('export.embed.copy')"
     @confirm="copyEmbed"
     @close="dialogVisible = false"
   >

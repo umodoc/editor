@@ -1,8 +1,8 @@
 <template>
   <node-view-wrapper
+    :id="node.attrs.id"
     ref="containerRef"
     class="umo-node-view"
-    :id="node.attrs.id"
     :style="nodeStyle"
   >
     <div
@@ -41,9 +41,9 @@
 </template>
 
 <script setup>
-import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
+import { nodeViewProps, } from '@tiptap/vue-3'
+
 import { getFileIcon } from '@/utils/file'
-import prettyBytes from 'pretty-bytes'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const { options } = useStore()
@@ -53,9 +53,9 @@ let filePath = $ref()
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs
   const marginTop =
-    margin?.top && margin?.top !== '' ? margin.top + 'px' : undefined
+    margin?.top && margin?.top !== '' ? `${margin.top}px` : undefined
   const marginBottom =
-    margin?.bottom && margin?.bottom !== '' ? margin.bottom + 'px' : undefined
+    margin?.bottom && margin?.bottom !== '' ? `${margin.bottom}px` : undefined
   return {
     'justify-content': nodeAlign,
     marginTop,
@@ -64,7 +64,7 @@ const nodeStyle = $computed(() => {
 })
 
 onMounted(async () => {
-  let fileIcon = getFileIcon(node.attrs.name)
+  const fileIcon = getFileIcon(node.attrs.name)
   filePath = `${options.value.cdnUrl}/icons/file/${fileIcon}.svg`
   if (node.attrs.uploaded === false && node.attrs.file) {
     try {

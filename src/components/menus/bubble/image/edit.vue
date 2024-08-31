@@ -8,9 +8,9 @@
 <script setup>
 const { editor } = useStore()
 const type = computed(() => {
-  return editor.value?.getAttributes('image')?.type
+  return editor.value?.getAttributes('image').type
 })
 const content = computed(() => {
-  return editor.value?.getAttributes('image')?.content
+  return editor.value?.getAttributes('image').content
 })
 </script>

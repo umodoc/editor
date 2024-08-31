@@ -15,8 +15,8 @@
     >
       <div class="umo-mermaid-container">
         <t-textarea
-          class="umo-mermaid-code"
           v-model="mermaidCode"
+          class="umo-mermaid-code"
           autofocus
           :placeholder="t('tools.mermaid.placeholder')"
         />
@@ -26,8 +26,8 @@
             v-text="t('tools.mermaid.preview')"
           ></div>
           <div
-            class="umo-mermaid-svg narrow-scrollbar"
             ref="mermaidRef"
+            class="umo-mermaid-svg narrow-scrollbar"
             v-html="svgCode"
           ></div>
         </div>
@@ -74,7 +74,7 @@ const renderMermaid = async () => {
   try {
     const { svg } = await mermaid.render('mermaid-svg', mermaidCode)
     svgCode = svg
-  } catch (e) {
+  } catch {
     svgCode = ''
   }
 }

@@ -62,7 +62,7 @@ const pageSize = $computed(() => {
 })
 // 页面缩放后的大小
 const pageZoomWidth = $computed(() => {
-  return `calc(${pageSize.width + 'cm'} * ${page.value.zoomLevel / 100})`
+  return `calc(${pageSize.width}cm * ${page.value.zoomLevel / 100})`
 })
 
 // 页面内容变化后更新页面高度
@@ -73,7 +73,7 @@ const setPageZoomHeight = () => {
     console.warn('The element <.umo-page-content> does not exist.')
     return
   }
-  pageZoomHeight = (el.clientHeight * page.value.zoomLevel) / 100 + 'px'
+  pageZoomHeight = `${(el.clientHeight * page.value.zoomLevel) / 100}px`
 }
 watch(
   () => [
@@ -84,13 +84,17 @@ watch(
   ],
   async () => {
     await nextTick()
-    setTimeout(() => setPageZoomHeight(), 100)
+    setTimeout(() => {
+      setPageZoomHeight()
+    }, 100)
   },
   { immediate: true, deep: true },
 )
 watch(
   () => store.editor.value?.getHTML(),
-  () => setPageZoomHeight(),
+  () => {
+    setPageZoomHeight()
+  },
 )
 
 // 图片预览
@@ -105,7 +109,9 @@ watch(
         .querySelectorAll(`${container} .umo-page-content img:not(.icon)`)
         .forEach((item) => {
           const src = item.getAttribute('src')
-          if (src) previewImages.push(src)
+          if (src) {
+            previewImages.push(src)
+          }
         })
       currentImageIndex = images.findIndex((item) => item === val)
       imagePreviewVisible = true

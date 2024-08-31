@@ -1,4 +1,4 @@
-import { Editor, Extension } from '@tiptap/core'
+import { type Editor, Extension } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 
 // @tiptap-pro/extension-file-handler
@@ -20,7 +20,7 @@ const FileHandlePlugin = (option: FileHandlePluginOption) => {
         if (!onDrop) {
           return
         }
-        if (!dataTransfer?.files?.length) {
+        if (!dataTransfer?.files.length) {
           return
         }
         const pos = view.posAtCoords({
@@ -50,7 +50,7 @@ const FileHandlePlugin = (option: FileHandlePluginOption) => {
         if (!onPaste) {
           return
         }
-        if (!clipboardData?.files?.length) {
+        if (!clipboardData?.files.length) {
           return
         }
         let files = Array.from(clipboardData.files)
@@ -99,4 +99,4 @@ const FileHandler = Extension.create<FileHandlerOption>({
     ]
   },
 })
-export { FileHandlePlugin, FileHandler, FileHandler as default }
+export { FileHandler as default, FileHandlePlugin, FileHandler }

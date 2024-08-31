@@ -1,7 +1,9 @@
-import Plyr from 'plyr'
-import i18n from '@/i18n'
 import 'plyr/dist/plyr.css'
 import '@/assets/styles/plyr.less'
+
+import Plyr from 'plyr'
+
+import i18n from '@/i18n'
 
 const locales = {
   'zh-CN': {

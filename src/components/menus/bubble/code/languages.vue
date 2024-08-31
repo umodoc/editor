@@ -13,6 +13,7 @@
 
 <script setup>
 import { languages } from 'prism-code-editor/prism'
+
 import { getSelectionNode } from '@/extensions/selection'
 
 const { editor } = useStore()

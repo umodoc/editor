@@ -50,8 +50,8 @@
           block
           theme="primary"
           variant="base"
-          v-text="t('table.insert.create')"
           @click="insertTable"
+          v-text="t('table.insert.create')"
         >
         </t-button>
       </div>
@@ -60,14 +60,14 @@
 </template>
 
 <script setup>
-let { popupVisible, togglePopup } = usePopup()
+const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
 const table = Array.from({ length: 8 }, () =>
   Array.from({ length: 10 }, () => ''),
 )
-let selected = $ref({ rows: 0, cols: 0 })
-let withHeaderRow = $ref(true)
+const selected = $ref({ rows: 0, cols: 0 })
+const withHeaderRow = $ref(true)
 
 const isSelected = (rows, cols) => {
   return (

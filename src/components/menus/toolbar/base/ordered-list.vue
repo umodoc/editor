@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-let { popupVisible, togglePopup } = usePopup()
+const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
 const options = [
@@ -114,7 +114,7 @@ let startAt = $ref(1)
 const changeOrderedListStart = () => {
   if (editor.value) {
     editor.value
-      ?.chain()
+      .chain()
       .focus()
       .updateAttributes('orderedList', { start: startAt })
       .run()

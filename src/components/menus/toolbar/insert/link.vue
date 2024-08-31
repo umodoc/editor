@@ -12,7 +12,7 @@
     width="420px"
     draggable
     destroy-on-close
-    :confirmBtn="t('insert.link.insert')"
+    :confirm-btn="t('insert.link.insert')"
     @confirm="insertLink"
     @close="dialogVisible = false"
   >
@@ -48,7 +48,7 @@ let dialogVisible = $ref(false)
 
 let text = $ref('')
 let href = $ref('')
-let error = $ref({ text: false, href: false })
+const error = $ref({ text: false, href: false })
 const insertLink = () => {
   if (text === '') {
     error.text = true

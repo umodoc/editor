@@ -8,7 +8,6 @@ export default OrderedList.extend({
       ...this.parent?.(),
       listType: {
         default: 'decimal',
-        //@ts-ignore
         parseHTML: (element) => element.style['list-style-type'] || 'decimal',
         renderHTML: ({ listType }) => {
           return {

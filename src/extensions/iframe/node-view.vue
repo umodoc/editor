@@ -1,8 +1,8 @@
 <template>
   <node-view-wrapper
+    :id="node.attrs.id"
     ref="containerRef"
     class="umo-node-view"
-    :id="node.attrs.id"
     :style="nodeStyle"
   >
     <div
@@ -28,8 +28,7 @@
 </template>
 
 <script setup>
-import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
-import Drager from 'es-drager'
+import { nodeViewProps } from '@tiptap/vue-3'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const { editor } = useStore()
@@ -40,9 +39,9 @@ let maxWidth = $ref(0)
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs
   const marginTop =
-    margin?.top && margin?.top !== '' ? margin.top + 'px' : undefined
+    margin?.top && margin?.top !== '' ? `${margin.top}px` : undefined
   const marginBottom =
-    margin?.bottom && margin?.bottom !== '' ? margin.bottom + 'px' : undefined
+    margin?.bottom && margin?.bottom !== '' ? `${margin.bottom}px` : undefined
   return {
     'justify-content': nodeAlign,
     marginTop,
@@ -53,7 +52,9 @@ const nodeStyle = $computed(() => {
 onMounted(() => {
   const width = containerRef.value.$el.offsetWidth
   maxWidth = width
-  if (node.attrs.width === null) updateAttributes({ width })
+  if (node.attrs.width === null) {
+    updateAttributes({ width })
+  }
 })
 const onResize = ({ width, height }) => {
   updateAttributes({ width, height })

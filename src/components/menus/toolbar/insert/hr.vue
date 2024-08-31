@@ -13,9 +13,9 @@
           <span v-text="t('insert.hr.title')"></span>
         </div>
         <div
-          class="umo-page-divider-item"
           v-for="item in options"
           :key="item.value"
+          class="umo-page-divider-item"
           :value="item.value"
           :title="item.label"
           @click="setHr(item)"
@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-let { popupVisible, togglePopup } = usePopup()
+const { popupVisible, togglePopup } = usePopup()
 const { container, editor } = useStore()
 
 const options = [

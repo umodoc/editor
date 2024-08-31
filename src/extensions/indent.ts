@@ -1,5 +1,5 @@
 import { Extension } from '@tiptap/core'
-import { TextSelection, AllSelection, Transaction } from '@tiptap/pm/state'
+import { AllSelection, TextSelection, type Transaction } from '@tiptap/pm/state'
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -43,12 +43,12 @@ export default Extension.create({
             parseHTML: (element) => {
               let indentClassName = ''
               element.classList.forEach((className) => {
-                if (className.indexOf(classAttrPrefix) === 0) {
+                if (className.startsWith(classAttrPrefix)) {
                   indentClassName = className
                 }
               })
               if (indentClassName) {
-                const level = parseInt(
+                const level = Number.parseInt(
                   indentClassName.slice(classAttrPrefix.length),
                   7,
                 )
@@ -67,7 +67,7 @@ export default Extension.create({
       pos: number,
       delta: number,
     ) => {
-      const node = tr?.doc?.nodeAt(pos) || null
+      const node = tr.doc.nodeAt(pos) || null
       if (node) {
         const nextLevel = (node.attrs.indent || 0) + delta
         const { minLevel, maxLevel } = this.options
@@ -108,7 +108,6 @@ export default Extension.create({
     const applyIndent =
       (direction: number) =>
       () =>
-      //@ts-ignore
       ({ tr, state, dispatch }) => {
         const { selection } = state
         tr = tr.setSelection(selection)

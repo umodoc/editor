@@ -26,18 +26,18 @@
           variant="text"
           size="small"
           :disabled="disabled || editor?.isEditable === false"
-          @click="menuClick"
           v-bind="attrs"
+          @click="menuClick"
         >
           <div class="umo-button-content">
             <slot />
             <template v-if="ico">
               <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
               </span>
-              <icon class="umo-button-icon" v-else :name="ico" />
+              <icon v-else class="umo-button-icon" :name="ico" />
             </template>
             <p class="umo-button-text">{{ text }}</p>
-            <kbd class="umo-button-kbd" v-if="shortcutText">
+            <kbd v-if="shortcutText" class="umo-button-kbd">
               {{ getShortcut(shortcutText) }}
             </kbd>
           </div>
@@ -62,10 +62,10 @@
               <template v-if="ico">
                 <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
                 </span>
-                <icon class="umo-button-icon" v-else :name="ico" />
+                <icon v-else class="umo-button-icon" :name="ico" />
               </template>
               <p class="umo-button-text">{{ text }}</p>
-              <kbd class="umo-button-kbd" v-if="shortcutText">
+              <kbd v-if="shortcutText" class="umo-button-kbd">
                 {{ getShortcut(shortcutText) }}
               </kbd>
             </div>
@@ -129,10 +129,10 @@
                     v-html="ico"
                   >
                   </span>
-                  <icon class="umo-button-icon" v-else :name="ico" />
+                  <icon v-else class="umo-button-icon" :name="ico" />
                 </template>
                 <p class="umo-button-text">{{ text }}</p>
-                <kbd class="umo-button-kbd" v-if="shortcutText">{{
+                <kbd v-if="shortcutText" class="umo-button-kbd">{{
                   getShortcut(shortcutText)
                 }}</kbd>
                 <span
@@ -189,10 +189,10 @@
               <template v-if="ico">
                 <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
                 </span>
-                <icon class="umo-button-icon" v-else :name="ico" />
+                <icon v-else class="umo-button-icon" :name="ico" />
               </template>
               <p class="umo-button-text">{{ text }}</p>
-              <kbd class="umo-button-kbd" v-if="shortcutText">
+              <kbd v-if="shortcutText" class="umo-button-kbd">
                 {{ getShortcut(shortcutText) }}
               </kbd>
             </div>
@@ -215,7 +215,7 @@
                 <icon name="arrow-down" />
               </span>
               <template #content>
-                <div class="umo-popup-content" ref="popupContentRef">
+                <div ref="popupContentRef" class="umo-popup-content">
                   <slot name="content" />
                 </div>
               </template>
@@ -260,10 +260,10 @@
                     v-html="ico"
                   >
                   </span>
-                  <icon class="umo-button-icon" v-else :name="ico" />
+                  <icon v-else class="umo-button-icon" :name="ico" />
                 </template>
                 <p class="umo-button-text">{{ text }}</p>
-                <kbd class="umo-button-kbd" v-if="shortcutText">{{
+                <kbd v-if="shortcutText" class="umo-button-kbd">{{
                   getShortcut(shortcutText)
                 }}</kbd>
                 <span
@@ -281,7 +281,7 @@
               </span>
             </t-button>
             <template #content>
-              <div class="umo-popup-content" ref="popupContentRef">
+              <div ref="popupContentRef" class="umo-popup-content">
                 <slot name="content" />
               </div>
             </template>
@@ -376,7 +376,7 @@ const menuClick = (...args) => {
   }
 }
 
-let tooltipVisible = $ref(false)
+const tooltipVisible = $ref(false)
 let tooltipForceHide = $ref(false)
 const popupVisileChange = (visible) => {
   // 隐藏 Tooltip，适用于 select、dropdown、popup 等子组件展开时，隐藏 Tooltip

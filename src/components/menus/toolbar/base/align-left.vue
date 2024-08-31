@@ -20,10 +20,10 @@
 const { editor } = useStore()
 const setAlignLeft = () => {
   if (editor.value?.can().chain().focus().setTextAlign('left').run()) {
-    editor.value?.chain().focus().setTextAlign('left').run()
+    editor.value.chain().focus().setTextAlign('left').run()
   }
   if (editor.value?.can().chain().focus().setNodeAlign('flex-start').run()) {
-    editor.value?.chain().focus().setNodeAlign('flex-start').run()
+    editor.value.chain().focus().setNodeAlign('flex-start').run()
   }
 }
 </script>

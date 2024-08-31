@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { MonacoEditor, loader } from '@vue-monaco/editor'
+import { loader, } from '@vue-monaco/editor'
 
 const { options, editor } = useStore()
 const $document = useState('document')

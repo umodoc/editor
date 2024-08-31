@@ -1,15 +1,12 @@
-import {
-  Fragment,
-  Node as ProseMirrorNode,
-  NodeType,
-  Slice,
-} from '@tiptap/pm/model'
+import { getNodeType } from '@tiptap/core'
+import { Fragment, type NodeType, Slice } from '@tiptap/pm/model'
 import { TextSelection } from '@tiptap/pm/state'
 import { canSplit } from '@tiptap/pm/transform'
-import { getNodeType } from '@tiptap/core'
+import type { RawCommands } from '@tiptap/vue-3'
+
+import { getId } from '@/extensions/page/utils'
+
 import { getSplittedAttributes } from './index'
-import { getId } from './core'
-import { RawCommands } from '@tiptap/vue-3'
 
 /**
  * 覆盖系统默认分割方法
@@ -20,10 +17,9 @@ export const splitListItem: RawCommands['splitListItem'] =
   ({ tr, state, dispatch, editor }) => {
     const type = getNodeType(typeOrName, state.schema)
     const { $from, $to } = state.selection
-    // @ts-ignore
-    const node = state.selection.node
+    const { node } = state.selection
 
-    if ((node && node.isBlock) || $from.depth < 2 || !$from.sameParent($to)) {
+    if (node?.isBlock || $from.depth < 2 || !$from.sameParent($to)) {
       return false
     }
     const grandParent = $from.node(-1)
@@ -65,7 +61,6 @@ export const splitListItem: RawCommands['splitListItem'] =
           $from.node().type.name,
           $from.node().attrs,
         )
-        // @ts-ignore
         const nextType =
           type.contentMatch.defaultType.createAndFill(newNextTypeAttributes) ||
           undefined

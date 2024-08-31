@@ -21,7 +21,7 @@
           <span v-if="!sealImg">{{
             converting ? converting : t('tools.seal.insertTip')
           }}</span>
-          <img class="umo-seal-img" v-else :src="sealImg" />
+          <img v-else class="umo-seal-img" :src="sealImg" />
         </div>
       </div>
     </modal>

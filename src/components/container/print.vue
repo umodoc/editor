@@ -5,13 +5,13 @@
 <script setup>
 const { container, options, editor, page, printing, exportPDF } = useStore()
 
-let iframeRef = $ref()
+const iframeRef = $ref()
 let iframeCode = $ref('')
 const getStylesHtml = () => {
   let styles = ''
   document
     .querySelectorAll('link, style')
-    .forEach((style) => (styles += style.outerHTML + '\n'))
+    .forEach((style) => (styles += `${style.outerHTML}\n`))
   return styles
 }
 

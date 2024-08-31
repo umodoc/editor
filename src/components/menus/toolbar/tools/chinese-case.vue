@@ -26,6 +26,7 @@
 
 <script setup>
 import nzh from 'nzh/cn'
+
 import { getSelectionText } from '@/extensions/selection'
 const { editor } = useStore()
 
@@ -74,7 +75,7 @@ const options = [
       }
       // 拼接为金额格式的字符串
       const result = parts.join('.')
-      return '￥' + result
+      return `￥${result}`
     },
   },
   {
@@ -85,23 +86,23 @@ const options = [
 ]
 
 const setChineseCase = (func) => {
+  if (!editor.value) {
+    return
+  }
+  const text = getSelectionText(editor.value)
+  if (text === '') {
+    return
+  }
+  let content = ''
   try {
-    if (!editor.value) {
-      return
-    }
-    const text = getSelectionText(editor.value)
-    if (text === '') {
-      return
-    }
-    const content = func(text)
-    if (content === '') {
-      throw new Error('转换失败')
-    } else {
-      editor.value.chain().focus().insertContent(content.toString()).run()
-    }
+    content = func(text)
   } catch {
     useMessage('error', '大小写转化失败，请检查当前选中的文本。')
   }
+  if (!content) {
+    throw new Error('转换失败')
+  }
+  editor.value.chain().focus().insertContent(content.toString()).run()
 }
 </script>
 

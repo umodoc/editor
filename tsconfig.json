@@ -1,16 +1,17 @@
 {
   "compilerOptions": {
     "removeComments": true,
-    "declaration": false,
+    "declaration": true,
+    "noEmit": false,
+    "emitDeclarationOnly": true,
     "disableSizeLimit": true,
     "outDir": "./dist",
     "rootDir": "./src",
     "target": "ESNext",
     "module": "ESNext",
     "strict": true,
-    "jsx": "preserve",
     "allowJs": true,
-    "checkJs": false,
+    "jsx": "preserve",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "resolveJsonModule": true,
@@ -19,22 +20,24 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": true,
+    "verbatimModuleSyntax": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["webpack-env", "jest", "vite/client"],
+    "types": ["vite/client", "vue/ref-macros", "./components.d.ts", "./imports.d.ts", "./shims.d.ts"],
     "paths": {
       "@/*": ["./src/*"]
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
   "include": [
-    "./imports.d.ts",
     "src/**/*.ts",
-    "src/**/*.tsx",
     "src/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "src/**/*.spec.ts",
+    "src/**/*.spec.tsx",
+    "src/**/*.d.ts",
+    "*.mjs",
+    "*.ts",
+    "*.d.ts"
   ],
-  "exclude": ["node_modules", "dist"],
-  "types": ["vue/ref-macros"]
+  "exclude": ["node_modules", "dist"]
 }

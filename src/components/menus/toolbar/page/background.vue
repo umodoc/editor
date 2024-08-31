@@ -10,11 +10,11 @@
     <template #content>
       <div class="umo-background-container">
         <div
+          v-for="(item, index) in backgrounds"
+          :key="index"
           class="umo-background-item"
           :class="{ active: page.background === item.value }"
           :style="{ backgroundColor: item.value }"
-          v-for="(item, index) in backgrounds"
-          :key="index"
           @click="backgroundChange(item.value)"
         >
           {{ item.label }}
@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-let { popupVisible, togglePopup } = usePopup()
+const { popupVisible, togglePopup } = usePopup()
 const { container, page } = useStore()
 
 const backgrounds = [

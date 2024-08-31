@@ -174,8 +174,8 @@
           </div>
         </div>
         <div
-          class="umo-virtual-group"
           v-if="!hidePageHeader || !hidePageFooter"
+          class="umo-virtual-group"
         >
           <menus-toolbar-page-header v-if="!hidePageHeader" />
           <menus-toolbar-page-footer v-if="!hidePageFooter" />

@@ -1,7 +1,7 @@
 <template>
   <node-view-wrapper
-    class="umo-node-view"
     :id="node.attrs.id"
+    class="umo-node-view"
     :style="nodeStyle"
   >
     <div
@@ -13,10 +13,10 @@
         class="umo-node-toc-body"
       >
         <li
-          class="umo-node-toc-item"
-          :class="`level-${heading.level}`"
           v-for="heading in tableOfContents"
           :key="heading.id"
+          class="umo-node-toc-item"
+          :class="`level-${heading.level}`"
         >
           <a @click="headingClick(heading.id)">{{ heading.textContent }}</a>
         </li>
@@ -28,7 +28,7 @@
 
 <script setup>
 import { TextSelection } from '@tiptap/pm/state'
-import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
+import { nodeViewProps, } from '@tiptap/vue-3'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 
@@ -37,9 +37,9 @@ const { editor, tableOfContents } = useStore()
 const nodeStyle = $computed(() => {
   const { margin } = node.attrs
   const marginTop =
-    margin?.top && margin?.top !== '' ? margin.top + 'px' : undefined
+    margin?.top && margin?.top !== '' ? `${margin.top}px` : undefined
   const marginBottom =
-    margin?.bottom && margin?.bottom !== '' ? margin.bottom + 'px' : undefined
+    margin?.bottom && margin?.bottom !== '' ? `${margin.bottom}px` : undefined
   return {
     marginTop,
     marginBottom,
@@ -50,7 +50,7 @@ const headingClick = (id) => {
   const element = editor.value.view.dom.querySelector(`[data-toc-id="${id}"`)
   element.scrollIntoView()
   const pos = editor.value.view.posAtDOM(element, 0)
-  const tr = editor.value.view.state.tr
+  const { tr } = editor.value.view.state
   tr.setSelection(new TextSelection(tr.doc.resolve(pos)))
   editor.value.view.dispatch(tr)
   editor.value.view.focus()

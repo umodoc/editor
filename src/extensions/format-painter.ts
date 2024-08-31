@@ -1,6 +1,6 @@
 import { Extension } from '@tiptap/core'
+import type { Mark } from '@tiptap/pm/model'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
-import { Mark } from '@tiptap/pm/model'
 const { painter, setPainter } = useStore()
 
 declare module '@tiptap/core' {
@@ -82,7 +82,7 @@ export default Extension.create({
                 let { tr, selection } = view.state
 
                 tr = tr.removeMark(selection.from, selection.to)
-                for (let mark of marks) {
+                for (const mark of marks) {
                   if (mark.type.name !== 'link') {
                     tr = tr.addMark(selection.from, selection.to, mark)
                   }

@@ -1,20 +1,24 @@
-import { DOMSerializer, Node, NodeType, Schema } from '@tiptap/pm/model'
-import { createHTMLDocument, VHTMLDocument } from 'zeed-dom'
-import { JSONContent } from '@tiptap/core'
-import { SplitContext } from '@/extensions/page/computed'
+import type { JSONContent } from '@tiptap/core'
+import { DOMSerializer, Node, type Schema } from '@tiptap/pm/model'
+import { createHTMLDocument, type VHTMLDocument } from 'zeed-dom'
+
+import type { SplitContext } from '@/extensions/page/computed'
+import { getId } from '@/extensions/page/utils'
 
 /**
- * 根据schema doc生成html
- * @param doc
- * @param schema
- * @param options
+ * Generates HTML from a ProseMirror document fragment.
+ * @param {Node} doc - The ProseMirror document node.
+ * @param {Schema} schema - The ProseMirror schema.
+ * @param {Object} [options] - Additional options.
+ * @param {Document} [options.document] - Optional document to use for serialization.
+ * @returns {string} - The generated HTML string.
  */
 export function getHTMLFromFragment(
   doc: Node,
   schema: Schema,
   options?: { document?: Document },
-) {
-  if (options && options.document) {
+): string {
+  if (options?.document) {
     const wrap = options.document.createElement('div')
     DOMSerializer.fromSchema(schema).serializeFragment(
       doc.content,
@@ -33,61 +37,61 @@ export function getHTMLFromFragment(
   return zeedDocument.render()
 }
 
-export function generateHTML(doc: JSONContent, schema: Schema) {
+/**
+ * Generates HTML from a JSON content structure.
+ * @param {JSONContent} doc - The JSON content structure.
+ * @param {Schema} schema - The ProseMirror schema.
+ * @returns {string} - The generated HTML string.
+ */
+export function generateHTML(doc: JSONContent, schema: Schema): string {
   const contentNode = Node.fromJSON(schema, doc)
 
   return getHTMLFromFragment(contentNode, schema)
 }
 
-function createAndCalculateHeight(node: Node, content: Node[]) {
-  //生成需要计算的节点
-  let calculateNode = node.type.create(node.attrs, content, node.marks)
-  //生成对应的html
+function createAndCalculateHeight(node: Node, content: Node[]): number {
+  // Creates a node and calculates its height
+  const calculateNode = node.type.create(node.attrs, content, node.marks)
+  // Generates the corresponding HTML
   const htmlNode = generateHTML(getJsonFromDoc(calculateNode), node.type.schema)
-  //计算高度
-  let htmlNodeHeight = computedHeight(htmlNode, node.attrs.id)
-  return htmlNodeHeight
+  // Computes the height
+  return computedHeight(htmlNode, node.attrs.id)
 }
 
 /**
- * 计算节点高度超出的位置
+ * Calculates the position where a node's height overflows.
+ * @param {Node} node - The ProseMirror node.
+ * @param {HTMLElement} dom - The DOM element representing the node.
+ * @param {SplitContext} splitContex - The context used for splitting content.
+ * @returns {number} - The position where the node's height overflows.
  */
 function calculateNodeOverflowHeightAndPoint(
   node: Node,
   dom: HTMLElement,
   splitContex: SplitContext,
-) {
-  //获得 dom现有高度
+): number {
   const { height } = getDomHeight(dom)
-  //拿到最后一个节点
-  let lastChild = node.lastChild
-  //获取当前需要计算的节点有多少个
-  let childCount = node.childCount
-  //最终计算的点有多少
+  let { lastChild } = node
+  const { childCount } = node
   let point = null
-  //获得到所有的节点 倒序遍历
-  // @ts-ignore
-  const content = node.content.content
-  //倒序遍历content
+  const { content } = node.content
+
   for (let i = childCount - 1; i >= 0; i--) {
-    if (point) break
+    if (point) {
+      break
+    }
     lastChild = content[i]
-    //分割节点 永远保留最后一个节点用作计算
-    let calculateContent = i ? content.slice(0, i) : []
-    //节点如果是文本的处理方式
+    const calculateContent = i ? content.slice(0, i) : []
 
     if (lastChild?.isText) {
-      let text = lastChild.text
-      // @ts-ignore
-      let calculateLength = text.length - 1
-      //计算每一个节点带来的影响
+      const { text } = lastChild
+      let calculateLength = text?.length - 1
+
       while (calculateLength) {
-        let calculatetext = text?.slice(0, calculateLength)
-        //计算高度
-        let htmlNodeHeight = createAndCalculateHeight(node, [
+        const calculatetext = text?.slice(0, calculateLength)
+        const htmlNodeHeight = createAndCalculateHeight(node, [
           ...calculateContent,
-          // @ts-ignore
-          splitContex.schema.text(calculatetext, lastChild?.marks),
+          splitContex.schema.text(calculatetext, lastChild.marks),
         ])
         if (
           height > htmlNodeHeight &&
@@ -99,43 +103,45 @@ function calculateNodeOverflowHeightAndPoint(
         calculateLength -= 1
       }
     } else {
-      let htmlNodeHeight = createAndCalculateHeight(node, calculateContent)
+      const htmlNodeHeight = createAndCalculateHeight(node, calculateContent)
       if (height > htmlNodeHeight && !splitContex.isOverflow(htmlNodeHeight)) {
         point = { i, calculateLength: 0 }
         break
       }
     }
   }
-  let isFlag = true
   let index = 0
-  if (!point) return index
-  node.descendants((node, pos, _, i) => {
-    if (!isFlag) {
-      return isFlag
-    }
-    if (i == point.i) {
+  if (!point) {
+    return index
+  }
+  node.descendants((_node, pos, _, i) => {
+    if (i === point.i) {
       index = pos + point.calculateLength + 1
-      isFlag = false
     }
   })
   return index
 }
 
 /**
- * 计算最后一行是否填满
- * @param cnode
+ * Checks if the last line of a node is fully filled.
+ * @param {Node} cnode - The ProseMirror node.
+ * @param {Schema} schema - The ProseMirror schema.
+ * @returns {boolean|null} - Returns true if the last line is filled, false otherwise, and null if the node is not found.
  */
-export function getFlag(cnode: Node, schema: Schema) {
+export function getFlag(cnode: Node, schema: Schema): boolean | null {
   const paragraphDOM =
-    document.getElementById(cnode.attrs.id) ||
+    document.getElementById(cnode.attrs.id) ??
     iframeDoc.getElementById(cnode.attrs.id)
-  if (!paragraphDOM) return null
+  if (!paragraphDOM) {
+    return null
+  }
   const height = getDomHeight(paragraphDOM)
-  let lastChild = cnode.lastChild
-  let childCount = cnode.childCount
-  // @ts-ignore
-  let content = cnode.content.content.slice(0, childCount)
-  if (!lastChild) return false
+  const { lastChild } = cnode
+  const { childCount } = cnode
+  const content = cnode.content.content.slice(0, childCount)
+  if (!lastChild) {
+    return false
+  }
   if (lastChild.isText) {
     content.push(schema.text('gg'))
   }
@@ -147,17 +153,22 @@ export function getFlag(cnode: Node, schema: Schema) {
   return htmlNodeHeight > height
 }
 
+/**
+ * Calculates the breaking position in a node based on DOM and context.
+ * @param {Node} cnode - The ProseMirror node.
+ * @param {HTMLElement} dom - The DOM element representing the node.
+ * @param {SplitContext} splitContex - The context used for splitting content.
+ * @returns {number|null} - The position where the node should be split, or null if no break is needed.
+ */
 export function getBreakPos(
   cnode: Node,
   dom: HTMLElement,
   splitContex: SplitContext,
-) {
-  const paragraphDOM = dom
-  if (!paragraphDOM) return null
-  const width = paragraphDOM.offsetWidth
+): number | null {
+  const width = dom.offsetWidth
   const html = generateHTML(getJsonFromDoc(cnode), splitContex.schema)
   const { width: wordl } = computedWidth(html, false)
-  //如果高度超过默认了 但是宽度没有超过 证明 只有一行 只是里面有 行内元素 比如 图片
+
   if (width >= wordl) {
     return null
   }
@@ -166,10 +177,11 @@ export function getBreakPos(
 }
 
 /**
- * 工具类
- * @param node
+ * Converts a ProseMirror node to a JSON structure.
+ * @param {Node} node - The ProseMirror node.
+ * @returns {Object} - The JSON representation of the document.
  */
-export function getJsonFromDoc(node: Node) {
+export function getJsonFromDoc(node: Node): object {
   return {
     type: 'doc',
     content: [node.toJSON()],
@@ -177,18 +189,15 @@ export function getJsonFromDoc(node: Node) {
 }
 
 let iframeComputed: any = null
-var iframeDoc: any = null
+let iframeDoc: any = null
 
 export class UnitConversion {
   arrDPI: any[] = []
 
   constructor() {
     const arr = []
-    // @ts-ignore
     if (window.screen.deviceXDPI) {
-      // @ts-ignore
       arr.push(window.screen.deviceXDPI)
-      // @ts-ignore
       arr.push(window.screen.deviceYDPI)
     } else {
       const tmpNode = document.createElement('DIV')
@@ -197,7 +206,7 @@ export class UnitConversion {
       document.body.appendChild(tmpNode)
       arr.push(tmpNode.offsetWidth)
       arr.push(tmpNode.offsetHeight)
-      if (tmpNode && tmpNode.parentNode) {
+      if (tmpNode.parentNode) {
         tmpNode.parentNode.removeChild(tmpNode)
       }
     }
@@ -205,55 +214,67 @@ export class UnitConversion {
   }
 
   /**
-   * @description px to mm
-   * @param value px值
+   * Converts pixels to millimeters.
+   * @param {number} value - The value in pixels.
+   * @returns {number} - The value in millimeters.
    */
-  pxConversionMm(value: number) {
+  pxConversionMm(value: number): number {
     const inch = value / this.arrDPI[0]
-    const c_value = inch * 25.4
-    return Number(c_value.toFixed())
+    const cValue = inch * 25.4
+    return Number(cValue.toFixed())
   }
 
   /**
-   * @description mm to px
-   * @param value px值
+   * Converts millimeters to pixels.
+   * @param {number} value - The value in millimeters.
+   * @returns {number} - The value in pixels.
    */
-  mmConversionPx(value: number) {
+  mmConversionPx(value: number): number {
     const inch = value / 25.4
-    const c_value = inch * this.arrDPI[0]
-    return Number(c_value.toFixed())
+    const cValue = inch * this.arrDPI[0]
+    return Number(cValue.toFixed())
   }
 
-  cmConversionPx(value: number) {
+  /**
+   * Converts centimeters to pixels.
+   * @param {number} value - The value in centimeters.
+   * @returns {number} - The value in pixels.
+   */
+  cmConversionPx(value: number): number {
     const inch = (value * 10) / 25.4
-    const c_value = inch * this.arrDPI[0]
-    return Number(c_value.toFixed())
+    const cValue = inch * this.arrDPI[0]
+    return Number(cValue.toFixed())
   }
 }
 
 let unitConversion: UnitConversion | null = null
 
-export function getPageOption(restore = false) {
-  if (restore) map.clear()
+/**
+ * Retrieves or calculates the page options, including body dimensions and margins.
+ * @param {boolean} [restore=false] - Whether to restore the options.
+ * @returns {Object} - The calculated page options.
+ */
+export function getPageOption(restore = false): object {
+  if (restore) {
+    map.clear()
+  }
   if (!restore && map.has('pageOption')) {
     return map.get('pageOption')
   }
-  if (!unitConversion) unitConversion = new UnitConversion()
+  if (!unitConversion) {
+    unitConversion = new UnitConversion()
+  }
   const { page } = useStore()
-  // @ts-ignore
   const { right, left, bottom, top } = page.value.margin
   const pageSize = () => {
-    // @ts-ignore
     const { width, height } = page.value.size
     return {
-      // @ts-ignore
       width: page.value.orientation === 'portrait' ? width : height,
-      // @ts-ignore
       height: page.value.orientation === 'portrait' ? height : width,
     }
   }
   const { width, height } = pageSize()
-  let pageOption = {
+  const pageOption = {
     bodyHeight: unitConversion.cmConversionPx(height - bottom - top),
     bodyWidth: unitConversion.cmConversionPx(width - right - left),
     right: unitConversion.cmConversionPx(right),
@@ -267,13 +288,20 @@ export function getPageOption(restore = false) {
 
 const map = new Map()
 
-export function computedHeight(html: string, id: string, cache = true) {
+/**
+ * Computes the height of the HTML content.
+ * @param {string} html - The HTML string.
+ * @param {string} id - The ID of the element.
+ * @param {boolean} [cache=true] - Whether to cache the result.
+ * @returns {number} - The computed height.
+ */
+export function computedHeight(html: string, id: string, cache = true): number {
   if (cache && map.has(html)) {
     return map.get(html)
   }
   const computeddiv = iframeDoc.getElementById('computeddiv')
   if (computeddiv) {
-    computeddiv.innerHTML = '<p>&nbsp;</p>' + html
+    computeddiv.innerHTML = `<p>&nbsp;</p>${html}`
     const htmldiv = iframeDoc.getElementById(id)
     const { height } = getDomHeight(htmldiv)
     computeddiv.innerHTML = '&nbsp;'
@@ -285,28 +313,41 @@ export function computedHeight(html: string, id: string, cache = true) {
   return 0
 }
 
-export function computedWidth(html: string, cache = true) {
+/**
+ * Computes the width of the HTML content.
+ * @param {string} html - The HTML string.
+ * @param {boolean} [cache=true] - Whether to cache the result.
+ * @returns {Object} - An object containing the computed width and height.
+ */
+export function computedWidth(
+  html: string,
+  cache = true,
+): { height: number; width: number } {
   if (cache && map.has(html)) {
     return map.get(html)
   }
   const computedspan = iframeDoc.getElementById('computedspan')
-  if (html == ' ') {
+  if (html === ' ') {
     html = '&nbsp;'
   }
   if (computedspan) {
     computedspan.innerHTML = html
-    const width = computedspan.getBoundingClientRect().width
-    const height = computedspan.getBoundingClientRect().height
+    const { width } = computedspan.getBoundingClientRect()
+    const { height } = computedspan.getBoundingClientRect()
     if (cache) {
       map.set(html, { height, width })
     }
     computedspan.innerHTML = '&nbsp;'
     return { height, width }
   }
-  return 0
+  return { height: 0, width: 0 }
 }
 
-export function getDefault() {
+/**
+ * Gets the default height for a text block.
+ * @returns {number} - The default height.
+ */
+export function getDefault(): number {
   if (map.has('defaultheight')) {
     return map.get('defaultheight')
   }
@@ -316,40 +357,53 @@ export function getDefault() {
   return pHeight
 }
 
-export function getDomHeight(dom: HTMLElement) {
+/**
+ * Gets the height of a DOM element, including margins.
+ * @param {HTMLElement} dom - The DOM element.
+ * @returns {Object} - An object containing the margin and height.
+ */
+export function getDomHeight(dom: HTMLElement): {
+  margin: number
+  height: number
+} {
   const contentStyle =
     window.getComputedStyle(dom) ||
     iframeComputed.contentWindow.getComputedStyle(dom)
   const marginTop = contentStyle.getPropertyValue('margin-top')
   const marginBottom = contentStyle.getPropertyValue('margin-bottom')
-  const margin = parseFloat(marginTop) + parseFloat(marginBottom)
+  const margin = Number.parseFloat(marginTop) + Number.parseFloat(marginBottom)
   return {
     margin,
-    height: margin + dom.offsetHeight + parseFloat(contentStyle.borderWidth),
+    height:
+      margin + dom.offsetHeight + Number.parseFloat(contentStyle.borderWidth),
   }
 }
 
-function findTextblockHacksIds(node: Node) {
-  let ids: any[] = []
+function findTextBlockHacksIds(node: Node): any[] {
+  const ids: any[] = []
   node.descendants((node) => {
-    if (node.isTextblock && node.childCount == 0) {
+    if (node.isTextblock && node.childCount === 0) {
       ids.push(node.attrs.id)
     }
   })
   return ids
 }
 
-export function getAbsentHtmlH(node: Node, schema: Schema) {
+/**
+ * Gets the computed HTML element for a node.
+ * @param {Node} node - The ProseMirror node.
+ * @param {Schema} schema - The ProseMirror schema.
+ * @returns {HTMLElement} - The corresponding HTML element.
+ */
+export function getAbsentHtmlH(node: Node, schema: Schema): HTMLElement {
   if (!node.attrs.id) {
-    // @ts-ignore
     node.attrs.id = getId()
   }
   const html = generateHTML(getJsonFromDoc(node), schema)
   const computeddiv = iframeDoc.getElementById('computeddiv')
-  let ids = findTextblockHacksIds(node)
+  const ids = findTextBlockHacksIds(node)
   if (computeddiv) {
-    computeddiv.innerHTML =
-      "<p><br class='ProseMirror-trailingBreak'></p>" + html
+    computeddiv.innerHTML = `<p><br class='ProseMirror-trailingBreak'></p>${html}`
     ids.forEach((id) => {
       const nodeHtml = iframeDoc.getElementById(id)
       if (nodeHtml) {
@@ -357,63 +411,63 @@ export function getAbsentHtmlH(node: Node, schema: Schema) {
       }
     })
   }
-  const nodesom = iframeDoc.getElementById(node.attrs.id)
-  return nodesom
+  return iframeDoc.getElementById(node.attrs.id)
 }
 
-export function removeAbsentHtmlH() {
+/**
+ * Clears the computed HTML content.
+ */
+export function removeAbsentHtmlH(): void {
   const computeddiv = iframeDoc.getElementById('computeddiv')
   computeddiv.innerHTML = ''
 }
 
-export function removeComputedHtml() {
+/**
+ * Removes the computed iframe from the document.
+ */
+export function removeComputedHtml(): void {
   const { container } = useStore()
-  const iframeComputed1 = document.querySelector(`${container}-computediframe`)
-  if (iframeComputed1) {
-    document.body.removeChild(iframeComputed1)
+  const computedIframe = document.querySelector(`${container}-computediframe`)
+  if (computedIframe) {
+    document.body.removeChild(computedIframe)
     iframeComputed = null
     iframeDoc = null
   }
 }
 
 /**
- * 构建计算html需要的辅助iframe 和打印html
- * @param options
+ * Constructs the auxiliary iframe needed for computing HTML and printing it.
  */
-export function buildComputedHtml() {
+export function buildComputedHtml(): void {
   removeComputedHtml()
   clonePageToIframe()
 }
 
-export function changeComputedHtml() {
+/**
+ * Updates the computed HTML content based on the current page options.
+ */
+export function changeComputedHtml(): void {
   getPageOption(true)
   const { page } = useStore()
   const pageSize = () => {
-    //  @ts-ignore
     const { width, height } = page.value.size
     return {
-      //  @ts-ignore
       width: page.value.orientation === 'portrait' ? width : height,
-      //  @ts-ignore
       height: page.value.orientation === 'portrait' ? height : width,
     }
   }
   const { width, height } = pageSize()
-  //  @ts-ignore
   const { right, left, bottom, top } = page.value.margin
-  let pageContent = iframeDoc.getElementById('computeddiv')
-  let watermark = iframeDoc.getElementsByClassName('umo-page-watermark')[0]
-  watermark.setAttribute(
-    'style',
-    `width: ${width + 'cm'};height: ${height + 'cm'}`,
-  )
+  const pageContent = iframeDoc.getElementById('computeddiv')
+  const [watermark] = iframeDoc.getElementsByClassName('umo-page-watermark')
+  watermark.setAttribute('style', `width: ${width}cm;height: ${height}cm`)
   pageContent.setAttribute(
     'style',
-    `padding-top: ${top + 'cm'};padding-right:  ${right + 'cm'};padding-bottom: ${bottom + 'cm'} ;padding-left:${left + 'cm'};min-height: ${height - top - bottom + 'cm'}`,
+    `padding-top: ${top}cm;padding-right:  ${right}cm;padding-bottom: ${bottom}cm ;padding-left:${left}cm;min-height: ${height - top - bottom}cm`,
   )
 }
 
-function clonePageToIframe() {
+function clonePageToIframe(): void {
   const iframe = createIframe()
   const { container } = useStore()
   iframeComputed = iframe
@@ -430,24 +484,23 @@ function clonePageToIframe() {
   adddPForProseMirror(iframe)
 }
 
-function cleanPagecontent(iframe: any) {
+function cleanPagecontent(iframe: any): void {
   const iframeDoc = iframe.contentDocument || iframe.contentWindow.document
-  const pageContent = iframeDoc.getElementsByClassName(
+  const [pageContent] = iframeDoc.getElementsByClassName(
     'umo-page-node-content',
-  )[0]
+  )
   pageContent.setAttribute('id', 'computeddiv')
   pageContent.innerHTML = ''
-  let editor = pageContent.parentNode.parentNode
-  let page = pageContent.parentNode
-  // 使用 while 循环和 firstChild 删除所有子节点
-  while (editor.lastChild != page) {
+  const editor = pageContent.parentNode.parentNode
+  const page = pageContent.parentNode
+  while (editor.lastChild !== page) {
     editor.removeChild(editor.lastChild)
   }
 }
 
-function adddPForProseMirror(iframe: any) {
+function adddPForProseMirror(iframe: any): void {
   const iframeDoc = iframe.contentDocument || iframe.contentWindow.document
-  const pageContent = iframeDoc.getElementsByClassName('ProseMirror')[0]
+  const [pageContent] = iframeDoc.getElementsByClassName('ProseMirror')
   const p = iframeDoc.createElement('p')
   p.setAttribute('id', 'computedspan')
   p.setAttribute('style', 'display: inline-block')
@@ -456,46 +509,41 @@ function adddPForProseMirror(iframe: any) {
   pageContent.setAttribute('contenteditable', 'false')
 }
 
-function createIframe() {
+function createIframe(): HTMLIFrameElement {
   const iframe = document.createElement('iframe')
   document.body.appendChild(iframe)
   return iframe
 }
 
-function copyStylesToIframe(iframeContentDoc: Document) {
-  // 获取当前页面的所有样式表
+function copyStylesToIframe(iframeContentDoc: Document): void {
   const links = document.getElementsByTagName('link')
-  for (let i = 0; i < links.length; i++) {
-    if (links[i].rel === 'stylesheet') {
+  for (const link of links) {
+    if (link.rel === 'stylesheet') {
       const newLink = iframeContentDoc.createElement('link')
       newLink.rel = 'stylesheet'
       newLink.type = 'text/css'
-      newLink.href = links[i].href
+      newLink.href = link.href
       iframeContentDoc.head.appendChild(newLink)
     }
   }
   const styles = document.querySelectorAll('style')
   styles.forEach((style) => {
-    // 创建一个新的<style>标签
     const newStyle = iframeContentDoc.createElement('style')
-    // 将样式内容复制到新标签中
     newStyle.textContent = style.textContent
-    // 将新标签插入到iframe的<head>中
     iframeContentDoc.head.appendChild(newStyle)
   })
   const elementsWithInlineStyles = document.querySelectorAll('[style]')
   elementsWithInlineStyles.forEach((element) => {
-    const styleAttr = element.getAttribute('style') || ''
+    const styleAttr = element.getAttribute('style') ?? ''
     const clonedElement = iframeContentDoc.createElement(element.tagName)
     clonedElement.setAttribute('style', styleAttr)
   })
 }
 
-function filterAndCopyHtmlToIframe(iframe: any, excludedTags: string[]) {
-  const body = document.body
+function filterAndCopyHtmlToIframe(iframe: any, excludedTags: string[]): void {
+  const { body } = document
   const bodyContent = body.innerHTML
 
-  // 使用正则表达式过滤掉不需要的标签
   const regex = new RegExp(`<(${excludedTags.join('|')})[^>]*>.*?</\\1>`, 'g')
   const filteredContent = bodyContent.replace(regex, '')
   const docFragment = document.createDocumentFragment()
@@ -506,68 +554,4 @@ function filterAndCopyHtmlToIframe(iframe: any, excludedTags: string[]) {
   const iframeDoc = iframe.contentDocument || iframe.contentWindow.document
   iframeDoc.adoptNode(docFragment)
   iframeDoc.body.parentNode.replaceChild(docFragment, iframeDoc.body)
-}
-
-//------------------------------util----------------------------------------------
-export function getId() {
-  return Math.random().toString(36).substring(2, 10)
-}
-// @ts-ignore
-export const findParentDomRefOfType = (nodeType, domAtPos) => (selection) => {
-  // @ts-ignore
-  return findParentDomRef(
-    (node: any) => equalNodeType(nodeType, node),
-    domAtPos,
-  )(selection)
-}
-// @ts-ignore
-export const equalNodeType = (nodeType, node) => {
-  return (
-    (Array.isArray(nodeType) && nodeType.indexOf(node.type) > -1) ||
-    node.type === nodeType
-  )
-}
-// @ts-ignore
-export const findParentDomRef = (predicate, domAtPos) => (selection) => {
-  const parent = findParentNode(predicate)(selection)
-  if (parent) {
-    return findDomRefAtPos(parent.pos, domAtPos)
-  }
-}
-// @ts-ignore
-export const findDomRefAtPos = (position, domAtPos) => {
-  const dom = domAtPos(position)
-  const node = dom.node.childNodes[dom.offset]
-  // @ts-ignore
-  if (dom.node.nodeType === Node.TEXT_NODE) {
-    return dom.node.parentNode
-  }
-  // @ts-ignore
-  if (!node || node.nodeType === Node.TEXT_NODE) {
-    return dom.node
-  }
-
-  return node
-}
-
-export const findParentNode =
-  // @ts-ignore
-
-    (predicate) =>
-    // @ts-ignore
-    ({ $from }) =>
-      findParentNodeClosestToPos($from, predicate)
-// @ts-ignore
-export const findParentNodeClosestToPos = ($pos, predicate) => {
-  for (let i = $pos.depth; i > 0; i--) {
-    const node = $pos.node(i)
-    if (predicate(node)) {
-      return {
-        pos: i > 0 ? $pos.before(i) : 0,
-        start: $pos.start(i),
-        depth: i,
-        node,
-      }
-    }
-  }
 }

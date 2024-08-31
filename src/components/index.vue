@@ -50,14 +50,15 @@
 </template>
 
 <script setup>
+import '@/assets/styles/index.less'
+
 import { toBlob, toJpeg, toPng } from 'dom-to-image-more'
-import i18n from '@/i18n'
-import { propsOptions } from '@/options'
 import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
 
-import '@/assets/styles/index.less'
 import { getSelectionNode, getSelectionText } from '@/extensions/selection'
+import i18n from '@/i18n'
+import { propsOptions } from '@/options'
 
 defineOptions({ name: 'UmoEditor' })
 
@@ -192,8 +193,9 @@ const setPage = (parmas) => {
     throw new Error('parmas must be an object.')
   }
   if (parmas.size) {
-    if (typeof parmas.size !== 'string')
+    if (typeof parmas.size !== 'string') {
       throw new Error('"parmas.size" must be a string.')
+    }
     const size = options.value.dicts.pageSizes.find(
       (item) => item.label === parmas.size,
     )
@@ -378,7 +380,9 @@ const setLocale = (parmas) => {
   location.reload()
 }
 const getContent = (format = 'html') => {
-  if (!editor.value) throw new Error('editor is not ready!')
+  if (!editor.value) {
+    throw new Error('editor is not ready!')
+  }
   if (format === 'html') {
     return editor.value.getHTML()
   }
@@ -391,7 +395,7 @@ const getContent = (format = 'html') => {
   throw new Error('format must be html, text or json')
 }
 const getImage = async (format = 'blob') => {
-  const zoomLevel = page.value.zoomLevel
+  const { zoomLevel } = page.value
   try {
     page.value.zoomLevel = 100
     const node = document.querySelector(`${container} .umo-page-content`)
@@ -603,7 +607,9 @@ watch(
     if (!editor.value) {
       return
     }
-    editor.value.on('create', ({ editor }) => emits('created', { editor }))
+    editor.value.on('create', ({ editor }) => {
+      emits('created', { editor })
+    })
     editor.value.on('update', ({ editor }) => {
       emits('changed', { editor })
       contentUpdated = true
@@ -611,25 +617,30 @@ watch(
     editor.value.on('selectionUpdate', ({ editor }) => {
       emits('changed:selection', { editor })
     })
-    editor.value.on('transaction', ({ editor, transaction }) =>
-      emits('changed:transaction', { editor, transaction }),
+    editor.value.on('transaction', ({ editor, transaction }) => {
+      emits('changed:transaction', { editor, transaction })
+    })
+    editor.value.on('focus', ({ editor, event }) => {
+      emits('focus', { editor, event })
+    })
+    editor.value.on(
+      'contentError',
+      ({ editor, error, disableCollaboration }) => {
+        emits('contentError', { editor, error, disableCollaboration })
+      },
     )
-    editor.value.on('focus', ({ editor, event }) =>
-      emits('focus', { editor, event }),
-    )
-    editor.value.on('contentError', ({ editor, error, disableCollaboration }) =>
-      emits('contentError', { editor, error, disableCollaboration }),
-    )
-    editor.value.on('blur', ({ editor, event }) =>
-      emits('blur', { editor, event }),
-    )
+    editor.value.on('blur', ({ editor, event }) => {
+      emits('blur', { editor, event })
+    })
     editor.value.on('destroy', () => {
       resetStore()
       emits('destroy')
     })
   },
 )
-const menuChange = (menu) => emits('changed:menu', menu)
+const menuChange = (menu) => {
+  emits('changed:menu', menu)
+}
 watch(
   () => $toolbar.value,
   (toolbar, oldToolbar) => {
@@ -639,48 +650,60 @@ watch(
 )
 watch(
   () => page.value.size,
-  (pageSize, oldPageSize) =>
-    emits('changed:pageSize', { pageSize, oldPageSize }),
+  (pageSize, oldPageSize) => {
+    emits('changed:pageSize', { pageSize, oldPageSize })
+  },
   { deep: true },
 )
 watch(
   () => page.value.margin,
-  (pageMargin, oldPageMargin) =>
-    emits('changed:pageMargin', { pageMargin, oldPageMargin }),
+  (pageMargin, oldPageMargin) => {
+    emits('changed:pageMargin', { pageMargin, oldPageMargin })
+  },
   { deep: true },
 )
 watch(
   () => page.value.background,
-  (pageBackground, oldPageBackground) =>
-    emits('changed:pageBackground', { pageBackground, oldPageBackground }),
+  (pageBackground, oldPageBackground) => {
+    emits('changed:pageBackground', { pageBackground, oldPageBackground })
+  },
 )
 watch(
   () => page.value.orientation,
-  (pageOrientation, oldPageOrientation) =>
-    emits('changed:pageOrientation', { pageOrientation, oldPageOrientation }),
+  (pageOrientation, oldPageOrientation) => {
+    emits('changed:pageOrientation', { pageOrientation, oldPageOrientation })
+  },
 )
 watch(
   () => page.value.showToc,
-  (showToc) => emits('changed:pageShowToc', showToc),
+  (showToc) => {
+    emits('changed:pageShowToc', showToc)
+  },
 )
 watch(
   () => page.value.zoomLevel,
-  (zoomLevel, oldZoomLevel) =>
-    emits('changed:pageZoom', { zoomLevel, oldZoomLevel }),
+  (zoomLevel, oldZoomLevel) => {
+    emits('changed:pageZoom', { zoomLevel, oldZoomLevel })
+  },
 )
 watch(
   () => page.value.preview.enabled,
-  (previewEnabled) => emits('changed:pagePreview', previewEnabled),
+  (previewEnabled) => {
+    emits('changed:pagePreview', previewEnabled)
+  },
 )
 watch(
   () => page.value.watermark,
-  (pageWatermark, oldPageWatermark) =>
-    emits('changed:pageWatermark', { pageWatermark, oldPageWatermark }),
+  (pageWatermark, oldPageWatermark) => {
+    emits('changed:pageWatermark', { pageWatermark, oldPageWatermark })
+  },
   { deep: true },
 )
 watch(
   () => printing.value,
-  () => emits('print'),
+  () => {
+    emits('print')
+  },
   { deep: true },
 )
 watch(

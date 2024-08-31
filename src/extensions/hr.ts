@@ -1,6 +1,6 @@
 import { nodeInputRule } from '@tiptap/core'
 import hr from '@tiptap/extension-horizontal-rule'
-import { TextSelection, NodeSelection } from '@tiptap/pm/state'
+import { NodeSelection, TextSelection } from '@tiptap/pm/state'
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -59,7 +59,7 @@ export default hr.extend({
             currentChain
               // set cursor after horizontal rule
               .command(({ tr, dispatch }) => {
-                var _a
+                let _a
                 if (dispatch) {
                   const { $to } = tr.selection
                   const posAfter = $to.end()

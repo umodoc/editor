@@ -1,5 +1,6 @@
 import { ObjectSchema } from '@eslint/object-schema'
-import { UmoEditorOptions } from '@/types'
+
+import type { UmoEditorOptions } from '@/types'
 
 // 默认配置
 const defaultOptions: UmoEditorOptions = {
@@ -276,7 +277,7 @@ const defaultOptions: UmoEditorOptions = {
   },
   templates: [],
   cdnUrl: 'https://unpkg.com/@umoteam/editor-external@latest',
-  shareUrl: location?.href || '',
+  shareUrl: location.href || '',
   diagrams: {
     domain: 'https://embed.diagrams.net',
     // https://www.drawio.com/doc/faq/supported-url-parameters
@@ -324,7 +325,7 @@ const isNumber = (value: any) => {
     return isFinite(value)
   }
   if (typeof value === 'string') {
-    const parsed = parseFloat(value)
+    const parsed = Number.parseFloat(value)
     return !isNaN(parsed) && isFinite(parsed) && value === parsed.toString()
   }
   return false
@@ -334,7 +335,7 @@ const isLocale = (value: any) => {
     return true
   }
   if (typeof value === 'object' && value !== null) {
-    for (let key in value) {
+    for (const key in value) {
       if (!['en_US', 'zh_CN'].includes(key)) {
         return false
       }
@@ -971,4 +972,4 @@ const ojbectSchema = new ObjectSchema({
   },
 })
 
-export { defaultOptions, propsOptions, ojbectSchema }
+export { defaultOptions, ojbectSchema, propsOptions }

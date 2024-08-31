@@ -10,5 +10,5 @@
 </template>
 
 <script setup>
-let dialogVisible = $ref(false)
+const dialogVisible = $ref(false)
 </script>
