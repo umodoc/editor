@@ -1,4 +1,4 @@
-const { container, editor } = useStore()
+const { container } = useStore()
 
 export const useNodePostion = () => {
   const currentNode: HTMLElement | null = document.querySelector(
@@ -13,15 +13,15 @@ export const useNodePostion = () => {
 
   // 微修正菜单位置
   offsetTop = currentNode.tagName === 'DIV' ? offsetTop - 8 : offsetTop - 5
-  let offsetY = 0
-  if (
-    editor.value.isActive('horizontalRule') ||
-    editor.value.isActive('table')
-  ) {
-    offsetY = 5
-  }
-  if (editor.value.isActive('pagination')) {
-    offsetY = -4
-  }
+  // let offsetY = 0
+  // if (
+  //   editor.value.isActive('horizontalRule') ||
+  //   editor.value.isActive('table')
+  // ) {
+  //   offsetY = 5
+  // }
+  // if (editor.value.isActive('pagination')) {
+  //   offsetY = -4
+  // }
   return { offsetTop, offsetLeft }
 }

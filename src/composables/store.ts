@@ -74,7 +74,7 @@ export const useStore = createGlobalState(() => {
 
   watch(
     () => [page.value.size, page.value.margin, page.value.orientation],
-    (value) => {
+    () => {
       editor.value?.commands.autoPaging(false)
       changeComputedHtml()
       setTimeout(() => {

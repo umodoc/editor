@@ -110,7 +110,7 @@ export default Extension.create({
       () =>
       ({ tr, state, dispatch }) => {
         const { selection } = state
-        tr = tr.setSelection(selection)
+        tr.setSelection(selection)
         tr = updateIndentLevel(tr, direction)
         if (tr.docChanged) {
           if (isFunction(dispatch)) {

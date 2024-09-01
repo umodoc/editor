@@ -66,7 +66,7 @@ export default Extension.create({
         },
         props: {
           handleDOMEvents: {
-            mousedown(view, event) {
+            mousedown(view) {
               const marks: Mark[] | undefined = this.getState(view.state)
               if (!marks || marks.length === 0) {
                 return false // 如果没有标记，则不执行任何操作

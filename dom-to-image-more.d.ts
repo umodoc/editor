@@ -1,4 +1,4 @@
 declare module 'dom-to-image-more' {
-  import domToImage = require('dom-to-image-more')
-  export = domToImage
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  export = require('@types/dom-to-image')
 }

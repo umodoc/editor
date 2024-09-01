@@ -58,13 +58,11 @@ const toggleBulletList = (listStyleType) => {
   const chain = editor.value?.chain().focus()
   if (editor.value?.isActive('bulletList')) {
     if (
-      editor.value.getAttributes('bulletList').listStyleType !== listStyleType
+      editor.value.getAttributes('bulletList').listStyleType === listStyleType
     ) {
-      chain.updateAttributes('bulletList', { listStyleType }).run()
-    }
-    // 关闭列表类型
-    else {
       chain.toggleBulletList().run()
+    } else {
+      chain.updateAttributes('bulletList', { listStyleType }).run()
     }
   } else {
     chain

@@ -211,7 +211,7 @@ const editorInstance = new Editor({
     }),
     FileHandler.configure({
       allowedMimeTypes: options.value.file.allowedMimeTypes,
-      onPaste(editor, files, html) {
+      onPaste(editor, files) {
         files.forEach((file) => editor.commands.insertFile({ file }))
       },
       onDrop: (editor, files, pos) => {
@@ -223,7 +223,7 @@ const editorInstance = new Editor({
     }),
     ...options.value.extensions,
   ],
-  onCreate({ editor }) {},
+  onCreate() {},
   onUpdate({ editor }) {
     $document.value.content = editor.getHTML()
   },

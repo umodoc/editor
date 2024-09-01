@@ -128,7 +128,7 @@ export default Node.create<PageOptions>({
     ]
   },
 
-  renderHTML({ node, HTMLAttributes }) {
+  renderHTML({ HTMLAttributes }) {
     return ['page', mergeAttributes(HTMLAttributes), 0]
   },
   addCommands() {
@@ -136,7 +136,7 @@ export default Node.create<PageOptions>({
       splitBlock,
       splitListItem,
       autoPaging: (status = true) => {
-        return ({ tr, state, dispatch, editor }) => {
+        return ({ tr, dispatch }) => {
           if (dispatch) {
             tr.setMeta('runState', status)
           }
@@ -144,7 +144,7 @@ export default Node.create<PageOptions>({
         }
       },
       setPageBreak: () => {
-        return ({ tr, state, dispatch, editor }) => {
+        return ({ tr, dispatch }) => {
           if (dispatch) {
             tr.setMeta('splitPage', true)
           }
@@ -252,7 +252,7 @@ export default Node.create<PageOptions>({
         () => deleteSelection(commands),
         () =>
           commands.command(({ tr }) => {
-            const { selection, doc } = tr
+            const { selection } = tr
             const { $anchor } = selection
             const currentNode = $anchor.node()
             const blockNode = findParentNode(
@@ -321,7 +321,7 @@ export default Node.create<PageOptions>({
           }),
       ])
     const handleTab = () =>
-      this.editor.commands.first(({ commands }) => [
+      this.editor.commands.first(() => [
         () => {
           return true
         },

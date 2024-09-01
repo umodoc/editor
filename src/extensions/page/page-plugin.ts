@@ -145,15 +145,15 @@ export const pagePlugin = (editor: Editor, nodesComputed: NodesComputed) => {
     },
     props: {
       handleDOMEvents: {
-        compositionstart(view, event) {
+        compositionstart() {
           composition = true
         },
 
-        compositionend(view, event) {
+        compositionend() {
           composition = false
         },
       },
-      transformPasted(slice, view) {
+      transformPasted(slice) {
         slice.content.descendants((node) => {
           node.attrs.id = getId()
         })
@@ -170,7 +170,7 @@ export const idPlugin = (types: string[]) => {
       init: () => {
         return false
       },
-      apply: (tr, prevState) => {
+      apply: (tr) => {
         return tr.getMeta('initSplit')
       },
     },

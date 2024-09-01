@@ -91,13 +91,11 @@ const toggleOrderedList = (listStyleType) => {
   const chain = editor.value?.chain().focus()
   if (editor.value?.isActive('orderedList')) {
     if (
-      editor.value.getAttributes('orderedList').listStyleType !== listStyleType
+      editor.value.getAttributes('orderedList').listStyleType === listStyleType
     ) {
-      chain.updateAttributes('orderedList', { listStyleType }).run()
-    }
-    // 关闭列表类型
-    else {
       chain.toggleOrderedList().run()
+    } else {
+      chain.updateAttributes('orderedList', { listStyleType }).run()
     }
   } else {
     chain

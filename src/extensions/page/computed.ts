@@ -344,7 +344,7 @@ export class PageComputedContext {
       return this.tr
     }
     if (inserting || deleting) {
-      const startTime = performance.now()
+      //const startTime = performance.now()
       this.computed()
       this.checkNodeAndFix()
     }
@@ -509,6 +509,7 @@ export class PageComputedContext {
    * @param depth
    * @param typesAfter
    * @param schema
+   * @param force
    */
   lift({ pos, depth = 1, typesAfter, schema, force = false }: SplitParams) {
     const { tr } = this
@@ -563,7 +564,7 @@ export class PageComputedContext {
     const { schema } = this.state
     let beforeBolck: Node | null = null
     let beforePos = 0
-    doc.descendants((node, pos, parentNode, i) => {
+    doc.descendants((node, pos) => {
       if (node.type === schema.nodes[PARAGRAPH] && node.attrs.extend === true) {
         if (beforeBolck) {
           // console.log('beforeBolck: ' + beforeBolck)

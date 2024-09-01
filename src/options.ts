@@ -293,7 +293,7 @@ const defaultOptions: UmoEditorOptions = {
     en_US: {},
     zh_CN: {},
   },
-  async onSave(content: any, page: any, document: any) {
+  async onSave() {
     return await new Promise((_, reject) => {
       reject(new Error('Key "onSave": Please set the save method'))
     })
@@ -307,17 +307,17 @@ const defaultOptions: UmoEditorOptions = {
       reject(new Error('Key "onFileUpload": Please set the upload method'))
     })
   },
-  onFileDelete(id: any, src: any) {
+  onFileDelete() {
     console.error(
       'The file has been deleted. Please configure the onFileDelete to completely delete the file from the server.',
     )
   },
-  async onAssistant(payload: any, content: any) {
+  async onAssistant() {
     return await new Promise((_, reject) => {
       reject(new Error('Key "onAssistant": Please set the onAssistant method'))
     })
   },
-  async onCustomImportWordMethod(file: any) {
+  async onCustomImportWordMethod() {
     return await new Promise((_, reject) => {
       reject(
         new Error(
@@ -346,7 +346,7 @@ const isLocale = (value: any) => {
     return true
   }
   if (typeof value === 'object' && value !== null) {
-    for (const key in value) {
+    for (const key of Object.keys(value)) {
       if (!['en_US', 'zh_CN'].includes(key)) {
         return false
       }
@@ -693,12 +693,12 @@ const ojbectSchema = new ObjectSchema({
         schema: {
           types: {
             merge: 'replace',
-            validate(value) {},
+            validate() {},
             required: false,
           },
           nodesComputed: {
             merge: 'replace',
-            validate(value) {},
+            validate() {},
             required: false,
           },
         },

@@ -100,6 +100,8 @@ const cssConfig = {
   preprocessorOptions: {
     less: {
       modifyVars: { '@prefix': 'umo' },
+      math: 'always',
+      relativeUrls: true,
       javascriptEnabled: true,
     },
   },
@@ -111,4 +113,9 @@ export default defineConfig({
   css: cssConfig,
   build: buildConfig,
   test: testConfig,
+  resolve: {
+    alias: {
+      '@': `${process.cwd()}/src`,
+    },
+  },
 })

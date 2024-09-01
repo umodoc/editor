@@ -52,6 +52,7 @@
 <script setup lang="ts">
 import '@/assets/styles/index.less'
 
+import { isRecord } from '@tool-belt/type-predicates'
 import { toBlob, toJpeg, toPng } from 'dom-to-image-more'
 import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
@@ -169,7 +170,7 @@ if (slots.page_footer) {
 
 // 对外暴露的编辑器方法
 const setToolbar = (parmas) => {
-  if ((!parmas) instanceof Object) {
+  if (!isRecord(params)) {
     throw new Error('parmas must be an object.')
   }
   if (parmas.mode) {
@@ -189,7 +190,7 @@ const setToolbar = (parmas) => {
   }
 }
 const setPage = (parmas) => {
-  if ((!parmas) instanceof Object) {
+  if (!isRecord(params)) {
     throw new Error('parmas must be an object.')
   }
   if (parmas.size) {
@@ -224,7 +225,7 @@ const setPage = (parmas) => {
   }
 }
 const setWatermark = (parmas) => {
-  if ((!parmas) instanceof Object) {
+  if (!isRecord(params)) {
     throw new Error('parmas must be an object.')
   }
   if (parmas.alpha !== undefined) {
@@ -284,7 +285,7 @@ const setWatermark = (parmas) => {
   }
 }
 const setDocument = (parmas) => {
-  if ((!parmas) instanceof Object) {
+  if (!isRecord(params)) {
     throw new Error('parmas must be an object.')
   }
   if (parmas.title) {
@@ -422,7 +423,7 @@ const saveContent = async () => {
     return
   }
   try {
-    let message = await useMessage(
+    const message = await useMessage(
       'loading',
       {
         content: t('save.saving'),
@@ -443,7 +444,7 @@ const saveContent = async () => {
     )
     if (!success) {
       message.close()
-      message = useMessage('error', {
+      useMessage('error', {
         content: t('save.failed'),
         placement: 'bottom',
         offset: [0, -20],

@@ -3,7 +3,7 @@ import '@/assets/styles/plyr.less'
 
 import Plyr from 'plyr'
 
-import i18n from '@/i18n'
+import { i18n } from '@/i18n'
 
 const locales = {
   'zh-CN': {

@@ -12,7 +12,7 @@
       <div class="umo-table-grid" @mouseleave="resetTable">
         <div v-for="(row, rowIndex) in table" :key="rowIndex" class="row">
           <div
-            v-for="(cell, colIndex) in row"
+            v-for="colIndex in row"
             :key="colIndex"
             class="cell"
             :class="{ selected: isSelected(rowIndex, colIndex) }"

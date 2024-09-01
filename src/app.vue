@@ -94,7 +94,7 @@ const options = $ref({
       size: file.size,
     }
   },
-  async onCustomImportWordMethod(file) {
+  async onCustomImportWordMethod() {
     return await Promise.resolve({
       value: '<p>测试导入word</p>',
     })

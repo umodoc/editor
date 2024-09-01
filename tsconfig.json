@@ -1,9 +1,6 @@
 {
   "compilerOptions": {
     "removeComments": true,
-    "declaration": true,
-    "noEmit": false,
-    "emitDeclarationOnly": true,
     "disableSizeLimit": true,
     "outDir": "./dist",
     "rootDir": "./src",
@@ -27,7 +24,7 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+    "lib": ["ESNext", "DOM", "DOM.Iterable", "ScriptHost"]
   },
   "include": [
     "src/**/*.ts",
