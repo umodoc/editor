@@ -732,6 +732,10 @@ watch(
   color: var(--umo-text-color);
   font-family: var(--umo-font-family);
   position: relative !important;
+  .umo-toolbar,
+  .umo-footer {
+    background-color: var(--umo-color-white);
+  }
   .umo-main {
     flex: 1;
     background-color: var(--umo-container-background);
