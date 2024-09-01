@@ -478,7 +478,7 @@ const getLocale = () => i18n.global.locale.value
 const getI18n = () => i18n
 const print = () => {
   const { toolbar, document } = options.value
-  if (toolbar.disableMenuItems.includes('print')) {
+  if (toolbar.disableMenuItems.includes('print') || editor.isEmpty) {
     return
   }
   if ($toolbar.value.mode !== 'source' && !document.readOnly) {
