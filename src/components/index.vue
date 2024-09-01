@@ -344,6 +344,9 @@ const setContent = (
     .setContent(content, options.emitUpdate)
     .focus(options.focusPosition, options.focusOptions)
     .run()
+  setTimeout(() => {
+    editor.value.commands.autoPaging()
+  }, 200)
 }
 const setPagination = (enabled) => {
   if (!editor.value) {
