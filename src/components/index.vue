@@ -357,6 +357,15 @@ const setPagination = (enabled) => {
   }
   page.value.pagination = enabled
 }
+const autoPagination = (enabled) => {
+  if (!editor.value) {
+    throw new Error('editor is not ready!')
+  }
+  if (typeof enabled !== 'boolean') {
+    throw new Error('"enabled" must be a boolean.')
+  }
+  editor.value.commands.autoPaging(enabled)
+}
 const setLocale = (parmas) => {
   if (!['zh-CN', 'en-US'].includes(parmas)) {
     throw new Error('"parmas" must be one of "zh-CN" or "en-US".')
@@ -519,6 +528,7 @@ defineExpose({
   setTheme,
   getContent,
   setPagination,
+  autoPagination,
   getImage,
   getText,
   getHTML,
