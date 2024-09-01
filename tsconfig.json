@@ -1,40 +1,48 @@
 {
-  "compilerOptions": {
-    "removeComments": true,
-    "disableSizeLimit": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "target": "ESNext",
-    "module": "ESNext",
-    "strict": true,
-    "allowJs": true,
-    "jsx": "preserve",
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "useDefineForClassFields": true,
-    "verbatimModuleSyntax": true,
-    "sourceMap": true,
-    "baseUrl": ".",
-    "types": ["vite/client", "vue/ref-macros", "vitest/globals", "vitest"],
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "lib": ["ESNext", "DOM", "DOM.Iterable", "ScriptHost"]
-  },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.vue",
-    "src/**/*.spec.ts",
-    "src/**/*.spec.tsx",
-    "src/**/*.d.ts",
-    "*.mjs",
-    "*.ts",
-    "*.d.ts"
-  ],
-  "exclude": ["node_modules", "dist"]
+	"compilerOptions": {
+		"removeComments": true,
+		"disableSizeLimit": true,
+		"target": "ESNext",
+		"module": "ESNext",
+		"strict": true,
+		"allowJs": true,
+		"jsx": "preserve",
+		"moduleResolution": "node",
+		"experimentalDecorators": true,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"forceConsistentCasingInFileNames": true,
+		"useDefineForClassFields": true,
+		"verbatimModuleSyntax": true,
+		"sourceMap": true,
+		"baseUrl": ".",
+		"types": ["vite/client", "vue/ref-macros", "vitest/globals", "vitest"],
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"lib": ["ESNext", "DOM", "DOM.Iterable", "ScriptHost"],
+		"vueCompilerOptions": {
+			"plugins": [
+				"@vue-macros/volar/define-models",
+				"@vue-macros/volar/define-props",
+				"@vue-macros/volar/define-props-refs",
+				"@vue-macros/volar/short-vmodel",
+				"@vue-macros/volar/export-props"
+			],
+			"experimentalDefinePropProposal": "kevinEdition"
+		}
+	},
+	"include": [
+		"*.mjs",
+		"*.ts",
+		"*.d.ts",
+		"src/**/*.ts",
+		"src/**/*.vue",
+		"src/**/*.spec.ts",
+		"src/**/*.spec.tsx",
+		"src/**/*.d.ts"
+	],
+	"exclude": ["node_modules", "dist"]
 }

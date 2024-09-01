@@ -3,7 +3,7 @@ import eslintConfigPrettier from 'eslint-config-prettier'
 import eslintPluginSimpleImportSort from 'eslint-plugin-simple-import-sort'
 import eslintPluginUnusedImports from 'eslint-plugin-unused-imports'
 import pluginVue from 'eslint-plugin-vue'
-import { readFileSync } from 'fs'
+import { readFileSync } from 'node:fs'
 import globals from 'globals'
 import eslintTS from 'typescript-eslint'
 
@@ -43,7 +43,7 @@ function createAutoImportedGlobals() {
 export default [
   eslintJS.configs.recommended,
   {
-    ignores: ['dist/', 'build/', 'node_modules/', './imported.d.ts'],
+    ignores: ['./dist/**/*.*', './node_modules/**/*,*', './*.d.ts'],
     languageOptions: {
       globals: {
         ...globals.browser,

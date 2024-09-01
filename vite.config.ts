@@ -7,6 +7,7 @@ import { defineConfig } from 'vite'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import tsConfigPaths from 'vite-tsconfig-paths'
 
+import VueMacros from 'unplugin-vue-macros/vite'
 import pkg from './package.json'
 import copyright from './src/utils/copyright'
 

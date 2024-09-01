@@ -9,11 +9,11 @@
       :id="container.substr(1)"
       class="umo-editor-container"
       :class="{
-        'toolbar-classic': $toolbar.mode === 'classic',
-        'toolbar-ribbon': $toolbar.mode === 'ribbon',
-        'toolbar-source': $toolbar.mode === 'source',
-        'preview-mode': page.preview.enabled,
-        'laser-pointer': page.preview.enabled && page.preview.laserPointer,
+        'toolbar-classic': isRecord($toolbar) && $toolbar.mode === 'classic',
+        'toolbar-ribbon': isRecord($toolbar) && $toolbar.mode === 'ribbon',
+        'toolbar-source': isRecord($toolbar) && $toolbar.mode === 'source',
+        'preview-mode': page.preview?.enabled,
+        'laser-pointer': page.preview?.enabled && page.preview?.laserPointer,
       }"
       :style="{ height: options.height }"
     >
@@ -30,14 +30,14 @@
       </header>
       <main class="umo-main">
         <container-page v-if="$toolbar.mode !== 'source'">
-          <template #page_header="props">
-            <slot name="page_header" v-bind="props" />
+          <template #page_header="slotProps">
+            <slot name="page_header" v-bind="slotProps" />
           </template>
-          <template #page_footer="props">
-            <slot name="page_footer" v-bind="props" />
+          <template #page_footer="slotProps">
+            <slot name="page_footer" v-bind="slotProps" />
           </template>
-          <template #bubble_menu="props">
-            <slot name="bubble_menu" v-bind="props" />
+          <template #bubble_menu="slotProps">
+            <slot name="bubble_menu" v-bind="slotProps" />
           </template>
         </container-page>
         <editor-source v-else />
@@ -52,10 +52,15 @@
 <script setup lang="ts">
 import '@/assets/styles/index.less'
 
-import { isRecord } from '@tool-belt/type-predicates'
 import { toBlob, toJpeg, toPng } from 'dom-to-image-more'
 import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
+import {
+  isBoolean,
+  isNumber,
+  isRecord,
+  isString,
+} from '@tool-belt/type-predicates'
 
 import { getSelectionNode, getSelectionText } from '@/extensions/selection'
 import { i18n } from '@/i18n'
@@ -115,9 +120,9 @@ watch(
 editorDestroyed.value = false
 
 // i18n
-const { appContext } = getCurrentInstance()
-appContext.config.globalProperties.t = i18n.global.t
-appContext.config.globalProperties.l = l
+const { appContext } = getCurrentInstance() ?? {}
+appContext?.config.globalProperties.t = i18n.global.t
+appContext?.config.globalProperties.l = l
 const locale = useState('locale')
 i18n.global.locale.value =
   locale.value !== options.value.locale ? locale.value : options.value.locale
@@ -130,8 +135,8 @@ const localeConfig = $ref({
 
 // 主题
 const setTheme = (theme) => {
-  if (!['light', 'dark', 'auto'].includes(theme)) {
-    throw new Error('"parmas" must be one of "light", "dark" or "auto".')
+  if (!isString(theme) || !['light', 'dark', 'auto'].includes(theme)) {
+    throw new Error('"theme" must be one of "light", "dark" or "auto".')
   }
   if (theme !== 'auto') {
     document.querySelector('html').setAttribute('theme-mode', theme)
@@ -169,166 +174,168 @@ if (slots.page_footer) {
 }
 
 // 对外暴露的编辑器方法
-const setToolbar = (parmas) => {
+const setToolbar = (params) => {
   if (!isRecord(params)) {
-    throw new Error('parmas must be an object.')
+    throw new Error('params must be an object.')
   }
-  if (parmas.mode) {
-    if (typeof parmas.mode !== 'string') {
-      throw new Error('"parmas.size" must be a string.')
+  if (params.mode) {
+    if (!isString(params.mode)) {
+      throw new Error('"params.mode" must be a string.')
     }
-    if (parmas.mode && !['classic', 'ribbon'].includes(parmas.mode)) {
-      throw new Error('"parmas.mode" must be one of "classic" or "ribbon".')
+    if (!['classic', 'ribbon'].includes(params.mode)) {
+      throw new Error('"params.mode" must be one of "classic" or "ribbon".')
     }
-    $toolbar.value.mode = parmas.mode
+    $toolbar.value.mode = params.mode
   }
-  if (parmas.show !== undefined) {
-    if (typeof parmas.show !== 'boolean') {
-      throw new Error('"parmas.show" must be a boolean.')
+  if (params.show !== undefined) {
+    if (!isBoolean(params.show)) {
+      throw new Error('"params.show" must be a boolean.')
     }
-    $toolbar.value.show = parmas.show
+    $toolbar.value.show = params.show
   }
 }
-const setPage = (parmas) => {
+const setPage = (params) => {
   if (!isRecord(params)) {
-    throw new Error('parmas must be an object.')
+    throw new Error('params must be an object.')
   }
-  if (parmas.size) {
-    if (typeof parmas.size !== 'string') {
-      throw new Error('"parmas.size" must be a string.')
+  if (params.size) {
+    if (!isString(params.size)) {
+      throw new Error('"params.size" must be a string.')
     }
     const size = options.value.dicts.pageSizes.find(
-      (item) => item.label === parmas.size,
+      (item) => item.label === params.size,
     )
     if (!size) {
       throw new Error(
-        `"parmas.size" must be one of ${options.value.dicts.pageSizes.map((item) => item.label)}.`,
+        `"params.size" must be one of ${options.value.dicts.pageSizes.map((item) => item.label)}.`,
       )
     }
     page.value.size = size
   }
-  if (parmas.orientation) {
-    if (typeof parmas.orientation !== 'string') {
-      throw new Error('"parmas.orientation" must be a string.')
+  if (params.orientation) {
+    if (!isString(params.orientation)) {
+      throw new Error('"params.orientation" must be a string.')
     }
-    if (!['portrait', 'landscape'].includes(parmas.orientation)) {
-      throw new Error('"parmas.mode" must be one of "portrait" or "landscape".')
+    if (!['portrait', 'landscape'].includes(params.orientation)) {
+      throw new Error(
+        '"params.orientation" must be one of "portrait" or "landscape".',
+      )
     }
-    page.value.orientation = parmas.orientation
+    page.value.orientation = params.orientation
   }
 
-  if (parmas.background) {
-    if (typeof parmas.background !== 'string') {
-      throw new Error('"parmas.background" must be a string.')
+  if (params.background) {
+    if (!isString(params.background)) {
+      throw new Error('"params.background" must be a string.')
     }
-    page.value.background = parmas.background
+    page.value.background = params.background
   }
 }
-const setWatermark = (parmas) => {
+const setWatermark = (params) => {
   if (!isRecord(params)) {
-    throw new Error('parmas must be an object.')
+    throw new Error('params must be an object.')
   }
-  if (parmas.alpha !== undefined) {
-    if (typeof parmas.alpha !== 'number') {
-      throw new Error('"parmas.alpha" must be a number.')
+  if (params.alpha !== undefined) {
+    if (!isNumber(params.alpha)) {
+      throw new Error('"params.alpha" must be a number.')
     }
-    page.value.watermark.alpha = parmas.alpha
+    page.value.watermark.alpha = params.alpha
   }
-  if (parmas.text) {
-    if (typeof parmas.text !== 'string') {
-      throw new Error('"parmas.text" must be a string.')
+  if (params.text) {
+    if (!isString(params.text)) {
+      throw new Error('"params.text" must be a string.')
     }
-    if (parmas.text.length > 30) {
-      throw new Error('"parmas.text" must be less than 30 characters.')
+    if (params.text.length > 30) {
+      throw new Error('"params.text" must be less than 30 characters.')
     }
-    page.value.watermark.text = parmas.text
+    page.value.watermark.text = params.text
   }
 
-  if (parmas.type) {
-    if (typeof parmas.type !== 'string') {
-      throw new Error('"parmas.type" must be a string.')
+  if (params.type) {
+    if (!isString(params.type)) {
+      throw new Error('"params.type" must be a string.')
     }
-    if (!['compact', 'spacious'].includes(parmas.type)) {
-      throw new Error('"parmas.type" must be one of "compact" or "spacious".')
+    if (!['compact', 'spacious'].includes(params.type)) {
+      throw new Error('"params.type" must be one of "compact" or "spacious".')
     }
-    page.value.watermark.type = parmas.type
+    page.value.watermark.type = params.type
   }
-  if (parmas.fontColor) {
-    if (typeof parmas.fontColor !== 'string') {
-      throw new Error('"parmas.fontColor" must be a string.')
+  if (params.fontColor) {
+    if (!isString(params.fontColor)) {
+      throw new Error('"params.fontColor" must be a string.')
     }
-    page.value.watermark.fontColor = parmas.fontColor
+    page.value.watermark.fontColor = params.fontColor
   }
-  if (parmas.fontSize) {
-    if (typeof parmas.fontSize !== 'number') {
-      throw new Error('"parmas.fontSize" must be a number.')
+  if (params.fontSize) {
+    if (!isNumber(params.fontSize)) {
+      throw new Error('"params.fontSize" must be a number.')
     }
-    page.value.watermark.fontSize = parmas.fontSize
+    page.value.watermark.fontSize = params.fontSize
   }
-  if (parmas.fontFamily || parmas.fontFamily === null) {
-    if (parmas.fontFamily !== null && typeof parmas.fontFamily !== 'string') {
-      throw new Error('"parmas.fontFamily" must be a string.')
+  if (params.fontFamily || params.fontFamily === null) {
+    if (params.fontFamily !== null && !isString(params.fontFamily)) {
+      throw new Error('"params.fontFamily" must be a string.')
     }
-    page.value.watermark.fontFamily = parmas.fontFamily
+    page.value.watermark.fontFamily = params.fontFamily
   }
-  if (parmas.fontWeight) {
-    if (typeof parmas.fontWeight !== 'string') {
-      throw new Error('"parmas.fontWeight" must be a string.')
+  if (params.fontWeight) {
+    if (!isString(params.fontWeight)) {
+      throw new Error('"params.fontWeight" must be a string.')
     }
-    if (!['normal', 'bold', 'bolder'].includes(parmas.fontWeight)) {
+    if (!['normal', 'bold', 'bolder'].includes(params.fontWeight)) {
       throw new Error(
-        '"parmas.fontWeight" must be one of "normal", "bold" or "bolder".',
+        '"params.fontWeight" must be one of "normal", "bold" or "bolder".',
       )
     }
 
-    page.value.watermark.fontWeight = parmas.fontWeight
+    page.value.watermark.fontWeight = params.fontWeight
   }
 }
-const setDocument = (parmas) => {
+const setDocument = (params) => {
   if (!isRecord(params)) {
-    throw new Error('parmas must be an object.')
+    throw new Error('params must be an object.')
   }
-  if (parmas.title) {
-    if (typeof parmas.title !== 'string') {
-      throw new Error('"parmas.title" must be a string.')
+  if (params.title) {
+    if (!isString(params.title)) {
+      throw new Error('"params.title" must be a string.')
     }
-    const title = parmas.title !== '' ? parmas.title : t('document.untitled')
+    const title = params.title !== '' ? params.title : t('document.untitled')
     $document.value.title = title
     options.value.document.title = title
   }
-  if (parmas.bubbleMenu !== undefined) {
-    if (typeof parmas.bubbleMenu !== 'boolean') {
-      throw new Error('"parmas.bubbleMenu" must be a boolean.')
+  if (params.bubbleMenu !== undefined) {
+    if (!isBoolean(params.bubbleMenu)) {
+      throw new Error('"params.bubbleMenu" must be a boolean.')
     }
-    options.value.document.bubbleMenu = parmas.bubbleMenu
+    options.value.document.bubbleMenu = params.bubbleMenu
   }
-  if (parmas.blockMenu !== undefined) {
-    if (typeof parmas.blockMenu !== 'boolean') {
-      throw new Error('"parmas.blockMenu" must be a boolean.')
+  if (params.blockMenu !== undefined) {
+    if (!isBoolean(params.blockMenu)) {
+      throw new Error('"params.blockMenu" must be a boolean.')
     }
-    options.value.document.blockMenu = parmas.blockMenu
+    options.value.document.blockMenu = params.blockMenu
   }
-  if (parmas.markdown !== undefined) {
-    if (typeof parmas.markdown !== 'boolean') {
-      throw new Error('"parmas.markdown" must be a boolean.')
+  if (params.markdown !== undefined) {
+    if (!isBoolean(params.markdown)) {
+      throw new Error('"params.markdown" must be a boolean.')
     }
-    $document.value.markdown = parmas.markdown
+    $document.value.markdown = params.markdown
   }
-  if (parmas.spellcheck !== undefined) {
-    if (typeof parmas.spellcheck !== 'boolean') {
-      throw new Error('"parmas.spellcheck" must be a boolean.')
+  if (params.spellcheck !== undefined) {
+    if (!isBoolean(params.spellcheck)) {
+      throw new Error('"params.spellcheck" must be a boolean.')
     }
-    $document.value.spellcheck = parmas.spellcheck
+    $document.value.spellcheck = params.spellcheck
   }
-  if (parmas.autoSave) {
-    if (typeof parmas.autoSave?.enabled !== 'boolean') {
-      throw new Error('"parmas.autoSave.enabled" must be a boolean.')
+  if (params.autoSave) {
+    if (!isBoolean(params.autoSave?.enabled)) {
+      throw new Error('"params.autoSave.enabled" must be a boolean.')
     }
-    options.value.document.autoSave.enabled = parmas.autoSave.enabled
-    if (parmas.autoSave?.interval !== 'number') {
-      throw new Error('"parmas.autoSave.interval" must be a number.')
+    options.value.document.autoSave.enabled = params.autoSave.enabled
+    if (!isNumber(params.autoSave?.interval)) {
+      throw new Error('"params.autoSave.interval" must be a number.')
     }
-    options.value.document.autoSave.interval = parmas.autoSave.interval
+    options.value.document.autoSave.interval = params.autoSave.interval
   }
 }
 const setContent = (
@@ -355,7 +362,7 @@ const setPagination = (enabled) => {
   if (!editor.value) {
     throw new Error('editor is not ready!')
   }
-  if (typeof enabled !== 'boolean') {
+  if (!isBoolean(enabled)) {
     throw new Error('"enabled" must be a boolean.')
   }
   page.value.pagination = enabled
@@ -373,11 +380,11 @@ const setLocale = (parmas) => {
   if (!['zh-CN', 'en-US'].includes(parmas)) {
     throw new Error('"parmas" must be one of "zh-CN" or "en-US".')
   }
-  if (i18n.global.locale.value === parmas) {
+  if (i18n.global.locale.value === params) {
     return
   }
   const locale = useState('locale')
-  locale.value = parmas
+  locale.value = params
   location.reload()
 }
 const getContent = (format = 'html') => {
