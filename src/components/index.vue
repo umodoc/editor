@@ -49,7 +49,7 @@
   </t-config-provider>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import '@/assets/styles/index.less'
 
 import { toBlob, toJpeg, toPng } from 'dom-to-image-more'
@@ -57,7 +57,7 @@ import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
 
 import { getSelectionNode, getSelectionText } from '@/extensions/selection'
-import i18n from '@/i18n'
+import { i18n } from '@/i18n'
 import { propsOptions } from '@/options'
 
 defineOptions({ name: 'UmoEditor' })
@@ -400,16 +400,13 @@ const getImage = async (format = 'blob') => {
     page.value.zoomLevel = 100
     const node = document.querySelector(`${container} .umo-page-content`)
     if (format === 'blob') {
-      const blob = await toBlob(node)
-      return blob
+      return await toBlob(node)
     }
     if (format === 'jpeg') {
-      const image = await toJpeg(node)
-      return image
+      return await toJpeg(node)
     }
     if (format === 'png') {
-      const image = await toPng(node)
-      return image
+      return await toPng(node)
     }
   } catch {
     throw new Error(t('export.image.error.message'))
@@ -588,7 +585,7 @@ watch(
       return
     }
     autoSaveInterval = setInterval(() => {
-      saveContent()
+      void saveContent()
       contentUpdated = false
       clearAutoSaveInterval()
     }, autoSave.interval)
@@ -721,7 +718,7 @@ provide('reset', reset)
 // 快捷键
 const unsetFormatPainter = () => editor.value?.commands.unsetFormatPainter()
 useHotkeys('ctrl+s,command+s', () => {
-  saveContent()
+  void saveContent()
   unsetFormatPainter()
 })
 useHotkeys('ctrl+p,command+p', () => {

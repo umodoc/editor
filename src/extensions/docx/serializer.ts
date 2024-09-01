@@ -1,4 +1,5 @@
 import type { Mark, Node } from '@tiptap/pm/model'
+import { isNumber } from '@tool-belt/type-predicates'
 import sizeOf from 'buffer-image-size'
 import {
   AlignmentType,
@@ -48,7 +49,7 @@ export interface Options {
   getImageBuffer: (src: string) => Buffer
 }
 
-export interface IMathOpts {
+export interface MathOpts {
   inline?: boolean
   id?: string | null
   numbered?: boolean
@@ -112,7 +113,7 @@ export class DocxSerializerState {
   }
 
   render(node: Node, parent: Node, index: number) {
-    if (typeof parent === 'number') {
+    if (isNumber(parent)) {
       throw new Error('!')
     }
     if (!this.nodes[node.type.name]) {
@@ -231,7 +232,7 @@ export class DocxSerializerState {
     delete this.nextRunOpts
   }
 
-  math(latex: string, opts: IMathOpts = { inline: true }) {
+  math(latex: string, opts: MathOpts = { inline: true }) {
     if (opts.inline || !opts.numbered) {
       this.current.push(new Math({ children: [new MathRun(latex)] }))
       return
@@ -278,7 +279,7 @@ export class DocxSerializerState {
         ...imageRunOpts,
         data: buffer,
         transformation: {
-          ...(imageRunOpts?.transformation || {}),
+          ...(imageRunOpts?.transformation ?? {}),
           width,
           height: width * aspect,
         },
@@ -340,13 +341,13 @@ export class DocxSerializerState {
         cells.push(
           new TableCell({
             ...tableCellOpts,
-            ...(getCellOptions?.(cell) || {}),
+            ...(getCellOptions?.(cell) ?? {}),
           }),
         )
       })
       rows.push(
         new TableRow({
-          ...(getRowOptions?.(row) || {}),
+          ...(getRowOptions?.(row) ?? {}),
           children: cells,
           tableHeader,
         }),
@@ -426,7 +427,6 @@ export class DocxSerializer {
   serialize(content: Node, options: Options) {
     const state = new DocxSerializerState(this.nodes, this.marks, options)
     state.renderContent(content)
-    const doc = createDocFromState(state)
-    return doc
+    return createDocFromState(state)
   }
 }

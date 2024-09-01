@@ -33,7 +33,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { options, editor } = useStore()
 const $toolbar = useState('toolbar')
 const $recent = useState('recent')

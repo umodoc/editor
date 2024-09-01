@@ -32,8 +32,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { TextSelection } from '@tiptap/pm/state'
+
 const { container, editor, tableOfContents } = useStore()
 
 const headingClick = (heading) => {

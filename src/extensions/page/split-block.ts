@@ -12,7 +12,7 @@ import { getSplittedAttributes } from './index'
 
 function ensureMarks(state: EditorState, splittableMarks?: string[]) {
   const marks =
-    state.storedMarks ||
+    state.storedMarks ??
     (state.selection.$to.parentOffset && state.selection.$from.marks())
 
   if (marks) {

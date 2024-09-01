@@ -26,9 +26,9 @@
   </node-view-wrapper>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { TextSelection } from '@tiptap/pm/state'
-import { nodeViewProps, } from '@tiptap/vue-3'
+import { nodeViewProps } from '@tiptap/vue-3'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 
@@ -66,7 +66,6 @@ const headingClick = (id) => {
     border-radius: var(--umo-content-node-radius);
     width: 100%;
     &-head {
-      font-size: 0.875rem;
       font-weight: 500;
       margin: 0;
       position: absolute;

@@ -14,7 +14,7 @@
   </node-view-wrapper>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import 'prism-code-editor/prism/languages/bash'
 import 'prism-code-editor/prism/languages/css'
 import 'prism-code-editor/prism/languages/css-extras'
@@ -56,7 +56,7 @@ import 'prism-code-editor/prism/languages/yaml'
 import 'prism-code-editor/prism/languages/regex'
 import 'prism-code-editor/layout.css'
 
-import { nodeViewProps, } from '@tiptap/vue-3'
+import { nodeViewProps } from '@tiptap/vue-3'
 import { createEditor } from 'prism-code-editor'
 import { defaultCommands, editHistory } from 'prism-code-editor/commands'
 import { cursorPosition } from 'prism-code-editor/cursor'

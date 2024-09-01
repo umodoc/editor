@@ -1,6 +1,6 @@
 import { Extension } from '@tiptap/core'
 import { AllSelection, TextSelection, type Transaction } from '@tiptap/pm/state'
-
+import { isFunction } from '@tool-belt/type-predicates'
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     indent: {
@@ -67,7 +67,7 @@ export default Extension.create({
       pos: number,
       delta: number,
     ) => {
-      const node = tr.doc.nodeAt(pos) || null
+      const node = tr.doc.nodeAt(pos) ?? null
       if (node) {
         const nextLevel = (node.attrs.indent || 0) + delta
         const { minLevel, maxLevel } = this.options
@@ -113,7 +113,9 @@ export default Extension.create({
         tr = tr.setSelection(selection)
         tr = updateIndentLevel(tr, direction)
         if (tr.docChanged) {
-          dispatch === null || dispatch === void 0 ? void 0 : dispatch(tr)
+          if (isFunction(dispatch)) {
+            dispatch(tr)
+          }
           return true
         }
         return false

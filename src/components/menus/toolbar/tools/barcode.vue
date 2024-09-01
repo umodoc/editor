@@ -209,7 +209,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 // https://github.com/lindell/JsBarcode/wiki/Options
 import JsBarcode from 'jsbarcode'
 import svg64 from 'svg64'
@@ -217,6 +217,7 @@ import svg64 from 'svg64'
 const { content } = defineProps({
   content: {
     type: String,
+    default: '',
   },
 })
 
@@ -310,7 +311,7 @@ watch(
   () => {
     if (dialogVisible) {
       changed = true
-      renderBarcode()
+      void renderBarcode()
     }
   },
   { immediate: true, deep: true },

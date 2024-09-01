@@ -6,7 +6,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { getSelectionNode } from '@/extensions/selection'
 
 const { editor } = useStore()
@@ -16,7 +16,7 @@ const copyCode = () => {
   const { copy } = useClipboard({
     source: ref(codeBlock.attrs.code),
   })
-  copy()
+  void copy()
   useMessage('success', t('bubbleMenu.code.copy.success'))
 }
 </script>

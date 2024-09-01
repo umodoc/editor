@@ -239,7 +239,7 @@
   </t-dropdown>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { container, options, editor, blockMenu, assistantBox } = useStore()
 
 const menuActive = $ref(false)

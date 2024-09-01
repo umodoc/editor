@@ -373,8 +373,7 @@ const deleteSelection = (commands: SingleCommands) => {
       },
       (node) => node.type.name === CASSIE_BLOCK,
     )
-    for (let i = 0; i < nodesInChangedRanges.length; i++) {
-      const node = nodesInChangedRanges[i]
+    for (const node of nodesInChangedRanges) {
       const endPos = node.pos + node.node.nodeSize
       if (selection.from < node.pos || selection.to > endPos) {
         return true

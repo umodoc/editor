@@ -122,6 +122,7 @@
 </template>
 
 <script setup lang="ts">
+import { isString } from '@tool-belt/type-predicates'
 import { ref } from 'vue'
 
 import { getSelectionText } from '@/extensions/selection'
@@ -201,11 +202,11 @@ const send = async () => {
           result.value.command = command.value
         },
       })
-      data.pipeTo(stream)
+      void data.pipeTo(stream)
       return
     }
 
-    if (typeof data === 'string') {
+    if (isString(data)) {
       generating.value = false
       result.value.command = command.value
       errorHandler()
@@ -236,7 +237,7 @@ const insertCommand = ({ value, autoSend }: CommandItem) => {
   result.value.content = ''
   inputRef.value?.focus()
   if (autoSend !== false) {
-    send()
+    void send()
   }
 }
 
@@ -267,13 +268,13 @@ const copyResult = () => {
   const { copy } = useClipboard({
     source: ref(result.value.content),
   })
-  copy()
+  void copy()
   useMessage('success', t('assistant.copySuccess'))
 }
 
 const rewrite = () => {
   command.value = result.value.command
-  send()
+  void send()
 }
 
 const deleteResult = () => {

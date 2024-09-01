@@ -33,14 +33,11 @@ const FileHandlePlugin = (option: FileHandlePluginOption) => {
             if (allowedMimeTypes.includes(item.type)) {
               return true
             }
-            if (allowedMimeTypes.includes(`${item.type.split('/')[0]}/*`)) {
-              return true
-            }
-            return false
+            return allowedMimeTypes.includes(`${item.type.split('/')[0]}/*`)
           })
         }
         if (files.length !== 0) {
-          onDrop(editor, files, (pos === null ? undefined : pos.pos) || 0)
+          onDrop(editor, files, (pos === null ? undefined : pos.pos) ?? 0)
         }
         event.preventDefault()
         event.stopPropagation()
@@ -60,10 +57,7 @@ const FileHandlePlugin = (option: FileHandlePluginOption) => {
             if (allowedMimeTypes.includes(item.type)) {
               return true
             }
-            if (allowedMimeTypes.includes(`${item.type.split('/')[0]}/*`)) {
-              return true
-            }
-            return false
+            return allowedMimeTypes.includes(`${item.type.split('/')[0]}/*`)
           })
         }
         if (files.length !== 0) {

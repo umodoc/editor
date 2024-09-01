@@ -294,13 +294,18 @@ const defaultOptions: UmoEditorOptions = {
     zh_CN: {},
   },
   async onSave(content: any, page: any, document: any) {
-    throw new Error('Key "onSave": Please set the save method')
+    return await new Promise((_, reject) => {
+      reject(new Error('Key "onSave": Please set the save method'))
+    })
   },
   async onFileUpload(file: any) {
-    if (!file) {
-      throw new Error('File not found')
-    }
-    throw new Error('Key "onFileUpload": Please set the upload method')
+    return await new Promise((_, reject) => {
+      if (!file) {
+        reject(new Error('File not found'))
+        return
+      }
+      reject(new Error('Key "onFileUpload": Please set the upload method'))
+    })
   },
   onFileDelete(id: any, src: any) {
     console.error(
@@ -308,12 +313,18 @@ const defaultOptions: UmoEditorOptions = {
     )
   },
   async onAssistant(payload: any, content: any) {
-    throw new Error('Key "onAssistant": Please set the onAssistant method')
+    return await new Promise((_, reject) => {
+      reject(new Error('Key "onAssistant": Please set the onAssistant method'))
+    })
   },
   async onCustomImportWordMethod(file: any) {
-    throw new Error(
-      'Key "onCustomImportWordMethod": Please set the onAssistant method',
-    )
+    return await new Promise((_, reject) => {
+      reject(
+        new Error(
+          'Key "onCustomImportWordMethod": Please set the onAssistant method',
+        ),
+      )
+    })
   },
 }
 

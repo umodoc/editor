@@ -46,9 +46,7 @@
   </menus-button>
 </template>
 
-<script setup>
-
-
+<script setup lang="ts">
 const { editor } = useStore()
 let dialogVisible = $ref(false)
 

@@ -43,7 +43,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { getSelectionNode } from '@/extensions/selection'
 
 const { popupVisible, togglePopup } = usePopup()

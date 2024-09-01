@@ -9,7 +9,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { editor } = useStore()
 const $toolbar = useState('toolbar')
 </script>

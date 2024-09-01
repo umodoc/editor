@@ -13,7 +13,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { removeBackground } from '@imgly/background-removal'
 
 import { getSelectionNode } from '@/extensions/selection'

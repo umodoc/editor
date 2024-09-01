@@ -17,8 +17,8 @@
   </node-view-wrapper>
 </template>
 
-<script setup>
-import { nodeViewProps, } from '@tiptap/vue-3'
+<script setup lang="ts">
+import { nodeViewProps } from '@tiptap/vue-3'
 
 import { mediaPlayer } from '@/utils/player'
 
@@ -86,9 +86,7 @@ onClickOutside(containerRef, () => (selected = false))
       top: 0;
       background: rgba(0, 0, 0, 0.2);
       height: 2px;
-      top: 0;
       left: 0;
-      right: 0;
       border-top-left-radius: var(--umo-radius);
       border-top-right-radius: var(--umo-radius);
       &:after {

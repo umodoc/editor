@@ -145,6 +145,7 @@ export default [
       'unused-imports/no-unused-imports': 'error',
       'vue/multi-word-component-names': 'off',
       'vue/no-v-html': 'off',
+      'vue/no-v-text-v-html-on-component': 'off',
     },
   },
   // {

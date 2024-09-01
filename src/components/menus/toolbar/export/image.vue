@@ -9,7 +9,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { toBlob } from 'dom-to-image-more'
 import { saveAs } from 'file-saver'
 

@@ -18,7 +18,7 @@ export function createDocFromState(state: {
   children: ISectionOptions['children']
   footnotes?: IFootnotes
 }) {
-  const doc = new Document({
+  return new Document({
     footnotes: state.footnotes,
     numbering: {
       config: state.numbering,
@@ -32,7 +32,6 @@ export function createDocFromState(state: {
       },
     ],
   })
-  return doc
 }
 
 export async function writeDocx(

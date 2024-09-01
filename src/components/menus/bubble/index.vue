@@ -18,9 +18,7 @@
   </bubble-menu>
 </template>
 
-<script setup>
-
-
+<script setup lang="ts">
 const { options, editor, painter, blockMenu, assistantBox, commentBox } =
   useStore()
 

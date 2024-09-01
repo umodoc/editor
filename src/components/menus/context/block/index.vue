@@ -9,7 +9,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { page, editor } = useStore()
 
 let visible = $ref(false)

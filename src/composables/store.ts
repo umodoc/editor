@@ -95,7 +95,7 @@ export const useStore = createGlobalState(() => {
 
   watch(
     () => options.value.document?.readOnly,
-    async (val) => {
+    (val) => {
       editor.value?.setEditable(!val)
       toolbarKey.value = shortId()
     },

@@ -201,7 +201,7 @@
   </modal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
   visible: {
     type: Boolean,

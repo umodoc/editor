@@ -39,7 +39,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { editor } = useStore()
 
 const options = [

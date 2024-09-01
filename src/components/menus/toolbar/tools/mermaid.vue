@@ -36,13 +36,14 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import mermaid from 'mermaid'
 import svg64 from 'svg64'
 
 const props = defineProps({
   content: {
     type: String,
+    default: '',
   },
 })
 
@@ -82,7 +83,7 @@ watch(
   () => dialogVisible,
   (val) => {
     if (val) {
-      mermaidCode = props.content || defaultCode
+      mermaidCode = props.content ?? defaultCode
     }
   },
   { immediate: true },
@@ -92,7 +93,7 @@ watch(
   async () => {
     if (dialogVisible) {
       await nextTick()
-      renderMermaid()
+      void renderMermaid()
     }
   },
   { immediate: true },
@@ -120,7 +121,7 @@ const setMermaid = () => {
           width,
           height,
         },
-        props.content ? true : false,
+        !!props.content,
       )
       .run()
   }

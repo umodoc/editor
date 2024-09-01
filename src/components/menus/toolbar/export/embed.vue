@@ -26,7 +26,7 @@
   </modal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { options } = useStore()
 let dialogVisible = $ref(false)
 
@@ -36,7 +36,7 @@ const embedValue = computed(() => {
 
 const copyEmbed = () => {
   const { copy } = useClipboard({ source: embedValue })
-  copy()
+  void copy()
   useMessage('success', t('export.embed.copied'))
   dialogVisible = false
 }

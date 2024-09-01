@@ -21,7 +21,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
   text: {
     type: String,
@@ -51,10 +51,10 @@ const colorChange = (color) => {
     return
   }
 
-  if (color !== '') {
-    editor.value?.chain().focus().setColor(color).run()
-  } else {
+  if (color === '') {
     editor.value?.chain().focus().unsetColor().run()
+  } else {
+    editor.value?.chain().focus().setColor(color).run()
   }
 }
 </script>

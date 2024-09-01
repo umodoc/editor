@@ -11,7 +11,7 @@
   </t-image-viewer>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { editor } = useStore()
 const viewerVisible = $ref(false)
 </script>

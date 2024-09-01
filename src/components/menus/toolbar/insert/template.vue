@@ -32,7 +32,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { options, editor } = useStore()
 
 const setTemplate = ({ content }) => {

@@ -31,9 +31,7 @@
   </div>
 </template>
 
-<script setup>
-
-
+<script setup lang="ts">
 const $document = useState('document')
 
 const shortcuts = $ref([

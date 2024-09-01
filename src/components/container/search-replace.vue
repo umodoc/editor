@@ -86,7 +86,7 @@
   </modal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { editor, searchReplace } = useStore()
 
 let searchText = $ref('')

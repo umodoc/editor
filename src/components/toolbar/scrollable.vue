@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const wraperRef = ref(null)
 const contentRef = $ref(null)
 let hidePrev = $ref(true)

@@ -8,7 +8,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { editor, options } = useStore()
 
 // 动态导入 mammoth.js
@@ -46,7 +46,7 @@ const importWord = () => {
   open()
   // 插入文件
   onChange(async (files) => {
-    const file = Array.from(files)[0]
+    const [file] = Array.from(files)
     if (!file) {
       return
     }

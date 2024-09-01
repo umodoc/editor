@@ -24,7 +24,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import nzh from 'nzh/cn'
 
 import { getSelectionText } from '@/extensions/selection'

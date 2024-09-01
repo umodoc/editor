@@ -27,7 +27,7 @@
   </node-view-wrapper>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { nodeViewProps } from '@tiptap/vue-3'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)

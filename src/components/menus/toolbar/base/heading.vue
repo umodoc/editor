@@ -71,7 +71,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { popupVisible } = usePopup()
 const { container, editor } = useStore()
 const $toolbar = useState('toolbar')
@@ -80,7 +80,7 @@ const popupContentRef = ref(null)
 const options = $ref([
   { label: t('base.heading.paragraph'), desc: 'text', value: 'paragraph' },
 ])
-for (const i in Array.from({ length: 6 })) {
+for (const i of Array.from({ length: 6 })) {
   const level = Number(i) + 1
   options.push({
     label: t('base.heading.text', { level }),

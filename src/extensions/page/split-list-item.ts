@@ -62,11 +62,11 @@ export const splitListItem: RawCommands['splitListItem'] =
           $from.node().attrs,
         )
         const nextType =
-          type.contentMatch.defaultType.createAndFill(newNextTypeAttributes) ||
+          type.contentMatch.defaultType.createAndFill(newNextTypeAttributes) ??
           undefined
 
         wrap = wrap.append(
-          Fragment.from(type.createAndFill(null, nextType) || undefined),
+          Fragment.from(type.createAndFill(null, nextType) ?? undefined),
         )
 
         const start = $from.before($from.depth - (depthBefore - 1))
@@ -129,7 +129,7 @@ export const splitListItem: RawCommands['splitListItem'] =
       const { selection, storedMarks } = state
       const { splittableMarks } = editor.extensionManager
       const marks =
-        storedMarks || (selection.$to.parentOffset && selection.$from.marks())
+        storedMarks ?? (selection.$to.parentOffset && selection.$from.marks())
 
       tr.split($from.pos, 2, types).scrollIntoView()
 

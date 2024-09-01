@@ -105,20 +105,21 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import QRCode from 'qrcode-svg'
 import svg64 from 'svg64'
 
 const { content } = defineProps({
   content: {
     type: String,
+    default: '',
   },
 })
 
 let dialogVisible = $ref(false)
 const { editor } = useStore()
 
-const menuClick = async () => {
+const menuClick = () => {
   renderQrcode()
   dialogVisible = true
 }

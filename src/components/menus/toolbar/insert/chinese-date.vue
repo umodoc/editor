@@ -9,7 +9,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 const formDate = (format) => useDateFormat(useNow(), format).value
 const formatDateToChinese = (dateStr) => {
   const replaceDigits = (num) => {

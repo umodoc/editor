@@ -22,9 +22,7 @@ function getTotalChildrenHeight(parentElement: Element) {
 
   // 遍历所有的子元素
   const { children } = parentElement
-  for (let i = 0; i < children.length; i++) {
-    const child = children[i]
-
+  for (const child of children) {
     // 获取子元素的高度
     const { height } = getDomHeight(child)
     // 累加高度
@@ -36,8 +34,9 @@ function getTotalChildrenHeight(parentElement: Element) {
 }
 
 class PageDetector {
+  // eslint-disable-next-line no-unused-private-class-members
   #editor: Editor
-  private readonly #pageClass: string
+  readonly #pageClass: string
   #checkPoints = [IMAGE, IFRAME, CODE_BLOCK, TOC, VIDEO]
 
   constructor(editor: Editor, pageClass = '.umo-page-node-content') {
@@ -59,14 +58,11 @@ class PageDetector {
     ) {
       return true
     }
-    if (
+    return !!(
       firstChild &&
       childCount === 1 &&
       this.#checkPoints.includes(firstChild.type.name)
-    ) {
-      return true
-    }
-    return false
+    )
   }
 
   update(view: EditorView, prevState: EditorState) {
@@ -120,7 +116,7 @@ class PageDetector {
 export const paginationPluginKey = new PluginKey('pagination')
 export const pagePlugin = (editor: Editor, nodesComputed: NodesComputed) => {
   buildComputedHtml()
-  const plugin = new Plugin({
+  return new Plugin({
     key: paginationPluginKey,
     view: () => {
       return new PageDetector(editor)
@@ -165,19 +161,17 @@ export const pagePlugin = (editor: Editor, nodesComputed: NodesComputed) => {
       },
     },
   })
-  return plugin
 }
 export const idPluginKey = new PluginKey('attrkey')
 export const idPlugin = (types: string[]) => {
-  const plugin = new Plugin({
+  return new Plugin({
     key: idPluginKey,
     state: {
       init: () => {
         return false
       },
       apply: (tr, prevState) => {
-        const data = tr.getMeta('initSplit')
-        return data
+        return tr.getMeta('initSplit')
       },
     },
     appendTransaction(transactions, _prevState, nextState) {
@@ -196,6 +190,4 @@ export const idPlugin = (types: string[]) => {
       return modified ? tr : null
     },
   })
-
-  return plugin
 }

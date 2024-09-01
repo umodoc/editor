@@ -15,7 +15,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const emits = defineEmits(['change'])
 
 const { popupVisible, togglePopup } = usePopup()

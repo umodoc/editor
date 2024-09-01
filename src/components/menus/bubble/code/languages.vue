@@ -11,7 +11,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { languages } from 'prism-code-editor/prism'
 
 import { getSelectionNode } from '@/extensions/selection'

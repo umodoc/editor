@@ -8,6 +8,6 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { searchReplace } = useStore()
 </script>

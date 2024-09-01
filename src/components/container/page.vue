@@ -48,7 +48,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const store = useStore()
 const { container, page, imagePreview } = useStore()
 

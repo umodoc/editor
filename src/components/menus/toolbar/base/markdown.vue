@@ -14,7 +14,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { options, editorDestroyed } = useStore()
 const $document = useState('document')
 

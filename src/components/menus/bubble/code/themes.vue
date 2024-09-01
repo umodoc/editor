@@ -9,7 +9,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { getSelectionNode } from '@/extensions/selection'
 
 const { editor } = useStore()

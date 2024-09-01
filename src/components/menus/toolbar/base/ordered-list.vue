@@ -20,7 +20,7 @@
         >
           <div
             class="umo-ordered-list-item"
-            :class="{ active: listType == item.value }"
+            :class="{ active: listType === item.value }"
             @click="toggleOrderedList(item.value)"
           >
             <icon
@@ -52,7 +52,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
@@ -89,21 +89,21 @@ watch(
 )
 const toggleOrderedList = (listStyleType) => {
   const chain = editor.value?.chain().focus()
-  if (!editor.value?.isActive('orderedList')) {
+  if (editor.value?.isActive('orderedList')) {
+    if (
+      editor.value.getAttributes('orderedList').listStyleType !== listStyleType
+    ) {
+      chain.updateAttributes('orderedList', { listStyleType }).run()
+    }
+    // 关闭列表类型
+    else {
+      chain.toggleOrderedList().run()
+    }
+  } else {
     chain
       .toggleOrderedList()
       .updateAttributes('orderedList', { listStyleType })
       .run()
-  }
-  // 切换列表类型
-  else if (
-    editor.value.getAttributes('orderedList').listStyleType !== listStyleType
-  ) {
-    chain.updateAttributes('orderedList', { listStyleType }).run()
-  }
-  // 关闭列表类型
-  else {
-    chain.toggleOrderedList().run()
   }
   listType = listStyleType
   popupVisible.value = false

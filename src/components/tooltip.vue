@@ -11,9 +11,12 @@
   </t-tooltip>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
-  content: {},
+  content: {
+    type: Object,
+    required: true,
+  },
 })
 const { container } = useStore()
 </script>

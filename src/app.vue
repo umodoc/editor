@@ -20,8 +20,10 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import UmoEditor from '@/components/index.vue'
 import shortId from '@/utils/short-id'
+
 const editorRef = $ref(null)
 const templates = [
   {
@@ -44,7 +46,7 @@ const onSave = async (content, page, document) => {
         console.log('onSave', { content, page, document })
         resolve('操作成功')
       } else {
-        reject('操作失败')
+        reject(new Error('操作失败'))
       }
     }, 2000)
   })
@@ -57,7 +59,7 @@ const options = $ref({
   },
   document: {
     // title: '测试文档',
-    content: localStorage.getItem('document.content') || '<p>测试文档</p>',
+    content: localStorage.getItem('document.content') ?? '<p>测试文档</p>',
   },
   templates,
   cdnUrl: 'https://cdn.umodoc.com',
@@ -93,9 +95,9 @@ const options = $ref({
     }
   },
   async onCustomImportWordMethod(file) {
-    return {
+    return await Promise.resolve({
       value: '<p>测试导入word</p>',
-    }
+    })
   },
 })
 </script>
@@ -108,6 +110,7 @@ const options = $ref({
   box-sizing: border-box;
   position: relative;
 }
+
 html,
 body {
   height: 100vh;

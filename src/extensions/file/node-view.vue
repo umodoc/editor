@@ -40,8 +40,8 @@
   </node-view-wrapper>
 </template>
 
-<script setup>
-import { nodeViewProps, } from '@tiptap/vue-3'
+<script setup lang="ts">
+import { nodeViewProps } from '@tiptap/vue-3'
 
 import { getFileIcon } from '@/utils/file'
 

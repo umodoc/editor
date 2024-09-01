@@ -23,7 +23,7 @@
     "verbatimModuleSyntax": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["vite/client", "vue/ref-macros", "./components.d.ts", "./imports.d.ts", "./shims.d.ts"],
+    "types": ["vite/client", "vue/ref-macros", "vitest/globals", "vitest"],
     "paths": {
       "@/*": ["./src/*"]
     },

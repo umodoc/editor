@@ -36,9 +36,7 @@
   </div>
 </template>
 
-<script setup>
-
-
+<script setup lang="ts">
 const { options, editor, commentBox } = useStore()
 
 const props = defineProps({

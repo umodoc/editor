@@ -7,7 +7,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { saveAs } from 'file-saver'
 
 const { options, editor } = useStore()

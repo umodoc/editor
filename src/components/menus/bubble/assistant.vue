@@ -6,7 +6,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { editor, assistantBox } = useStore()
 const openAssistantBox = () => {
   assistantBox.value = true

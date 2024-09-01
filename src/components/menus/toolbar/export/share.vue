@@ -26,13 +26,13 @@
   </modal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { options } = useStore()
 let dialogVisible = $ref(false)
 
 const copyLink = () => {
   const { copy } = useClipboard({ source: options.value.shareUrl })
-  copy()
+  void copy()
   useMessage('success', t('export.share.copied'))
   dialogVisible = false
 }

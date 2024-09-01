@@ -2,7 +2,7 @@
   <menus-button text="PDF" ico="pdf" huge @menu-click="exportPDF = true" />
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { exportPDF } = useStore()
 </script>
 

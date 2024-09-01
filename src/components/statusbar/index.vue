@@ -283,8 +283,8 @@
   </t-drawer>
 </template>
 
-<script setup>
-import i18n from '@/i18n'
+<script setup lang="ts">
+import { i18n } from '@/i18n'
 
 const { container, options, page, editor } = useStore()
 const $document = useState('document')
@@ -321,7 +321,7 @@ onMounted(() => {
 })
 
 // 演示模式
-const togglePreview = async () => {
+const togglePreview = () => {
   page.value.showToc = false
   page.value.preview.enabled = !page.value.preview.enabled
   if (page.value.preview.enabled) {
@@ -356,13 +356,13 @@ watch(
 // 页面缩放
 const zoomIn = () => {
   if (page.value.zoomLevel < 500) {
-    page.value.zoomLevel = page.value.zoomLevel + 10
+    page.value.zoomLevel += 10
     page.value.autoWidth = false
   }
 }
 const zoomOut = () => {
   if (page.value.zoomLevel > 20) {
-    page.value.zoomLevel = page.value.zoomLevel - 10
+    page.value.zoomLevel -= 10
     page.value.autoWidth = false
   }
 }

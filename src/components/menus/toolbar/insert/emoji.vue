@@ -27,7 +27,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { popupVisible, togglePopup } = usePopup()
 const { options, editor } = useStore()
 
@@ -77,7 +77,6 @@ const selectEmoji = (emoji) => {
     line-height: 1em;
     border-radius: var(--umo-radius);
     cursor: pointer;
-    transition: background-color 0.2s;
     font-size: 20px;
     margin-bottom: 2px;
     color: var(--umo-text-color);

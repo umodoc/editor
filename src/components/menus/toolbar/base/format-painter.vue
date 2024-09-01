@@ -11,7 +11,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { editor, painter } = useStore()
 
 const setFormatPainter = (once) => {

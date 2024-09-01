@@ -24,7 +24,7 @@ export default hr.extend({
   addAttributes() {
     return {
       'data-type': {
-        parseHTML: (element) => element.getAttribute('data-type') || 'signle',
+        parseHTML: (element) => element.getAttribute('data-type') ?? 'signle',
       },
       color: {
         parseHTML: (element) => element.getAttribute('data-color'),

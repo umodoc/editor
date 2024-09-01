@@ -77,8 +77,8 @@
   </node-view-wrapper>
 </template>
 
-<script setup>
-import { nodeViewProps, } from '@tiptap/vue-3'
+<script setup lang="ts">
+import { nodeViewProps } from '@tiptap/vue-3'
 import { base64ToFile } from 'file64'
 
 import shortId from '@/utils/short-id'
@@ -134,7 +134,10 @@ const onRotate = ({ angle }) => {
   updateAttributes({ angle })
 }
 const onResize = ({ width, height }) => {
-  updateAttributes({ width: Number.parseInt(width), height: Number.parseInt(height) })
+  updateAttributes({
+    width: Number.parseInt(width),
+    height: Number.parseInt(height),
+  })
 }
 const onResizeStart = () => {
   editor.value.commands.autoPaging(false)
@@ -163,8 +166,8 @@ watch(
   async (src) => {
     if (node.attrs.uploaded === false && !error.value) {
       if (src?.startsWith('data:image')) {
-        const type = src.split(';')[0].split(':')[1]
-        let ext = type.split('/')[1]
+        const [imageType] = src.split(';')[0].split(':')
+        let [ext] = imageType.split('/')
         if (ext === 'jpeg') {
           ext = 'jpg'
         }
@@ -173,12 +176,12 @@ watch(
         }
         const filename = shortId(10)
         const file = await base64ToFile(src, `${filename}.${ext}`, {
-          type,
+          imageType,
         })
         updateAttributes({ file })
       }
       await nextTick()
-      uploadImage()
+      void uploadImage()
     }
   },
   { immediate: true },

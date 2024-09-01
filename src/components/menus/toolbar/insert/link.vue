@@ -40,7 +40,7 @@
   </modal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { getSelectionText } from '@/extensions/selection'
 
 const { editor } = useStore()

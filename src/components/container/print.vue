@@ -2,7 +2,7 @@
   <iframe ref="iframeRef" class="umo-print-iframe" :srcdoc="iframeCode" />
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { container, options, editor, page, printing, exportPDF } = useStore()
 
 const iframeRef = $ref()
@@ -16,7 +16,7 @@ const getStylesHtml = () => {
 }
 
 const getPlyrSprite = () => {
-  return document.querySelector('#sprite-plyr')?.innerHTML || ''
+  return document.querySelector('#sprite-plyr')?.innerHTML ?? ''
 }
 
 const getContentHtml = () => {
@@ -67,7 +67,7 @@ const getIframeCode = () => {
     </html>`
 }
 
-const printPage = async () => {
+const printPage = () => {
   editor.value.commands.blur()
   iframeCode = getIframeCode()
 

@@ -31,7 +31,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { options, page } = useStore()
 const dialogVisible = $ref(false)
 </script>

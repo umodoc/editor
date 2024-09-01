@@ -171,7 +171,7 @@ export default Node.create({
           let bool = false
           // 插入文件
           onChange((fileList) => {
-            const files = Array.from(fileList || [])
+            const files = Array.from(fileList ?? [])
             if (!files) {
               return
             }

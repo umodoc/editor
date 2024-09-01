@@ -565,10 +565,7 @@ export class PageComputedContext {
     let beforePos = 0
     doc.descendants((node, pos, parentNode, i) => {
       if (node.type === schema.nodes[PARAGRAPH] && node.attrs.extend === true) {
-        if (!beforeBolck) {
-          beforeBolck = node
-          beforePos = pos
-        } else {
+        if (beforeBolck) {
           // console.log('beforeBolck: ' + beforeBolck)
           const mappedPos = tr.mapping.map(pos)
           if (beforeBolck.type === schema.nodes[PARAGRAPH]) {
@@ -578,6 +575,9 @@ export class PageComputedContext {
             )
           }
           return false
+        } else {
+          beforeBolck = node
+          beforePos = pos
         }
       }
       //如果进入了新的扩展块 直接 清除 上次的 记录

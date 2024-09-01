@@ -59,7 +59,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 

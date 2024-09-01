@@ -21,7 +21,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import SearchReplace from '@sereneinserenade/tiptap-search-and-replace'
 import Bold from '@tiptap/extension-bold'
 import CharacterCount from '@tiptap/extension-character-count'
@@ -41,7 +41,7 @@ import TextColor from '@tiptap/extension-text-style'
 import Typography from '@tiptap/extension-typography'
 import Underline from '@tiptap/extension-underline'
 import StarterKit from '@tiptap/starter-kit'
-import { Editor, } from '@tiptap/vue-3'
+import { Editor } from '@tiptap/vue-3'
 import Mathematics from '@tiptap-pro/extension-mathematics'
 import { TableOfContents } from '@tiptap-pro/extension-table-of-contents'
 import { getHierarchicalIndexes } from '@tiptap-pro/extension-table-of-contents'

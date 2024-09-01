@@ -28,7 +28,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { removeBackground } from '@imgly/background-removal'
 
 let dialogVisible = $ref(false)
@@ -38,7 +38,7 @@ let sealImg = $ref(null)
 let converting = $ref(null)
 let file = $ref(null)
 
-const selectImage = async () => {
+const selectImage = () => {
   const { open, onChange } = useFileDialog({
     accept: 'image/png,image/jpeg',
     multiple: false,
@@ -51,7 +51,7 @@ const selectImage = async () => {
     if (!files) {
       return
     }
-    file = files[0]
+    ;[file] = files
     if (!file) {
       return
     }

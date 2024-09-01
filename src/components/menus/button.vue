@@ -295,7 +295,9 @@
   </t-tooltip>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { isString } from '@tool-belt/type-predicates'
+
 import getShortcut from '@/utils/shortcut'
 
 const props = defineProps({
@@ -340,6 +342,7 @@ const props = defineProps({
   // Dropdown,Select 相关
   selectOptions: {
     type: Array,
+    default: () => [],
   },
   selectValue: {
     type: [String, Number],
@@ -352,6 +355,7 @@ const props = defineProps({
   },
   popupHandle: {
     type: String,
+    default: '',
   },
   // 菜单激活状态
   menuActive: {
@@ -390,7 +394,7 @@ const getTooltipContent = () => {
     return `${props.tooltip}${props.shortcut ? ` (${getShortcut(props.shortcut)})` : ''}`
   }
   if (props.text) {
-    return `${props.tooltip || props.text}${props.shortcut ? ` (${getShortcut(props.shortcut)})` : ''}`
+    return `${isString(props.tooltip) && props.tooltip ? props.tooltip : props.text}${props.shortcut ? ` (${getShortcut(props.shortcut)})` : ''}`
   }
   return ''
 }
@@ -456,8 +460,6 @@ onClickOutside(
   .umo-button-content {
     display: flex;
     align-items: center;
-    display: flex;
-    align-items: center;
     justify-content: center;
     .umo-button-icon,
     :deep(.umo-icon) {
@@ -495,7 +497,6 @@ onClickOutside(
     }
   }
   &.huge {
-    padding: 0 3px;
     width: auto;
     padding: 0 var(--td-comp-paddingLR-s);
     height: 56px;

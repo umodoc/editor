@@ -212,7 +212,9 @@
   </toolbar-scrollable>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { withSuppress } from '@/utils/functional'
+
 const props = defineProps({
   menus: {
     type: Array,
@@ -234,13 +236,11 @@ const disableItem = (name) => {
 let currentMenu = $ref('')
 watch(
   () => props.currentMenu,
-  async (val) => {
+  withSuppress(async (val) => {
     currentMenu = val
     await nextTick()
-    try {
-      scrollableRef.update()
-    } catch {}
-  },
+    scrollableRef.update()
+  }),
   { immediate: true },
 )
 const scrollableRef = $ref()

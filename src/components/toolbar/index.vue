@@ -133,9 +133,7 @@
   </tooltip>
 </template>
 
-<script setup>
-
-
+<script setup lang="ts">
 const emits = defineEmits(['menu-change'])
 const { container, options, editor, savedAt } = useStore()
 const $toolbar = useState('toolbar')

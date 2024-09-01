@@ -2,19 +2,18 @@ import i18n from '@/i18n'
 
 export const useState = (key: string, editorKey: string) => {
   const { options } = useStore()
+  const { id, title, content, enableMarkdown, enableSpellcheck } =
+    options.value.document
+
   let data = null
   switch (key) {
     case 'toolbar':
       data = {
-        // @ts-ignore
         mode: options.value.toolbar.defaultMode,
         show: true,
       }
       break
     case 'document':
-      // @ts-ignore
-      const { id, title, content, enableMarkdown, enableSpellcheck } =
-        options.value.document
       data = {
         id,
         title,
