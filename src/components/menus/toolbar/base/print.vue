@@ -3,6 +3,7 @@
     :text="t('print.text')"
     ico="print"
     shortcut="Ctrl+P"
+    :disabled="editor?.isEmpty"
     huge
     @menu-click="printing = true"
   >
@@ -10,7 +11,7 @@
 </template>
 
 <script setup>
-const { printing } = useStore()
+const { editor, printing } = useStore()
 </script>
 
 <style lang="less" scoped></style>

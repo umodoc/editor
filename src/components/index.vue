@@ -344,6 +344,9 @@ const setContent = (
     .setContent(content, options.emitUpdate)
     .focus(options.focusPosition, options.focusOptions)
     .run()
+  setTimeout(() => {
+    editor.value.commands.autoPaging()
+  }, 200)
 }
 const setPagination = (enabled) => {
   if (!editor.value) {
@@ -353,6 +356,15 @@ const setPagination = (enabled) => {
     throw new Error('"enabled" must be a boolean.')
   }
   page.value.pagination = enabled
+}
+const autoPagination = (enabled) => {
+  if (!editor.value) {
+    throw new Error('editor is not ready!')
+  }
+  if (typeof enabled !== 'boolean') {
+    throw new Error('"enabled" must be a boolean.')
+  }
+  editor.value.commands.autoPaging(enabled)
 }
 const setLocale = (parmas) => {
   if (!['zh-CN', 'en-US'].includes(parmas)) {
@@ -466,7 +478,7 @@ const getLocale = () => i18n.global.locale.value
 const getI18n = () => i18n
 const print = () => {
   const { toolbar, document } = options.value
-  if (toolbar.disableMenuItems.includes('print')) {
+  if (toolbar.disableMenuItems.includes('print') || editor.isEmpty) {
     return
   }
   if ($toolbar.value.mode !== 'source' && !document.readOnly) {
@@ -516,6 +528,7 @@ defineExpose({
   setTheme,
   getContent,
   setPagination,
+  autoPagination,
   getImage,
   getText,
   getHTML,
@@ -719,6 +732,10 @@ watch(
   color: var(--umo-text-color);
   font-family: var(--umo-font-family);
   position: relative !important;
+  .umo-toolbar,
+  .umo-footer {
+    background-color: var(--umo-color-white);
+  }
   .umo-main {
     flex: 1;
     background-color: var(--umo-container-background);
