@@ -29,6 +29,7 @@ import DiagramEditor from '@/utils/diagram-editor'
 const props = defineProps({
   content: {
     type: String,
+    default: '',
   },
 })
 
@@ -42,7 +43,7 @@ const diagramEditor = new DiagramEditor({
   container: `${container} .umo-diagrams-container`,
 })
 const openDiagramEditor = () => {
-  diagramEditor.edit(props.content || '')
+  diagramEditor.edit(props.content ?? '')
 }
 
 let image = $ref({})
@@ -85,11 +86,7 @@ watch(
       window.removeEventListener('message', messageListener)
       diagramEditor.stopEditing()
       if (image.type) {
-        editor.value
-          ?.chain()
-          .focus()
-          .setImage(image, props.content ? true : false)
-          .run()
+        editor.value?.chain().focus().setImage(image, !!props.content).run()
       }
       return
     }

@@ -17,10 +17,8 @@ export const useConfirm = (parmas: any) => {
     ...parmas,
   })
 }
-//@ts-ignore
 export const useMessage = (type, parmas) => {
   const options = typeof parmas === 'string' ? { content: parmas } : parmas
-  //@ts-ignore
   return MessagePlugin[type]({
     attach: container,
     ...options,

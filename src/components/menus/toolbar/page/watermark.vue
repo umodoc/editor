@@ -79,12 +79,12 @@
           </div>
         </div>
         <t-button
-          class="umo-clear-button"
           v-if="page.watermark.text !== ''"
+          class="umo-clear-button"
           block
           variant="outline"
-          v-text="t('page.watermark.clear')"
           @click="clearWatermark"
+          v-text="t('page.watermark.clear')"
         ></t-button>
       </div>
     </template>
@@ -92,7 +92,7 @@
 </template>
 
 <script setup>
-let { popupVisible, togglePopup } = usePopup()
+const { popupVisible, togglePopup } = usePopup()
 
 const { options, page } = useStore()
 

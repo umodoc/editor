@@ -1,35 +1,36 @@
-import { Node, Mark } from '@tiptap/pm/model'
-import {
-  IParagraphOptions,
-  IRunOptions,
-  Paragraph,
-  TextRun,
-  ExternalHyperlink,
-  ParagraphChild,
-  MathRun,
-  Math,
-  TabStopType,
-  TabStopPosition,
-  SequentialIdentifier,
-  Bookmark,
-  ImageRun,
-  AlignmentType,
-  Table,
-  TableRow,
-  TableCell,
-  ITableCellOptions,
-  InternalHyperlink,
-  SimpleField,
-  FootnoteReferenceRun,
-  IImageOptions,
-  ITableOptions,
-  ITableRowOptions,
-  PageBreak,
-} from 'docx'
+import type { Mark, Node } from '@tiptap/pm/model'
+import { isNumber } from '@tool-belt/type-predicates'
 import sizeOf from 'buffer-image-size'
-import { createNumbering, NumberingStyles } from './numbering'
+import {
+  AlignmentType,
+  Bookmark,
+  ExternalHyperlink,
+  FootnoteReferenceRun,
+  type IImageOptions,
+  ImageRun,
+  InternalHyperlink,
+  type IParagraphOptions,
+  type IRunOptions,
+  type ITableCellOptions,
+  type ITableOptions,
+  type ITableRowOptions,
+  Math,
+  MathRun,
+  Paragraph,
+  type ParagraphChild,
+  SequentialIdentifier,
+  SimpleField,
+  Table,
+  TableCell,
+  TableRow,
+  TabStopPosition,
+  TabStopType,
+  TextRun,
+} from 'docx'
+
+import { createNumbering, type NumberingStyles } from './numbering'
+import type { IFootnotes, INumbering, Mutable } from './types'
 import { createDocFromState, createShortId } from './utils'
-import { IFootnotes, INumbering, Mutable } from './types'
 
 // This is duplicated from @curvenote/schema
 export type AlignOptions = 'left' | 'center' | 'right'
@@ -44,11 +45,11 @@ export type MarkSerializer = Record<
   (state: DocxSerializerState, node: Node, mark: Mark) => IRunOptions
 >
 
-export type Options = {
+export interface Options {
   getImageBuffer: (src: string) => Buffer
 }
 
-export type IMathOpts = {
+export interface MathOpts {
   inline?: boolean
   id?: string | null
   numbered?: boolean
@@ -104,24 +105,29 @@ export class DocxSerializerState {
 
   renderContent(parent: Node, opts?: IParagraphOptions) {
     parent.forEach((node, _, i) => {
-      if (opts) this.addParagraphOptions(opts)
+      if (opts) {
+        this.addParagraphOptions(opts)
+      }
       this.render(node, parent, i)
     })
   }
 
   render(node: Node, parent: Node, index: number) {
-    if (typeof parent === 'number') throw new Error('!')
-    if (!this.nodes[node.type.name])
+    if (isNumber(parent)) {
+      throw new Error('!')
+    }
+    if (!this.nodes[node.type.name]) {
       throw new Error(
         `Token type \`${node.type.name}\` not supported by Word renderer`,
       )
+    }
     this.nodes[node.type.name](this, node, parent, index)
   }
 
   renderMarks(node: Node, marks: Mark[]): IRunOptions {
     return marks
       .map((mark) => {
-        return this.marks[mark.type.name]?.(this, node, mark)
+        return this.marks[mark.type.name](this, node, mark)
       })
       .reduce((a, b) => ({ ...a, ...b }), {})
   }
@@ -130,7 +136,9 @@ export class DocxSerializerState {
     // Pop the stack over to this object when we encounter a link, and closeLink restores it
     let currentLink: { link: string; stack: ParagraphChild[] } | undefined
     const closeLink = () => {
-      if (!currentLink) return
+      if (!currentLink) {
+        return
+      }
       const hyperlink = new ExternalHyperlink({
         link: currentLink.link,
         // child: this.current[0],
@@ -145,14 +153,16 @@ export class DocxSerializerState {
       // TODO: https://github.com/dolanmiu/docx/issues/1119
       // Remove the if statement here and oneLink!
       const oneLink = true
-      if (!oneLink) {
-        closeLink()
-      } else {
-        if (currentLink && sameLink) return
+      if (oneLink) {
+        if (currentLink && sameLink) {
+          return
+        }
         if (currentLink && !sameLink) {
           // Close previous, and open a new one
           closeLink()
         }
+      } else {
+        closeLink()
       }
       currentLink = {
         link: href,
@@ -180,13 +190,13 @@ export class DocxSerializerState {
   }
 
   renderList(node: Node, style: NumberingStyles) {
-    if (!this.currentNumbering) {
+    if (this.currentNumbering) {
+      const { reference, level } = this.currentNumbering
+      this.currentNumbering = { reference, level: level + 1 }
+    } else {
       const nextId = createShortId()
       this.numbering.push(createNumbering(nextId, style))
       this.currentNumbering = { reference: nextId, level: 0 }
-    } else {
-      const { reference, level } = this.currentNumbering
-      this.currentNumbering = { reference, level: level + 1 }
     }
     this.renderContent(node)
     if (this.currentNumbering.level === 0) {
@@ -199,8 +209,9 @@ export class DocxSerializerState {
 
   // This is a pass through to the paragraphs, etc. underneath they will close the block
   renderListItem(node: Node) {
-    if (!this.currentNumbering)
+    if (!this.currentNumbering) {
       throw new Error('Trying to create a list item without a list?')
+    }
     this.addParagraphOptions({ numbering: this.currentNumbering })
     this.renderContent(node)
   }
@@ -214,12 +225,14 @@ export class DocxSerializerState {
   }
 
   text(text: string | null | undefined, opts?: IRunOptions) {
-    if (!text) return
+    if (!text) {
+      return
+    }
     this.current.push(new TextRun({ text, ...this.nextRunOpts, ...opts }))
     delete this.nextRunOpts
   }
 
-  math(latex: string, opts: IMathOpts = { inline: true }) {
+  math(latex: string, opts: MathOpts = { inline: true }) {
     if (opts.inline || !opts.numbered) {
       this.current.push(new Math({ children: [new MathRun(latex)] }))
       return
@@ -266,7 +279,7 @@ export class DocxSerializerState {
         ...imageRunOpts,
         data: buffer,
         transformation: {
-          ...(imageRunOpts?.transformation || {}),
+          ...(imageRunOpts?.transformation ?? {}),
           width,
           height: width * aspect,
         },
@@ -319,18 +332,22 @@ export class DocxSerializerState {
         }
         const colspan = cell.attrs.colspan ?? 1
         const rowspan = cell.attrs.rowspan ?? 1
-        if (colspan > 1) tableCellOpts.columnSpan = colspan
-        if (rowspan > 1) tableCellOpts.rowSpan = rowspan
+        if (colspan > 1) {
+          tableCellOpts.columnSpan = colspan
+        }
+        if (rowspan > 1) {
+          tableCellOpts.rowSpan = rowspan
+        }
         cells.push(
           new TableCell({
             ...tableCellOpts,
-            ...(getCellOptions?.(cell) || {}),
+            ...(getCellOptions?.(cell) ?? {}),
           }),
         )
       })
       rows.push(
         new TableRow({
-          ...(getRowOptions?.(row) || {}),
+          ...(getRowOptions?.(row) ?? {}),
           children: cells,
           tableHeader,
         }),
@@ -385,9 +402,13 @@ export class DocxSerializerState {
 
   createReference(id: string, before?: string, after?: string) {
     const children: ParagraphChild[] = []
-    if (before) children.push(new TextRun(before))
+    if (before) {
+      children.push(new TextRun(before))
+    }
     children.push(new SimpleField(`REF ${id} \\h`))
-    if (after) children.push(new TextRun(after))
+    if (after) {
+      children.push(new TextRun(after))
+    }
     const ref = new InternalHyperlink({ anchor: id, children })
     this.current.push(ref)
   }
@@ -406,7 +427,6 @@ export class DocxSerializer {
   serialize(content: Node, options: Options) {
     const state = new DocxSerializerState(this.nodes, this.marks, options)
     state.renderContent(content)
-    const doc = createDocFromState(state)
-    return doc
+    return createDocFromState(state)
   }
 }

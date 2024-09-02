@@ -1,7 +1,7 @@
-import { Node, mergeAttributes } from '@tiptap/core'
+import { mergeAttributes, Node } from '@tiptap/core'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
+
 import NodeView from './node-view.vue'
-import { re } from 'prism-code-editor/prism/utils/shared'
 
 const { options } = useStore()
 
@@ -169,7 +169,7 @@ export default Node.create({
           let bool = false
           // 插入文件
           onChange((fileList) => {
-            const files = Array.from(fileList || [])
+            const files = Array.from(fileList ?? [])
             if (!files) {
               return
             }

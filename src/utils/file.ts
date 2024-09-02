@@ -56,8 +56,7 @@ const fileTypes = {
 
 export const getFileExtname = (filename) => {
   const splitFileName = filename.split('.')
-  const extname = splitFileName[splitFileName.length - 1]
-  return extname
+  return splitFileName[splitFileName.length - 1]
 }
 
 export const getFileIcon = (filename) => {

@@ -46,7 +46,7 @@ const importWord = () => {
   open()
   // 插入文件
   onChange(async (files) => {
-    const file = Array.from(files)[0]
+    const [file] = Array.from(files)
     if (!file) {
       return
     }
@@ -54,7 +54,7 @@ const importWord = () => {
       useMessage('error', t('base.importWord.limitSize'))
       return
     }
-    let message = await useMessage(
+    const message = await useMessage(
       'loading',
       t('base.importWord.converting'),
       0,
@@ -68,7 +68,7 @@ const importWord = () => {
         if (result?.messages?.type === 'error') {
           useMesssage(
             'error',
-            `${t('base.importWord.convertError')} (${messages.message})`,
+            `${t('base.importWord.convertError')} (${result.messages.message})`,
           )
           return
         }
@@ -77,7 +77,7 @@ const importWord = () => {
         } else {
           useMessage('error', t('base.importWord.importError'))
         }
-      } catch (error) {
+      } catch {
         useMessage('error', t('base.importWord.importError'))
       }
       return
@@ -99,8 +99,8 @@ const importWord = () => {
     }
     try {
       // 解析和加工 Mammoth 返回的 HTML 内容
-      let domparser = new DOMParser()
-      let doc = domparser.parseFromString(value, 'text/html')
+      const domparser = new DOMParser()
+      const doc = domparser.parseFromString(value, 'text/html')
       doc.querySelectorAll('img').forEach((img) => {
         const parent = img.parentElement
         if (parent.tagName === 'P') {
@@ -112,7 +112,7 @@ const importWord = () => {
       })
       const content = doc.body.innerHTML.toString()
       editor.value.commands.setContent(content)
-    } catch (error) {
+    } catch {
       useMessage('error', t('base.importWord.importError'))
     }
   })

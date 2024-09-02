@@ -1,19 +1,27 @@
-import { defaultOptions, ojbectSchema } from '@/options'
-import shortId from '@/utils/short-id'
+import type { Mark } from '@tiptap/pm/model'
+import type { Editor } from '@tiptap/vue-3'
+import { isRecord } from '@tool-belt/type-predicates'
+
 import { changeComputedHtml } from '@/extensions/page/core'
-import { Editor } from '@tiptap/vue-3'
-import { PageOption, UmoEditorOptions } from '@/types'
-type KeyValuePair<T> = { [K in keyof T]?: T[K] }
+import { defaultOptions, ojbectSchema } from '@/options'
+import type { PageOption, UmoEditorOptions } from '@/types'
+import shortId from '@/utils/short-id'
+
 export const useStore = createGlobalState(() => {
   const toolbarKey = ref<string>(shortId())
   const options = ref<UmoEditorOptions>(defaultOptions)
   const page = ref<PageOption>(defaultOptions.page)
-  const editor = ref<any>()
-  const painter = ref<any>({
+  const editor = ref<Editor>()
+  const painter = ref<{
+    enabled: boolean
+    once: boolean
+    marks: Mark[]
+  }>({
     enabled: false,
     once: true,
     marks: [],
   })
+
   const blockMenu = ref(false)
   const assistantBox = ref(false)
   const commentBox = ref(false)
@@ -27,21 +35,37 @@ export const useStore = createGlobalState(() => {
   const hidePageHeader = ref(true)
   const hidePageFooter = ref(true)
   const editorDestroyed = ref(false)
-  const setOptions = (value: any) => {
-    const opts = value?.value || value
+
+  const setOptions = (value: unknown) => {
+    const opts =
+      isRecord(value) && Object.keys(value).includes('value')
+        ? value.value
+        : value
+
     options.value = ojbectSchema.merge(
       options.value,
-      Object.keys(opts).reduce((acc: any, key) => {
-        if (opts[key] !== undefined) {
-          acc[key] = opts[key]
-        }
-        return acc
-      }, {}),
+      Object.keys(opts).reduce<Record<string, unknown>>(
+        (acc: Record<string, unknown>, key: string) => {
+          if (opts[key] !== undefined) {
+            acc[key] = opts[key]
+          }
+          return acc
+        },
+        {},
+      ),
     )
     return options.value
   }
-  //@ts-ignore
-  const setPainter = ({ enabled, once, marks }) => {
+
+  const setPainter = ({
+    enabled,
+    once,
+    marks,
+  }: {
+    enabled: boolean
+    once: boolean
+    marks: Mark[]
+  }) => {
     painter.value.enabled = enabled
     painter.value.once = once
     painter.value.marks = marks
@@ -51,7 +75,7 @@ export const useStore = createGlobalState(() => {
     () => options.value.page,
     ({ defaultBackground, defaultMargin, defaultOrientation, watermark }) => {
       page.value = {
-        size: options.value.dicts.pageSizes.find((item: any) => item.default),
+        size: options.value.dicts?.pageSizes.find((item) => item.default),
         margin: defaultMargin,
         background: defaultBackground,
         orientation: defaultOrientation,
@@ -74,7 +98,7 @@ export const useStore = createGlobalState(() => {
 
   watch(
     () => [page.value.size, page.value.margin, page.value.orientation],
-    (value) => {
+    () => {
       editor.value?.commands.autoPaging(false)
       changeComputedHtml()
       setTimeout(() => {
@@ -84,9 +108,11 @@ export const useStore = createGlobalState(() => {
     { deep: true },
   )
 
-  const setEditor = (editorInstance: Editor) => (editor.value = editorInstance)
+  const setEditor = (editorInstance: Editor) => {
+    editor.value = editorInstance
+  }
   const resetStore = () => {
-    editor.value = null
+    editor.value = undefined
     tableOfContents.value = []
     searchReplace.value = false
     savedAt.value = null
@@ -95,7 +121,7 @@ export const useStore = createGlobalState(() => {
 
   watch(
     () => options.value.document?.readOnly,
-    async (val) => {
+    (val) => {
       editor.value?.setEditable(!val)
       toolbarKey.value = shortId()
     },

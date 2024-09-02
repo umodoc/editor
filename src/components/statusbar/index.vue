@@ -15,17 +15,17 @@
       <tooltip
         v-if="options.document.enableSpellcheck"
         :content="
-          $document.spellcheck
+          $document.enableSpellcheck
             ? t('spellcheck.disable')
             : t('spellcheck.enable')
         "
       >
         <t-button
           class="umo-status-bar-button"
-          :class="{ active: $document.spellcheck }"
+          :class="{ active: $document.enableSpellcheck }"
           variant="text"
           size="small"
-          @click="$document.spellcheck = !$document.spellcheck"
+          @click="$document.enableSpellcheck = !$document.enableSpellcheck"
         >
           <icon name="spellcheck" color="red" />
         </t-button>
@@ -243,8 +243,8 @@
           class="umo-status-bar-button auto-width umo-lang-button"
           variant="text"
           size="small"
-          v-text="locale"
           @click="zoomReset"
+          v-text="locale"
         >
         </t-button>
       </t-dropdown>
@@ -284,8 +284,7 @@
 </template>
 
 <script setup>
-import i18n from '@/i18n'
-import getShortcut from '@/utils/shortcut'
+import { i18n } from '@/i18n'
 
 const { container, options, page, editor } = useStore()
 const $document = useState('document')
@@ -303,7 +302,7 @@ const togglePagination = () => {
 }
 
 // 字数统计
-let showWordCount = $ref(false)
+const showWordCount = $ref(false)
 const selectionCharacters = computed(() => {
   const { state } = editor.value
   if (state) {
@@ -322,14 +321,16 @@ onMounted(() => {
 })
 
 // 演示模式
-const togglePreview = async () => {
+const togglePreview = () => {
   page.value.showToc = false
   page.value.preview.enabled = !page.value.preview.enabled
   if (page.value.preview.enabled) {
     document.querySelector(`${container} .umo-zoomable-container`).scrollTop = 0
   }
 }
-onMounted(() => useHotkeys('f5', togglePreview))
+onMounted(() => {
+  useHotkeys('f5', togglePreview)
+})
 watch(
   () => page.value.preview.enabled,
   (val) => {
@@ -355,13 +356,13 @@ watch(
 // 页面缩放
 const zoomIn = () => {
   if (page.value.zoomLevel < 500) {
-    page.value.zoomLevel = page.value.zoomLevel + 10
+    page.value.zoomLevel += 10
     page.value.autoWidth = false
   }
 }
 const zoomOut = () => {
   if (page.value.zoomLevel > 20) {
-    page.value.zoomLevel = page.value.zoomLevel - 10
+    page.value.zoomLevel -= 10
     page.value.autoWidth = false
   }
 }
@@ -386,7 +387,7 @@ const autoWidth = (auto, padding = 50) => {
     const pageEl = editorEl.querySelector('.umo-page-content')
     const editorWidth = editorEl.clientWidth
     const pageWidth = pageEl.clientWidth
-    page.value.zoomLevel = parseInt(
+    page.value.zoomLevel = Number.parseInt(
       ((editorWidth - padding * 2) / pageWidth) * 100,
     )
     page.value.autoWidth = true
@@ -401,7 +402,9 @@ useHotkeys('ctrl+0,command+0', autoWidth)
 watch(
   () => page.value.showToc,
   () => {
-    if (page.value.autoWidth) autoWidth()
+    if (page.value.autoWidth) {
+      autoWidth()
+    }
   },
 )
 

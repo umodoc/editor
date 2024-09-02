@@ -68,12 +68,12 @@
 </template>
 
 <script setup>
-import getId from '@/utils/short-id'
 import { getSelectionNode } from '@/extensions/selection'
+import getId from '@/utils/short-id'
 
 const { container, editor, blockMenu } = useStore()
 
-let menuActive = $ref(false)
+const menuActive = $ref(false)
 
 const clearTextFormatting = () => {
   editor.value.chain().focus().setCurrentNodeSelection().unsetAllMarks().run()
@@ -91,7 +91,7 @@ const duplicateNode = () => {
   const getPosition = () => {
     let point = 0
     editor.value.state.doc.descendants((node, pos) => {
-      if (node == selectionNode) {
+      if (node === selectionNode) {
         point = pos + node.nodeSize // 返回节点结束位置
       }
     })

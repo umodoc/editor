@@ -1,46 +1,64 @@
-import i18n from '@/i18n'
+import type { RemovableRef } from "@vueuse/core";
 
-export const useState = (key: string, editorKey: string) => {
-  const { options } = useStore()
-  let data = null
-  switch (key) {
-    case 'toolbar':
-      data = {
-        mode: options.value.toolbar.defaultMode,
-        show: true,
-      }
-      break
-    case 'document':
-      const { id, title, content, enableMarkdown, enableSpellcheck } =
-        options.value.document
-      data = {
-        id,
-        title,
-        content,
-        markdown: enableMarkdown,
-        spellcheck: enableSpellcheck,
-      }
-      break
-    case 'recent':
-      data = {
-        fonts: [],
-        colors: [],
-      }
-      break
-    case 'print':
-      data = {
-        singleColumn: true,
-        showPageNumber: true,
-      }
-      break
-    case 'locale':
-      data = i18n.global.locale.value
-      break
-    default:
-      throw new Error('[useStorage]', { cause: 'Key is not valid' })
-  }
-  return useStorage(
-    `umo-editor:${editorKey || options.value.editorKey}:${key}`,
-    data,
-  )
+import { i18n } from "@/i18n";
+import type { DocumentOptions } from "@/types";
+
+type StateKey = "toolbar" | "document" | "recent" | "print" | "locale";
+
+type StateValue<K extends StateKey> = K extends "document"
+	? RemovableRef<Partial<DocumentOptions>>
+	: K extends "toolbar"
+		? RemovableRef<{
+				mode: "classic" | "ribbon" | "source";
+				show: boolean;
+			}>
+		: K extends "recent"
+			? RemovableRef<{
+					fonts: string[];
+					colors: string[];
+				}>
+			: K extends "print"
+				? RemovableRef<{
+						singleColumn: boolean;
+						showPageNumber: boolean;
+					}>
+				: K extends "locale"
+					? RemovableRef<"en-US" | "zh-CN">
+					: never;
+
+export function useState<K extends StateKey>(
+	key: K,
+	editorKey?: string,
+): StateValue<K> {
+	const { options } = useStore();
+	const storageKey = `umo-editor:${editorKey ?? options.value.editorKey}:${key}`;
+
+	if (key === "document") {
+		return useStorage(
+			storageKey,
+			options.value.document ?? ({} as Partial<DocumentOptions>),
+		) as StateValue<K>;
+	}
+	if (key === "toolbar") {
+		return useStorage(storageKey, {
+			mode: options.value.toolbar?.defaultMode ?? "classic",
+			show: true,
+		}) as StateValue<K>;
+	}
+	if (key === "recent") {
+		return useStorage(storageKey, {
+			fonts: [] as string[],
+			colors: [] as string[],
+		}) as StateValue<K>;
+	}
+	if (key === "print") {
+		return useStorage(storageKey, {
+			singleColumn: true,
+			showPageNumber: true,
+		}) as StateValue<K>;
+	}
+	if (key === "locale") {
+		return useStorage(storageKey, i18n.global.locale.value) as StateValue<K>;
+	}
+	throw new Error("[useStorage]", { cause: "Key is not valid" });
 }

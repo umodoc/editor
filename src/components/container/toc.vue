@@ -13,10 +13,10 @@
         v-text="t('toc.empty')"
       ></div>
       <div
-        v-else
-        class="umo-toc-item"
         v-for="(item, index) in tableOfContents"
+        v-else
         :key="item.id"
+        class="umo-toc-item"
         :class="{
           active: item.isActive,
           ['level-' + item.level]: true,
@@ -34,6 +34,9 @@
 
 <script setup>
 import { TextSelection } from '@tiptap/pm/state'
+
+const emit = defineEmits(['close'])
+
 const { container, editor, tableOfContents } = useStore()
 
 const headingClick = (heading) => {
@@ -57,7 +60,7 @@ const headingClick = (heading) => {
     top: element.offsetTop + 10,
   })
   const pos = editor.value.view.posAtDOM(element, 0)
-  const tr = editor.value.view.state.tr
+  const { tr } = editor.value.view.state
   tr.setSelection(new TextSelection(tr.doc.resolve(pos)))
   editor.value.view.dispatch(tr)
   editor.value.view.focus()

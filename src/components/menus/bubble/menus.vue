@@ -123,7 +123,7 @@ const { options, editor } = useStore()
 
 <style lang="less" scoped>
 .umo-bubble-menu-divider {
-  width: 1;
+  width: 1px;
   border-right: solid 1px var(--umo-border-color-light);
   height: 16px;
   margin: 0 10px 0 5px;

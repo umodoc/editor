@@ -1,6 +1,6 @@
 import { Extension } from '@tiptap/core'
+import type { Mark } from '@tiptap/pm/model'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
-import { Mark } from '@tiptap/pm/model'
 const { painter, setPainter } = useStore()
 
 declare module '@tiptap/core' {
@@ -66,7 +66,7 @@ export default Extension.create({
         },
         props: {
           handleDOMEvents: {
-            mousedown(view, event) {
+            mousedown(view) {
               const marks: Mark[] | undefined = this.getState(view.state)
               if (!marks || marks.length === 0) {
                 return false // 如果没有标记，则不执行任何操作
@@ -82,7 +82,7 @@ export default Extension.create({
                 let { tr, selection } = view.state
 
                 tr = tr.removeMark(selection.from, selection.to)
-                for (let mark of marks) {
+                for (const mark of marks) {
                   if (mark.type.name !== 'link') {
                     tr = tr.addMark(selection.from, selection.to, mark)
                   }

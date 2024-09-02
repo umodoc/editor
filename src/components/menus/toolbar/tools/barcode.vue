@@ -201,7 +201,7 @@
               class="umo-barcode-empty"
               v-text="t('tools.barcode.renderError')"
             ></div>
-            <svg ref="barcodeSvgRef" id="barcode" v-show="!renderError"></svg>
+            <svg v-show="!renderError" id="barcode" ref="barcodeSvgRef"></svg>
           </div>
         </div>
       </div>
@@ -217,10 +217,11 @@ import svg64 from 'svg64'
 const { content } = defineProps({
   content: {
     type: String,
+    default: '',
   },
 })
 
-let { popupVisible, togglePopup } = usePopup()
+const { popupVisible, togglePopup } = usePopup()
 
 let dialogVisible = $ref(false)
 const { container, options, editor } = useStore()
@@ -310,7 +311,7 @@ watch(
   () => {
     if (dialogVisible) {
       changed = true
-      renderBarcode()
+      void renderBarcode()
     }
   },
   { immediate: true, deep: true },

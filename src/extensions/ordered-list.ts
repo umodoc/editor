@@ -9,7 +9,6 @@ export default OrderedList.extend({
       listStyleType: {
         default: 'decimal',
         parseHTML: (element) => {
-          //@ts-ignore
           const listStyleType = element.style['list-style-type']
           return { listStyleType: listStyleType || 'decimal' }
         },

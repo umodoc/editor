@@ -38,7 +38,7 @@ const props = defineProps({
 })
 const emits = defineEmits(['change'])
 
-let { popupVisible, togglePopup } = usePopup()
+const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
 let currentColor = $ref()
@@ -51,10 +51,10 @@ const colorChange = (color) => {
     return
   }
 
-  if (color !== '') {
-    editor.value?.chain().focus().setColor(color).run()
-  } else {
+  if (color === '') {
     editor.value?.chain().focus().unsetColor().run()
+  } else {
+    editor.value?.chain().focus().setColor(color).run()
   }
 }
 </script>

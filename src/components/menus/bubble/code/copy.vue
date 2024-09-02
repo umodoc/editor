@@ -16,7 +16,7 @@ const copyCode = () => {
   const { copy } = useClipboard({
     source: ref(codeBlock.attrs.code),
   })
-  copy()
+  void copy()
   useMessage('success', t('bubbleMenu.code.copy.success'))
 }
 </script>

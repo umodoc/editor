@@ -1,8 +1,8 @@
 <template>
   <node-view-wrapper
+    :id="node.attrs.id"
     ref="containerRef"
     class="umo-node-view"
-    :id="node.attrs.id"
     @dblclick.capture="disabled = true"
   >
     <div class="umo-node-container umo-node-text-box">
@@ -33,8 +33,7 @@
 </template>
 
 <script setup>
-import { nodeViewProps, NodeViewWrapper, NodeViewContent } from '@tiptap/vue-3'
-import Drager from 'es-drager'
+import { nodeViewProps } from '@tiptap/vue-3'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 

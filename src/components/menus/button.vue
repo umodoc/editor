@@ -26,18 +26,18 @@
           variant="text"
           size="small"
           :disabled="disabled || editor?.isEditable === false"
-          @click="menuClick"
           v-bind="attrs"
+          @click="menuClick"
         >
           <div class="umo-button-content">
             <slot />
             <template v-if="ico">
               <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
               </span>
-              <icon class="umo-button-icon" v-else :name="ico" />
+              <icon v-else class="umo-button-icon" :name="ico" />
             </template>
             <p class="umo-button-text">{{ text }}</p>
-            <kbd class="umo-button-kbd" v-if="shortcutText">
+            <kbd v-if="shortcutText" class="umo-button-kbd">
               {{ getShortcut(shortcutText) }}
             </kbd>
           </div>
@@ -62,10 +62,10 @@
               <template v-if="ico">
                 <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
                 </span>
-                <icon class="umo-button-icon" v-else :name="ico" />
+                <icon v-else class="umo-button-icon" :name="ico" />
               </template>
               <p class="umo-button-text">{{ text }}</p>
-              <kbd class="umo-button-kbd" v-if="shortcutText">
+              <kbd v-if="shortcutText" class="umo-button-kbd">
                 {{ getShortcut(shortcutText) }}
               </kbd>
             </div>
@@ -129,10 +129,10 @@
                     v-html="ico"
                   >
                   </span>
-                  <icon class="umo-button-icon" v-else :name="ico" />
+                  <icon v-else class="umo-button-icon" :name="ico" />
                 </template>
                 <p class="umo-button-text">{{ text }}</p>
-                <kbd class="umo-button-kbd" v-if="shortcutText">{{
+                <kbd v-if="shortcutText" class="umo-button-kbd">{{
                   getShortcut(shortcutText)
                 }}</kbd>
                 <span
@@ -189,10 +189,10 @@
               <template v-if="ico">
                 <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
                 </span>
-                <icon class="umo-button-icon" v-else :name="ico" />
+                <icon v-else class="umo-button-icon" :name="ico" />
               </template>
               <p class="umo-button-text">{{ text }}</p>
-              <kbd class="umo-button-kbd" v-if="shortcutText">
+              <kbd v-if="shortcutText" class="umo-button-kbd">
                 {{ getShortcut(shortcutText) }}
               </kbd>
             </div>
@@ -215,7 +215,7 @@
                 <icon name="arrow-down" />
               </span>
               <template #content>
-                <div class="umo-popup-content" ref="popupContentRef">
+                <div ref="popupContentRef" class="umo-popup-content">
                   <slot name="content" />
                 </div>
               </template>
@@ -260,10 +260,10 @@
                     v-html="ico"
                   >
                   </span>
-                  <icon class="umo-button-icon" v-else :name="ico" />
+                  <icon v-else class="umo-button-icon" :name="ico" />
                 </template>
                 <p class="umo-button-text">{{ text }}</p>
-                <kbd class="umo-button-kbd" v-if="shortcutText">{{
+                <kbd v-if="shortcutText" class="umo-button-kbd">{{
                   getShortcut(shortcutText)
                 }}</kbd>
                 <span
@@ -281,7 +281,7 @@
               </span>
             </t-button>
             <template #content>
-              <div class="umo-popup-content" ref="popupContentRef">
+              <div ref="popupContentRef" class="umo-popup-content">
                 <slot name="content" />
               </div>
             </template>
@@ -296,6 +296,8 @@
 </template>
 
 <script setup>
+import { isString } from '@tool-belt/type-predicates'
+
 import getShortcut from '@/utils/shortcut'
 
 const props = defineProps({
@@ -340,6 +342,7 @@ const props = defineProps({
   // Dropdown,Select 相关
   selectOptions: {
     type: Array,
+    default: () => [],
   },
   selectValue: {
     type: [String, Number],
@@ -352,6 +355,7 @@ const props = defineProps({
   },
   popupHandle: {
     type: String,
+    default: '',
   },
   // 菜单激活状态
   menuActive: {
@@ -376,7 +380,7 @@ const menuClick = (...args) => {
   }
 }
 
-let tooltipVisible = $ref(false)
+const tooltipVisible = $ref(false)
 let tooltipForceHide = $ref(false)
 const popupVisileChange = (visible) => {
   // 隐藏 Tooltip，适用于 select、dropdown、popup 等子组件展开时，隐藏 Tooltip
@@ -390,7 +394,7 @@ const getTooltipContent = () => {
     return `${props.tooltip}${props.shortcut ? ` (${getShortcut(props.shortcut)})` : ''}`
   }
   if (props.text) {
-    return `${props.tooltip || props.text}${props.shortcut ? ` (${getShortcut(props.shortcut)})` : ''}`
+    return `${isString(props.tooltip) && props.tooltip ? props.tooltip : props.text}${props.shortcut ? ` (${getShortcut(props.shortcut)})` : ''}`
   }
   return ''
 }
@@ -456,8 +460,6 @@ onClickOutside(
   .umo-button-content {
     display: flex;
     align-items: center;
-    display: flex;
-    align-items: center;
     justify-content: center;
     .umo-button-icon,
     :deep(.umo-icon) {
@@ -495,7 +497,6 @@ onClickOutside(
     }
   }
   &.huge {
-    padding: 0 3px;
     width: auto;
     padding: 0 var(--td-comp-paddingLR-s);
     height: 56px;

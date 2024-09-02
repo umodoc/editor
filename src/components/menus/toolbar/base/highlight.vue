@@ -16,9 +16,9 @@
     <template #dropmenu>
       <t-dropdown-menu>
         <t-dropdown-item
-          class="umo-text-highlight-menu"
           v-for="item in options"
           :key="item.value"
+          class="umo-text-highlight-menu"
           :value="item.value"
           :style="{ backgroundColor: item.bgcolor, color: item.color }"
           :divider="item.divider"

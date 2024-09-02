@@ -13,7 +13,10 @@
 
 <script setup>
 const props = defineProps({
-  content: {},
+  content: {
+    type: Object,
+    required: true,
+  },
 })
 const { container } = useStore()
 </script>

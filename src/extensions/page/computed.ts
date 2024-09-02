@@ -1,38 +1,33 @@
-import {
-  TABLE,
-  CASSIE_BLOCK,
-  CASSIE_BLOCK_EXTEND,
-  EXTEND,
-  HEADING,
-  LISTITEM,
-  PAGE,
-  PARAGRAPH,
-  TABLE_ROW,
-  ORDEREDLIST,
-  BULLETLIST,
-  TABLE_CELL,
-  TASKITEM,
-  TASKLIST,
-  LIST_TYPE,
-} from './node-names'
-import { Fragment, Slice, Node, Schema } from '@tiptap/pm/model'
-import {
-  getAbsentHtmlH,
-  getBreakPos,
-  getDefault,
-  getDomHeight,
-  getId,
-} from './core'
-import { findParentNode, getNodeType, Editor } from '@tiptap/core'
-import { EditorState, Transaction } from '@tiptap/pm/state'
+import { type Editor, findParentNode, getNodeType } from '@tiptap/core'
+import { Fragment, type Node, type Schema, Slice } from '@tiptap/pm/model'
+import type { EditorState, Transaction } from '@tiptap/pm/state'
 import { ReplaceStep } from '@tiptap/pm/transform'
-import {
+
+import type {
   ComputedFn,
   NodesComputed,
   PageState,
   SplitInfo,
   SplitParams,
 } from '@/extensions/page/types'
+import { getId } from '@/extensions/page/utils'
+
+import { getAbsentHtmlH, getBreakPos, getDefault, getDomHeight } from './core'
+import {
+  BULLETLIST,
+  CASSIE_BLOCK_EXTEND,
+  EXTEND,
+  HEADING,
+  LIST_TYPE,
+  LISTITEM,
+  ORDEREDLIST,
+  PAGE,
+  PARAGRAPH,
+  TABLE,
+  TABLE_ROW,
+  TASKITEM,
+  TASKLIST,
+} from './node-names'
 
 export const sameListCalculation: ComputedFn = (
   splitContex,
@@ -65,7 +60,7 @@ export const sameItemCalculation: ComputedFn = (
       splitContex.addHeight(margin)
       return true
     }
-    if (parent?.firstChild == node) {
+    if (parent?.firstChild === node) {
       splitContex.setBoundary(chunks[chunks.length - 2][2], chunks.length - 2)
     } else {
       splitContex.setBoundary(pos, chunks.length - 1)
@@ -101,7 +96,7 @@ export const defaultNodesComputed: NodesComputed = {
         return false
       }
       //如果当前行是list的第一行并且已经超过分页高度 直接返回上一层级的切割点
-      if (parent?.firstChild == node) {
+      if (parent?.firstChild === node) {
         splitContex.setBoundary(chunks[chunks.length - 2][2], chunks.length - 2)
       } else {
         //如果不是第一行 直接返回当前行的切割点
@@ -158,7 +153,7 @@ export const defaultNodesComputed: NodesComputed = {
         return false
       }
     }
-    if (parent?.firstChild == node) {
+    if (parent?.firstChild === node) {
       splitContex.setBoundary(chunks[chunks.length - 2][2], chunks.length - 2)
       return false
     }
@@ -166,7 +161,7 @@ export const defaultNodesComputed: NodesComputed = {
     return false
   },
   [PAGE]: (splitContex, node, pos, parent, dom, startIndex, forcePageId, i) => {
-    return startIndex == i && parent?.type.name == 'doc'
+    return startIndex === i && parent?.type.name === 'doc'
   },
   ['default']: (splitContex, node, pos, parent, dom) => {
     const { height: pHeight } = getDomHeight(dom)
@@ -176,7 +171,7 @@ export const defaultNodesComputed: NodesComputed = {
     }
 
     const chunks = splitContex.splitResolve(pos)
-    if (parent?.firstChild == node) {
+    if (parent?.firstChild === node) {
       const chunksNext = splitContex.splitResolve(pos + node.nodeSize)
       splitContex.setBoundary(pos + node.nodeSize, chunksNext.length - 1)
       return false
@@ -208,6 +203,7 @@ export class SplitContext {
 
   /**
    * 构造函数
+   * @param schema schema
    * @param doc 文档
    * @param height 分页高度
    * @param paragraphDefaultHeight p标签的默认高度
@@ -279,10 +275,11 @@ export class SplitContext {
    * @returns 解析结果
    */
   splitResolve(pos: number) {
-    // @ts-ignore
     const array = this.#doc.resolve(pos).path
     const chunks = []
-    if (array.length <= 3) return array
+    if (array.length <= 3) {
+      return array
+    }
     const size = 3
     for (let i = 0; i < array.length; i += size) {
       chunks.push(array.slice(i, i + size))
@@ -333,14 +330,21 @@ export class PageComputedContext {
     const { selection, doc } = this.state
     const { inserting, deleting, runState, initSplit, splitPage } =
       this.pageState
-    if (!runState) return null
+    if (!runState) {
+      return null
+    }
     this.prepare()
-    if (splitPage) return this.forceSplit()
-    if (initSplit) return this.initComputed()
-    if (!inserting && deleting && selection.$head.node(1) === doc.lastChild)
+    if (splitPage) {
+      return this.forceSplit()
+    }
+    if (initSplit) {
+      return this.initComputed()
+    }
+    if (!inserting && deleting && selection.$head.node(1) === doc.lastChild) {
       return this.tr
+    }
     if (inserting || deleting) {
-      const startTime = performance.now()
+      //const startTime = performance.now()
       this.computed()
       this.checkNodeAndFix()
     }
@@ -351,14 +355,13 @@ export class PageComputedContext {
   prepare() {
     const { doc } = this.tr
     const { selection } = this.state
-    // @ts-ignore
     this.startIndex = doc.content.findIndex(selection.head).index
   }
 
   computed() {
-    const tr = this.tr
+    const { tr } = this
     const curNunmber = this.startIndex + 1
-    if (tr.doc.childCount > 1 && tr.doc.content.childCount != curNunmber) {
+    if (tr.doc.childCount > 1 && tr.doc.content.childCount !== curNunmber) {
       this.mergeDocument()
     }
     this.splitDocument()
@@ -382,13 +385,15 @@ export class PageComputedContext {
     for (;;) {
       // 获取最后一个page计算高度，如果返回值存在的话证明需要分割
       const splitInfo = this.getNodeHeight()
-      if (!splitInfo) return
+      if (!splitInfo) {
+        return
+      }
       const type = getNodeType(PAGE, schema)
       this.lift({
         pos: splitInfo.pos,
         depth: splitInfo.depth,
         typesAfter: [{ type }],
-        schema: schema,
+        schema,
       } as SplitParams)
       this.startIndex += 1
     }
@@ -399,27 +404,26 @@ export class PageComputedContext {
    * @param count
    */
   mergeDefaultDocument(count: number) {
-    const tr = this.tr
+    const { tr } = this
     if (this.forcePageId) {
       while (true) {
-        // @ts-ignore
         const nodeSize = tr.doc.content.content
           .slice(0, count)
           .map((item: Node) => item.nodeSize)
           .reduce((a: number, b: number) => a + b, 0)
         let depth = 1
-        if (tr.doc.child(count).attrs.id == this.forcePageId) {
+        if (tr.doc.child(count).attrs.id === this.forcePageId) {
           break
         }
         const currentPage = tr.doc.content.child(count - 1)
         const nextPage = tr.doc.content.child(count)
         if (
-          (nextPage?.firstChild?.type == currentPage?.lastChild?.type ||
-            nextPage?.firstChild?.type.name.includes(EXTEND)) &&
-          nextPage?.firstChild?.attrs?.extend
+          (nextPage.firstChild?.type === currentPage.lastChild?.type ||
+            nextPage.firstChild?.type.name.includes(EXTEND)) &&
+          nextPage.firstChild?.attrs.extend
         ) {
           depth = 2
-          this.restDomIds.push(currentPage?.lastChild?.attrs?.id)
+          this.restDomIds.push(currentPage.lastChild?.attrs.id)
         }
         tr.join(nodeSize, depth)
       }
@@ -431,7 +435,7 @@ export class PageComputedContext {
           : 0
         let depth = 1
         //如果 前一页的最后一个node 和后一页的node 是同类 则合并
-        if (tr.doc.content.lastChild != tr.doc.content.firstChild) {
+        if (tr.doc.content.lastChild !== tr.doc.content.firstChild) {
           //获取倒数第二页
           const prePage = tr.doc.content.child(tr.doc.content.childCount - 2)
           //获取最后一页
@@ -439,12 +443,12 @@ export class PageComputedContext {
           //如果最后一页的第一个子标签和前一页的最后一个子标签类型一致 或者是扩展类型(是主类型的拆分类型) 进行合并的时候 深度为2
 
           if (
-            (lastPage?.firstChild?.type == prePage?.lastChild?.type ||
+            (lastPage?.firstChild?.type === prePage.lastChild?.type ||
               lastPage?.firstChild?.type.name.includes(EXTEND)) &&
-            lastPage?.firstChild?.attrs?.extend
+            lastPage?.firstChild?.attrs.extend
           ) {
             depth = 2
-            this.restDomIds.push(prePage?.lastChild?.attrs?.id)
+            this.restDomIds.push(prePage.lastChild?.attrs.id)
           }
         }
         tr.join(tr.doc.content.size - nodesize, depth)
@@ -460,13 +464,13 @@ export class PageComputedContext {
    *  如果第一个标签不是扩展类型 则深度为1
    */
   mergeDocument() {
-    const tr = this.tr
+    const { tr } = this
 
     let id = null
     for (let i = this.startIndex + 1; i < tr.doc.content.childCount; i++) {
       const node = tr.doc.content.child(i)
       if (node.attrs.force) {
-        id = node.attrs.id
+        ;[id] = node.attrs
         break
       }
     }
@@ -479,7 +483,7 @@ export class PageComputedContext {
     const { selection, schema } = this.state
     const { $anchor } = selection
     const splitInfo = { pos: $anchor.pos, depth: $anchor.depth }
-    let parentNode = findParentNode((node) =>
+    const parentNode = findParentNode((node) =>
       LIST_TYPE.includes(node.type.name),
     )(selection)
     if (parentNode) {
@@ -491,7 +495,7 @@ export class PageComputedContext {
       pos: splitInfo.pos,
       depth: splitInfo.depth,
       typesAfter: [{ type }],
-      schema: schema,
+      schema,
       force: true,
     })
     return this.tr
@@ -505,9 +509,10 @@ export class PageComputedContext {
    * @param depth
    * @param typesAfter
    * @param schema
+   * @param force
    */
   lift({ pos, depth = 1, typesAfter, schema, force = false }: SplitParams) {
-    const tr = this.tr
+    const { tr } = this
     const $pos = tr.doc.resolve(pos)
     let before = Fragment.empty
     let after = Fragment.empty
@@ -518,18 +523,17 @@ export class PageComputedContext {
     ) {
       //新建一个和 $pos.node(d) 一样的节点 内容是 before
       before = Fragment.from($pos.node(d).copy(before))
-      const typeAfter = typesAfter && typesAfter[i]
+      const typeAfter = typesAfter?.[i]
       const n = $pos.node(d)
       let na = $pos.node(d).copy(after)
       //处理id重复的问题
-      if (na && na.attrs.id) {
+      if (na.attrs.id) {
         let extend = {}
-        if (na.attrs.extend == false) {
+        if (na.attrs.extend === false) {
           extend = { extend: true }
         }
         //重新生成id
         const attr = Object.assign({}, n.attrs, { id: getId(), ...extend })
-        // @ts-ignore
         na = schema.nodes[n.type.name].createAndFill(attr, after)
       }
       after = Fragment.from(
@@ -537,7 +541,7 @@ export class PageComputedContext {
           ? typeAfter.type.create(
               {
                 id: getId(),
-                pageNumber: na?.attrs.pageNumber + 1,
+                pageNumber: na.attrs.pageNumber + 1,
                 force,
               },
               after,
@@ -555,26 +559,26 @@ export class PageComputedContext {
    * desc 检查并修正分页造成的段落分行问题
    */
   checkNodeAndFix() {
-    let tr = this.tr
+    let { tr } = this
     const { doc } = tr
     const { schema } = this.state
     let beforeBolck: Node | null = null
     let beforePos = 0
-    doc.descendants((node, pos, parentNode, i) => {
-      if (node.type === schema.nodes[PARAGRAPH] && node.attrs.extend == true) {
-        if (beforeBolck == null) {
-          beforeBolck = node
-          beforePos = pos
-        } else {
+    doc.descendants((node, pos) => {
+      if (node.type === schema.nodes[PARAGRAPH] && node.attrs.extend === true) {
+        if (beforeBolck) {
           // console.log('beforeBolck: ' + beforeBolck)
           const mappedPos = tr.mapping.map(pos)
-          if (beforeBolck.type == schema.nodes[PARAGRAPH]) {
+          if (beforeBolck.type === schema.nodes[PARAGRAPH]) {
           } else {
             tr = tr.step(
               new ReplaceStep(mappedPos - 1, mappedPos + 1, Slice.empty),
             )
           }
           return false
+        } else {
+          beforeBolck = node
+          beforePos = pos
         }
       }
       //如果进入了新的扩展块 直接 清除 上次的 记录
@@ -594,7 +598,7 @@ export class PageComputedContext {
    * @method getNodeHeight 获取节点高度
    */
   getNodeHeight() {
-    const doc = this.tr.doc
+    const { doc } = this.tr
     const { bodyOptions } = this.pageState
     const splitContex = new SplitContext(
       this.state.schema,
@@ -602,13 +606,13 @@ export class PageComputedContext {
       bodyOptions?.bodyHeight,
       getDefault(),
     )
-    const nodesComputed = this.nodesComputed
-    const restDomIds = this.restDomIds
-    const forcePageId = this.forcePageId
-    const startIndex = this.startIndex
+    const { nodesComputed } = this
+    const { restDomIds } = this
+    const { forcePageId } = this
+    const { startIndex } = this
     let breakDescendants = false
     doc.descendants((node, pos, parentNode, i) => {
-      if (breakDescendants || node.attrs.id == forcePageId) {
+      if (breakDescendants || node.attrs.id === forcePageId) {
         breakDescendants = true
         return false
       }
@@ -617,16 +621,15 @@ export class PageComputedContext {
         let dom = document.getElementById(node.attrs.id)
         if (
           restDomIds.includes(node.attrs.id) ||
-          (!dom && node.type.name != PAGE)
+          (!dom && node.type.name !== PAGE)
         ) {
           dom = getAbsentHtmlH(node, this.state.schema)
         }
-        return (nodesComputed[node.type.name] || nodesComputed['default'])(
+        return (nodesComputed[node.type.name] || nodesComputed.default)(
           splitContex,
           node,
           pos,
           parentNode,
-          // @ts-ignore
           dom,
           startIndex,
           forcePageId,

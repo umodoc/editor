@@ -77,14 +77,14 @@
             <div class="umo-document-button-container">
               <t-button
                 size="small"
-                v-text="t('save.text')"
                 @click="saveContent"
+                v-text="t('save.text')"
               ></t-button>
               <t-button
                 size="small"
                 variant="outline"
-                v-text="t('save.cache.text')"
                 @click="setContentFromCache"
+                v-text="t('save.cache.text')"
               >
               </t-button>
             </div>
@@ -134,8 +134,6 @@
 </template>
 
 <script setup>
-import timeAgo from '@/utils/time-ago'
-
 const emits = defineEmits(['menu-change'])
 const { container, options, editor, savedAt } = useStore()
 const $toolbar = useState('toolbar')

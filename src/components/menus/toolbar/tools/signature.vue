@@ -47,8 +47,6 @@
 </template>
 
 <script setup>
-import signature from 'vue-esign'
-
 const { editor } = useStore()
 let dialogVisible = $ref(false)
 

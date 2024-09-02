@@ -1,8 +1,8 @@
 <template>
   <node-view-wrapper
+    :id="node.attrs.id"
     ref="containerRef"
     class="umo-page-node-view"
-    :id="node.attrs.id"
     :class="{ 'no-shadow': exportImage }"
     :style="{
       '--umo-page-background': page.background,
@@ -34,8 +34,8 @@
 
         <div class="umo-page-node-header-content">
           <component
-            v-if="page.header"
             :is="node.attrs.slots.page_header"
+            v-if="page.header"
             :page-number="node.attrs.pageNumber"
             :total-pages="editor.$nodes('page').length"
           />
@@ -58,8 +58,8 @@
         ></div>
         <div class="umo-page-node-footer-content">
           <component
-            v-if="page.footer"
             :is="node.attrs.slots.page_footer"
+            v-if="page.footer"
             :page-number="node.attrs.pageNumber"
             :total-pages="editor.$nodes('page').length"
           />
@@ -73,7 +73,7 @@
   </node-view-wrapper>
 </template>
 <script setup>
-import { nodeViewProps, NodeViewWrapper, NodeViewContent } from '@tiptap/vue-3'
+import { nodeViewProps } from '@tiptap/vue-3'
 
 const { page, exportImage } = useStore()
 const { editor, node } = defineProps(nodeViewProps)
@@ -121,8 +121,8 @@ watch(
 
   &:not(.no-shadow) {
     box-shadow:
-      rgba(0, 0, 0, 0.06) 0px 0px 10px 0px,
-      rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
+      rgba(0, 0, 0, 0.06) 0 0 10px 0,
+      rgba(0, 0, 0, 0.04) 0 0 0 1px;
   }
 
   &:not(:first-child) {

@@ -1,43 +1,45 @@
 import {
-  mergeAttributes,
   findChildrenInRange,
   findParentNode,
+  mergeAttributes,
   Node,
-  SingleCommands,
+  type SingleCommands,
 } from '@tiptap/core'
-import { ExtensionAttribute } from '@tiptap/vue-3'
+import { Slice } from '@tiptap/pm/model'
+import { Selection, TextSelection } from '@tiptap/pm/state'
+import { ReplaceStep } from '@tiptap/pm/transform'
+import type { ExtensionAttribute } from '@tiptap/vue-3'
+import { VueNodeViewRenderer } from '@tiptap/vue-3'
+
+import type { PageOptions } from '@/extensions/page/types'
+
+import { getFlag } from './core'
 import {
-  PAGE,
+  AUDIO,
   BULLETLIST,
   CASSIE_BLOCK,
+  CODE_BLOCK,
+  FILE,
   HEADING,
+  HORIZONTALRULE,
+  IFRAME,
+  IMAGE,
   LISTITEM,
   ORDEREDLIST,
+  PAGE,
+  PAGEBREAK,
   PARAGRAPH,
   TABLE,
   TABLE_ROW,
+  TABLEHEADER,
   TEXT_BOX,
-  IMAGE,
-  IFRAME,
-  FILE,
-  CODE_BLOCK,
-  AUDIO,
   TOC,
   VIDEO,
-  HORIZONTALRULE,
-  PAGEBREAK,
-  TABLEHEADER,
 } from './node-names'
-import { VueNodeViewRenderer } from '@tiptap/vue-3'
-import { Selection, TextSelection } from '@tiptap/pm/state'
-import { Slice } from '@tiptap/pm/model'
-import { getFlag } from './core'
+import NodeView from './node-view.vue'
 import { idPlugin } from './page-plugin'
 import { splitBlock } from './split-block'
 import { splitListItem } from './split-list-item'
-import NodeView from './node-view.vue'
-import { ReplaceStep } from '@tiptap/pm/transform'
-import { PageOptions } from '@/extensions/page/types'
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -80,7 +82,7 @@ const types = [
 ]
 export default Node.create<PageOptions>({
   priority: 2,
-  name: `${PAGE}`,
+  name: PAGE,
   content: `block*`,
   group: 'block',
   isolating: true,
@@ -126,7 +128,7 @@ export default Node.create<PageOptions>({
     ]
   },
 
-  renderHTML({ node, HTMLAttributes }) {
+  renderHTML({ HTMLAttributes }) {
     return ['page', mergeAttributes(HTMLAttributes), 0]
   },
   addCommands() {
@@ -134,7 +136,7 @@ export default Node.create<PageOptions>({
       splitBlock,
       splitListItem,
       autoPaging: (status = true) => {
-        return ({ tr, state, dispatch, editor }) => {
+        return ({ tr, dispatch }) => {
           if (dispatch) {
             tr.setMeta('runState', status)
           }
@@ -142,7 +144,7 @@ export default Node.create<PageOptions>({
         }
       },
       setPageBreak: () => {
-        return ({ tr, state, dispatch, editor }) => {
+        return ({ tr, dispatch }) => {
           if (dispatch) {
             tr.setMeta('splitPage', true)
           }
@@ -195,7 +197,9 @@ export default Node.create<PageOptions>({
             const { selection, doc } = tr
             const { $anchor } = selection
             const { pos } = $anchor
-            if (doc.childCount == 1) return false
+            if (doc.childCount === 1) {
+              return false
+            }
             if (Selection.atEnd(doc).from === pos && !$anchor.parentOffset) {
               return commands.deleteNode(PAGE)
             }
@@ -226,8 +230,8 @@ export default Node.create<PageOptions>({
                     beforePageNode.start
                   const selection1 = TextSelection.create(doc, pos1, pos1)
                   //和上一页的最后一个节点进行对比 如果相等则合并
-                  if (curBlockType == beforePageNode.node.lastChild.type) {
-                    const parent = selection1.$anchor.parent
+                  if (curBlockType === beforePageNode.node.lastChild.type) {
+                    const { parent } = selection1.$anchor
                     if (getFlag(parent, editor.schema)) {
                       tr.setSelection(selection1)
                     } else {
@@ -248,7 +252,7 @@ export default Node.create<PageOptions>({
         () => deleteSelection(commands),
         () =>
           commands.command(({ tr }) => {
-            const { selection, doc } = tr
+            const { selection } = tr
             const { $anchor } = selection
             const currentNode = $anchor.node()
             const blockNode = findParentNode(
@@ -258,8 +262,8 @@ export default Node.create<PageOptions>({
               const isBlockStart =
                 blockNode.start + Selection.atStart(blockNode.node).from ===
                 $anchor.pos
-              if (isBlockStart && blockNode.node.childCount == 1) {
-                if (currentNode.content.size == 0) {
+              if (isBlockStart && blockNode.node.childCount === 1) {
+                if (currentNode.content.size === 0) {
                   return true
                 }
               }
@@ -276,7 +280,9 @@ export default Node.create<PageOptions>({
             const { $anchor } = selection
             const { pos } = $anchor
             //如果当前只有一页的情况不做处理
-            if (doc.childCount == 1) return false
+            if (doc.childCount === 1) {
+              return false
+            }
             //如果是最后一页并且删除的点已经是 整个文档的 最后点位 证明最后一页啥都没了直接删除
             if (Selection.atEnd(doc).from === pos) {
               return commands.deleteNode(PAGE)
@@ -315,7 +321,7 @@ export default Node.create<PageOptions>({
           }),
       ])
     const handleTab = () =>
-      this.editor.commands.first(({ commands }) => [
+      this.editor.commands.first(() => [
         () => {
           return true
         },
@@ -365,10 +371,9 @@ const deleteSelection = (commands: SingleCommands) => {
         from: selection.from,
         to: selection.to,
       },
-      (node) => node.type.name == CASSIE_BLOCK,
+      (node) => node.type.name === CASSIE_BLOCK,
     )
-    for (let i = 0; i < nodesInChangedRanges.length; i++) {
-      const node = nodesInChangedRanges[i]
+    for (const node of nodesInChangedRanges) {
       const endPos = node.pos + node.node.nodeSize
       if (selection.from < node.pos || selection.to > endPos) {
         return true

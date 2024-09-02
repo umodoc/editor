@@ -47,7 +47,7 @@ export default Extension.create({
               ) {
                 return {}
               }
-              let styleMargin = { top: '0px', bottom: '0px' }
+              const styleMargin = { top: '0px', bottom: '0px' }
               if (marginTop && marginTop !== '0px') {
                 styleMargin.top = marginTop.replace(/px/g, '')
               }
@@ -57,7 +57,9 @@ export default Extension.create({
               return styleMargin
             },
             renderHTML: ({ margin }) => {
-              if (!Object.keys(margin).length) return {}
+              if (!Object.keys(margin).length) {
+                return {}
+              }
               const { top, bottom } = margin
               let styleMargin = ''
               if (top && top !== '') {

@@ -1,10 +1,11 @@
 import {
   AlignmentType,
   convertInchesToTwip,
-  ILevelsOptions,
+  type ILevelsOptions,
   LevelFormat,
 } from 'docx'
-import { INumbering } from './types'
+
+import type { INumbering } from './types'
 
 function basicIndentStyle(
   indent: number,

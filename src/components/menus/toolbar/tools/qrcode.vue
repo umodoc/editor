@@ -97,7 +97,7 @@
               class="umo-qrcode-empty"
               v-text="t('tools.qrcode.notEmpty')"
             ></div>
-            <div class="umo-svg-render" v-else v-html="svgCode"></div>
+            <div v-else class="umo-svg-render" v-html="svgCode"></div>
           </div>
         </div>
       </div>
@@ -112,13 +112,14 @@ import svg64 from 'svg64'
 const { content } = defineProps({
   content: {
     type: String,
+    default: '',
   },
 })
 
 let dialogVisible = $ref(false)
 const { editor } = useStore()
 
-const menuClick = async () => {
+const menuClick = () => {
   renderQrcode()
   dialogVisible = true
 }

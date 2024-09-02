@@ -1,12 +1,13 @@
+import type { Node as ProsemirrorNode } from '@tiptap/pm/model'
 import {
   Document,
-  INumberingOptions,
-  ISectionOptions,
+  type INumberingOptions,
+  type ISectionOptions,
   Packer,
   SectionType,
 } from 'docx'
-import { Node as ProsemirrorNode } from '@tiptap/pm/model'
-import { IFootnotes } from './types'
+
+import type { IFootnotes } from './types'
 
 export function createShortId() {
   return Math.random().toString(36).substr(2, 9)
@@ -17,7 +18,7 @@ export function createDocFromState(state: {
   children: ISectionOptions['children']
   footnotes?: IFootnotes
 }) {
-  const doc = new Document({
+  return new Document({
     footnotes: state.footnotes,
     numbering: {
       config: state.numbering,
@@ -31,7 +32,6 @@ export function createDocFromState(state: {
       },
     ],
   })
-  return doc
 }
 
 export async function writeDocx(
@@ -45,7 +45,9 @@ export async function writeDocx(
 export function getLatexFromNode(node: ProsemirrorNode): string {
   let math = ''
   node.forEach((child) => {
-    if (child.isText) math += child.text
+    if (child.isText) {
+      math += child.text
+    }
     // TODO: improve this as we may have other things in the future
   })
   return math

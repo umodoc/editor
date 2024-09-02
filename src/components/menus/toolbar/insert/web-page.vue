@@ -10,7 +10,7 @@
       icon="web-page"
       :header="t('insert.web.title')"
       width="480px"
-      :confirmBtn="t('insert.web.insert')"
+      :confirm-btn="t('insert.web.insert')"
       @confirm="insertWebPage"
       @close="dialogVisible = false"
     >
@@ -47,7 +47,7 @@ const insertWebPage = () => {
     return
   }
   editor.value
-    ?.chain()
+    .chain()
     .focus()
     .setParagraph()
     .setIframe({

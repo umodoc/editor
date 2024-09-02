@@ -174,8 +174,8 @@
           </div>
         </div>
         <div
-          class="umo-virtual-group"
           v-if="!hidePageHeader || !hidePageFooter"
+          class="umo-virtual-group"
         >
           <menus-toolbar-page-header v-if="!hidePageHeader" />
           <menus-toolbar-page-footer v-if="!hidePageFooter" />
@@ -213,6 +213,8 @@
 </template>
 
 <script setup>
+import { withSuppress } from '@/utils/functional'
+
 const props = defineProps({
   menus: {
     type: Array,
@@ -234,13 +236,11 @@ const disableItem = (name) => {
 let currentMenu = $ref('')
 watch(
   () => props.currentMenu,
-  async (val) => {
+  withSuppress(async (val) => {
     currentMenu = val
     await nextTick()
-    try {
-      scrollableRef.update()
-    } catch {}
-  },
+    scrollableRef.update()
+  }),
   { immediate: true },
 )
 const scrollableRef = $ref()

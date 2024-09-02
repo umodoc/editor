@@ -1,8 +1,8 @@
 <template>
   <node-view-wrapper
+    :id="node.attrs.id"
     ref="containerRef"
     class="umo-node-view"
-    :id="node.attrs.id"
     :style="nodeStyle"
     @dblclick="imagePreview = node.attrs.src"
   >
@@ -23,8 +23,8 @@
         {{ t('node.image.loading') }}
       </div>
       <div
-        class="error"
         v-else-if="node.attrs.src && error"
+        class="error"
         :style="{ height: `${node.attrs.height}px` }"
       >
         <icon name="image-failed" class="error-icon" />
@@ -49,8 +49,8 @@
         :equal-proportion="node.attrs.equalProportion"
         @rotate="onRotate"
         @resize="onResize"
-        @resizeStart="onResizeStart"
-        @resizeEnd="onResizeEnd"
+        @resize-start="onResizeStart"
+        @resize-end="onResizeEnd"
         @drag="onDrag"
         @click="selected = true"
       >
@@ -78,9 +78,9 @@
 </template>
 
 <script setup>
-import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
-import Drager from 'es-drager'
+import { nodeViewProps } from '@tiptap/vue-3'
 import { base64ToFile } from 'file64'
+
 import shortId from '@/utils/short-id'
 
 const { node, getPos, updateAttributes } = defineProps(nodeViewProps)
@@ -97,9 +97,9 @@ let maxHeight = $ref(200)
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs
   const marginTop =
-    margin?.top && margin?.top !== '' ? margin.top + 'px' : undefined
+    margin?.top && margin?.top !== '' ? `${margin.top}px` : undefined
   const marginBottom =
-    margin?.bottom && margin?.bottom !== '' ? margin.bottom + 'px' : undefined
+    margin?.bottom && margin?.bottom !== '' ? `${margin.bottom}px` : undefined
   return {
     'justify-content': nodeAlign,
     marginTop,
@@ -126,7 +126,7 @@ const onLoad = () => {
     maxWidth = containerRef.value.$el.clientWidth
     const ratio = clientWidth / clientHeight
     maxHeight = containerRef.value.$el.clientWidth / ratio
-    updateAttributes({ width: parseInt(200 * ratio) })
+    updateAttributes({ width: Number.parseInt(200 * ratio) })
   }
 }
 
@@ -134,7 +134,10 @@ const onRotate = ({ angle }) => {
   updateAttributes({ angle })
 }
 const onResize = ({ width, height }) => {
-  updateAttributes({ width: parseInt(width), height: parseInt(height) })
+  updateAttributes({
+    width: Number.parseInt(width),
+    height: Number.parseInt(height),
+  })
 }
 const onResizeStart = () => {
   editor.value.commands.autoPaging(false)
@@ -163,8 +166,8 @@ watch(
   async (src) => {
     if (node.attrs.uploaded === false && !error.value) {
       if (src?.startsWith('data:image')) {
-        const type = src.split(';')[0].split(':')[1]
-        let ext = type.split('/')[1]
+        const [imageType] = src.split(';')[0].split(':')
+        let [ext] = imageType.split('/')
         if (ext === 'jpeg') {
           ext = 'jpg'
         }
@@ -173,12 +176,12 @@ watch(
         }
         const filename = shortId(10)
         const file = await base64ToFile(src, `${filename}.${ext}`, {
-          type,
+          imageType,
         })
         updateAttributes({ file })
       }
       await nextTick()
-      uploadImage()
+      void uploadImage()
     }
   },
   { immediate: true },

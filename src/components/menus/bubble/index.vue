@@ -19,8 +19,6 @@
 </template>
 
 <script setup>
-import { BubbleMenu } from '@tiptap/vue-3'
-
 const { options, editor, painter, blockMenu, assistantBox, commentBox } =
   useStore()
 

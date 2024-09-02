@@ -8,9 +8,11 @@ export default BulletList.extend({
       ...this.parent?.(),
       listStyleType: {
         default: 'disc',
-        parseHTML: (element) => {
-          const listStyleType = element.style['list-style-type']
-          return { listStyleType: listStyleType || 'disc' }
+        parseHTML: (element: HTMLElement) => {
+          const listStyleType =
+            element.style['list-style-type' as keyof CSSStyleDeclaration] ??
+            'disc'
+          return { listStyleType }
         },
         renderHTML: ({ listStyleType }) => {
           return {

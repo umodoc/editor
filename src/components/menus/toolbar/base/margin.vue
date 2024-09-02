@@ -46,7 +46,7 @@
 <script setup>
 import { getSelectionNode } from '@/extensions/selection'
 
-let { popupVisible, togglePopup } = usePopup()
+const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
 let marginTop = $ref('')

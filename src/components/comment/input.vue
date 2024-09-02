@@ -37,8 +37,6 @@
 </template>
 
 <script setup>
-import defaultAvatar from '@/assets/images/avatar.svg'
-
 const { options, editor, commentBox } = useStore()
 
 const props = defineProps({
@@ -48,7 +46,7 @@ const props = defineProps({
   },
 })
 
-let comment = $ref('')
+const comment = $ref('')
 const submitComment = () => {
   console.log(comment)
   closeComment()
@@ -85,12 +83,12 @@ const closeComment = () => {
     .umo-comment-buttons {
       margin-top: 10px;
       :deep(.umo-button) {
-          margin-right: 10px;
-          padding: 0 15px;
-          height: 28px;
-          font-size: 12px;
-        }
+        margin-right: 10px;
+        padding: 0 15px;
+        height: 28px;
+        font-size: 12px;
       }
+    }
   }
 }
 </style>

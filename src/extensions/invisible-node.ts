@@ -1,6 +1,5 @@
-//@ts-ignore
+import type { Node } from '@tiptap/pm/model'
 import { InvisibleNode } from '@tiptap-pro/extension-invisible-characters'
-import { Node } from '@tiptap/pm/model'
 export default class Invisible extends InvisibleNode {
   constructor() {
     super({

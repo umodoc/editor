@@ -63,23 +63,23 @@
           :disabled="resultLength === 0"
           theme="default"
           variant="text"
-          v-text="t('search.replace')"
           @click="replace"
+          v-text="t('search.replace')"
         >
         </t-button>
         <t-button
           :disabled="resultLength === 0"
           theme="default"
           variant="text"
-          v-text="t('search.replaceAll')"
           @click="replaceAll"
+          v-text="t('search.replaceAll')"
         >
         </t-button>
         <t-button
           :disabled="resultLength === 0"
           theme="primary"
-          v-text="t('search.search')"
           @click="next"
+          v-text="t('search.search')"
         ></t-button>
       </div>
     </div>
@@ -91,11 +91,11 @@ const { editor, searchReplace } = useStore()
 
 let searchText = $ref('')
 let replaceText = $ref('')
-let caseSensitive = $ref(false)
+const caseSensitive = $ref(false)
 useHotkeys('ctrl+f, command+f', () => (searchReplace.value = true))
 
 const resultLength = computed(
-  () => editor.value?.storage?.searchAndReplace?.results.length || 0,
+  () => editor.value?.storage.searchAndReplace?.results.length || 0,
 )
 
 const clear = () => {
@@ -129,7 +129,7 @@ const goToSelection = () => {
   const { node } = editor.value.view.domAtPos(
     editor.value.state.selection.anchor,
   )
-  node && node.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  node.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
 
 watch(
@@ -172,7 +172,9 @@ const replaceAll = () => editor.value?.commands.replaceAll()
 
 watch(
   () => searchReplace.value,
-  () => clear(),
+  () => {
+    clear()
+  },
 )
 </script>
 

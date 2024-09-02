@@ -6,16 +6,16 @@
         variant="outline"
         size="small"
         block
-        v-text="t('colorPicker.default')"
         @click="selectColor(color)"
+        v-text="t('colorPicker.default')"
       >
       </t-button>
     </div>
     <div class="umo-color-picker-group">
       <div
-        class="umo-color-picker-item"
         v-for="(item, index) in options.dicts.colors"
         :key="index"
+        class="umo-color-picker-item"
         :style="{ backgroundColor: item }"
         @click="selectColor(item)"
       ></div>
@@ -26,23 +26,23 @@
     ></div>
     <div class="umo-color-picker-group">
       <div
-        class="umo-color-picker-item"
         v-for="(item, index) in standardColors"
         :key="index"
+        class="umo-color-picker-item"
         :style="{ backgroundColor: item }"
         @click="selectColor(item)"
       ></div>
     </div>
     <div
-      class="umo-color-picker-group-title"
       v-if="$recent.colors.length > 0"
+      class="umo-color-picker-group-title"
       v-text="t('colorPicker.recent')"
     ></div>
-    <div class="umo-color-picker-group" v-if="$recent.colors.length > 0">
+    <div v-if="$recent.colors.length > 0" class="umo-color-picker-group">
       <div
-        class="umo-color-picker-item"
         v-for="(item, index) in $recent.colors"
         :key="index"
+        class="umo-color-picker-item"
         :style="{ backgroundColor: item }"
         @click="selectColor(item)"
       ></div>

@@ -5,18 +5,18 @@
 <script setup>
 const { container, options, editor, page, printing, exportPDF } = useStore()
 
-let iframeRef = $ref()
+const iframeRef = $ref()
 let iframeCode = $ref('')
 const getStylesHtml = () => {
   let styles = ''
   document
     .querySelectorAll('link, style')
-    .forEach((style) => (styles += style.outerHTML + '\n'))
+    .forEach((style) => (styles += `${style.outerHTML}\n`))
   return styles
 }
 
 const getPlyrSprite = () => {
-  return document.querySelector('#sprite-plyr')?.innerHTML || ''
+  return document.querySelector('#sprite-plyr')?.innerHTML ?? ''
 }
 
 const getContentHtml = () => {
@@ -67,7 +67,7 @@ const getIframeCode = () => {
     </html>`
 }
 
-const printPage = async () => {
+const printPage = () => {
   editor.value.commands.blur()
   iframeCode = getIframeCode()
 

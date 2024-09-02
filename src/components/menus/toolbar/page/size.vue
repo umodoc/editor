@@ -33,7 +33,7 @@
 
 <script setup>
 const { options, page } = useStore()
-let dialogVisible = $ref(false)
+const dialogVisible = $ref(false)
 </script>
 
 <style lang="less">

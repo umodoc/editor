@@ -15,8 +15,8 @@
     >
       <div class="umo-mermaid-container">
         <t-textarea
-          class="umo-mermaid-code"
           v-model="mermaidCode"
+          class="umo-mermaid-code"
           autofocus
           :placeholder="t('tools.mermaid.placeholder')"
         />
@@ -26,8 +26,8 @@
             v-text="t('tools.mermaid.preview')"
           ></div>
           <div
-            class="umo-mermaid-svg narrow-scrollbar"
             ref="mermaidRef"
+            class="umo-mermaid-svg narrow-scrollbar"
             v-html="svgCode"
           ></div>
         </div>
@@ -43,6 +43,7 @@ import svg64 from 'svg64'
 const props = defineProps({
   content: {
     type: String,
+    default: '',
   },
 })
 
@@ -74,7 +75,7 @@ const renderMermaid = async () => {
   try {
     const { svg } = await mermaid.render('mermaid-svg', mermaidCode)
     svgCode = svg
-  } catch (e) {
+  } catch {
     svgCode = ''
   }
 }
@@ -82,7 +83,7 @@ watch(
   () => dialogVisible,
   (val) => {
     if (val) {
-      mermaidCode = props.content || defaultCode
+      mermaidCode = props.content ?? defaultCode
     }
   },
   { immediate: true },
@@ -92,7 +93,7 @@ watch(
   async () => {
     if (dialogVisible) {
       await nextTick()
-      renderMermaid()
+      void renderMermaid()
     }
   },
   { immediate: true },
@@ -120,7 +121,7 @@ const setMermaid = () => {
           width,
           height,
         },
-        props.content ? true : false,
+        !!props.content,
       )
       .run()
   }

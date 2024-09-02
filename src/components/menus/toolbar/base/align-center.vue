@@ -21,10 +21,10 @@ const { editor } = useStore()
 
 const setAlignCenter = () => {
   if (editor.value?.can().chain().focus().setTextAlign('center').run()) {
-    editor.value?.chain().focus().setTextAlign('center').run()
+    editor.value.chain().focus().setTextAlign('center').run()
   }
   if (editor.value?.can().chain().focus().setNodeAlign('center').run()) {
-    editor.value?.chain().focus().setNodeAlign('center').run()
+    editor.value.chain().focus().setNodeAlign('center').run()
   }
 }
 </script>

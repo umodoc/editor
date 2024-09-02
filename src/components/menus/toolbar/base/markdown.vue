@@ -8,7 +8,7 @@
         ? t('base.markdown.disable')
         : t('base.markdown.enable')
     "
-    :menu-active="$document.markdown"
+    :menu-active="$document.enableMarkdown"
     huge
     @menu-click="toggleMarkdownMode"
   />

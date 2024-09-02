@@ -8,7 +8,9 @@
     }"
     :editor="editor"
     :style="{ lineHeight: defaultLineHeight }"
-    :spellcheck="options.document.enableSpellcheck && $document.spellcheck"
+    :spellcheck="
+      options.document.enableSpellcheck && $document.enableSpellcheck
+    "
   />
   <menus-bubble v-if="editor && !page.preview.enabled && !editorDestroyed" />
   <menus-context-block
@@ -22,67 +24,62 @@
 </template>
 
 <script setup>
-import { Editor, EditorContent } from '@tiptap/vue-3'
-import StarterKit from '@tiptap/starter-kit'
-import Placeholder from '@tiptap/extension-placeholder'
-import Focus from '@tiptap/extension-focus'
-
-// 基本
-import FormatPainter from '@/extensions/format-painter'
-import FontFamily from '@tiptap/extension-font-family'
-import FontSize from '@/extensions/font-size'
-import Bold from '@tiptap/extension-bold'
-import Underline from '@tiptap/extension-underline'
-import Subscript from '@tiptap/extension-subscript'
-import Superscript from '@tiptap/extension-superscript'
-import Color from '@tiptap/extension-color'
-import TextColor from '@tiptap/extension-text-style'
-import Highlight from '@tiptap/extension-highlight'
-import BulletList from '@/extensions/bullet-list'
-import OrderedList from '@/extensions/ordered-list'
-import Indent from '@/extensions/indent'
-import TextAlign from '@/extensions/text-align'
-import NodeAlign from '@/extensions/node-align'
-import TaskItem from '@tiptap/extension-task-item'
-import TaskList from '@/extensions/list/tasklist'
-import LineHeight from '@/extensions/line-height'
-import Margin from '@/extensions/margin'
 import SearchReplace from '@sereneinserenade/tiptap-search-and-replace'
-
+import Bold from '@tiptap/extension-bold'
+import CharacterCount from '@tiptap/extension-character-count'
+import Color from '@tiptap/extension-color'
+import { Document } from '@tiptap/extension-document'
+import Dropcursor from '@tiptap/extension-dropcursor'
+import Focus from '@tiptap/extension-focus'
+import FontFamily from '@tiptap/extension-font-family'
+import Highlight from '@tiptap/extension-highlight'
 // 插入
 import Link from '@tiptap/extension-link'
-import Image from '@/extensions/image'
-import Video from '@/extensions/video'
-import Audio from '@/extensions/audio'
-import File from '@/extensions/file'
-import CodeBlock from '@/extensions/code-block'
-import TextBox from '@/extensions/text-box'
-import hr from '@/extensions/hr'
-import Iframe from '@/extensions/iframe'
-import Mathematics from '@tiptap-pro/extension-mathematics'
-
-// 表格
-import Table from '@/extensions/list/table'
-import TableCell from '@/extensions/table-cell'
-import TableHeader from '@/extensions/table-header'
+import Subscript from '@tiptap/extension-subscript'
+import Superscript from '@tiptap/extension-superscript'
 import TableRow from '@tiptap/extension-table-row'
-
-// 页面
-import Toc from '@/extensions/toc'
-// 分页
-import Page from '@/extensions/page'
-import { Document } from '@tiptap/extension-document'
-// 其他
-import Selection from '@/extensions/selection'
+import TaskItem from '@tiptap/extension-task-item'
+import TextColor from '@tiptap/extension-text-style'
+import Typography from '@tiptap/extension-typography'
+import Underline from '@tiptap/extension-underline'
+import StarterKit from '@tiptap/starter-kit'
+import { Editor } from '@tiptap/vue-3'
+import Mathematics from '@tiptap-pro/extension-mathematics'
 import { TableOfContents } from '@tiptap-pro/extension-table-of-contents'
 import { getHierarchicalIndexes } from '@tiptap-pro/extension-table-of-contents'
-import Typography from '@tiptap/extension-typography'
-import CharacterCount from '@tiptap/extension-character-count'
-import FileHandler from '@/extensions/file-handler'
-import Dropcursor from '@tiptap/extension-dropcursor'
 
-import shortId from '@/utils/short-id'
+import Audio from '@/extensions/audio'
+import BulletList from '@/extensions/bullet-list'
+import CodeBlock from '@/extensions/code-block'
+import File from '@/extensions/file'
+import FileHandler from '@/extensions/file-handler'
+import FontSize from '@/extensions/font-size'
+// 基本
+import FormatPainter from '@/extensions/format-painter'
+import hr from '@/extensions/hr'
+import Iframe from '@/extensions/iframe'
+import Image from '@/extensions/image'
+import Indent from '@/extensions/indent'
+import LineHeight from '@/extensions/line-height'
+// 表格
+import Table from '@/extensions/list/table'
+import TaskList from '@/extensions/list/tasklist'
+import Margin from '@/extensions/margin'
+import NodeAlign from '@/extensions/node-align'
+import OrderedList from '@/extensions/ordered-list'
+// 分页
+import Page from '@/extensions/page'
 import { pagePlugin } from '@/extensions/page/page-plugin'
+// 其他
+import Selection from '@/extensions/selection'
+import TableCell from '@/extensions/table-cell'
+import TableHeader from '@/extensions/table-header'
+import TextAlign from '@/extensions/text-align'
+import TextBox from '@/extensions/text-box'
+// 页面
+import Toc from '@/extensions/toc'
+import Video from '@/extensions/video'
+import shortId from '@/utils/short-id'
 
 const {
   options,
@@ -216,11 +213,15 @@ const editorInstance = new Editor({
     }),
     FileHandler.configure({
       allowedMimeTypes: options.value.file.allowedMimeTypes,
-      onPaste(editor, files, html) {
-        files.forEach((file) => editor.commands.insertFile({ file }))
+      onPaste(editor, files) {
+        for (const file of files) {
+          editor.commands.insertFile({ file })
+        }
       },
       onDrop: (editor, files, pos) => {
-        files.forEach((file) => editor.commands.insertFile({ file, pos }))
+        for (const file of files) {
+          editor.commands.insertFile({ file, pos })
+        }
       },
     }),
     Dropcursor.configure({
@@ -228,7 +229,7 @@ const editorInstance = new Editor({
     }),
     ...options.value.extensions,
   ],
-  onCreate({ editor }) {},
+  onCreate() {},
   onUpdate({ editor }) {
     $document.value.content = editor.getHTML()
   },
@@ -249,7 +250,7 @@ onMounted(() => {
     document.querySelector('head').append(style)
   }
 })
-window.addEventListener('load', function () {
+window.addEventListener('load', () => {
   editorInstance.registerPlugin(
     pagePlugin(
       editor,
@@ -263,7 +264,9 @@ window.addEventListener('load', function () {
 })
 
 // 销毁编辑器实例
-onBeforeUnmount(() => editorInstance.destroy())
+onBeforeUnmount(() => {
+  editorInstance.destroy()
+})
 </script>
 
 <style lang="less">

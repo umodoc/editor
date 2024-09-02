@@ -7,7 +7,6 @@ export default (timestamp: string) => {
     minute: (n: any) => t('time.minute', { n }),
     second: (n: any) => t('time.second', { n }),
   }
-  //@ts-ignore
   const time = useTimeAgo(new Date(timestamp), { messages })
   return time.value.replace(/"/gi, '')
 }

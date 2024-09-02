@@ -1,12 +1,18 @@
-import i18n from '../i18n'
-//@ts-ignore
-export const t = i18n.global.t
-export const l = (data: any) => {
+import { isRecord } from '@tool-belt/type-predicates'
+
+import { i18n } from '@/i18n'
+
+export const l = (data: unknown) => {
   const lang: string = i18n.global.locale.value.replace('-', '_')
   if (typeof data === 'string') {
     return data
   }
-  if (typeof data === 'object') {
+  if (isRecord(data)) {
     return data[lang]
   }
 }
+
+// @ts-expect-error, typing is recursive.
+export const {t} = i18n.global
+
+export { i18n }

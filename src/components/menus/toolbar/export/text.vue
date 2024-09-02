@@ -16,7 +16,7 @@ const saveTextFile = () => {
   if (!editor.value) {
     return
   }
-  const blob = new Blob([editor.value?.getText()], {
+  const blob = new Blob([editor.value.getText()], {
     type: 'text/plain;charset=utf-8',
   })
   const { title } = options.value.document

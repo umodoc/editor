@@ -41,8 +41,8 @@
         <!-- 回复评论 -->
         <template v-if="active" #reply>
           <t-textarea
-            class="umo-comment-reply"
             v-model="comment"
+            class="umo-comment-reply"
             size="small"
             placeholder="Enter 发送, Shift+Enter 换行"
             autosize
@@ -74,8 +74,8 @@
       <!-- 发布新评论 -->
       <t-textarea
         v-if="active"
-        class="umo-comment-reply"
         v-model="comment"
+        class="umo-comment-reply"
         size="small"
         placeholder="Enter 发送, Shift+Enter 换行"
         autosize
@@ -99,7 +99,7 @@ const props = defineProps({
 
 const emits = defineEmits(['done'])
 
-let comment = $ref('')
+const comment = $ref('')
 
 const markAsDone = () => {
   emits('done')

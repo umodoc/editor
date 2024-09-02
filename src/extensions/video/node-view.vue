@@ -1,8 +1,8 @@
 <template>
   <node-view-wrapper
+    :id="node.attrs.id"
     ref="containerRef"
     class="umo-node-view"
-    :id="node.attrs.id"
     :style="nodeStyle"
   >
     <div class="umo-node-container umo-hover-shadow umo-node-video">
@@ -40,8 +40,8 @@
 </template>
 
 <script setup>
-import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
-import Drager from 'es-drager'
+import { nodeViewProps } from '@tiptap/vue-3'
+
 import { mediaPlayer } from '@/utils/player'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
@@ -57,9 +57,9 @@ let maxHeight = $ref(0)
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs
   const marginTop =
-    margin?.top && margin?.top !== '' ? margin.top + 'px' : undefined
+    margin?.top && margin?.top !== '' ? `${margin.top}px` : undefined
   const marginBottom =
-    margin?.bottom && margin?.bottom !== '' ? margin.bottom + 'px' : undefined
+    margin?.bottom && margin?.bottom !== '' ? `${margin.bottom}px` : undefined
   return {
     'justify-content': nodeAlign,
     marginTop,
@@ -87,7 +87,7 @@ const onLoad = () => {
     maxWidth = containerRef.value.$el.clientWidth
     const ratio = clientWidth / clientHeight
     maxHeight = containerRef.value.$el.clientWidth / ratio
-    updateAttributes({ width: parseInt(200 * ratio) })
+    updateAttributes({ width: Number.parseInt(200 * ratio) })
   }
 }
 const onResize = ({ width, height }) => {
@@ -128,7 +128,6 @@ onClickOutside(containerRef, () => (selected = false))
 
       video {
         display: block;
-        height: auto;
         border-radius: var(--umo-radius);
         overflow: hidden;
         pointer-events: auto;
@@ -150,9 +149,7 @@ onClickOutside(containerRef, () => (selected = false))
       top: 0;
       background: rgba(255, 255, 255, 0.7);
       height: 2px;
-      top: 0;
       left: 0;
-      right: 0;
       border-top-left-radius: var(--umo-radius);
       border-top-right-radius: var(--umo-radius);
 

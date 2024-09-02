@@ -1,12 +1,10 @@
-# 忽略目录
-.DS_Store
-.vscode/
-.idea/
-.husky/
-node_modules/
-dist/
-imports.d.ts
-vite.config.js.timestamp*
 *.log
+.DS_Store
+.eslintcache
 .idea
+.idea/
+.vscode/
+dist/
+node_modules/
 pnpm-lock.yaml
+vite.config.js.timestamp*
