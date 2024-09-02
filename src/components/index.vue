@@ -392,6 +392,9 @@ const setContent = (
     .setContent(content, options.emitUpdate)
     .focus(options.focusPosition, options.focusOptions)
     .run()
+  setTimeout(() => {
+    editor.value.commands.autoPaging()
+  }, 200)
 }
 const setPagination = (enabled: boolean) => {
   if (!editor.value) {
@@ -402,9 +405,24 @@ const setPagination = (enabled: boolean) => {
   }
   page.value.pagination = enabled
 }
+<<<<<<< HEAD
 const setLocale = (params: 'zh-CN' | 'en-US') => {
   if (!['zh-CN', 'en-US'].includes(params)) {
     throw new Error('"params" must be one of "zh-CN" or "en-US".')
+=======
+const autoPagination = (enabled) => {
+  if (!editor.value) {
+    throw new Error('editor is not ready!')
+  }
+  if (typeof enabled !== 'boolean') {
+    throw new Error('"enabled" must be a boolean.')
+  }
+  editor.value.commands.autoPaging(enabled)
+}
+const setLocale = (parmas) => {
+  if (!['zh-CN', 'en-US'].includes(parmas)) {
+    throw new Error('"parmas" must be one of "zh-CN" or "en-US".')
+>>>>>>> 927ebd74e9c60d6316c6957094f588c3ec49e5b9
   }
   if (i18n.global.locale.value === params) {
     return
@@ -513,7 +531,7 @@ const getLocale = () => i18n.global.locale.value
 const getI18n = () => i18n
 const print = () => {
   const { toolbar, document } = options.value
-  if (toolbar.disableMenuItems.includes('print')) {
+  if (toolbar.disableMenuItems.includes('print') || editor.isEmpty) {
     return
   }
   if ($toolbar.value.mode !== 'source' && !document.readOnly) {
@@ -563,6 +581,7 @@ defineExpose({
   setTheme,
   getContent,
   setPagination,
+  autoPagination,
   getImage,
   getText,
   getHTML,
@@ -792,6 +811,10 @@ watch(
   color: var(--umo-text-color);
   font-family: var(--umo-font-family);
   position: relative !important;
+  .umo-toolbar,
+  .umo-footer {
+    background-color: var(--umo-color-white);
+  }
   .umo-main {
     flex: 1;
     background-color: var(--umo-container-background);

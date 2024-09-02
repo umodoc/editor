@@ -74,6 +74,9 @@ const importWord = () => {
         }
         if (result?.value) {
           editor.value.commands.setContent(result.value)
+          setTimeout(() => {
+            editor.value.commands.autoPaging()
+          }, 500)
         } else {
           useMessage('error', t('base.importWord.importError'))
         }
@@ -112,7 +115,14 @@ const importWord = () => {
       })
       const content = doc.body.innerHTML.toString()
       editor.value.commands.setContent(content)
+<<<<<<< HEAD
     } catch {
+=======
+      setTimeout(() => {
+        editor.value.commands.autoPaging()
+      }, 500)
+    } catch (error) {
+>>>>>>> 927ebd74e9c60d6316c6957094f588c3ec49e5b9
       useMessage('error', t('base.importWord.importError'))
     }
   })
