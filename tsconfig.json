@@ -3,6 +3,8 @@
     "removeComments": true,
     "declaration": false,
     "disableSizeLimit": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
     "target": "ESNext",
     "module": "ESNext",
     "strict": true,
