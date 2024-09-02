@@ -74,6 +74,7 @@ export default Extension.create({
             ) {
               const { options } = useStore()
               const { id, src } = node
+              // @ts-ignore
               options.value.onFileDelete(id, src)
             }
             chain().focus().deleteSelection().run()

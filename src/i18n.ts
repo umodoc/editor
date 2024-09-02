@@ -5,7 +5,7 @@ import en_US from './locales/en-US.json'
 const { options } = useStore()
 
 const getLocale = (lang: 'en_US' | 'zh_CN') => {
-  const translations = options.value.translations[lang]
+  const translations = options.value.translations?.[lang]
   if (typeof translations === 'object') {
     return translations
   }

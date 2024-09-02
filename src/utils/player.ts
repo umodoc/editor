@@ -77,7 +77,7 @@ const locales = {
   },
 }
 
-export const mediaPlayer = (container) => {
+export const mediaPlayer = (container: HTMLElement) => {
   return new Plyr(container, {
     i18n: locales[i18n.global.locale.value],
     settings: [],

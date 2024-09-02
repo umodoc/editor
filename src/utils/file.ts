@@ -1,4 +1,4 @@
-const fileTypes = {
+const fileTypes: { [key: string]: string[] } = {
   ai: ['ai', 'eps'],
   app: ['app'],
   axure: ['rp'],
@@ -54,13 +54,13 @@ const fileTypes = {
   font: ['eot', 'otf', 'fon', 'font', 'ttf', 'ttc', 'woff', 'woff2'],
 }
 
-export const getFileExtname = (filename) => {
+export const getFileExtname = (filename: string) => {
   const splitFileName = filename.split('.')
   const extname = splitFileName[splitFileName.length - 1]
   return extname
 }
 
-export const getFileIcon = (filename) => {
+export const getFileIcon = (filename: string) => {
   const extname = getFileExtname(filename)
   for (const type of Object.keys(fileTypes)) {
     if (fileTypes[type].includes(extname)) {
