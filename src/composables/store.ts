@@ -28,7 +28,7 @@ export const useStore = createGlobalState(() => {
 	const tableOfContents = ref([]);
 	const imagePreview = ref(false);
 	const searchReplace = ref(false);
-	const savedAt = ref(null);
+	const savedAt = ref<number | null>(null);
 	const printing = ref(false);
 	const exportImage = ref(false);
 	const exportPDF = ref(false);

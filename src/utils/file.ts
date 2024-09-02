@@ -1,4 +1,4 @@
-const fileTypes: { [key: string]: string[] } = {
+const fileTypes: Record<string, string[]> = {
   ai: ['ai', 'eps'],
   app: ['app'],
   axure: ['rp'],

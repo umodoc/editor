@@ -1,9 +1,10 @@
+import { readFileSync } from 'node:fs'
+
 import eslintJS from '@eslint/js'
 import eslintConfigPrettier from 'eslint-config-prettier'
 import eslintPluginSimpleImportSort from 'eslint-plugin-simple-import-sort'
 import eslintPluginUnusedImports from 'eslint-plugin-unused-imports'
 import pluginVue from 'eslint-plugin-vue'
-import { readFileSync } from 'node:fs'
 import globals from 'globals'
 import eslintTS from 'typescript-eslint'
 

@@ -6,6 +6,7 @@
 		"module": "ESNext",
 		"strict": true,
 		"allowJs": true,
+		"noEmit": true,
 		"jsx": "preserve",
 		"moduleResolution": "node",
 		"experimentalDecorators": true,
@@ -18,11 +19,19 @@
 		"verbatimModuleSyntax": true,
 		"sourceMap": true,
 		"baseUrl": ".",
-		"types": ["vite/client", "vue/ref-macros", "vitest/globals", "vitest"],
+		"types": [
+			"unplugin-vue-macros/macros-global",
+			"vite/client",
+			"vitest/globals",
+			"vitest"
+		],
 		"paths": {
 			"@/*": ["./src/*"]
 		},
 		"lib": ["ESNext", "DOM", "DOM.Iterable", "ScriptHost"]
+	},
+	"vueCompilerOptions": {
+		"plugins": ["unplugin-vue-macros/volar"]
 	},
 	"include": [
 		"*.mjs",

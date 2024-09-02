@@ -72,7 +72,10 @@ export interface DocumentOptions {
 	typographyRules: Record<string, unknown>;
 	editorProps: Record<string, unknown>;
 	parseOptions: Record<string, unknown>;
-	autoSave: Record<string, unknown>;
+	autoSave: {
+		enabled: boolean;
+		interval: number;
+	};
 }
 
 //定义一个 异步方法

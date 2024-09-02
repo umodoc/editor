@@ -13,6 +13,6 @@ export const l = (data: unknown) => {
 };
 
 // @ts-expect-error, typing is recursive.
-export const t = i18n.global.t;
+export const {t} = i18n.global;
 
 export { i18n };

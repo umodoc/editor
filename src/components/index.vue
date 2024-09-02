@@ -1,7 +1,9 @@
 <template>
   <t-config-provider
     :global-config="{
-      ...localeConfig[i18n.global.locale.value],
+      ...(localeConfig[
+        i18n.global.locale.value
+      ] as unknown as GlobalConfigProvider),
       classPrefix: 'umo',
     }"
   >
@@ -20,11 +22,11 @@
       <header class="umo-toolbar">
         <toolbar :key="toolbarKey" @menu-change="menuChange">
           <template
-            v-for="item in options.toolbar.menus"
+            v-for="item in options.toolbar?.menus"
             :key="item"
-            #[`toolbar_${item}`]="props"
+            #[`toolbar_${item}`]="slotProps"
           >
-            <slot :name="`toolbar_${item}`" v-bind="props" />
+            <slot :name="`toolbar_${item}`" v-bind="slotProps" />
           </template>
         </toolbar>
       </header>
@@ -52,6 +54,7 @@
 <script setup lang="ts">
 import '@/assets/styles/index.less'
 
+import type { FocusPosition } from '@tiptap/core'
 import {
   isBoolean,
   isNumber,
@@ -59,13 +62,14 @@ import {
   isString,
 } from '@tool-belt/type-predicates'
 import domToImageMore from 'dom-to-image-more'
+import type { GlobalConfigProvider } from 'tdesign-vue-next'
 import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
 
 import { getSelectionNode, getSelectionText } from '@/extensions/selection'
 import { i18n } from '@/i18n'
 import { propsOptions } from '@/options'
-import type { DocumentOptions, WatermarkOption } from '@/types'
+import type { DocumentOptions, SupportedLocale, WatermarkOption } from '@/types'
 
 const { toBlob, toJpeg, toPng } = domToImageMore
 
@@ -128,7 +132,10 @@ editorDestroyed.value = false
 const { appContext } = getCurrentInstance() ?? {}
 
 if (appContext) {
-  appContext.config.globalProperties.t = i18n.global.t
+  appContext.config.globalProperties.t = i18n.global.t as (
+    key: string,
+    ...args: unknown[]
+  ) => string
   appContext.config.globalProperties.l = l
 }
 const locale = useState('locale')
@@ -305,10 +312,21 @@ const setWatermark = (params: Partial<WatermarkOption>) => {
     page.value.watermark.fontWeight = params.fontWeight
   }
 }
-const setDocument = (params: Partial<DocumentOptions>) => {
+const setDocument = (params: {
+  title: string
+  bubbleMenu: boolean
+  blockMenu: boolean
+  markdown: boolean
+  spellcheck: boolean
+  autoSave: {
+    enabled: boolean
+    interval: number
+  }
+}) => {
   if (!isRecord(params)) {
     throw new Error('params must be an object.')
   }
+  options.value.document ??= {} as DocumentOptions
   if (params.title) {
     if (!isString(params.title)) {
       throw new Error('"params.title" must be a string.')
@@ -324,7 +342,7 @@ const setDocument = (params: Partial<DocumentOptions>) => {
       throw new Error('"params.bubbleMenu" must be a boolean.')
     }
     if (options.value.document) {
-      options.value.document.bubbleMenu = params.bubbleMenu
+      options.value.document.enableBubbleMenu = params.bubbleMenu
     }
   }
   if (params.blockMenu !== undefined) {
@@ -332,7 +350,7 @@ const setDocument = (params: Partial<DocumentOptions>) => {
       throw new Error('"params.blockMenu" must be a boolean.')
     }
     if (options.value.document) {
-      options.value.document.blockMenu = params.blockMenu
+      options.value.document.enableBlockMenu = params.blockMenu
     }
   }
   if (params.markdown !== undefined) {
@@ -345,7 +363,7 @@ const setDocument = (params: Partial<DocumentOptions>) => {
     if (!isBoolean(params.spellcheck)) {
       throw new Error('"params.spellcheck" must be a boolean.')
     }
-    $document.value.spellcheck = params.spellcheck
+    $document.value.enableSpellcheck = params.spellcheck
   }
   if (params.autoSave) {
     if (!isBoolean(params.autoSave?.enabled)) {
@@ -359,7 +377,7 @@ const setDocument = (params: Partial<DocumentOptions>) => {
   }
 }
 const setContent = (
-  content,
+  content: string,
   options = {
     emitUpdate: true,
     focusPosition: 'start',
@@ -372,13 +390,13 @@ const setContent = (
   editor.value
     .chain()
     .setContent(content, options.emitUpdate)
-    .focus(options.focusPosition, options.focusOptions)
+    .focus(options.focusPosition as FocusPosition, options.focusOptions)
     .run()
   setTimeout(() => {
-    editor.value.commands.autoPaging()
+    editor.value?.commands.autoPaging(undefined)
   }, 200)
 }
-const setPagination = (enabled) => {
+const setPagination = (enabled: boolean) => {
   if (!editor.value) {
     throw new Error('editor is not ready!')
   }
@@ -387,7 +405,7 @@ const setPagination = (enabled) => {
   }
   page.value.pagination = enabled
 }
-const autoPagination = (enabled) => {
+const autoPagination = (enabled: boolean) => {
   if (!editor.value) {
     throw new Error('editor is not ready!')
   }
@@ -396,9 +414,9 @@ const autoPagination = (enabled) => {
   }
   editor.value.commands.autoPaging(enabled)
 }
-const setLocale = (parmas) => {
-  if (!['zh-CN', 'en-US'].includes(parmas)) {
-    throw new Error('"parmas" must be one of "zh-CN" or "en-US".')
+const setLocale = (params: SupportedLocale) => {
+  if (!['zh-CN', 'en-US'].includes(params)) {
+    throw new Error('"params" must be one of "zh-CN" or "en-US".')
   }
   if (i18n.global.locale.value === params) {
     return
@@ -446,25 +464,21 @@ const getText = () => getContent('text')
 const getHTML = () => getContent('html')
 const getJSON = () => getContent('json')
 const saveContent = async () => {
-  if ($toolbar.value.mode === 'source' || options.value.document.readOnly) {
+  if ($toolbar.value.mode === 'source' || options.value.document?.readOnly) {
     return
   }
   try {
-    const message = await useMessage(
-      'loading',
+    const message = await useMessage('loading', {
+      content: t('save.saving'),
+      placement: 'bottom',
+      closeBtn: true,
+      offset: [0, -20],
+    })
+    const success = await options.value?.onSave?.(
       {
-        content: t('save.saving'),
-        placement: 'bottom',
-        closeBtn: true,
-        offset: [0, -20],
-      },
-      0,
-    )
-    const success = await options.value.onSave(
-      {
-        html: editor.value.getHTML(),
-        json: editor.value.getJSON(),
-        text: editor.value.getHTML(),
+        html: editor.value?.getHTML(),
+        json: editor.value?.getJSON(),
+        text: editor.value?.getHTML(),
       },
       page.value,
       $document.value,
@@ -493,36 +507,36 @@ const saveContent = async () => {
       placement: 'bottom',
       offset: [0, -20],
     })
-    console.error(e.message)
+    console.error((e as Error).message)
   }
 }
 const getContentExcerpt = (charLimit = 100, more = ' ...') => {
-  const text = editor.value.getText()
-  if (text.length === 0) {
+  const text = editor.value?.getText()
+  if (text?.length === 0) {
     return ''
   }
-  return text.substring(0, charLimit) + more
+  return text?.substring(0, charLimit) + more
 }
 const getLocale = () => i18n.global.locale.value
 const getI18n = () => i18n
 const print = () => {
   const { toolbar, document } = options.value
-  if (toolbar.disableMenuItems.includes('print') || editor.isEmpty) {
+  if (toolbar?.disableMenuItems.includes('print') || editor.value?.isEmpty) {
     return
   }
-  if ($toolbar.value.mode !== 'source' && !document.readOnly) {
+  if ($toolbar.value.mode !== 'source' && !document?.readOnly) {
     printing.value = true
   }
 }
 const focus = (position = 'start', options = { scrollIntoView: true }) =>
-  editor.value.commands.focus(position, options)
-const blur = () => editor.value.chain().blur().run()
-const reset = (silent) => {
+  editor.value?.commands.focus(position as FocusPosition, options)
+const blur = () => editor.value?.chain().blur().run()
+const reset = (silent: boolean) => {
   const resetFn = () => {
     localStorage.clear()
     location.reload()
   }
-  if (silent === true) {
+  if (silent) {
     resetFn()
     return
   }
@@ -541,7 +555,7 @@ const reset = (silent) => {
   })
 }
 const destroy = () => {
-  editor.value.destroy()
+  editor.value?.destroy()
   resetStore()
 }
 
@@ -566,15 +580,18 @@ defineExpose({
   getContentExcerpt,
   getEditor: () => editor,
   getTableOfContents: () => tableOfContents.value,
-  getSelectionText: () => getSelectionText(editor.value),
-  getSelectionNode: () => getSelectionNode(editor.value),
+  getSelectionText: () => (editor.value ? getSelectionText(editor.value) : ''),
+  getSelectionNode: () =>
+    editor.value ? getSelectionNode(editor.value) : null,
   deleteSelectionNode: () => editor.value?.commands.deleteSelectionNode(),
   setCurrentNodeSelection: () =>
     editor.value?.commands.setCurrentNodeSelection(),
   getLocale,
   getI18n,
   setReadOnly(readOnly = true) {
-    options.value.document.readOnly = readOnly
+    if (options.value.document) {
+      options.value.document.readOnly = readOnly
+    }
   },
   print,
   focus,
@@ -589,7 +606,7 @@ defineExpose({
 // 定时保存
 let contentUpdated = $ref(false)
 let isFirstUpdate = $ref(true)
-let autoSaveInterval = $ref(null)
+let autoSaveInterval = $ref<NodeJS.Timeout | null>(null)
 const clearAutoSaveInterval = () => {
   if (autoSaveInterval !== null) {
     clearInterval(autoSaveInterval)
@@ -599,13 +616,15 @@ const clearAutoSaveInterval = () => {
 watch(
   () => contentUpdated,
   (val) => {
-    const { autoSave } = options.value.document
-    if (!autoSave.enabled) {
+    const { autoSave } = options.value.document ?? {}
+    if (!autoSave?.enabled) {
       return
     }
     if (isFirstUpdate) {
       isFirstUpdate = false
-      setTimeout(() => (contentUpdated = false))
+      setTimeout(() => {
+        contentUpdated = false
+      })
       return
     }
     if (!val) {
@@ -663,7 +682,7 @@ watch(
     })
   },
 )
-const menuChange = (menu) => {
+const menuChange = (menu: string) => {
   emits('changed:menu', menu)
 }
 watch(
@@ -712,7 +731,7 @@ watch(
   },
 )
 watch(
-  () => page.value.preview.enabled,
+  () => page.value.preview?.enabled,
   (previewEnabled) => {
     emits('changed:pagePreview', previewEnabled)
   },
@@ -754,14 +773,18 @@ useHotkeys('ctrl+p,command+p', () => {
   unsetFormatPainter()
 })
 useHotkeys('esc', () => {
-  page.value.preview.enabled = false
+  if (page.value.preview) {
+    page.value.preview.enabled = false
+  }
   unsetFormatPainter()
 })
 
 // 工具栏切换时重置编辑器
 watch(
   () => $toolbar.value.mode,
-  (val) => (editorDestroyed.value = val === 'source'),
+  (val) => {
+    editorDestroyed.value = val === 'source'
+  },
 )
 </script>
 
