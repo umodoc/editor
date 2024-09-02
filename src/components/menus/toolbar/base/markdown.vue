@@ -8,7 +8,7 @@
         ? t('base.markdown.disable')
         : t('base.markdown.enable')
     "
-    :menu-active="$document.markdown"
+    :menu-active="$document.enableMarkdown"
     huge
     @menu-click="toggleMarkdownMode"
   />
@@ -30,7 +30,7 @@ const toggleMarkdownMode = () => {
       content: t('base.markdown.toggle'),
     },
     async onConfirm() {
-      $document.value.markdown = !$document.value.markdown
+      $document.value.enableMarkdown = !$document.value.enableMarkdown
       dialog.destroy()
       await nextTick()
       editorDestroyed.value = true

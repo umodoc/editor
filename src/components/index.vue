@@ -52,19 +52,22 @@
 <script setup lang="ts">
 import '@/assets/styles/index.less'
 
-import { toBlob, toJpeg, toPng } from 'dom-to-image-more'
-import enConfig from 'tdesign-vue-next/esm/locale/en_US'
-import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
 import {
   isBoolean,
   isNumber,
   isRecord,
   isString,
 } from '@tool-belt/type-predicates'
+import domToImageMore from 'dom-to-image-more'
+import enConfig from 'tdesign-vue-next/esm/locale/en_US'
+import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
 
 import { getSelectionNode, getSelectionText } from '@/extensions/selection'
 import { i18n } from '@/i18n'
 import { propsOptions } from '@/options'
+import type { DocumentOptions, WatermarkOption } from '@/types'
+
+const { toBlob, toJpeg, toPng } = domToImageMore
 
 defineOptions({ name: 'UmoEditor' })
 
@@ -110,8 +113,10 @@ const {
   printing,
   resetStore,
 } = useStore()
+
 const $toolbar = useState('toolbar', props.editorKey)
 const $document = useState('document', props.editorKey)
+
 watch(
   () => props,
   () => setOptions(props),
@@ -121,8 +126,11 @@ editorDestroyed.value = false
 
 // i18n
 const { appContext } = getCurrentInstance() ?? {}
-appContext?.config.globalProperties.t = i18n.global.t
-appContext?.config.globalProperties.l = l
+
+if (appContext) {
+  appContext.config.globalProperties.t = i18n.global.t
+  appContext.config.globalProperties.l = l
+}
 const locale = useState('locale')
 i18n.global.locale.value =
   locale.value !== options.value.locale ? locale.value : options.value.locale
@@ -134,12 +142,12 @@ const localeConfig = $ref({
 })
 
 // 主题
-const setTheme = (theme) => {
+const setTheme = (theme: 'light' | 'dark' | 'auto') => {
   if (!isString(theme) || !['light', 'dark', 'auto'].includes(theme)) {
     throw new Error('"theme" must be one of "light", "dark" or "auto".')
   }
   if (theme !== 'auto') {
-    document.querySelector('html').setAttribute('theme-mode', theme)
+    document.querySelector('html')?.setAttribute('theme-mode', theme)
     emits('changed:theme', theme)
     return
   }
@@ -174,7 +182,7 @@ if (slots.page_footer) {
 }
 
 // 对外暴露的编辑器方法
-const setToolbar = (params) => {
+const setToolbar = (params: { mode: string; show: boolean }) => {
   if (!isRecord(params)) {
     throw new Error('params must be an object.')
   }
@@ -194,7 +202,11 @@ const setToolbar = (params) => {
     $toolbar.value.show = params.show
   }
 }
-const setPage = (params) => {
+const setPage = (params: {
+  size: string
+  orientation: string
+  background: string
+}) => {
   if (!isRecord(params)) {
     throw new Error('params must be an object.')
   }
@@ -202,12 +214,12 @@ const setPage = (params) => {
     if (!isString(params.size)) {
       throw new Error('"params.size" must be a string.')
     }
-    const size = options.value.dicts.pageSizes.find(
+    const size = options.value.dicts?.pageSizes.find(
       (item) => item.label === params.size,
     )
     if (!size) {
       throw new Error(
-        `"params.size" must be one of ${options.value.dicts.pageSizes.map((item) => item.label)}.`,
+        `"params.size" must be one of ${options.value.dicts?.pageSizes.map((item) => item.label)}.`,
       )
     }
     page.value.size = size
@@ -231,9 +243,12 @@ const setPage = (params) => {
     page.value.background = params.background
   }
 }
-const setWatermark = (params) => {
+const setWatermark = (params: Partial<WatermarkOption>) => {
   if (!isRecord(params)) {
     throw new Error('params must be an object.')
+  }
+  if (!page.value.watermark) {
+    page.value.watermark = {} as WatermarkOption
   }
   if (params.alpha !== undefined) {
     if (!isNumber(params.alpha)) {
@@ -287,11 +302,10 @@ const setWatermark = (params) => {
         '"params.fontWeight" must be one of "normal", "bold" or "bolder".',
       )
     }
-
     page.value.watermark.fontWeight = params.fontWeight
   }
 }
-const setDocument = (params) => {
+const setDocument = (params: Partial<DocumentOptions>) => {
   if (!isRecord(params)) {
     throw new Error('params must be an object.')
   }
@@ -301,25 +315,31 @@ const setDocument = (params) => {
     }
     const title = params.title !== '' ? params.title : t('document.untitled')
     $document.value.title = title
-    options.value.document.title = title
+    if (options.value.document) {
+      options.value.document.title = title
+    }
   }
   if (params.bubbleMenu !== undefined) {
     if (!isBoolean(params.bubbleMenu)) {
       throw new Error('"params.bubbleMenu" must be a boolean.')
     }
-    options.value.document.bubbleMenu = params.bubbleMenu
+    if (options.value.document) {
+      options.value.document.bubbleMenu = params.bubbleMenu
+    }
   }
   if (params.blockMenu !== undefined) {
     if (!isBoolean(params.blockMenu)) {
       throw new Error('"params.blockMenu" must be a boolean.')
     }
-    options.value.document.blockMenu = params.blockMenu
+    if (options.value.document) {
+      options.value.document.blockMenu = params.blockMenu
+    }
   }
   if (params.markdown !== undefined) {
     if (!isBoolean(params.markdown)) {
       throw new Error('"params.markdown" must be a boolean.')
     }
-    $document.value.markdown = params.markdown
+    $document.value.enableMarkdown = params.markdown
   }
   if (params.spellcheck !== undefined) {
     if (!isBoolean(params.spellcheck)) {

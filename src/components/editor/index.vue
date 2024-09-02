@@ -8,7 +8,9 @@
     }"
     :editor="editor"
     :style="{ lineHeight: defaultLineHeight }"
-    :spellcheck="options.document.enableSpellcheck && $document.spellcheck"
+    :spellcheck="
+      options.document.enableSpellcheck && $document.enableSpellcheck
+    "
   />
   <menus-bubble v-if="editor && !page.preview.enabled && !editorDestroyed" />
   <menus-context-block
@@ -93,7 +95,7 @@ const {
 const $document = useState('document')
 
 let enableRules = true
-if (!options.value.document.enableMarkdown || !$document.value.markdown) {
+if (!options.value.document.enableMarkdown || !$document.value.enableMarkdown) {
   enableRules = [Image, Mathematics, Typography]
 }
 

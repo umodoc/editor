@@ -1,7 +1,8 @@
 import type { Extension } from "@tiptap/core";
+import type { AsyncFunction } from "@tool-belt/type-predicates";
 
 import type { NodesComputed } from "@/extensions/page/types";
-
+export type SupportedLocale = "en-US" | "zh-CN";
 export interface MarginOption {
 	left: number;
 	right: number;
@@ -45,7 +46,7 @@ export interface PageOption {
 	};
 }
 export interface ToolbarOptions {
-	defaultMode: string;
+	defaultMode: "classic" | "ribbon";
 	enableSourceEditor: boolean;
 	menus: string[];
 	disableMenuItems: unknown[];
@@ -55,13 +56,11 @@ export interface ToolbarOptions {
 		useCustomMethod: boolean;
 	};
 }
-export type Dictionary = Record<string, unknown>;
-
 export interface DocumentOptions {
 	id: string;
 	title: string;
 	content: string;
-	placeholder: Dictionary;
+	placeholder: Record<string, unknown>;
 	enableSpellcheck: boolean;
 	enableMarkdown: boolean;
 	enableBubbleMenu: boolean;
@@ -70,36 +69,34 @@ export interface DocumentOptions {
 	readOnly: boolean;
 	autofocus: boolean;
 	characterLimit: number;
-	typographyRules: Dictionary;
-	editorProps: Dictionary;
-	parseOptions: Dictionary;
-	autoSave: Dictionary;
+	typographyRules: Record<string, unknown>;
+	editorProps: Record<string, unknown>;
+	parseOptions: Record<string, unknown>;
+	autoSave: Record<string, unknown>;
 }
 
 //定义一个 异步方法
-export type AsyncMethod = (...args: unknown[]) => Promise<void>;
-export type Method = (...args: unknown[]) => void;
 export interface UmoEditorOptions {
 	editorKey: string;
-	locale: "en-US" | "zh-CN";
+	locale: SupportedLocale;
 	theme: "light" | "dark";
 	height: string;
-	dicts?: { pageSizes: { default: boolean; value: string }[] };
+	dicts?: { pageSizes: { default: boolean; value: string; label: string }[] };
 	toolbar?: ToolbarOptions;
 	page: PageOption;
 	document?: DocumentOptions;
-	assistant?: Dictionary;
+	assistant?: Record<string, unknown>;
 	templates?: unknown[];
 	cdnUrl?: string;
 	shareUrl?: string;
-	diagrams?: Dictionary;
-	file?: Dictionary;
-	user?: Dictionary;
+	diagrams?: Record<string, unknown>;
+	file?: Record<string, unknown>;
+	user?: Record<string, unknown>;
 	extensions?: Extension[];
-	translations?: Dictionary;
-	onSave?: AsyncMethod;
-	onFileUpload?: AsyncMethod;
-	onFileDelete?: Method;
-	onAssistant?: AsyncMethod;
-	onCustomImportWordMethod?: AsyncMethod;
+	translations?: Record<string, unknown>;
+	onSave?: AsyncFunction;
+	onFileUpload?: AsyncFunction;
+	onFileDelete?: CallableFunction;
+	onAssistant?: AsyncFunction;
+	onCustomImportWordMethod?: AsyncFunction;
 }

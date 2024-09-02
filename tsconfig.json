@@ -22,17 +22,7 @@
 		"paths": {
 			"@/*": ["./src/*"]
 		},
-		"lib": ["ESNext", "DOM", "DOM.Iterable", "ScriptHost"],
-		"vueCompilerOptions": {
-			"plugins": [
-				"@vue-macros/volar/define-models",
-				"@vue-macros/volar/define-props",
-				"@vue-macros/volar/define-props-refs",
-				"@vue-macros/volar/short-vmodel",
-				"@vue-macros/volar/export-props"
-			],
-			"experimentalDefinePropProposal": "kevinEdition"
-		}
+		"lib": ["ESNext", "DOM", "DOM.Iterable", "ScriptHost"]
 	},
 	"include": [
 		"*.mjs",

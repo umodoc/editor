@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!page.preview.enabled" class="umo-status-bar">
+  <div v-if="!page.preview?.enabled" class="umo-status-bar">
     <div class="umo-status-bar-left">
       <tooltip :content="page.showToc ? t('toc.hide') : t('toc.show')">
         <t-button
@@ -13,9 +13,9 @@
         </t-button>
       </tooltip>
       <tooltip
-        v-if="options.document.enableSpellcheck"
+        v-if="options.document?.enableSpellcheck"
         :content="
-          $document.spellcheck
+          $document?.enableSpellcheck
             ? t('spellcheck.disable')
             : t('spellcheck.enable')
         "
@@ -25,7 +25,7 @@
           :class="{ active: $document.spellcheck }"
           variant="text"
           size="small"
-          @click="$document.spellcheck = !$document.spellcheck"
+          @click="$document?.enableSpellcheck = !$document?.enableSpellcheck"
         >
           <icon name="spellcheck" color="red" />
         </t-button>
