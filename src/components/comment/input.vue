@@ -85,12 +85,12 @@ const closeComment = () => {
     .umo-comment-buttons {
       margin-top: 10px;
       :deep(.umo-button) {
-          margin-right: 10px;
-          padding: 0 15px;
-          height: 28px;
-          font-size: 12px;
-        }
+        margin-right: 10px;
+        padding: 0 15px;
+        height: 28px;
+        font-size: 12px;
       }
+    }
   }
 }
 </style>
