@@ -19,14 +19,7 @@ export default hr.extend({
     }
   },
   parseHTML() {
-    return [
-      {
-        tag: 'hr',
-        /*  getAttrs: (element) => {
-          element.getAttribute('data-type'), element.style.color
-        },*/
-      },
-    ]
+    return [{ tag: 'hr' }]
   },
   addAttributes() {
     return {

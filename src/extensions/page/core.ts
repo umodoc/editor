@@ -516,7 +516,7 @@ export function getId() {
 export const findParentDomRefOfType = (nodeType, domAtPos) => (selection) => {
   // @ts-ignore
   return findParentDomRef(
-    (node) => equalNodeType(nodeType, node),
+    (node: any) => equalNodeType(nodeType, node),
     domAtPos,
   )(selection)
 }
@@ -552,7 +552,6 @@ export const findDomRefAtPos = (position, domAtPos) => {
 
 export const findParentNode =
   // @ts-ignore
-
 
     (predicate) =>
     // @ts-ignore

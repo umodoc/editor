@@ -17,6 +17,7 @@ export default TableHeader.extend({
             'data-bg-color': backgroundColor,
           }
           if (backgroundColor) {
+            // @ts-ignore
             attrs.style = `background-color: ${backgroundColor}`
           }
           return attrs

@@ -1,4 +1,4 @@
-import { ObjectDefinition, ObjectSchema } from '@eslint/object-schema'
+import { ObjectSchema } from '@eslint/object-schema'
 import { UmoEditorOptions } from '@/types'
 
 // 默认配置
@@ -354,6 +354,7 @@ const ojbectSchema = new ObjectSchema({
   editorKey: {
     merge: 'replace',
     validate: 'string!',
+    required: false,
   },
   locale: {
     merge: 'replace',
@@ -362,6 +363,7 @@ const ojbectSchema = new ObjectSchema({
         throw new Error('Key "locale": must be one of "en-US" or "zh-CN".')
       }
     },
+    required: false,
   },
   theme: {
     merge: 'replace',
@@ -372,12 +374,17 @@ const ojbectSchema = new ObjectSchema({
         )
       }
     },
+    required: false,
   },
   height: {
     merge: 'replace',
     validate: 'string!',
+    required: false,
   },
   dicts: {
+    required: false,
+    merge: 'replace',
+    validate: 'object',
     schema: {
       fonts: {
         merge: 'replace',
@@ -385,7 +392,7 @@ const ojbectSchema = new ObjectSchema({
           if (value && !Array.isArray(value)) {
             throw new Error('Key "dicts": Key "fonts" must be a array.')
           }
-          value.forEach((item) => {
+          value.forEach((item: any) => {
             if (!item.label || (!item.value && item.value !== null)) {
               throw new Error(
                 'Key "dicts": Key "fonts" must be a array of objects with "label" and "value" properties.',
@@ -393,10 +400,12 @@ const ojbectSchema = new ObjectSchema({
             }
           })
         },
+        required: false,
       },
       colors: {
         merge: 'replace',
         validate: 'array',
+        required: false,
       },
       lineHeights: {
         merge: 'replace',
@@ -404,12 +413,12 @@ const ojbectSchema = new ObjectSchema({
           if (value && !Array.isArray(value)) {
             throw new Error('Key "dicts": Key "lineHeights": must be a array.')
           }
-          if (!value.find((item) => item.default)) {
+          if (!value.find((item: any) => item.default)) {
             throw new Error(
               'Key "dicts": Key "lineHeights": please set a default value.',
             )
           }
-          value.forEach((item, index) => {
+          value.forEach((item: any, index: number) => {
             if (!item.label || (!item.value && item.value !== null)) {
               throw new Error(
                 `Key "dicts": Key "lineHeights[${index}]": must be a array of objects with "label" and "value" properties.`,
@@ -422,6 +431,7 @@ const ojbectSchema = new ObjectSchema({
             }
           })
         },
+        required: false,
       },
       symbols: {
         merge: 'replace',
@@ -429,7 +439,7 @@ const ojbectSchema = new ObjectSchema({
           if (value && !Array.isArray(value)) {
             throw new Error('Key "dicts": Key "symbols" must be a array.')
           }
-          value.forEach((item, index) => {
+          value.forEach((item: any, index: number) => {
             if (!item.label || typeof item.items !== 'string') {
               throw new Error(
                 `Key "dicts": Key "symbols[${index}]": must be a array of objects with "label" and "items" properties.`,
@@ -442,6 +452,7 @@ const ojbectSchema = new ObjectSchema({
             }
           })
         },
+        required: false,
       },
       emojis: {
         merge: 'replace',
@@ -449,7 +460,7 @@ const ojbectSchema = new ObjectSchema({
           if (value && !Array.isArray(value)) {
             throw new Error('Key "dicts": Key "emojis" must be a array.')
           }
-          value.forEach((item, index) => {
+          value.forEach((item: any, index: number) => {
             if (!item.label || typeof item.items !== 'string') {
               throw new Error(
                 `Key "dicts": Key "emojis[${index}]": must be a array of objects with "label" and "value" properties.`,
@@ -462,6 +473,7 @@ const ojbectSchema = new ObjectSchema({
             }
           })
         },
+        required: false,
       },
       pageSizes: {
         merge: 'replace',
@@ -469,12 +481,12 @@ const ojbectSchema = new ObjectSchema({
           if (value && !Array.isArray(value)) {
             throw new Error('Key "dicts": Key "pageSizes": must be a array.')
           }
-          if (!value.find((item) => item.default)) {
+          if (!value.find((item: any) => item.default)) {
             throw new Error(
               'Key "dicts": Key "pageSizes": please set a default value.',
             )
           }
-          value.forEach((item, index) => {
+          value.forEach((item: any, index: number) => {
             if (!item.label || item.label === '') {
               throw new Error(
                 `Key "dicts": Key "pageSizes[${index}]" Key: "label" cannot be empty.`,
@@ -497,10 +509,14 @@ const ojbectSchema = new ObjectSchema({
             }
           })
         },
+        required: false,
       },
     },
   },
   toolbar: {
+    required: false,
+    merge: 'replace',
+    validate: 'object',
     schema: {
       defaultMode: {
         merge: 'replace',
@@ -511,15 +527,17 @@ const ojbectSchema = new ObjectSchema({
             )
           }
         },
+        required: false,
       },
       enableSourceEditor: {
         merge: 'replace',
         validate: 'boolean',
+        required: false,
       },
       menus: {
         merge: 'replace',
         validate(value) {
-          const defaultMenus = defaultOptions.toolbar.menus
+          const defaultMenus = defaultOptions?.toolbar?.menus
           if (value && !Array.isArray(value)) {
             throw new Error('Key "toolbar": Key "menus" must be a array.')
           }
@@ -528,12 +546,13 @@ const ojbectSchema = new ObjectSchema({
               'Key "toolbar": Key "menus" should at least contain "base".',
             )
           }
-          if (!value.every((item) => defaultMenus.includes(item))) {
+          if (!value.every((item: any) => defaultMenus?.includes(item))) {
             throw new Error(
               `Key "toolbar": Key "menus" the array items of toolbar.menus must contain only one or multiple of ${JSON.stringify(defaultMenus)}.`,
             )
           }
         },
+        required: false,
       },
       disableMenuItems: {
         merge: 'replace',
@@ -544,32 +563,44 @@ const ojbectSchema = new ObjectSchema({
             )
           }
         },
+        required: false,
       },
       importWord: {
         merge: 'replace',
         validate: 'object',
+        required: false,
       },
     },
   },
   page: {
+    merge: 'replace',
+    validate: 'object',
+    required: false,
     schema: {
       defaultMargin: {
+        required: false,
+        merge: 'replace',
+        validate: 'object',
         schema: {
           left: {
             merge: 'replace',
             validate: 'number',
+            required: false,
           },
           right: {
             merge: 'replace',
             validate: 'number',
+            required: false,
           },
           top: {
             merge: 'replace',
             validate: 'number',
+            required: false,
           },
           bottom: {
             merge: 'replace',
             validate: 'number',
+            required: false,
           },
         },
       },
@@ -582,12 +613,17 @@ const ojbectSchema = new ObjectSchema({
             )
           }
         },
+        required: false,
       },
       defaultBackground: {
         merge: 'replace',
         validate: 'string',
+        required: false,
       },
       watermark: {
+        required: false,
+        merge: 'replace',
+        validate: 'object',
         schema: {
           type: {
             merge: 'replace',
@@ -598,14 +634,17 @@ const ojbectSchema = new ObjectSchema({
                 )
               }
             },
+            required: false,
           },
           alpha: {
             merge: 'replace',
             validate: 'number',
+            required: false,
           },
           fontColor: {
             merge: 'replace',
             validate: 'string',
+            required: false,
           },
           fontFamily: {
             merge: 'replace',
@@ -616,44 +655,58 @@ const ojbectSchema = new ObjectSchema({
                 )
               }
             },
+            required: false,
           },
           fontSize: {
             merge: 'replace',
             validate: 'number',
+            required: false,
           },
           fontWeight: {
             merge: 'replace',
             validate: 'string',
+            required: false,
           },
           text: {
             merge: 'replace',
             validate: 'string',
+            required: false,
           },
         },
       },
       nodesComputedOption: {
+        merge: 'replace',
+        validate: 'object',
+        required: false,
         schema: {
           types: {
             merge: 'replace',
             validate(value) {},
+            required: false,
           },
           nodesComputed: {
             merge: 'replace',
             validate(value) {},
+            required: false,
           },
         },
       },
     },
   },
   document: {
+    merge: 'replace',
+    validate: 'object',
+    required: false,
     schema: {
       title: {
         merge: 'replace',
         validate: 'string',
+        required: false,
       },
       content: {
         merge: 'replace',
         validate() {},
+        required: false,
       },
       placeholder: {
         merge: 'replace',
@@ -664,30 +717,37 @@ const ojbectSchema = new ObjectSchema({
             )
           }
         },
+        required: false,
       },
       enableSpellcheck: {
         merge: 'replace',
         validate: 'boolean',
+        required: false,
       },
       enableMarkdown: {
         merge: 'replace',
         validate: 'boolean',
+        required: false,
       },
       enableBubbleMenu: {
         merge: 'replace',
         validate: 'boolean',
+        required: false,
       },
       enableBlockMenu: {
         merge: 'replace',
         validate: 'boolean',
+        required: false,
       },
       enableComment: {
         merge: 'replace',
         validate: 'boolean',
+        required: false,
       },
       readOnly: {
         merge: 'replace',
         validate: 'boolean',
+        required: false,
       },
       autofocus: {
         merge: 'replace',
@@ -701,42 +761,56 @@ const ojbectSchema = new ObjectSchema({
             )
           }
         },
+        required: false,
       },
       characterLimit: {
         merge: 'replace',
         validate: 'number',
+        required: false,
       },
       typographyRules: {
         merge: 'replace',
         validate: 'object',
+        required: false,
       },
       editorProps: {
         merge: 'replace',
         validate: 'object',
+        required: false,
       },
       parseOptions: {
         merge: 'replace',
         validate: 'object',
+        required: false,
       },
       autoSave: {
+        required: false,
+        merge: 'replace',
+        validate: 'object',
         schema: {
           enabled: {
             merge: 'replace',
             validate: 'boolean',
+            required: false,
           },
           interval: {
             merge: 'replace',
             validate: 'number',
+            required: false,
           },
         },
       },
     },
   },
   assistant: {
+    merge: 'replace',
+    validate: 'object',
+    required: false,
     schema: {
       enabled: {
         merge: 'replace',
         validate: 'boolean',
+        required: false,
       },
       maxlength: {
         merge: 'replace',
@@ -747,6 +821,7 @@ const ojbectSchema = new ObjectSchema({
             )
           }
         },
+        required: false,
       },
       commands: {
         merge: 'replace',
@@ -754,7 +829,7 @@ const ojbectSchema = new ObjectSchema({
           if (value && !Array.isArray(value)) {
             throw new Error('Key "assistant": Key "commands" must be a array.')
           }
-          value.forEach((item) => {
+          value.forEach((item: any, index: number) => {
             if (!item.label || !item.value) {
               throw new Error(
                 'Key "assistant": Key "commands" must be a array of objects with "label" and "value" properties.',
@@ -772,61 +847,77 @@ const ojbectSchema = new ObjectSchema({
             }
           })
         },
+        required: false,
       },
     },
   },
-  shareUrl: { merge: 'replace', validate: 'string' },
+  shareUrl: {
+    merge: 'replace',
+    validate: 'string',
+    required: false,
+  },
   templates: {
     merge: 'replace',
     validate(value) {
       if (value && !Array.isArray(value)) {
         throw new Error('Key "templates": Key "menus" must be a array.')
       }
-      value.forEach((item, index) => {
-        if (!item.title || !item.title === '') {
+      value.forEach((item: any, index: number) => {
+        if (!item.title || item.title === '') {
           throw new Error(
             `Key "templates[${index}]": Key "title" cannot be empty.`,
           )
         }
-        if (!item.content || !item.content === '') {
+        if (!item.content || item.content === '') {
           throw new Error(
             `Key "templates[${index}]": Key "content" cannot be empty.`,
           )
         }
       })
     },
+    required: false,
   },
   cdnUrl: {
     merge: 'replace',
     validate: 'string',
+    required: false,
   },
   diagrams: {
     merge: 'assign',
     validate: 'object',
+    required: false,
   },
   file: {
+    required: false,
+    merge: 'replace',
+    validate: 'object',
     schema: {
       allowedMimeTypes: {
         merge: 'replace',
         validate: 'array',
+        required: false,
       },
       maxSize: {
         merge: 'replace',
         validate: 'number',
+        required: false,
       },
     },
   },
   user: {
     merge: 'assign',
     validate: 'object',
+    required: false,
   },
   extensions: {
     merge: 'replace',
     validate: 'array',
+    required: false,
   },
   translations: {
     merge: 'replace',
     validate: 'object',
+    required: false,
   },
   onSave: {
     merge: 'replace',
@@ -835,6 +926,7 @@ const ojbectSchema = new ObjectSchema({
         throw new Error('Key "onSave" must be a async function.')
       }
     },
+    required: false,
   },
   onFileUpload: {
     merge: 'replace',
@@ -843,6 +935,7 @@ const ojbectSchema = new ObjectSchema({
         throw new Error('Key "onFileUpload" must be a async function.')
       }
     },
+    required: false,
   },
   onFileDelete: {
     merge: 'replace',
@@ -854,6 +947,7 @@ const ojbectSchema = new ObjectSchema({
         throw new Error('Key "onFileDelete" must be a function.')
       }
     },
+    required: false,
   },
   onAssistant: {
     merge: 'replace',
@@ -862,6 +956,7 @@ const ojbectSchema = new ObjectSchema({
         throw new Error('Key "onAssistant" must be a async function.')
       }
     },
+    required: false,
   },
   onCustomImportWordMethod: {
     merge: 'replace',
@@ -872,6 +967,7 @@ const ojbectSchema = new ObjectSchema({
         )
       }
     },
+    required: false,
   },
 })
 

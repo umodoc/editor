@@ -6,16 +6,13 @@ export default OrderedList.extend({
   addAttributes() {
     return {
       ...this.parent?.(),
-      listStyleType: {
+      listType: {
         default: 'decimal',
-        parseHTML: (element) => {
-          //@ts-ignore
-          const listStyleType = element.style['list-style-type']
-          return { listStyleType: listStyleType || 'decimal' }
-        },
-        renderHTML: ({ listStyleType }) => {
+        //@ts-ignore
+        parseHTML: (element) => element.style['list-style-type'] || 'decimal',
+        renderHTML: ({ listType }) => {
           return {
-            style: `list-style-type: ${listStyleType?.listStyleType || listStyleType}`,
+            style: `list-style-type: ${listType}`,
           }
         },
       },
