@@ -1,4 +1,5 @@
 import Vue from "@vitejs/plugin-vue";
+import ReactivityTransform from "@vue-macros/reactivity-transform/vite";
 import AutoImport from "unplugin-auto-import/vite";
 import { TDesignResolver } from "unplugin-vue-components/resolvers";
 import Components from "unplugin-vue-components/vite";
@@ -92,7 +93,11 @@ const cssConfig = {
 
 export default defineConfig({
 	base: "/umo-editor/",
-	plugins: [tsConfigPaths(), ...Object.values(vuePlugins)],
+	plugins: [
+		tsConfigPaths(),
+		ReactivityTransform(),
+		...Object.values(vuePlugins),
+	],
 	css: cssConfig,
 	build: buildConfig,
 	test: testConfig,

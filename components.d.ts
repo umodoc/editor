@@ -144,18 +144,13 @@ declare module 'vue' {
     PageOptions: typeof import('./src/components/page-options.vue')['default']
     Statusbar: typeof import('./src/components/statusbar/index.vue')['default']
     StatusbarShortcuts: typeof import('./src/components/statusbar/shortcuts.vue')['default']
-    TButton: typeof import('tdesign-vue-next/esm')['Button']
-    TConfigProvider: typeof import('tdesign-vue-next/esm')['ConfigProvider']
     TDialog: typeof import('tdesign-vue-next/esm')['Dialog']
-    TDropdown: typeof import('tdesign-vue-next/esm')['Dropdown']
     Toolbar: typeof import('./src/components/toolbar/index.vue')['default']
     ToolbarClassic: typeof import('./src/components/toolbar/classic.vue')['default']
     ToolbarRibbon: typeof import('./src/components/toolbar/ribbon.vue')['default']
     ToolbarScrollable: typeof import('./src/components/toolbar/scrollable.vue')['default']
     ToolbarSource: typeof import('./src/components/toolbar/source.vue')['default']
     Tooltip: typeof import('./src/components/tooltip.vue')['default']
-    TPopup: typeof import('tdesign-vue-next/esm')['Popup']
-    TSelect: typeof import('tdesign-vue-next/esm')['Select']
     TTooltip: typeof import('tdesign-vue-next/esm')['Tooltip']
   }
 }

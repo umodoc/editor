@@ -75,6 +75,7 @@ const { toBlob, toJpeg, toPng } = domToImageMore
 
 defineOptions({ name: 'UmoEditor' })
 
+// Props and Emits
 const props = defineProps(propsOptions)
 const emits = defineEmits([
   'beforeCreate',
@@ -102,8 +103,7 @@ const emits = defineEmits([
   'destroy',
 ])
 
-onBeforeMount(() => setOptions(props))
-
+// Store Setup
 const {
   container,
   toolbarKey,
@@ -121,16 +121,188 @@ const {
 const $toolbar = useState('toolbar', props.editorKey)
 const $document = useState('document', props.editorKey)
 
+// Lifecycle Hooks
+onBeforeMount(() => setOptions(props))
+onMounted(() => {
+  setTheme(options.value.theme)
+})
+onBeforeUnmount(() => {
+  clearAutoSaveInterval()
+  destroy()
+})
+
+// Watchers
 watch(
   () => props,
   () => setOptions(props),
   { deep: true },
 )
-editorDestroyed.value = false
 
-// i18n
+watch(
+  () => options.value.theme,
+  (theme) => {
+    setTheme(theme)
+  },
+)
+
+// 定时保存
+let contentUpdated = $ref(false)
+let isFirstUpdate = $ref(true)
+let autoSaveInterval = $ref<NodeJS.Timeout | null>(null)
+const clearAutoSaveInterval = () => {
+  if (autoSaveInterval !== null) {
+    clearInterval(autoSaveInterval)
+    autoSaveInterval = null
+  }
+}
+watch(
+  () => contentUpdated,
+  (val) => {
+    const { autoSave } = options.value.document ?? {}
+    if (!autoSave?.enabled) {
+      return
+    }
+    if (isFirstUpdate) {
+      isFirstUpdate = false
+      setTimeout(() => {
+        contentUpdated = false
+      })
+      return
+    }
+    if (!val) {
+      clearAutoSaveInterval()
+      return
+    }
+    autoSaveInterval = setInterval(() => {
+      void saveContent()
+      contentUpdated = false
+      clearAutoSaveInterval()
+    }, autoSave.interval)
+  },
+)
+
+watch(
+  () => editor.value,
+  () => {
+    if (!editor.value) {
+      return
+    }
+    editor.value.on('create', ({ editor }) => {
+      emits('created', { editor })
+    })
+    editor.value.on('update', ({ editor }) => {
+      emits('changed', { editor })
+      contentUpdated = true
+    })
+    editor.value.on('selectionUpdate', ({ editor }) => {
+      emits('changed:selection', { editor })
+    })
+    editor.value.on('transaction', ({ editor, transaction }) => {
+      emits('changed:transaction', { editor, transaction })
+    })
+    editor.value.on('focus', ({ editor, event }) => {
+      emits('focus', { editor, event })
+    })
+    editor.value.on(
+      'contentError',
+      ({ editor, error, disableCollaboration }) => {
+        emits('contentError', { editor, error, disableCollaboration })
+      },
+    )
+    editor.value.on('blur', ({ editor, event }) => {
+      emits('blur', { editor, event })
+    })
+    editor.value.on('destroy', () => {
+      resetStore()
+      emits('destroy')
+    })
+  },
+)
+
+watch(
+  () => $toolbar.value,
+  (toolbar, oldToolbar) => {
+    emits('changed:toolbar', { toolbar, oldToolbar })
+  },
+  { deep: true },
+)
+
+watch(
+  () => page.value.size,
+  (pageSize, oldPageSize) => {
+    emits('changed:pageSize', { pageSize, oldPageSize })
+  },
+  { deep: true },
+)
+
+watch(
+  () => page.value.margin,
+  (pageMargin, oldPageMargin) => {
+    emits('changed:pageMargin', { pageMargin, oldPageMargin })
+  },
+  { deep: true },
+)
+
+watch(
+  () => page.value.background,
+  (pageBackground, oldPageBackground) => {
+    emits('changed:pageBackground', { pageBackground, oldPageBackground })
+  },
+)
+
+watch(
+  () => page.value.orientation,
+  (pageOrientation, oldPageOrientation) => {
+    emits('changed:pageOrientation', { pageOrientation, oldPageOrientation })
+  },
+)
+
+watch(
+  () => page.value.showToc,
+  (showToc) => {
+    emits('changed:pageShowToc', showToc)
+  },
+)
+
+watch(
+  () => page.value.zoomLevel,
+  (zoomLevel, oldZoomLevel) => {
+    emits('changed:pageZoom', { zoomLevel, oldZoomLevel })
+  },
+)
+
+watch(
+  () => page.value.preview?.enabled,
+  (previewEnabled) => {
+    emits('changed:pagePreview', previewEnabled)
+  },
+)
+
+watch(
+  () => page.value.watermark,
+  (pageWatermark, oldPageWatermark) => {
+    emits('changed:pageWatermark', { pageWatermark, oldPageWatermark })
+  },
+  { deep: true },
+)
+
+watch(
+  () => printing.value,
+  () => {
+    emits('print')
+  },
+  { deep: true },
+)
+
+watch(
+  () => i18n.global.locale.value,
+  (locale, oldLocale) => {
+    emits('changed:locale', { locale, oldLocale })
+  },
+)
+
+// i18n Setup
 const { appContext } = getCurrentInstance() ?? {}
-
 if (appContext) {
   appContext.config.globalProperties.t = i18n.global.t as (
     key: string,
@@ -142,13 +314,13 @@ const locale = useState('locale')
 i18n.global.locale.value =
   locale.value !== options.value.locale ? locale.value : options.value.locale
 
-// 全局设置
+// Global Locale Config
 const localeConfig = $ref({
   'zh-CN': cnConfig,
   'en-US': enConfig,
 })
 
-// 主题
+// Theme Setup
 const setTheme = (theme: 'light' | 'dark' | 'auto') => {
   if (!isString(theme) || !['light', 'dark', 'auto'].includes(theme)) {
     throw new Error('"theme" must be one of "light", "dark" or "auto".')
@@ -158,27 +330,15 @@ const setTheme = (theme: 'light' | 'dark' | 'auto') => {
     emits('changed:theme', theme)
     return
   }
-  // 检测用户偏好的主题
   const darkScheme = '(prefers-color-scheme: dark)'
   const prefersDarkScheme = window.matchMedia(darkScheme).matches
   setTheme(prefersDarkScheme ? 'dark' : 'light')
-  // 添加事件监听器，监听主题变化
   window.matchMedia(darkScheme).addEventListener('change', (e) => {
     setTheme(e.matches ? 'dark' : 'light')
   })
 }
 
-onMounted(() => {
-  setTheme(options.value.theme)
-})
-watch(
-  () => options.value.theme,
-  (theme) => {
-    setTheme(theme)
-  },
-)
-
-// 页眉页脚
+// Page Header/Footer Visibility
 const { hidePageHeader, hidePageFooter } = useStore()
 const slots = useSlots()
 if (slots.page_header) {
@@ -188,7 +348,7 @@ if (slots.page_footer) {
   hidePageFooter.value = false
 }
 
-// 对外暴露的编辑器方法
+// Toolbar and Page Setup Methods
 const setToolbar = (params: { mode: string; show: boolean }) => {
   if (!isRecord(params)) {
     throw new Error('params must be an object.')
@@ -209,6 +369,7 @@ const setToolbar = (params: { mode: string; show: boolean }) => {
     $toolbar.value.show = params.show
   }
 }
+
 const setPage = (params: {
   size: string
   orientation: string
@@ -250,6 +411,7 @@ const setPage = (params: {
     page.value.background = params.background
   }
 }
+
 const setWatermark = (params: Partial<WatermarkOption>) => {
   if (!isRecord(params)) {
     throw new Error('params must be an object.')
@@ -312,6 +474,7 @@ const setWatermark = (params: Partial<WatermarkOption>) => {
     page.value.watermark.fontWeight = params.fontWeight
   }
 }
+
 const setDocument = (params: {
   title: string
   bubbleMenu: boolean
@@ -376,6 +539,8 @@ const setDocument = (params: {
     options.value.document.autoSave.interval = params.autoSave.interval
   }
 }
+
+// Content Methods
 const setContent = (
   content: string,
   options = {
@@ -396,35 +561,7 @@ const setContent = (
     editor.value?.commands.autoPaging(undefined)
   }, 200)
 }
-const setPagination = (enabled: boolean) => {
-  if (!editor.value) {
-    throw new Error('editor is not ready!')
-  }
-  if (!isBoolean(enabled)) {
-    throw new Error('"enabled" must be a boolean.')
-  }
-  page.value.pagination = enabled
-}
-const autoPagination = (enabled: boolean) => {
-  if (!editor.value) {
-    throw new Error('editor is not ready!')
-  }
-  if (typeof enabled !== 'boolean') {
-    throw new Error('"enabled" must be a boolean.')
-  }
-  editor.value.commands.autoPaging(enabled)
-}
-const setLocale = (params: SupportedLocale) => {
-  if (!['zh-CN', 'en-US'].includes(params)) {
-    throw new Error('"params" must be one of "zh-CN" or "en-US".')
-  }
-  if (i18n.global.locale.value === params) {
-    return
-  }
-  const locale = useState('locale')
-  locale.value = params
-  location.reload()
-}
+
 const getContent = (format = 'html') => {
   if (!editor.value) {
     throw new Error('editor is not ready!')
@@ -440,6 +577,45 @@ const getContent = (format = 'html') => {
   }
   throw new Error('format must be html, text or json')
 }
+
+// Pagination Methods
+const setPagination = (enabled: boolean) => {
+  if (!editor.value) {
+    throw new Error('editor is not ready!')
+  }
+  if (!isBoolean(enabled)) {
+    throw new Error('"enabled" must be a boolean.')
+  }
+  page.value.pagination = enabled
+}
+
+const autoPagination = (enabled: boolean) => {
+  if (!editor.value) {
+    throw new Error('editor is not ready!')
+  }
+  if (typeof enabled !== 'boolean') {
+    throw new Error('"enabled" must be a boolean.')
+  }
+  editor.value.commands.autoPaging(enabled)
+}
+
+// Locale Methods
+const setLocale = (params: SupportedLocale) => {
+  if (!['zh-CN', 'en-US'].includes(params)) {
+    throw new Error('"params" must be one of "zh-CN" or "en-US".')
+  }
+  if (i18n.global.locale.value === params) {
+    return
+  }
+  const locale = useState('locale')
+  locale.value = params
+  location.reload()
+}
+
+const getLocale = () => i18n.global.locale.value
+const getI18n = () => i18n
+
+// Export Methods
 const getImage = async (format = 'blob') => {
   const { zoomLevel } = page.value
   try {
@@ -460,9 +636,57 @@ const getImage = async (format = 'blob') => {
     page.value.zoomLevel = zoomLevel
   }
 }
+
+// Editor Interaction Methods
 const getText = () => getContent('text')
 const getHTML = () => getContent('html')
 const getJSON = () => getContent('json')
+
+const focus = (position = 'start', options = { scrollIntoView: true }) =>
+  editor.value?.commands.focus(position as FocusPosition, options)
+
+const blur = () => editor.value?.chain().blur().run()
+
+const print = () => {
+  const { toolbar, document } = options.value
+  if (toolbar?.disableMenuItems.includes('print') || editor.value?.isEmpty) {
+    return
+  }
+  if ($toolbar.value.mode !== 'source' && !document?.readOnly) {
+    printing.value = true
+  }
+}
+
+const reset = (silent: boolean) => {
+  const resetFn = () => {
+    localStorage.clear()
+    location.reload()
+  }
+  if (silent) {
+    resetFn()
+    return
+  }
+  const dialog = useConfirm({
+    theme: 'warning',
+    header: t('resetAll.title'),
+    body: t('resetAll.message'),
+    confirmBtn: {
+      theme: 'warning',
+      content: t('resetAll.reset'),
+    },
+    onConfirm() {
+      dialog.destroy()
+      resetFn()
+    },
+  })
+}
+
+const destroy = () => {
+  editor.value?.destroy()
+  resetStore()
+}
+
+// Content Saving Methods
 const saveContent = async () => {
   if ($toolbar.value.mode === 'source' || options.value.document?.readOnly) {
     return
@@ -510,6 +734,8 @@ const saveContent = async () => {
     console.error((e as Error).message)
   }
 }
+
+// Content Excerpt Methods
 const getContentExcerpt = (charLimit = 100, more = ' ...') => {
   const text = editor.value?.getText()
   if (text?.length === 0) {
@@ -517,48 +743,38 @@ const getContentExcerpt = (charLimit = 100, more = ' ...') => {
   }
   return text?.substring(0, charLimit) + more
 }
-const getLocale = () => i18n.global.locale.value
-const getI18n = () => i18n
-const print = () => {
-  const { toolbar, document } = options.value
-  if (toolbar?.disableMenuItems.includes('print') || editor.value?.isEmpty) {
-    return
-  }
-  if ($toolbar.value.mode !== 'source' && !document?.readOnly) {
-    printing.value = true
-  }
-}
-const focus = (position = 'start', options = { scrollIntoView: true }) =>
-  editor.value?.commands.focus(position as FocusPosition, options)
-const blur = () => editor.value?.chain().blur().run()
-const reset = (silent: boolean) => {
-  const resetFn = () => {
-    localStorage.clear()
-    location.reload()
-  }
-  if (silent) {
-    resetFn()
-    return
-  }
-  const dialog = useConfirm({
-    theme: 'warning',
-    header: t('resetAll.title'),
-    body: t('resetAll.message'),
-    confirmBtn: {
-      theme: 'warning',
-      content: t('resetAll.reset'),
-    },
-    onConfirm() {
-      dialog.destroy()
-      resetFn()
-    },
-  })
-}
-const destroy = () => {
-  editor.value?.destroy()
-  resetStore()
-}
 
+// Toolbar Mode Reset
+watch(
+  () => $toolbar.value.mode,
+  (val) => {
+    editorDestroyed.value = val === 'source'
+  },
+)
+
+// Hotkeys Setup
+const unsetFormatPainter = () => editor.value?.commands.unsetFormatPainter()
+useHotkeys('ctrl+s,command+s', () => {
+  void saveContent()
+  unsetFormatPainter()
+})
+useHotkeys('ctrl+p,command+p', () => {
+  print()
+  unsetFormatPainter()
+})
+useHotkeys('esc', () => {
+  if (page.value.preview) {
+    page.value.preview.enabled = false
+  }
+  unsetFormatPainter()
+})
+
+// Methods Exposed to Descendants
+provide('saveContent', saveContent)
+provide('setLocale', setLocale)
+provide('reset', reset)
+
+// Exposing Methods
 defineExpose({
   getOptions: () => options.value,
   setOptions,
@@ -602,190 +818,6 @@ defineExpose({
   useMessage,
   destroy,
 })
-
-// 定时保存
-let contentUpdated = $ref(false)
-let isFirstUpdate = $ref(true)
-let autoSaveInterval = $ref<NodeJS.Timeout | null>(null)
-const clearAutoSaveInterval = () => {
-  if (autoSaveInterval !== null) {
-    clearInterval(autoSaveInterval)
-    autoSaveInterval = null
-  }
-}
-watch(
-  () => contentUpdated,
-  (val) => {
-    const { autoSave } = options.value.document ?? {}
-    if (!autoSave?.enabled) {
-      return
-    }
-    if (isFirstUpdate) {
-      isFirstUpdate = false
-      setTimeout(() => {
-        contentUpdated = false
-      })
-      return
-    }
-    if (!val) {
-      clearAutoSaveInterval()
-      return
-    }
-    autoSaveInterval = setInterval(() => {
-      void saveContent()
-      contentUpdated = false
-      clearAutoSaveInterval()
-    }, autoSave.interval)
-  },
-)
-onBeforeUnmount(() => {
-  clearAutoSaveInterval()
-  destroy()
-})
-
-// 编辑器事件
-emits('beforeCreate')
-watch(
-  () => editor.value,
-  () => {
-    if (!editor.value) {
-      return
-    }
-    editor.value.on('create', ({ editor }) => {
-      emits('created', { editor })
-    })
-    editor.value.on('update', ({ editor }) => {
-      emits('changed', { editor })
-      contentUpdated = true
-    })
-    editor.value.on('selectionUpdate', ({ editor }) => {
-      emits('changed:selection', { editor })
-    })
-    editor.value.on('transaction', ({ editor, transaction }) => {
-      emits('changed:transaction', { editor, transaction })
-    })
-    editor.value.on('focus', ({ editor, event }) => {
-      emits('focus', { editor, event })
-    })
-    editor.value.on(
-      'contentError',
-      ({ editor, error, disableCollaboration }) => {
-        emits('contentError', { editor, error, disableCollaboration })
-      },
-    )
-    editor.value.on('blur', ({ editor, event }) => {
-      emits('blur', { editor, event })
-    })
-    editor.value.on('destroy', () => {
-      resetStore()
-      emits('destroy')
-    })
-  },
-)
-const menuChange = (menu: string) => {
-  emits('changed:menu', menu)
-}
-watch(
-  () => $toolbar.value,
-  (toolbar, oldToolbar) => {
-    emits('changed:toolbar', { toolbar, oldToolbar })
-  },
-  { deep: true },
-)
-watch(
-  () => page.value.size,
-  (pageSize, oldPageSize) => {
-    emits('changed:pageSize', { pageSize, oldPageSize })
-  },
-  { deep: true },
-)
-watch(
-  () => page.value.margin,
-  (pageMargin, oldPageMargin) => {
-    emits('changed:pageMargin', { pageMargin, oldPageMargin })
-  },
-  { deep: true },
-)
-watch(
-  () => page.value.background,
-  (pageBackground, oldPageBackground) => {
-    emits('changed:pageBackground', { pageBackground, oldPageBackground })
-  },
-)
-watch(
-  () => page.value.orientation,
-  (pageOrientation, oldPageOrientation) => {
-    emits('changed:pageOrientation', { pageOrientation, oldPageOrientation })
-  },
-)
-watch(
-  () => page.value.showToc,
-  (showToc) => {
-    emits('changed:pageShowToc', showToc)
-  },
-)
-watch(
-  () => page.value.zoomLevel,
-  (zoomLevel, oldZoomLevel) => {
-    emits('changed:pageZoom', { zoomLevel, oldZoomLevel })
-  },
-)
-watch(
-  () => page.value.preview?.enabled,
-  (previewEnabled) => {
-    emits('changed:pagePreview', previewEnabled)
-  },
-)
-watch(
-  () => page.value.watermark,
-  (pageWatermark, oldPageWatermark) => {
-    emits('changed:pageWatermark', { pageWatermark, oldPageWatermark })
-  },
-  { deep: true },
-)
-watch(
-  () => printing.value,
-  () => {
-    emits('print')
-  },
-  { deep: true },
-)
-watch(
-  () => i18n.global.locale.value,
-  (locale, oldLocale) => {
-    emits('changed:locale', { locale, oldLocale })
-  },
-)
-
-// 将方法传递给子孙组件使用
-provide('saveContent', saveContent)
-provide('setLocale', setLocale)
-provide('reset', reset)
-
-// 快捷键
-const unsetFormatPainter = () => editor.value?.commands.unsetFormatPainter()
-useHotkeys('ctrl+s,command+s', () => {
-  void saveContent()
-  unsetFormatPainter()
-})
-useHotkeys('ctrl+p,command+p', () => {
-  print()
-  unsetFormatPainter()
-})
-useHotkeys('esc', () => {
-  if (page.value.preview) {
-    page.value.preview.enabled = false
-  }
-  unsetFormatPainter()
-})
-
-// 工具栏切换时重置编辑器
-watch(
-  () => $toolbar.value.mode,
-  (val) => {
-    editorDestroyed.value = val === 'source'
-  },
-)
 </script>
 
 <style lang="less">
