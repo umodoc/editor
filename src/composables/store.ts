@@ -3,7 +3,7 @@ import shortId from '@/utils/short-id'
 import { changeComputedHtml } from '@/extensions/page/core'
 import { Editor } from '@tiptap/vue-3'
 import { PageOption, UmoEditorOptions } from '@/types'
-type KeyValuePair<T> = { [K in keyof T]?: T[K] }
+
 export const useStore = createGlobalState(() => {
   const toolbarKey = ref<string>(shortId())
   const options = ref<UmoEditorOptions>(defaultOptions)

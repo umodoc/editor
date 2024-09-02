@@ -1,8 +1,7 @@
-//@ts-nocheck
 const { container, editor } = useStore()
 
 export const useNodePostion = () => {
-  const currentNode: Element | null = document.querySelector(
+  const currentNode: HTMLElement | null = document.querySelector(
     `${container} .umo-page-node-content .umo-node-focused`,
   )
   if (currentNode === null) {

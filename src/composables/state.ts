@@ -6,11 +6,13 @@ export const useState = (key: string, editorKey: string) => {
   switch (key) {
     case 'toolbar':
       data = {
+        // @ts-ignore
         mode: options.value.toolbar.defaultMode,
         show: true,
       }
       break
     case 'document':
+      // @ts-ignore
       const { id, title, content, enableMarkdown, enableSpellcheck } =
         options.value.document
       data = {
