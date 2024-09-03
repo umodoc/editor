@@ -1,12 +1,21 @@
 import { ObjectSchema } from "@eslint/object-schema";
 import {
+	type AsyncFunction,
 	isAsyncFunction,
 	isNumber,
 	isRecord,
 	isString,
 } from "@tool-belt/type-predicates";
 
-import type { UmoEditorOptions } from "@/types";
+import type {
+	Emoji,
+	GraphicSymbol,
+	LineHeight,
+	LocaleLabel,
+	PageSize,
+	Template,
+	UmoEditorOptions,
+} from "@/types";
 
 // 默认配置
 const defaultOptions: UmoEditorOptions = {
@@ -470,7 +479,7 @@ const ojbectSchema = new ObjectSchema({
 			},
 			lineHeights: {
 				merge: "replace",
-				validate(value: unknown[]) {
+				validate(value: LineHeight[]) {
 					if (!Array.isArray(value)) {
 						throw new Error('Key "dicts": Key "lineHeights": must be a array.');
 					}
@@ -496,11 +505,11 @@ const ojbectSchema = new ObjectSchema({
 			},
 			symbols: {
 				merge: "replace",
-				validate(value) {
+				validate(value: GraphicSymbol[]) {
 					if (value && !Array.isArray(value)) {
 						throw new Error('Key "dicts": Key "symbols" must be a array.');
 					}
-					value.forEach((item: any, index: number) => {
+					value.forEach((item, index: number) => {
 						if (!item.label || typeof item.items !== "string") {
 							throw new Error(
 								`Key "dicts": Key "symbols[${index}]": must be a array of objects with "label" and "items" properties.`,
@@ -517,11 +526,11 @@ const ojbectSchema = new ObjectSchema({
 			},
 			emojis: {
 				merge: "replace",
-				validate(value) {
+				validate(value: Emoji[]) {
 					if (value && !Array.isArray(value)) {
 						throw new Error('Key "dicts": Key "emojis" must be a array.');
 					}
-					value.forEach((item: any, index: number) => {
+					value.forEach((item, index: number) => {
 						if (!item.label || typeof item.items !== "string") {
 							throw new Error(
 								`Key "dicts": Key "emojis[${index}]": must be a array of objects with "label" and "value" properties.`,
@@ -538,16 +547,16 @@ const ojbectSchema = new ObjectSchema({
 			},
 			pageSizes: {
 				merge: "replace",
-				validate(value) {
+				validate(value: PageSize[]) {
 					if (value && !Array.isArray(value)) {
 						throw new Error('Key "dicts": Key "pageSizes": must be a array.');
 					}
-					if (!value.find((item: any) => item.default)) {
+					if (!value.find((item) => item.default)) {
 						throw new Error(
 							'Key "dicts": Key "pageSizes": please set a default value.',
 						);
 					}
-					value.forEach((item: any, index: number) => {
+					value.forEach((item, index) => {
 						if (!item.label || item.label === "") {
 							throw new Error(
 								`Key "dicts": Key "pageSizes[${index}]" Key: "label" cannot be empty.`,
@@ -581,7 +590,7 @@ const ojbectSchema = new ObjectSchema({
 		schema: {
 			defaultMode: {
 				merge: "replace",
-				validate(value) {
+				validate(value: "classic" | "ribbon") {
 					if (value && !["classic", "ribbon"].includes(value)) {
 						throw new Error(
 							'Key "toolbar": Key "defaultMode" must be one of "classic" or "ribbon".',
@@ -597,7 +606,7 @@ const ojbectSchema = new ObjectSchema({
 			},
 			menus: {
 				merge: "replace",
-				validate(value) {
+				validate(value: "base" | "advanced" | "custom") {
 					const defaultMenus = defaultOptions?.toolbar?.menus;
 					if (value && !Array.isArray(value)) {
 						throw new Error('Key "toolbar": Key "menus" must be a array.');
@@ -607,7 +616,7 @@ const ojbectSchema = new ObjectSchema({
 							'Key "toolbar": Key "menus" should at least contain "base".',
 						);
 					}
-					if (!value.every((item: any) => defaultMenus?.includes(item))) {
+					if (!value.every((item) => defaultMenus?.includes(item))) {
 						throw new Error(
 							`Key "toolbar": Key "menus" the array items of toolbar.menus must contain only one or multiple of ${JSON.stringify(defaultMenus)}.`,
 						);
@@ -617,7 +626,7 @@ const ojbectSchema = new ObjectSchema({
 			},
 			disableMenuItems: {
 				merge: "replace",
-				validate(value) {
+				validate(value: string[]) {
 					if (value && !Array.isArray(value)) {
 						throw new Error(
 							'Key "toolbar": Key "disableMenuItems" must be a array.',
@@ -667,7 +676,7 @@ const ojbectSchema = new ObjectSchema({
 			},
 			defaultOrientation: {
 				merge: "replace",
-				validate(value) {
+				validate(value: "portrait" | "landscape") {
 					if (value && !["portrait", "landscape"].includes(value)) {
 						throw new Error(
 							'Key "page": Key "defaultOrientation" must be one of "portrait" or "landscape".',
@@ -688,7 +697,7 @@ const ojbectSchema = new ObjectSchema({
 				schema: {
 					type: {
 						merge: "replace",
-						validate(value) {
+						validate(value: "compact" | "spacious") {
 							if (value && !["compact", "spacious"].includes(value)) {
 								throw new Error(
 									'Key "watermark": Key "type" must be one of "compact" or "spacious".',
@@ -709,7 +718,7 @@ const ojbectSchema = new ObjectSchema({
 					},
 					fontFamily: {
 						merge: "replace",
-						validate(value) {
+						validate(value: string | null) {
 							if (value !== null && typeof value !== "string") {
 								throw new Error(
 									'Key "watermark": Key "fontFamily" must be a string.',
@@ -771,7 +780,7 @@ const ojbectSchema = new ObjectSchema({
 			},
 			placeholder: {
 				merge: "replace",
-				validate(value) {
+				validate(value: LocaleLabel) {
 					if (!isLocale(value)) {
 						throw new Error(
 							`Key "document": Key "title": Key "label" must be string, or a object with "en_US" and "zh_CN" properties.`,
@@ -812,9 +821,11 @@ const ojbectSchema = new ObjectSchema({
 			},
 			autofocus: {
 				merge: "replace",
-				validate(value) {
+				validate(value: "start" | "end" | "all" | number | boolean | null) {
 					if (
-						!["start", "end", "all", true, false, null].includes(value) &&
+						!["start", "end", "all", true, false, null].includes(
+							value as unknown as string,
+						) ||
 						!isNumber(value)
 					) {
 						throw new Error(
@@ -875,7 +886,7 @@ const ojbectSchema = new ObjectSchema({
 			},
 			maxlength: {
 				merge: "replace",
-				validate(value) {
+				validate(value: number) {
 					if (!isNumber(value) || !Number.isInteger(value) || value <= 0) {
 						throw new Error(
 							'Key "assistant": Key "maxlength" must be a number.',
@@ -886,11 +897,11 @@ const ojbectSchema = new ObjectSchema({
 			},
 			commands: {
 				merge: "replace",
-				validate(value) {
+				validate(value: { label: LocaleLabel; value: LocaleLabel }[]) {
 					if (value && !Array.isArray(value)) {
 						throw new Error('Key "assistant": Key "commands" must be a array.');
 					}
-					value.forEach((item: any, index: number) => {
+					value.forEach((item, index: number) => {
 						if (!item.label || !item.value) {
 							throw new Error(
 								'Key "assistant": Key "commands" must be a array of objects with "label" and "value" properties.',
@@ -919,11 +930,11 @@ const ojbectSchema = new ObjectSchema({
 	},
 	templates: {
 		merge: "replace",
-		validate(value) {
+		validate(value: Template[]) {
 			if (value && !Array.isArray(value)) {
 				throw new Error('Key "templates": Key "menus" must be a array.');
 			}
-			value.forEach((item: any, index: number) => {
+			value.forEach((item, index: number) => {
 				if (!item.title || item.title === "") {
 					throw new Error(
 						`Key "templates[${index}]": Key "title" cannot be empty.`,
@@ -982,7 +993,7 @@ const ojbectSchema = new ObjectSchema({
 	},
 	onSave: {
 		merge: "replace",
-		validate(value) {
+		validate(value: AsyncFunction) {
 			if (!isAsyncFunction(value)) {
 				throw new Error('Key "onSave" must be a async function.');
 			}
@@ -991,7 +1002,7 @@ const ojbectSchema = new ObjectSchema({
 	},
 	onFileUpload: {
 		merge: "replace",
-		validate(value) {
+		validate(value: AsyncFunction) {
 			if (!isAsyncFunction(value)) {
 				throw new Error('Key "onFileUpload" must be a async function.');
 			}
@@ -1000,11 +1011,8 @@ const ojbectSchema = new ObjectSchema({
 	},
 	onFileDelete: {
 		merge: "replace",
-		validate(value) {
-			if (
-				typeof value !== "function" &&
-				value.constructor.name !== "AsyncFunction"
-			) {
+		validate(value: AsyncFunction) {
+			if (!isAsyncFunction(value)) {
 				throw new Error('Key "onFileDelete" must be a function.');
 			}
 		},
@@ -1012,7 +1020,7 @@ const ojbectSchema = new ObjectSchema({
 	},
 	onAssistant: {
 		merge: "replace",
-		validate(value) {
+		validate(value: AsyncFunction) {
 			if (!isAsyncFunction(value)) {
 				throw new Error('Key "onAssistant" must be a async function.');
 			}
@@ -1021,7 +1029,7 @@ const ojbectSchema = new ObjectSchema({
 	},
 	onCustomImportWordMethod: {
 		merge: "replace",
-		validate(value) {
+		validate(value: AsyncFunction) {
 			if (!isAsyncFunction(value)) {
 				throw new Error(
 					'Key "onCustomImportWordMethod" must be a async function.',

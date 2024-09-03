@@ -45,11 +45,22 @@ export interface PageOption {
 		laserPointer?: boolean;
 	};
 }
+
+export type ToolbarMenu =
+	| "base"
+	| "insert"
+	| "table"
+	| "tools"
+	| "page"
+	| "export"
+	| "advanced"
+	| "custom";
+
 export interface ToolbarOptions {
 	defaultMode: "classic" | "ribbon";
 	enableSourceEditor: boolean;
-	menus: string[];
-	disableMenuItems: unknown[];
+	menus: ToolbarMenu[];
+	disableMenuItems: string[];
 	importWord: {
 		enabled: boolean;
 		options: unknown;
@@ -67,7 +78,7 @@ export interface DocumentOptions {
 	enableBlockMenu: boolean;
 	enableComment: boolean;
 	readOnly: boolean;
-	autofocus: boolean;
+	autofocus: "start" | "end" | "all" | number | boolean | null;
 	characterLimit: number;
 	typographyRules: Record<string, unknown>;
 	editorProps: Record<string, unknown>;
@@ -98,7 +109,7 @@ export interface LineHeight {
 	default?: boolean;
 }
 
-export interface Symbol {
+export interface GraphicSymbol {
 	label: LocaleLabel;
 	items: string;
 }
@@ -106,6 +117,11 @@ export interface Symbol {
 export interface Emoji {
 	label: LocaleLabel;
 	items: string;
+}
+
+export interface Template {
+	title: string;
+	content: string;
 }
 
 //定义一个 异步方法
@@ -119,14 +135,14 @@ export interface UmoEditorOptions {
 		fonts: Font[];
 		colors: string[];
 		lineHeights: LineHeight[];
-		symbols: Symbol[];
+		symbols: GraphicSymbol[];
 		emojis: Emoji[];
 	};
 	toolbar?: ToolbarOptions;
 	page: PageOption;
 	document?: DocumentOptions;
 	assistant?: Record<string, unknown>;
-	templates?: unknown[];
+	templates?: Template[];
 	cdnUrl?: string;
 	shareUrl?: string;
 	diagrams?: Record<string, unknown>;
