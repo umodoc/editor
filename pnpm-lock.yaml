@@ -12,97 +12,97 @@ dependencies:
     specifier: 1.5.3
     version: 1.5.3
   '@tiptap/core':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/pm@2.6.6)
   '@tiptap/extension-bold':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)
   '@tiptap/extension-bubble-menu':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)(@tiptap/pm@2.6.6)
   '@tiptap/extension-bullet-list':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)
   '@tiptap/extension-character-count':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)(@tiptap/pm@2.6.6)
   '@tiptap/extension-color':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)(@tiptap/extension-text-style@2.6.6)
   '@tiptap/extension-document':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)
   '@tiptap/extension-dropcursor':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)(@tiptap/pm@2.6.6)
   '@tiptap/extension-focus':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)(@tiptap/pm@2.6.6)
   '@tiptap/extension-font-family':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)(@tiptap/extension-text-style@2.6.6)
   '@tiptap/extension-highlight':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)
   '@tiptap/extension-horizontal-rule':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)(@tiptap/pm@2.6.6)
   '@tiptap/extension-image':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)
   '@tiptap/extension-link':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)(@tiptap/pm@2.6.6)
   '@tiptap/extension-ordered-list':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)
   '@tiptap/extension-placeholder':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)(@tiptap/pm@2.6.6)
   '@tiptap/extension-subscript':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)
   '@tiptap/extension-superscript':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)
   '@tiptap/extension-table':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)(@tiptap/pm@2.6.6)
   '@tiptap/extension-table-cell':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)
   '@tiptap/extension-table-header':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)
   '@tiptap/extension-table-row':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)
   '@tiptap/extension-task-item':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)(@tiptap/pm@2.6.6)
   '@tiptap/extension-task-list':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)
   '@tiptap/extension-text-align':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)
   '@tiptap/extension-text-style':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)
   '@tiptap/extension-typography':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)
   '@tiptap/extension-underline':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)
   '@tiptap/pm':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6
   '@tiptap/starter-kit':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6
   '@tiptap/vue-3':
-    specifier: ^2.5.8
+    specifier: ^2.6.6
     version: 2.6.6(@tiptap/core@2.6.6)(@tiptap/pm@2.6.6)(vue@3.4.38)
   '@umoteam/editor-external':
     specifier: 4.2.0
