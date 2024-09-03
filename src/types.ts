@@ -70,6 +70,12 @@ export interface ToolbarOptions {
 		useCustomMethod: boolean;
 	};
 }
+
+export interface AutoSaveOptions {
+	enabled: boolean;
+	interval: number;
+}
+
 export interface DocumentOptions {
 	id?: string;
 	title: string;
@@ -86,10 +92,7 @@ export interface DocumentOptions {
 	typographyRules?: Record<string, unknown>;
 	editorProps?: Record<string, unknown>;
 	parseOptions?: Record<string, unknown>;
-	autoSave?: {
-		enabled: boolean;
-		interval: number;
-	};
+	autoSave?: AutoSaveOptions;
 }
 
 export type LocaleLabel = string | { en_US: string; zh_CN: string };
@@ -131,11 +134,12 @@ export interface Template {
 export interface AssistantOptions {
 	maxlength: number;
 	commands: CommandItem[];
+	enabled: boolean;
 }
 
 export interface CommandItem {
-	label: string;
-	value: string;
+	label: LocaleLabel;
+	value: LocaleLabel;
 	autoSend?: boolean;
 }
 
@@ -180,7 +184,7 @@ export interface UmoEditorOptions {
 	cdnUrl?: string;
 	shareUrl?: string;
 	diagrams?: Record<string, unknown>;
-	file?: Record<string, unknown>;
+	file?: { allowedMimeTypes: string[]; maxSize: number };
 	user?: Record<string, unknown>;
 	extensions?: Extension[];
 	translations?: Record<string, unknown>;

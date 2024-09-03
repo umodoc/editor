@@ -69,7 +69,12 @@ import { useI18n } from 'vue-i18n'
 
 import { getSelectionNode, getSelectionText } from '@/extensions/selection'
 import { propsOptions } from '@/options'
-import type { DocumentOptions, SupportedLocale, WatermarkOption } from '@/types'
+import type {
+  AutoSaveOptions,
+  DocumentOptions,
+  SupportedLocale,
+  WatermarkOption,
+} from '@/types'
 
 const i18n = useI18n()
 const { t } = i18n
@@ -323,6 +328,16 @@ const localeConfig = $ref({
   'en-US': enConfig,
 })
 
+// Page Header/Footer Visibility
+const { hidePageHeader, hidePageFooter } = useStore()
+const slots = useSlots()
+if (slots.page_header) {
+  hidePageHeader.value = false
+}
+if (slots.page_footer) {
+  hidePageFooter.value = false
+}
+
 // Theme Setup
 const setTheme = (theme: 'light' | 'dark' | 'auto') => {
   if (!isString(theme) || !['light', 'dark', 'auto'].includes(theme)) {
@@ -341,18 +356,8 @@ const setTheme = (theme: 'light' | 'dark' | 'auto') => {
   })
 }
 
-// Page Header/Footer Visibility
-const { hidePageHeader, hidePageFooter } = useStore()
-const slots = useSlots()
-if (slots.page_header) {
-  hidePageHeader.value = false
-}
-if (slots.page_footer) {
-  hidePageFooter.value = false
-}
-
 // Toolbar and Page Setup Methods
-const setToolbar = (params: { mode: string; show: boolean }) => {
+const setToolbar = (params: { mode: 'classic' | 'ribbon'; show: boolean }) => {
   if (!isRecord(params)) {
     throw new Error('params must be an object.')
   }
@@ -365,7 +370,7 @@ const setToolbar = (params: { mode: string; show: boolean }) => {
     }
     $toolbar.value.mode = params.mode
   }
-  if (params.show !== undefined) {
+  if (isDefined(params.show)) {
     if (!isBoolean(params.show)) {
       throw new Error('"params.show" must be a boolean.')
     }
@@ -422,7 +427,7 @@ const setWatermark = (params: Partial<WatermarkOption>) => {
   if (!page.value.watermark) {
     page.value.watermark = {} as WatermarkOption
   }
-  if (params.alpha !== undefined) {
+  if (isDefined(params.alpha)) {
     if (!isNumber(params.alpha)) {
       throw new Error('"params.alpha" must be a number.')
     }
@@ -478,17 +483,7 @@ const setWatermark = (params: Partial<WatermarkOption>) => {
   }
 }
 
-const setDocument = (params: {
-  title: string
-  bubbleMenu: boolean
-  blockMenu: boolean
-  markdown: boolean
-  spellcheck: boolean
-  autoSave: {
-    enabled: boolean
-    interval: number
-  }
-}) => {
+const setDocument = (params: DocumentOptions) => {
   if (!isRecord(params)) {
     throw new Error('params must be an object.')
   }
@@ -503,41 +498,41 @@ const setDocument = (params: {
     $document.value.title = title
     options.value.document.title = title
   }
-  if (params.bubbleMenu !== undefined) {
-    if (!isBoolean(params.bubbleMenu)) {
-      throw new Error('"params.bubbleMenu" must be a boolean.')
+  if (isDefined(params.enableBubbleMenu)) {
+    if (!isBoolean(params.enableBubbleMenu)) {
+      throw new Error('"params.enableBubbleMenu" must be a boolean.')
     }
-    options.value.document.enableBubbleMenu = params.bubbleMenu
+    options.value.document.enableBubbleMenu = params.enableBubbleMenu
   }
-  if (params.blockMenu !== undefined) {
-    if (!isBoolean(params.blockMenu)) {
-      throw new Error('"params.blockMenu" must be a boolean.')
+  if (isDefined(params.enableBlockMenu)) {
+    if (!isBoolean(params.enableBlockMenu)) {
+      throw new Error('"params.enableBlockMenu" must be a boolean.')
     }
-    options.value.document.enableBlockMenu = params.blockMenu
+    options.value.document.enableBlockMenu = params.enableBlockMenu
   }
-  if (params.markdown !== undefined) {
-    if (!isBoolean(params.markdown)) {
-      throw new Error('"params.markdown" must be a boolean.')
+  if (isDefined(params.enableMarkdown)) {
+    if (!isBoolean(params.enableMarkdown)) {
+      throw new Error('"params.enableMarkdown" must be a boolean.')
     }
-    $document.value.enableMarkdown = params.markdown
+    $document.value.enableMarkdown = params.enableMarkdown
   }
-  if (params.spellcheck !== undefined) {
-    if (!isBoolean(params.spellcheck)) {
+  if (isDefined(params.enableSpellcheck)) {
+    if (!isBoolean(params.enableSpellcheck)) {
       throw new Error('"params.spellcheck" must be a boolean.')
     }
-    $document.value.enableSpellcheck = params.spellcheck
+    $document.value.enableSpellcheck = params.enableSpellcheck
   }
   if (params.autoSave) {
-    if (!isBoolean(params.autoSave?.enabled)) {
+    if (!isBoolean(params.autoSave.enabled)) {
       throw new Error('"params.autoSave.enabled" must be a boolean.')
     }
-    if (!options.value.document?.autoSave) {
-      options.value.document.autoSave = {}
-    }
-    options.value.document.autoSave.enabled = params.autoSave.enabled
-    if (!isNumber(params.autoSave?.interval)) {
+    if (!isNumber(params.autoSave.interval)) {
       throw new Error('"params.autoSave.interval" must be a number.')
     }
+
+    options.value.document ??= {} as DocumentOptions
+    options.value.document.autoSave ??= {} as AutoSaveOptions
+    options.value.document.autoSave.enabled = params.autoSave.enabled
     options.value.document.autoSave.interval = params.autoSave.interval
   }
 }
@@ -618,7 +613,7 @@ const getLocale = () => i18n.locale.value
 const getI18n = () => i18n
 
 // Export Methods
-const getImage = async (format = 'blob') => {
+const getImage = async (format: 'blob' | 'jpeg' | 'png' = 'blob') => {
   const { zoomLevel } = page.value
   try {
     page.value.zoomLevel = 100

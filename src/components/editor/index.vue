@@ -33,7 +33,6 @@ import Dropcursor from '@tiptap/extension-dropcursor'
 import Focus from '@tiptap/extension-focus'
 import FontFamily from '@tiptap/extension-font-family'
 import Highlight from '@tiptap/extension-highlight'
-// 插入
 import Link from '@tiptap/extension-link'
 import Subscript from '@tiptap/extension-subscript'
 import Superscript from '@tiptap/extension-superscript'
@@ -45,41 +44,35 @@ import Underline from '@tiptap/extension-underline'
 import StarterKit from '@tiptap/starter-kit'
 import { Editor } from '@tiptap/vue-3'
 import Mathematics from '@tiptap-pro/extension-mathematics'
-import {
-  type TableOfContentData,
-  TableOfContents,
-} from '@tiptap-pro/extension-table-of-contents'
+import { TableOfContents } from '@tiptap-pro/extension-table-of-contents'
 import { getHierarchicalIndexes } from '@tiptap-pro/extension-table-of-contents'
+import { assertIsNotNullish } from '@tool-belt/type-predicates'
 
+import type { TableOfContentItem } from '@/composables/store'
 import Audio from '@/extensions/audio'
 import BulletList from '@/extensions/bullet-list'
 import CodeBlock from '@/extensions/code-block'
 import File from '@/extensions/file'
 import FileHandler from '@/extensions/file-handler'
 import FontSize from '@/extensions/font-size'
-// 基本
 import FormatPainter from '@/extensions/format-painter'
 import hr from '@/extensions/hr'
 import Iframe from '@/extensions/iframe'
 import Image from '@/extensions/image'
 import Indent from '@/extensions/indent'
 import LineHeight from '@/extensions/line-height'
-// 表格
 import Table from '@/extensions/list/table'
 import TaskList from '@/extensions/list/tasklist'
 import Margin from '@/extensions/margin'
 import NodeAlign from '@/extensions/node-align'
 import OrderedList from '@/extensions/ordered-list'
-// 分页
 import Page from '@/extensions/page'
 import { pagePlugin } from '@/extensions/page/page-plugin'
-// 其他
 import Selection from '@/extensions/selection'
 import TableCell from '@/extensions/table-cell'
 import TableHeader from '@/extensions/table-header'
 import TextAlign from '@/extensions/text-align'
 import TextBox from '@/extensions/text-box'
-// 页面
 import Toc from '@/extensions/toc'
 import Video from '@/extensions/video'
 import shortId from '@/utils/short-id'
@@ -90,7 +83,6 @@ const {
   editor,
   page,
   painter,
-  blockMenu,
   tableOfContents,
   setEditor,
   editorDestroyed,
@@ -199,11 +191,16 @@ const editorInstance = new Editor({
     Selection,
     TableOfContents.configure({
       getIndex: getHierarchicalIndexes,
-      onUpdate: (content: TableOfContentData) => {
-        tableOfContents.value = content
+      onUpdate: (content) => {
+        tableOfContents.value = content as TableOfContentItem[]
       },
-      scrollParent: () =>
-        document.querySelector(`${container} .umo-zoomable-container`),
+      scrollParent: () => {
+        const element: HTMLElement | null = document.querySelector(
+          `${container} .umo-zoomable-container`,
+        )
+        assertIsNotNullish(element)
+        return element
+      },
       getId: () => shortId(6),
     }),
     Typography.configure(options.value.document?.typographyRules),
@@ -257,12 +254,14 @@ onMounted(() => {
   }
 })
 window.addEventListener('load', () => {
-  editorInstance.registerPlugin(
-    pagePlugin(
-      editor.value,
-      options.value.page.nodesComputedOption?.nodesComputed ?? {},
-    ),
-  )
+  if (editor.value) {
+    editorInstance.registerPlugin(
+      pagePlugin(
+        editor.value,
+        options.value.page.nodesComputedOption?.nodesComputed ?? {},
+      ),
+    )
+  }
   setTimeout(() => {
     const tr = editorInstance.state.tr.setMeta('initSplit', true)
     editorInstance.view.dispatch(tr)

@@ -19,20 +19,13 @@
         class="umo-toc-item"
         :class="{
           active: item.isActive,
-          ['level-' + (item.level ?? item.originalLevel)]: true,
+          ['level-' + item.level]: true,
         }"
         :data-heading="'H' + (item.level ?? item.originalLevel)"
-        @click="
-          headingClick(
-            item as unknown as TableOfContentDataItem & { title: string },
-          )
-        "
+        @click="headingClick(item as unknown as TableOfContentItem)"
       >
         <div class="umo-toc-text">
-          {{
-            (item as TableOfContentDataItem & { title: string }).title ??
-            item.dom.textContent
-          }}
+          {{ item.title ?? item.textContent }}
         </div>
       </div>
     </div>
@@ -41,17 +34,16 @@
 
 <script setup lang="ts">
 import { TextSelection } from '@tiptap/pm/state'
-import type { TableOfContentDataItem } from '@tiptap-pro/extension-table-of-contents'
 import { useI18n } from 'vue-i18n'
+
+import type { TableOfContentItem } from '@/composables/store'
 
 const { t } = useI18n()
 const { container, editor, tableOfContents } = useStore()
 
-const headingClick = (
-  heading: TableOfContentDataItem & {
-    title: string
-  },
-) => {
+defineEmits(['close'])
+
+const headingClick = (heading: TableOfContentItem) => {
   if (!editor.value) {
     return
   }

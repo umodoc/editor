@@ -8,7 +8,7 @@ import { defaultOptions, ojbectSchema } from "@/options";
 import type { PageOption, UmoEditorOptions } from "@/types";
 import shortId from "@/utils/short-id";
 
-export type TableOfContentData = Array<TableOfContentDataItem>;
+export type TableOfContentItem = TableOfContentDataItem & { title: string };
 
 export const useStore = createGlobalState(() => {
 	const toolbarKey = ref<string>(shortId());
@@ -28,7 +28,7 @@ export const useStore = createGlobalState(() => {
 	const blockMenu = ref(false);
 	const assistantBox = ref(false);
 	const commentBox = ref(false);
-	const tableOfContents = ref<TableOfContentData[]>([]);
+	const tableOfContents = ref<TableOfContentItem[]>([]);
 	const imagePreview = ref(false);
 	const searchReplace = ref(false);
 	const savedAt = ref<number | null>(null);
