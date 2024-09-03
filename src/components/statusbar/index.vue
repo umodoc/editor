@@ -25,7 +25,7 @@
           :class="{ active: $document.spellcheck }"
           variant="text"
           size="small"
-          @click="$document?.enableSpellcheck = !$document?.enableSpellcheck"
+          @click="toggleSpellcheck"
         >
           <icon name="spellcheck" color="red" />
         </t-button>
@@ -434,6 +434,12 @@ const changeLang = ({ value }) => {
       setTimeout(() => setLocale(value), 300)
     },
   })
+}
+
+const toggleSpellcheck = () => {
+  if ($document.value) {
+    $document.value.enableSpellcheck = !$document.value.enableSpellcheck
+  }
 }
 </script>
 

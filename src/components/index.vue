@@ -489,32 +489,28 @@ const setDocument = (params: {
   if (!isRecord(params)) {
     throw new Error('params must be an object.')
   }
-  options.value.document ??= {} as DocumentOptions
+  if (!options.value.document) {
+    options.value.document = {} as DocumentOptions
+  }
   if (params.title) {
     if (!isString(params.title)) {
       throw new Error('"params.title" must be a string.')
     }
     const title = params.title !== '' ? params.title : t('document.untitled')
     $document.value.title = title
-    if (options.value.document) {
-      options.value.document.title = title
-    }
+    options.value.document.title = title
   }
   if (params.bubbleMenu !== undefined) {
     if (!isBoolean(params.bubbleMenu)) {
       throw new Error('"params.bubbleMenu" must be a boolean.')
     }
-    if (options.value.document) {
-      options.value.document.enableBubbleMenu = params.bubbleMenu
-    }
+    options.value.document.enableBubbleMenu = params.bubbleMenu
   }
   if (params.blockMenu !== undefined) {
     if (!isBoolean(params.blockMenu)) {
       throw new Error('"params.blockMenu" must be a boolean.')
     }
-    if (options.value.document) {
-      options.value.document.enableBlockMenu = params.blockMenu
-    }
+    options.value.document.enableBlockMenu = params.blockMenu
   }
   if (params.markdown !== undefined) {
     if (!isBoolean(params.markdown)) {
@@ -532,8 +528,8 @@ const setDocument = (params: {
     if (!isBoolean(params.autoSave?.enabled)) {
       throw new Error('"params.autoSave.enabled" must be a boolean.')
     }
-    if (!options.value.document) {
-      options.value.document = {} as DocumentOptions
+    if (!options.value.document?.autoSave) {
+      options.value.document.autoSave = {}
     }
     options.value.document.autoSave.enabled = params.autoSave.enabled
     if (!isNumber(params.autoSave?.interval)) {
