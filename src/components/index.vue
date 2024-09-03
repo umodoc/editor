@@ -304,7 +304,7 @@ watch(
 // i18n Setup
 const { appContext } = getCurrentInstance() ?? {}
 if (appContext) {
-  appContext.config.globalProperties.t = i18n.global.t as (
+  appContext.config.globalProperties.t = i18n.global.t as unknown as (
     key: string,
     ...args: unknown[]
   ) => string

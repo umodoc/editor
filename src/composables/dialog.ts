@@ -1,26 +1,37 @@
-import { DialogPlugin, MessagePlugin } from 'tdesign-vue-next'
-const { container } = useStore()
+import {
+	type DialogOptions,
+	DialogPlugin,
+	type MessageOptions,
+	MessagePlugin,
+} from "tdesign-vue-next";
+const { container } = useStore();
 
-export const useAlert = (parmas: any) => {
-  return DialogPlugin.alert({
-    attach: container,
-    placement: 'center',
-    ...parmas,
-  })
-}
-export const useConfirm = (parmas: any) => {
-  return DialogPlugin.confirm({
-    attach: container,
-    placement: 'center',
-    preventScrollThrough: false,
-    cancelBtn: t('dialog.cancel'),
-    ...parmas,
-  })
-}
-export const useMessage = (type, parmas) => {
-  const options = typeof parmas === 'string' ? { content: parmas } : parmas
-  return MessagePlugin[type]({
-    attach: container,
-    ...options,
-  })
-}
+export const useAlert = (
+	parmas: Omit<DialogOptions, "attach" | "placement" | "cancelBtn">,
+) => {
+	return DialogPlugin.alert({
+		attach: container,
+		placement: "center",
+		...parmas,
+	});
+};
+export const useConfirm = (parmas: DialogOptions) => {
+	return DialogPlugin.confirm({
+		attach: container,
+		placement: "center",
+		preventScrollThrough: false,
+		cancelBtn: t("dialog.cancel"),
+		...parmas,
+	});
+};
+export const useMessage = (type: string, parmas: string | MessageOptions) => {
+	const options = typeof parmas === "string" ? { content: parmas } : parmas;
+	return (
+		MessagePlugin[type as keyof typeof MessagePlugin] as
+			| CallableFunction
+			| undefined
+	)?.({
+		attach: container,
+		...options,
+	});
+};

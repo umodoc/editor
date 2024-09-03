@@ -57,7 +57,7 @@ export interface ToolbarOptions {
 	};
 }
 export interface DocumentOptions {
-	id: string;
+	id?: string;
 	title: string;
 	content: string;
 	placeholder: Record<string, unknown>;
@@ -78,13 +78,50 @@ export interface DocumentOptions {
 	};
 }
 
+export type LocaleLabel = string | { en_US: string; zh_CN: string };
+
+export interface PageSize {
+	label: LocaleLabel;
+	width: number;
+	height: number;
+	default?: boolean;
+}
+
+export interface Font {
+	label: LocaleLabel;
+	value: string | null;
+}
+
+export interface LineHeight {
+	label: LocaleLabel;
+	value: number;
+	default?: boolean;
+}
+
+export interface Symbol {
+	label: LocaleLabel;
+	items: string;
+}
+
+export interface Emoji {
+	label: LocaleLabel;
+	items: string;
+}
+
 //定义一个 异步方法
 export interface UmoEditorOptions {
 	editorKey: string;
 	locale: SupportedLocale;
 	theme: "light" | "dark";
 	height: string;
-	dicts?: { pageSizes: { default: boolean; value: string; label: string }[] };
+	dicts?: {
+		pageSizes: PageSize[];
+		fonts: Font[];
+		colors: string[];
+		lineHeights: LineHeight[];
+		symbols: Symbol[];
+		emojis: Emoji[];
+	};
 	toolbar?: ToolbarOptions;
 	page: PageOption;
 	document?: DocumentOptions;
