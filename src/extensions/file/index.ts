@@ -1,4 +1,5 @@
 import { Node, mergeAttributes } from '@tiptap/core'
+import { ReplaceStep } from 'prosemirror-transform'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import NodeView from './node-view.vue'
 
@@ -181,5 +182,28 @@ export default Node.create({
           return bool
         },
     }
+  },
+  onTransaction({ transaction }) {
+    transaction.steps.forEach((step:any) => {
+      if (step instanceof ReplaceStep && step.slice.size === 0) {
+        // 使用事务前的文档状态来获取被删除的页面节点
+        const deletedPages = transaction.before.content.cut(step.from, step.to)
+        // @ts-ignore
+        deletedPages.content.forEach((page:Node) => {
+          // 遍历删除的页面节点
+          // @ts-ignore
+          page.content.forEach((node:Node) => {
+            // 如果是文件节点，调用删除方法删除文件
+            // @ts-ignore
+            if (['image', 'video', 'audio', 'file'].includes(node.attrs.type)) {
+              // @ts-ignore
+              const { id, src, url } = node.attrs
+              // @ts-ignore
+              options.value.onFileDelete(id, src || url)
+            }
+          })
+        })
+      }
+    })
   },
 })
