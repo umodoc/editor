@@ -1,8 +1,15 @@
 <template>
-  <div>
-    <bubble-menu v-show="!blockMenu && !painter.enabled && !editor.isEmpty" class="umo-editor-bubble-menu"
-      :class="{ assistant: assistantBox }" :editor="editor" :tippy-options="tippyOpitons">
-      <menus-bubble-menus v-if="options.document.enableBubbleMenu && !assistantBox && !commentBox">
+  <div class="umo-editor-bubble-menu-container">
+    <bubble-menu
+      v-show="!blockMenu && !painter.enabled && !editor.isEmpty"
+      class="umo-editor-bubble-menu"
+      :class="{ assistant: assistantBox }"
+      :editor="editor"
+      :tippy-options="tippyOpitons"
+    >
+      <menus-bubble-menus
+        v-if="options.document.enableBubbleMenu && !assistantBox && !commentBox"
+      >
         <template #bubble_menu="props">
           <slot name="bubble_menu" v-bind="props" />
         </template>
