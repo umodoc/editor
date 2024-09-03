@@ -520,6 +520,7 @@ export const findParentDomRefOfType = (nodeType, domAtPos) => (selection) => {
     domAtPos,
   )(selection)
 }
+
 // @ts-ignore
 export const equalNodeType = (nodeType, node) => {
   return (
@@ -527,6 +528,7 @@ export const equalNodeType = (nodeType, node) => {
     node.type === nodeType
   )
 }
+
 // @ts-ignore
 export const findParentDomRef = (predicate, domAtPos) => (selection) => {
   const parent = findParentNode(predicate)(selection)
@@ -534,6 +536,7 @@ export const findParentDomRef = (predicate, domAtPos) => (selection) => {
     return findDomRefAtPos(parent.pos, domAtPos)
   }
 }
+
 // @ts-ignore
 export const findDomRefAtPos = (position, domAtPos) => {
   const dom = domAtPos(position)
@@ -551,12 +554,10 @@ export const findDomRefAtPos = (position, domAtPos) => {
 }
 
 export const findParentNode =
-  // @ts-ignore
+  (predicate: any) =>
+  ({ $from }: { $from: any }) =>
+    findParentNodeClosestToPos($from, predicate)
 
-    (predicate) =>
-    // @ts-ignore
-    ({ $from }) =>
-      findParentNodeClosestToPos($from, predicate)
 // @ts-ignore
 export const findParentNodeClosestToPos = ($pos, predicate) => {
   for (let i = $pos.depth; i > 0; i--) {
