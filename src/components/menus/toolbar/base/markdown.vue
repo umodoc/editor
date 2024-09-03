@@ -1,10 +1,10 @@
 <template>
   <menus-button
-    v-if="options.document.enableMarkdown"
+    v-if="options.document?.enableMarkdown"
     :text="t('base.markdown.text')"
     ico="markdown"
     :tooltip="
-      options.document.enableMarkdown
+      options.document?.enableMarkdown
         ? t('base.markdown.disable')
         : t('base.markdown.enable')
     "
@@ -16,6 +16,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+
 const { t } = useI18n()
 const { options, editorDestroyed } = useStore()
 const $document = useState('document')

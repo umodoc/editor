@@ -204,7 +204,7 @@
             class="umo-status-bar-button"
             variant="text"
             size="small"
-            :disabled="page.zoomLevel >= 500"
+            :disabled="!!(page.zoomLevel && page.zoomLevel >= 500)"
             @click="zoomIn"
           >
             <icon name="plus" />
@@ -284,9 +284,14 @@
 </template>
 
 <script setup lang="ts">
-import type { SupportedLocale } from '@/types'
-import type { MaybeElementRef, UseFullscreenReturn } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+import type { MaybeElementRef, UseFullscreenReturn } from '@vueuse/core'
+import type { DropdownOption } from 'tdesign-vue-next'
+import { useI18n } from 'vue-i18n'
+
+import type { SupportedLocale } from '@/types'
 
 const i18n = useI18n()
 const { t } = i18n
@@ -349,21 +354,22 @@ onMounted(() => {
   useHotkeys('f5', togglePreview)
 })
 watch(
-  () => page.value.preview.enabled,
-  (val) => {
-    if (val) {
-      fullscreen.enter()
+  () => page.value.preview?.enabled,
+  (value) => {
+    if (value) {
+      void fullscreen.enter()
       autoWidth(false, 10)
     } else {
-      fullscreen.exit()
+      void fullscreen.exit()
       zoomReset()
     }
   },
 )
 watch(
   () => fullscreen.isFullscreen,
-  (val) => {
-    if (!val) {
+  (value) => {
+    if (!value) {
+      page.value.preview ??= {}
       page.value.preview.enabled = false
     }
   },
@@ -372,13 +378,13 @@ watch(
 
 // 页面缩放
 const zoomIn = () => {
-  if (page.value.zoomLevel < 500) {
+  if (page.value?.zoomLevel && page.value.zoomLevel < 500) {
     page.value.zoomLevel += 10
     page.value.autoWidth = false
   }
 }
 const zoomOut = () => {
-  if (page.value.zoomLevel > 20) {
+  if (page.value?.zoomLevel && page.value.zoomLevel > 20) {
     page.value.zoomLevel -= 10
     page.value.autoWidth = false
   }
@@ -392,7 +398,7 @@ useHotkeys('ctrl+=,command+=', zoomIn)
 useHotkeys('ctrl+1,command+1', zoomReset)
 
 // 最佳宽度
-const autoWidth = (auto, padding = 50) => {
+const autoWidth = (auto = true, padding = 50) => {
   if (auto && page.value.autoWidth) {
     zoomReset()
     return
@@ -401,12 +407,11 @@ const autoWidth = (auto, padding = 50) => {
     const editorEl = document.querySelector(
       `${container} .umo-zoomable-container`,
     )
-    const pageEl = editorEl.querySelector('.umo-page-content')
-    const editorWidth = editorEl.clientWidth
-    const pageWidth = pageEl.clientWidth
-    page.value.zoomLevel = Number.parseInt(
-      ((editorWidth - padding * 2) / pageWidth) * 100,
-    )
+    const pageEl = editorEl?.querySelector('.umo-page-content')
+    const editorWidth = editorEl?.clientWidth ?? 0
+    const pageWidth = pageEl?.clientWidth ?? 0
+    page.value.zoomLevel = ((editorWidth - padding * 2) / pageWidth) * 100
+
     page.value.autoWidth = true
   } catch (e) {
     page.value.autoWidth = false
@@ -433,9 +438,10 @@ const langs = [
 const setLocale = inject('setLocale') as (value: SupportedLocale) => void
 
 const locale = computed(
-  () => langs.find((item) => item.value === i18n.locale.value).content,
+  () => langs.find((item) => item.value === i18n.locale.value)?.content,
 )
-const changeLang = ({ value }) => {
+const changeLang = (dropdownItem: DropdownOption) => {
+  const value = dropdownItem.value as SupportedLocale
   if (i18n.locale.value === value) {
     return
   }

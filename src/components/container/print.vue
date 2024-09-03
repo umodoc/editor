@@ -3,6 +3,9 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const { container, options, editor, page, printing, exportPDF } = useStore()
 
 const iframeRef = $ref<HTMLIFrameElement | null>(null)

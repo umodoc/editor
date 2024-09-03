@@ -15,6 +15,9 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import 'prism-code-editor/prism/languages/bash'
 import 'prism-code-editor/prism/languages/css'
 import 'prism-code-editor/prism/languages/css-extras'

@@ -33,7 +33,7 @@ export interface PageOption {
 		width: number;
 		height: number;
 	};
-	margin?: unknown;
+	margin?: { right: number; left: number; bottom: number; top: number };
 	orientation?: string;
 	background?: string;
 	header?: boolean;
@@ -42,6 +42,7 @@ export interface PageOption {
 	showToc?: boolean;
 	pagination?: boolean;
 	zoomLevel?: number;
+	bodyHeight?: number;
 	autoWidth?: boolean;
 	preview?: {
 		enabled?: boolean;

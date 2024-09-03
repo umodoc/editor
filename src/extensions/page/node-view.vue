@@ -73,6 +73,9 @@
   </node-view-wrapper>
 </template>
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import { nodeViewProps } from '@tiptap/vue-3'
 
 const { page, exportImage } = useStore()
@@ -80,7 +83,7 @@ const { editor, node } = defineProps(nodeViewProps)
 const containerRef = ref(null)
 
 const pageSize = $computed(() => {
-  const { width, height } = page.value.size
+  const { width, height } = page.value.size || { width: 0, height: 0 }
   return {
     width: page.value.orientation === 'portrait' ? width : height,
     height: page.value.orientation === 'portrait' ? height : width,
@@ -88,7 +91,13 @@ const pageSize = $computed(() => {
 })
 
 // 水印
-const watermarkOptions = $ref({
+const watermarkOptions = $ref<{
+  x: number
+  y?: number
+  width?: number
+  height: number
+  type?: string
+}>({
   x: 0,
   height: 0,
 })

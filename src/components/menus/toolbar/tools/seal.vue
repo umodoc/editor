@@ -29,6 +29,9 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import { removeBackground } from '@imgly/background-removal'
 
 let dialogVisible = $ref(false)

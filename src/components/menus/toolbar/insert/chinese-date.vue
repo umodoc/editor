@@ -10,6 +10,9 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const formDate = (format) => useDateFormat(useNow(), format).value
 const formatDateToChinese = (dateStr) => {
   const replaceDigits = (num) => {

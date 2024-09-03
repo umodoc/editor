@@ -24,6 +24,9 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import SearchReplace from '@sereneinserenade/tiptap-search-and-replace'
 import Bold from '@tiptap/extension-bold'
 import CharacterCount from '@tiptap/extension-character-count'

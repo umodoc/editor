@@ -213,6 +213,9 @@
 // https://github.com/lindell/JsBarcode/wiki/Options
 import JsBarcode from 'jsbarcode'
 import svg64 from 'svg64'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const { content } = defineProps({
   content: {
