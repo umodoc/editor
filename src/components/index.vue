@@ -532,6 +532,9 @@ const setDocument = (params: {
     if (!isBoolean(params.autoSave?.enabled)) {
       throw new Error('"params.autoSave.enabled" must be a boolean.')
     }
+    if (!options.value.document) {
+      options.value.document = {} as DocumentOptions
+    }
     options.value.document.autoSave.enabled = params.autoSave.enabled
     if (!isNumber(params.autoSave?.interval)) {
       throw new Error('"params.autoSave.interval" must be a number.')

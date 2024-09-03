@@ -71,19 +71,19 @@ export interface DocumentOptions {
 	id?: string;
 	title: string;
 	content: string;
-	placeholder: Record<string, unknown>;
-	enableSpellcheck: boolean;
-	enableMarkdown: boolean;
-	enableBubbleMenu: boolean;
-	enableBlockMenu: boolean;
-	enableComment: boolean;
-	readOnly: boolean;
-	autofocus: "start" | "end" | "all" | number | boolean | null;
-	characterLimit: number;
-	typographyRules: Record<string, unknown>;
-	editorProps: Record<string, unknown>;
-	parseOptions: Record<string, unknown>;
-	autoSave: {
+	placeholder?: Record<string, unknown>;
+	enableSpellcheck?: boolean;
+	enableMarkdown?: boolean;
+	enableBubbleMenu?: boolean;
+	enableBlockMenu?: boolean;
+	enableComment?: boolean;
+	readOnly?: boolean;
+	autofocus?: "start" | "end" | "all" | number | boolean | null;
+	characterLimit?: number;
+	typographyRules?: Record<string, unknown>;
+	editorProps?: Record<string, unknown>;
+	parseOptions?: Record<string, unknown>;
+	autoSave?: {
 		enabled: boolean;
 		interval: number;
 	};
@@ -122,6 +122,7 @@ export interface Emoji {
 export interface Template {
 	title: string;
 	content: string;
+	description?: string;
 }
 
 //定义一个 异步方法
