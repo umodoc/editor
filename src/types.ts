@@ -29,7 +29,10 @@ export interface PageOption {
 	defaultBackground?: string;
 	watermark?: WatermarkOption;
 	nodesComputedOption?: NodesComputedOption;
-	size?: unknown;
+	size?: {
+		width: number;
+		height: number;
+	};
 	margin?: unknown;
 	orientation?: string;
 	background?: string;
@@ -125,6 +128,36 @@ export interface Template {
 	description?: string;
 }
 
+export interface AssistantOptions {
+	maxlength: number;
+	commands: CommandItem[];
+}
+
+export interface CommandItem {
+	label: string;
+	value: string;
+	autoSend?: boolean;
+}
+
+export interface AssistantPayload {
+	lang: string;
+	input: string;
+	command: string;
+	output: string;
+}
+
+export interface AssistantContent {
+	html: string;
+	text: string;
+	json: unknown;
+}
+export interface AssistantResult {
+	prompt: string;
+	content: string;
+	error: boolean;
+	command?: string;
+}
+
 //定义一个 异步方法
 export interface UmoEditorOptions {
 	editorKey: string;
@@ -142,7 +175,7 @@ export interface UmoEditorOptions {
 	toolbar?: ToolbarOptions;
 	page: PageOption;
 	document?: DocumentOptions;
-	assistant?: Record<string, unknown>;
+	assistant?: AssistantOptions;
 	templates?: Template[];
 	cdnUrl?: string;
 	shareUrl?: string;

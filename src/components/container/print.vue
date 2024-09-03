@@ -5,14 +5,12 @@
 <script setup lang="ts">
 const { container, options, editor, page, printing, exportPDF } = useStore()
 
-const iframeRef = $ref()
+const iframeRef = $ref<HTMLIFrameElement | null>(null)
 let iframeCode = $ref('')
 const getStylesHtml = () => {
-  let styles = ''
-  document
-    .querySelectorAll('link, style')
-    .forEach((style) => (styles += `${style.outerHTML}\n`))
-  return styles
+  return Array.from(document.querySelectorAll('link, style'))
+    .map((item) => item.outerHTML)
+    .join('')
 }
 
 const getPlyrSprite = () => {
@@ -20,16 +18,18 @@ const getPlyrSprite = () => {
 }
 
 const getContentHtml = () => {
-  let html = ''
-  const pages = document.querySelectorAll(`${container} .umo-page-node-view`)
-  pages.forEach((page) => {
-    html += page.outerHTML
-  })
-  return html
+  return Array.from(
+    document.querySelectorAll(`${container} .umo-page-node-view`),
+  )
+    .map((page) => page.outerHTML)
+    .join('')
 }
 
 const defaultLineHeight = $computed(() => {
-  return options.value.dicts.lineHeights.find((item) => item.default).value
+  return (
+    options.value.dicts?.lineHeights.find((item) => item.default)?.value ??
+    '1.5'
+  )
 })
 
 const getIframeCode = () => {
@@ -38,7 +38,7 @@ const getIframeCode = () => {
     <!DOCTYPE html>
     <html lang="zh-CN" theme-mode="${options.value.theme}">
     <head>
-      <title>${options.value.document.title}</title>
+      <title>${options.value.document?.title}</title>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       ${getStylesHtml()}
@@ -48,7 +48,7 @@ const getIframeCode = () => {
         height: auto;
       }
       @page {
-        size: ${orientation === 'portrait' ? size.width : size.height}cm ${orientation === 'portrait' ? size.height : size.width}cm; 
+        size: ${(orientation === 'portrait' ? size?.width : size?.height) ?? '1'}cm ${(orientation === 'portrait' ? size?.height : size?.width) ?? '1'}cm; 
         margin:0;
         background: ${background};
       }
@@ -68,7 +68,7 @@ const getIframeCode = () => {
 }
 
 const printPage = () => {
-  editor.value.commands.blur()
+  editor.value?.commands.blur()
   iframeCode = getIframeCode()
 
   const dialog = useConfirm({
@@ -79,7 +79,7 @@ const printPage = () => {
     onConfirm() {
       dialog.destroy()
       setTimeout(() => {
-        iframeRef.contentWindow.print()
+        iframeRef?.contentWindow?.print()
       }, 300)
     },
     onClosed() {

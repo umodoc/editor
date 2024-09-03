@@ -13,7 +13,7 @@
     </div>
     <div class="umo-color-picker-group">
       <div
-        v-for="(item, index) in options.dicts.colors"
+        v-for="(item, index) in options.dicts?.colors"
         :key="index"
         class="umo-color-picker-item"
         :style="{ backgroundColor: item }"
@@ -78,6 +78,8 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const props = defineProps({
   defaultColor: {
     type: String,
@@ -95,7 +97,7 @@ const color = $ref(props.defaultColor)
 
 // 更多颜色
 const moreColorPicker = $ref(false)
-const colorChange = (color, ctx) => {
+const colorChange = (color: string, ctx?: { trigger: string }) => {
   if (ctx && ctx.trigger !== 'palette-saturation-brightness') {
     return
   }
@@ -114,13 +116,13 @@ watch(
   () => moreColorPicker,
   (visible) => {
     if (visible) {
-      editor.value.commands.focus(undefined, { scrollIntoView: false })
+      editor.value?.commands.focus(undefined, { scrollIntoView: false })
     }
   },
 )
 
 // 选择颜色
-const selectColor = (color) => {
+const selectColor = (color: string) => {
   colorChange(color)
   emits('change', color)
 }

@@ -12,9 +12,9 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
+defineProps({
   content: {
-    type: Object,
+    type: String,
     required: true,
   },
 })

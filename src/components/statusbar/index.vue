@@ -284,7 +284,10 @@
 </template>
 
 <script setup lang="ts">
-import { i18n } from '@/i18n'
+import { useI18n } from 'vue-i18n'
+
+const i18n = useI18n()
+const { t } = i18n
 
 const { container, options, page, editor } = useStore()
 const $document = useState('document')
@@ -418,7 +421,7 @@ const locale = computed(
   () => langs.find((item) => item.value === i18n.global.locale.value).content,
 )
 const changeLang = ({ value }) => {
-  if (i18n.global.locale.value === value) {
+  if (i18n.locale.value === value) {
     return
   }
   const dialog = useConfirm({

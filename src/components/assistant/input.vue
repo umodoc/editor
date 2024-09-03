@@ -50,7 +50,7 @@
             variant="outline"
             theme="default"
             @click="insertCommand(item)"
-            v-text="l(item.label)"
+            v-text="localize(item.label)"
           ></t-button>
         </div>
       </div>
@@ -124,39 +124,25 @@
 <script setup lang="ts">
 import { isString } from '@tool-belt/type-predicates'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 import { getSelectionText } from '@/extensions/selection'
+import type {
+  AssistantContent,
+  AssistantPayload,
+  AssistantResult,
+  CommandItem,
+} from '@/types'
+import { localize } from '@/utils/localisation'
 
-interface Result {
-  prompt: string
-  content: string
-  error: boolean
-}
-
-interface CommandItem {
-  label: string
-  value: string
-  autoSend?: boolean
-}
-
-interface Payload {
-  lang: string
-  input: string
-  command: string
-  output: string
-}
-
-interface Content {
-  html: string
-  text: string
-  json: unknown
-}
+const i18n = useI18n()
+const { t } = i18n
 
 const { options, editor, assistantBox } = useStore()
 
 const inputRef = ref<HTMLElement | null>(null)
 const command = ref<string>('')
-const result = ref<Result>({
+const result = ref<AssistantResult>({
   prompt: '',
   content: '',
   error: false,
@@ -169,17 +155,17 @@ const send = async () => {
   result.value.prompt = ''
   result.value.content = ''
 
-  const payload: Payload = {
-    lang: i18n.global.locale.value,
-    input: getSelectionText(editor.value),
+  const payload: AssistantPayload = {
+    lang: i18n.locale.value,
+    input: editor.value ? getSelectionText(editor.value) : '',
     command: command.value,
     output: 'rich-text',
   }
 
-  const content: Content = {
-    html: editor.value.getHTML(),
-    text: editor.value.getText(),
-    json: editor.value.getJSON(),
+  const content: AssistantContent = {
+    html: editor.value?.getHTML() ?? '',
+    text: editor.value?.getText() ?? '',
+    json: editor.value?.getJSON() ?? {},
   }
 
   try {
@@ -243,24 +229,36 @@ const insertCommand = ({ value, autoSend }: CommandItem) => {
 
 const exitAssistant = () => {
   assistantBox.value = false
-  editor.value.commands.focus()
+  editor.value?.commands.focus()
 }
 
 const replaceContent = () => {
-  editor.value.chain().insertContent(result.value.content).run()
+  editor.value?.chain().insertContent(result.value.content).run()
   exitAssistant()
 }
 
 const insertContentAtAfter = () => {
-  const { to } = editor.value.state.selection
-  editor.value.chain().insertContentAt(to, result.value.content).focus().run()
+  const { to } = editor.value?.state.selection ?? {}
+  if (to) {
+    editor.value
+      ?.chain()
+      .insertContentAt(to, result.value.content)
+      .focus()
+      .run()
+  }
   exitAssistant()
 }
 
 const insertContentAtBelow = () => {
-  editor.value.commands.selectParentNode()
-  const { to } = editor.value.state.selection
-  editor.value.chain().insertContentAt(to, result.value.content).focus().run()
+  editor.value?.commands.selectParentNode()
+  const { to } = editor.value?.state.selection ?? {}
+  if (to) {
+    editor.value
+      ?.chain()
+      .insertContentAt(to, result.value.content)
+      .focus()
+      .run()
+  }
   exitAssistant()
 }
 
@@ -273,7 +271,9 @@ const copyResult = () => {
 }
 
 const rewrite = () => {
-  command.value = result.value.command
+  if (result.value.command) {
+    command.value = result.value.command
+  }
   void send()
 }
 

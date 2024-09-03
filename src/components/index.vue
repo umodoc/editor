@@ -2,7 +2,7 @@
   <t-config-provider
     :global-config="{
       ...(localeConfig[
-        i18n.global.locale.value
+        i18n.locale.value as SupportedLocale
       ] as unknown as GlobalConfigProvider),
       classPrefix: 'umo',
     }"
@@ -65,11 +65,14 @@ import domToImageMore from 'dom-to-image-more'
 import type { GlobalConfigProvider } from 'tdesign-vue-next'
 import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
+import { useI18n } from 'vue-i18n'
 
 import { getSelectionNode, getSelectionText } from '@/extensions/selection'
-import { i18n } from '@/i18n'
 import { propsOptions } from '@/options'
 import type { DocumentOptions, SupportedLocale, WatermarkOption } from '@/types'
+
+const i18n = useI18n()
+const { t } = i18n
 
 const { toBlob, toJpeg, toPng } = domToImageMore
 
@@ -295,7 +298,7 @@ watch(
 )
 
 watch(
-  () => i18n.global.locale.value,
+  () => i18n.locale.value,
   (locale, oldLocale) => {
     emits('changed:locale', { locale, oldLocale })
   },
@@ -304,14 +307,14 @@ watch(
 // i18n Setup
 const { appContext } = getCurrentInstance() ?? {}
 if (appContext) {
-  appContext.config.globalProperties.t = i18n.global.t as unknown as (
+  appContext.config.globalProperties.t = i18n.t as unknown as (
     key: string,
     ...args: unknown[]
   ) => string
   appContext.config.globalProperties.l = l
 }
 const locale = useState('locale')
-i18n.global.locale.value =
+i18n.locale.value =
   locale.value !== options.value.locale ? locale.value : options.value.locale
 
 // Global Locale Config
@@ -603,7 +606,7 @@ const setLocale = (params: SupportedLocale) => {
   if (!['zh-CN', 'en-US'].includes(params)) {
     throw new Error('"params" must be one of "zh-CN" or "en-US".')
   }
-  if (i18n.global.locale.value === params) {
+  if (i18n.locale.value === params) {
     return
   }
   const locale = useState('locale')
@@ -611,7 +614,7 @@ const setLocale = (params: SupportedLocale) => {
   location.reload()
 }
 
-const getLocale = () => i18n.global.locale.value
+const getLocale = () => i18n.locale.value
 const getI18n = () => i18n
 
 // Export Methods

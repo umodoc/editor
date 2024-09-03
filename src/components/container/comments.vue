@@ -35,6 +35,8 @@
 </template>
 
 <script setup lang="ts">
+import type { Editor } from '@tiptap/vue-3'
+
 const { page, editor } = useStore()
 
 let visible = $ref(true)
@@ -51,10 +53,10 @@ const updatePostion = () => {
 }
 watch(
   editor,
-  (val) => {
-    if (val) {
-      editor.value.on('selectionUpdate', updatePostion)
-      editor.value.on('focus', updatePostion)
+  (value: Editor | undefined) => {
+    if (value) {
+      editor.value?.on('selectionUpdate', updatePostion)
+      editor.value?.on('focus', updatePostion)
     } else {
       visible = false
     }

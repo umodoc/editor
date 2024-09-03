@@ -1,11 +1,14 @@
 import type { Mark } from "@tiptap/pm/model";
 import type { Editor } from "@tiptap/vue-3";
+import type { TableOfContentDataItem } from "@tiptap-pro/extension-table-of-contents";
 import { isRecord } from "@tool-belt/type-predicates";
 
 import { changeComputedHtml } from "@/extensions/page/core";
 import { defaultOptions, ojbectSchema } from "@/options";
 import type { PageOption, UmoEditorOptions } from "@/types";
 import shortId from "@/utils/short-id";
+
+export type TableOfContentData = Array<TableOfContentDataItem>;
 
 export const useStore = createGlobalState(() => {
 	const toolbarKey = ref<string>(shortId());
@@ -25,7 +28,7 @@ export const useStore = createGlobalState(() => {
 	const blockMenu = ref(false);
 	const assistantBox = ref(false);
 	const commentBox = ref(false);
-	const tableOfContents = ref([]);
+	const tableOfContents = ref<TableOfContentData[]>([]);
 	const imagePreview = ref(false);
 	const searchReplace = ref(false);
 	const savedAt = ref<number | null>(null);

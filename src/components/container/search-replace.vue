@@ -87,12 +87,17 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+
 const { editor, searchReplace } = useStore()
 
 let searchText = $ref('')
 let replaceText = $ref('')
 const caseSensitive = $ref(false)
-useHotkeys('ctrl+f, command+f', () => (searchReplace.value = true))
+useHotkeys('ctrl+f, command+f', () => {
+  searchReplace.value = true
+})
 
 const resultLength = computed(
   () => editor.value?.storage.searchAndReplace?.results.length || 0,
@@ -101,7 +106,7 @@ const resultLength = computed(
 const clear = () => {
   searchText = ''
   replaceText = ''
-  editor.value.commands.resetIndex()
+  editor.value?.commands.resetIndex()
 }
 
 const search = (clearIndex = false) => {
@@ -129,7 +134,7 @@ const goToSelection = () => {
   const { node } = editor.value.view.domAtPos(
     editor.value.state.selection.anchor,
   )
-  node.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  ;(node as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
 
 watch(

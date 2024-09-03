@@ -1,8 +1,8 @@
 <template>
   <div class="umo-comment-container">
     <t-comment
-      :avatar="user.avatarUrl || options.user.avatarUrl || defaultAvatar"
-      :author="user.nickName || options.user.nickName || '未知用户'"
+      :avatar="user.avatarUrl || options.user?.avatarUrl"
+      :author="user.nickName || options.user?.nickName || '未知用户'"
     >
       <template #content>
         <div class="umo-comment-form">
@@ -53,7 +53,7 @@ const submitComment = () => {
 }
 const closeComment = () => {
   commentBox.value = false
-  editor.value.commands.focus()
+  editor.value?.commands.focus()
 }
 </script>
 

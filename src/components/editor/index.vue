@@ -9,14 +9,14 @@
     :editor="editor"
     :style="{ lineHeight: defaultLineHeight }"
     :spellcheck="
-      options.document.enableSpellcheck && $document.enableSpellcheck
+      options.document?.enableSpellcheck && $document.enableSpellcheck
     "
   />
-  <menus-bubble v-if="editor && !page.preview.enabled && !editorDestroyed" />
+  <menus-bubble v-if="editor && !page.preview?.enabled && !editorDestroyed" />
   <menus-context-block
     v-if="
-      options.document.enableBlockMenu &&
-      !page.preview.enabled &&
+      options.document?.enableBlockMenu &&
+      !page.preview?.enabled &&
       editor &&
       !editorDestroyed
     "
@@ -45,7 +45,10 @@ import Underline from '@tiptap/extension-underline'
 import StarterKit from '@tiptap/starter-kit'
 import { Editor } from '@tiptap/vue-3'
 import Mathematics from '@tiptap-pro/extension-mathematics'
-import { TableOfContents } from '@tiptap-pro/extension-table-of-contents'
+import {
+  type TableOfContentData,
+  TableOfContents,
+} from '@tiptap-pro/extension-table-of-contents'
 import { getHierarchicalIndexes } from '@tiptap-pro/extension-table-of-contents'
 
 import Audio from '@/extensions/audio'
@@ -94,28 +97,28 @@ const {
 } = useStore()
 const $document = useState('document')
 
-let enableRules = true
-if (!options.value.document.enableMarkdown || !$document.value.enableMarkdown) {
-  enableRules = [Image, Mathematics, Typography]
-}
+const enableRules =
+  !options.value.document?.enableMarkdown || !$document.value.enableMarkdown
+    ? [Image, Mathematics, Typography]
+    : []
 
 const defaultLineHeight = $computed(() => {
-  return options.value.dicts.lineHeights.find((item) => item.default).value
+  return options.value.dicts?.lineHeights?.find((item) => item.default)?.value
 })
 
 const editorInstance = new Editor({
-  editable: !options.value.document.readOnly,
-  autofocus: options.value.document.autofocus,
-  content: options.value.document.content,
+  editable: !options.value.document?.readOnly,
+  autofocus: options.value.document?.autofocus,
+  content: options.value.document?.content,
   enableInputRules: enableRules,
   enablePasteRules: enableRules,
   editorProps: {
     attributes: {
       class: 'umo-editor',
     },
-    ...options.value.document.editorProps,
+    ...options.value.document?.editorProps,
   },
-  parseOptions: options.value.document.parseOptions,
+  parseOptions: options.value.document?.parseOptions,
   extensions: [
     StarterKit.configure({
       document: false,
@@ -124,12 +127,11 @@ const editorInstance = new Editor({
       orderedList: false,
       codeBlock: false,
       horizontalRule: false,
-      gapcursor: true,
       dropcursor: false,
     }),
     Document.extend({ content: 'page+' }),
     Page.configure({
-      types: options.value.page.nodesComputedOption.types || [],
+      types: options.value.page.nodesComputedOption?.types ?? [],
       slots: useSlots(),
     }),
     /* Placeholder.configure({
@@ -197,33 +199,41 @@ const editorInstance = new Editor({
     Selection,
     TableOfContents.configure({
       getIndex: getHierarchicalIndexes,
-      onUpdate: (content) => {
+      onUpdate: (content: TableOfContentData) => {
         tableOfContents.value = content
       },
       scrollParent: () =>
         document.querySelector(`${container} .umo-zoomable-container`),
       getId: () => shortId(6),
     }),
-    Typography.configure(options.value.document.typographyRules),
+    Typography.configure(options.value.document?.typographyRules),
     CharacterCount.configure({
       limit:
-        options.value.document.characterLimit !== 0
-          ? options.value.document.characterLimit
+        options.value.document?.characterLimit !== 0
+          ? options.value.document?.characterLimit
           : undefined,
     }),
     FileHandler.configure({
-      allowedMimeTypes: options.value.file.allowedMimeTypes,
-      onPaste(editor, files) {
-        files.forEach((file) => editor.commands.insertFile({ file }))
+      allowedMimeTypes: options.value?.file?.allowedMimeTypes ?? [],
+      onPaste(editor: Editor, files: File[]) {
+        for (const file of files) {
+          editor.commands?.insertFile?.({ file })
+        }
       },
-      onDrop: (editor, files, pos) => {
-        files.forEach((file) => editor.commands.insertFile({ file, pos }))
+      onDrop: (
+        editor: Editor,
+        files: File[],
+        pos: { top: number; left: number },
+      ) => {
+        for (const file of files) {
+          editor.commands?.insertFile?.({ file, pos })
+        }
       },
     }),
     Dropcursor.configure({
       color: 'var(--umo-primary-color)',
     }),
-    ...options.value.extensions,
+    ...(options.value?.extensions ?? []),
   ],
   onCreate() {},
   onUpdate({ editor }) {
@@ -237,20 +247,20 @@ onMounted(() => {
   const katexStyleElement = document.querySelector('#katex-style')
   if (
     katexStyleElement === null &&
-    !options.value.toolbar.disableMenuItems.includes('math')
+    !options.value.toolbar?.disableMenuItems.includes('math')
   ) {
     const style = document.createElement('link')
     style.href = `${options.value.cdnUrl}/libs/katex/katex.min.css`
     style.rel = 'stylesheet'
     style.id = 'katex-style'
-    document.querySelector('head').append(style)
+    document.querySelector('head')?.append(style)
   }
 })
 window.addEventListener('load', () => {
   editorInstance.registerPlugin(
     pagePlugin(
-      editor,
-      options.value.page.nodesComputedOption.nodesComputed || {},
+      editor.value,
+      options.value.page.nodesComputedOption?.nodesComputed ?? {},
     ),
   )
   setTimeout(() => {

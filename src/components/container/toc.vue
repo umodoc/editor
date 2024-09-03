@@ -13,19 +13,26 @@
         v-text="t('toc.empty')"
       ></div>
       <div
-        v-for="(item, index) in tableOfContents"
+        v-for="item in tableOfContents"
         v-else
         :key="item.id"
         class="umo-toc-item"
         :class="{
           active: item.isActive,
-          ['level-' + item.level]: true,
+          ['level-' + (item.level ?? item.originalLevel)]: true,
         }"
-        :data-heading="'H' + item.originalLevel"
-        @click="headingClick(item, index)"
+        :data-heading="'H' + (item.level ?? item.originalLevel)"
+        @click="
+          headingClick(
+            item as unknown as TableOfContentDataItem & { title: string },
+          )
+        "
       >
         <div class="umo-toc-text">
-          {{ item.textContent }}
+          {{
+            (item as TableOfContentDataItem & { title: string }).title ??
+            item.dom.textContent
+          }}
         </div>
       </div>
     </div>
@@ -34,30 +41,39 @@
 
 <script setup lang="ts">
 import { TextSelection } from '@tiptap/pm/state'
+import type { TableOfContentDataItem } from '@tiptap-pro/extension-table-of-contents'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const { container, editor, tableOfContents } = useStore()
 
-const headingClick = (heading) => {
+const headingClick = (
+  heading: TableOfContentDataItem & {
+    title: string
+  },
+) => {
   if (!editor.value) {
     return
   }
   const activeHeading = tableOfContents.value.find(
-    (item) => item.isActive === true,
+    (item) => 'isActive' in item && item.isActive,
   )
-  if (activeHeading) {
+  if (activeHeading && 'isActive' in activeHeading) {
     activeHeading.isActive = false
   }
-  heading.isActive = true
+  if ('isActive' in heading) {
+    heading.isActive = true
+  }
   const element = editor.value.view.dom.querySelector(
     `[data-toc-id="${heading.id}"`,
   )
   const pageContainer = document.querySelector(
     `${container} .umo-zoomable-container`,
   )
-  pageContainer.scrollTo({
-    top: element.offsetTop + 10,
+  pageContainer?.scrollTo({
+    top: (element as HTMLElement)?.offsetTop ?? 0 + 10,
   })
-  const pos = editor.value.view.posAtDOM(element, 0)
+  const pos = editor.value.view.posAtDOM(element as Node, 0)
   const { tr } = editor.value.view.state
   tr.setSelection(new TextSelection(tr.doc.resolve(pos)))
   editor.value.view.dispatch(tr)
