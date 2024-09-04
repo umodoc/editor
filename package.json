@@ -84,7 +84,7 @@
     "@tiptap/pm": "^2.6.6",
     "@tiptap/starter-kit": "^2.6.6",
     "@tiptap/vue-3": "^2.6.6",
-    "@umoteam/editor-external": "4.2.0",
+    "@umoteam/editor-external": "4.3.0",
     "@vue-monaco/editor": "^0.0.6",
     "@vueuse/core": "^10.11.0",
     "docx": "^8.5.0",
