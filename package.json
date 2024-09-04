@@ -103,6 +103,7 @@
     "prism-code-editor": "^3.4.0-beta.1",
     "prismjs": "^1.29.0",
     "prosemirror-docx": "^0.2.0",
+    "prosemirror-transform": "^1.10.0",
     "qrcode-svg": "^1.1.0",
     "svg64": "^2.0.0",
     "vue-esign": "^1.1.4",
