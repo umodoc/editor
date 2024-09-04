@@ -244,7 +244,6 @@ setEditor(editorInstance)
 
 let isEmpty = $ref(false)
 const setPlaceholder = (editor) => {
-  console.log(editor.isEmpty, editor.state.doc.content.size)
   if (editor.isEmpty && editor.state.doc.content.size <= 4) {
     isEmpty = true
     editor
