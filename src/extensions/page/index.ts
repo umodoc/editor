@@ -82,7 +82,7 @@ export default Node.create<PageOptions>({
   priority: 2,
   name: `${PAGE}`,
   content: `block*`,
-  group: 'block',
+  group: `${PAGE}`,
   isolating: true,
   selectable: false,
   draggable: false,
