@@ -69,7 +69,6 @@
     "@tiptap/extension-image": "^2.6.6",
     "@tiptap/extension-link": "^2.6.6",
     "@tiptap/extension-ordered-list": "^2.6.6",
-    "@tiptap/extension-placeholder": "^2.6.6",
     "@tiptap/extension-subscript": "^2.6.6",
     "@tiptap/extension-superscript": "^2.6.6",
     "@tiptap/extension-table": "^2.6.6",

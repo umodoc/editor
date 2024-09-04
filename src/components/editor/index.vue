@@ -2,12 +2,15 @@
   <editor-content
     class="umo-editor-container"
     :class="{
+      'is-empty': isEmpty,
       'show-line-number': page.showLineNumber,
       'format-painter': painter.enabled,
       'disable-page-break': !page.pagination,
     }"
     :editor="editor"
-    :style="{ lineHeight: defaultLineHeight }"
+    :style="{
+      lineHeight: defaultLineHeight,
+    }"
     :spellcheck="options.document.enableSpellcheck && $document.spellcheck"
   />
   <menus-bubble v-if="editor && !page.preview.enabled && !editorDestroyed" />
@@ -24,7 +27,7 @@
 <script setup>
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
-import Placeholder from '@tiptap/extension-placeholder'
+import Placeholder from '@/extensions/placeholder'
 import Focus from '@tiptap/extension-focus'
 
 // 基本
@@ -83,6 +86,7 @@ import Dropcursor from '@tiptap/extension-dropcursor'
 
 import shortId from '@/utils/short-id'
 import { pagePlugin } from '@/extensions/page/page-plugin'
+import placeholder from '@/extensions/placeholder'
 
 const {
   options,
@@ -95,6 +99,7 @@ const {
   setEditor,
   editorDestroyed,
 } = useStore()
+
 const $document = useState('document')
 
 let enableRules = true
@@ -135,10 +140,9 @@ const editorInstance = new Editor({
       types: options.value.page.nodesComputedOption.types || [],
       slots: useSlots(),
     }),
-    /* Placeholder.configure({
-      considerAnyAsEmpty: true,
+    Placeholder.configure({
       placeholder: l(options.value.document.placeholder),
-    }),*/
+    }),
     Focus.configure({
       className: 'umo-node-focused',
       mode: 'all',
@@ -228,12 +232,32 @@ const editorInstance = new Editor({
     }),
     ...options.value.extensions,
   ],
-  onCreate({ editor }) {},
+  onCreate({ editor }) {
+    setPlaceholder(editor)
+  },
   onUpdate({ editor }) {
     $document.value.content = editor.getHTML()
+    setPlaceholder(editor)
   },
 })
 setEditor(editorInstance)
+
+let isEmpty = $ref(false)
+const setPlaceholder = (editor) => {
+  console.log(editor.isEmpty, editor.state.doc.content.size)
+  if (editor.isEmpty && editor.state.doc.content.size <= 4) {
+    isEmpty = true
+    editor
+      .chain()
+      .setContent(
+        `<p data-placeholder="${l(options.value.document.placeholder)}"></p>`,
+      )
+      .focus(3)
+      .run()
+  } else {
+    isEmpty = false
+  }
+}
 
 // 动态导入 katex 样式
 onMounted(() => {

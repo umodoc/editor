@@ -9,6 +9,17 @@
     height: auto;
   }
 
+  &.is-empty {
+    .umo-page-node-content > p {
+      &::after {
+        content: attr(data-placeholder);
+        color: var(--umo-content-placeholder-color);
+        position: absolute;
+        top: 0;
+      }
+    }
+  }
+
   &.show-line-number {
     .umo-page-node-content {
       > *:not([data-line-number='false']):not(div):not(.umo-node-focused) {
