@@ -158,6 +158,9 @@ dependencies:
   prosemirror-docx:
     specifier: ^0.2.0
     version: 0.2.0
+  prosemirror-transform:
+    specifier: ^1.10.0
+    version: 1.10.0
   qrcode-svg:
     specifier: ^1.1.0
     version: 1.1.0
