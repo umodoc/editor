@@ -1,6 +1,6 @@
 <template>
   <svg class="umo-icon" aria-hidden="true" :width="size" :height="size">
-    <use :xlink:href="`#icon-${props.name}`" :fill="color" />
+    <use :xlink:href="`#umo-icon-${props.name}`" :fill="color" />
   </svg>
 </template>
 
