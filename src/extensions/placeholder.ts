@@ -25,7 +25,9 @@ export default Extension.create({
           placeholder: {
             default: this.options.placeholder,
             parseHTML: (element) => element.getAttribute('data-placeholder'),
-            renderHTML: ({ placeholder }) => ({ 'data-placeholder': placeholder }),
+            renderHTML: ({ placeholder }) => ({
+              'data-placeholder': placeholder,
+            }),
           },
         },
       },
@@ -33,19 +35,21 @@ export default Extension.create({
   },
   addCommands() {
     return {
-      setPlaceholder: () => ({ editor,chain,state }) => {
-        const { options } = useStore()
-        if (!editor.isEmpty || state.doc.content.size > 4) {
-          return false
-        }
-        // @ts-ignore
-        const placeholder = l(options.value.document.placeholder)
-        chain()
-          .setContent(`<p data-placeholder="${placeholder}"></p>`)
-          .focus(3)
-          .run()
-        return true
-      },
+      setPlaceholder:
+        () =>
+        ({ editor, chain, state }) => {
+          const { options } = useStore()
+          if (!editor.isEmpty || state.doc.content.size > 4) {
+            return false
+          }
+          // @ts-ignore
+          const placeholder = l(options.value.document.placeholder)
+          chain()
+            .setContent(`<p data-placeholder="${placeholder}"></p>`)
+            .focus(3)
+            .run()
+          return true
+        },
     }
   },
 })

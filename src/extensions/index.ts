@@ -59,13 +59,9 @@ import Dropcursor from '@tiptap/extension-dropcursor'
 
 import shortId from '@/utils/short-id'
 
-const {
-  options,
-  container,
-  tableOfContents,
-} = useStore()
+const { options, container, tableOfContents } = useStore()
 
-const { dicts, document:doc, file } = options.value
+const { dicts, document: doc, file } = options.value
 
 export const extensions = [
   StarterKit.configure({
@@ -113,7 +109,7 @@ export const extensions = [
   }),
   LineHeight.configure({
     types: ['heading', 'paragraph'],
-    defaultLineHeight:dicts.lineHeights.find((item) => item.default).value,
+    defaultLineHeight: dicts.lineHeights.find((item) => item.default).value,
   }),
   Margin,
   SearchReplace.configure({
@@ -152,10 +148,7 @@ export const extensions = [
   }),
   Typography.configure(doc.typographyRules),
   CharacterCount.configure({
-    limit:
-    doc.characterLimit !== 0
-        ? doc.characterLimit
-        : undefined,
+    limit: doc.characterLimit !== 0 ? doc.characterLimit : undefined,
   }),
   FileHandler.configure({
     allowedMimeTypes: file.allowedMimeTypes,
