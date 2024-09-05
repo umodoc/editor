@@ -111,6 +111,23 @@ const defaultLineHeight = $computed(() => {
   return options.value.dicts.lineHeights.find((item) => item.default).value
 })
 
+let isReady = $ref(false)
+let isEmpty = $ref(false)
+const setPlaceholder = (editor) => {
+  if (editor.isEmpty && editor.state.doc.content.size <= 4) {
+    isEmpty = true
+    editor
+      .chain()
+      .setContent(
+        `<p data-placeholder="${l(options.value.document.placeholder)}"></p>`,
+      )
+      .focus(3)
+      .run()
+  } else {
+    isEmpty = false
+  }
+}
+
 const editorInstance = new Editor({
   editable: !options.value.document.readOnly,
   autofocus: options.value.document.autofocus,
@@ -238,28 +255,35 @@ const editorInstance = new Editor({
   onUpdate({ editor }) {
     $document.value.content = editor.getHTML()
     setPlaceholder(editor)
+    isReady = true
   },
 })
 setEditor(editorInstance)
 
-let isEmpty = $ref(false)
-const setPlaceholder = (editor) => {
-  if (editor.isEmpty && editor.state.doc.content.size <= 4) {
-    isEmpty = true
-    editor
-      .chain()
-      .setContent(
-        `<p data-placeholder="${l(options.value.document.placeholder)}"></p>`,
-      )
-      .focus(3)
-      .run()
-  } else {
-    isEmpty = false
-  }
+// 注册分页组件
+const registerPagePlugin = async () => {
+  await nextTick()
+  editorInstance.registerPlugin(
+    pagePlugin(
+      editor,
+      options.value.page.nodesComputedOption.nodesComputed || {},
+    ),
+  )
+  setTimeout(() => {
+    const tr = editorInstance.state.tr.setMeta('initSplit', true)
+    editorInstance.view.dispatch(tr)
+  }, 500)
 }
+watch(
+  () => isReady,
+  () => {
+    if (isReady) registerPagePlugin()
+  },
+  { once: true },
+)
 
 // 动态导入 katex 样式
-onMounted(() => {
+const loadTatexStyle = () => {
   const katexStyleElement = document.querySelector('#katex-style')
   if (
     katexStyleElement === null &&
@@ -271,19 +295,9 @@ onMounted(() => {
     style.id = 'katex-style'
     document.querySelector('head').append(style)
   }
-})
-window.addEventListener('load', function () {
-  editorInstance.registerPlugin(
-    pagePlugin(
-      editor,
-      options.value.page.nodesComputedOption.nodesComputed || {},
-    ),
-  )
-  setTimeout(() => {
-    const tr = editorInstance.state.tr.setMeta('initSplit', true)
-    editorInstance.view.dispatch(tr)
-  }, 500)
-})
+}
+
+onMounted(loadTatexStyle)
 
 // 销毁编辑器实例
 onBeforeUnmount(() => editorInstance.destroy())
