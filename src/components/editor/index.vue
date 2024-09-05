@@ -91,12 +91,8 @@ setEditor(editorInstance)
 // 注册分页组件
 const registerPagePlugin = async () => {
   await nextTick()
-  editorInstance.registerPlugin(
-    pagePlugin(
-      editor,
-      options.value.page.nodesComputedOption.nodesComputed || {},
-    ),
-  )
+  const { nodesComputed } = options.value.page.nodesComputedOption
+  editorInstance.registerPlugin(pagePlugin(editor, nodesComputed || {}))
   setTimeout(() => {
     const tr = editorInstance.state.tr.setMeta('initSplit', true)
     editorInstance.view.dispatch(tr)
