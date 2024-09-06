@@ -26,6 +26,9 @@
 
 <script setup>
 import { Editor, EditorContent } from '@tiptap/vue-3'
+import Mathematics from '@tiptap-pro/extension-mathematics'
+import Typography from '@tiptap/extension-typography'
+import Image from '@/extensions/image'
 import { extensions } from '@/extensions'
 import Page from '@/extensions/page'
 import { pagePlugin } from '@/extensions/page/page-plugin'
@@ -46,7 +49,7 @@ const $document = useState('document')
 
 let enableRules = true
 if (!options.value.document.enableMarkdown || !$document.value.markdown) {
-  enableRules = [Image, Mathematics, Typography]
+  enableRules = [Mathematics, Typography, Image]
 }
 
 const defaultLineHeight = $computed(() => {
