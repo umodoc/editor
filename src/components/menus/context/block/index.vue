@@ -2,21 +2,28 @@
   <div
     v-if="visible"
     class="umo-block-menu-hander"
-    :style="`transform: translate(${page.margin.left}cm, ${scrollTop}px);`"
+    :style="{
+      transform: `translate(${page.margin.left}cm, ${scrollTop}px)`,
+      pointerEvents,
+    }"
   >
+  <!-- :style="`transform: translate(${page.margin.left}cm, ${scrollTop}px);`" -->
     <menus-context-block-node />
     <menus-context-block-common />
   </div>
 </template>
 
 <script setup>
+import { getSelectionText } from '@/extensions/selection';
+
 const { page, editor } = useStore()
 
 let visible = $ref(false)
 let scrollTop = $ref(0)
-
+let pointerEvents = $ref('auto')
 // 更新菜单位置
 const updateMenuPostion = () => {
+  pointerEvents = getSelectionText(editor.value).length > 0 ? 'none' : 'auto'
   const { offsetTop } = useNodePostion()
   if (offsetTop === null) {
     return
@@ -25,19 +32,33 @@ const updateMenuPostion = () => {
   visible = true
   scrollTop = offsetTop
 }
-watch(
-  editor,
-  (val) => {
-    if (val) {
-      editor.value.on('selectionUpdate', updateMenuPostion)
-      editor.value.on('focus', updateMenuPostion)
-      // editor.value.on('blur', () => (visible = false))
-    } else {
-      visible = false
-    }
-  },
-  { immediate: true },
-)
+onMounted(()=>{
+  if(editor){
+    editor.value.on('selectionUpdate', updateMenuPostion)
+    // editor.value.on('focus', updateMenuPostion)
+  }else{
+    visible = false
+  }
+})
+onUnmounted(()=>{
+  if(editor){
+    editor.value.off('selectionUpdate', updateMenuPostion)
+    editor.value.off('focus', updateMenuPostion)
+  }
+})
+// watch(
+//   editor,
+//   (val) => {
+//     if (val) {
+//       editor.value.on('selectionUpdate', updateMenuPostion)
+//       editor.value.on('focus', updateMenuPostion)
+//       // editor.value.on('blur', () => (visible = false))
+//     } else {
+//       visible = false
+//     }
+//   },
+//   { immediate: true },
+// )
 watch(() => page.value.pagination, updateMenuPostion)
 </script>
 
