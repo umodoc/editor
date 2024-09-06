@@ -12,7 +12,7 @@
   &.is-empty {
     .umo-page-node-content > p {
       &::after {
-        content: attr(data-placeholder);
+        content: var(--umo-editor-placeholder);
         color: var(--umo-content-placeholder-color);
         position: absolute;
         top: 0;

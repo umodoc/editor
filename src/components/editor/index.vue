@@ -10,6 +10,7 @@
     :editor="editor"
     :style="{
       lineHeight: defaultLineHeight,
+      '--umo-editor-placeholder': `'${l(options.document.placeholder)}'`,
     }"
     :spellcheck="options.document.enableSpellcheck && $document.spellcheck"
   />
