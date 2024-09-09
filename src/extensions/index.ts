@@ -130,6 +130,7 @@ export const extensions = [
   // 表格
   Table.configure({
     allowTableNodeSelection: true,
+    resizable: true,
   }),
   TableRow,
   TableHeader,
