@@ -56,7 +56,7 @@ import Typography from '@tiptap/extension-typography'
 import CharacterCount from '@tiptap/extension-character-count'
 import FileHandler from './file-handler'
 import Dropcursor from '@tiptap/extension-dropcursor'
-
+import { ColorHighlighter } from './color-highlighter'
 import shortId from '@/utils/short-id'
 
 const { options, container, tableOfContents } = useStore()
@@ -122,6 +122,7 @@ export const extensions = [
   File,
   TextBox,
   CodeBlock,
+  ColorHighlighter,
   hr,
   Iframe,
   Mathematics,
@@ -129,6 +130,7 @@ export const extensions = [
   // 表格
   Table.configure({
     allowTableNodeSelection: true,
+    resizable: true,
   }),
   TableRow,
   TableHeader,
