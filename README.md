@@ -99,7 +99,7 @@ The development of Umo Editor could not have been possible without the support o
 - [Umo Team](https://github.com/umodoc): 👨‍💻 Core developers
 - [Cassielxd](https://github.com/Cassielxd): 💪 Implemented pagination and many important features for Umo Editor
 - [Na'aman Hirschfeld](https://github.com/Goldziher)：💪🏻 Enhanced TypeScript support, added test cases, and provided a better foundation for the development of Umo Editor
-- [Sunny Wisozk](https://github.com/ChenErik)：🛠️ Contributed code to Umo Editor
+- [ChenErik](https://github.com/ChenErik)：🛠️ Contributed code to Umo Editor
 - [Sherman Xu](https://github.com/xuzhenjun130): 🛠 Contributed code to Umo Editor
 
 We welcome all forms of contributions, including but not limited to submitting bug reports, feature requests, and code contributions.
