@@ -336,6 +336,7 @@
 
     li {
       display: flex;
+      align-items: first baseline;
 
       &[data-checked='true'] {
         p {
@@ -356,6 +357,9 @@
         flex: 0 0 auto;
         margin-right: 10px;
         user-select: none;
+        input {
+          transform: translateY(0.2em);
+        }
       }
 
       > div {
