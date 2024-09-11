@@ -24,7 +24,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -33,7 +33,13 @@ import nzh from 'nzh/cn'
 import { getSelectionText } from '@/extensions/selection'
 const { editor } = useStore()
 
-const options = [
+const options: {
+  label: string
+  desc: string
+  func: (text: string) => string
+  divider?: boolean
+  value?: string | number
+}[] = [
   {
     label: '数字小写金额 → 中文大写金额',
     desc: '人民币伍佰肆拾叁元贰角壹分',
@@ -88,7 +94,7 @@ const options = [
   },
 ]
 
-const setChineseCase = (func) => {
+const setChineseCase = (func: (text: string) => string) => {
   if (!editor.value) {
     return
   }

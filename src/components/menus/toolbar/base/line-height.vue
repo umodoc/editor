@@ -19,8 +19,8 @@ const lineHeights = computed(() => {
   return options.value.dicts?.lineHeights.map((item) => {
     return {
       content: item.default
-        ? l(item.label) + t('base.lineHeight.default')
-        : l(item.label),
+        ? localize(item.label) + t('base.lineHeight.default')
+        : localize(item.label),
       value: item.value,
       active: editor.value?.isActive({ lineHeight: item.value }),
     }

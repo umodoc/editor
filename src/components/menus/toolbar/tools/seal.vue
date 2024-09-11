@@ -28,7 +28,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -37,9 +37,9 @@ import { removeBackground } from '@imgly/background-removal'
 let dialogVisible = $ref(false)
 const { options, editor } = useStore()
 
-let sealImg = $ref(null)
-let converting = $ref(null)
-let file = $ref(null)
+let sealImg = $ref<string | null>(null)
+let converting = $ref<string | null>(null)
+let file = $ref<File | null>(null)
 
 const selectImage = () => {
   const { open, onChange } = useFileDialog({

@@ -116,6 +116,9 @@ importers:
       '@tool-belt/type-predicates':
         specifier: ^1.3.0
         version: 1.3.0
+      '@types/svg64':
+        specifier: ^1.1.2
+        version: 1.1.2
       '@umoteam/editor-external':
         specifier: 4.5.0
         version: 4.5.0
@@ -1370,6 +1373,9 @@ packages:
 
   '@types/sortablejs@1.15.8':
     resolution: {integrity: sha512-b79830lW+RZfwaztgs1aVPgbasJ8e7AXtZYHTELNXZPsERt4ymJdjV4OccDbHQAvHrCcFpbF78jkm0R6h/pZVg==}
+
+  '@types/svg64@1.1.2':
+    resolution: {integrity: sha512-kIsgEdYo12kMpR7bD0r3eGEp3Pen9c8HH5H7w+2iWxanwrt7h3QWua8ujjkDE8BpKAatAYI9lE9k7rF4USMUAg==}
 
   '@types/svgo@2.6.4':
     resolution: {integrity: sha512-l4cmyPEckf8moNYHdJ+4wkHvFxjyW6ulm9l4YGaOxeyBWPhBOT0gvni1InpFPdzx1dKf/2s62qGITwxNWnPQng==}
@@ -6071,6 +6077,8 @@ snapshots:
   '@types/semver@7.5.8': {}
 
   '@types/sortablejs@1.15.8': {}
+
+  '@types/svg64@1.1.2': {}
 
   '@types/svgo@2.6.4':
     dependencies:

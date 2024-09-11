@@ -11,7 +11,7 @@
       :header="content ? t('tools.mermaid.edit') : t('tools.mermaid.text')"
       width="960px"
       @confirm="setMermaid"
-      @close="dialogVisible = flase"
+      @close="dialogVisible = false"
     >
       <div class="umo-mermaid-container">
         <t-textarea
@@ -36,7 +36,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -73,7 +73,7 @@ const menuClick = () => {
 const defaultCode = 'graph TB\na-->b'
 let mermaidCode = $ref('')
 let svgCode = $ref('')
-const mermaidRef = $ref()
+const mermaidRef = $ref<HTMLElement | null>(null)
 const renderMermaid = async () => {
   try {
     const { svg } = await mermaid.render('mermaid-svg', mermaidCode)
@@ -108,9 +108,9 @@ const setMermaid = () => {
     useMessage('error', t('tools.mermaid.notEmpty'))
     return
   }
-  const svg = mermaidRef.querySelector('svg')
-  const width = svg.width.animVal.value
-  const height = svg.height.animVal.value
+  const svg = mermaidRef?.querySelector('svg')
+  const width = svg?.width.animVal.value
+  const height = svg?.height.animVal.value
   const src = svg64(svgCode)
   if (!props.content || (props.content && props.content !== mermaidCode)) {
     editor.value

@@ -16,14 +16,17 @@
     >
       <t-option
         v-for="item in group.children"
-        :key="item.value"
+        :key="item.value ?? ''"
         class="umo-font-family-item"
-        :value="item.value"
-        :label="l(item.label)"
+        :value="item.value ?? ''"
+        :label="localize(item.label)"
       >
-        <span :style="{ fontFamily: item.value }" v-text="l(item.label)"></span>
         <span
-          v-if="!fontDetect(item.value)"
+          :style="{ fontFamily: item.value ?? undefined }"
+          v-text="localize(item.label)"
+        ></span>
+        <span
+          v-if="!fontDetect(item.value ?? '')"
           class="umo-font-family-unsupport"
           :title="t('base.fontFamily.unsupport')"
           >!</span
@@ -33,21 +36,24 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { isString } from '@tool-belt/type-predicates'
 import { useI18n } from 'vue-i18n'
+
+import { localize } from '@/utils/localisation'
 
 const { t } = useI18n()
 const { options, editor } = useStore()
 const $toolbar = useState('toolbar')
 const $recent = useState('recent')
 
-const usedFonts = $ref([])
+const usedFonts = $ref<string[]>([])
 // https://www.cnblogs.com/gaidalou/p/8479452.html
-const fontDetect = (font) => {
+const fontDetect = (font?: string) => {
   if (!font) {
     return true
   }
-  if (typeof font !== 'string') {
+  if (!isString(font)) {
     return false
   }
 
@@ -61,12 +67,16 @@ const fontDetect = (font) => {
 
   canvas.width = canvasWidth
   canvas.height = canvasHeight
+  if (context) {
+    context.textAlign = 'center'
+    context.fillStyle = 'black'
+    context.textBaseline = 'middle'
+  }
 
-  context.textAlign = 'center'
-  context.fillStyle = 'black'
-  context.textBaseline = 'middle'
-
-  const getImageDataWithFont = (currentFont) => {
+  const getImageDataWithFont = (currentFont: string) => {
+    if (!context) {
+      return []
+    }
     context.clearRect(0, 0, canvasWidth, canvasHeight)
     context.font = `${canvasHeight}px ${currentFont}, ${baseFont}`
     context.fillText(testChar, canvasWidth / 2, canvasHeight / 2)
@@ -86,14 +96,14 @@ const allFonts = computed(() => {
   const all = [
     {
       label: t('base.fontFamily.all'),
-      children: options.value.dicts.fonts,
+      children: options.value.dicts?.fonts ?? [],
     },
   ]
   // 通过字体值获取字体列表
-  const getFontsByValues = (values) => {
+  const getFontsByValues = (values: string[]) => {
     return values.map(
       (item) =>
-        options.value.dicts.fonts.find(({ value }) => value === item) ?? {
+        options.value.dicts?.fonts.find(({ value }) => value === item) ?? {
           label: item,
           item,
         },
@@ -102,13 +112,13 @@ const allFonts = computed(() => {
   if ($recent.value.fonts.length > 0) {
     all.unshift({
       label: t('base.fontFamily.recent'),
-      children: getFontsByValues($recent.value.fonts),
+      children: getFontsByValues($recent.value.fonts) as any,
     })
   }
   if (usedFonts.length > 0) {
     all.unshift({
       label: t('base.fontFamily.used'),
-      children: getFontsByValues(usedFonts),
+      children: getFontsByValues(usedFonts) as any,
     })
   }
   return all
@@ -116,7 +126,7 @@ const allFonts = computed(() => {
 
 // 获取当前文档中所有已使用的字体
 const getUsedFonts = () => {
-  const content = JSON.stringify(editor.value.getJSON())
+  const content = JSON.stringify(editor.value?.getJSON())
   const matches = content.match(/"fontFamily":"([^"]+)"/g)
   if (matches) {
     for (const item of matches) {
@@ -128,7 +138,7 @@ const getUsedFonts = () => {
   }
 }
 
-const setFontFamily = (fontFamily) => {
+const setFontFamily = (fontFamily: string) => {
   if (fontFamily) {
     $recent.value.fonts.forEach((item, index) => {
       if (item === fontFamily) {
@@ -140,7 +150,7 @@ const setFontFamily = (fontFamily) => {
       $recent.value.fonts.splice(10, 1)
     }
   }
-  editor.value.chain().focus().setFontFamily(fontFamily).run()
+  editor.value?.chain().focus().setFontFamily(fontFamily).run()
   getUsedFonts()
 }
 

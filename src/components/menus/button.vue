@@ -75,7 +75,9 @@
               size="small"
               :options="selectOptions"
               :popup-props="{
-                overlayClassName: attrs['overlay-class-name'],
+                overlayClassName: attrs['overlay-class-name'] as
+                  | string
+                  | undefined,
                 popperOptions: {
                   modifiers: [
                     { name: 'offset', options: { offset: [-22, 0] } },
@@ -85,7 +87,7 @@
                 destroyOnClose: true,
                 attach: container,
               }"
-              @click="attrs.onChange"
+              @click="attrs.onChange as any"
             >
               <span class="umo-button-icon-arrow umo-button-handle">
                 <icon name="arrow-down" />
@@ -101,12 +103,14 @@
             size="small"
             :options="selectOptions"
             :popup-props="{
-              overlayClassName: attrs['overlay-class-name'],
+              overlayClassName: attrs['overlay-class-name'] as
+                | string
+                | undefined,
               onVisibleChange: popupVisileChange,
               destroyOnClose: true,
               attach: container,
             }"
-            @click="attrs.onChange"
+            @click="attrs.onChangeas as any"
           >
             <t-button
               class="umo-menu-button has-arrow"
@@ -210,7 +214,7 @@
                 v-if="$toolbar.mode === 'ribbon'"
                 ref="popupHandleRef"
                 class="umo-button-icon-arrow umo-button-handle"
-                @click="togglePopup()"
+                @click="togglePopup(!popupVisible)"
               >
                 <icon name="arrow-down" />
               </span>
@@ -223,7 +227,7 @@
                 v-if="$toolbar.mode === 'classic'"
                 ref="popupHandleRef"
                 class="umo-button-icon-arrow umo-button-handle"
-                @click="togglePopup()"
+                @click="togglePopup(!popupVisible)"
               >
                 <icon name="arrow-down" />
               </span>
@@ -249,7 +253,7 @@
               size="small"
               v-bind="attrs"
               :disabled="disabled || editor?.isEditable === false"
-              @click="togglePopup()"
+              @click="togglePopup(!popupVisible)"
             >
               <div class="umo-button-content">
                 <slot />
@@ -295,97 +299,47 @@
   </t-tooltip>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 import { isString } from '@tool-belt/type-predicates'
+import type { DropdownOption } from 'tdesign-vue-next'
 
 import { getShortcut } from '@/utils/shortcut'
 
-const props = defineProps({
-  // 菜单类型
-  menuType: {
-    type: String,
-    default: 'button',
-  },
-  // 是否为大按钮
-  huge: {
-    type: Boolean,
-    default: false,
-  },
-  // 按钮图标
-  ico: {
-    type: String,
-    default: undefined,
-  },
-  // 按钮文字
-  text: {
-    type: String,
-    default: '',
-  },
-  hideText: {
-    type: Boolean,
-    default: false,
-  },
-  // 文字提示
-  tooltip: {
-    type: [String, Boolean],
-    default: undefined,
-  },
-  // 快捷键
-  shortcut: {
-    type: String,
-    default: undefined,
-  },
-  shortcutText: {
-    type: String,
-    default: undefined,
-  },
-  // Dropdown,Select 相关
-  selectOptions: {
-    type: Array,
-    default: () => [],
-  },
-  selectValue: {
-    type: [String, Number],
-    default: '',
-  },
-  // Popup 相关
-  popupVisible: {
-    type: Boolean,
-    default: false,
-  },
-  popupHandle: {
-    type: String,
-    default: '',
-  },
-  // 菜单激活状态
-  menuActive: {
-    type: Boolean,
-    default: false,
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-})
+const props = defineProps<{
+  menuType?: string
+  huge?: boolean
+  ico?: string
+  text?: string
+  hideText?: boolean
+  tooltip?: string | boolean
+  shortcut?: string
+  shortcutText?: string
+  selectOptions?: DropdownOption[]
+  selectValue?: string | number
+  popupVisible?: boolean
+  popupHandle?: string
+  menuActive?: boolean
+  disabled?: boolean
+}>()
 const emits = defineEmits(['toggle-popup'])
 
 const attrs = useAttrs()
 const { container, editor } = useStore()
 const $toolbar = useState('toolbar')
-const menuClick = (...args) => {
+const menuClick = (...args: any[]) => {
   if (attrs.onMenuClickThrough) {
-    attrs.onMenuClickThrough(...args)
+    ;(attrs.onMenuClickThrough as (...args: any[]) => void)(...args)
   } else if (attrs.onMenuClick) {
-    attrs.onMenuClick(...args)
+    ;(attrs.onMenuClick as (...args: any[]) => void)(...args)
   }
 }
 
 const tooltipVisible = $ref(false)
 let tooltipForceHide = $ref(false)
-const popupVisileChange = (visible) => {
+const popupVisileChange = (visible: boolean) => {
   // 隐藏 Tooltip，适用于 select、dropdown、popup 等子组件展开时，隐藏 Tooltip
   tooltipForceHide = visible
 }
@@ -411,7 +365,7 @@ watch(
 // Popup
 const popupHandleRef = ref(null)
 const popupContentRef = ref(null)
-const togglePopup = (visible) => {
+const togglePopup = (visible: boolean) => {
   emits('toggle-popup', visible)
 }
 onClickOutside(
