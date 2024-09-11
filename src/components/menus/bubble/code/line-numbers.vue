@@ -17,8 +17,10 @@ const { editor } = useStore()
 
 const toggleLineNumbers = () => {
   const codeBlock = editor.value ? getSelectionNode(editor.value) : null
-  editor.value?.commands.updateAttributes(codeBlock.type, {
-    lineNumbers: !codeBlock.attrs.lineNumbers,
-  })
+  if (codeBlock) {
+    editor.value?.commands.updateAttributes(codeBlock.type, {
+      lineNumbers: !codeBlock.attrs.lineNumbers,
+    })
+  }
 }
 </script>

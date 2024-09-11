@@ -28,7 +28,7 @@ import {
   TextRun,
 } from 'docx'
 
-import { createNumbering,type NumberingStyles } from './numbering'
+import { createNumbering, type NumberingStyles } from './numbering'
 import type { IFootnotes, INumbering, Mutable } from './types'
 import { createDocFromState, createShortId } from './utils'
 

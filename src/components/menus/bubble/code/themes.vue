@@ -24,6 +24,8 @@ const themes = [
 
 const setTheme = (theme: 'dark' | 'light') => {
   const codeBlock = editor.value ? getSelectionNode(editor.value) : null
-  editor.value?.commands.updateAttributes(codeBlock.type, { theme })
+  if (codeBlock) {
+    editor.value?.commands.updateAttributes(codeBlock.type, { theme })
+  }
 }
 </script>

@@ -2,7 +2,7 @@
   <menus-button
     v-if="currentColor"
     ico="color"
-    :text="text"
+    :text="text || t('base.color')"
     menu-type="popup"
     popup-handle="arrow"
     hide-text
@@ -29,7 +29,7 @@ const { t } = useI18n()
 const props = defineProps({
   text: {
     type: String,
-    default: t('base.color'),
+    default: '',
   },
   modeless: {
     type: Boolean,

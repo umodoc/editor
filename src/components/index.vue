@@ -20,7 +20,10 @@
       :style="{ height: options.height }"
     >
       <header class="umo-toolbar">
-        <toolbar :key="toolbarKey" @menu-change="menuChange">
+        <toolbar
+          :key="toolbarKey"
+          @menu-change="(event) => emits('menuChange', event)"
+        >
           <template
             v-for="item in options.toolbar?.menus"
             :key="item"
@@ -109,6 +112,7 @@ const emits = defineEmits([
   'blur',
   'saved',
   'destroy',
+  'menuChange',
 ])
 
 // Store Setup

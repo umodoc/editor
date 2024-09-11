@@ -4,7 +4,7 @@
     :text="t('insert.codeBlock')"
     shortcut="Ctrl+Alt+C"
     huge
-    @menu-click="editor.chain().focus().setCodeBlock().run()"
+    @menu-click="editor?.chain().focus().setCodeBlock().run()"
   />
 </template>
 

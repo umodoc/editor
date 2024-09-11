@@ -188,7 +188,7 @@
             <menus-button
               :tooltip="false"
               :shortcut-text="`ctrl+alt+${item}`"
-              @menu-click="toggleNodeType('heading', { level: item })"
+              @menu-click="toggleNodeType('heading', { level: item as Level })"
             >
               <span class="umo-heading">
                 <span class="icon-heading">H{{ item }}</span>

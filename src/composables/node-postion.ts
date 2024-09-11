@@ -1,27 +1,27 @@
-const { container } = useStore();
+const { container } = useStore()
 
 export const useNodePostion = () => {
-	const currentNode = document.querySelector(
-		`${container} .umo-page-node-content .umo-node-focused`,
-	);
-	if (currentNode === null) {
-		return { offsetTop: null, offsetLeft: null };
-	}
+  const currentNode = document.querySelector(
+    `${container} .umo-page-node-content .umo-node-focused`,
+  )
+  if (currentNode === null) {
+    return { offsetTop: null, offsetLeft: null }
+  }
 
-	// 当前元素距离页面顶部的距离
-	let { offsetTop, offsetLeft } = currentNode as HTMLElement;
+  // 当前元素距离页面顶部的距离
+  let { offsetTop, offsetLeft } = currentNode as HTMLElement
 
-	// 微修正菜单位置
-	offsetTop = currentNode.tagName === "DIV" ? offsetTop - 8 : offsetTop - 5;
-	// let offsetY = 0
-	// if (
-	//   editor.value.isActive('horizontalRule') ||
-	//   editor.value.isActive('table')
-	// ) {
-	//   offsetY = 5
-	// }
-	// if (editor.value.isActive('pagination')) {
-	//   offsetY = -4
-	// }
-	return { offsetTop, offsetLeft };
-};
+  // 微修正菜单位置
+  offsetTop = currentNode.tagName === 'DIV' ? offsetTop - 8 : offsetTop - 5
+  // let offsetY = 0
+  // if (
+  //   editor.value.isActive('horizontalRule') ||
+  //   editor.value.isActive('table')
+  // ) {
+  //   offsetY = 5
+  // }
+  // if (editor.value.isActive('pagination')) {
+  //   offsetY = -4
+  // }
+  return { offsetTop, offsetLeft }
+}

@@ -24,13 +24,13 @@ const { editor } = useStore()
 
 const setFlip = (flip: 'flipX' | 'flipY') => {
   const image = editor.value ? getSelectionNode(editor.value) : null
-  const { flipX, flipY } = image.attrs
-  if (flip === 'flipX') {
+  const { flipX, flipY } = image?.attrs ?? {}
+  if (image && flip === 'flipX') {
     editor.value?.commands.updateAttributes(image.type, {
       flipX: !flipX,
     })
   }
-  if (flip === 'flipY') {
+  if (image && flip === 'flipY') {
     editor.value?.commands.updateAttributes(image.type, {
       flipY: !flipY,
     })

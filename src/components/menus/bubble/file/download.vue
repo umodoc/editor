@@ -20,9 +20,9 @@ const downloadFile = () => {
   a.href = node?.attrs.url
   a.download = node?.attrs.name
   if (a) {
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
   }
 }
 </script>

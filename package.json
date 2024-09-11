@@ -44,9 +44,10 @@
     }
   },
   "scripts": {
-    "build": "vite build",
+    "build": "vue-tsc --noEmit && vite build",
     "check:code": "eslint --cache .",
     "check:style": "stylelint src",
+    "check:types": "vue-tsc --noEmit",
     "dev": "vite --port 9000 --open --force",
     "format": "prettier --write .",
     "lint:code": "eslint --cache --fix .",

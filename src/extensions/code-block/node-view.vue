@@ -60,7 +60,7 @@ import 'prism-code-editor/prism/languages/regex'
 import 'prism-code-editor/layout.css'
 
 import { nodeViewProps } from '@tiptap/vue-3'
-import { createEditor,type PrismEditor } from 'prism-code-editor'
+import { createEditor, type PrismEditor } from 'prism-code-editor'
 import { defaultCommands, editHistory } from 'prism-code-editor/commands'
 import { cursorPosition } from 'prism-code-editor/cursor'
 import { indentGuides } from 'prism-code-editor/guides'

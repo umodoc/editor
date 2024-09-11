@@ -109,7 +109,7 @@ const duplicateNode = () => {
     selectionNode.content,
     selectionNode.marks,
   )
-  editor.value?.commands.insertContentAt(getPosition(), copeNode.toJSON())
+  editor.value?.commands.insertContentAt(getPosition(), copeNode?.toJSON())
 }
 const deleteNode = () => {
   editor.value?.chain().focus().deleteSelectionNode().run()

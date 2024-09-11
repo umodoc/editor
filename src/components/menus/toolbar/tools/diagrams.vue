@@ -41,8 +41,8 @@ const { container, options, editor } = useStore()
 let dialogVisible = $ref(false)
 let loading = $ref(false)
 const diagramEditor = new DiagramEditor({
-  domain: options.value.diagrams?.domain,
-  params: options.value.diagrams?.params,
+  domain: (options.value.diagrams?.domain ?? '') as string,
+  params: (options.value.diagrams?.params ?? {}) as Record<string, any>,
   container: `${container} .umo-diagrams-container`,
 })
 const openDiagramEditor = () => {

@@ -22,9 +22,11 @@ const { editor } = useStore()
 
 const setRotate = (rotate: number) => {
   const image = editor.value ? getSelectionNode(editor.value) : null
-  const { angle } = image.attrs
-  editor.value?.commands.updateAttributes(image.type, {
-    angle: angle ? angle + rotate : rotate,
-  })
+  const { angle } = image?.attrs ?? {}
+  if (image) {
+    editor.value?.commands.updateAttributes(image.type, {
+      angle: angle ? angle + rotate : rotate,
+    })
+  }
 }
 </script>

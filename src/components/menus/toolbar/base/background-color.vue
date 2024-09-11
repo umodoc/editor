@@ -1,6 +1,6 @@
 <template>
   <menus-button
-    :text="text"
+    :text="text || t('base.bgColor')"
     menu-type="popup"
     popup-handle="arrow"
     hide-text
@@ -28,8 +28,7 @@ const { t } = useI18n()
 const props = defineProps({
   text: {
     type: String,
-    // eslint-disable-next-line vue/valid-define-props
-    default: t('base.bgColor'),
+    default: '',
   },
   modeless: {
     type: Boolean,

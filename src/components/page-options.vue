@@ -61,7 +61,10 @@
                 :suffix="t('page.size.cm')"
                 placeholder=""
                 :allow-input-over-limit="false"
-                @blur="(val) => inputPageSize(Number(val), 'width')"
+                @blur="
+                  (val: string) =>
+                    inputPageSize(Number.parseFloat(val), 'width')
+                "
               />
             </div>
             <div class="item">
@@ -76,7 +79,10 @@
                 :suffix="t('page.size.cm')"
                 placeholder=""
                 :allow-input-over-limit="false"
-                @blur="(val) => inputPageSize(Number(val), 'height')"
+                @blur="
+                  (val: string) =>
+                    inputPageSize(Number.parseFloat(val), 'height')
+                "
               />
             </div>
           </div>
@@ -156,7 +162,10 @@
                   :suffix="t('page.size.cm')"
                   placeholder=""
                   :allow-input-over-limit="false"
-                  @blur="(val) => inputPageMargin(Number(val), 'top')"
+                  @blur="
+                    (val: string) =>
+                      inputPageMargin(Number.parseFloat(val), 'top')
+                  "
                 />
               </div>
               <div class="item">
@@ -172,7 +181,10 @@
                   :suffix="t('page.size.cm')"
                   placeholder=""
                   :allow-input-over-limit="false"
-                  @blur="(val) => inputPageMargin(Number(val), 'bottom')"
+                  @blur="
+                    (val: string) =>
+                      inputPageMargin(Number.parseFloat(val), 'bottom')
+                  "
                 />
               </div>
               <div class="item">
@@ -188,7 +200,10 @@
                   :suffix="t('page.size.cm')"
                   placeholder=""
                   :allow-input-over-limit="false"
-                  @blur="(val) => inputPageMargin(Number(val), 'left')"
+                  @blur="
+                    (val: string) =>
+                      inputPageMargin(Number.parseFloat(val), 'left')
+                  "
                 />
               </div>
               <div class="item">
@@ -204,7 +219,10 @@
                   :suffix="t('page.size.cm')"
                   placeholder=""
                   :allow-input-over-limit="false"
-                  @blur="(val) => inputPageMargin(Number(val), 'right')"
+                  @blur="
+                    (val: string) =>
+                      inputPageMargin(Number.parseFloat(val), 'right')
+                  "
                 />
               </div>
             </div>

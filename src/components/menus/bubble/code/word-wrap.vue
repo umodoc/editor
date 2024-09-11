@@ -17,8 +17,10 @@ const { editor } = useStore()
 
 const toggleWordWrap = () => {
   const codeBlock = editor.value ? getSelectionNode(editor.value) : null
-  editor.value?.commands.updateAttributes(codeBlock.type, {
-    wordWrap: !codeBlock.attrs.wordWrap,
-  })
+  if (codeBlock) {
+    editor.value?.commands.updateAttributes(codeBlock.type, {
+      wordWrap: !codeBlock.attrs.wordWrap,
+    })
+  }
 }
 </script>
