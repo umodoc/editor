@@ -34,7 +34,6 @@
 
 <script setup lang="ts">
 import { TextSelection } from '@tiptap/pm/state'
-import { useI18n } from 'vue-i18n'
 
 import type { TableOfContentItem } from '@/composables/store'
 

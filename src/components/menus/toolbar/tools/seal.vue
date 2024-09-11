@@ -1,6 +1,6 @@
 <template>
   <menus-button
-    v-if="removeBackground"
+    v-if="hasRemoveBackgroundFunction"
     ico="seal"
     :text="t('tools.seal.text')"
     huge
@@ -29,10 +29,10 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-
 const { t } = useI18n()
 import { removeBackground } from '@imgly/background-removal'
+
+const hasRemoveBackgroundFunction = typeof removeBackground === 'function'
 
 let dialogVisible = $ref(false)
 const { options, editor } = useStore()

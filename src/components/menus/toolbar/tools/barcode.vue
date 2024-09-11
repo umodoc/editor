@@ -221,7 +221,6 @@
 // https://github.com/lindell/JsBarcode/wiki/Options
 import JsBarcode from 'jsbarcode'
 import svg64 from 'svg64'
-import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
@@ -257,7 +256,7 @@ const formats = [
 ]
 const fonts = options.value.dicts?.fonts.map((item) => {
   return {
-    label: localize(item.label),
+    label: l(item.label),
     value: item.value ?? '',
   }
 })

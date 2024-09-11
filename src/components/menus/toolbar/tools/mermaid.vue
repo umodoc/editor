@@ -37,8 +37,6 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-
 const { t } = useI18n()
 import mermaid from 'mermaid'
 import svg64 from 'svg64'

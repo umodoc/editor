@@ -19,7 +19,7 @@
           :min-column-width="150"
           @click="page.size = item"
         >
-          <div class="label" v-text="localize(item.label)"></div>
+          <div class="label" v-text="l(item.label)"></div>
           <div class="desc">
             {{ item.width + t('page.size.cm') }} ×
             {{ item.height + t('page.size.cm') }}
@@ -35,10 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-
-import { localize } from '@/utils/localisation'
-const { t } = useI18n()
+const { t, l } = useI18n()
 const { options, page } = useStore()
 const dialogVisible = $ref(false)
 </script>

@@ -17,11 +17,9 @@
 
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import { getSelectionText } from '@/extensions/selection'
 
-const { t } = useI18n()
 const { page, editor } = useStore()
 
 let visible = $ref(false)

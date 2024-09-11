@@ -71,7 +71,7 @@
           class="umo-status-bar-button"
           variant="text"
           size="small"
-          :href="`https://editor.umodoc.com/${i18n.locale.value === 'zh-CN' ? 'cn' : 'en'}/docs`"
+          :href="`https://editor.umodoc.com/${locale.value === 'zh-CN' ? 'cn' : 'en'}/docs`"
           target="_blank"
         >
           <icon name="home-page" />
@@ -158,16 +158,18 @@
         </t-button>
       </tooltip>
       <tooltip
-        :content="`${fullscreen.isFullscreen ? t('fullscreen.disable') : t('fullscreen.title')} (F11 / ⌘+F11)`"
+        :content="`${fullscreen?.isFullscreen ? t('fullscreen.disable') : t('fullscreen.title')} (F11 / ⌘+F11)`"
       >
         <t-button
           class="umo-status-bar-button"
           variant="text"
           size="small"
-          @click="fullscreen.toggle"
+          @click="fullscreen?.toggle"
         >
           <icon
-            :name="fullscreen.isFullscreen ? 'full-screen-exit' : 'full-screen'"
+            :name="
+              fullscreen?.isFullscreen ? 'full-screen-exit' : 'full-screen'
+            "
           />
         </t-button>
       </tooltip>
@@ -244,7 +246,7 @@
           variant="text"
           size="small"
           @click="zoomReset"
-          v-text="locale"
+          v-text="lang"
         >
         </t-button>
       </t-dropdown>
@@ -253,8 +255,10 @@
   <div v-else class="umo-preview-bar">
     <div
       class="item"
-      :class="{ active: page.preview.laserPointer }"
-      @click="page.preview.laserPointer = !page.preview.laserPointer"
+      :class="{ active: page.preview?.laserPointer }"
+      @click="
+        page.preview && (page.preview.laserPointer = !page.preview.laserPointer)
+      "
     >
       <icon name="laser-pointer" />
       {{ t('preview.laserPointer') }}
@@ -286,13 +290,11 @@
 <script setup lang="ts">
 import type { MaybeElementRef, UseFullscreenReturn } from '@vueuse/core'
 import type { DropdownOption } from 'tdesign-vue-next'
-import { useI18n } from 'vue-i18n'
 
 import type { SupportedLocale } from '@/types'
 import { getShortcut } from '@/utils/shortcut'
 
-const i18n = useI18n()
-const { t } = i18n
+const { t, locale } = useI18n()
 
 const { container, options, page, editor } = useStore()
 const $document = useState('document')
@@ -364,7 +366,7 @@ watch(
   },
 )
 watch(
-  () => fullscreen.isFullscreen,
+  () => fullscreen?.isFullscreen?.value,
   (value) => {
     if (!value) {
       page.value.preview ??= {}
@@ -435,12 +437,12 @@ const langs = [
 ]
 const setLocale = inject('setLocale') as (value: SupportedLocale) => void
 
-const locale = computed(
-  () => langs.find((item) => item.value === i18n.locale.value)?.content,
+const lang = computed(
+  () => langs.find((item) => item.value === locale.value)?.content,
 )
 const changeLang = (dropdownItem: DropdownOption) => {
   const value = dropdownItem.value as SupportedLocale
-  if (i18n.locale.value === value) {
+  if (lang.value === value) {
     return
   }
   const dialog = useConfirm({

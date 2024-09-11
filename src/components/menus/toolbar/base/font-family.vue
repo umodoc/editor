@@ -19,11 +19,11 @@
         :key="item.value ?? ''"
         class="umo-font-family-item"
         :value="item.value ?? ''"
-        :label="localize(item.label)"
+        :label="l(item.label)"
       >
         <span
           :style="{ fontFamily: item.value ?? undefined }"
-          v-text="localize(item.label)"
+          v-text="l(item.label)"
         ></span>
         <span
           v-if="!fontDetect(item.value ?? '')"
@@ -38,11 +38,8 @@
 
 <script setup lang="ts">
 import { isString } from '@tool-belt/type-predicates'
-import { useI18n } from 'vue-i18n'
 
-import { localize } from '@/utils/localisation'
-
-const { t } = useI18n()
+const { t, l } = useI18n()
 const { options, editor } = useStore()
 const $toolbar = useState('toolbar')
 const $recent = useState('recent')

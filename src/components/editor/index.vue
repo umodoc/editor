@@ -10,7 +10,7 @@
     :editor="editor"
     :style="{
       lineHeight: defaultLineHeight,
-      '--umo-editor-placeholder': `'${localize(options.document?.placeholder ?? {})}'`,
+      '--umo-editor-placeholder': `'${l(options.document?.placeholder ?? {})}'`,
     }"
     :spellcheck="
       options.document?.enableSpellcheck && $document.enableSpellcheck
@@ -31,25 +31,15 @@
 import Typography from '@tiptap/extension-typography'
 import { Editor, EditorContent, type Extension } from '@tiptap/vue-3'
 import Mathematics from '@tiptap-pro/extension-mathematics'
-import { useI18n } from 'vue-i18n'
 
 import { extensions } from '@/extensions'
 import Image from '@/extensions/image'
 import Page from '@/extensions/page'
 import { pagePlugin } from '@/extensions/page/page-plugin'
-import { localize } from '@/utils/localisation'
 
-const { t } = useI18n()
-const {
-  options,
-  container,
-  editor,
-  page,
-  painter,
-  tableOfContents,
-  setEditor,
-  editorDestroyed,
-} = useStore()
+const { l } = useI18n()
+const { options, editor, page, painter, setEditor, editorDestroyed } =
+  useStore()
 
 const $document = useState('document')
 

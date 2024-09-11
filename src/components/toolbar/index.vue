@@ -135,7 +135,6 @@
 
 <script setup lang="ts">
 import type { DropdownOption } from 'tdesign-vue-next'
-import { useI18n } from 'vue-i18n'
 
 import { timeAgo } from '@/utils/time-ago'
 const { t } = useI18n()

@@ -78,14 +78,11 @@
   </node-view-wrapper>
 </template>
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-
-const { t } = useI18n()
-import { nodeViewProps } from '@tiptap/vue-3'
+import { nodeViewProps, NodeViewWrapper, NodeViewContent } from '@tiptap/vue-3'
 import type { WatermarkText } from 'tdesign-vue-next'
-
 import type { WatermarkOption } from '@/types'
 
+const { t } = useI18n()
 const { page, exportImage } = useStore()
 const { editor, node } = defineProps(nodeViewProps)
 const containerRef = ref(null)
@@ -138,8 +135,8 @@ watch(
 
   &:not(.no-shadow) {
     box-shadow:
-      rgba(0, 0, 0, 0.06) 0 0 10px 0,
-      rgba(0, 0, 0, 0.04) 0 0 0 1px;
+      rgba(0, 0, 0, 0.06) 0px 0px 10px 0px,
+      rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
   }
 
   &:not(:first-child) {

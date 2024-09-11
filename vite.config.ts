@@ -30,7 +30,9 @@ const vuePlugins = {
     resolvers: [TDesignResolver({ library: 'vue-next', esm: true })],
   }),
   SvgIcons: createSvgIconsPlugin({
-    iconDirs: [`${process.cwd()}/src/assets/icons`],
+    iconDirs: [process.cwd() + '/src/assets/icons'],
+    symbolId: 'umo-icon-[name]',
+    customDomId: '__umo__svg__icons__dom__',
   }),
 }
 

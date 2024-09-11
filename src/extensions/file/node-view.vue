@@ -43,7 +43,6 @@
 <script setup lang="ts">
 import { nodeViewProps } from '@tiptap/vue-3'
 import prettyBytes from 'pretty-bytes'
-import { useI18n } from 'vue-i18n'
 
 import { getFileIcon } from '@/utils/file'
 

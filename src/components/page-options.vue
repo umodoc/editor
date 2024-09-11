@@ -39,7 +39,7 @@
               :key="index"
               :value="index"
             >
-              <div class="label" v-text="localize(item.label)"></div>
+              <div class="label" v-text="l(item.label)"></div>
               <div class="desc">
                 {{ item.width }}{{ t('page.size.cm') }} × {{ item.height
                 }}{{ t('page.size.cm') }}
@@ -234,11 +234,8 @@
 
 <script setup lang="ts">
 import type { InputNumberValue } from 'tdesign-vue-next'
-import { useI18n } from 'vue-i18n'
 
-import { localize } from '@/utils/localisation'
-
-const { t } = useI18n()
+const { t, l } = useI18n()
 const props = defineProps({
   visible: {
     type: Boolean,
@@ -249,7 +246,7 @@ const emits = defineEmits(['close'])
 
 const { container, options, page } = useStore()
 
-const pageOptions = $ref(structuredClone(page.value))
+let pageOptions = $ref(JSON.parse(JSON.stringify(page.value)))
 
 // 页面大小
 const selectPageSize = (value: number) => {

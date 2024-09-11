@@ -110,16 +110,14 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-
-const { t } = useI18n()
+const { t, l } = useI18n()
 const { popupVisible, togglePopup } = usePopup()
 
 const { options, page } = useStore()
 
 const fonts = options.value.dicts?.fonts.map((item) => {
   return {
-    label: localize(item.label),
+    label: l(item.label),
     value: item.value ?? '',
   }
 })

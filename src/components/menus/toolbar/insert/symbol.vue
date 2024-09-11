@@ -10,10 +10,7 @@
     <template #content>
       <div class="umo-symbols-container narrow-scrollbar">
         <template v-for="(group, index) in options.dicts?.symbols" :key="index">
-          <div
-            class="umo-symbols-group-title"
-            v-text="localize(group.label)"
-          ></div>
+          <div class="umo-symbols-group-title" v-text="l(group.label)"></div>
           <div class="umo-symbols-group-container">
             <div
               v-for="(item, i) in group.items.split('')"
@@ -31,10 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-
-import { localize } from '@/utils/localisation'
-const { t } = useI18n()
+const { t, l } = useI18n()
 const { popupVisible, togglePopup } = usePopup()
 const { options, editor } = useStore()
 

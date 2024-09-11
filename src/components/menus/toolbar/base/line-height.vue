@@ -10,17 +10,15 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-
-const { t } = useI18n()
+const { t, l } = useI18n()
 const { options, editor } = useStore()
 
 const lineHeights = computed(() => {
   return options.value.dicts?.lineHeights.map((item) => {
     return {
       content: item.default
-        ? localize(item.label) + t('base.lineHeight.default')
-        : localize(item.label),
+        ? l(item.label) + t('base.lineHeight.default')
+        : l(item.label),
       value: item.value,
       active: editor.value?.isActive({ lineHeight: item.value }),
     }

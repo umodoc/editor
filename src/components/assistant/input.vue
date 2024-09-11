@@ -50,7 +50,7 @@
             variant="outline"
             theme="default"
             @click="insertCommand(item)"
-            v-text="localize(item.label)"
+            v-text="l(item.label)"
           ></t-button>
         </div>
       </div>
@@ -124,7 +124,6 @@
 <script setup lang="ts">
 import { isString } from '@tool-belt/type-predicates'
 import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import { getSelectionText } from '@/extensions/selection'
 import type {
@@ -133,10 +132,9 @@ import type {
   AssistantResult,
   CommandItem,
 } from '@/types'
-import { localize } from '@/utils/localisation'
 
 const i18n = useI18n()
-const { t } = i18n
+const { t, l } = i18n
 
 const { options, editor, assistantBox } = useStore()
 
@@ -218,8 +216,8 @@ const send = async () => {
 }
 
 const insertCommand = ({ value, autoSend }: CommandItem) => {
-  command.value = localize(value) ?? ''
-  result.value.command = localize(value) ?? ''
+  command.value = l(value) ?? ''
+  result.value.command = l(value) ?? ''
   result.value.content = ''
   inputRef.value?.focus()
   if (autoSend !== false) {

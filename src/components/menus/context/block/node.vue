@@ -244,7 +244,6 @@
 
 <script setup lang="ts">
 import type { Level } from '@tiptap/extension-heading'
-import { useI18n } from 'vue-i18n'
 
 import type { Template } from '@/types'
 

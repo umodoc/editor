@@ -34,7 +34,7 @@ const options = {
     },
   ],
   shareUrl: 'https://umodoc.com',
-  onSave(content: unknown, page: unknown, document: { content: string }) {
+  async onSave(content: unknown, page: unknown, document: { content: string }) {
     console.log('onSave', { content, page, document })
     localStorage.setItem('document.content', document.content)
     return new Promise((resolve) => {

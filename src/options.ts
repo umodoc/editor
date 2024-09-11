@@ -2,6 +2,7 @@ import { ObjectSchema } from '@eslint/object-schema'
 import {
   type AsyncFunction,
   isAsyncFunction,
+  isFunction,
   isNumber,
   isRecord,
   isString,
@@ -825,9 +826,10 @@ const ojbectSchema = new ObjectSchema({
           if (
             !['start', 'end', 'all', true, false, null].includes(
               value as unknown as string,
-            ) ||
+            ) &&
             !isNumber(value)
           ) {
+            console.log(value)
             throw new Error(
               'Key "document": Key "autofocus" must be one of "start", "end", "all", Number, true, false, null.',
             )
@@ -1011,8 +1013,8 @@ const ojbectSchema = new ObjectSchema({
   },
   onFileDelete: {
     merge: 'replace',
-    validate(value: AsyncFunction) {
-      if (!isAsyncFunction(value)) {
+    validate(value: Function) {
+      if (!isFunction(value)) {
         throw new Error('Key "onFileDelete" must be a function.')
       }
     },

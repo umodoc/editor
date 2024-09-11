@@ -300,30 +300,76 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-
-const { t } = useI18n()
 import { isString } from '@tool-belt/type-predicates'
 import type { DropdownOption } from 'tdesign-vue-next'
 
 import { getShortcut } from '@/utils/shortcut'
 
-const props = defineProps<{
-  menuType?: string
-  huge?: boolean
-  ico?: string
-  text?: string
-  hideText?: boolean
-  tooltip?: string | boolean
-  shortcut?: string
-  shortcutText?: string
-  selectOptions?: DropdownOption[]
-  selectValue?: string | number
-  popupVisible?: boolean
-  popupHandle?: string
-  menuActive?: boolean
-  disabled?: boolean
-}>()
+const props = defineProps({
+  // 菜单类型
+  menuType: {
+    type: String,
+    default: 'button',
+  },
+  // 是否为大按钮
+  huge: {
+    type: Boolean,
+    default: false,
+  },
+  // 按钮图标
+  ico: {
+    type: String,
+    default: undefined,
+  },
+  // 按钮文字
+  text: {
+    type: String,
+    default: '',
+  },
+  hideText: {
+    type: Boolean,
+    default: false,
+  },
+  // 文字提示
+  tooltip: {
+    type: [String, Boolean],
+    default: undefined,
+  },
+  // 快捷键
+  shortcut: {
+    type: String,
+    default: undefined,
+  },
+  shortcutText: {
+    type: String,
+    default: undefined,
+  },
+  // Dropdown,Select 相关
+  selectOptions: {
+    type: Array as PropType<DropdownOption[]>,
+  },
+  selectValue: {
+    type: [String, Number],
+    default: '',
+  },
+  // Popup 相关
+  popupVisible: {
+    type: Boolean,
+    default: false,
+  },
+  popupHandle: {
+    type: String,
+  },
+  // 菜单激活状态
+  menuActive: {
+    type: Boolean,
+    default: false,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+})
 const emits = defineEmits(['toggle-popup'])
 
 const attrs = useAttrs()
