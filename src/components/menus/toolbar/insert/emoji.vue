@@ -9,13 +9,16 @@
   >
     <template #content>
       <div class="umo-emojis-container narrow-scrollbar">
-        <template v-for="(group, index) in options.dicts.emojis" :key="index">
-          <div class="umo-emojis-group-title" v-text="l(group.label)"></div>
+        <template v-for="(group, index) in options.dicts?.emojis" :key="index">
+          <div
+            class="umo-emojis-group-title"
+            v-text="localize(group.label)"
+          ></div>
           <div class="umo-emojis-group-container">
             <div
-              class="umo-emojis-group-item"
               v-for="(item, i) in group.items.split(' ')"
               :key="i"
+              class="umo-emojis-group-item"
               @click="selectEmoji(item)"
             >
               {{ item }}
@@ -27,11 +30,15 @@
   </menus-button>
 </template>
 
-<script setup>
-let { popupVisible, togglePopup } = usePopup()
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+import { localize } from '@/utils/localisation'
+const { t } = useI18n()
+const { popupVisible, togglePopup } = usePopup()
 const { options, editor } = useStore()
 
-const selectEmoji = (emoji) => {
+const selectEmoji = (emoji: string) => {
   editor.value?.chain().focus().insertContent(emoji).run()
   popupVisible.value = false
 }
@@ -77,7 +84,6 @@ const selectEmoji = (emoji) => {
     line-height: 1em;
     border-radius: var(--umo-radius);
     cursor: pointer;
-    transition: background-color 0.2s;
     font-size: 20px;
     margin-bottom: 2px;
     color: var(--umo-text-color);

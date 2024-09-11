@@ -9,7 +9,10 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import { getSelectionNode } from '@/extensions/selection'
 
 const { editor } = useStore()
@@ -19,8 +22,10 @@ const themes = [
   { label: t('bubbleMenu.code.themes.light'), value: 'light' },
 ]
 
-const setTheme = (theme) => {
-  const codeBlock = getSelectionNode(editor.value)
-  editor.value.commands.updateAttributes(codeBlock.type, { theme })
+const setTheme = (theme: 'dark' | 'light') => {
+  const codeBlock = editor.value ? getSelectionNode(editor.value) : null
+  if (codeBlock) {
+    editor.value?.commands.updateAttributes(codeBlock.type, { theme })
+  }
 }
 </script>

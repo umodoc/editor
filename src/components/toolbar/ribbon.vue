@@ -2,10 +2,10 @@
   <div class="umo-ribbon-menu">
     <div v-if="menus.length > 1" class="umo-ribbon-tabs">
       <div
-        class="umo-ribbon-tabs-item"
-        :class="{ active: currentMenu === item.value }"
         v-for="item in menus"
         :key="item.value"
+        class="umo-ribbon-tabs-item"
+        :class="{ active: currentMenu === item.value }"
         @click="changeMenu(item.value)"
       >
         {{ item.label }}
@@ -203,8 +203,8 @@
             </div>
           </div>
           <div
-            class="umo-virtual-group"
             v-if="!hidePageHeader || !hidePageFooter"
+            class="umo-virtual-group"
           >
             <menus-toolbar-page-header v-if="!hidePageHeader" />
             <menus-toolbar-page-footer v-if="!hidePageFooter" />
@@ -242,29 +242,29 @@
   </div>
 </template>
 
-<script setup>
-const props = defineProps({
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const props = defineProps<{
   menus: {
-    type: Array,
-    required: true,
-  },
-  currentMenu: {
-    type: String,
-    required: true,
-  },
-})
+    value: string
+    label: string
+  }[]
+  currentMenu: string
+}>()
 const emits = defineEmits(['menu-change'])
 
 const { options, hidePageHeader, hidePageFooter } = useStore()
-const disableItem = (name) => {
-  return options.value.toolbar.disableMenuItems.includes(name)
+const disableItem = (name: string) => {
+  return options.value.toolbar?.disableMenuItems.includes(name)
 }
 
-const scrollableRef = $ref()
-const changeMenu = async (menu) => {
+const scrollableRef = $ref<{ update: () => void }>()
+const changeMenu = async (menu: string) => {
   emits('menu-change', menu)
   await nextTick()
-  scrollableRef.update()
+  scrollableRef?.update()
 }
 </script>
 

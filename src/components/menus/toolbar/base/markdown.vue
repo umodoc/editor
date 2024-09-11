@@ -1,20 +1,23 @@
 <template>
   <menus-button
-    v-if="options.document.enableMarkdown"
+    v-if="options.document?.enableMarkdown"
     :text="t('base.markdown.text')"
     ico="markdown"
     :tooltip="
-      options.document.enableMarkdown
+      options.document?.enableMarkdown
         ? t('base.markdown.disable')
         : t('base.markdown.enable')
     "
-    :menu-active="$document.markdown"
+    :menu-active="$document.enableMarkdown"
     huge
     @menu-click="toggleMarkdownMode"
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const { options, editorDestroyed } = useStore()
 const $document = useState('document')
 
@@ -30,7 +33,7 @@ const toggleMarkdownMode = () => {
       content: t('base.markdown.toggle'),
     },
     async onConfirm() {
-      $document.value.markdown = !$document.value.markdown
+      $document.value.enableMarkdown = !$document.value.enableMarkdown
       dialog.destroy()
       await nextTick()
       editorDestroyed.value = true

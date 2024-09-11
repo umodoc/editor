@@ -1,6 +1,7 @@
-import { Editor, Extension, findParentNode } from '@tiptap/core'
-import { Plugin, PluginKey } from '@tiptap/pm/state'
+import { type Editor, Extension, findParentNode } from '@tiptap/core'
+import { type NodeSelection, Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
+
 import { LIST_TYPE } from '@/extensions/page/node-names'
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -26,7 +27,7 @@ export default Extension.create({
               return null
             }
 
-            if (editor.isFocused === true) {
+            if (editor.isFocused) {
               return null
             }
 
@@ -45,14 +46,14 @@ export default Extension.create({
       setCurrentNodeSelection:
         () =>
         ({ editor, chain }) => {
-          let parentNode = findParentNode((node) =>
+          const parentNode = findParentNode((node) =>
             LIST_TYPE.includes(node.type.name),
           )(editor.state.selection)
           if (parentNode) {
             return chain().setNodeSelection(parentNode.pos).run()
           }
-          // @ts-ignore
-          const { $anchor, node } = editor.state.selection
+          // FIXME: The type assertion below might be wrong.
+          const { $anchor, node } = editor.state.selection as NodeSelection
           const pos = node?.attrs?.vnode
             ? $anchor.pos
             : $anchor.pos - $anchor.parentOffset - 1
@@ -73,9 +74,8 @@ export default Extension.create({
               editor.isActive('file')
             ) {
               const { options } = useStore()
-              const { id, src } = node
-              // @ts-ignore
-              options.value.onFileDelete(id, src)
+              const { id, src } = node.attrs
+              options.value.onFileDelete?.(id, src)
             }
             chain().focus().deleteSelection().run()
             return true
@@ -90,21 +90,19 @@ export default Extension.create({
   },
 })
 export function getSelectionNode(editor: Editor) {
-  // @ts-ignore
-  const { node } = editor.state.selection
+  const { node } = editor.state.selection as NodeSelection
   if (node) {
     return node
   }
-  let parentNode = findParentNode((node) => LIST_TYPE.includes(node.type.name))(
-    editor.state.selection,
-  )
+  const parentNode = findParentNode((node) =>
+    LIST_TYPE.includes(node.type.name),
+  )(editor.state.selection)
   const { $anchor } = editor.state.selection
   if (parentNode) {
     return $anchor.node(parentNode.depth)
   }
   editor.commands.selectParentNode()
-  // @ts-ignore
-  return editor.state.selection.node
+  return (editor.state.selection as NodeSelection).node
 }
 export function getSelectionText(editor: Editor) {
   const { from, to, empty } = editor.state.selection

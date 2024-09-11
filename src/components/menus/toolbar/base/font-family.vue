@@ -15,10 +15,10 @@
       :divider="false"
     >
       <t-option
-        class="umo-font-family-item"
         v-for="item in group.children"
-        :value="item.value"
         :key="item.value"
+        class="umo-font-family-item"
+        :value="item.value"
         :label="l(item.label)"
       >
         <span :style="{ fontFamily: item.value }" v-text="l(item.label)"></span>
@@ -34,11 +34,14 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const { options, editor } = useStore()
 const $toolbar = useState('toolbar')
 const $recent = useState('recent')
 
-let usedFonts = $ref([])
+const usedFonts = $ref([])
 // https://www.cnblogs.com/gaidalou/p/8479452.html
 const fontDetect = (font) => {
   if (!font) {
@@ -90,7 +93,7 @@ const allFonts = computed(() => {
   const getFontsByValues = (values) => {
     return values.map(
       (item) =>
-        options.value.dicts.fonts.find(({ value }) => value === item) || {
+        options.value.dicts.fonts.find(({ value }) => value === item) ?? {
           label: item,
           item,
         },
@@ -116,12 +119,12 @@ const getUsedFonts = () => {
   const content = JSON.stringify(editor.value.getJSON())
   const matches = content.match(/"fontFamily":"([^"]+)"/g)
   if (matches) {
-    matches.forEach((item) => {
+    for (const item of matches) {
       const font = item.replace('"fontFamily":"', '').replace('"', '')
       if (!usedFonts.includes(font)) {
         usedFonts.push(font)
       }
-    })
+    }
   }
 }
 

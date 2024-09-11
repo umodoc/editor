@@ -97,7 +97,7 @@
               class="umo-qrcode-empty"
               v-text="t('tools.qrcode.notEmpty')"
             ></div>
-            <div class="umo-svg-render" v-else v-html="svgCode"></div>
+            <div v-else class="umo-svg-render" v-html="svgCode"></div>
           </div>
         </div>
       </div>
@@ -106,19 +106,23 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import QRCode from 'qrcode-svg'
 import svg64 from 'svg64'
 
 const { content } = defineProps({
   content: {
     type: String,
+    default: '',
   },
 })
 
 let dialogVisible = $ref(false)
 const { editor } = useStore()
 
-const menuClick = async () => {
+const menuClick = () => {
   renderQrcode()
   dialogVisible = true
 }
@@ -165,7 +169,9 @@ watch(
   (val) => {
     if (val) {
       config = content ? JSON.parse(content) : { ...defaultConfig }
-      setTimeout(() => (changed = false), 200)
+      setTimeout(() => {
+        changed = false
+      }, 200)
     }
   },
   { immediate: true },

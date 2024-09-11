@@ -11,8 +11,12 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import { languages } from 'prism-code-editor/prism'
+
 import { getSelectionNode } from '@/extensions/selection'
 
 const { editor } = useStore()
@@ -21,8 +25,10 @@ const languageOptions = Object.keys(languages).map((item) => {
   return { label: item, value: item }
 })
 
-const setLanguage = (language) => {
-  const codeBlock = getSelectionNode(editor.value)
-  editor.value.commands.updateAttributes(codeBlock.type, { language })
+const setLanguage = (language: string) => {
+  const codeBlock = editor.value ? getSelectionNode(editor.value) : null
+  if (codeBlock) {
+    editor.value?.commands.updateAttributes(codeBlock.type, { language })
+  }
 }
 </script>

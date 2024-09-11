@@ -8,9 +8,9 @@
     <div class="umo-heading-container">
       <template v-for="(item, index) in options" :key="item.value">
         <div
+          v-if="index < 4"
           class="card"
           :class="{ active: item.value === currentValue && editor?.isEditable }"
-          v-if="index < 4"
           @click="setHeading(item.value)"
         >
           <div class="title" :class="item.desc">{{ item.label }}</div>
@@ -32,11 +32,11 @@
           <div ref="popupContentRef" class="umo-heading-container">
             <template v-for="(item, index) in options" :key="item.value">
               <div
+                v-if="index >= 4"
                 class="card"
                 :class="{
                   active: item.value === currentValue && editor?.isEditable,
                 }"
-                v-if="index >= 4"
                 @click="setHeading(item.value)"
               >
                 <div class="title" :class="item.desc">{{ item.label }}</div>
@@ -61,8 +61,8 @@
   >
     <t-option
       v-for="item in options"
-      class="umo-heading-select-option"
       :key="item.value"
+      class="umo-heading-select-option"
       :value="item.value"
       :label="item.label"
     >
@@ -71,8 +71,12 @@
   </menus-button>
 </template>
 
-<script setup>
-let { popupVisible } = usePopup()
+<script setup lang="ts">
+import type { Level } from '@tiptap/extension-heading'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const { popupVisible } = usePopup()
 const { container, editor } = useStore()
 const $toolbar = useState('toolbar')
 const popupContentRef = ref(null)
@@ -80,19 +84,20 @@ const popupContentRef = ref(null)
 const options = $ref([
   { label: t('base.heading.paragraph'), desc: 'text', value: 'paragraph' },
 ])
-for (let i in Array.from({ length: 6 })) {
+for (const i of Array.from({ length: 6 })) {
   const level = Number(i) + 1
   options.push({
-    label: `${t('base.heading.text', { level })}`,
+    label: t('base.heading.text', { level }),
     desc: `h${level}`,
-    value: level,
+    value: level.toString(),
   })
 }
 
 const currentValue = computed(() => {
-  const heading = (level) => editor.value?.isActive('heading', { level })
+  const heading = (level: number) =>
+    editor.value?.isActive('heading', { level })
   if (editor.value) {
-    if (editor.value?.isActive('paragraph')) {
+    if (editor.value.isActive('paragraph')) {
       return 'paragraph'
     }
     if (heading(1)) {
@@ -117,11 +122,15 @@ const currentValue = computed(() => {
   return ''
 })
 
-const setHeading = (value) => {
+const setHeading = (value: string) => {
   if (value === 'paragraph') {
     editor.value?.chain().focus().setParagraph().run()
   } else {
-    editor.value?.chain().focus().toggleHeading({ level: value }).run()
+    editor.value
+      ?.chain()
+      .focus()
+      .toggleHeading({ level: Number(value) as Level })
+      .run()
   }
   popupVisible.value = false
 }

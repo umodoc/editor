@@ -63,45 +63,50 @@
           :disabled="resultLength === 0"
           theme="default"
           variant="text"
-          v-text="t('search.replace')"
           @click="replace"
+          v-text="t('search.replace')"
         >
         </t-button>
         <t-button
           :disabled="resultLength === 0"
           theme="default"
           variant="text"
-          v-text="t('search.replaceAll')"
           @click="replaceAll"
+          v-text="t('search.replaceAll')"
         >
         </t-button>
         <t-button
           :disabled="resultLength === 0"
           theme="primary"
-          v-text="t('search.search')"
           @click="next"
+          v-text="t('search.search')"
         ></t-button>
       </div>
     </div>
   </modal>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+
 const { editor, searchReplace } = useStore()
 
 let searchText = $ref('')
 let replaceText = $ref('')
-let caseSensitive = $ref(false)
-useHotkeys('ctrl+f, command+f', () => (searchReplace.value = true))
+const caseSensitive = $ref(false)
+useHotkeys('ctrl+f, command+f', () => {
+  searchReplace.value = true
+})
 
 const resultLength = computed(
-  () => editor.value?.storage?.searchAndReplace?.results.length || 0,
+  () => editor.value?.storage.searchAndReplace?.results.length || 0,
 )
 
 const clear = () => {
   searchText = ''
   replaceText = ''
-  editor.value.commands.resetIndex()
+  editor.value?.commands.resetIndex()
 }
 
 const search = (clearIndex = false) => {
@@ -129,7 +134,7 @@ const goToSelection = () => {
   const { node } = editor.value.view.domAtPos(
     editor.value.state.selection.anchor,
   )
-  node && node.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  ;(node as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
 
 watch(
@@ -172,7 +177,9 @@ const replaceAll = () => editor.value?.commands.replaceAll()
 
 watch(
   () => searchReplace.value,
-  () => clear(),
+  () => {
+    clear()
+  },
 )
 </script>
 

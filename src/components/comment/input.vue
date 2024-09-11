@@ -1,8 +1,8 @@
 <template>
   <div class="umo-comment-container">
     <t-comment
-      :avatar="user.avatarUrl || options.user.avatarUrl || defaultAvatar"
-      :author="user.nickName || options.user.nickName || '未知用户'"
+      :avatar="user.avatarUrl || options.user?.avatarUrl"
+      :author="user.nickName || options.user?.nickName || '未知用户'"
     >
       <template #content>
         <div class="umo-comment-form">
@@ -36,9 +36,10 @@
   </div>
 </template>
 
-<script setup>
-import defaultAvatar from '@/assets/images/avatar.svg'
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const { options, editor, commentBox } = useStore()
 
 const props = defineProps({
@@ -48,14 +49,14 @@ const props = defineProps({
   },
 })
 
-let comment = $ref('')
+const comment = $ref('')
 const submitComment = () => {
   console.log(comment)
   closeComment()
 }
 const closeComment = () => {
   commentBox.value = false
-  editor.value.commands.focus()
+  editor.value?.commands.focus()
 }
 </script>
 

@@ -11,9 +11,15 @@
   </t-tooltip>
 </template>
 
-<script setup>
-const props = defineProps({
-  content: {},
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+defineProps({
+  content: {
+    type: String,
+    required: true,
+  },
 })
 const { container } = useStore()
 </script>

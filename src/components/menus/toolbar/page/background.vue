@@ -10,12 +10,12 @@
     <template #content>
       <div class="umo-background-container">
         <div
+          v-for="(item, index) in backgrounds"
+          :key="index"
           class="umo-background-item"
           :class="{ active: page.background === item.value }"
           :style="{ backgroundColor: item.value }"
-          v-for="(item, index) in backgrounds"
-          :key="index"
-          @click="backgroundChange(item.value)"
+          @click="backgroundChange(item.value ?? '')"
         >
           {{ item.label }}
         </div>
@@ -49,8 +49,11 @@
   </menus-button>
 </template>
 
-<script setup>
-let { popupVisible, togglePopup } = usePopup()
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const { popupVisible, togglePopup } = usePopup()
 const { container, page } = useStore()
 
 const backgrounds = [
@@ -64,7 +67,7 @@ const backgrounds = [
 
 // 更多颜色
 const moreColorPicker = $ref(false)
-const backgroundChange = (color) => {
+const backgroundChange = (color: string) => {
   page.value.background = color
 }
 </script>

@@ -43,10 +43,13 @@
   </menus-button>
 </template>
 
-<script setup>
-import { getSelectionNode } from '@/extensions/selection'
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 
-let { popupVisible, togglePopup } = usePopup()
+import { getSelectionNode } from '@/extensions/selection'
+const { t } = useI18n()
+
+const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
 let marginTop = $ref('')
@@ -54,7 +57,7 @@ let marginBottom = $ref('')
 
 const setMarginValue = () => {
   if (popupVisible.value) {
-    const node = getSelectionNode(editor.value)
+    const node = editor.value ? getSelectionNode(editor.value) : null
     if (!node?.attrs?.margin) {
       return
     }
@@ -72,7 +75,7 @@ const setMarginValue = () => {
 }
 
 const setMargin = () => {
-  editor.value.commands.setMargin({
+  editor.value?.commands.setMargin({
     top: marginTop && marginTop !== '' ? marginTop?.toString() : undefined,
     bottom:
       marginBottom && marginBottom !== ''
@@ -92,7 +95,7 @@ watch(
   { immediate: true },
 )
 const resetMargin = () => {
-  editor.value.commands.unsetMargin()
+  editor.value?.commands.unsetMargin()
   popupVisible.value = false
 }
 </script>

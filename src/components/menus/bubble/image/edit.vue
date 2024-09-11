@@ -5,12 +5,15 @@
   <menus-toolbar-tools-mermaid v-if="type === 'mermaid'" :content="content" />
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const { editor } = useStore()
 const type = computed(() => {
-  return editor.value?.getAttributes('image')?.type
+  return editor.value?.getAttributes('image').type
 })
 const content = computed(() => {
-  return editor.value?.getAttributes('image')?.content
+  return editor.value?.getAttributes('image').content
 })
 </script>

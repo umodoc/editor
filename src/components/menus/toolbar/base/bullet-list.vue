@@ -20,7 +20,7 @@
         >
           <div
             class="umo-bullet-list-item"
-            :class="{ active: listType == item.value }"
+            :class="{ active: listType === item.value }"
             @click="toggleBulletList(item.value)"
           >
             <icon
@@ -34,8 +34,11 @@
   </menus-button>
 </template>
 
-<script setup>
-let { popupVisible, togglePopup } = usePopup()
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
 const options = [
@@ -54,23 +57,21 @@ watch(
     }
   },
 )
-const toggleBulletList = (listStyleType) => {
+const toggleBulletList = (listStyleType: string) => {
   const chain = editor.value?.chain().focus()
-  if (!editor.value?.isActive('bulletList')) {
+  if (editor.value?.isActive('bulletList')) {
+    if (
+      editor.value.getAttributes('bulletList').listStyleType === listStyleType
+    ) {
+      chain?.toggleBulletList().run()
+    } else {
+      chain?.updateAttributes('bulletList', { listStyleType }).run()
+    }
+  } else {
     chain
-      .toggleBulletList()
-      .updateAttributes('bulletList', { listStyleType })
-      .run()
-  }
-  // 切换列表类型
-  else if (
-    editor.value.getAttributes('bulletList').listStyleType !== listStyleType
-  ) {
-    chain.updateAttributes('bulletList', { listStyleType }).run()
-  }
-  // 关闭列表类型
-  else {
-    chain.toggleBulletList().run()
+      ?.toggleBulletList()
+      ?.updateAttributes('bulletList', { listStyleType })
+      ?.run()
   }
   listType = listStyleType
   popupVisible.value = false

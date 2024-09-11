@@ -1,6 +1,11 @@
-import { Extension } from '@tiptap/core'
-import { TextSelection, AllSelection, Transaction } from '@tiptap/pm/state'
-
+import { type Dispatch, Extension } from '@tiptap/core'
+import {
+  AllSelection,
+  type EditorState,
+  TextSelection,
+  type Transaction,
+} from '@tiptap/pm/state'
+import { isFunction } from '@tool-belt/type-predicates'
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     indent: {
@@ -42,15 +47,16 @@ export default Extension.create({
             },
             parseHTML: (element) => {
               let indentClassName = ''
-              element.classList.forEach((className) => {
-                if (className.indexOf(classAttrPrefix) === 0) {
+              for (const className of element.classList) {
+                if (className.startsWith(classAttrPrefix)) {
                   indentClassName = className
+                  break
                 }
-              })
+              }
               if (indentClassName) {
-                const level = parseInt(
+                const level = Number.parseInt(
                   indentClassName.slice(classAttrPrefix.length),
-                  7,
+                  10,
                 )
                 return level && level > this.options.minLevel ? level : null
               }
@@ -67,7 +73,7 @@ export default Extension.create({
       pos: number,
       delta: number,
     ) => {
-      const node = tr?.doc?.nodeAt(pos) || null
+      const node = tr.doc.nodeAt(pos) ?? null
       if (node) {
         const nextLevel = (node.attrs.indent || 0) + delta
         const { minLevel, maxLevel } = this.options
@@ -78,9 +84,11 @@ export default Extension.create({
           indent = maxLevel
         }
         if (indent !== node.attrs.indent) {
-          const { indent: oldIndent, ...currentAttrs } = node.attrs
+          const clonedAttrs = { ...node.attrs }
+          delete clonedAttrs.indent
+
           const nodeAttrs =
-            indent > minLevel ? { ...currentAttrs, indent } : currentAttrs
+            indent > minLevel ? { ...clonedAttrs, indent } : clonedAttrs
           return tr.setNodeMarkup(pos, node.type, nodeAttrs, node.marks)
         }
       }
@@ -108,13 +116,22 @@ export default Extension.create({
     const applyIndent =
       (direction: number) =>
       () =>
-      //@ts-ignore
-      ({ tr, state, dispatch }) => {
+      ({
+        tr,
+        state,
+        dispatch,
+      }: {
+        tr: Transaction
+        state: EditorState
+        dispatch: Dispatch
+      }) => {
         const { selection } = state
-        tr = tr.setSelection(selection)
+        tr.setSelection(selection)
         tr = updateIndentLevel(tr, direction)
         if (tr.docChanged) {
-          dispatch === null || dispatch === void 0 ? void 0 : dispatch(tr)
+          if (isFunction(dispatch)) {
+            dispatch(tr)
+          }
           return true
         }
         return false

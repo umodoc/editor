@@ -9,14 +9,17 @@
     v-bind="$attrs"
   >
     <template #header>
-      <icon v-if="$attrs.icon" :name="$attrs.icon" />
+      <icon v-if="$attrs.icon" :name="$attrs.icon as string" />
       <span>{{ $attrs.header }}</span>
     </template>
     <slot />
   </t-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const props = defineProps({
   visible: {
     type: Boolean,

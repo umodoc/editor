@@ -12,7 +12,7 @@
     width="420px"
     draggable
     destroy-on-close
-    :confirmBtn="t('insert.link.insert')"
+    :confirm-btn="t('insert.link.insert')"
     @confirm="insertLink"
     @close="dialogVisible = false"
   >
@@ -40,7 +40,10 @@
   </modal>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import { getSelectionText } from '@/extensions/selection'
 
 const { editor } = useStore()
@@ -48,7 +51,7 @@ let dialogVisible = $ref(false)
 
 let text = $ref('')
 let href = $ref('')
-let error = $ref({ text: false, href: false })
+const error = $ref({ text: false, href: false })
 const insertLink = () => {
   if (text === '') {
     error.text = true
@@ -74,8 +77,8 @@ watch(
   () => dialogVisible,
   (val) => {
     if (val) {
-      text = getSelectionText(editor.value)
-      href = editor.value.getAttributes('link').href || ''
+      text = editor.value ? getSelectionText(editor.value) : ''
+      href = editor?.value?.getAttributes('link').href ?? ''
     } else {
       text = ''
       href = ''

@@ -4,7 +4,7 @@
     :text="t('table.borderColor')"
     menu-type="popup"
     huge
-    :disabled="!editor?.can().setCellAttribute('borderColor')"
+    :disabled="!editor?.can().setCellAttribute('borderColor', '')"
     :popup-visible="popupVisible"
     @toggle-popup="togglePopup"
   >
@@ -14,13 +14,16 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const emits = defineEmits(['change'])
 
-let { popupVisible, togglePopup } = usePopup()
+const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
-const colorBorderChange = (color) => {
+const colorBorderChange = (color: string) => {
   popupVisible.value = false
   const borderColor = color === '' ? null : color
   editor.value

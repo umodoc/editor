@@ -1,8 +1,8 @@
 <template>
   <node-view-wrapper
+    :id="node.attrs.id"
     ref="containerRef"
     class="umo-node-view"
-    :id="node.attrs.id"
     :style="nodeStyle"
     @dblclick="imagePreview = node.attrs.src"
   >
@@ -12,7 +12,7 @@
         'is-loading': node.attrs.src && isLoading,
         'is-error': node.attrs.src && error,
         'is-draggable': node.attrs.draggable,
-        'umo-hover-shadow': !options.document.readOnly,
+        'umo-hover-shadow': !options.document?.readOnly,
       }"
     >
       <div
@@ -24,8 +24,8 @@
         {{ t('node.image.loading') }}
       </div>
       <div
-        class="error"
         v-else-if="node.attrs.src && error"
+        class="error"
         :style="{ height: `${node.attrs.height}px` }"
       >
         <icon name="image-failed" class="error-icon" />
@@ -36,8 +36,10 @@
         :selected="selected"
         :rotatable="true"
         :boundary="false"
-        :draggable="Boolean(node.attrs.draggable) && !options.document.readOnly"
-        :disabled="options.document.readOnly"
+        :draggable="
+          Boolean(node.attrs.draggable) && !options.document?.readOnly
+        "
+        :disabled="options.document?.readOnly"
         :angle="node.attrs.angle"
         :width="Number(node.attrs.width)"
         :height="Number(node.attrs.height)"
@@ -51,8 +53,8 @@
         :equal-proportion="node.attrs.equalProportion"
         @rotate="onRotate"
         @resize="onResize"
-        @resizeStart="onResizeStart"
-        @resizeEnd="onResizeEnd"
+        @resize-start="onResizeStart"
+        @resize-end="onResizeEnd"
         @drag="onDrag"
         @click="selected = true"
       >
@@ -79,10 +81,14 @@
   </node-view-wrapper>
 </template>
 
-<script setup>
-import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
-import Drager from 'es-drager'
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+import { nodeViewProps } from '@tiptap/vue-3'
+import { isRecord } from '@tool-belt/type-predicates'
 import { base64ToFile } from 'file64'
+
 import shortId from '@/utils/short-id'
 
 const { node, getPos, updateAttributes } = defineProps(nodeViewProps)
@@ -90,8 +96,8 @@ const { options, editor } = useStore()
 const { imagePreview } = useStore()
 const { isLoading, error } = useImage({ src: node.attrs.src })
 
-const containerRef = ref(null)
-const imageRef = $ref(null)
+const containerRef = ref<ComponentPublicInstance | null>(null)
+const imageRef = $ref<HTMLImageElement | null>(null)
 let selected = $ref(false)
 let maxWidth = $ref(0)
 let maxHeight = $ref(200)
@@ -99,9 +105,9 @@ let maxHeight = $ref(200)
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs
   const marginTop =
-    margin?.top && margin?.top !== '' ? margin.top + 'px' : undefined
+    margin?.top && margin?.top !== '' ? `${margin.top}px` : undefined
   const marginBottom =
-    margin?.bottom && margin?.bottom !== '' ? margin.bottom + 'px' : undefined
+    margin?.bottom && margin?.bottom !== '' ? `${margin.bottom}px` : undefined
   return {
     'justify-content': nodeAlign,
     marginTop,
@@ -114,49 +120,55 @@ const uploadImage = async () => {
     return
   }
   try {
-    const { id, url } = await options.value.onFileUpload(node.attrs.file)
+    const { id, url } =
+      (await options.value?.onFileUpload?.(node.attrs.file)) ?? {}
     if (containerRef.value) {
       updateAttributes({ id, src: url, file: null, uploaded: true })
     }
   } catch (error) {
-    useMessage('error', error.message)
+    useMessage('error', (error as Error).message)
   }
 }
 const onLoad = () => {
   if (node.attrs.width === null) {
-    const { clientWidth, clientHeight } = imageRef
-    maxWidth = containerRef.value.$el.clientWidth
+    const { clientWidth = 1, clientHeight = 1 } = imageRef ?? {}
+    maxWidth = containerRef.value?.$el.clientWidth
     const ratio = clientWidth / clientHeight
-    maxHeight = containerRef.value.$el.clientWidth / ratio
-    updateAttributes({ width: parseInt(200 * ratio) })
+    maxHeight = containerRef.value?.$el.clientWidth / ratio
+    updateAttributes({ width: 200 * ratio })
   }
 }
 
-const onRotate = ({ angle }) => {
+const onRotate = ({ angle }: { angle: number }) => {
   updateAttributes({ angle })
 }
-const onResize = ({ width, height }) => {
-  updateAttributes({ width: parseInt(width), height: parseInt(height) })
+const onResize = ({ width, height }: { width: string; height: string }) => {
+  updateAttributes({
+    width: Number.parseInt(width),
+    height: Number.parseInt(height),
+  })
 }
 const onResizeStart = () => {
-  editor.value.commands.autoPaging(false)
+  editor.value?.commands.autoPaging(false)
 }
 const onResizeEnd = () => {
-  editor.value.commands.autoPaging()
+  editor.value?.commands.autoPaging()
 }
 
-const onDrag = ({ left, top }) => {
+const onDrag = ({ left, top }: { left: string; top: string }) => {
   updateAttributes({ left, top })
 }
 
-onClickOutside(containerRef, () => (selected = false))
+onClickOutside(containerRef, () => {
+  selected = false
+})
 
 watch(
   () => node.attrs.equalProportion,
   async () => {
     await nextTick()
-    const width = imageRef.offsetWidth
-    const height = imageRef.offsetHeight
+    const width = imageRef?.offsetWidth ?? 1
+    const height = imageRef?.offsetHeight ?? 1
     updateAttributes({ width, height })
   },
 )
@@ -165,8 +177,8 @@ watch(
   async (src) => {
     if (node.attrs.uploaded === false && !error.value) {
       if (src?.startsWith('data:image')) {
-        const type = src.split(';')[0].split(':')[1]
-        let ext = type.split('/')[1]
+        const [imageType] = src.split(';')[0].split(':')
+        let [ext] = imageType.split('/')
         if (ext === 'jpeg') {
           ext = 'jpg'
         }
@@ -175,20 +187,24 @@ watch(
         }
         const filename = shortId(10)
         const file = await base64ToFile(src, `${filename}.${ext}`, {
-          type,
+          type: imageType,
         })
         updateAttributes({ file })
       }
       await nextTick()
-      uploadImage()
+      void uploadImage()
     }
   },
   { immediate: true },
 )
 watch(
   () => error.value,
-  ({ type }) => {
-    updateAttributes({ error: type === 'error' })
+  (errorValue) => {
+    if (errorValue && isRecord(errorValue) && 'type' in errorValue) {
+      updateAttributes({ error: errorValue.type === 'error' })
+    } else {
+      updateAttributes({ error: false })
+    }
   },
 )
 </script>

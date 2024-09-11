@@ -10,7 +10,7 @@ export default function (doc: Node): DecorationSet {
       return
     }
 
-    Array.from(node.text.matchAll(hexColor)).forEach(match => {
+    Array.from(node.text.matchAll(hexColor)).forEach((match) => {
       const color = match[0]
       const index = match.index || 0
       const from = position + index

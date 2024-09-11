@@ -13,9 +13,9 @@
           <span v-text="t('insert.hr.title')"></span>
         </div>
         <div
-          class="umo-page-divider-item"
           v-for="item in options"
           :key="item.value"
+          class="umo-page-divider-item"
           :value="item.value"
           :title="item.label"
           @click="setHr(item)"
@@ -52,8 +52,11 @@
   </menus-button>
 </template>
 
-<script setup>
-let { popupVisible, togglePopup } = usePopup()
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const { popupVisible, togglePopup } = usePopup()
 const { container, editor } = useStore()
 
 const options = [
@@ -70,12 +73,12 @@ const options = [
 
 let currentColor = $ref('#000')
 let colorPickerVisible = $ref(false)
-const colorChange = (color) => {
+const colorChange = (color: string) => {
   currentColor = color
   colorPickerVisible = false
 }
 
-const setHr = ({ value }) => {
+const setHr = ({ value }: { value: string }) => {
   if (!value || !editor.value) {
     return
   }

@@ -1,8 +1,8 @@
 <template>
   <node-view-wrapper
+    :id="node.attrs.id"
     ref="containerRef"
     class="umo-node-view"
-    :id="node.attrs.id"
     :style="nodeStyle"
   >
     <div class="umo-node-container umo-hover-shadow umo-node-video">
@@ -27,7 +27,7 @@
           :src="node.attrs.src"
           preload="metadata"
           controls
-          crossorigin
+          crossorigin="anonymous"
           @canplay="onLoad"
         ></video>
         <div
@@ -39,27 +39,30 @@
   </node-view-wrapper>
 </template>
 
-<script setup>
-import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
-import Drager from 'es-drager'
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+import { nodeViewProps } from '@tiptap/vue-3'
+
 import { mediaPlayer } from '@/utils/player'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const { options, editor } = useStore()
 
-const containerRef = ref(null)
+const containerRef = ref<ComponentPublicInstance | null>(null)
 let selected = $ref(false)
-const videoRef = $ref(null)
-let player = $ref(null)
+const videoRef = $ref<HTMLVideoElement | null>(null)
+let player = $ref<Plyr | null>(null)
 let maxWidth = $ref(0)
 let maxHeight = $ref(0)
 
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs
   const marginTop =
-    margin?.top && margin?.top !== '' ? margin.top + 'px' : undefined
+    margin?.top && margin?.top !== '' ? `${margin.top}px` : undefined
   const marginBottom =
-    margin?.bottom && margin?.bottom !== '' ? margin.bottom + 'px' : undefined
+    margin?.bottom && margin?.bottom !== '' ? `${margin.bottom}px` : undefined
   return {
     'justify-content': nodeAlign,
     marginTop,
@@ -69,35 +72,36 @@ const nodeStyle = $computed(() => {
 
 onMounted(async () => {
   await nextTick()
-  player = mediaPlayer(videoRef)
+  player = mediaPlayer(videoRef!)
   if (node.attrs.uploaded === false && node.attrs.file) {
     try {
-      const { url } = await options.value.onFileUpload(node.attrs.file)
+      const { url } =
+        (await options.value?.onFileUpload?.(node.attrs.file)) ?? {}
       if (containerRef.value) {
         updateAttributes({ src: url, file: null, uploaded: true })
       }
     } catch (error) {
-      useMessage('error', error.message)
+      useMessage('error', (error as Error).message)
     }
   }
 })
 const onLoad = () => {
   if (node.attrs.width === null) {
-    const { clientWidth, clientHeight } = videoRef
-    maxWidth = containerRef.value.$el.clientWidth
+    const { clientWidth = 0, clientHeight = 0 } = videoRef ?? {}
+    maxWidth = containerRef.value?.$el.clientWidth ?? 0
     const ratio = clientWidth / clientHeight
-    maxHeight = containerRef.value.$el.clientWidth / ratio
-    updateAttributes({ width: parseInt(200 * ratio) })
+    maxHeight = containerRef.value?.$el.clientWidth / ratio
+    updateAttributes({ width: 200 * ratio })
   }
 }
-const onResize = ({ width, height }) => {
+const onResize = ({ width, height }: { width: number; height: number }) => {
   updateAttributes({ width, height })
 }
 const onResizeStart = () => {
-  editor.value.commands.autoPaging(false)
+  editor.value?.commands.autoPaging(false)
 }
 const onResizeEnd = () => {
-  editor.value.commands.autoPaging()
+  editor.value?.commands.autoPaging()
 }
 onBeforeUnmount(() => {
   if (player) {
@@ -105,7 +109,9 @@ onBeforeUnmount(() => {
   }
 })
 
-onClickOutside(containerRef, () => (selected = false))
+onClickOutside(containerRef, () => {
+  selected = false
+})
 </script>
 
 <style lang="less">
@@ -128,7 +134,6 @@ onClickOutside(containerRef, () => (selected = false))
 
       video {
         display: block;
-        height: auto;
         border-radius: var(--umo-radius);
         overflow: hidden;
         pointer-events: auto;
@@ -150,9 +155,7 @@ onClickOutside(containerRef, () => (selected = false))
       top: 0;
       background: rgba(255, 255, 255, 0.7);
       height: 2px;
-      top: 0;
       left: 0;
-      right: 0;
       border-top-left-radius: var(--umo-radius);
       border-top-right-radius: var(--umo-radius);
 

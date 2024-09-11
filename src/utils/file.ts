@@ -1,4 +1,4 @@
-const fileTypes: { [key: string]: string[] } = {
+const fileTypes: Record<string, string[]> = {
   ai: ['ai', 'eps'],
   app: ['app'],
   axure: ['rp'],
@@ -56,8 +56,7 @@ const fileTypes: { [key: string]: string[] } = {
 
 export const getFileExtname = (filename: string) => {
   const splitFileName = filename.split('.')
-  const extname = splitFileName[splitFileName.length - 1]
-  return extname
+  return splitFileName[splitFileName.length - 1]
 }
 
 export const getFileIcon = (filename: string) => {

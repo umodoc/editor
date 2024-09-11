@@ -9,11 +9,14 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const { options, editor } = useStore()
 
 const lineHeights = computed(() => {
-  const result = options.value.dicts.lineHeights.map((item) => {
+  return options.value.dicts?.lineHeights.map((item) => {
     return {
       content: item.default
         ? l(item.label) + t('base.lineHeight.default')
@@ -22,10 +25,15 @@ const lineHeights = computed(() => {
       active: editor.value?.isActive({ lineHeight: item.value }),
     }
   })
-  return result
 })
 
-const setLineHeight = ({ content, value }) => {
+const setLineHeight = ({
+  content,
+  value,
+}: {
+  content: string
+  value: string
+}) => {
   if (!content) {
     return
   }

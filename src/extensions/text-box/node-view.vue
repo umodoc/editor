@@ -1,15 +1,15 @@
 <template>
   <node-view-wrapper
+    :id="node.attrs.id"
     ref="containerRef"
     class="umo-node-view"
-    :id="node.attrs.id"
     @dblclick.capture="disabled = true"
   >
     <div class="umo-node-container umo-node-text-box">
       <drager
         :selected="selected"
         :disabled="disabled"
-        :draggable="!options.document.readOnly"
+        :draggable="!options.document?.readOnly"
         :rotatable="true"
         :boundary="false"
         :angle="node.attrs.angle"
@@ -32,9 +32,11 @@
   </node-view-wrapper>
 </template>
 
-<script setup>
-import { nodeViewProps, NodeViewWrapper, NodeViewContent } from '@tiptap/vue-3'
-import Drager from 'es-drager'
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+import { nodeViewProps } from '@tiptap/vue-3'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 
@@ -44,17 +46,19 @@ const containerRef = ref(null)
 let selected = $ref(false)
 const disabled = $ref(false)
 
-const onRotate = ({ angle }) => {
+const onRotate = ({ angle }: { angle: number }) => {
   updateAttributes({ angle })
 }
-const onResize = ({ width, height }) => {
+const onResize = ({ width, height }: { width: number; height: number }) => {
   updateAttributes({ width, height })
 }
-const onDrag = ({ left, top }) => {
+const onDrag = ({ left, top }: { left: number; top: number }) => {
   updateAttributes({ left, top })
 }
 
-onClickOutside(containerRef, () => (selected = false))
+onClickOutside(containerRef, () => {
+  selected = false
+})
 </script>
 
 <style lang="less">

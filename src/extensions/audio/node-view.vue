@@ -1,14 +1,20 @@
 <template>
   <node-view-wrapper
+    :id="node.attrs.id"
     ref="containerRef"
     class="umo-node-view"
-    :id="node.attrs.id"
     :style="nodeStyle"
   >
     <div
       class="umo-node-container umo-hover-shadow umo-select-outline umo-node-audio"
     >
-      <audio ref="audiorRef" :src="node.attrs.src" controls crossorigin></audio>
+      <audio
+        ref="audiorRef"
+        :src="node.attrs.src"
+        controls
+        crossorigin="anonymous"
+        preload="metadata"
+      ></audio>
       <div
         v-if="!node.attrs.uploaded && node.attrs.file !== null"
         class="uploading"
@@ -17,24 +23,29 @@
   </node-view-wrapper>
 </template>
 
-<script setup>
-import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+import { nodeViewProps } from '@tiptap/vue-3'
+import type { ReactiveVariable } from '@vue-macros/reactivity-transform/macros'
+
 import { mediaPlayer } from '@/utils/player'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const { options } = useStore()
 
-const containerRef = ref(null)
-const audiorRef = $ref(null)
-let player = $ref(null)
+const containerRef = ref<HTMLElement | null>(null)
+const audiorRef = $ref<ReactiveVariable<HTMLAudioElement> | null>(null)
+let player = $ref<Plyr | null>(null)
 let selected = $ref(false)
 
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs
   const marginTop =
-    margin?.top && margin?.top !== '' ? margin.top + 'px' : undefined
+    margin?.top && margin?.top !== '' ? `${margin.top}px` : undefined
   const marginBottom =
-    margin?.bottom && margin?.bottom !== '' ? margin.bottom + 'px' : undefined
+    margin?.bottom && margin?.bottom !== '' ? `${margin.bottom}px` : undefined
   return {
     'justify-content': nodeAlign,
     marginTop,
@@ -43,15 +54,16 @@ const nodeStyle = $computed(() => {
 })
 
 onMounted(async () => {
-  player = mediaPlayer(audiorRef)
+  player = mediaPlayer(audiorRef!)
   if (node.attrs.uploaded === false && node.attrs.file) {
     try {
-      const { url } = await options.value.onFileUpload(node.attrs.file)
+      const { url } =
+        (await options.value?.onFileUpload?.(node.attrs.file)) ?? {}
       if (containerRef.value) {
         updateAttributes({ src: url, file: null, uploaded: true })
       }
     } catch (error) {
-      useMessage('error', error.message)
+      useMessage('error', (error as Error).message)
     }
   }
 })
@@ -62,7 +74,9 @@ onBeforeUnmount(() => {
   }
 })
 
-onClickOutside(containerRef, () => (selected = false))
+onClickOutside(containerRef, () => {
+  selected = false
+})
 </script>
 
 <style lang="less">
@@ -85,9 +99,7 @@ onClickOutside(containerRef, () => (selected = false))
       top: 0;
       background: rgba(0, 0, 0, 0.2);
       height: 2px;
-      top: 0;
       left: 0;
-      right: 0;
       border-top-left-radius: var(--umo-radius);
       border-top-right-radius: var(--umo-radius);
       &:after {

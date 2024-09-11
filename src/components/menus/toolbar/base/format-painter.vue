@@ -11,13 +11,16 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const { editor, painter } = useStore()
 
-const setFormatPainter = (once) => {
+const setFormatPainter = (once: boolean) => {
   painter.value.enabled = !painter.value.enabled
   if (painter.value.enabled) {
-    editor.value.chain().focus().setFormatPainter(once).run()
+    editor.value?.chain().focus().setFormatPainter(once).run()
   }
 }
 </script>

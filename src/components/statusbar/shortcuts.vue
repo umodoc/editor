@@ -14,7 +14,7 @@
               v-html="item.html"
             >
             </span>
-            <component v-if="item.tag" :is="item.tag">{{
+            <component :is="item.tag" v-if="item.tag">{{
               item.label
             }}</component>
             <span v-else :class="item.className || ''">{{ item.label }}</span>
@@ -31,13 +31,27 @@
   </div>
 </template>
 
-<script setup>
-// https://ckeditor.com/docs/ckeditor5/latest/features/keyboard-support.html#related-productivity-features
-import getShortcut from '@/utils/shortcut'
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 
+import { getShortcut } from '@/utils/shortcut'
+
+const { t } = useI18n()
 const $document = useState('document')
 
-const shortcuts = $ref([
+const shortcuts = $ref<
+  {
+    title: string
+    items: {
+      icon?: string
+      html?: string
+      tag?: string
+      className?: string
+      label: string
+      keys: string[]
+    }[]
+  }[]
+>([
   {
     title: t('shortcut.commonlyUsed'),
     items: [
@@ -94,7 +108,7 @@ const shortcuts = $ref([
   },
 ])
 
-if ($document.value.markdown) {
+if ($document.value.enableMarkdown) {
   shortcuts.push({
     title: t('shortcut.markdown'),
     items: [

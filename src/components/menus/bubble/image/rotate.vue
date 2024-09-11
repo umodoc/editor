@@ -12,16 +12,21 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import { getSelectionNode } from '@/extensions/selection'
 
 const { editor } = useStore()
 
-const setRotate = (rotate) => {
-  const image = getSelectionNode(editor.value)
-  const { angle } = image.attrs
-  editor.value.commands.updateAttributes(image.type, {
-    angle: angle ? angle + rotate : rotate,
-  })
+const setRotate = (rotate: number) => {
+  const image = editor.value ? getSelectionNode(editor.value) : null
+  const { angle } = image?.attrs ?? {}
+  if (image) {
+    editor.value?.commands.updateAttributes(image.type, {
+      angle: angle ? angle + rotate : rotate,
+    })
+  }
 }
 </script>

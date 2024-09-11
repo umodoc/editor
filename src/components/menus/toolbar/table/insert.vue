@@ -12,11 +12,11 @@
       <div class="umo-table-grid" @mouseleave="resetTable">
         <div v-for="(row, rowIndex) in table" :key="rowIndex" class="row">
           <div
-            v-for="(cell, colIndex) in row"
+            v-for="colIndex in row"
             :key="colIndex"
             class="cell"
-            :class="{ selected: isSelected(rowIndex, colIndex) }"
-            @mouseover="selectCell(rowIndex, colIndex)"
+            :class="{ selected: isSelected(rowIndex, Number(colIndex)) }"
+            @mouseover="selectCell(rowIndex, Number(colIndex))"
             @click="insertTable"
           ></div>
         </div>
@@ -50,8 +50,8 @@
           block
           theme="primary"
           variant="base"
-          v-text="t('table.insert.create')"
           @click="insertTable"
+          v-text="t('table.insert.create')"
         >
         </t-button>
       </div>
@@ -59,17 +59,20 @@
   </menus-button>
 </template>
 
-<script setup>
-let { popupVisible, togglePopup } = usePopup()
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
 const table = Array.from({ length: 8 }, () =>
   Array.from({ length: 10 }, () => ''),
 )
-let selected = $ref({ rows: 0, cols: 0 })
-let withHeaderRow = $ref(true)
+const selected = $ref({ rows: 0, cols: 0 })
+const withHeaderRow = $ref(true)
 
-const isSelected = (rows, cols) => {
+const isSelected = (rows: number, cols: number) => {
   return (
     selected.rows &&
     selected.rows > rows &&
@@ -77,7 +80,7 @@ const isSelected = (rows, cols) => {
     selected.cols > cols
   )
 }
-const selectCell = (rows, cols) => {
+const selectCell = (rows: number, cols: number) => {
   selected.rows = rows + 1
   selected.cols = cols + 1
 }

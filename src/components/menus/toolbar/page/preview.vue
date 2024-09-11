@@ -1,5 +1,6 @@
 <template>
   <menus-button
+    v-if="page.preview"
     ico="preview"
     :text="t('page.preview')"
     shortcut="F5"
@@ -9,6 +10,9 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const { page } = useStore()
 </script>

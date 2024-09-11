@@ -92,7 +92,7 @@
     <menus-bubble-node-delete />
   </template>
   <template v-else>
-    <template v-if="options.assistant.enabled">
+    <template v-if="options.assistant?.enabled">
       <menus-bubble-assistant />
       <div class="umo-bubble-menu-divider"></div>
     </template>
@@ -109,7 +109,7 @@
     <menus-toolbar-base-background-color />
     <menus-toolbar-base-highlight />
     <div class="umo-bubble-menu-divider"></div>
-    <template v-if="options.document.enableComment">
+    <template v-if="options.document?.enableComment">
       <menus-bubble-comment />
       <div class="umo-bubble-menu-divider"></div>
     </template>
@@ -117,13 +117,16 @@
   </template>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const { options, editor } = useStore()
 </script>
 
 <style lang="less" scoped>
 .umo-bubble-menu-divider {
-  width: 1;
+  width: 1px;
   border-right: solid 1px var(--umo-border-color-light);
   height: 16px;
   margin: 0 10px 0 5px;

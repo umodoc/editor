@@ -7,15 +7,20 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import { getSelectionNode } from '@/extensions/selection'
 
 const { editor } = useStore()
 
 const toggleDraggable = () => {
-  const image = getSelectionNode(editor.value)
-  editor.value.commands.updateAttributes(image.type, {
-    draggable: !image.attrs.draggable,
-  })
+  const image = editor.value ? getSelectionNode(editor.value) : null
+  if (image) {
+    editor.value?.commands.updateAttributes(image.type, {
+      draggable: !image.attrs.draggable,
+    })
+  }
 }
 </script>

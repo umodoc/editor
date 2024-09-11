@@ -7,7 +7,7 @@
     :destroy-on-close="false"
     :popup-props="{
       onVisibleChange(visible) {
-        editor.commands.focus()
+        editor?.commands.focus()
         blockMenu = visible
         menuActive = visible
       },
@@ -22,7 +22,7 @@
     <t-dropdown-menu>
       <t-dropdown-item
         v-if="
-          options.assistant.enabled &&
+          options.assistant?.enabled &&
           (editor?.isActive('paragraph') || editor?.isActive('heading')) &&
           editor?.state?.selection?.$from?.nodeAfter
         "
@@ -81,7 +81,7 @@
             <menus-toolbar-insert-code-block
               v-if="!disableItem('code-block')"
               :huge="false"
-              shortcutText="Ctrl+Alt+C"
+              shortcut-text="Ctrl+Alt+C"
               :tooltip="false"
             />
           </t-dropdown-item>
@@ -91,7 +91,7 @@
               :text="t('insert.hr.text')"
               :tooltip="false"
               @menu-click="
-                editor.chain().focus().setHr({ type: 'signle' }).run()
+                editor?.chain().focus().setHr({ type: 'signle' }).run()
               "
             />
           </t-dropdown-item>
@@ -112,9 +112,9 @@
           </t-dropdown-item>
           <t-dropdown-item>
             <menus-toolbar-tools-signature
+              v-if="!disableItem('signature')"
               :huge="false"
               :tooltip="false"
-              v-if="!disableItem('signature')"
             />
           </t-dropdown-item>
           <t-dropdown-item>
@@ -140,7 +140,10 @@
           </t-dropdown-item>
         </t-dropdown-menu>
       </t-dropdown-item>
-      <t-dropdown-item v-if="options.templates.length > 0" divider>
+      <t-dropdown-item
+        v-if="options.templates && options.templates.length > 0"
+        divider
+      >
         <menus-button
           ico="template"
           :text="t('blockMenu.template')"
@@ -179,13 +182,13 @@
         <t-dropdown-menu overlay-class-name="umo-block-menu-dropdown">
           <t-dropdown-item
             v-for="item in headings"
-            :key="item.level"
+            :key="item"
             :disabled="editor?.isActive('heading', { level: item })"
           >
             <menus-button
               :tooltip="false"
               :shortcut-text="`ctrl+alt+${item}`"
-              @menu-click="toggleNodeType('heading', { level: item })"
+              @menu-click="toggleNodeType('heading', { level: item as Level })"
             >
               <span class="umo-heading">
                 <span class="icon-heading">H{{ item }}</span>
@@ -239,40 +242,53 @@
   </t-dropdown>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { Level } from '@tiptap/extension-heading'
+import { useI18n } from 'vue-i18n'
+
+import type { Template } from '@/types'
+
+const { t } = useI18n()
 const { container, options, editor, blockMenu, assistantBox } = useStore()
 
-let menuActive = $ref(false)
+const menuActive = $ref(false)
 
-const headings = $ref([1, 2, 3, 4, 5, 6])
+const headings = $ref<number[]>([1, 2, 3, 4, 5, 6])
 
-const disableItem = (name) => {
-  return options.value.toolbar.disableMenuItems.includes(name)
+const disableItem = (name: string) => {
+  return options.value.toolbar?.disableMenuItems.includes(name)
 }
 
 const openAssistantBox = () => {
   assistantBox.value = true
-  editor.value.commands.selectParentNode()
-  editor.value.commands.focus()
-  const { from, to } = editor.value.state.selection
-  editor.value.commands.setTextSelection({ from, to })
+  editor.value?.commands.selectParentNode()
+  editor.value?.commands.focus()
+  const { from, to } = editor.value?.state.selection ?? {}
+  editor.value?.commands.setTextSelection({ from: from ?? 0, to: to ?? 0 })
 }
 
-const setTemplate = ({ content }) => {
+const setTemplate = ({ content }: Template) => {
   if (!content || !editor.value) {
     return
   }
   editor.value.commands.insertContent(content)
 }
 
-const toggleNodeType = (type, props = {}) => {
+const toggleNodeType = (
+  type: string,
+  props?: {
+    level: Level
+  },
+) => {
   editor.value?.chain().focus().run()
   switch (type) {
     case 'paragraph':
       editor.value?.commands.setParagraph()
       break
     case 'heading':
-      editor.value?.commands.setHeading(props)
+      if (props) {
+        editor.value?.commands.setHeading(props)
+      }
       break
     case 'orderedList':
       editor.value?.commands.toggleOrderedList()

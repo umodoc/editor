@@ -17,8 +17,11 @@
   </div>
 </template>
 
-<script setup>
-import { MonacoEditor, loader } from '@vue-monaco/editor'
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+import { type Editor, loader } from '@vue-monaco/editor'
 
 const { options, editor } = useStore()
 const $document = useState('document')
@@ -47,12 +50,14 @@ const config = {
     horizontal: 'hidden',
   },
 }
-const code = $ref(editor.value?.getHTML() || $document.value.content)
+const code = $ref(editor.value?.getHTML() ?? $document.value.content)
 
-const editorMount = async (editor) => {
-  setTimeout(() => {
-    editor.getAction('editor.action.formatDocument').run()
-  }, 200)
+const editorMount = async (editor: Editor.ICodeEditor) => {
+  return await Promise.resolve(
+    setTimeout(() => {
+      void editor.getAction('editor.action.formatDocument')?.run()
+    }, 200),
+  )
 }
 
 const codeChange = () => {

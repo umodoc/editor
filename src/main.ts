@@ -1,8 +1,9 @@
-import App from './app.vue'
 import shortId from '@/utils/short-id'
 
+import App from './app.vue'
 // 插件本地开发
-import { useUmoEditor, UmoEditor } from './components'
+import { useUmoEditor } from './components'
+import type { UmoEditorOptions } from './types'
 
 // 插件打包测试
 // import UmoEditor from '../dist/umo-editor'
@@ -18,7 +19,7 @@ const options = {
   },
   document: {
     title: '测试文档',
-    content: localStorage.getItem('document.content'),
+    content: localStorage.getItem('document.content') ?? '',
   },
   templates: [
     {
@@ -33,22 +34,20 @@ const options = {
     },
   ],
   shareUrl: 'https://umodoc.com',
-  onSave(content: any, page: any, document: any) {
+  onSave(content: unknown, page: unknown, document: { content: string }) {
     console.log('onSave', { content, page, document })
     localStorage.setItem('document.content', document.content)
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       setTimeout(() => {
-        if (true) {
-          resolve('操作成功')
-        } else {
-          reject('操作失败')
-        }
+        resolve('操作成功')
       }, 2000)
     })
   },
 
-  async onFileUpload(file: any) {
-    if (!file) throw new Error('没有找到要上传的文件')
+  async onFileUpload(file: File & { url: string }) {
+    if (!file) {
+      throw new Error('没有找到要上传的文件')
+    }
     console.log('onUpload', file)
     await new Promise((resolve) => setTimeout(resolve, 3000))
     return {
@@ -60,7 +59,8 @@ const options = {
     }
   },
 }
-app.use(useUmoEditor, options)
+// FIXME: we are hard casting below because there are issues with the types. Namely, a lot of them are partial. This needs to be systematically addressed.
+app.use(useUmoEditor, options as unknown as UmoEditorOptions)
 // app.component('UmoEditor', UmoEditor)
 
 app.mount('#app')

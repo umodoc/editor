@@ -7,7 +7,10 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import { saveAs } from 'file-saver'
 
 const { options, editor } = useStore()
@@ -16,12 +19,12 @@ const saveTextFile = () => {
   if (!editor.value) {
     return
   }
-  const blob = new Blob([editor.value?.getText()], {
+  const blob = new Blob([editor.value.getText()], {
     type: 'text/plain;charset=utf-8',
   })
-  const { title } = options.value.document
+  const { title } = options.value.document ?? {}
   const filename =
-    title !== '' ? options.value.document.title : t('document.untitled')
+    title !== '' ? options.value?.document?.title : t('document.untitled')
   saveAs(blob, `${filename}.txt`)
 }
 </script>

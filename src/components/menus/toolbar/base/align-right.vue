@@ -16,15 +16,18 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const { editor } = useStore()
 
 const setAlignRight = () => {
   if (editor.value?.can().chain().focus().setTextAlign('right').run()) {
-    editor.value?.chain().focus().setTextAlign('right').run()
+    editor.value.chain().focus().setTextAlign('right').run()
   }
   if (editor.value?.can().chain().focus().setNodeAlign('flex-end').run()) {
-    editor.value?.chain().focus().setNodeAlign('flex-end').run()
+    editor.value.chain().focus().setNodeAlign('flex-end').run()
   }
 }
 </script>

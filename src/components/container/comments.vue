@@ -1,8 +1,8 @@
 <template>
   <!-- 
    TODO: 
-   1. 每个有评论的节点后面显示一个数字，点击后打开评论列表
-   2. 点击文档中的标注正文也可以打开评论
+    1. 每个有评论的节点后面显示一个数字，点击后打开评论列表
+    2. 点击文档中的标注正文也可以打开评论
   -->
   <div v-if="visible" class="umo-comments-group-container">
     <!-- 仅显示当前节点下的所有评论 -->
@@ -34,7 +34,12 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+import type { Editor } from '@tiptap/vue-3'
+
 const { page, editor } = useStore()
 
 let visible = $ref(true)
@@ -51,10 +56,10 @@ const updatePostion = () => {
 }
 watch(
   editor,
-  (val) => {
-    if (val) {
-      editor.value.on('selectionUpdate', updatePostion)
-      editor.value.on('focus', updatePostion)
+  (value: Editor | undefined) => {
+    if (value) {
+      editor.value?.on('selectionUpdate', updatePostion)
+      editor.value?.on('focus', updatePostion)
     } else {
       visible = false
     }

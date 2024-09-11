@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!page.preview.enabled" class="umo-status-bar">
+  <div v-if="!page.preview?.enabled" class="umo-status-bar">
     <div class="umo-status-bar-left">
       <tooltip :content="page.showToc ? t('toc.hide') : t('toc.show')">
         <t-button
@@ -13,19 +13,19 @@
         </t-button>
       </tooltip>
       <tooltip
-        v-if="options.document.enableSpellcheck"
+        v-if="options.document?.enableSpellcheck"
         :content="
-          $document.spellcheck
+          $document?.enableSpellcheck
             ? t('spellcheck.disable')
             : t('spellcheck.enable')
         "
       >
         <t-button
           class="umo-status-bar-button"
-          :class="{ active: $document.spellcheck }"
+          :class="{ active: $document.enableSpellcheck }"
           variant="text"
           size="small"
-          @click="$document.spellcheck = !$document.spellcheck"
+          @click="toggleSpellcheck"
         >
           <icon name="spellcheck" color="red" />
         </t-button>
@@ -71,7 +71,7 @@
           class="umo-status-bar-button"
           variant="text"
           size="small"
-          :href="`https://editor.umodoc.com/${i18n.global.locale.value === 'zh-CN' ? 'cn' : 'en'}/docs`"
+          :href="`https://editor.umodoc.com/${i18n.locale.value === 'zh-CN' ? 'cn' : 'en'}/docs`"
           target="_blank"
         >
           <icon name="home-page" />
@@ -120,10 +120,10 @@
                 {{ t('wordCount.selection') }}
                 <span>{{ selectionCharacters }}</span>
               </li>
-              <li v-if="options.document.characterLimit > 0">
+              <li v-if="options.document?.characterLimit ?? 0 > 0">
                 {{ t('wordCount.limit') }}
                 <span>
-                  {{ options.document.characterLimit }}
+                  {{ options.document?.characterLimit ?? 0 }}
                 </span>
               </li>
               <li>
@@ -135,7 +135,7 @@
               <li>
                 {{ t('wordCount.totalPage') }}
                 <span>
-                  {{ editor.$nodes('page').length }}
+                  {{ editor?.$nodes('page')?.length ?? 0 }}
                 </span>
               </li>
             </ul>
@@ -145,11 +145,11 @@
     </div>
     <div class="umo-status-bar-right">
       <tooltip
-        :content="`${page.preview.enabled ? t('preview.disable') : t('preview.title')} (F5)`"
+        :content="`${page.preview?.enabled ? t('preview.disable') : t('preview.title')} (F5)`"
       >
         <t-button
           class="umo-status-bar-button"
-          :class="{ active: page.preview.enabled }"
+          :class="{ active: page.preview?.enabled }"
           variant="text"
           size="small"
           @click="togglePreview"
@@ -178,7 +178,7 @@
             class="umo-status-bar-button"
             variant="text"
             size="small"
-            :disabled="page.zoomLevel <= 20"
+            :disabled="(page.zoomLevel ?? 21) <= 20"
             @click="zoomOut"
           >
             <icon name="minus" />
@@ -204,7 +204,7 @@
             class="umo-status-bar-button"
             variant="text"
             size="small"
-            :disabled="page.zoomLevel >= 500"
+            :disabled="!!(page.zoomLevel && page.zoomLevel >= 500)"
             @click="zoomIn"
           >
             <icon name="plus" />
@@ -243,8 +243,8 @@
           class="umo-status-bar-button auto-width umo-lang-button"
           variant="text"
           size="small"
-          v-text="locale"
           @click="zoomReset"
+          v-text="locale"
         >
         </t-button>
       </t-dropdown>
@@ -283,9 +283,16 @@
   </t-drawer>
 </template>
 
-<script setup>
-import i18n from '@/i18n'
-import getShortcut from '@/utils/shortcut'
+<script setup lang="ts">
+import type { MaybeElementRef, UseFullscreenReturn } from '@vueuse/core'
+import type { DropdownOption } from 'tdesign-vue-next'
+import { useI18n } from 'vue-i18n'
+
+import type { SupportedLocale } from '@/types'
+import { getShortcut } from '@/utils/shortcut'
+
+const i18n = useI18n()
+const { t } = i18n
 
 const { container, options, page, editor } = useStore()
 const $document = useState('document')
@@ -293,59 +300,74 @@ const $document = useState('document')
 // 快捷键抽屉
 const showShortcut = $ref(false)
 
-const reset = inject('reset')
+const reset = inject('reset') as (e: MouseEvent) => void
 
 // 分页
 const togglePagination = () => {
   page.value.pagination = !page.value.pagination
-  const tr = editor.value.state.tr.setMeta('splitPage', false)
-  editor.value.view.dispatch(tr)
+  const tr = editor.value?.state.tr.setMeta('splitPage', false)
+  if (tr) {
+    editor.value?.view.dispatch(tr)
+  }
 }
 
 // 字数统计
-let showWordCount = $ref(false)
+const showWordCount = $ref(false)
 const selectionCharacters = computed(() => {
-  const { state } = editor.value
-  if (state) {
-    const { selection } = state
-    const text = state.doc.textBetween(selection.from, selection.to, '')
+  if (editor.value) {
+    const { selection } = editor.value.state
+    const text = editor.value.state.doc.textBetween(
+      selection.from,
+      selection.to,
+      '',
+    )
     return text.length
   }
   return 0
 })
 
 // 页面全屏
-let fullscreen = $ref({})
+let fullscreen: UseFullscreenReturn
 onMounted(() => {
-  fullscreen = useFullscreen(document.querySelector(container))
+  fullscreen = useFullscreen(
+    document.querySelector(container) as MaybeElementRef,
+  )
   useHotkeys('f11, command+f11', fullscreen.toggle)
 })
 
 // 演示模式
-const togglePreview = async () => {
+const togglePreview = () => {
   page.value.showToc = false
+  page.value.preview ??= {}
   page.value.preview.enabled = !page.value.preview.enabled
-  if (page.value.preview.enabled) {
-    document.querySelector(`${container} .umo-zoomable-container`).scrollTop = 0
+
+  const zoomableContainer = document.querySelector(
+    `${container} .umo-zoomable-container`,
+  )
+  if (zoomableContainer && page.value.preview.enabled) {
+    zoomableContainer.scrollTop = 0
   }
 }
-onMounted(() => useHotkeys('f5', togglePreview))
+onMounted(() => {
+  useHotkeys('f5', togglePreview)
+})
 watch(
-  () => page.value.preview.enabled,
-  (val) => {
-    if (val) {
-      fullscreen.enter()
+  () => page.value.preview?.enabled,
+  (value) => {
+    if (value) {
+      void fullscreen.enter()
       autoWidth(false, 10)
     } else {
-      fullscreen.exit()
+      void fullscreen.exit()
       zoomReset()
     }
   },
 )
 watch(
   () => fullscreen.isFullscreen,
-  (val) => {
-    if (!val) {
+  (value) => {
+    if (!value) {
+      page.value.preview ??= {}
       page.value.preview.enabled = false
     }
   },
@@ -354,14 +376,14 @@ watch(
 
 // 页面缩放
 const zoomIn = () => {
-  if (page.value.zoomLevel < 500) {
-    page.value.zoomLevel = page.value.zoomLevel + 10
+  if (page.value?.zoomLevel && page.value.zoomLevel < 500) {
+    page.value.zoomLevel += 10
     page.value.autoWidth = false
   }
 }
 const zoomOut = () => {
-  if (page.value.zoomLevel > 20) {
-    page.value.zoomLevel = page.value.zoomLevel - 10
+  if (page.value?.zoomLevel && page.value.zoomLevel > 20) {
+    page.value.zoomLevel -= 10
     page.value.autoWidth = false
   }
 }
@@ -374,7 +396,7 @@ useHotkeys('ctrl+=,command+=', zoomIn)
 useHotkeys('ctrl+1,command+1', zoomReset)
 
 // 最佳宽度
-const autoWidth = (auto, padding = 50) => {
+const autoWidth = (auto = true, padding = 50) => {
   if (auto && page.value.autoWidth) {
     zoomReset()
     return
@@ -383,12 +405,11 @@ const autoWidth = (auto, padding = 50) => {
     const editorEl = document.querySelector(
       `${container} .umo-zoomable-container`,
     )
-    const pageEl = editorEl.querySelector('.umo-page-content')
-    const editorWidth = editorEl.clientWidth
-    const pageWidth = pageEl.clientWidth
-    page.value.zoomLevel = parseInt(
-      ((editorWidth - padding * 2) / pageWidth) * 100,
-    )
+    const pageEl = editorEl?.querySelector('.umo-page-content')
+    const editorWidth = editorEl?.clientWidth ?? 0
+    const pageWidth = pageEl?.clientWidth ?? 0
+    page.value.zoomLevel = ((editorWidth - padding * 2) / pageWidth) * 100
+
     page.value.autoWidth = true
   } catch (e) {
     page.value.autoWidth = false
@@ -401,7 +422,9 @@ useHotkeys('ctrl+0,command+0', autoWidth)
 watch(
   () => page.value.showToc,
   () => {
-    if (page.value.autoWidth) autoWidth()
+    if (page.value.autoWidth) {
+      autoWidth()
+    }
   },
 )
 
@@ -410,12 +433,14 @@ const langs = [
   { content: '🇨🇳 简体中文', value: 'zh-CN' },
   { content: '🇱🇷 English', value: 'en-US' },
 ]
-const setLocale = inject('setLocale')
+const setLocale = inject('setLocale') as (value: SupportedLocale) => void
+
 const locale = computed(
-  () => langs.find((item) => item.value === i18n.global.locale.value).content,
+  () => langs.find((item) => item.value === i18n.locale.value)?.content,
 )
-const changeLang = ({ value }) => {
-  if (i18n.global.locale.value === value) {
+const changeLang = (dropdownItem: DropdownOption) => {
+  const value = dropdownItem.value as SupportedLocale
+  if (i18n.locale.value === value) {
     return
   }
   const dialog = useConfirm({
@@ -431,6 +456,12 @@ const changeLang = ({ value }) => {
       setTimeout(() => setLocale(value), 300)
     },
   })
+}
+
+const toggleSpellcheck = () => {
+  if ($document.value) {
+    $document.value.enableSpellcheck = !$document.value.enableSpellcheck
+  }
 }
 </script>
 

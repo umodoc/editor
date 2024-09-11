@@ -2,20 +2,26 @@
   <div
     v-if="visible"
     class="umo-block-menu-hander"
-    :style="{
-      transform: `translate(${page.margin.left}cm, ${scrollTop}px)`,
-      pointerEvents,
-    }"
+    :style="
+      {
+        transform: `translate(${page.margin?.left ?? 0}cm, ${scrollTop}px)`,
+        pointerEvents,
+      } as CSSProperties
+    "
   >
-  <!-- :style="`transform: translate(${page.margin.left}cm, ${scrollTop}px);`" -->
+    <!-- :style="`transform: translate(${page.margin.left}cm, ${scrollTop}px);`" -->
     <menus-context-block-node />
     <menus-context-block-common />
   </div>
 </template>
 
-<script setup>
-import { getSelectionText } from '@/extensions/selection';
+<script setup lang="ts">
+import type { CSSProperties } from 'vue'
+import { useI18n } from 'vue-i18n'
 
+import { getSelectionText } from '@/extensions/selection'
+
+const { t } = useI18n()
 const { page, editor } = useStore()
 
 let visible = $ref(false)
@@ -23,7 +29,11 @@ let scrollTop = $ref(0)
 let pointerEvents = $ref('auto')
 // 更新菜单位置
 const updateMenuPostion = () => {
-  pointerEvents = getSelectionText(editor.value).length > 0 ? 'none' : 'auto'
+  pointerEvents = editor.value
+    ? getSelectionText(editor.value).length > 0
+      ? 'none'
+      : 'auto'
+    : 'auto'
   const { offsetTop } = useNodePostion()
   if (offsetTop === null) {
     return
@@ -32,18 +42,18 @@ const updateMenuPostion = () => {
   visible = true
   scrollTop = offsetTop
 }
-onMounted(()=>{
-  if(editor){
-    editor.value.on('selectionUpdate', updateMenuPostion)
+onMounted(() => {
+  if (editor) {
+    editor.value?.on('selectionUpdate', updateMenuPostion)
     // editor.value.on('focus', updateMenuPostion)
-  }else{
+  } else {
     visible = false
   }
 })
-onUnmounted(()=>{
-  if(editor){
-    editor.value.off('selectionUpdate', updateMenuPostion)
-    editor.value.off('focus', updateMenuPostion)
+onUnmounted(() => {
+  if (editor) {
+    editor.value?.off('selectionUpdate', updateMenuPostion)
+    editor.value?.off('focus', updateMenuPostion)
   }
 })
 // watch(
@@ -165,6 +175,7 @@ watch(() => page.value.pagination, updateMenuPostion)
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
       }
     }

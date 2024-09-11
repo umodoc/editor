@@ -27,7 +27,10 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const props = defineProps({
   select: {
     type: Boolean,
@@ -73,13 +76,13 @@ const fontSizes = [
 ]
 
 // 设置字体大小
-const setFontSize = (fontSize) => {
-  editor.value.chain().focus().setFontSize(fontSize).run()
+const setFontSize = (fontSize: string) => {
+  editor.value?.chain().focus().setFontSize(fontSize).run()
 }
 
 // 增大字号
 const increaseFontSize = () => {
-  const { fontSize } = editor.value.getAttributes('textStyle')
+  const { fontSize } = editor.value?.getAttributes('textStyle') ?? {}
   if (fontSize) {
     const size = fontSizes.find(({ value }) => value === fontSize)
     if (!size) {
@@ -96,7 +99,7 @@ const increaseFontSize = () => {
 
 // 减小字号
 const decreaseFontSize = () => {
-  const { fontSize } = editor.value.getAttributes('textStyle')
+  const { fontSize } = editor.value?.getAttributes('textStyle') ?? {}
   if (fontSize) {
     const size = fontSizes.find(({ value }) => value === fontSize)
     if (!size) {

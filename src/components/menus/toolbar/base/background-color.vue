@@ -1,6 +1,6 @@
 <template>
   <menus-button
-    :text="text"
+    :text="text || t('base.bgColor')"
     menu-type="popup"
     popup-handle="arrow"
     hide-text
@@ -20,11 +20,15 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 const props = defineProps({
   text: {
     type: String,
-    default: t('base.bgColor'),
+    default: '',
   },
   modeless: {
     type: Boolean,
@@ -37,12 +41,12 @@ const props = defineProps({
 })
 const emits = defineEmits(['change'])
 
-let { popupVisible, togglePopup } = usePopup()
+const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
-let currentColor = $ref()
+let currentColor = $ref<string | undefined>()
 
-const colorChange = (color) => {
+const colorChange = (color: string) => {
   currentColor = color
   popupVisible.value = false
 
@@ -51,10 +55,10 @@ const colorChange = (color) => {
     return
   }
 
-  if (color !== '') {
-    editor.value?.chain().focus().setHighlight({ color }).run()
-  } else {
+  if (color === '') {
     editor.value?.chain().focus().unsetHighlight().run()
+  } else {
+    editor.value?.chain().focus().setHighlight({ color }).run()
   }
 }
 </script>

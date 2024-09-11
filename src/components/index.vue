@@ -1,7 +1,9 @@
 <template>
   <t-config-provider
     :global-config="{
-      ...localeConfig[i18n.global.locale.value],
+      ...(localeConfig[
+        i18n.locale.value as SupportedLocale
+      ] as unknown as GlobalConfigProvider),
       classPrefix: 'umo',
     }"
   >
@@ -9,35 +11,38 @@
       :id="container.substr(1)"
       class="umo-editor-container"
       :class="{
-        'toolbar-classic': $toolbar.mode === 'classic',
-        'toolbar-ribbon': $toolbar.mode === 'ribbon',
-        'toolbar-source': $toolbar.mode === 'source',
-        'preview-mode': page.preview.enabled,
-        'laser-pointer': page.preview.enabled && page.preview.laserPointer,
+        'toolbar-classic': isRecord($toolbar) && $toolbar.mode === 'classic',
+        'toolbar-ribbon': isRecord($toolbar) && $toolbar.mode === 'ribbon',
+        'toolbar-source': isRecord($toolbar) && $toolbar.mode === 'source',
+        'preview-mode': page.preview?.enabled,
+        'laser-pointer': page.preview?.enabled && page.preview?.laserPointer,
       }"
       :style="{ height: options.height }"
     >
       <header class="umo-toolbar">
-        <toolbar :key="toolbarKey" @menu-change="menuChange">
+        <toolbar
+          :key="toolbarKey"
+          @menu-change="(event) => emits('menuChange', event)"
+        >
           <template
-            v-for="item in options.toolbar.menus"
+            v-for="item in options.toolbar?.menus"
             :key="item"
-            #[`toolbar_${item}`]="props"
+            #[`toolbar_${item}`]="slotProps"
           >
-            <slot :name="`toolbar_${item}`" v-bind="props" />
+            <slot :name="`toolbar_${item}`" v-bind="slotProps" />
           </template>
         </toolbar>
       </header>
       <main class="umo-main">
         <container-page v-if="$toolbar.mode !== 'source'">
-          <template #page_header="props">
-            <slot name="page_header" v-bind="props" />
+          <template #page_header="slotProps">
+            <slot name="page_header" v-bind="slotProps" />
           </template>
-          <template #page_footer="props">
-            <slot name="page_footer" v-bind="props" />
+          <template #page_footer="slotProps">
+            <slot name="page_footer" v-bind="slotProps" />
           </template>
-          <template #bubble_menu="props">
-            <slot name="bubble_menu" v-bind="props" />
+          <template #bubble_menu="slotProps">
+            <slot name="bubble_menu" v-bind="slotProps" />
           </template>
         </container-page>
         <editor-source v-else />
@@ -49,18 +54,39 @@
   </t-config-provider>
 </template>
 
-<script setup>
-import { toBlob, toJpeg, toPng } from 'dom-to-image-more'
-import i18n from '@/i18n'
-import { propsOptions } from '@/options'
+<script setup lang="ts">
+import '@/assets/styles/index.less'
+
+import type { FocusPosition } from '@tiptap/core'
+import {
+  isBoolean,
+  isNumber,
+  isRecord,
+  isString,
+} from '@tool-belt/type-predicates'
+import domToImageMore from 'dom-to-image-more'
+import type { GlobalConfigProvider } from 'tdesign-vue-next'
 import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
+import { useI18n } from 'vue-i18n'
 
-import '@/assets/styles/index.less'
 import { getSelectionNode, getSelectionText } from '@/extensions/selection'
+import { propsOptions } from '@/options'
+import type {
+  AutoSaveOptions,
+  DocumentOptions,
+  SupportedLocale,
+  WatermarkOption,
+} from '@/types'
+
+const i18n = useI18n()
+const { t } = i18n
+
+const { toBlob, toJpeg, toPng } = domToImageMore
 
 defineOptions({ name: 'UmoEditor' })
 
+// Props and Emits
 const props = defineProps(propsOptions)
 const emits = defineEmits([
   'beforeCreate',
@@ -86,10 +112,10 @@ const emits = defineEmits([
   'blur',
   'saved',
   'destroy',
+  'menuChange',
 ])
 
-onBeforeMount(() => setOptions(props))
-
+// Store Setup
 const {
   container,
   toolbarKey,
@@ -103,52 +129,27 @@ const {
   printing,
   resetStore,
 } = useStore()
+
 const $toolbar = useState('toolbar', props.editorKey)
 const $document = useState('document', props.editorKey)
+
+// Lifecycle Hooks
+onBeforeMount(() => setOptions(props))
+onMounted(() => {
+  setTheme(options.value.theme)
+})
+onBeforeUnmount(() => {
+  clearAutoSaveInterval()
+  destroy()
+})
+
+// Watchers
 watch(
   () => props,
   () => setOptions(props),
   { deep: true },
 )
-editorDestroyed.value = false
 
-// i18n
-const { appContext } = getCurrentInstance()
-appContext.config.globalProperties.t = i18n.global.t
-appContext.config.globalProperties.l = l
-const locale = useState('locale')
-i18n.global.locale.value =
-  locale.value !== options.value.locale ? locale.value : options.value.locale
-
-// 全局设置
-const localeConfig = $ref({
-  'zh-CN': cnConfig,
-  'en-US': enConfig,
-})
-
-// 主题
-const setTheme = (theme) => {
-  if (!['light', 'dark', 'auto'].includes(theme)) {
-    throw new Error('"parmas" must be one of "light", "dark" or "auto".')
-  }
-  if (theme !== 'auto') {
-    document.querySelector('html').setAttribute('theme-mode', theme)
-    emits('changed:theme', theme)
-    return
-  }
-  // 检测用户偏好的主题
-  const darkScheme = '(prefers-color-scheme: dark)'
-  const prefersDarkScheme = window.matchMedia(darkScheme).matches
-  setTheme(prefersDarkScheme ? 'dark' : 'light')
-  // 添加事件监听器，监听主题变化
-  window.matchMedia(darkScheme).addEventListener('change', (e) => {
-    setTheme(e.matches ? 'dark' : 'light')
-  })
-}
-
-onMounted(() => {
-  setTheme(options.value.theme)
-})
 watch(
   () => options.value.theme,
   (theme) => {
@@ -156,7 +157,182 @@ watch(
   },
 )
 
-// 页眉页脚
+// 定时保存
+let contentUpdated = $ref(false)
+let isFirstUpdate = $ref(true)
+let autoSaveInterval = $ref<NodeJS.Timeout | null>(null)
+const clearAutoSaveInterval = () => {
+  if (autoSaveInterval !== null) {
+    clearInterval(autoSaveInterval)
+    autoSaveInterval = null
+  }
+}
+watch(
+  () => contentUpdated,
+  (val) => {
+    const { autoSave } = options.value.document ?? {}
+    if (!autoSave?.enabled) {
+      return
+    }
+    if (isFirstUpdate) {
+      isFirstUpdate = false
+      setTimeout(() => {
+        contentUpdated = false
+      })
+      return
+    }
+    if (!val) {
+      clearAutoSaveInterval()
+      return
+    }
+    autoSaveInterval = setInterval(() => {
+      void saveContent()
+      contentUpdated = false
+      clearAutoSaveInterval()
+    }, autoSave.interval)
+  },
+)
+
+watch(
+  () => editor.value,
+  () => {
+    if (!editor.value) {
+      return
+    }
+    editor.value.on('create', ({ editor }) => {
+      emits('created', { editor })
+    })
+    editor.value.on('update', ({ editor }) => {
+      emits('changed', { editor })
+      contentUpdated = true
+    })
+    editor.value.on('selectionUpdate', ({ editor }) => {
+      emits('changed:selection', { editor })
+    })
+    editor.value.on('transaction', ({ editor, transaction }) => {
+      emits('changed:transaction', { editor, transaction })
+    })
+    editor.value.on('focus', ({ editor, event }) => {
+      emits('focus', { editor, event })
+    })
+    editor.value.on(
+      'contentError',
+      ({ editor, error, disableCollaboration }) => {
+        emits('contentError', { editor, error, disableCollaboration })
+      },
+    )
+    editor.value.on('blur', ({ editor, event }) => {
+      emits('blur', { editor, event })
+    })
+    editor.value.on('destroy', () => {
+      resetStore()
+      emits('destroy')
+    })
+  },
+)
+
+watch(
+  () => $toolbar.value,
+  (toolbar, oldToolbar) => {
+    emits('changed:toolbar', { toolbar, oldToolbar })
+  },
+  { deep: true },
+)
+
+watch(
+  () => page.value.size,
+  (pageSize, oldPageSize) => {
+    emits('changed:pageSize', { pageSize, oldPageSize })
+  },
+  { deep: true },
+)
+
+watch(
+  () => page.value.margin,
+  (pageMargin, oldPageMargin) => {
+    emits('changed:pageMargin', { pageMargin, oldPageMargin })
+  },
+  { deep: true },
+)
+
+watch(
+  () => page.value.background,
+  (pageBackground, oldPageBackground) => {
+    emits('changed:pageBackground', { pageBackground, oldPageBackground })
+  },
+)
+
+watch(
+  () => page.value.orientation,
+  (pageOrientation, oldPageOrientation) => {
+    emits('changed:pageOrientation', { pageOrientation, oldPageOrientation })
+  },
+)
+
+watch(
+  () => page.value.showToc,
+  (showToc) => {
+    emits('changed:pageShowToc', showToc)
+  },
+)
+
+watch(
+  () => page.value.zoomLevel,
+  (zoomLevel, oldZoomLevel) => {
+    emits('changed:pageZoom', { zoomLevel, oldZoomLevel })
+  },
+)
+
+watch(
+  () => page.value.preview?.enabled,
+  (previewEnabled) => {
+    emits('changed:pagePreview', previewEnabled)
+  },
+)
+
+watch(
+  () => page.value.watermark,
+  (pageWatermark, oldPageWatermark) => {
+    emits('changed:pageWatermark', { pageWatermark, oldPageWatermark })
+  },
+  { deep: true },
+)
+
+watch(
+  () => printing.value,
+  () => {
+    emits('print')
+  },
+  { deep: true },
+)
+
+watch(
+  () => i18n.locale.value,
+  (locale, oldLocale) => {
+    emits('changed:locale', { locale, oldLocale })
+  },
+)
+
+// i18n Setup
+const { appContext } = getCurrentInstance() ?? {}
+if (appContext) {
+  appContext.config.globalProperties.t = i18n.t as unknown as (
+    key: string,
+    ...args: unknown[]
+  ) => string
+  appContext.config.globalProperties.l = l
+}
+const locale = useState('locale')
+i18n.locale.value =
+  locale.value !== options.value.locale ? locale.value : options.value.locale
+
+// Global Locale Config
+const localeConfig = $ref({
+  'zh-CN': cnConfig,
+  'en-US': enConfig,
+})
+
+// Page Header/Footer Visibility
 const { hidePageHeader, hidePageFooter } = useStore()
 const slots = useSlots()
 if (slots.page_header) {
@@ -166,170 +342,208 @@ if (slots.page_footer) {
   hidePageFooter.value = false
 }
 
-// 对外暴露的编辑器方法
-const setToolbar = (parmas) => {
-  if ((!parmas) instanceof Object) {
-    throw new Error('parmas must be an object.')
+// Theme Setup
+const setTheme = (theme: 'light' | 'dark' | 'auto') => {
+  if (!isString(theme) || !['light', 'dark', 'auto'].includes(theme)) {
+    throw new Error('"theme" must be one of "light", "dark" or "auto".')
   }
-  if (parmas.mode) {
-    if (typeof parmas.mode !== 'string') {
-      throw new Error('"parmas.size" must be a string.')
-    }
-    if (parmas.mode && !['classic', 'ribbon'].includes(parmas.mode)) {
-      throw new Error('"parmas.mode" must be one of "classic" or "ribbon".')
-    }
-    $toolbar.value.mode = parmas.mode
+  if (theme !== 'auto') {
+    document.querySelector('html')?.setAttribute('theme-mode', theme)
+    emits('changed:theme', theme)
+    return
   }
-  if (parmas.show !== undefined) {
-    if (typeof parmas.show !== 'boolean') {
-      throw new Error('"parmas.show" must be a boolean.')
+  const darkScheme = '(prefers-color-scheme: dark)'
+  const prefersDarkScheme = window.matchMedia(darkScheme).matches
+  setTheme(prefersDarkScheme ? 'dark' : 'light')
+  window.matchMedia(darkScheme).addEventListener('change', (e) => {
+    setTheme(e.matches ? 'dark' : 'light')
+  })
+}
+
+// Toolbar and Page Setup Methods
+const setToolbar = (params: { mode: 'classic' | 'ribbon'; show: boolean }) => {
+  if (!isRecord(params)) {
+    throw new Error('params must be an object.')
+  }
+  if (params.mode) {
+    if (!isString(params.mode)) {
+      throw new Error('"params.mode" must be a string.')
     }
-    $toolbar.value.show = parmas.show
+    if (!['classic', 'ribbon'].includes(params.mode)) {
+      throw new Error('"params.mode" must be one of "classic" or "ribbon".')
+    }
+    $toolbar.value.mode = params.mode
+  }
+  if (isDefined(params.show)) {
+    if (!isBoolean(params.show)) {
+      throw new Error('"params.show" must be a boolean.')
+    }
+    $toolbar.value.show = params.show
   }
 }
-const setPage = (parmas) => {
-  if ((!parmas) instanceof Object) {
-    throw new Error('parmas must be an object.')
+
+const setPage = (params: {
+  size: string
+  orientation: string
+  background: string
+}) => {
+  if (!isRecord(params)) {
+    throw new Error('params must be an object.')
   }
-  if (parmas.size) {
-    if (typeof parmas.size !== 'string')
-      throw new Error('"parmas.size" must be a string.')
-    const size = options.value.dicts.pageSizes.find(
-      (item) => item.label === parmas.size,
+  if (params.size) {
+    if (!isString(params.size)) {
+      throw new Error('"params.size" must be a string.')
+    }
+    const size = options.value.dicts?.pageSizes.find(
+      (item) => item.label === params.size,
     )
     if (!size) {
       throw new Error(
-        `"parmas.size" must be one of ${options.value.dicts.pageSizes.map((item) => item.label)}.`,
+        `"params.size" must be one of ${options.value.dicts?.pageSizes.map((item) => item.label)}.`,
       )
     }
     page.value.size = size
   }
-  if (parmas.orientation) {
-    if (typeof parmas.orientation !== 'string') {
-      throw new Error('"parmas.orientation" must be a string.')
+  if (params.orientation) {
+    if (!isString(params.orientation)) {
+      throw new Error('"params.orientation" must be a string.')
     }
-    if (!['portrait', 'landscape'].includes(parmas.orientation)) {
-      throw new Error('"parmas.mode" must be one of "portrait" or "landscape".')
-    }
-    page.value.orientation = parmas.orientation
-  }
-
-  if (parmas.background) {
-    if (typeof parmas.background !== 'string') {
-      throw new Error('"parmas.background" must be a string.')
-    }
-    page.value.background = parmas.background
-  }
-}
-const setWatermark = (parmas) => {
-  if ((!parmas) instanceof Object) {
-    throw new Error('parmas must be an object.')
-  }
-  if (parmas.alpha !== undefined) {
-    if (typeof parmas.alpha !== 'number') {
-      throw new Error('"parmas.alpha" must be a number.')
-    }
-    page.value.watermark.alpha = parmas.alpha
-  }
-  if (parmas.text) {
-    if (typeof parmas.text !== 'string') {
-      throw new Error('"parmas.text" must be a string.')
-    }
-    if (parmas.text.length > 30) {
-      throw new Error('"parmas.text" must be less than 30 characters.')
-    }
-    page.value.watermark.text = parmas.text
-  }
-
-  if (parmas.type) {
-    if (typeof parmas.type !== 'string') {
-      throw new Error('"parmas.type" must be a string.')
-    }
-    if (!['compact', 'spacious'].includes(parmas.type)) {
-      throw new Error('"parmas.type" must be one of "compact" or "spacious".')
-    }
-    page.value.watermark.type = parmas.type
-  }
-  if (parmas.fontColor) {
-    if (typeof parmas.fontColor !== 'string') {
-      throw new Error('"parmas.fontColor" must be a string.')
-    }
-    page.value.watermark.fontColor = parmas.fontColor
-  }
-  if (parmas.fontSize) {
-    if (typeof parmas.fontSize !== 'number') {
-      throw new Error('"parmas.fontSize" must be a number.')
-    }
-    page.value.watermark.fontSize = parmas.fontSize
-  }
-  if (parmas.fontFamily || parmas.fontFamily === null) {
-    if (parmas.fontFamily !== null && typeof parmas.fontFamily !== 'string') {
-      throw new Error('"parmas.fontFamily" must be a string.')
-    }
-    page.value.watermark.fontFamily = parmas.fontFamily
-  }
-  if (parmas.fontWeight) {
-    if (typeof parmas.fontWeight !== 'string') {
-      throw new Error('"parmas.fontWeight" must be a string.')
-    }
-    if (!['normal', 'bold', 'bolder'].includes(parmas.fontWeight)) {
+    if (!['portrait', 'landscape'].includes(params.orientation)) {
       throw new Error(
-        '"parmas.fontWeight" must be one of "normal", "bold" or "bolder".',
+        '"params.orientation" must be one of "portrait" or "landscape".',
       )
     }
+    page.value.orientation = params.orientation
+  }
 
-    page.value.watermark.fontWeight = parmas.fontWeight
+  if (params.background) {
+    if (!isString(params.background)) {
+      throw new Error('"params.background" must be a string.')
+    }
+    page.value.background = params.background
   }
 }
-const setDocument = (parmas) => {
-  if ((!parmas) instanceof Object) {
-    throw new Error('parmas must be an object.')
+
+const setWatermark = (params: Partial<WatermarkOption>) => {
+  if (!isRecord(params)) {
+    throw new Error('params must be an object.')
   }
-  if (parmas.title) {
-    if (typeof parmas.title !== 'string') {
-      throw new Error('"parmas.title" must be a string.')
+  if (!page.value.watermark) {
+    page.value.watermark = {} as WatermarkOption
+  }
+  if (isDefined(params.alpha)) {
+    if (!isNumber(params.alpha)) {
+      throw new Error('"params.alpha" must be a number.')
     }
-    const title = parmas.title !== '' ? parmas.title : t('document.untitled')
+    page.value.watermark.alpha = params.alpha
+  }
+  if (params.text) {
+    if (!isString(params.text)) {
+      throw new Error('"params.text" must be a string.')
+    }
+    if (params.text.length > 30) {
+      throw new Error('"params.text" must be less than 30 characters.')
+    }
+    page.value.watermark.text = params.text
+  }
+
+  if (params.type) {
+    if (!isString(params.type)) {
+      throw new Error('"params.type" must be a string.')
+    }
+    if (!['compact', 'spacious'].includes(params.type)) {
+      throw new Error('"params.type" must be one of "compact" or "spacious".')
+    }
+    page.value.watermark.type = params.type
+  }
+  if (params.fontColor) {
+    if (!isString(params.fontColor)) {
+      throw new Error('"params.fontColor" must be a string.')
+    }
+    page.value.watermark.fontColor = params.fontColor
+  }
+  if (params.fontSize) {
+    if (!isNumber(params.fontSize)) {
+      throw new Error('"params.fontSize" must be a number.')
+    }
+    page.value.watermark.fontSize = params.fontSize
+  }
+  if (params.fontFamily || params.fontFamily === null) {
+    if (params.fontFamily !== null && !isString(params.fontFamily)) {
+      throw new Error('"params.fontFamily" must be a string.')
+    }
+    page.value.watermark.fontFamily = params.fontFamily
+  }
+  if (params.fontWeight) {
+    if (!isString(params.fontWeight)) {
+      throw new Error('"params.fontWeight" must be a string.')
+    }
+    if (!['normal', 'bold', 'bolder'].includes(params.fontWeight)) {
+      throw new Error(
+        '"params.fontWeight" must be one of "normal", "bold" or "bolder".',
+      )
+    }
+    page.value.watermark.fontWeight = params.fontWeight
+  }
+}
+
+const setDocument = (params: DocumentOptions) => {
+  if (!isRecord(params)) {
+    throw new Error('params must be an object.')
+  }
+  if (!options.value.document) {
+    options.value.document = {} as DocumentOptions
+  }
+  if (params.title) {
+    if (!isString(params.title)) {
+      throw new Error('"params.title" must be a string.')
+    }
+    const title = params.title !== '' ? params.title : t('document.untitled')
     $document.value.title = title
     options.value.document.title = title
   }
-  if (parmas.bubbleMenu !== undefined) {
-    if (typeof parmas.bubbleMenu !== 'boolean') {
-      throw new Error('"parmas.bubbleMenu" must be a boolean.')
+  if (isDefined(params.enableBubbleMenu)) {
+    if (!isBoolean(params.enableBubbleMenu)) {
+      throw new Error('"params.enableBubbleMenu" must be a boolean.')
     }
-    options.value.document.bubbleMenu = parmas.bubbleMenu
+    options.value.document.enableBubbleMenu = params.enableBubbleMenu
   }
-  if (parmas.blockMenu !== undefined) {
-    if (typeof parmas.blockMenu !== 'boolean') {
-      throw new Error('"parmas.blockMenu" must be a boolean.')
+  if (isDefined(params.enableBlockMenu)) {
+    if (!isBoolean(params.enableBlockMenu)) {
+      throw new Error('"params.enableBlockMenu" must be a boolean.')
     }
-    options.value.document.blockMenu = parmas.blockMenu
+    options.value.document.enableBlockMenu = params.enableBlockMenu
   }
-  if (parmas.markdown !== undefined) {
-    if (typeof parmas.markdown !== 'boolean') {
-      throw new Error('"parmas.markdown" must be a boolean.')
+  if (isDefined(params.enableMarkdown)) {
+    if (!isBoolean(params.enableMarkdown)) {
+      throw new Error('"params.enableMarkdown" must be a boolean.')
     }
-    $document.value.markdown = parmas.markdown
+    $document.value.enableMarkdown = params.enableMarkdown
   }
-  if (parmas.spellcheck !== undefined) {
-    if (typeof parmas.spellcheck !== 'boolean') {
-      throw new Error('"parmas.spellcheck" must be a boolean.')
+  if (isDefined(params.enableSpellcheck)) {
+    if (!isBoolean(params.enableSpellcheck)) {
+      throw new Error('"params.spellcheck" must be a boolean.')
     }
-    $document.value.spellcheck = parmas.spellcheck
+    $document.value.enableSpellcheck = params.enableSpellcheck
   }
-  if (parmas.autoSave) {
-    if (typeof parmas.autoSave?.enabled !== 'boolean') {
-      throw new Error('"parmas.autoSave.enabled" must be a boolean.')
+  if (params.autoSave) {
+    if (!isBoolean(params.autoSave.enabled)) {
+      throw new Error('"params.autoSave.enabled" must be a boolean.')
     }
-    options.value.document.autoSave.enabled = parmas.autoSave.enabled
-    if (parmas.autoSave?.interval !== 'number') {
-      throw new Error('"parmas.autoSave.interval" must be a number.')
+    if (!isNumber(params.autoSave.interval)) {
+      throw new Error('"params.autoSave.interval" must be a number.')
     }
-    options.value.document.autoSave.interval = parmas.autoSave.interval
+
+    options.value.document ??= {} as DocumentOptions
+    options.value.document.autoSave ??= {} as AutoSaveOptions
+    options.value.document.autoSave.enabled = params.autoSave.enabled
+    options.value.document.autoSave.interval = params.autoSave.interval
   }
 }
+
+// Content Methods
 const setContent = (
-  content,
+  content: string,
   options = {
     emitUpdate: true,
     focusPosition: 'start',
@@ -342,43 +556,17 @@ const setContent = (
   editor.value
     .chain()
     .setContent(content, options.emitUpdate)
-    .focus(options.focusPosition, options.focusOptions)
+    .focus(options.focusPosition as FocusPosition, options.focusOptions)
     .run()
   setTimeout(() => {
-    editor.value.commands.autoPaging()
+    editor.value?.commands.autoPaging(undefined)
   }, 200)
 }
-const setPagination = (enabled) => {
-  if (!editor.value) {
-    throw new Error('editor is not ready!')
-  }
-  if (typeof enabled !== 'boolean') {
-    throw new Error('"enabled" must be a boolean.')
-  }
-  page.value.pagination = enabled
-}
-const autoPagination = (enabled) => {
-  if (!editor.value) {
-    throw new Error('editor is not ready!')
-  }
-  if (typeof enabled !== 'boolean') {
-    throw new Error('"enabled" must be a boolean.')
-  }
-  editor.value.commands.autoPaging(enabled)
-}
-const setLocale = (parmas) => {
-  if (!['zh-CN', 'en-US'].includes(parmas)) {
-    throw new Error('"parmas" must be one of "zh-CN" or "en-US".')
-  }
-  if (i18n.global.locale.value === parmas) {
-    return
-  }
-  const locale = useState('locale')
-  locale.value = parmas
-  location.reload()
-}
+
 const getContent = (format = 'html') => {
-  if (!editor.value) throw new Error('editor is not ready!')
+  if (!editor.value) {
+    throw new Error('editor is not ready!')
+  }
   if (format === 'html') {
     return editor.value.getHTML()
   }
@@ -390,22 +578,58 @@ const getContent = (format = 'html') => {
   }
   throw new Error('format must be html, text or json')
 }
-const getImage = async (format = 'blob') => {
-  const zoomLevel = page.value.zoomLevel
+
+// Pagination Methods
+const setPagination = (enabled: boolean) => {
+  if (!editor.value) {
+    throw new Error('editor is not ready!')
+  }
+  if (!isBoolean(enabled)) {
+    throw new Error('"enabled" must be a boolean.')
+  }
+  page.value.pagination = enabled
+}
+
+const autoPagination = (enabled: boolean) => {
+  if (!editor.value) {
+    throw new Error('editor is not ready!')
+  }
+  if (typeof enabled !== 'boolean') {
+    throw new Error('"enabled" must be a boolean.')
+  }
+  editor.value.commands.autoPaging(enabled)
+}
+
+// Locale Methods
+const setLocale = (params: SupportedLocale) => {
+  if (!['zh-CN', 'en-US'].includes(params)) {
+    throw new Error('"params" must be one of "zh-CN" or "en-US".')
+  }
+  if (i18n.locale.value === params) {
+    return
+  }
+  const locale = useState('locale')
+  locale.value = params
+  location.reload()
+}
+
+const getLocale = () => i18n.locale.value
+const getI18n = () => i18n
+
+// Export Methods
+const getImage = async (format: 'blob' | 'jpeg' | 'png' = 'blob') => {
+  const { zoomLevel } = page.value
   try {
     page.value.zoomLevel = 100
     const node = document.querySelector(`${container} .umo-page-content`)
     if (format === 'blob') {
-      const blob = await toBlob(node)
-      return blob
+      return await toBlob(node)
     }
     if (format === 'jpeg') {
-      const image = await toJpeg(node)
-      return image
+      return await toJpeg(node)
     }
     if (format === 'png') {
-      const image = await toPng(node)
-      return image
+      return await toPng(node)
     }
   } catch {
     throw new Error(t('export.image.error.message'))
@@ -413,36 +637,80 @@ const getImage = async (format = 'blob') => {
     page.value.zoomLevel = zoomLevel
   }
 }
+
+// Editor Interaction Methods
 const getText = () => getContent('text')
 const getHTML = () => getContent('html')
 const getJSON = () => getContent('json')
+
+const focus = (position = 'start', options = { scrollIntoView: true }) =>
+  editor.value?.commands.focus(position as FocusPosition, options)
+
+const blur = () => editor.value?.chain().blur().run()
+
+const print = () => {
+  const { toolbar, document } = options.value
+  if (toolbar?.disableMenuItems.includes('print') || editor.value?.isEmpty) {
+    return
+  }
+  if ($toolbar.value.mode !== 'source' && !document?.readOnly) {
+    printing.value = true
+  }
+}
+
+const reset = (silent: boolean) => {
+  const resetFn = () => {
+    localStorage.clear()
+    location.reload()
+  }
+  if (silent) {
+    resetFn()
+    return
+  }
+  const dialog = useConfirm({
+    theme: 'warning',
+    header: t('resetAll.title'),
+    body: t('resetAll.message'),
+    confirmBtn: {
+      theme: 'warning',
+      content: t('resetAll.reset'),
+    },
+    onConfirm() {
+      dialog.destroy()
+      resetFn()
+    },
+  })
+}
+
+const destroy = () => {
+  editor.value?.destroy()
+  resetStore()
+}
+
+// Content Saving Methods
 const saveContent = async () => {
-  if ($toolbar.value.mode === 'source' || options.value.document.readOnly) {
+  if ($toolbar.value.mode === 'source' || options.value.document?.readOnly) {
     return
   }
   try {
-    let message = await useMessage(
-      'loading',
+    const message = await useMessage('loading', {
+      content: t('save.saving'),
+      placement: 'bottom',
+      closeBtn: true,
+      offset: [0, -20],
+    })
+    const success = await options.value?.onSave?.(
       {
-        content: t('save.saving'),
-        placement: 'bottom',
-        closeBtn: true,
-        offset: [0, -20],
-      },
-      0,
-    )
-    const success = await options.value.onSave(
-      {
-        html: editor.value.getHTML(),
-        json: editor.value.getJSON(),
-        text: editor.value.getHTML(),
+        html: editor.value?.getHTML(),
+        json: editor.value?.getJSON(),
+        text: editor.value?.getHTML(),
       },
       page.value,
       $document.value,
     )
     if (!success) {
       message.close()
-      message = useMessage('error', {
+      useMessage('error', {
         content: t('save.failed'),
         placement: 'bottom',
         offset: [0, -20],
@@ -464,58 +732,50 @@ const saveContent = async () => {
       placement: 'bottom',
       offset: [0, -20],
     })
-    console.error(e.message)
+    console.error((e as Error).message)
   }
-}
-const getContentExcerpt = (charLimit = 100, more = ' ...') => {
-  const text = editor.value.getText()
-  if (text.length === 0) {
-    return ''
-  }
-  return text.substring(0, charLimit) + more
-}
-const getLocale = () => i18n.global.locale.value
-const getI18n = () => i18n
-const print = () => {
-  const { toolbar, document } = options.value
-  if (toolbar.disableMenuItems.includes('print') || editor.isEmpty) {
-    return
-  }
-  if ($toolbar.value.mode !== 'source' && !document.readOnly) {
-    printing.value = true
-  }
-}
-const focus = (position = 'start', options = { scrollIntoView: true }) =>
-  editor.value.commands.focus(position, options)
-const blur = () => editor.value.chain().blur().run()
-const reset = (silent) => {
-  const resetFn = () => {
-    localStorage.clear()
-    location.reload()
-  }
-  if (silent === true) {
-    resetFn()
-    return
-  }
-  const dialog = useConfirm({
-    theme: 'warning',
-    header: t('resetAll.title'),
-    body: t('resetAll.message'),
-    confirmBtn: {
-      theme: 'warning',
-      content: t('resetAll.reset'),
-    },
-    onConfirm() {
-      dialog.destroy()
-      resetFn()
-    },
-  })
-}
-const destroy = () => {
-  editor.value.destroy()
-  resetStore()
 }
 
+// Content Excerpt Methods
+const getContentExcerpt = (charLimit = 100, more = ' ...') => {
+  const text = editor.value?.getText()
+  if (text?.length === 0) {
+    return ''
+  }
+  return text?.substring(0, charLimit) + more
+}
+
+// Toolbar Mode Reset
+watch(
+  () => $toolbar.value.mode,
+  (val) => {
+    editorDestroyed.value = val === 'source'
+  },
+)
+
+// Hotkeys Setup
+const unsetFormatPainter = () => editor.value?.commands.unsetFormatPainter()
+useHotkeys('ctrl+s,command+s', () => {
+  void saveContent()
+  unsetFormatPainter()
+})
+useHotkeys('ctrl+p,command+p', () => {
+  print()
+  unsetFormatPainter()
+})
+useHotkeys('esc', () => {
+  if (page.value.preview) {
+    page.value.preview.enabled = false
+  }
+  unsetFormatPainter()
+})
+
+// Methods Exposed to Descendants
+provide('saveContent', saveContent)
+provide('setLocale', setLocale)
+provide('reset', reset)
+
+// Exposing Methods
 defineExpose({
   getOptions: () => options.value,
   setOptions,
@@ -537,15 +797,18 @@ defineExpose({
   getContentExcerpt,
   getEditor: () => editor,
   getTableOfContents: () => tableOfContents.value,
-  getSelectionText: () => getSelectionText(editor.value),
-  getSelectionNode: () => getSelectionNode(editor.value),
+  getSelectionText: () => (editor.value ? getSelectionText(editor.value) : ''),
+  getSelectionNode: () =>
+    editor.value ? getSelectionNode(editor.value) : null,
   deleteSelectionNode: () => editor.value?.commands.deleteSelectionNode(),
   setCurrentNodeSelection: () =>
     editor.value?.commands.setCurrentNodeSelection(),
   getLocale,
   getI18n,
   setReadOnly(readOnly = true) {
-    options.value.document.readOnly = readOnly
+    if (options.value.document) {
+      options.value.document.readOnly = readOnly
+    }
   },
   print,
   focus,
@@ -556,165 +819,6 @@ defineExpose({
   useMessage,
   destroy,
 })
-
-// 定时保存
-let contentUpdated = $ref(false)
-let isFirstUpdate = $ref(true)
-let autoSaveInterval = $ref(null)
-const clearAutoSaveInterval = () => {
-  if (autoSaveInterval !== null) {
-    clearInterval(autoSaveInterval)
-    autoSaveInterval = null
-  }
-}
-watch(
-  () => contentUpdated,
-  (val) => {
-    const { autoSave } = options.value.document
-    if (!autoSave.enabled) {
-      return
-    }
-    if (isFirstUpdate) {
-      isFirstUpdate = false
-      setTimeout(() => (contentUpdated = false))
-      return
-    }
-    if (!val) {
-      clearAutoSaveInterval()
-      return
-    }
-    autoSaveInterval = setInterval(() => {
-      saveContent()
-      contentUpdated = false
-      clearAutoSaveInterval()
-    }, autoSave.interval)
-  },
-)
-onBeforeUnmount(() => {
-  clearAutoSaveInterval()
-  destroy()
-})
-
-// 编辑器事件
-emits('beforeCreate')
-watch(
-  () => editor.value,
-  () => {
-    if (!editor.value) {
-      return
-    }
-    editor.value.on('create', ({ editor }) => emits('created', { editor }))
-    editor.value.on('update', ({ editor }) => {
-      emits('changed', { editor })
-      contentUpdated = true
-    })
-    editor.value.on('selectionUpdate', ({ editor }) => {
-      emits('changed:selection', { editor })
-    })
-    editor.value.on('transaction', ({ editor, transaction }) =>
-      emits('changed:transaction', { editor, transaction }),
-    )
-    editor.value.on('focus', ({ editor, event }) =>
-      emits('focus', { editor, event }),
-    )
-    editor.value.on('contentError', ({ editor, error, disableCollaboration }) =>
-      emits('contentError', { editor, error, disableCollaboration }),
-    )
-    editor.value.on('blur', ({ editor, event }) =>
-      emits('blur', { editor, event }),
-    )
-    editor.value.on('destroy', () => {
-      resetStore()
-      emits('destroy')
-    })
-  },
-)
-const menuChange = (menu) => emits('changed:menu', menu)
-watch(
-  () => $toolbar.value,
-  (toolbar, oldToolbar) => {
-    emits('changed:toolbar', { toolbar, oldToolbar })
-  },
-  { deep: true },
-)
-watch(
-  () => page.value.size,
-  (pageSize, oldPageSize) =>
-    emits('changed:pageSize', { pageSize, oldPageSize }),
-  { deep: true },
-)
-watch(
-  () => page.value.margin,
-  (pageMargin, oldPageMargin) =>
-    emits('changed:pageMargin', { pageMargin, oldPageMargin }),
-  { deep: true },
-)
-watch(
-  () => page.value.background,
-  (pageBackground, oldPageBackground) =>
-    emits('changed:pageBackground', { pageBackground, oldPageBackground }),
-)
-watch(
-  () => page.value.orientation,
-  (pageOrientation, oldPageOrientation) =>
-    emits('changed:pageOrientation', { pageOrientation, oldPageOrientation }),
-)
-watch(
-  () => page.value.showToc,
-  (showToc) => emits('changed:pageShowToc', showToc),
-)
-watch(
-  () => page.value.zoomLevel,
-  (zoomLevel, oldZoomLevel) =>
-    emits('changed:pageZoom', { zoomLevel, oldZoomLevel }),
-)
-watch(
-  () => page.value.preview.enabled,
-  (previewEnabled) => emits('changed:pagePreview', previewEnabled),
-)
-watch(
-  () => page.value.watermark,
-  (pageWatermark, oldPageWatermark) =>
-    emits('changed:pageWatermark', { pageWatermark, oldPageWatermark }),
-  { deep: true },
-)
-watch(
-  () => printing.value,
-  () => emits('print'),
-  { deep: true },
-)
-watch(
-  () => i18n.global.locale.value,
-  (locale, oldLocale) => {
-    emits('changed:locale', { locale, oldLocale })
-  },
-)
-
-// 将方法传递给子孙组件使用
-provide('saveContent', saveContent)
-provide('setLocale', setLocale)
-provide('reset', reset)
-
-// 快捷键
-const unsetFormatPainter = () => editor.value?.commands.unsetFormatPainter()
-useHotkeys('ctrl+s,command+s', () => {
-  saveContent()
-  unsetFormatPainter()
-})
-useHotkeys('ctrl+p,command+p', () => {
-  print()
-  unsetFormatPainter()
-})
-useHotkeys('esc', () => {
-  page.value.preview.enabled = false
-  unsetFormatPainter()
-})
-
-// 工具栏切换时重置编辑器
-watch(
-  () => $toolbar.value.mode,
-  (val) => (editorDestroyed.value = val === 'source'),
-)
 </script>
 
 <style lang="less">

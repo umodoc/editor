@@ -6,18 +6,23 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import { getSelectionNode } from '@/extensions/selection'
 
 const { editor } = useStore()
 
 const downloadFile = () => {
-  const node = getSelectionNode(editor.value)
+  const node = editor.value ? getSelectionNode(editor.value) : null
   const a = document.createElement('a')
-  a.href = node.attrs.url
-  a.download = node.attrs.name
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
+  a.href = node?.attrs.url
+  a.download = node?.attrs.name
+  if (a) {
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+  }
 }
 </script>

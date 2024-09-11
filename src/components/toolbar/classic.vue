@@ -11,7 +11,7 @@
           size="small"
           auto-width
           borderless
-          @change="toggoleMenu"
+          @change="toggoleMenu as any"
         >
           <template #prefixIcon>
             <icon name="menu" />
@@ -174,8 +174,8 @@
           </div>
         </div>
         <div
-          class="umo-virtual-group"
           v-if="!hidePageHeader || !hidePageFooter"
+          class="umo-virtual-group"
         >
           <menus-toolbar-page-header v-if="!hidePageHeader" />
           <menus-toolbar-page-footer v-if="!hidePageFooter" />
@@ -212,42 +212,44 @@
   </toolbar-scrollable>
 </template>
 
-<script setup>
-const props = defineProps({
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
+import { withSuppress } from '@/utils/functional'
+
+const props = defineProps<{
   menus: {
-    type: Array,
-    required: true,
-  },
-  currentMenu: {
-    type: String,
-    required: true,
-  },
-})
+    value: string
+    label: string
+  }[]
+  currentMenu: string
+}>()
+
 const emits = defineEmits(['menu-change'])
 
 const { container, options, hidePageHeader, hidePageFooter } = useStore()
-const disableItem = (name) => {
-  return options.value.toolbar.disableMenuItems.includes(name)
+const disableItem = (name: string) => {
+  return options.value.toolbar?.disableMenuItems.includes(name)
 }
 
 // eslint-disable-next-line vue/no-dupe-keys
 let currentMenu = $ref('')
 watch(
   () => props.currentMenu,
-  async (val) => {
+  withSuppress(async (val) => {
     currentMenu = val
     await nextTick()
-    try {
-      scrollableRef.update()
-    } catch {}
-  },
+    scrollableRef?.update()
+  }),
   { immediate: true },
 )
-const scrollableRef = $ref()
-const toggoleMenu = async (menu) => {
+const scrollableRef = $ref<{ update: () => void }>()
+const toggoleMenu = async (menu: string) => {
   emits('menu-change', menu)
   await nextTick()
-  scrollableRef.update()
+  scrollableRef?.update()
 }
 </script>
 

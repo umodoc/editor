@@ -7,7 +7,7 @@
     :destroy-on-close="false"
     :popup-props="{
       onVisibleChange(visible) {
-        editor.commands.focus()
+        editor?.commands.focus()
         blockMenu = visible
         menuActive = visible
       },
@@ -67,37 +67,41 @@
   </t-dropdown>
 </template>
 
-<script setup>
-import getId from '@/utils/short-id'
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
 import { getSelectionNode } from '@/extensions/selection'
+import getId from '@/utils/short-id'
+
+const { t } = useI18n()
 
 const { container, editor, blockMenu } = useStore()
 
-let menuActive = $ref(false)
+const menuActive = $ref(false)
 
 const clearTextFormatting = () => {
-  editor.value.chain().focus().setCurrentNodeSelection().unsetAllMarks().run()
+  editor.value?.chain().focus().setCurrentNodeSelection().unsetAllMarks().run()
 }
 const copyNodeToClipboard = () => {
-  editor.value.commands.setCurrentNodeSelection()
+  editor.value?.commands.setCurrentNodeSelection()
   document.execCommand('copy')
 }
 const cutNodeToClipboard = () => {
-  editor.value.commands.setCurrentNodeSelection()
+  editor.value?.commands.setCurrentNodeSelection()
   document.execCommand('cut')
 }
 const duplicateNode = () => {
-  const selectionNode = getSelectionNode(editor.value)
+  const selectionNode = editor.value ? getSelectionNode(editor.value) : null
   const getPosition = () => {
     let point = 0
-    editor.value.state.doc.descendants((node, pos) => {
-      if (node == selectionNode) {
+    editor.value?.state.doc.descendants((node, pos) => {
+      if (node === selectionNode) {
         point = pos + node.nodeSize // 返回节点结束位置
       }
     })
     return point
   }
-  const copeNode = selectionNode.type.create(
+  const copeNode = selectionNode?.type.create(
     {
       ...selectionNode.attrs,
       id: getId(),
@@ -105,7 +109,7 @@ const duplicateNode = () => {
     selectionNode.content,
     selectionNode.marks,
   )
-  editor.value.commands.insertContentAt(getPosition(), copeNode.toJSON())
+  editor.value?.commands.insertContentAt(getPosition(), copeNode?.toJSON())
 }
 const deleteNode = () => {
   editor.value?.chain().focus().deleteSelectionNode().run()

@@ -1,0 +1,43 @@
+# Umo Editor Configuration
+
+Umo Editor is an open-source rich-text document editor built using:
+
+- **Vue.js 3** (>=v3.4)
+- **Tiptap** (>=v2.6)
+- **TypeScript** (>=v5.5)
+- **Vite** (>=v5.4)
+
+You are an expert in all of these technologies
+
+## Coding Style & Practices
+
+- Prefer functional programming where appropriate
+- Use OOP for complex service abstractions, otherwise prefer functional
+- Ensure the code is strongly typed
+- Follow these Prettier rules:
+
+  ```json
+  {
+    "semi": false,
+    "singleQuote": true,
+    "tabWidth": 2
+  }
+  ```
+
+- Use strict typing and assume the code maintainers are experienced TypeScript and VueJS developers.
+- Import type predicate functions (isString, isRecord, isAsyncFunction etc.) from `@tool-belt/type-predicates`, it includes everything included in the node:util module and more, and is available in the browser.
+- Use typescript path aliases as configured: `@/` which equals the workspace `src/*` directory, and `::testing/`, which equals the workspace `testing/` directory.
+  Note: `::testing` should only be imported in test files.
+- Test files are written next to the code file, inside the src folder, and they follow the `*.spec.ts` naming scheme.
+- The VueMacroes and Reactivity transform libraries are configured in the vite config.
+
+### Testing Guidelines
+
+When writing tests:
+
+- Use `vitest` for writing test with the `@testing-library/vue` and installed.
+- Use `@faker-js/faker` where appropriate in tests to generate mock data.
+- Use `it` rather than `test` and follow BDD test message practices.
+- Use `describe.each` and `it.each` if parameterized tests are appropriate for the testing scenario.
+- Use nested describes if testing multiple functions or classes in the same file.
+- Use `vi.mocked(<value>)` to type cast values as mocks.

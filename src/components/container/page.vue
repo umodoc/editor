@@ -13,7 +13,7 @@
           class="umo-page-content"
           :style="{
             width: pageSize.width + 'cm',
-            transform: `scale(${page.zoomLevel / 100})`,
+            transform: `scale(${page.zoomLevel ? page.zoomLevel / 100 : 1})`,
           }"
         >
           <editor>
@@ -48,13 +48,16 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const store = useStore()
 const { container, page, imagePreview } = useStore()
 
 // 页面大小
 const pageSize = $computed(() => {
-  const { width, height } = page.value.size
+  const { width, height } = page.value.size ?? { width: 0, height: 0 }
   return {
     width: page.value.orientation === 'portrait' ? width : height,
     height: page.value.orientation === 'portrait' ? height : width,
@@ -62,18 +65,18 @@ const pageSize = $computed(() => {
 })
 // 页面缩放后的大小
 const pageZoomWidth = $computed(() => {
-  return `calc(${pageSize.width + 'cm'} * ${page.value.zoomLevel / 100})`
+  return `calc(${pageSize.width}cm * ${page.value.zoomLevel ? page.value.zoomLevel / 100 : 1})`
 })
 
 // 页面内容变化后更新页面高度
-let pageZoomHeight = $ref()
+let pageZoomHeight = $ref('')
 const setPageZoomHeight = () => {
   const el = document.querySelector(`${container} .umo-page-content`)
   if (!el) {
     console.warn('The element <.umo-page-content> does not exist.')
     return
   }
-  pageZoomHeight = (el.clientHeight * page.value.zoomLevel) / 100 + 'px'
+  pageZoomHeight = `${(el.clientHeight * (page.value.zoomLevel ?? 1)) / 100}px`
 }
 watch(
   () => [
@@ -84,30 +87,42 @@ watch(
   ],
   async () => {
     await nextTick()
-    setTimeout(() => setPageZoomHeight(), 100)
+    setTimeout(() => {
+      setPageZoomHeight()
+    }, 100)
   },
   { immediate: true, deep: true },
 )
 watch(
   () => store.editor.value?.getHTML(),
-  () => setPageZoomHeight(),
+  () => {
+    setPageZoomHeight()
+  },
 )
 
 // 图片预览
-let previewImages = $ref([])
+let previewImages = $ref<string[]>([])
 let currentImageIndex = $ref(0)
 let imagePreviewVisible = $ref(false)
+
 watch(
   () => imagePreview.value,
-  (val) => {
-    if (val) {
-      document
-        .querySelectorAll(`${container} .umo-page-content img:not(.icon)`)
-        .forEach((item) => {
-          const src = item.getAttribute('src')
-          if (src) previewImages.push(src)
-        })
-      currentImageIndex = images.findIndex((item) => item === val)
+  (value: boolean) => {
+    if (value) {
+      const images = document.querySelectorAll(
+        `${container} .umo-page-content img:not(.icon)`,
+      )
+
+      for (const image of images) {
+        const src = image.getAttribute('src')
+        if (src) {
+          previewImages.push(src)
+        }
+      }
+      // TODO: address this issue
+      //currentImageIndex = Array.from(images).findIndex((item) => {
+      // FIXME: 这里需要使用图片的src进行比较
+      //})
       imagePreviewVisible = true
     } else {
       previewImages = []

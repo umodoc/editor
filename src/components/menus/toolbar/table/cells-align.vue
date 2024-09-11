@@ -6,12 +6,15 @@
     menu-type="dropdown"
     huge
     :select-options="alignments"
-    :disabled="!editor?.can().setCellAttribute('align')"
+    :disabled="!editor?.can().setCellAttribute('align', '')"
     @change="setCellsAlign"
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const { editor } = useStore()
 
 const alignments = [
@@ -29,7 +32,7 @@ const alignments = [
   { content: t('table.cellAlign.jb'), value: 'justify-bottom' },
 ]
 
-const setCellsAlign = ({ value }) => {
+const setCellsAlign = ({ value }: { value: string }) => {
   editor.value?.chain().focus().setCellAttribute('align', value).run()
 }
 </script>

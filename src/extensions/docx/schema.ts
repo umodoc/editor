@@ -1,5 +1,10 @@
-import { HeadingLevel, PageBreak, ShadingType } from 'docx'
-import { DocxSerializer, MarkSerializer, NodeSerializer } from './serializer'
+import { HeadingLevel, ShadingType } from 'docx'
+
+import {
+  DocxSerializer,
+  type MarkSerializer,
+  type NodeSerializer,
+} from './serializer'
 import { getLatexFromNode } from './utils'
 
 export const defaultNodes: NodeSerializer = {

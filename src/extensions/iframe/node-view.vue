@@ -1,8 +1,8 @@
 <template>
   <node-view-wrapper
+    :id="node.attrs.id"
     ref="containerRef"
     class="umo-node-view"
-    :id="node.attrs.id"
     :style="nodeStyle"
   >
     <div
@@ -27,22 +27,25 @@
   </node-view-wrapper>
 </template>
 
-<script setup>
-import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
-import Drager from 'es-drager'
+<script setup lang="ts">
+import type { ComponentPublicInstance } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+import { nodeViewProps } from '@tiptap/vue-3'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const { editor } = useStore()
-const containerRef = ref(null)
+const containerRef = ref<ComponentPublicInstance | null>(null)
 let selected = $ref(false)
 let maxWidth = $ref(0)
 
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs
   const marginTop =
-    margin?.top && margin?.top !== '' ? margin.top + 'px' : undefined
+    margin?.top && margin?.top !== '' ? `${margin.top}px` : undefined
   const marginBottom =
-    margin?.bottom && margin?.bottom !== '' ? margin.bottom + 'px' : undefined
+    margin?.bottom && margin?.bottom !== '' ? `${margin.bottom}px` : undefined
   return {
     'justify-content': nodeAlign,
     marginTop,
@@ -51,20 +54,27 @@ const nodeStyle = $computed(() => {
 })
 
 onMounted(() => {
-  const width = containerRef.value.$el.offsetWidth
-  maxWidth = width
-  if (node.attrs.width === null) updateAttributes({ width })
+  if (containerRef.value) {
+    const { offsetWidth } = containerRef.value.$el
+
+    maxWidth = offsetWidth
+    if (node.attrs.width === null) {
+      updateAttributes({ width: offsetWidth })
+    }
+  }
 })
-const onResize = ({ width, height }) => {
+const onResize = ({ width, height }: { width: number; height: number }) => {
   updateAttributes({ width, height })
 }
 const onResizeStart = () => {
-  editor.value.commands.autoPaging(false)
+  editor.value?.commands.autoPaging(false)
 }
 const onResizeEnd = () => {
-  editor.value.commands.autoPaging()
+  editor.value?.commands.autoPaging()
 }
-onClickOutside(containerRef, () => (selected = false))
+onClickOutside(containerRef, () => {
+  selected = false
+})
 </script>
 
 <style lang="less">

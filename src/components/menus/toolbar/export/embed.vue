@@ -10,7 +10,7 @@
     icon="embed"
     :header="t('export.embed.title')"
     width="460px"
-    :confirmBtn="t('export.embed.copy')"
+    :confirm-btn="t('export.embed.copy')"
     @confirm="copyEmbed"
     @close="dialogVisible = false"
   >
@@ -26,7 +26,10 @@
   </modal>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const { options } = useStore()
 let dialogVisible = $ref(false)
 
@@ -36,7 +39,7 @@ const embedValue = computed(() => {
 
 const copyEmbed = () => {
   const { copy } = useClipboard({ source: embedValue })
-  copy()
+  void copy()
   useMessage('success', t('export.embed.copied'))
   dialogVisible = false
 }

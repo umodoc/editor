@@ -201,7 +201,7 @@
               class="umo-barcode-empty"
               v-text="t('tools.barcode.renderError')"
             ></div>
-            <svg ref="barcodeSvgRef" id="barcode" v-show="!renderError"></svg>
+            <svg v-show="!renderError" id="barcode" ref="barcodeSvgRef"></svg>
           </div>
         </div>
       </div>
@@ -213,14 +213,18 @@
 // https://github.com/lindell/JsBarcode/wiki/Options
 import JsBarcode from 'jsbarcode'
 import svg64 from 'svg64'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const { content } = defineProps({
   content: {
     type: String,
+    default: '',
   },
 })
 
-let { popupVisible, togglePopup } = usePopup()
+const { popupVisible, togglePopup } = usePopup()
 
 let dialogVisible = $ref(false)
 const { container, options, editor } = useStore()
@@ -300,7 +304,9 @@ watch(
   (val) => {
     if (val) {
       config = content ? JSON.parse(content) : { ...defaultConfig }
-      setTimeout(() => (changed = false), 200)
+      setTimeout(() => {
+        changed = false
+      }, 200)
     }
   },
   { immediate: true },
@@ -310,7 +316,7 @@ watch(
   () => {
     if (dialogVisible) {
       changed = true
-      renderBarcode()
+      void renderBarcode()
     }
   },
   { immediate: true, deep: true },

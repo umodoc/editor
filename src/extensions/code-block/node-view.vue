@@ -1,12 +1,12 @@
 <template>
-  <node-view-wrapper class="umo-node-view" :id="node.attrs.id">
+  <node-view-wrapper :id="node.attrs.id" class="umo-node-view">
     <div
+      ref="containerRef"
       class="umo-node-container umo-hover-shadow umo-select-outline umo-node-code-block"
       :class="node.attrs.theme"
-      ref="containerRef"
     >
       <div
-        v-if="!options.document.readOnly"
+        v-if="!options.document?.readOnly"
         class="umo-show-code-block-toolbar"
         v-text="t('node.codeBlock.menu')"
       ></div>
@@ -14,15 +14,10 @@
   </node-view-wrapper>
 </template>
 
-<script setup>
-import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
-import { createEditor } from 'prism-code-editor'
-import { matchBrackets } from 'prism-code-editor/match-brackets'
-import { matchTags } from 'prism-code-editor/match-tags'
-import { indentGuides } from 'prism-code-editor/guides'
-import { highlightBracketPairs } from 'prism-code-editor/highlight-brackets'
-import { cursorPosition } from 'prism-code-editor/cursor'
-import { defaultCommands, editHistory } from 'prism-code-editor/commands'
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import 'prism-code-editor/prism/languages/bash'
 import 'prism-code-editor/prism/languages/css'
 import 'prism-code-editor/prism/languages/css-extras'
@@ -64,6 +59,15 @@ import 'prism-code-editor/prism/languages/yaml'
 import 'prism-code-editor/prism/languages/regex'
 import 'prism-code-editor/layout.css'
 
+import { nodeViewProps } from '@tiptap/vue-3'
+import { createEditor, type PrismEditor } from 'prism-code-editor'
+import { defaultCommands, editHistory } from 'prism-code-editor/commands'
+import { cursorPosition } from 'prism-code-editor/cursor'
+import { indentGuides } from 'prism-code-editor/guides'
+import { highlightBracketPairs } from 'prism-code-editor/highlight-brackets'
+import { matchBrackets } from 'prism-code-editor/match-brackets'
+import { matchTags } from 'prism-code-editor/match-tags'
+
 const { node, updateAttributes } = defineProps(nodeViewProps)
 
 const { options } = useStore()
@@ -71,14 +75,14 @@ const { options } = useStore()
 const containerRef = $ref(null)
 
 const code = $ref(node.attrs.code)
-let codeEditor = $ref(null)
+let codeEditor = $ref<PrismEditor | null>(null)
 
 const nodeStyle = $computed(() => {
   const { margin } = node.attrs
   const marginTop =
-    margin?.top && margin?.top !== '' ? margin.top + 'px' : undefined
+    margin?.top && margin?.top !== '' ? `${margin.top}px` : undefined
   const marginBottom =
-    margin?.bottom && margin?.bottom !== '' ? margin.bottom + 'px' : undefined
+    margin?.bottom && margin?.bottom !== '' ? `${margin.bottom}px` : undefined
   return {
     marginTop,
     marginBottom,
@@ -87,13 +91,12 @@ const nodeStyle = $computed(() => {
 
 onMounted(() => {
   codeEditor = createEditor(containerRef, {
-    readOnly: options.value.document.readOnly,
+    readOnly: options.value.document?.readOnly,
     language: node.attrs.language,
     tabSize: 2,
     lineNumbers: node.attrs.lineNumbers,
     wordWrap: node.attrs.wordWrap,
     value: code,
-    focusd: true,
     onUpdate(value) {
       updateAttributes({ code: value })
     },
@@ -113,9 +116,9 @@ onBeforeUnmount(() => {
 })
 
 watch(
-  () => options.value.document.readOnly,
+  () => options.value.document?.readOnly,
   (val) => {
-    codeEditor.setOptions({
+    codeEditor?.setOptions({
       readOnly: val,
     })
   },
@@ -123,7 +126,7 @@ watch(
 watch(
   () => [node.attrs.language, node.attrs.lineNumbers, node.attrs.wordWrap],
   () => {
-    codeEditor.setOptions(node.attrs)
+    codeEditor?.setOptions(node.attrs)
   },
 )
 </script>

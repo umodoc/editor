@@ -13,27 +13,33 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import { removeBackground } from '@imgly/background-removal'
-import shortId from '@/utils/short-id'
+
 import { getSelectionNode } from '@/extensions/selection'
+import shortId from '@/utils/short-id'
 
 const { options, editor } = useStore()
 
 let converting = $ref(false)
 const removeBg = async () => {
-  const image = getSelectionNode(editor.value)
-  const { src } = image.attrs
+  const image = editor.value ? getSelectionNode(editor.value) : null
+  const { src } = image?.attrs ?? {}
   converting = true
   const blob = await removeBackground(src, {
     publicPath: `${options.value.cdnUrl}/libs/imgly/background-removal-data/`,
   })
   const file = new File([blob], `${shortId(10)}.png`, { type: 'image/png' })
-  editor.value.commands.updateAttributes(image.type, {
-    src: URL.createObjectURL(blob),
-    uploaded: false,
-    file,
-  })
+  if (image) {
+    editor.value?.commands.updateAttributes(image.type, {
+      src: URL.createObjectURL(blob),
+      uploaded: false,
+      file,
+    })
+  }
   converting = false
   console.log('ok')
 }

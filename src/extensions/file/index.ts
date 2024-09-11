@@ -1,6 +1,9 @@
-import { Node, mergeAttributes } from '@tiptap/core'
-import { ReplaceStep } from 'prosemirror-transform'
+import { mergeAttributes, Node } from '@tiptap/core'
+import type { Step } from '@tiptap/pm/transform'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
+import { isFunction } from '@tool-belt/type-predicates'
+import { ReplaceStep } from 'prosemirror-transform'
+
 import NodeView from './node-view.vue'
 
 const { options } = useStore()
@@ -155,7 +158,6 @@ export default Node.create({
               theme: 'danger',
               header: t('file.notAllow.title'),
               body: t('file.notAllow.message'),
-              placement: 'center',
               onConfirm() {
                 dialog.destroy()
               },
@@ -171,39 +173,47 @@ export default Node.create({
           let bool = false
           // 插入文件
           onChange((fileList) => {
-            const files = Array.from(fileList || [])
+            const files = Array.from(fileList ?? [])
             if (!files) {
               return
             }
-            files.forEach((file) => {
+            for (const file of files) {
               bool = editor.chain().focus().insertFile({ file }).run()
-            })
+            }
           })
           return bool
         },
     }
   },
   onTransaction({ transaction }) {
-    transaction.steps.forEach((step: any) => {
-      if (step instanceof ReplaceStep && step.slice.size === 0) {
+    for (const step of transaction.steps as (Step & {
+      slice: any
+      from: number
+      to: number
+    })[]) {
+      if (
+        step instanceof ReplaceStep &&
+        Reflect.get(step, 'slice')?.size === 0
+      ) {
         // 使用事务前的文档状态来获取被删除的页面节点
         const deletedPages = transaction.before.content.cut(step.from, step.to)
-        // @ts-ignore
-        deletedPages.content.forEach((page: Node) => {
+
+        for (const page of (deletedPages as unknown as { content: Node[] })
+          .content) {
           // 遍历删除的页面节点
-          // @ts-ignore
-          page.content.forEach((node: Node) => {
+
+          for (const node of (page as unknown as { content: Node[] }).content) {
             // 如果是文件节点，调用删除方法删除文件
-            // @ts-ignore
+            // @ts-expect-error, typing issues upstream
             if (['image', 'video', 'audio', 'file'].includes(node.attrs.type)) {
-              // @ts-ignore
-              const { id, src, url } = node.attrs
-              // @ts-ignore
-              options.value.onFileDelete(id, src || url)
+              const { id, src, url } = Reflect.get(node, 'attrs') ?? {}
+              if (isFunction(options.value.onFileDelete)) {
+                options.value.onFileDelete(id, src || url)
+              }
             }
-          })
-        })
+          }
+        }
       }
-    })
+    }
   },
 })

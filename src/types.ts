@@ -1,6 +1,8 @@
-import { NodesComputed } from '@/extensions/page/types'
-import { Extension } from '@tiptap/core'
+import type { Extension } from '@tiptap/core'
+import type { AsyncFunction } from '@tool-belt/type-predicates'
 
+import type { NodesComputed } from '@/extensions/page/types'
+export type SupportedLocale = 'en-US' | 'zh-CN'
 export interface MarginOption {
   left: number
   right: number
@@ -27,8 +29,18 @@ export interface PageOption {
   defaultBackground?: string
   watermark?: WatermarkOption
   nodesComputedOption?: NodesComputedOption
-  size?: any
-  margin?: any
+  size?: {
+    width: number
+    height: number
+    label?: LocaleLabel
+  }
+  margin?: {
+    right: number
+    left: number
+    bottom: number
+    top: number
+    layout?: 'narrow' | 'moderate' | 'wide' | 'custom'
+  }
   orientation?: string
   background?: string
   header?: boolean
@@ -37,69 +49,164 @@ export interface PageOption {
   showToc?: boolean
   pagination?: boolean
   zoomLevel?: number
+  bodyHeight?: number
   autoWidth?: boolean
   preview?: {
     enabled?: boolean
     laserPointer?: boolean
   }
 }
+
+export type ToolbarMenu =
+  | 'base'
+  | 'insert'
+  | 'table'
+  | 'tools'
+  | 'page'
+  | 'export'
+  | 'advanced'
+  | 'custom'
+
 export interface ToolbarOptions {
-  defaultMode: string
+  defaultMode: 'classic' | 'ribbon'
   enableSourceEditor: boolean
-  menus: string[]
-  disableMenuItems: any[]
+  menus: ToolbarMenu[]
+  disableMenuItems: string[]
   importWord: {
     enabled: boolean
-    options: any
-    useCustomMethod: boolean
+    options: unknown
+    useCustomMethod?: boolean
+    onCustomImportWordMethod?: (file: File) => Promise<{
+      id: string
+      url: string
+      value: string
+      messages: { type: string; message: string }
+    }>
   }
 }
-export interface Dictionary {
-  [key: string]: any
+
+export interface AutoSaveOptions {
+  enabled: boolean
+  interval: number
 }
 
 export interface DocumentOptions {
+  id?: string
   title: string
   content: string
-  placeholder: Dictionary
-  enableSpellcheck: boolean
-  enableMarkdown: boolean
-  enableBubbleMenu: boolean
-  enableBlockMenu: boolean
-  enableComment: boolean
-  readOnly: boolean
-  autofocus: boolean
-  characterLimit: number
-  typographyRules: Dictionary
-  editorProps: Dictionary
-  parseOptions: Dictionary
-  autoSave: Dictionary
+  placeholder?: Record<string, string>
+  enableSpellcheck?: boolean
+  enableMarkdown?: boolean
+  enableBubbleMenu?: boolean
+  enableBlockMenu?: boolean
+  enableComment?: boolean
+  readOnly?: boolean
+  autofocus?: 'start' | 'end' | 'all' | number | boolean | null
+  characterLimit?: number
+  typographyRules?: Record<string, unknown>
+  editorProps?: Record<string, unknown>
+  parseOptions?: Record<string, unknown>
+  autoSave?: AutoSaveOptions
+}
+
+export type LocaleLabel = string | { en_US: string; zh_CN: string }
+
+export interface PageSize {
+  label: LocaleLabel
+  width: number
+  height: number
+  default?: boolean
+}
+
+export interface Font {
+  label: LocaleLabel
+  value: string | null
+}
+
+export interface LineHeight {
+  label: LocaleLabel
+  value: number
+  default?: boolean
+}
+
+export interface GraphicSymbol {
+  label: LocaleLabel
+  items: string
+}
+
+export interface Emoji {
+  label: LocaleLabel
+  items: string
+}
+
+export interface Template {
+  title: string
+  content: string
+  description?: string
+  value: string
+  divider?: boolean
+}
+
+export interface AssistantOptions {
+  maxlength: number
+  commands: CommandItem[]
+  enabled: boolean
+}
+
+export interface CommandItem {
+  label: LocaleLabel
+  value: LocaleLabel
+  autoSend?: boolean
+}
+
+export interface AssistantPayload {
+  lang: string
+  input: string
+  command: string
+  output: string
+}
+
+export interface AssistantContent {
+  html: string
+  text: string
+  json: unknown
+}
+export interface AssistantResult {
+  prompt: string
+  content: string
+  error: boolean
+  command?: string
 }
 
 //定义一个 异步方法
-export type AsyncMethod = (...args: any[]) => Promise<void>
-export type Method = (...args: any[]) => void
-export type UmoEditorOptions = {
+export interface UmoEditorOptions {
   editorKey: string
-  locale: 'en-US' | 'zh-CN'
+  locale: SupportedLocale
   theme: 'light' | 'dark'
   height: string
-  dicts?: any
+  dicts?: {
+    pageSizes: PageSize[]
+    fonts: Font[]
+    colors: string[]
+    lineHeights: LineHeight[]
+    symbols: GraphicSymbol[]
+    emojis: Emoji[]
+  }
   toolbar?: ToolbarOptions
   page: PageOption
   document?: DocumentOptions
-  assistant?: Dictionary
-  templates?: any[]
+  assistant?: AssistantOptions
+  templates?: Template[]
   cdnUrl?: string
   shareUrl?: string
-  diagrams?: Dictionary
-  file?: Dictionary
-  user?: Dictionary
+  diagrams?: Record<string, unknown>
+  file?: { allowedMimeTypes: string[]; maxSize: number }
+  user?: Record<string, unknown>
   extensions?: Extension[]
-  translations?: Dictionary
-  onSave?: AsyncMethod
-  onFileUpload?: AsyncMethod
-  onFileDelete?: Method
-  onAssistant?: AsyncMethod
-  onCustomImportWordMethod?: AsyncMethod
+  translations?: Record<string, unknown>
+  onSave?: AsyncFunction
+  onFileUpload?: (file: File) => Promise<{ id: string; url: string }>
+  onFileDelete?: CallableFunction
+  onAssistant?: AsyncFunction
+  onCustomImportWordMethod?: AsyncFunction
 }

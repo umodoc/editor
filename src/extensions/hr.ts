@@ -1,6 +1,6 @@
 import { nodeInputRule } from '@tiptap/core'
 import hr from '@tiptap/extension-horizontal-rule'
-import { TextSelection, NodeSelection } from '@tiptap/pm/state'
+import { NodeSelection, TextSelection } from '@tiptap/pm/state'
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -24,7 +24,7 @@ export default hr.extend({
   addAttributes() {
     return {
       'data-type': {
-        parseHTML: (element) => element.getAttribute('data-type') || 'signle',
+        parseHTML: (element) => element.getAttribute('data-type') ?? 'signle',
       },
       color: {
         parseHTML: (element) => element.getAttribute('data-color'),
@@ -59,7 +59,6 @@ export default hr.extend({
             currentChain
               // set cursor after horizontal rule
               .command(({ tr, dispatch }) => {
-                var _a
                 if (dispatch) {
                   const { $to } = tr.selection
                   const posAfter = $to.end()
@@ -74,10 +73,7 @@ export default hr.extend({
                   } else {
                     // add node after horizontal rule if it’s the end of the document
                     const node =
-                      (_a = $to.parent.type.contentMatch.defaultType) ===
-                        null || _a === void 0
-                        ? void 0
-                        : _a.create()
+                      $to.parent.type.contentMatch.defaultType?.create() ?? 0
                     if (node) {
                       tr.insert(posAfter, node)
                       tr.setSelection(

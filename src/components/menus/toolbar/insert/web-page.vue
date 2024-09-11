@@ -10,7 +10,7 @@
       icon="web-page"
       :header="t('insert.web.title')"
       width="480px"
-      :confirmBtn="t('insert.web.insert')"
+      :confirm-btn="t('insert.web.insert')"
       @confirm="insertWebPage"
       @close="dialogVisible = false"
     >
@@ -28,7 +28,10 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const { editor } = useStore()
 
 let dialogVisible = $ref(false)
@@ -47,7 +50,7 @@ const insertWebPage = () => {
     return
   }
   editor.value
-    ?.chain()
+    .chain()
     .focus()
     .setParagraph()
     .setIframe({

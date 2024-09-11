@@ -16,15 +16,18 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const { editor } = useStore()
 
 const setAlignCenter = () => {
   if (editor.value?.can().chain().focus().setTextAlign('center').run()) {
-    editor.value?.chain().focus().setTextAlign('center').run()
+    editor.value.chain().focus().setTextAlign('center').run()
   }
   if (editor.value?.can().chain().focus().setNodeAlign('center').run()) {
-    editor.value?.chain().focus().setNodeAlign('center').run()
+    editor.value.chain().focus().setNodeAlign('center').run()
   }
 }
 </script>

@@ -10,7 +10,7 @@
     icon="share"
     :header="t('export.share.text')"
     width="420px"
-    :confirmBtn="t('export.share.copy')"
+    :confirm-btn="t('export.share.copy')"
     @confirm="copyLink"
     @close="dialogVisible = false"
   >
@@ -26,13 +26,16 @@
   </modal>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const { options } = useStore()
 let dialogVisible = $ref(false)
 
 const copyLink = () => {
   const { copy } = useClipboard({ source: options.value.shareUrl })
-  copy()
+  void copy()
   useMessage('success', t('export.share.copied'))
   dialogVisible = false
 }

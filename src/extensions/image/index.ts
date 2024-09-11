@@ -1,5 +1,6 @@
-import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import Image from '@tiptap/extension-image'
+import { type CommandProps, VueNodeViewRenderer } from '@tiptap/vue-3'
+
 import NodeView from './node-view.vue'
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -74,12 +75,14 @@ export default Image.extend({
   addNodeView() {
     return VueNodeViewRenderer(NodeView)
   },
-  //@ts-ignore
   addCommands() {
     return {
       setImage:
-        (options, replace) =>
-        ({ commands, editor }) => {
+        (
+          options: { src: string; alt?: string; title?: string },
+          replace?: boolean,
+        ) =>
+        ({ commands, editor }: CommandProps) => {
           if (replace) {
             return commands.insertContent({
               type: this.name,

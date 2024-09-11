@@ -13,51 +13,60 @@
         v-text="t('toc.empty')"
       ></div>
       <div
+        v-for="item in tableOfContents"
         v-else
-        class="umo-toc-item"
-        v-for="(item, index) in tableOfContents"
         :key="item.id"
+        class="umo-toc-item"
         :class="{
           active: item.isActive,
           ['level-' + item.level]: true,
         }"
-        :data-heading="'H' + item.originalLevel"
-        @click="headingClick(item, index)"
+        :data-heading="'H' + (item.level ?? item.originalLevel)"
+        @click="headingClick(item as unknown as TableOfContentItem)"
       >
         <div class="umo-toc-text">
-          {{ item.textContent }}
+          {{ item.title ?? item.textContent }}
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { TextSelection } from '@tiptap/pm/state'
+import { useI18n } from 'vue-i18n'
+
+import type { TableOfContentItem } from '@/composables/store'
+
+const { t } = useI18n()
 const { container, editor, tableOfContents } = useStore()
 
-const headingClick = (heading) => {
+defineEmits(['close'])
+
+const headingClick = (heading: TableOfContentItem) => {
   if (!editor.value) {
     return
   }
   const activeHeading = tableOfContents.value.find(
-    (item) => item.isActive === true,
+    (item) => 'isActive' in item && item.isActive,
   )
-  if (activeHeading) {
+  if (activeHeading && 'isActive' in activeHeading) {
     activeHeading.isActive = false
   }
-  heading.isActive = true
+  if ('isActive' in heading) {
+    heading.isActive = true
+  }
   const element = editor.value.view.dom.querySelector(
     `[data-toc-id="${heading.id}"`,
   )
   const pageContainer = document.querySelector(
     `${container} .umo-zoomable-container`,
   )
-  pageContainer.scrollTo({
-    top: element.offsetTop + 10,
+  pageContainer?.scrollTo({
+    top: (element as HTMLElement)?.offsetTop ?? 0 + 10,
   })
-  const pos = editor.value.view.posAtDOM(element, 0)
-  const tr = editor.value.view.state.tr
+  const pos = editor.value.view.posAtDOM(element as Node, 0)
+  const { tr } = editor.value.view.state
   tr.setSelection(new TextSelection(tr.doc.resolve(pos)))
   editor.value.view.dispatch(tr)
   editor.value.view.focus()

@@ -1,8 +1,8 @@
+export { defaultDocxSerializer, defaultMarks, defaultNodes } from './schema'
 export {
-  DocxSerializerState,
   DocxSerializer,
-  MarkSerializer,
-  NodeSerializer,
+  DocxSerializerState,
+  type MarkSerializer,
+  type NodeSerializer,
 } from './serializer'
-export { defaultDocxSerializer, defaultNodes, defaultMarks } from './schema'
-export { writeDocx, createDocFromState } from './utils'
+export { createDocFromState, writeDocx } from './utils'
