@@ -1,5 +1,8 @@
 import { mergeAttributes, Node } from '@tiptap/core'
+import type { Step } from '@tiptap/pm/transform'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
+import { isFunction } from '@tool-belt/type-predicates'
+import { ReplaceStep } from 'prosemirror-transform'
 
 import NodeView from './node-view.vue'
 
@@ -180,6 +183,37 @@ export default Node.create({
           })
           return bool
         },
+    }
+  },
+  onTransaction({ transaction }) {
+    for (const step of transaction.steps as (Step & {
+      slice: any
+      from: number
+      to: number
+    })[]) {
+      if (
+        step instanceof ReplaceStep &&
+        Reflect.get(step, 'slice')?.size === 0
+      ) {
+        // 使用事务前的文档状态来获取被删除的页面节点
+        const deletedPages = transaction.before.content.cut(step.from, step.to)
+
+        for (const page of (deletedPages as unknown as { content: Node[] })
+          .content) {
+          // 遍历删除的页面节点
+
+          for (const node of (page as unknown as { content: Node[] }).content) {
+            // 如果是文件节点，调用删除方法删除文件
+            // @ts-expect-error, typing issues upstream
+            if (['image', 'video', 'audio', 'file'].includes(node.attrs.type)) {
+              const { id, src, url } = Reflect.get(node, 'attrs') ?? {}
+              if (isFunction(options.value.onFileDelete)) {
+                options.value.onFileDelete(id, src || url)
+              }
+            }
+          }
+        }
+      }
     }
   },
 })

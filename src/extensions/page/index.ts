@@ -82,9 +82,9 @@ const types = [
 ]
 export default Node.create<PageOptions>({
   priority: 2,
-  name: PAGE,
-  content: 'block*',
-  group: 'block',
+  name: `${PAGE}`,
+  content: `block*`,
+  group: `${PAGE}`,
   isolating: true,
   selectable: false,
   draggable: false,

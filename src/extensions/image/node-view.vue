@@ -7,11 +7,12 @@
     @dblclick="imagePreview = node.attrs.src"
   >
     <div
-      class="umo-node-container umo-hover-shadow umo-select-outline umo-node-image"
+      class="umo-node-container umo-select-outline umo-node-image"
       :class="{
         'is-loading': node.attrs.src && isLoading,
         'is-error': node.attrs.src && error,
         'is-draggable': node.attrs.draggable,
+        'umo-hover-shadow': !options.document?.readOnly,
       }"
     >
       <div
@@ -38,6 +39,7 @@
         :draggable="
           Boolean(node.attrs.draggable) && !options.document?.readOnly
         "
+        :disabled="options.document?.readOnly"
         :angle="node.attrs.angle"
         :width="Number(node.attrs.width)"
         :height="Number(node.attrs.height)"

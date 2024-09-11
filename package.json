@@ -1,6 +1,6 @@
 {
   "name": "@umoteam/editor",
-  "version": "4.2.0",
+  "version": "4.5.0",
   "type": "module",
   "description": "Umo Editor is open-source document editor based on Vue3 and Tiptap. Umo Editor provides comprehensive document editing capabilities and AI creation features, supports pagination, supports Markdown syntax, offers basic rich text editing functions, allows for the insertion of various node types in multiple formats, provides a variety of practical tools, and supports setting page styles. It also supports exporting in various formats, printing and print preview, block-level document editing, adding custom extensions, multi-language settings, and a dark theme.",
   "keywords": [
@@ -37,7 +37,7 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/umo-editor.mjs"
+      "import": "./dist/umo-editor.js"
     },
     "./style": {
       "import": "./dist/style.css"
@@ -114,6 +114,7 @@
     "prism-code-editor": "^3.4.0",
     "prismjs": "^1.29.0",
     "prosemirror-docx": "^0.2.0",
+    "prosemirror-transform": "^1.10.0",
     "qrcode-svg": "^1.1.0",
     "svg64": "^2.0.0",
     "tippy.js": "^6.3.7",
@@ -163,7 +164,7 @@
     "unplugin-vue": "^5.1.5",
     "unplugin-vue-components": "^0.27.4",
     "unplugin-vue-macros": "^2.11.11",
-    "vite": "^5.4.3",
+    "vite": "^5.4.4",
     "vite-plugin-inspect": "^0.8.7",
     "vite-plugin-svg-icons": "^2.0.1",
     "vite-tsconfig-paths": "^5.0.1",
@@ -184,10 +185,5 @@
     "*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,vue}": [
       "eslint --fix"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   }
 }
