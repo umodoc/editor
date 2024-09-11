@@ -62,8 +62,7 @@
                 placeholder=""
                 :allow-input-over-limit="false"
                 @blur="
-                  (val: string) =>
-                    inputPageSize(Number.parseFloat(val), 'width')
+                  (val: InputNumberValue) => inputPageSize(Number(val), 'width')
                 "
               />
             </div>
@@ -80,8 +79,8 @@
                 placeholder=""
                 :allow-input-over-limit="false"
                 @blur="
-                  (val: string) =>
-                    inputPageSize(Number.parseFloat(val), 'height')
+                  (val: InputNumberValue) =>
+                    inputPageSize(Number(val), 'height')
                 "
               />
             </div>
@@ -163,8 +162,8 @@
                   placeholder=""
                   :allow-input-over-limit="false"
                   @blur="
-                    (val: string) =>
-                      inputPageMargin(Number.parseFloat(val), 'top')
+                    (val: InputNumberValue) =>
+                      inputPageMargin(Number(val), 'top')
                   "
                 />
               </div>
@@ -182,8 +181,8 @@
                   placeholder=""
                   :allow-input-over-limit="false"
                   @blur="
-                    (val: string) =>
-                      inputPageMargin(Number.parseFloat(val), 'bottom')
+                    (val: InputNumberValue) =>
+                      inputPageMargin(Number(val), 'bottom')
                   "
                 />
               </div>
@@ -201,8 +200,8 @@
                   placeholder=""
                   :allow-input-over-limit="false"
                   @blur="
-                    (val: string) =>
-                      inputPageMargin(Number.parseFloat(val), 'left')
+                    (val: InputNumberValue) =>
+                      inputPageMargin(Number(val), 'left')
                   "
                 />
               </div>
@@ -220,8 +219,8 @@
                   placeholder=""
                   :allow-input-over-limit="false"
                   @blur="
-                    (val: string) =>
-                      inputPageMargin(Number.parseFloat(val), 'right')
+                    (val: InputNumberValue) =>
+                      inputPageMargin(Number(val), 'right')
                   "
                 />
               </div>
@@ -234,6 +233,7 @@
 </template>
 
 <script setup lang="ts">
+import type { InputNumberValue } from 'tdesign-vue-next'
 import { useI18n } from 'vue-i18n'
 
 import { localize } from '@/utils/localisation'
