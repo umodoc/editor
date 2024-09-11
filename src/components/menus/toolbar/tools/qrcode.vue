@@ -21,7 +21,11 @@
             :select-options="levels"
             menu-type="select"
             :select-value="config.ecl"
-            @menu-click="(value) => (config.ecl = value)"
+            @menu-click="
+              (value: string) => {
+                config.ecl = value
+              }
+            "
           ></menus-button>
           <menus-button
             menu-type="input"
@@ -105,7 +109,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -150,13 +154,13 @@ const defaultConfig = {
 let config = $ref({ ...defaultConfig })
 let changed = $ref(false)
 
-let svgCode = $ref(null)
+let svgCode = $ref<string | null>(null)
 let renderError = $ref(false)
 const renderQrcode = () => {
   try {
     svgCode = null
     config.height = config.width
-    const qrcode = new QRCode(config)
+    const qrcode = new QRCode(config.content)
     svgCode = qrcode.svg()
     renderError = false
   } catch {

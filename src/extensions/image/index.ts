@@ -5,7 +5,7 @@ import NodeView from './node-view.vue'
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     setImage: {
-      setImage: (options: any, replace: any) => ReturnType
+      setImage: (options: any, replace?: any) => ReturnType
     }
   }
 }

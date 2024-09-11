@@ -320,7 +320,7 @@ if (appContext) {
     key: string,
     ...args: unknown[]
   ) => string
-  appContext.config.globalProperties.l = l
+  appContext.config.globalProperties.l = localize
 }
 const locale = useState('locale')
 i18n.locale.value =

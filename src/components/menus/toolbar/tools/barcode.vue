@@ -21,16 +21,24 @@
             :select-options="formats"
             menu-type="select"
             :select-value="config.format"
-            @menu-click="(value) => (config.format = value)"
+            @menu-click="
+              (value: string) => {
+                config.format = value
+              }
+            "
           ></menus-button>
           <t-divider layout="vertical" />
           <menus-button
             style="width: 114px"
             :text="t('tools.barcode.font')"
-            :select-options="fonts"
+            :select-options="fonts ?? []"
             menu-type="select"
             :select-value="config.font"
-            @menu-click="(value) => (config.font = value)"
+            @menu-click="
+              (value: string) => {
+                config.font = value
+              }
+            "
           ></menus-button>
           <t-divider layout="vertical" />
           <menus-toolbar-base-color
@@ -178,7 +186,7 @@
             autofocus
             clearable
             :placeholder="t('tools.barcode.placeholder')"
-            :status="renderError && config.content !== '' ? 'error' : ''"
+            :status="renderError && config.content !== '' ? 'error' : 'default'"
           >
             <template #prefixIcon>
               <icon name="barcode" />
@@ -209,7 +217,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 // https://github.com/lindell/JsBarcode/wiki/Options
 import JsBarcode from 'jsbarcode'
 import svg64 from 'svg64'
@@ -247,10 +255,10 @@ const formats = [
   { label: 'MSI1110', value: 'MSI1110' },
   { label: 'Pharmacode', value: 'Pharmacode' },
 ]
-const fonts = options.value.dicts.fonts.map((item) => {
+const fonts = options.value.dicts?.fonts.map((item) => {
   return {
-    label: l(item.label),
-    value: item.value,
+    label: localize(item.label),
+    value: item.value ?? '',
   }
 })
 const textPositions = [
@@ -261,7 +269,7 @@ const defaultConfig = {
   content: '',
   width: 2,
   height: 100,
-  font: null,
+  font: '',
   format: 'CODE128',
   lineColor: '#000',
   background: '',
@@ -277,7 +285,7 @@ const defaultConfig = {
 let config = $ref({ ...defaultConfig })
 let changed = $ref(false)
 
-const changeFontOptions = (val) => {
+const changeFontOptions = (val: string) => {
   let fontOptions = config.fontOptions.split(' ')
   if (fontOptions.includes(val)) {
     fontOptions = fontOptions.filter((item) => item !== val)
@@ -289,7 +297,13 @@ const changeFontOptions = (val) => {
 
 // 生成条形码
 let renderError = $ref(false)
-const barcodeSvgRef = $ref(null)
+const barcodeSvgRef = $ref<
+  | (HTMLElement & {
+      width: { animVal: { value: number } }
+      height: { animVal: { value: number } }
+    })
+  | null
+>(null)
 const renderBarcode = async () => {
   try {
     await nextTick()
@@ -332,8 +346,8 @@ const setBarcode = () => {
     useMessage('error', t('tools.barcode.notEmpty'))
     return
   }
-  const width = barcodeSvgRef.width.animVal.value
-  const height = barcodeSvgRef.height.animVal.value
+  const width = barcodeSvgRef?.width.animVal.value
+  const height = barcodeSvgRef?.height.animVal.value
   if (changed) {
     editor.value
       ?.chain()
@@ -341,7 +355,7 @@ const setBarcode = () => {
       .setImage(
         {
           type: 'barcode',
-          src: svg64(barcodeSvgRef.outerHTML),
+          src: svg64(barcodeSvgRef?.outerHTML ?? ''),
           content: JSON.stringify(config),
           width,
           height,

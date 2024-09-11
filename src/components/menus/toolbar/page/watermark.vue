@@ -14,15 +14,22 @@
             style="width: 140px"
             :tooltip="t('page.watermark.fontFamily')"
             menu-type="select"
-            :select-options="fonts"
-            :select-value="page.watermark.fontFamily"
-            @menu-click="(value) => (page.watermark.fontFamily = value)"
+            :select-options="fonts ?? []"
+            :select-value="page.watermark?.fontFamily"
+            @menu-click="
+              (value: string) => {
+                if (page.watermark) {
+                  page.watermark.fontFamily = value
+                }
+              }
+            "
           ></menus-button>
           <menus-button
             menu-type="input"
             :tooltip="t('page.watermark.fontSize')"
           >
             <t-input-number
+              v-if="page.watermark"
               v-model="page.watermark.fontSize"
               style="width: 60px"
               size="small"
@@ -36,12 +43,20 @@
             </t-input-number>
           </menus-button>
           <menus-toolbar-base-color
+            v-if="page.watermark"
             :text="t('page.watermark.fontColor')"
-            :default-color="page.watermark.fontColor"
+            :default-color="page.watermark?.fontColor"
             modeless
-            @change="(value) => (page.watermark.fontColor = value)"
+            @change="
+              (value) => {
+                if (page.watermark) {
+                  page.watermark.fontColor = value
+                }
+              }
+            "
           />
           <menus-toolbar-base-bold
+            v-if="page.watermark"
             :menu-active="page.watermark.fontWeight === 'bold'"
             @menu-click-through="
               page.watermark.fontWeight === 'bold'
@@ -51,6 +66,7 @@
           />
         </div>
         <t-input
+          v-if="page.watermark"
           v-model.trim="page.watermark.text"
           maxlength="30"
           clearable
@@ -62,6 +78,7 @@
         ></div>
         <div class="umo-watermark-type">
           <div
+            v-if="page.watermark"
             class="item compact"
             :class="{ active: page.watermark.type === 'compact' }"
             @click="page.watermark.type = 'compact'"
@@ -70,6 +87,7 @@
             <span v-text="t('page.watermark.compact')"></span>
           </div>
           <div
+            v-if="page.watermark"
             class="item spacious"
             :class="{ active: page.watermark.type === 'spacious' }"
             @click="page.watermark.type = 'spacious'"
@@ -79,7 +97,7 @@
           </div>
         </div>
         <t-button
-          v-if="page.watermark.text !== ''"
+          v-if="page.watermark?.text"
           class="umo-clear-button"
           block
           variant="outline"
@@ -91,7 +109,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -99,15 +117,17 @@ const { popupVisible, togglePopup } = usePopup()
 
 const { options, page } = useStore()
 
-const fonts = options.value.dicts.fonts.map((item) => {
+const fonts = options.value.dicts?.fonts.map((item) => {
   return {
-    label: l(item.label),
-    value: item.value,
+    label: localize(item.label),
+    value: item.value ?? '',
   }
 })
 
 const clearWatermark = () => {
-  page.value.watermark.text = ''
+  if (page.value.watermark) {
+    page.value.watermark.text = ''
+  }
   popupVisible.value = false
 }
 </script>

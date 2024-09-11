@@ -218,8 +218,8 @@ const send = async () => {
 }
 
 const insertCommand = ({ value, autoSend }: CommandItem) => {
-  command.value = l(value)
-  result.value.command = l(value)
+  command.value = localize(value) ?? ''
+  result.value.command = localize(value) ?? ''
   result.value.content = ''
   inputRef.value?.focus()
   if (autoSend !== false) {
