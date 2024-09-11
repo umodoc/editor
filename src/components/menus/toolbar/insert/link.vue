@@ -77,8 +77,8 @@ watch(
   () => dialogVisible,
   (val) => {
     if (val) {
-      text = getSelectionText(editor.value)
-      href = editor.value.getAttributes('link').href || ''
+      text = editor.value ? getSelectionText(editor.value) : ''
+      href = editor?.value?.getAttributes('link').href ?? ''
     } else {
       text = ''
       href = ''

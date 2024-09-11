@@ -1,5 +1,5 @@
 import { type Editor, Extension, findParentNode } from '@tiptap/core'
-import { Plugin, PluginKey } from '@tiptap/pm/state'
+import { type NodeSelection, Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
 
 import { LIST_TYPE } from '@/extensions/page/node-names'
@@ -52,7 +52,8 @@ export default Extension.create({
           if (parentNode) {
             return chain().setNodeSelection(parentNode.pos).run()
           }
-          const { $anchor, node } = editor.state.selection
+          // FIXME: The type assertion below might be wrong.
+          const { $anchor, node } = editor.state.selection as NodeSelection
           const pos = node?.attrs?.vnode
             ? $anchor.pos
             : $anchor.pos - $anchor.parentOffset - 1
@@ -73,9 +74,8 @@ export default Extension.create({
               editor.isActive('file')
             ) {
               const { options } = useStore()
-              const { id, src } = node
-              // @ts-ignore
-              options.value.onFileDelete(id, src)
+              const { id, src } = node.attrs
+              options.value.onFileDelete?.(id, src)
             }
             chain().focus().deleteSelection().run()
             return true
@@ -90,7 +90,7 @@ export default Extension.create({
   },
 })
 export function getSelectionNode(editor: Editor) {
-  const { node } = editor.state.selection
+  const { node } = editor.state.selection as NodeSelection
   if (node) {
     return node
   }
@@ -102,7 +102,7 @@ export function getSelectionNode(editor: Editor) {
     return $anchor.node(parentNode.depth)
   }
   editor.commands.selectParentNode()
-  return editor.state.selection.node
+  return (editor.state.selection as NodeSelection).node
 }
 export function getSelectionText(editor: Editor) {
   const { from, to, empty } = editor.state.selection

@@ -73,12 +73,12 @@ const options = [
 
 let currentColor = $ref('#000')
 let colorPickerVisible = $ref(false)
-const colorChange = (color) => {
+const colorChange = (color: string) => {
   currentColor = color
   colorPickerVisible = false
 }
 
-const setHr = ({ value }) => {
+const setHr = ({ value }: { value: string }) => {
   if (!value || !editor.value) {
     return
   }

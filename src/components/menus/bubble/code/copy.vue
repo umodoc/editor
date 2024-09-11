@@ -15,11 +15,13 @@ import { getSelectionNode } from '@/extensions/selection'
 const { editor } = useStore()
 
 const copyCode = () => {
-  const codeBlock = getSelectionNode(editor.value)
-  const { copy } = useClipboard({
-    source: ref(codeBlock.attrs.code),
-  })
-  void copy()
-  useMessage('success', t('bubbleMenu.code.copy.success'))
+  const codeBlock = editor.value ? getSelectionNode(editor.value) : null
+  if (codeBlock) {
+    const { copy } = useClipboard({
+      source: ref(codeBlock.attrs.code),
+    })
+    void copy()
+    useMessage('success', t('bubbleMenu.code.copy.success'))
+  }
 }
 </script>

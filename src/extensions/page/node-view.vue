@@ -6,10 +6,10 @@
     :class="{ 'no-shadow': exportImage }"
     :style="{
       '--umo-page-background': page.background,
-      '--umo-page-margin-top': page.margin.top + 'cm',
-      '--umo-page-margin-bottom': page.margin.bottom + 'cm',
-      '--umo-page-margin-left': page.margin.left + 'cm',
-      '--umo-page-margin-right': page.margin.right + 'cm',
+      '--umo-page-margin-top': (page.margin?.top ?? '0') + 'cm',
+      '--umo-page-margin-bottom': (page.margin?.bottom ?? '0') + 'cm',
+      '--umo-page-margin-left': (page.margin?.left ?? '0') + 'cm',
+      '--umo-page-margin-right': (page.margin?.right ?? '0') + 'cm',
       '--umo-page-width': pageSize.width + 'cm',
       '--umo-page-height': pageSize.height + 'cm',
     }"
@@ -21,10 +21,11 @@
       @dblclick="page.pagination = !page.pagination"
     ></div>
     <t-watermark
+      v-if="page.watermark"
       class="umo-page-watermark"
-      :alpha="page.watermark.alpha"
+      :alpha="page.watermark?.alpha"
       v-bind="watermarkOptions"
-      :watermark-content="page.watermark"
+      :watermark-content="page.watermark as WatermarkText"
     >
       <div class="umo-page-node-header" contenteditable="false">
         <div
@@ -37,7 +38,7 @@
             :is="node.attrs.slots.page_header"
             v-if="page.header"
             :page-number="node.attrs.pageNumber"
-            :total-pages="editor.$nodes('page').length"
+            :total-pages="editor.$nodes('page')?.length ?? 0"
           />
         </div>
         <div
@@ -48,7 +49,11 @@
       <node-view-content
         class="umo-page-node-content"
         :style="{
-          height: pageSize.height - page.margin.top - page.margin.bottom + 'cm',
+          height:
+            pageSize.height -
+            (page.margin?.top ?? 0) -
+            (page.margin?.bottom ?? 0) +
+            'cm',
         }"
       />
       <div class="umo-page-node-footer" contenteditable="false">
@@ -61,7 +66,7 @@
             :is="node.attrs.slots.page_footer"
             v-if="page.footer"
             :page-number="node.attrs.pageNumber"
-            :total-pages="editor.$nodes('page').length"
+            :total-pages="editor.$nodes('page')?.length ?? 0"
           />
         </div>
         <div
@@ -77,13 +82,16 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 import { nodeViewProps } from '@tiptap/vue-3'
+import type { WatermarkText } from 'tdesign-vue-next'
+
+import type { WatermarkOption } from '@/types'
 
 const { page, exportImage } = useStore()
 const { editor, node } = defineProps(nodeViewProps)
 const containerRef = ref(null)
 
 const pageSize = $computed(() => {
-  const { width, height } = page.value.size || { width: 0, height: 0 }
+  const { width, height } = page.value.size ?? { width: 0, height: 0 }
   return {
     width: page.value.orientation === 'portrait' ? width : height,
     height: page.value.orientation === 'portrait' ? height : width,
@@ -103,7 +111,7 @@ const watermarkOptions = $ref<{
 })
 watch(
   () => page.value.watermark,
-  ({ type }) => {
+  ({ type }: Partial<WatermarkOption> = { type: '' }) => {
     if (type === 'compact') {
       watermarkOptions.width = 320
       watermarkOptions.y = 240

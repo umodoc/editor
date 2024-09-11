@@ -22,8 +22,8 @@ const themes = [
   { label: t('bubbleMenu.code.themes.light'), value: 'light' },
 ]
 
-const setTheme = (theme) => {
-  const codeBlock = getSelectionNode(editor.value)
-  editor.value.commands.updateAttributes(codeBlock.type, { theme })
+const setTheme = (theme: 'dark' | 'light') => {
+  const codeBlock = editor.value ? getSelectionNode(editor.value) : null
+  editor.value?.commands.updateAttributes(codeBlock.type, { theme })
 }
 </script>

@@ -57,21 +57,21 @@ watch(
     }
   },
 )
-const toggleBulletList = (listStyleType) => {
+const toggleBulletList = (listStyleType: string) => {
   const chain = editor.value?.chain().focus()
   if (editor.value?.isActive('bulletList')) {
     if (
       editor.value.getAttributes('bulletList').listStyleType === listStyleType
     ) {
-      chain.toggleBulletList().run()
+      chain?.toggleBulletList().run()
     } else {
-      chain.updateAttributes('bulletList', { listStyleType }).run()
+      chain?.updateAttributes('bulletList', { listStyleType }).run()
     }
   } else {
     chain
-      .toggleBulletList()
-      .updateAttributes('bulletList', { listStyleType })
-      .run()
+      ?.toggleBulletList()
+      ?.updateAttributes('bulletList', { listStyleType })
+      ?.run()
   }
   listType = listStyleType
   popupVisible.value = false

@@ -1,22 +1,6 @@
 <template>
   <div class="box">
-    <umo-editor ref="editorRef" v-bind="options" @save="onSave">
-      <!-- <template #toolbar_base="props">
-        <span>toolbar_base slot：{{ props }}</span>
-      </template>
-      <template #toolbar_ribbon="props">
-        <span>toolbar_ribbon slot：{{ props }}</span>
-      </template>
-      <template #bubble_menu>
-        <span>bubble_menu slot</span>
-      </template> -->
-      <!-- <template #page_header="props">
-        <span>page_header slot：{{ props }}</span>
-      </template>
-      <template #page_footer="props">
-        <span>page_footer slot：{{ props }}</span>
-      </template> -->
-    </umo-editor>
+    <umo-editor ref="editorRef" v-bind="options" @save="onSave" />
   </div>
 </template>
 

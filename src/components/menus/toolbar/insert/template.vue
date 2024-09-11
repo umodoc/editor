@@ -1,6 +1,6 @@
 <template>
   <menus-button
-    v-if="options.templates.length > 0"
+    v-if="options.templates && options.templates.length"
     ico="template"
     :text="t('insert.template')"
     menu-type="dropdown"
@@ -38,7 +38,7 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const { options, editor } = useStore()
 
-const setTemplate = ({ content }) => {
+const setTemplate = ({ content }: { content: string }) => {
   if (!content || !editor.value) {
     return
   }

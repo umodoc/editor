@@ -59,7 +59,6 @@ export default hr.extend({
             currentChain
               // set cursor after horizontal rule
               .command(({ tr, dispatch }) => {
-                let _a
                 if (dispatch) {
                   const { $to } = tr.selection
                   const posAfter = $to.end()
@@ -74,10 +73,7 @@ export default hr.extend({
                   } else {
                     // add node after horizontal rule if it’s the end of the document
                     const node =
-                      (_a = $to.parent.type.contentMatch.defaultType) ===
-                        null || _a === void 0
-                        ? void 0
-                        : _a.create()
+                      $to.parent.type.contentMatch.defaultType?.create() ?? 0
                     if (node) {
                       tr.insert(posAfter, node)
                       tr.setSelection(

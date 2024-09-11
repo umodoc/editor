@@ -1,5 +1,5 @@
 import type { INumberingOptions } from 'docx'
-import type { IPropertiesOptions } from 'docx/build/file/core-properties'
+import type { IPropertiesOptions } from 'node_modules/docx/build/file/core-properties'
 
 export type Mutable<T> = {
   -readonly [k in keyof T]: T[k]

@@ -1,5 +1,6 @@
 <template>
   <menus-button
+    v-if="page.preview"
     ico="preview"
     :text="t('page.preview')"
     shortcut="F5"

@@ -1,5 +1,6 @@
 <template>
   <menus-button
+    v-if="currentColor"
     ico="color"
     :text="text"
     menu-type="popup"
@@ -44,8 +45,8 @@ const emits = defineEmits(['change'])
 const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
-let currentColor = $ref()
-const colorChange = (color) => {
+let currentColor = $ref<string | undefined>()
+const colorChange = (color: string) => {
   currentColor = color
   popupVisible.value = false
 

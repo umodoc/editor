@@ -15,8 +15,8 @@
             v-for="colIndex in row"
             :key="colIndex"
             class="cell"
-            :class="{ selected: isSelected(rowIndex, colIndex) }"
-            @mouseover="selectCell(rowIndex, colIndex)"
+            :class="{ selected: isSelected(rowIndex, Number(colIndex)) }"
+            @mouseover="selectCell(rowIndex, Number(colIndex))"
             @click="insertTable"
           ></div>
         </div>
@@ -72,7 +72,7 @@ const table = Array.from({ length: 8 }, () =>
 const selected = $ref({ rows: 0, cols: 0 })
 const withHeaderRow = $ref(true)
 
-const isSelected = (rows, cols) => {
+const isSelected = (rows: number, cols: number) => {
   return (
     selected.rows &&
     selected.rows > rows &&
@@ -80,7 +80,7 @@ const isSelected = (rows, cols) => {
     selected.cols > cols
   )
 }
-const selectCell = (rows, cols) => {
+const selectCell = (rows: number, cols: number) => {
   selected.rows = rows + 1
   selected.cols = cols + 1
 }

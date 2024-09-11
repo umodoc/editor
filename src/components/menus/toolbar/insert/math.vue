@@ -3,7 +3,7 @@
     ico="math"
     :text="t('insert.math')"
     huge
-    @menu-click="editor.chain().focus().insertContent('$\\LaTeX$').run()"
+    @menu-click="editor?.chain().focus().insertContent('$\\LaTeX$').run()"
   />
 </template>
 

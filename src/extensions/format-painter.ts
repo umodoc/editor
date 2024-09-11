@@ -57,9 +57,10 @@ export default Extension.create({
           apply(tr, set) {
             const action = tr.getMeta('painterAction')
             if (action?.type === 'start') {
-              set = action.marks
-            } else if (action?.type === 'end') {
-              set = []
+              return action.marks
+            }
+            if (action?.type === 'end') {
+              return []
             }
             return set
           },

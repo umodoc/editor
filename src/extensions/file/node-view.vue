@@ -41,17 +41,17 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-
-const { t } = useI18n()
 import { nodeViewProps } from '@tiptap/vue-3'
+import prettyBytes from 'pretty-bytes'
+import { useI18n } from 'vue-i18n'
 
 import { getFileIcon } from '@/utils/file'
 
+const { t } = useI18n()
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const { options } = useStore()
 const containerRef = ref(null)
-let filePath = $ref()
+let filePath = $ref('')
 
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs
@@ -69,14 +69,18 @@ const nodeStyle = $computed(() => {
 onMounted(async () => {
   const fileIcon = getFileIcon(node.attrs.name)
   filePath = `${options.value.cdnUrl}/icons/file/${fileIcon}.svg`
-  if (node.attrs.uploaded === false && node.attrs.file) {
+  if (
+    node.attrs.uploaded === false &&
+    node.attrs.file &&
+    options.value?.onFileUpload
+  ) {
     try {
       const { id, url } = await options.value.onFileUpload(node.attrs.file)
       if (containerRef.value) {
         updateAttributes({ id, url, file: null, uploaded: true })
       }
-    } catch (error) {
-      useMessage('error', error.message)
+    } catch (e) {
+      useMessage('error', (e as Error).message)
     }
   }
 })

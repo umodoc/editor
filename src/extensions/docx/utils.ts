@@ -44,11 +44,11 @@ export async function writeDocx(
 
 export function getLatexFromNode(node: ProsemirrorNode): string {
   let math = ''
-  node.forEach((child) => {
+  for (const child of node.content as unknown as ProsemirrorNode[]) {
     if (child.isText) {
       math += child.text
     }
     // TODO: improve this as we may have other things in the future
-  })
+  }
   return math
 }

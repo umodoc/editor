@@ -13,8 +13,10 @@
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-import { toBlob } from 'dom-to-image-more'
+import domToImageMore from 'dom-to-image-more'
 import { saveAs } from 'file-saver'
+
+const { toBlob } = domToImageMore
 
 const { container, options, page, exportImage } = useStore()
 
@@ -23,7 +25,13 @@ const formats = [
   { content: t('export.image.jpg'), value: 'jpg' },
 ]
 
-const saveImage = async ({ content, value }) => {
+const saveImage = async ({
+  content,
+  value,
+}: {
+  content: string
+  value: string
+}) => {
   if (!content) {
     return
   }
@@ -34,9 +42,9 @@ const saveImage = async ({ content, value }) => {
     await nextTick()
     const node = document.querySelector(`${container} .umo-page-content`)
     const blob = await toBlob(node, { scale: devicePixelRatio })
-    const { title } = options.value.document
+    const { title } = options.value.document ?? {}
     const filename =
-      title !== '' ? options.value.document.title : t('document.untitled')
+      title !== '' ? options.value?.document?.title : t('document.untitled')
     saveAs(
       blob,
       `${filename}${devicePixelRatio > 1 ? `@${devicePixelRatio}x` : ''}.${value}`,

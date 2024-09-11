@@ -64,27 +64,31 @@ const lineWidthOptions = $ref([
   { content: '7', value: 7 },
   { content: '8', value: 8 },
 ])
-const signatureRef = $ref(null)
+const signatureRef = $ref<{
+  reset: () => void
+  generate: () => Promise<string>
+} | null>(null)
 const reset = () => {
-  signatureRef.reset()
+  signatureRef?.reset()
 }
 
-const changeLineColor = (color) => {
+const changeLineColor = (color: string) => {
   lineColor = color
 }
-const changeLineWidth = ({ value }) => {
+const changeLineWidth = ({ value }: { value: number }) => {
   lineWidth = value
 }
 
 const setSignature = async () => {
   try {
-    const image = await signatureRef.generate()
+    const image = await signatureRef?.generate()
     editor.value
       ?.chain()
       .focus()
       .setImage({
+        // @ts-ignore
         type: 'signature',
-        src: image,
+        src: image ?? '',
         width: 80,
         draggable: true,
       })

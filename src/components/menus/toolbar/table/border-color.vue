@@ -4,7 +4,7 @@
     :text="t('table.borderColor')"
     menu-type="popup"
     huge
-    :disabled="!editor?.can().setCellAttribute('borderColor')"
+    :disabled="!editor?.can().setCellAttribute('borderColor', '')"
     :popup-visible="popupVisible"
     @toggle-popup="togglePopup"
   >
@@ -23,7 +23,7 @@ const emits = defineEmits(['change'])
 const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
-const colorBorderChange = (color) => {
+const colorBorderChange = (color: string) => {
   popupVisible.value = false
   const borderColor = color === '' ? null : color
   editor.value

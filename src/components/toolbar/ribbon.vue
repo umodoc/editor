@@ -246,28 +246,25 @@
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-const props = defineProps({
+const props = defineProps<{
   menus: {
-    type: Array,
-    required: true,
-  },
-  currentMenu: {
-    type: String,
-    required: true,
-  },
-})
+    value: string
+    label: string
+  }[]
+  currentMenu: string
+}>()
 const emits = defineEmits(['menu-change'])
 
 const { options, hidePageHeader, hidePageFooter } = useStore()
-const disableItem = (name) => {
-  return options.value.toolbar.disableMenuItems.includes(name)
+const disableItem = (name: string) => {
+  return options.value.toolbar?.disableMenuItems.includes(name)
 }
 
-const scrollableRef = $ref()
-const changeMenu = async (menu) => {
+const scrollableRef = $ref<{ update: () => void }>()
+const changeMenu = async (menu: string) => {
   emits('menu-change', menu)
   await nextTick()
-  scrollableRef.update()
+  scrollableRef?.update()
 }
 </script>
 

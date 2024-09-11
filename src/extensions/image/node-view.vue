@@ -35,7 +35,9 @@
         :selected="selected"
         :rotatable="true"
         :boundary="false"
-        :draggable="Boolean(node.attrs.draggable) && !options.document.readOnly"
+        :draggable="
+          Boolean(node.attrs.draggable) && !options.document?.readOnly
+        "
         :angle="node.attrs.angle"
         :width="Number(node.attrs.width)"
         :height="Number(node.attrs.height)"
@@ -82,6 +84,7 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 import { nodeViewProps } from '@tiptap/vue-3'
+import { isRecord } from '@tool-belt/type-predicates'
 import { base64ToFile } from 'file64'
 
 import shortId from '@/utils/short-id'
@@ -91,8 +94,8 @@ const { options, editor } = useStore()
 const { imagePreview } = useStore()
 const { isLoading, error } = useImage({ src: node.attrs.src })
 
-const containerRef = ref(null)
-const imageRef = $ref(null)
+const containerRef = ref<ComponentPublicInstance | null>(null)
+const imageRef = $ref<HTMLImageElement | null>(null)
 let selected = $ref(false)
 let maxWidth = $ref(0)
 let maxHeight = $ref(200)
@@ -115,52 +118,55 @@ const uploadImage = async () => {
     return
   }
   try {
-    const { id, url } = await options.value.onFileUpload(node.attrs.file)
+    const { id, url } =
+      (await options.value?.onFileUpload?.(node.attrs.file)) ?? {}
     if (containerRef.value) {
       updateAttributes({ id, src: url, file: null, uploaded: true })
     }
   } catch (error) {
-    useMessage('error', error.message)
+    useMessage('error', (error as Error).message)
   }
 }
 const onLoad = () => {
   if (node.attrs.width === null) {
-    const { clientWidth, clientHeight } = imageRef
-    maxWidth = containerRef.value.$el.clientWidth
+    const { clientWidth = 1, clientHeight = 1 } = imageRef ?? {}
+    maxWidth = containerRef.value?.$el.clientWidth
     const ratio = clientWidth / clientHeight
-    maxHeight = containerRef.value.$el.clientWidth / ratio
-    updateAttributes({ width: Number.parseInt(200 * ratio) })
+    maxHeight = containerRef.value?.$el.clientWidth / ratio
+    updateAttributes({ width: 200 * ratio })
   }
 }
 
-const onRotate = ({ angle }) => {
+const onRotate = ({ angle }: { angle: number }) => {
   updateAttributes({ angle })
 }
-const onResize = ({ width, height }) => {
+const onResize = ({ width, height }: { width: string; height: string }) => {
   updateAttributes({
     width: Number.parseInt(width),
     height: Number.parseInt(height),
   })
 }
 const onResizeStart = () => {
-  editor.value.commands.autoPaging(false)
+  editor.value?.commands.autoPaging(false)
 }
 const onResizeEnd = () => {
-  editor.value.commands.autoPaging()
+  editor.value?.commands.autoPaging()
 }
 
-const onDrag = ({ left, top }) => {
+const onDrag = ({ left, top }: { left: string; top: string }) => {
   updateAttributes({ left, top })
 }
 
-onClickOutside(containerRef, () => (selected = false))
+onClickOutside(containerRef, () => {
+  selected = false
+})
 
 watch(
   () => node.attrs.equalProportion,
   async () => {
     await nextTick()
-    const width = imageRef.offsetWidth
-    const height = imageRef.offsetHeight
+    const width = imageRef?.offsetWidth ?? 1
+    const height = imageRef?.offsetHeight ?? 1
     updateAttributes({ width, height })
   },
 )
@@ -179,7 +185,7 @@ watch(
         }
         const filename = shortId(10)
         const file = await base64ToFile(src, `${filename}.${ext}`, {
-          imageType,
+          type: imageType,
         })
         updateAttributes({ file })
       }
@@ -191,8 +197,12 @@ watch(
 )
 watch(
   () => error.value,
-  ({ type }) => {
-    updateAttributes({ error: type === 'error' })
+  (errorValue) => {
+    if (errorValue && isRecord(errorValue) && 'type' in errorValue) {
+      updateAttributes({ error: errorValue.type === 'error' })
+    } else {
+      updateAttributes({ error: false })
+    }
   },
 )
 </script>

@@ -16,8 +16,8 @@ import { getSelectionNode } from '@/extensions/selection'
 const { editor } = useStore()
 
 const toggleLineNumbers = () => {
-  const codeBlock = getSelectionNode(editor.value)
-  editor.value.commands.updateAttributes(codeBlock.type, {
+  const codeBlock = editor.value ? getSelectionNode(editor.value) : null
+  editor.value?.commands.updateAttributes(codeBlock.type, {
     lineNumbers: !codeBlock.attrs.lineNumbers,
   })
 }

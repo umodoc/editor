@@ -15,7 +15,7 @@
           class="umo-background-item"
           :class="{ active: page.background === item.value }"
           :style="{ backgroundColor: item.value }"
-          @click="backgroundChange(item.value)"
+          @click="backgroundChange(item.value ?? '')"
         >
           {{ item.label }}
         </div>
@@ -67,7 +67,7 @@ const backgrounds = [
 
 // 更多颜色
 const moreColorPicker = $ref(false)
-const backgroundChange = (color) => {
+const backgroundChange = (color: string) => {
   page.value.background = color
 }
 </script>

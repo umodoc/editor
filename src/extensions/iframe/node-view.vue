@@ -28,6 +28,7 @@
 </template>
 
 <script setup lang="ts">
+import type { ComponentPublicInstance } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -35,7 +36,7 @@ import { nodeViewProps } from '@tiptap/vue-3'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const { editor } = useStore()
-const containerRef = ref(null)
+const containerRef = ref<ComponentPublicInstance | null>(null)
 let selected = $ref(false)
 let maxWidth = $ref(0)
 
@@ -53,22 +54,27 @@ const nodeStyle = $computed(() => {
 })
 
 onMounted(() => {
-  const width = containerRef.value.$el.offsetWidth
-  maxWidth = width
-  if (node.attrs.width === null) {
-    updateAttributes({ width })
+  if (containerRef.value) {
+    const { offsetWidth } = containerRef.value.$el
+
+    maxWidth = offsetWidth
+    if (node.attrs.width === null) {
+      updateAttributes({ width: offsetWidth })
+    }
   }
 })
-const onResize = ({ width, height }) => {
+const onResize = ({ width, height }: { width: number; height: number }) => {
   updateAttributes({ width, height })
 }
 const onResizeStart = () => {
-  editor.value.commands.autoPaging(false)
+  editor.value?.commands.autoPaging(false)
 }
 const onResizeEnd = () => {
-  editor.value.commands.autoPaging()
+  editor.value?.commands.autoPaging()
 }
-onClickOutside(containerRef, () => (selected = false))
+onClickOutside(containerRef, () => {
+  selected = false
+})
 </script>
 
 <style lang="less">

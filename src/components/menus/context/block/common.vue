@@ -7,7 +7,7 @@
     :destroy-on-close="false"
     :popup-props="{
       onVisibleChange(visible) {
-        editor.commands.focus()
+        editor?.commands.focus()
         blockMenu = visible
         menuActive = visible
       },

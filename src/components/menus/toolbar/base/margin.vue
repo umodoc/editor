@@ -57,7 +57,7 @@ let marginBottom = $ref('')
 
 const setMarginValue = () => {
   if (popupVisible.value) {
-    const node = getSelectionNode(editor.value)
+    const node = editor.value ? getSelectionNode(editor.value) : null
     if (!node?.attrs?.margin) {
       return
     }
@@ -75,7 +75,7 @@ const setMarginValue = () => {
 }
 
 const setMargin = () => {
-  editor.value.commands.setMargin({
+  editor.value?.commands.setMargin({
     top: marginTop && marginTop !== '' ? marginTop?.toString() : undefined,
     bottom:
       marginBottom && marginBottom !== ''
@@ -95,7 +95,7 @@ watch(
   { immediate: true },
 )
 const resetMargin = () => {
-  editor.value.commands.unsetMargin()
+  editor.value?.commands.unsetMargin()
   popupVisible.value = false
 }
 </script>

@@ -1,4 +1,4 @@
-export default (shortcut: string) => {
+export function getShortcut(shortcut: string) {
   if (!shortcut) {
     return ''
   }

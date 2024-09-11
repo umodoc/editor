@@ -9,8 +9,11 @@
   >
     <template #content>
       <div class="umo-emojis-container narrow-scrollbar">
-        <template v-for="(group, index) in options.dicts.emojis" :key="index">
-          <div class="umo-emojis-group-title" v-text="l(group.label)"></div>
+        <template v-for="(group, index) in options.dicts?.emojis" :key="index">
+          <div
+            class="umo-emojis-group-title"
+            v-text="localize(group.label)"
+          ></div>
           <div class="umo-emojis-group-container">
             <div
               v-for="(item, i) in group.items.split(' ')"
@@ -30,11 +33,12 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
+import { localize } from '@/utils/localisation'
 const { t } = useI18n()
 const { popupVisible, togglePopup } = usePopup()
 const { options, editor } = useStore()
 
-const selectEmoji = (emoji) => {
+const selectEmoji = (emoji: string) => {
   editor.value?.chain().focus().insertContent(emoji).run()
   popupVisible.value = false
 }

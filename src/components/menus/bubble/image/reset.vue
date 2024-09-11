@@ -15,8 +15,8 @@ import { getSelectionNode } from '@/extensions/selection'
 const { editor } = useStore()
 
 const resetPosition = () => {
-  const image = getSelectionNode(editor.value)
-  editor.value.commands.updateAttributes(image.type, {
+  const image = editor.value ? getSelectionNode(editor.value) : null
+  editor.value?.commands.updateAttributes(image.type, {
     top: 0,
     left: 0,
     angle: 0,

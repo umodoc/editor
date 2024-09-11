@@ -53,7 +53,7 @@ declare module '@tiptap/core' {
       /**
        * Splits one list item into two list items.
        */
-      autoPaging: (status: boolean | undefined) => ReturnType
+      autoPaging: (status?: boolean) => ReturnType
     }
   }
 }
@@ -83,7 +83,7 @@ const types = [
 export default Node.create<PageOptions>({
   priority: 2,
   name: PAGE,
-  content: `block*`,
+  content: 'block*',
   group: 'block',
   isolating: true,
   selectable: false,

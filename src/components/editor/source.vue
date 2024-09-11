@@ -21,7 +21,7 @@
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-import { loader } from '@vue-monaco/editor'
+import { type Editor, loader } from '@vue-monaco/editor'
 
 const { options, editor } = useStore()
 const $document = useState('document')
@@ -52,10 +52,10 @@ const config = {
 }
 const code = $ref(editor.value?.getHTML() ?? $document.value.content)
 
-const editorMount = async (editor) => {
+const editorMount = async (editor: Editor.ICodeEditor) => {
   return await Promise.resolve(
     setTimeout(() => {
-      editor.getAction('editor.action.formatDocument').run()
+      void editor.getAction('editor.action.formatDocument')?.run()
     }, 200),
   )
 }

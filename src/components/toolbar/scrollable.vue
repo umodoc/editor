@@ -24,20 +24,28 @@
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-const wraperRef = ref(null)
-const contentRef = $ref(null)
+const wraperRef = ref<HTMLDivElement | null>(null)
+const contentRef = $ref<HTMLDivElement | null>(null)
 let hidePrev = $ref(true)
 let hideNext = $ref(true)
 
 const checkScrollPosition = () => {
-  const { scrollLeft, scrollWidth, clientWidth } = contentRef
+  const { scrollLeft = 0, scrollWidth = 0, clientWidth = 0 } = contentRef ?? {}
   hidePrev = scrollLeft === 0
   hideNext = scrollLeft + clientWidth + 1 >= scrollWidth
 }
 
-const scrollLeft = () => (contentRef.scrollLeft -= 100)
+const scrollLeft = () => {
+  if (contentRef?.scrollLeft) {
+    contentRef.scrollLeft -= 100
+  }
+}
 
-const scrollRight = () => (contentRef.scrollLeft += 100)
+const scrollRight = () => {
+  if (contentRef?.scrollLeft) {
+    contentRef.scrollLeft += 100
+  }
+}
 
 // 监听父元素大小变化
 useResizeObserver(wraperRef, () => {
@@ -46,12 +54,14 @@ useResizeObserver(wraperRef, () => {
 
 //
 onMounted(() => {
-  contentRef.addEventListener('scroll', checkScrollPosition)
+  contentRef?.addEventListener('scroll', checkScrollPosition)
 })
 
 // 更新
 const update = () => {
-  contentRef.scrollLeft = 0
+  if (contentRef) {
+    contentRef.scrollLeft = 0
+  }
   hideNext = true
   checkScrollPosition()
 }

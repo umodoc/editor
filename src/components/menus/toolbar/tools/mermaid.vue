@@ -36,7 +36,7 @@
   </menus-button>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -70,7 +70,7 @@ const menuClick = () => {
 }
 
 // 渲染 Mermaid
-const defaultCode = `graph TB\na-->b`
+const defaultCode = 'graph TB\na-->b'
 let mermaidCode = $ref('')
 let svgCode = $ref('')
 const mermaidRef = $ref()

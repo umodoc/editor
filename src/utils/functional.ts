@@ -30,7 +30,9 @@ export function withSuppress<T extends (...args: any[]) => any>(
 
       return result
     } catch (error) {
-      log?.(`${errorMessage}\n${error?.stack ?? error}`)
+      log?.(
+        `${errorMessage}\n${Reflect.get(error as Record<string, any>, 'stack') ?? error}`,
+      )
       return undefined
     }
   }

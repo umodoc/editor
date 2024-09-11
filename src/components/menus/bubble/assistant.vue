@@ -13,7 +13,7 @@ const { t } = useI18n()
 const { editor, assistantBox } = useStore()
 const openAssistantBox = () => {
   assistantBox.value = true
-  editor.value.commands.focus()
+  editor.value?.commands.focus()
 }
 </script>
 

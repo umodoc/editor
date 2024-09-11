@@ -6,12 +6,12 @@
     popup-handle="arrow"
     hide-text
     overlay-class-name="umo-highlight-dropdown"
-    @menu-click="highlightChange(highlight)"
+    @menu-click="highlightChange(highlight as HighlightOption)"
   >
     <icon
       name="highlight"
       class="umo-icon-highlight"
-      :style="{ backgroundColor: highlight.bgcolor, color: highlight.color }"
+      :style="{ backgroundColor: highlight?.bgcolor, color: highlight?.color }"
     />
     <template #dropmenu>
       <t-dropdown-menu>
@@ -22,7 +22,7 @@
           :value="item.value"
           :style="{ backgroundColor: item.bgcolor, color: item.color }"
           :divider="item.divider"
-          @click="highlightChange(item)"
+          @click="highlightChange(item as HighlightOption)"
         >
           <icon name="highlight" />
           <span>{{ item.label }}</span>
@@ -45,7 +45,15 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const { editor } = useStore()
 
-const options = [
+interface HighlightOption {
+  label: string
+  value: number
+  bgcolor?: string
+  color?: string
+  divider?: boolean
+}
+
+const options: HighlightOption[] = [
   { label: t('base.highlight.yellowBg'), value: 1, bgcolor: '#ffff8a' },
   { label: t('base.highlight.greenBg'), value: 2, bgcolor: '#a7ffa7' },
   { label: t('base.highlight.purpleBg'), value: 3, bgcolor: '#e6afff' },
@@ -63,8 +71,9 @@ const options = [
     divider: true,
   },
 ]
-let highlight = $ref({})
-const highlightChange = (item) => {
+
+let highlight = $ref<HighlightOption | undefined>()
+const highlightChange = (item: HighlightOption) => {
   if (item.bgcolor) {
     editor.value?.chain().focus().setHighlight({ color: item.bgcolor }).run()
   }
@@ -76,7 +85,7 @@ const highlightChange = (item) => {
 const clearFormat = () => {
   editor.value?.chain().focus().unsetHighlight().run()
   editor.value?.chain().focus().unsetColor().run()
-  highlight = {}
+  highlight = undefined
 }
 </script>
 

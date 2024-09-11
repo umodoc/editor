@@ -15,9 +15,9 @@ import { getSelectionNode } from '@/extensions/selection'
 const { editor } = useStore()
 
 const openImage = () => {
-  const node = getSelectionNode(editor.value)
+  const node = editor.value ? getSelectionNode(editor?.value) : null
   const a = document.createElement('a')
-  a.href = node.attrs.src
+  a.href = node?.attrs.src
   a.target = '_blank'
   document.body.appendChild(a)
   a.click()

@@ -20,7 +20,7 @@ export const gecko_version =
 
 export const chrome = Boolean(!ie && /Chrome\/(\d+)/.test(agent))
 export const chrome_version: number = chrome
-  ? parseInt(/Chrome\/(\d+)/.exec(agent)?.[1] ?? '0', 10)
+  ? Number.parseInt(/Chrome\/(\d+)/.exec(agent)?.[1] ?? '0', 10)
   : 0
 export const safari = !ie && !!nav && nav.vendor.includes('Apple Computer')
 // Is true for both iOS and iPadOS for convenience

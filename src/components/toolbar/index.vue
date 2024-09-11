@@ -7,7 +7,7 @@
       @menu-change="menuChange"
     >
       <template
-        v-for="item in options.toolbar.menus"
+        v-for="item in options.toolbar?.menus"
         :key="item"
         #[`toolbar_${item}`]="props"
       >
@@ -21,7 +21,7 @@
       @menu-change="menuChange"
     >
       <template
-        v-for="item in options.toolbar.menus"
+        v-for="item in options.toolbar?.menus"
         :key="item"
         #[`toolbar_${item}`]="props"
       >
@@ -29,7 +29,7 @@
       </template>
     </toolbar-classic>
     <toolbar-source
-      v-if="$toolbar.mode === 'source' && options.toolbar.enableSourceEditor"
+      v-if="$toolbar.mode === 'source' && options.toolbar?.enableSourceEditor"
     />
     <div class="umo-toolbar-actions" :class="$toolbar.mode">
       <t-popup
@@ -112,7 +112,7 @@
         <template #dropdown>
           <t-dropdown-menu
             v-for="item in editorModeOptions"
-            :key="item.value"
+            :key="item.value as string"
             :content="item.label"
             :value="item.value"
             :divider="item.divider"
@@ -134,8 +134,10 @@
 </template>
 
 <script setup lang="ts">
+import type { DropdownOption } from 'tdesign-vue-next'
 import { useI18n } from 'vue-i18n'
 
+import { timeAgo } from '@/utils/time-ago'
 const { t } = useI18n()
 const emits = defineEmits(['menu-change'])
 const { container, options, editor, savedAt } = useStore()
@@ -153,13 +155,13 @@ const defaultToolbarMenus = [
   { label: t('toolbar.export'), value: 'export' },
 ]
 let toolbarMenus = defaultToolbarMenus
-if (options.value.toolbar.menus) {
-  toolbarMenus = options.value.toolbar.menus.map(
+if (options.value.toolbar?.menus) {
+  toolbarMenus = options.value.toolbar?.menus.map(
     (item) => defaultToolbarMenus.filter((menu) => menu.value === item)[0],
   )
 }
 let currentMenu = $ref(toolbarMenus[0].value)
-const menuChange = (menu) => {
+const menuChange = (menu: string) => {
   currentMenu = menu
   emits('menu-change', menu)
 }
@@ -177,7 +179,12 @@ watch(
 
 // 切换编辑器模式
 const editorModeOptions = computed(() => {
-  const modeOptions = [
+  const modeOptions: {
+    value: string
+    label: string
+    prefixIcon: string
+    divider?: boolean
+  }[] = [
     {
       label: t('toolbar.ribbon'),
       value: 'ribbon',
@@ -194,7 +201,7 @@ const editorModeOptions = computed(() => {
       prefixIcon: 'hide-toolbar',
     },
   ]
-  if (options.value.toolbar.enableSourceEditor) {
+  if (options.value.toolbar?.enableSourceEditor) {
     modeOptions.splice(2, 0, {
       label: t('toolbar.source'),
       value: 'source',
@@ -205,17 +212,17 @@ const editorModeOptions = computed(() => {
   return modeOptions
 })
 
-const toggleToolbarMode = ({ value }) => {
+const toggleToolbarMode = ({ value }: DropdownOption) => {
   if (value === 'hideToolbar') {
     $toolbar.value.show = false
   } else {
     $toolbar.value.show = true
-    $toolbar.value.mode = value
+    $toolbar.value.mode = value as string
   }
 }
 
 // 保存文档
-const saveContentMethod = inject('saveContent')
+const saveContentMethod = inject('saveContent') as () => void
 const saveContent = () => {
   saveContentMethod()
   statusPopup = false
@@ -230,7 +237,6 @@ const setContentFromCache = () => {
       theme: 'info',
       header: t('save.cache.error.title'),
       body: t('save.cache.error.message'),
-      placement: 'center',
       onConfirm() {
         dialog.destroy()
       },

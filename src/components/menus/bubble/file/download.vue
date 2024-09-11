@@ -15,12 +15,14 @@ import { getSelectionNode } from '@/extensions/selection'
 const { editor } = useStore()
 
 const downloadFile = () => {
-  const node = getSelectionNode(editor.value)
+  const node = editor.value ? getSelectionNode(editor.value) : null
   const a = document.createElement('a')
-  a.href = node.attrs.url
-  a.download = node.attrs.name
+  a.href = node?.attrs.url
+  a.download = node?.attrs.name
+  if (a) {
   document.body.appendChild(a)
   a.click()
   document.body.removeChild(a)
+  }
 }
 </script>

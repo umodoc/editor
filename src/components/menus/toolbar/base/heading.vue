@@ -72,6 +72,7 @@
 </template>
 
 <script setup lang="ts">
+import type { Level } from '@tiptap/extension-heading'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -88,12 +89,13 @@ for (const i of Array.from({ length: 6 })) {
   options.push({
     label: t('base.heading.text', { level }),
     desc: `h${level}`,
-    value: level,
+    value: level.toString(),
   })
 }
 
 const currentValue = computed(() => {
-  const heading = (level) => editor.value?.isActive('heading', { level })
+  const heading = (level: number) =>
+    editor.value?.isActive('heading', { level })
   if (editor.value) {
     if (editor.value.isActive('paragraph')) {
       return 'paragraph'
@@ -120,11 +122,15 @@ const currentValue = computed(() => {
   return ''
 })
 
-const setHeading = (value) => {
+const setHeading = (value: string) => {
   if (value === 'paragraph') {
     editor.value?.chain().focus().setParagraph().run()
   } else {
-    editor.value?.chain().focus().toggleHeading({ level: value }).run()
+    editor.value
+      ?.chain()
+      .focus()
+      .toggleHeading({ level: Number(value) as Level })
+      .run()
   }
   popupVisible.value = false
 }

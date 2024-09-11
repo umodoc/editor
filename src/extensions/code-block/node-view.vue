@@ -6,7 +6,7 @@
       :class="node.attrs.theme"
     >
       <div
-        v-if="!options.document.readOnly"
+        v-if="!options.document?.readOnly"
         class="umo-show-code-block-toolbar"
         v-text="t('node.codeBlock.menu')"
       ></div>
@@ -60,7 +60,7 @@ import 'prism-code-editor/prism/languages/regex'
 import 'prism-code-editor/layout.css'
 
 import { nodeViewProps } from '@tiptap/vue-3'
-import { createEditor } from 'prism-code-editor'
+import { createEditor,type PrismEditor } from 'prism-code-editor'
 import { defaultCommands, editHistory } from 'prism-code-editor/commands'
 import { cursorPosition } from 'prism-code-editor/cursor'
 import { indentGuides } from 'prism-code-editor/guides'
@@ -75,7 +75,7 @@ const { options } = useStore()
 const containerRef = $ref(null)
 
 const code = $ref(node.attrs.code)
-let codeEditor = $ref(null)
+let codeEditor = $ref<PrismEditor | null>(null)
 
 const nodeStyle = $computed(() => {
   const { margin } = node.attrs
@@ -91,13 +91,12 @@ const nodeStyle = $computed(() => {
 
 onMounted(() => {
   codeEditor = createEditor(containerRef, {
-    readOnly: options.value.document.readOnly,
+    readOnly: options.value.document?.readOnly,
     language: node.attrs.language,
     tabSize: 2,
     lineNumbers: node.attrs.lineNumbers,
     wordWrap: node.attrs.wordWrap,
     value: code,
-    focusd: true,
     onUpdate(value) {
       updateAttributes({ code: value })
     },
@@ -117,9 +116,9 @@ onBeforeUnmount(() => {
 })
 
 watch(
-  () => options.value.document.readOnly,
+  () => options.value.document?.readOnly,
   (val) => {
-    codeEditor.setOptions({
+    codeEditor?.setOptions({
       readOnly: val,
     })
   },
@@ -127,7 +126,7 @@ watch(
 watch(
   () => [node.attrs.language, node.attrs.lineNumbers, node.attrs.wordWrap],
   () => {
-    codeEditor.setOptions(node.attrs)
+    codeEditor?.setOptions(node.attrs)
   },
 )
 </script>

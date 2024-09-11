@@ -92,7 +92,7 @@
     <menus-bubble-node-delete />
   </template>
   <template v-else>
-    <template v-if="options.assistant.enabled">
+    <template v-if="options.assistant?.enabled">
       <menus-bubble-assistant />
       <div class="umo-bubble-menu-divider"></div>
     </template>
@@ -109,7 +109,7 @@
     <menus-toolbar-base-background-color />
     <menus-toolbar-base-highlight />
     <div class="umo-bubble-menu-divider"></div>
-    <template v-if="options.document.enableComment">
+    <template v-if="options.document?.enableComment">
       <menus-bubble-comment />
       <div class="umo-bubble-menu-divider"></div>
     </template>

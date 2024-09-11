@@ -105,7 +105,7 @@
   </menus-button>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -169,7 +169,9 @@ watch(
   (val) => {
     if (val) {
       config = content ? JSON.parse(content) : { ...defaultConfig }
-      setTimeout(() => (changed = false), 200)
+      setTimeout(() => {
+        changed = false
+      }, 200)
     }
   },
   { immediate: true },

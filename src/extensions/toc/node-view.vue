@@ -49,14 +49,18 @@ const nodeStyle = $computed(() => {
   }
 })
 
-const headingClick = (id) => {
-  const element = editor.value.view.dom.querySelector(`[data-toc-id="${id}"`)
-  element.scrollIntoView()
-  const pos = editor.value.view.posAtDOM(element, 0)
-  const { tr } = editor.value.view.state
-  tr.setSelection(new TextSelection(tr.doc.resolve(pos)))
-  editor.value.view.dispatch(tr)
-  editor.value.view.focus()
+const headingClick = (id: string) => {
+  const element = editor.value?.view.dom.querySelector(`[data-toc-id="${id}"`)
+  if (element) {
+    element.scrollIntoView()
+    const pos = editor.value?.view.posAtDOM(element, 0)
+    const { tr } = editor.value?.view.state ?? {}
+    tr?.setSelection(new TextSelection(tr.doc.resolve(pos ?? 0)))
+    if (tr) {
+      editor.value?.view.dispatch(tr)
+      editor.value?.view.focus()
+    }
+  }
 }
 </script>
 
@@ -95,8 +99,6 @@ const headingClick = (id) => {
     &-item {
       font-weight: bold;
       font-size: 14px;
-      &.level-1 {
-      }
       &.level-2 {
         text-indent: 20px;
       }

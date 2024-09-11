@@ -5,7 +5,7 @@
     :tooltip="t('table.cellBgColor.tip')"
     menu-type="popup"
     huge
-    :disabled="!editor?.can().setCellAttribute('backgroundColor')"
+    :disabled="!editor?.can().setCellAttribute('backgroundColor', '')"
     :popup-visible="popupVisible"
     @toggle-popup="togglePopup"
   >
@@ -24,7 +24,7 @@ const emits = defineEmits(['change'])
 const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
-const colorChange = (color) => {
+const colorChange = (color: string) => {
   popupVisible.value = false
   const backgroundColor = color === '' ? null : color
   editor.value

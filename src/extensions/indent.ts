@@ -1,6 +1,7 @@
-import { Extension } from "@tiptap/core";
+import { type Dispatch, Extension } from "@tiptap/core";
 import {
 	AllSelection,
+	type EditorState,
 	TextSelection,
 	type Transaction,
 } from "@tiptap/pm/state";
@@ -46,15 +47,16 @@ export default Extension.create({
 						},
 						parseHTML: (element) => {
 							let indentClassName = "";
-							element.classList.forEach((className) => {
+							for (const className of element.classList) {
 								if (className.startsWith(classAttrPrefix)) {
 									indentClassName = className;
+									break;
 								}
-							});
+							}
 							if (indentClassName) {
 								const level = Number.parseInt(
 									indentClassName.slice(classAttrPrefix.length),
-									7,
+									10,
 								);
 								return level && level > this.options.minLevel ? level : null;
 							}
@@ -82,9 +84,11 @@ export default Extension.create({
 					indent = maxLevel;
 				}
 				if (indent !== node.attrs.indent) {
-					const { indent: oldIndent, ...currentAttrs } = node.attrs;
+					const clonedAttrs = { ...node.attrs };
+					delete clonedAttrs.indent;
+
 					const nodeAttrs =
-						indent > minLevel ? { ...currentAttrs, indent } : currentAttrs;
+						indent > minLevel ? { ...clonedAttrs, indent } : clonedAttrs;
 					return tr.setNodeMarkup(pos, node.type, nodeAttrs, node.marks);
 				}
 			}
@@ -112,7 +116,11 @@ export default Extension.create({
 		const applyIndent =
 			(direction: number) =>
 			() =>
-			({ tr, state, dispatch }) => {
+			({
+				tr,
+				state,
+				dispatch,
+			}: { tr: Transaction; state: EditorState; dispatch: Dispatch }) => {
 				const { selection } = state;
 				tr.setSelection(selection);
 				tr = updateIndentLevel(tr, direction);

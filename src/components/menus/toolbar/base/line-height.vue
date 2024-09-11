@@ -16,7 +16,7 @@ const { t } = useI18n()
 const { options, editor } = useStore()
 
 const lineHeights = computed(() => {
-  return options.value.dicts.lineHeights.map((item) => {
+  return options.value.dicts?.lineHeights.map((item) => {
     return {
       content: item.default
         ? l(item.label) + t('base.lineHeight.default')
@@ -27,7 +27,13 @@ const lineHeights = computed(() => {
   })
 })
 
-const setLineHeight = ({ content, value }) => {
+const setLineHeight = ({
+  content,
+  value,
+}: {
+  content: string
+  value: string
+}) => {
   if (!content) {
     return
   }

@@ -8,15 +8,18 @@
     <template #dropmenu>
       <t-dropdown-menu>
         <t-dropdown-item
-          v-for="(item, index) in options.dicts.pageSizes"
+          v-for="(item, index) in options.dicts?.pageSizes"
           :key="index"
           :value="index"
-          :active="page.size.width === item.width"
-          :divider="options.dicts.pageSizes.length - 1 === index"
+          :active="page.size?.width === item.width"
+          :divider="
+            options.dicts?.pageSizes &&
+            options.dicts.pageSizes.length - 1 === index
+          "
           :min-column-width="150"
           @click="page.size = item"
         >
-          <div class="label" v-text="l(item.label)"></div>
+          <div class="label" v-text="localize(item.label)"></div>
           <div class="desc">
             {{ item.width + t('page.size.cm') }} ×
             {{ item.height + t('page.size.cm') }}
@@ -34,6 +37,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
+import { localize } from '@/utils/localisation'
 const { t } = useI18n()
 const { options, page } = useStore()
 const dialogVisible = $ref(false)

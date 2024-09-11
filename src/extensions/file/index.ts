@@ -1,4 +1,4 @@
-import { mergeAttributes, Node } from '@tiptap/core'
+import { mergeAttributes,Node } from '@tiptap/core'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 
 import NodeView from './node-view.vue'
@@ -155,7 +155,6 @@ export default Node.create({
               theme: 'danger',
               header: t('file.notAllow.title'),
               body: t('file.notAllow.message'),
-              placement: 'center',
               onConfirm() {
                 dialog.destroy()
               },
@@ -175,9 +174,9 @@ export default Node.create({
             if (!files) {
               return
             }
-            files.forEach((file) => {
+            for (const file of files) {
               bool = editor.chain().focus().insertFile({ file }).run()
-            })
+            }
           })
           return bool
         },

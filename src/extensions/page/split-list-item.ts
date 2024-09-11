@@ -1,6 +1,6 @@
 import { getNodeType } from '@tiptap/core'
 import { Fragment, type NodeType, Slice } from '@tiptap/pm/model'
-import { TextSelection } from '@tiptap/pm/state'
+import { type NodeSelection, TextSelection } from '@tiptap/pm/state'
 import { canSplit } from '@tiptap/pm/transform'
 import type { RawCommands } from '@tiptap/vue-3'
 
@@ -17,7 +17,8 @@ export const splitListItem: RawCommands['splitListItem'] =
   ({ tr, state, dispatch, editor }) => {
     const type = getNodeType(typeOrName, state.schema)
     const { $from, $to } = state.selection
-    const { node } = state.selection
+    // FIXME: The type assertion below might well be wrong.
+    const { node } = state.selection as NodeSelection
 
     if (node?.isBlock || $from.depth < 2 || !$from.sameParent($to)) {
       return false
@@ -62,7 +63,7 @@ export const splitListItem: RawCommands['splitListItem'] =
           $from.node().attrs,
         )
         const nextType =
-          type.contentMatch.defaultType.createAndFill(newNextTypeAttributes) ??
+          type.contentMatch.defaultType?.createAndFill(newNextTypeAttributes) ??
           undefined
 
         wrap = wrap.append(

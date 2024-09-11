@@ -209,7 +209,7 @@
   </menus-button>
 </template>
 
-<script setup lang="ts">
+<script setup>
 // https://github.com/lindell/JsBarcode/wiki/Options
 import JsBarcode from 'jsbarcode'
 import svg64 from 'svg64'
@@ -304,7 +304,9 @@ watch(
   (val) => {
     if (val) {
       config = content ? JSON.parse(content) : { ...defaultConfig }
-      setTimeout(() => (changed = false), 200)
+      setTimeout(() => {
+        changed = false
+      }, 200)
     }
   },
   { immediate: true },

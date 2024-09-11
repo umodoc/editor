@@ -3,7 +3,7 @@
     ico="image"
     :text="t('insert.image')"
     huge
-    @menu-click="editor.chain().focus().selectFiles('image').run()"
+    @menu-click="editor?.chain().focus().selectFiles('image').run()"
   />
 </template>
 

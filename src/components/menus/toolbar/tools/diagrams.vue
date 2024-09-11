@@ -41,20 +41,29 @@ const { container, options, editor } = useStore()
 let dialogVisible = $ref(false)
 let loading = $ref(false)
 const diagramEditor = new DiagramEditor({
-  domain: options.value.diagrams.domain,
-  params: options.value.diagrams.params,
+  domain: options.value.diagrams?.domain,
+  params: options.value.diagrams?.params,
   container: `${container} .umo-diagrams-container`,
 })
 const openDiagramEditor = () => {
   diagramEditor.edit(props.content ?? '')
 }
 
-let image = $ref({})
+let image = $ref<
+  | {
+      type: string
+      src: string
+      width: number
+      height: number
+      content: string
+    }
+  | undefined
+>()
 
-const messageListener = (evt) => {
+const messageListener = (evt: MessageEvent) => {
   if (
     evt?.type !== 'message' &&
-    evt?.origin !== options.value.diagrams.domain
+    evt?.origin !== options.value.diagrams?.domain
   ) {
     return
   }
@@ -88,14 +97,14 @@ watch(
     if (!val) {
       window.removeEventListener('message', messageListener)
       diagramEditor.stopEditing()
-      if (image.type) {
+      if (image?.type) {
         editor.value?.chain().focus().setImage(image, !!props.content).run()
       }
       return
     }
     loading = true
     window.addEventListener('message', messageListener)
-    image = {}
+    image = undefined
   },
 )
 

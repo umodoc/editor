@@ -16,8 +16,8 @@ import { getSelectionNode } from '@/extensions/selection'
 const { editor } = useStore()
 
 const toggleWordWrap = () => {
-  const codeBlock = getSelectionNode(editor.value)
-  editor.value.commands.updateAttributes(codeBlock.type, {
+  const codeBlock = editor.value ? getSelectionNode(editor.value) : null
+  editor.value?.commands.updateAttributes(codeBlock.type, {
     wordWrap: !codeBlock.attrs.wordWrap,
   })
 }

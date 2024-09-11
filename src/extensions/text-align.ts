@@ -26,7 +26,7 @@ export default TextAlign.extend({
                 return {}
               }
               if (attributes.textAlign === 'distributed') {
-                return { style: `text-align-last: justify` }
+                return { style: 'text-align-last: justify' }
               }
               return { style: `text-align: ${attributes.textAlign}` }
             },

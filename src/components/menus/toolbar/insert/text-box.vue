@@ -3,7 +3,7 @@
     ico="text-box"
     :text="t('insert.textBox')"
     huge
-    @menu-click="editor?.chain().focus().setTextBox().run()"
+    @menu-click="editor?.chain().focus().setTextBox({}).run()"
   />
 </template>
 

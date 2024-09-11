@@ -295,13 +295,13 @@
   </t-tooltip>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 import { isString } from '@tool-belt/type-predicates'
 
-import getShortcut from '@/utils/shortcut'
+import { getShortcut } from '@/utils/shortcut'
 
 const props = defineProps({
   // 菜单类型

@@ -9,7 +9,7 @@
     v-bind="$attrs"
   >
     <template #header>
-      <icon v-if="$attrs.icon" :name="$attrs.icon" />
+      <icon v-if="$attrs.icon" :name="$attrs.icon as string" />
       <span>{{ $attrs.header }}</span>
     </template>
     <slot />

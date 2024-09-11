@@ -89,19 +89,19 @@ watch(
     }
   },
 )
-const toggleOrderedList = (listStyleType) => {
+const toggleOrderedList = (listStyleType: string) => {
   const chain = editor.value?.chain().focus()
   if (editor.value?.isActive('orderedList')) {
     if (
       editor.value.getAttributes('orderedList').listStyleType === listStyleType
     ) {
-      chain.toggleOrderedList().run()
+      chain?.toggleOrderedList().run()
     } else {
-      chain.updateAttributes('orderedList', { listStyleType }).run()
+      chain?.updateAttributes('orderedList', { listStyleType }).run()
     }
   } else {
     chain
-      .toggleOrderedList()
+      ?.toggleOrderedList()
       .updateAttributes('orderedList', { listStyleType })
       .run()
   }

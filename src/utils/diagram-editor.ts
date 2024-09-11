@@ -7,28 +7,8 @@ const locales = {
 
 // https://www.diagrams.com/doc/faq/embed-mode
 class DiagramEditor {
-  constructor({ domain, params, container }) {
-    this.domain = domain ?? this.domain
-    this.params = Object.assign(params || {}, this.params)
-    this.container = container
-    this.handleuseMessageEvent = (evt) => {
-      if (
-        this.frame !== undefined &&
-        evt.source === this.frame.contentWindow &&
-        evt.data.length > 0
-      ) {
-        try {
-          const msg = JSON.parse(evt.data)
-          if (msg) {
-            this.handleuseMessage(msg)
-          }
-        } catch (e) {
-          console.error(e)
-        }
-      }
-    }
-  }
-
+  frame: HTMLIFrameElement | undefined
+  container: string
   domain = 'https://embed.diagrams.net'
   // https://www.drawio.com/doc/faq/supported-url-parameters
   params = {
@@ -38,11 +18,43 @@ class DiagramEditor {
     configure: 1,
     noSaveBtn: 1,
   }
-  xml = null
+  xml: string | null = null
   format = 'xmlsvg'
+  data: any
+
+  constructor({
+    domain,
+    params,
+    container,
+  }: {
+    domain: string
+    params: Record<string, any>
+    container: string
+  }) {
+    this.domain = domain ?? this.domain
+    this.params = { ...params, ...this.params }
+    this.container = container
+  }
+
+  handleuseMessageEvent = (evt: MessageEvent) => {
+    if (
+      this.frame !== undefined &&
+      evt.source === this.frame.contentWindow &&
+      evt.data.length > 0
+    ) {
+      try {
+        const msg = JSON.parse(evt.data)
+        if (msg) {
+          this.handleuseMessage(msg)
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    }
+  }
 
   // 编辑元素
-  edit(src) {
+  edit(src: string) {
     let fmt = this.format
     if (src.substring(0, 15) === 'data:image/png;') {
       fmt = 'xmlpng'
@@ -56,7 +68,7 @@ class DiagramEditor {
   // 创建 iframe
   createFrame() {
     const params = Object.keys(this.params)
-      .map((key) => `${key}=${this.params[key]}`)
+      .map((key) => `${key}=${this.params[key as keyof typeof this.params]}`)
       .join('&')
     const lang = locales[i18n.global.locale.value]
     const frame = document.createElement('iframe')
@@ -66,12 +78,17 @@ class DiagramEditor {
   }
 
   // diagrams页面和当前页面通信
-  postMessage(msg) {
+  postMessage(msg: Record<string, any>) {
     if (this.frame) {
-      this.frame.contentWindow.postMessage(JSON.stringify(msg), '*')
+      this.frame.contentWindow?.postMessage(JSON.stringify(msg), '*')
     }
   }
-  handleuseMessage(msg) {
+  handleuseMessage(msg: {
+    event: string
+    data: any
+    xml: string
+    exit: boolean
+  }) {
     if (msg.event === 'configure') {
       this.configureEditor()
     } else if (msg.event === 'init') {
@@ -100,19 +117,19 @@ class DiagramEditor {
           })
         }
       }
-      this.stopEditing(msg)
+      this.stopEditing()
     }
   }
 
   // 开始编辑
-  startEditing(data, format) {
+  startEditing(data: any, format: string) {
     if (!this.frame) {
       window.addEventListener('message', this.handleuseMessageEvent)
       this.format = format ?? this.format
       this.data = data
       this.frame = this.createFrame()
       const container = document.querySelector(this.container)
-      container.appendChild(this.frame)
+      container?.appendChild(this.frame)
     }
   }
 
@@ -138,7 +155,7 @@ class DiagramEditor {
     this.postMessage({ action: 'configure', config: this.params.configure })
   }
   // 导出数据
-  export(data) {
+  export(data: any) {
     return data
   }
 }

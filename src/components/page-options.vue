@@ -31,16 +31,15 @@
               destroyOnClose: true,
               attach: container,
             }"
-            placeholder=""
-            @change="selectPageSize"
+            @change="selectPageSize as any"
           >
-            <template #valueDisplay> {{ pageOptions.size.label }} </template>
+            <template #valueDisplay> {{ pageOptions.size?.label }} </template>
             <t-option
-              v-for="(item, index) in options.dicts.pageSizes"
+              v-for="(item, index) in options.dicts?.pageSizes"
               :key="index"
               :value="index"
             >
-              <div class="label" v-text="l(item.label)"></div>
+              <div class="label" v-text="localize(item.label)"></div>
               <div class="desc">
                 {{ item.width }}{{ t('page.size.cm') }} × {{ item.height
                 }}{{ t('page.size.cm') }}
@@ -52,6 +51,7 @@
           <div class="umo-page-setting">
             <div class="item">
               <t-input-number
+                v-if="pageOptions?.size"
                 v-model="pageOptions.size.width"
                 class="umo-page-setting-number"
                 theme="normal"
@@ -61,11 +61,12 @@
                 :suffix="t('page.size.cm')"
                 placeholder=""
                 :allow-input-over-limit="false"
-                @blur="(val) => inputPageSize(val, 'width')"
+                @blur="(val) => inputPageSize(Number(val), 'width')"
               />
             </div>
             <div class="item">
               <t-input-number
+                v-if="pageOptions?.size"
                 v-model="pageOptions.size.height"
                 class="umo-page-setting-number"
                 theme="normal"
@@ -75,7 +76,7 @@
                 :suffix="t('page.size.cm')"
                 placeholder=""
                 :allow-input-over-limit="false"
-                @blur="(val) => inputPageSize(val, 'height')"
+                @blur="(val) => inputPageSize(Number(val), 'height')"
               />
             </div>
           </div>
@@ -85,13 +86,22 @@
             <div class="umo-page-margin-inbuilt">
               <div
                 class="item"
-                :class="{ active: !pageOptions.margin.layout }"
-                @click="selectPageMargin(options.page.defaultMargin)"
+                :class="{ active: !pageOptions.margin?.layout }"
+                @click="
+                  selectPageMargin(
+                    options.page?.defaultMargin ?? {
+                      left: 1.27,
+                      right: 1.27,
+                      top: 1.27,
+                      bottom: 1.27,
+                    },
+                  )
+                "
                 v-text="t('pageOptions.margin.default')"
               ></div>
               <div
                 class="item narrow"
-                :class="{ active: pageOptions.margin.layout === 'narrow' }"
+                :class="{ active: pageOptions.margin?.layout === 'narrow' }"
                 @click="
                   selectPageMargin({
                     left: 1.27,
@@ -105,7 +115,7 @@
               ></div>
               <div
                 class="item moderate"
-                :class="{ active: pageOptions.margin.layout === 'moderate' }"
+                :class="{ active: pageOptions.margin?.layout === 'moderate' }"
                 @click="
                   selectPageMargin({
                     left: 1.91,
@@ -119,7 +129,7 @@
               ></div>
               <div
                 class="item wide"
-                :class="{ active: pageOptions.margin.layout === 'wide' }"
+                :class="{ active: pageOptions.margin?.layout === 'wide' }"
                 @click="
                   selectPageMargin({
                     top: 2.54,
@@ -135,6 +145,7 @@
             <div class="umo-page-setting">
               <div class="item">
                 <t-input-number
+                  v-if="pageOptions?.margin"
                   v-model="pageOptions.margin.top"
                   class="umo-page-setting-number"
                   theme="normal"
@@ -145,11 +156,12 @@
                   :suffix="t('page.size.cm')"
                   placeholder=""
                   :allow-input-over-limit="false"
-                  @blur="(val) => inputPageMargin(val, 'top')"
+                  @blur="(val) => inputPageMargin(Number(val), 'top')"
                 />
               </div>
               <div class="item">
                 <t-input-number
+                  v-if="pageOptions?.margin"
                   v-model="pageOptions.margin.bottom"
                   class="umo-page-setting-number"
                   theme="normal"
@@ -160,11 +172,12 @@
                   :suffix="t('page.size.cm')"
                   placeholder=""
                   :allow-input-over-limit="false"
-                  @blur="(val) => inputPageMargin(val, 'bottom')"
+                  @blur="(val) => inputPageMargin(Number(val), 'bottom')"
                 />
               </div>
               <div class="item">
                 <t-input-number
+                  v-if="pageOptions?.margin"
                   v-model="pageOptions.margin.left"
                   class="umo-page-setting-number"
                   theme="normal"
@@ -175,11 +188,12 @@
                   :suffix="t('page.size.cm')"
                   placeholder=""
                   :allow-input-over-limit="false"
-                  @blur="(val) => inputPageMargin(val, 'left')"
+                  @blur="(val) => inputPageMargin(Number(val), 'left')"
                 />
               </div>
               <div class="item">
                 <t-input-number
+                  v-if="pageOptions?.margin"
                   v-model="pageOptions.margin.right"
                   class="umo-page-setting-number"
                   theme="normal"
@@ -190,7 +204,7 @@
                   :suffix="t('page.size.cm')"
                   placeholder=""
                   :allow-input-over-limit="false"
-                  @blur="(val) => inputPageMargin(val, 'right')"
+                  @blur="(val) => inputPageMargin(Number(val), 'right')"
                 />
               </div>
             </div>
@@ -204,6 +218,8 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
+import { localize } from '@/utils/localisation'
+
 const { t } = useI18n()
 const props = defineProps({
   visible: {
@@ -215,27 +231,50 @@ const emits = defineEmits(['close'])
 
 const { container, options, page } = useStore()
 
-const pageOptions = $ref(JSON.parse(JSON.stringify(page.value)))
+const pageOptions = $ref(structuredClone(page.value))
 
 // 页面大小
-const selectPageSize = (index) => {
-  pageOptions.size = options.value.dicts.pageSizes[index]
+const selectPageSize = (value: number) => {
+  pageOptions.size = options.value?.dicts?.pageSizes[value]
 }
-const inputPageSize = (value, field) => {
+const inputPageSize = (value: number, field: 'width' | 'height') => {
+  if (!pageOptions.size) {
+    pageOptions.size = {
+      width: 0,
+      height: 0,
+    }
+  }
   if (!value || value < 10) {
-    pageOptions.size[field] = 10
+    Reflect.set(pageOptions.size, field, 10)
     return
   }
   pageOptions.size.label = t('pageOptions.size.custom')
 }
 
 // 页边距
-const selectPageMargin = (margin) => {
+const selectPageMargin = (margin: {
+  right: number
+  left: number
+  bottom: number
+  top: number
+  layout?: 'narrow' | 'moderate' | 'wide' | 'custom'
+}) => {
   pageOptions.margin = margin
 }
-const inputPageMargin = (value, field) => {
+const inputPageMargin = (
+  value: number,
+  field: 'top' | 'bottom' | 'left' | 'right' | 'layout',
+) => {
+  if (!pageOptions.margin) {
+    pageOptions.margin = {
+      right: 0,
+      left: 0,
+      bottom: 0,
+      top: 0,
+    }
+  }
   if (!value || value < 0) {
-    pageOptions.margin[field] = 0
+    Reflect.set(pageOptions.margin, field, 0)
     return
   }
   pageOptions.margin.layout = 'custom'

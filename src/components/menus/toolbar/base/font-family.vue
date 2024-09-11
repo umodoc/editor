@@ -33,7 +33,7 @@
   </menus-button>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -93,7 +93,7 @@ const allFonts = computed(() => {
   const getFontsByValues = (values) => {
     return values.map(
       (item) =>
-        options.value.dicts.fonts.find(({ value }) => value === item) || {
+        options.value.dicts.fonts.find(({ value }) => value === item) ?? {
           label: item,
           item,
         },
@@ -119,12 +119,12 @@ const getUsedFonts = () => {
   const content = JSON.stringify(editor.value.getJSON())
   const matches = content.match(/"fontFamily":"([^"]+)"/g)
   if (matches) {
-    matches.forEach((item) => {
+    for (const item of matches) {
       const font = item.replace('"fontFamily":"', '').replace('"', '')
       if (!usedFonts.includes(font)) {
         usedFonts.push(font)
       }
-    })
+    }
   }
 }
 

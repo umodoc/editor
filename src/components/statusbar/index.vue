@@ -284,14 +284,12 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-
-const { t } = useI18n()
 import type { MaybeElementRef, UseFullscreenReturn } from '@vueuse/core'
 import type { DropdownOption } from 'tdesign-vue-next'
 import { useI18n } from 'vue-i18n'
 
 import type { SupportedLocale } from '@/types'
+import { getShortcut } from '@/utils/shortcut'
 
 const i18n = useI18n()
 const { t } = i18n

@@ -2,7 +2,7 @@
   <div
     v-if="visible"
     class="umo-block-menu-hander"
-    :style="`transform: translate(${page.margin.left}cm, ${scrollTop}px);`"
+    :style="`transform: translate(${page.margin?.left ?? 0}cm, ${scrollTop}px);`"
   >
     <menus-context-block-node />
     <menus-context-block-common />
@@ -32,8 +32,8 @@ watch(
   editor,
   (val) => {
     if (val) {
-      editor.value.on('selectionUpdate', updateMenuPostion)
-      editor.value.on('focus', updateMenuPostion)
+      editor.value?.on('selectionUpdate', updateMenuPostion)
+      editor.value?.on('focus', updateMenuPostion)
       // editor.value.on('blur', () => (visible = false))
     } else {
       visible = false

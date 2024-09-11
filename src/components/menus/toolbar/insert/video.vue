@@ -3,7 +3,7 @@
     ico="video"
     :text="t('insert.video')"
     huge
-    @menu-click="editor.chain().focus().selectFiles('video').run()"
+    @menu-click="editor?.chain().focus().selectFiles('video').run()"
   />
 </template>
 

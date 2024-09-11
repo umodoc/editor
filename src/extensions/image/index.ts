@@ -1,5 +1,5 @@
 import Image from '@tiptap/extension-image'
-import { VueNodeViewRenderer } from '@tiptap/vue-3'
+import { type CommandProps, VueNodeViewRenderer } from '@tiptap/vue-3'
 
 import NodeView from './node-view.vue'
 declare module '@tiptap/core' {
@@ -78,8 +78,11 @@ export default Image.extend({
   addCommands() {
     return {
       setImage:
-        (options, replace) =>
-        ({ commands, editor }) => {
+        (
+          options: { src: string; alt?: string; title?: string },
+          replace?: boolean,
+        ) =>
+        ({ commands, editor }: CommandProps) => {
           if (replace) {
             return commands.insertContent({
               type: this.name,

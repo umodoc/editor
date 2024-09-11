@@ -20,10 +20,10 @@ import { getSelectionNode } from '@/extensions/selection'
 
 const { editor } = useStore()
 
-const setRotate = (rotate) => {
-  const image = getSelectionNode(editor.value)
+const setRotate = (rotate: number) => {
+  const image = editor.value ? getSelectionNode(editor.value) : null
   const { angle } = image.attrs
-  editor.value.commands.updateAttributes(image.type, {
+  editor.value?.commands.updateAttributes(image.type, {
     angle: angle ? angle + rotate : rotate,
   })
 }

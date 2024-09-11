@@ -6,7 +6,7 @@
     menu-type="dropdown"
     huge
     :select-options="alignments"
-    :disabled="!editor?.can().setCellAttribute('align')"
+    :disabled="!editor?.can().setCellAttribute('align', '')"
     @change="setCellsAlign"
   />
 </template>
@@ -32,7 +32,7 @@ const alignments = [
   { content: t('table.cellAlign.jb'), value: 'justify-bottom' },
 ]
 
-const setCellsAlign = ({ value }) => {
+const setCellsAlign = ({ value }: { value: string }) => {
   editor.value?.chain().focus().setCellAttribute('align', value).run()
 }
 </script>

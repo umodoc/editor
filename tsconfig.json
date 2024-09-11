@@ -1,50 +1,50 @@
 {
-	"compilerOptions": {
-		"removeComments": true,
-		"disableSizeLimit": true,
-		"target": "ESNext",
-		"module": "ESNext",
-		"strict": true,
-		"allowJs": true,
-		"noEmit": true,
-		"jsx": "preserve",
-		"moduleResolution": "node",
-		"experimentalDecorators": true,
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
-		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
-		"forceConsistentCasingInFileNames": true,
-		"useDefineForClassFields": true,
-		"verbatimModuleSyntax": true,
-		"sourceMap": true,
-		"baseUrl": ".",
-		"types": [
-			"unplugin-vue-macros/macros-global",
-			"@vue-macros/reactivity-transform/macros-global",
-			"vite/client",
-			"vitest/globals",
-			"vitest",
-			"./imports.d.ts",
-			"./components.d.ts"
-		],
-		"paths": {
-			"@/*": ["./src/*"]
-		},
-		"lib": ["ESNext", "DOM", "DOM.Iterable", "ScriptHost"]
-	},
-	"vueCompilerOptions": {
-		"plugins": ["unplugin-vue-macros/volar"]
-	},
-	"include": [
-		"*.mjs",
-		"*.ts",
-		"*.d.ts",
-		"src/**/*.ts",
-		"src/**/*.vue",
-		"src/**/*.spec.ts",
-		"src/**/*.spec.tsx",
-		"src/**/*.d.ts"
-	],
-	"exclude": ["node_modules", "dist"]
+  "compilerOptions": {
+    "removeComments": true,
+    "disableSizeLimit": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "strict": true,
+    "allowJs": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "moduleResolution": "bundler",
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "useDefineForClassFields": true,
+    "verbatimModuleSyntax": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "types": [
+      "unplugin-vue-macros/macros-global",
+      "@vue-macros/reactivity-transform/macros-global",
+      "vite/client",
+      "vitest/globals",
+      "vitest",
+      "./imports.d.ts",
+      "./components.d.ts"
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "lib": ["ESNext", "DOM", "DOM.Iterable", "ScriptHost"]
+  },
+  "vueCompilerOptions": {
+    "plugins": ["unplugin-vue-macros/volar"]
+  },
+  "include": [
+    "*.mjs",
+    "*.ts",
+    "*.d.ts",
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "src/**/*.spec.ts",
+    "src/**/*.spec.tsx",
+    "src/**/*.d.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
 }
