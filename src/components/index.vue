@@ -62,7 +62,7 @@ import {
   isRecord,
   isString,
 } from '@tool-belt/type-predicates'
-import domToImageMore from 'dom-to-image-more'
+import domtoimage from 'dom-to-image-more'
 import type { GlobalConfigProvider } from 'tdesign-vue-next'
 import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
@@ -76,7 +76,7 @@ import type {
   WatermarkOption,
 } from '@/types'
 
-const { toBlob, toJpeg, toPng } = domToImageMore
+const { toBlob, toJpeg, toPng } = domtoimage
 
 defineOptions({ name: 'UmoEditor' })
 

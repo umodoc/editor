@@ -10,10 +10,10 @@
 </template>
 
 <script setup lang="ts">
-import domToImageMore from 'dom-to-image-more'
+import domtoimage from 'dom-to-image-more'
 import { saveAs } from 'file-saver'
 
-const { toBlob } = domToImageMore
+const { toBlob } = domtoimage
 
 const { container, options, page, exportImage } = useStore()
 
