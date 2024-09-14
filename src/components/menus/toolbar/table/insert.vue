@@ -12,11 +12,11 @@
       <div class="umo-table-grid" @mouseleave="resetTable">
         <div v-for="(row, rowIndex) in table" :key="rowIndex" class="row">
           <div
-            v-for="colIndex in row"
+            v-for="(cell, colIndex) in row"
             :key="colIndex"
             class="cell"
-            :class="{ selected: isSelected(rowIndex, Number(colIndex)) }"
-            @mouseover="selectCell(rowIndex, Number(colIndex))"
+            :class="{ selected: isSelected(rowIndex, colIndex) }"
+            @mouseover="selectCell(rowIndex, colIndex)"
             @click="insertTable"
           ></div>
         </div>
@@ -60,8 +60,8 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 const { popupVisible, togglePopup } = usePopup()
+const { t } = useI18n()
 const { editor } = useStore()
 
 const table = Array.from({ length: 8 }, () =>
