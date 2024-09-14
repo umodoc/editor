@@ -88,7 +88,14 @@ const onLoad = () => {
     maxWidth = containerRef.value?.$el.clientWidth ?? 0
     const ratio = clientWidth / clientHeight
     maxHeight = containerRef.value?.$el.clientWidth / ratio
-    updateAttributes({ width: 200 * ratio })
+    updateAttributes({
+      width: (200 * ratio).toFixed(2),
+    })
+    setTimeout(() => {
+      updateAttributes({
+        height: containerRef.value?.$el.clientHeight,
+      })
+    }, 200)
   }
 }
 const onResize = ({ width, height }: { width: number; height: number }) => {
