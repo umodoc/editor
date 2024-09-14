@@ -300,7 +300,7 @@ watch(
 )
 
 // i18n Setup
-const { locale } = useI18n()
+const { t, locale } = useI18n()
 const $locale = useState('locale')
 const { appContext } = getCurrentInstance() ?? {}
 if (appContext) {
@@ -548,7 +548,7 @@ const setContent = (
     .focus(options.focusPosition as FocusPosition, options.focusOptions)
     .run()
   setTimeout(() => {
-    editor.value?.commands.autoPaging(undefined)
+    editor.value?.commands.autoPaging()
   }, 200)
 }
 
