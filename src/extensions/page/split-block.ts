@@ -1,13 +1,9 @@
-import {
-  type EditorState,
-  NodeSelection,
-  TextSelection,
-} from '@tiptap/pm/state'
+import { EditorState, NodeSelection, TextSelection } from '@tiptap/pm/state'
 import { canSplit } from '@tiptap/pm/transform'
-import { defaultBlockAt, type RawCommands } from '@tiptap/vue-3'
+import type { RawCommands } from '@tiptap/vue-3'
+import { defaultBlockAt } from '@tiptap/vue-3'
 
-import { getId } from '@/extensions/page/utils'
-
+import { getId } from './core'
 import { getSplittedAttributes } from './index'
 
 function ensureMarks(state: EditorState, splittableMarks?: string[]) {

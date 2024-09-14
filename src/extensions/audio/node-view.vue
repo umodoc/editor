@@ -24,8 +24,7 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
-import { nodeViewProps } from '@tiptap/vue-3'
+import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import type { ReactiveVariable } from '@vue-macros/reactivity-transform/macros'
 
 import { mediaPlayer } from '@/utils/player'

@@ -29,7 +29,7 @@
 <script setup lang="ts">
 const { t } = useI18n()
 import { TextSelection } from '@tiptap/pm/state'
-import { nodeViewProps } from '@tiptap/vue-3'
+import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 
 const { node } = defineProps(nodeViewProps)
 

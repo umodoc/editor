@@ -83,7 +83,7 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
-import { nodeViewProps } from '@tiptap/vue-3'
+import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import { isRecord } from '@tool-belt/type-predicates'
 import { base64ToFile } from 'file64'
 
@@ -150,7 +150,7 @@ const onResizeStart = () => {
   editor.value?.commands.autoPaging(false)
 }
 const onResizeEnd = () => {
-  editor.value?.commands.autoPaging()
+  editor.value?.commands.autoPaging(true)
 }
 
 const onDrag = ({ left, top }: { left: string; top: string }) => {

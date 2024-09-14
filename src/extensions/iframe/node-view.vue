@@ -28,9 +28,8 @@
 </template>
 
 <script setup lang="ts">
+import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import type { ComponentPublicInstance } from 'vue'
-
-import { nodeViewProps } from '@tiptap/vue-3'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const { editor } = useStore()
@@ -68,7 +67,7 @@ const onResizeStart = () => {
   editor.value?.commands.autoPaging(false)
 }
 const onResizeEnd = () => {
-  editor.value?.commands.autoPaging()
+  editor.value?.commands.autoPaging(true)
 }
 onClickOutside(containerRef, () => {
   selected = false

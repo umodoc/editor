@@ -1,6 +1,6 @@
-import { type Editor, findParentNode, getNodeType } from '@tiptap/core'
-import { Fragment, type Node, type Schema, Slice } from '@tiptap/pm/model'
-import type { EditorState, Transaction } from '@tiptap/pm/state'
+import { Editor, findParentNode, getNodeType } from '@tiptap/core'
+import { Fragment, Node, Schema, Slice } from '@tiptap/pm/model'
+import { EditorState, Transaction } from '@tiptap/pm/state'
 import { ReplaceStep } from '@tiptap/pm/transform'
 
 import type {
@@ -10,9 +10,14 @@ import type {
   SplitInfo,
   SplitParams,
 } from '@/extensions/page/types'
-import { getId } from '@/extensions/page/utils'
 
-import { getAbsentHtmlH, getBreakPos, getDefault, getDomHeight } from './core'
+import {
+  getAbsentHtmlH,
+  getBreakPos,
+  getDefault,
+  getDomHeight,
+  getId,
+} from './core'
 import {
   BULLETLIST,
   CASSIE_BLOCK_EXTEND,
@@ -163,7 +168,7 @@ export const defaultNodesComputed: NodesComputed = {
   [PAGE]: (splitContex, node, pos, parent, dom, startIndex, forcePageId, i) => {
     return startIndex === i && parent?.type.name === 'doc'
   },
-  default: (splitContex, node, pos, parent, dom) => {
+  ['default']: (splitContex, node, pos, parent, dom) => {
     const { height: pHeight } = getDomHeight(dom)
     if (!splitContex.isOverflow(pHeight)) {
       splitContex.addHeight(pHeight)
@@ -190,7 +195,7 @@ export class SplitContext {
   #pageBoundary: SplitInfo | null = null //返回的切割点
   #height = 0 //分页的高度
   #paragraphDefaultHeight = 0 //p标签的默认高度
-  attributes: Record<string, unknown> = {}
+  attributes: Record<string, any> = {}
   schema: Schema
 
   /**
@@ -203,7 +208,6 @@ export class SplitContext {
 
   /**
    * 构造函数
-   * @param schema schema
    * @param doc 文档
    * @param height 分页高度
    * @param paragraphDefaultHeight p标签的默认高度
@@ -275,12 +279,10 @@ export class SplitContext {
    * @returns 解析结果
    */
   splitResolve(pos: number) {
-    // @ts-expect-error, requires fix
+    // @ts-ignore
     const array = this.#doc.resolve(pos).path
     const chunks = []
-    if (array.length <= 3) {
-      return array
-    }
+    if (array.length <= 3) return array
     const size = 3
     for (let i = 0; i < array.length; i += size) {
       chunks.push(array.slice(i, i + size))
@@ -331,21 +333,14 @@ export class PageComputedContext {
     const { selection, doc } = this.state
     const { inserting, deleting, runState, initSplit, splitPage } =
       this.pageState
-    if (!runState) {
-      return null
-    }
+    if (!runState) return null
     this.prepare()
-    if (splitPage) {
-      return this.forceSplit()
-    }
-    if (initSplit) {
-      return this.initComputed()
-    }
-    if (!inserting && deleting && selection.$head.node(1) === doc.lastChild) {
+    if (splitPage) return this.forceSplit()
+    if (initSplit) return this.initComputed()
+    if (!inserting && deleting && selection.$head.node(1) === doc.lastChild)
       return this.tr
-    }
     if (inserting || deleting) {
-      //const startTime = performance.now()
+      const startTime = performance.now()
       this.computed()
       this.checkNodeAndFix()
     }
@@ -356,7 +351,7 @@ export class PageComputedContext {
   prepare() {
     const { doc } = this.tr
     const { selection } = this.state
-    // @ts-expect-error, requires fix
+    // @ts-ignore
     this.startIndex = doc.content.findIndex(selection.head).index
   }
 
@@ -387,9 +382,7 @@ export class PageComputedContext {
     for (;;) {
       // 获取最后一个page计算高度，如果返回值存在的话证明需要分割
       const splitInfo = this.getNodeHeight()
-      if (!splitInfo) {
-        return
-      }
+      if (!splitInfo) return
       const type = getNodeType(PAGE, schema)
       this.lift({
         pos: splitInfo.pos,
@@ -409,7 +402,7 @@ export class PageComputedContext {
     const { tr } = this
     if (this.forcePageId) {
       while (true) {
-        // @ts-expect-error, requires fix
+        // @ts-ignore
         const nodeSize = tr.doc.content.content
           .slice(0, count)
           .map((item: Node) => item.nodeSize)
@@ -421,12 +414,12 @@ export class PageComputedContext {
         const currentPage = tr.doc.content.child(count - 1)
         const nextPage = tr.doc.content.child(count)
         if (
-          (nextPage.firstChild?.type === currentPage.lastChild?.type ||
-            nextPage.firstChild?.type.name.includes(EXTEND)) &&
-          nextPage.firstChild?.attrs.extend
+          (nextPage?.firstChild?.type === currentPage?.lastChild?.type ||
+            nextPage?.firstChild?.type.name.includes(EXTEND)) &&
+          nextPage?.firstChild?.attrs?.extend
         ) {
           depth = 2
-          this.restDomIds.push(currentPage.lastChild?.attrs.id)
+          this.restDomIds.push(currentPage?.lastChild?.attrs?.id)
         }
         tr.join(nodeSize, depth)
       }
@@ -446,12 +439,12 @@ export class PageComputedContext {
           //如果最后一页的第一个子标签和前一页的最后一个子标签类型一致 或者是扩展类型(是主类型的拆分类型) 进行合并的时候 深度为2
 
           if (
-            (lastPage?.firstChild?.type === prePage.lastChild?.type ||
+            (lastPage?.firstChild?.type === prePage?.lastChild?.type ||
               lastPage?.firstChild?.type.name.includes(EXTEND)) &&
-            lastPage?.firstChild?.attrs.extend
+            lastPage?.firstChild?.attrs?.extend
           ) {
             depth = 2
-            this.restDomIds.push(prePage.lastChild?.attrs.id)
+            this.restDomIds.push(prePage?.lastChild?.attrs?.id)
           }
         }
         tr.join(tr.doc.content.size - nodesize, depth)
@@ -513,7 +506,6 @@ export class PageComputedContext {
    * @param depth
    * @param typesAfter
    * @param schema
-   * @param force
    */
   lift({ pos, depth = 1, typesAfter, schema, force = false }: SplitParams) {
     const { tr } = this
@@ -529,15 +521,16 @@ export class PageComputedContext {
       before = Fragment.from($pos.node(d).copy(before))
       const typeAfter = typesAfter?.[i]
       const n = $pos.node(d)
-      let na: Node | null = $pos.node(d).copy(after)
+      let na = $pos.node(d).copy(after)
       //处理id重复的问题
-      if (na.attrs.id) {
+      if (na?.attrs.id) {
         let extend = {}
         if (na.attrs.extend === false) {
           extend = { extend: true }
         }
         //重新生成id
         const attr = Object.assign({}, n.attrs, { id: getId(), ...extend })
+        // @ts-ignore
         na = schema.nodes[n.type.name].createAndFill(attr, after)
       }
       after = Fragment.from(
@@ -545,7 +538,7 @@ export class PageComputedContext {
           ? typeAfter.type.create(
               {
                 id: getId(),
-                pageNumber: (na?.attrs.pageNumber ?? 0) + 1,
+                pageNumber: na?.attrs.pageNumber + 1,
                 force,
               },
               after,
@@ -567,24 +560,28 @@ export class PageComputedContext {
     const { doc } = tr
     const { schema } = this.state
     let beforeBolck: Node | null = null
-    doc.descendants((node, pos) => {
+    let beforePos = 0
+    doc.descendants((node, pos, parentNode, i) => {
       if (node.type === schema.nodes[PARAGRAPH] && node.attrs.extend === true) {
-        if (beforeBolck) {
+        if (beforeBolck === null) {
+          beforeBolck = node
+          beforePos = pos
+        } else {
           // console.log('beforeBolck: ' + beforeBolck)
           const mappedPos = tr.mapping.map(pos)
-          if (beforeBolck.type !== schema.nodes[PARAGRAPH]) {
+          if (beforeBolck.type === schema.nodes[PARAGRAPH]) {
+          } else {
             tr = tr.step(
               new ReplaceStep(mappedPos - 1, mappedPos + 1, Slice.empty),
             )
           }
           return false
         }
-        beforeBolck = node
       }
       //如果进入了新的扩展块 直接 清除 上次的 记录
       if (node.type === schema.nodes[CASSIE_BLOCK_EXTEND]) {
         beforeBolck = null
-
+        beforePos = 0
         return true
       }
     })
@@ -625,14 +622,15 @@ export class PageComputedContext {
         ) {
           dom = getAbsentHtmlH(node, this.state.schema)
         }
-        return (nodesComputed[node.type.name] || nodesComputed.default)(
+        return (nodesComputed[node.type.name] || nodesComputed['default'])(
           splitContex,
           node,
           pos,
           parentNode,
-          dom as HTMLElement,
+          // @ts-ignore
+          dom,
           startIndex,
-          forcePageId ?? '',
+          forcePageId,
           i,
         )
       }

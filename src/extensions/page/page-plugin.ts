@@ -1,20 +1,17 @@
-import { type Editor, findParentNode } from '@tiptap/core'
-import type { Node } from '@tiptap/pm/model'
-import {
-  type EditorState,
-  type NodeSelection,
-  Plugin,
-  PluginKey,
-} from '@tiptap/pm/state'
-import type { EditorView } from '@tiptap/pm/view'
+import { Editor, findParentNode } from '@tiptap/core'
+import { Node } from '@tiptap/pm/model'
+import { EditorState, Plugin, PluginKey } from '@tiptap/pm/state'
+import { EditorView } from '@tiptap/pm/view'
 
-import { type NodesComputed, PageState } from '@/extensions/page/types'
-import { findParentDomRefOfType, getId } from '@/extensions/page/utils'
+import type { NodesComputed } from '@/extensions/page/types'
+import { PageState } from '@/extensions/page/types'
 
 import { defaultNodesComputed, PageComputedContext } from './computed'
 import {
   buildComputedHtml,
+  findParentDomRefOfType,
   getDomHeight,
+  getId,
   getPageOption,
   removeAbsentHtmlH,
 } from './core'
@@ -39,9 +36,9 @@ function getTotalChildrenHeight(parentElement: Element) {
 }
 
 class PageDetector {
-  // eslint-disable-next-line no-unused-private-class-members
+  // eslint-disable-next-line
   #editor: Editor
-  readonly #pageClass: string
+  #pageClass: string
   #checkPoints = [IMAGE, IFRAME, CODE_BLOCK, TOC, VIDEO]
 
   constructor(editor: Editor, pageClass = '.umo-page-node-content') {
@@ -50,8 +47,8 @@ class PageDetector {
   }
 
   isOverflown(childrenHeight: number) {
-    const { bodyHeight } = getPageOption() ?? {}
-    return childrenHeight > (bodyHeight ?? 0)
+    const { bodyHeight } = getPageOption()
+    return childrenHeight > bodyHeight
   }
 
   checkCriticalPoint(node: Node) {
@@ -60,24 +57,21 @@ class PageDetector {
       childCount === 1 &&
       firstChild?.type.name === 'table' &&
       firstChild.childCount === 1
-    ) {
+    )
       return true
-    }
-    return !!(
+    if (
       firstChild &&
       childCount === 1 &&
       this.#checkPoints.includes(firstChild.type.name)
     )
+      return true
+    return false
   }
 
   update(view: EditorView, prevState: EditorState) {
-    if (composition) {
-      return
-    }
+    if (composition) return
     const { selection, schema, tr } = view.state
-    if (view.state.doc.eq(prevState.doc)) {
-      return
-    }
+    if (view.state.doc.eq(prevState.doc)) return
 
     const domAtPos = view.domAtPos.bind(view)
     const { scrollHeight } = paginationPluginKey.getState(prevState)
@@ -85,11 +79,9 @@ class PageDetector {
     const pageDOM = findParentDomRefOfType(
       schema.nodes[PAGE],
       domAtPos,
-    )(selection as NodeSelection)
+    )(selection)
 
-    if (!pageDOM) {
-      return
-    }
+    if (!pageDOM) return
     const pageBody = (pageDOM as HTMLElement).querySelector(this.#pageClass)
     if (pageBody) {
       const childrenHeight = getTotalChildrenHeight(pageBody)
@@ -101,14 +93,10 @@ class PageDetector {
       const inserting = this.isOverflown(childrenHeight)
       if (inserting) {
         const curPage = findParentNode((n) => n.type.name === PAGE)(selection)
-        if (curPage && this.checkCriticalPoint(curPage.node)) {
-          return
-        }
+        if (curPage && this.checkCriticalPoint(curPage.node)) return
       }
       if (inserting || deleting) {
-        if (inserting) {
-          tr.setMeta('inserting', inserting)
-        }
+        if (inserting) tr.setMeta('inserting', inserting)
         if (deleting) {
           tr.setMeta('deleting', true)
         }
@@ -121,7 +109,7 @@ class PageDetector {
 export const paginationPluginKey = new PluginKey('pagination')
 export const pagePlugin = (editor: Editor, nodesComputed: NodesComputed) => {
   buildComputedHtml()
-  return new Plugin({
+  const plugin = new Plugin({
     key: paginationPluginKey,
     view: () => {
       return new PageDetector(editor)
@@ -138,7 +126,7 @@ export const pagePlugin = (editor: Editor, nodesComputed: NodesComputed) => {
         return prevState.transform(tr)
       },
     },
-    appendTransaction(_, _prevState, state) {
+    appendTransaction([newTr], _prevState, state) {
       removeAbsentHtmlH()
       const page = new PageComputedContext(
         editor,
@@ -150,33 +138,36 @@ export const pagePlugin = (editor: Editor, nodesComputed: NodesComputed) => {
     },
     props: {
       handleDOMEvents: {
-        compositionstart() {
+        compositionstart(view, event) {
           composition = true
         },
 
-        compositionend() {
+        compositionend(view, event) {
           composition = false
         },
       },
-      transformPasted(slice) {
+      transformPasted(slice, view) {
         slice.content.descendants((node) => {
-          Reflect.set(node.attrs, 'id', getId())
+          // @ts-ignore
+          node.attrs.id = getId()
         })
         return slice
       },
     },
   })
+  return plugin
 }
 export const idPluginKey = new PluginKey('attrkey')
 export const idPlugin = (types: string[]) => {
-  return new Plugin({
+  const plugin = new Plugin({
     key: idPluginKey,
     state: {
       init: () => {
         return false
       },
-      apply: (tr) => {
-        return tr.getMeta('initSplit')
+      apply: (tr, prevState) => {
+        const data = tr.getMeta('initSplit')
+        return data
       },
     },
     appendTransaction(transactions, _prevState, nextState) {
@@ -195,4 +186,6 @@ export const idPlugin = (types: string[]) => {
       return modified ? tr : null
     },
   })
+
+  return plugin
 }

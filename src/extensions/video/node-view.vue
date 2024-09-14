@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { nodeViewProps } from '@tiptap/vue-3'
+import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 
 import { mediaPlayer } from '@/utils/player'
 
@@ -98,7 +98,7 @@ const onResizeStart = () => {
   editor.value?.commands.autoPaging(false)
 }
 const onResizeEnd = () => {
-  editor.value?.commands.autoPaging()
+  editor.value?.commands.autoPaging(true)
 }
 onBeforeUnmount(() => {
   if (player) {

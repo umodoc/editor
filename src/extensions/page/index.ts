@@ -1,9 +1,9 @@
+import type { SingleCommands } from '@tiptap/core'
 import {
   findChildrenInRange,
   findParentNode,
   mergeAttributes,
   Node,
-  type SingleCommands,
 } from '@tiptap/core'
 import { Slice } from '@tiptap/pm/model'
 import { Selection, TextSelection } from '@tiptap/pm/state'
@@ -53,7 +53,7 @@ declare module '@tiptap/core' {
       /**
        * Splits one list item into two list items.
        */
-      autoPaging: (status?: boolean) => ReturnType
+      autoPaging: (status: boolean | undefined) => ReturnType
     }
   }
 }
@@ -128,7 +128,7 @@ export default Node.create<PageOptions>({
     ]
   },
 
-  renderHTML({ HTMLAttributes }) {
+  renderHTML({ node, HTMLAttributes }) {
     return ['page', mergeAttributes(HTMLAttributes), 0]
   },
   addCommands() {
@@ -136,7 +136,7 @@ export default Node.create<PageOptions>({
       splitBlock,
       splitListItem,
       autoPaging: (status = true) => {
-        return ({ tr, dispatch }) => {
+        return ({ tr, state, dispatch, editor }) => {
           if (dispatch) {
             tr.setMeta('runState', status)
           }
@@ -144,7 +144,7 @@ export default Node.create<PageOptions>({
         }
       },
       setPageBreak: () => {
-        return ({ tr, dispatch }) => {
+        return ({ tr, state, dispatch, editor }) => {
           if (dispatch) {
             tr.setMeta('splitPage', true)
           }
@@ -197,9 +197,7 @@ export default Node.create<PageOptions>({
             const { selection, doc } = tr
             const { $anchor } = selection
             const { pos } = $anchor
-            if (doc.childCount === 1) {
-              return false
-            }
+            if (doc.childCount === 1) return false
             if (Selection.atEnd(doc).from === pos && !$anchor.parentOffset) {
               return commands.deleteNode(PAGE)
             }
@@ -252,7 +250,7 @@ export default Node.create<PageOptions>({
         () => deleteSelection(commands),
         () =>
           commands.command(({ tr }) => {
-            const { selection } = tr
+            const { selection, doc } = tr
             const { $anchor } = selection
             const currentNode = $anchor.node()
             const blockNode = findParentNode(
@@ -280,9 +278,7 @@ export default Node.create<PageOptions>({
             const { $anchor } = selection
             const { pos } = $anchor
             //如果当前只有一页的情况不做处理
-            if (doc.childCount === 1) {
-              return false
-            }
+            if (doc.childCount === 1) return false
             //如果是最后一页并且删除的点已经是 整个文档的 最后点位 证明最后一页啥都没了直接删除
             if (Selection.atEnd(doc).from === pos) {
               return commands.deleteNode(PAGE)
@@ -321,7 +317,7 @@ export default Node.create<PageOptions>({
           }),
       ])
     const handleTab = () =>
-      this.editor.commands.first(() => [
+      this.editor.commands.first(({ commands }) => [
         () => {
           return true
         },

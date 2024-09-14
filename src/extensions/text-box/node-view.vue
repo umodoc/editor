@@ -9,7 +9,7 @@
       <drager
         :selected="selected"
         :disabled="disabled"
-        :draggable="!options.document?.readOnly"
+        :draggable="!options?.document?.readOnly"
         :rotatable="true"
         :boundary="false"
         :angle="node.attrs.angle"
@@ -33,9 +33,10 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
-import { nodeViewProps } from '@tiptap/vue-3'
+import { NodeViewContent, nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
+import Drager from 'es-drager'
 
+const { t } = useI18n()
 const { node, updateAttributes } = defineProps(nodeViewProps)
 
 const { options } = useStore()
@@ -54,9 +55,7 @@ const onDrag = ({ left, top }: { left: number; top: number }) => {
   updateAttributes({ left, top })
 }
 
-onClickOutside(containerRef, () => {
-  selected = false
-})
+onClickOutside(containerRef, () => (selected = false))
 </script>
 
 <style lang="less">

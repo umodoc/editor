@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { nodeViewProps } from '@tiptap/vue-3'
+import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import prettyBytes from 'pretty-bytes'
 
 import { getFileIcon } from '@/utils/file'

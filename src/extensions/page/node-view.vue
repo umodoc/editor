@@ -78,8 +78,9 @@
   </node-view-wrapper>
 </template>
 <script setup lang="ts">
-import { nodeViewProps, NodeViewWrapper, NodeViewContent } from '@tiptap/vue-3'
+import { NodeViewContent, nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import type { WatermarkText } from 'tdesign-vue-next'
+
 import type { WatermarkOption } from '@/types'
 
 const { t } = useI18n()

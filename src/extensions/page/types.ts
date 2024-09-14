@@ -1,8 +1,9 @@
 import type { NodeViewRenderer } from '@tiptap/core'
-import type { Attrs, Node, NodeType, Schema } from '@tiptap/pm/model'
-import type { Transaction } from '@tiptap/pm/state'
+import type { Attrs } from '@tiptap/pm/model'
+import { Node, NodeType, Schema } from '@tiptap/pm/model'
+import { Transaction } from '@tiptap/pm/state'
 
-import type { SplitContext } from '@/extensions/page/computed'
+import { SplitContext } from '@/extensions/page/computed'
 import { getPageOption } from '@/extensions/page/core'
 
 export type ComputedFn = (
@@ -72,9 +73,7 @@ export class PageState {
     let inserting = tr.getMeta('inserting') || false
     let runState = tr.getMeta('runState')
     //如果运行状态从false到true时，需要重新计算
-    if (!this.runState && runState === true) {
-      inserting = true
-    }
+    if (!this.runState && runState === true) inserting = true
     runState = typeof runState === 'undefined' ? this.runState : runState
     const scrollHeight = tr.getMeta('scrollHeight') || this.scrollHeight
     return new PageState(

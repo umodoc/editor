@@ -23,8 +23,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Instance } from 'tippy.js'
 import { BubbleMenu } from '@tiptap/vue-3'
+import type { Instance } from 'tippy.js'
 
 const { options, editor, painter, blockMenu, assistantBox, commentBox } =
   useStore()
