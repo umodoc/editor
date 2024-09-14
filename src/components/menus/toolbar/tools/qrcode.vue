@@ -157,7 +157,7 @@ const renderQrcode = () => {
   try {
     svgCode = null
     config.height = config.width
-    const qrcode = new QRCode(config.content)
+    const qrcode = new QRCode(config)
     svgCode = qrcode.svg()
     renderError = false
   } catch {
