@@ -18,6 +18,7 @@
     "useDefineForClassFields": true,
     "verbatimModuleSyntax": true,
     "sourceMap": true,
+    "noErrorTruncation": true,
     "baseUrl": ".",
     "types": [
       "vue",
