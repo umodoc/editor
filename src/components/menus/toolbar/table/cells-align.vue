@@ -7,7 +7,7 @@
     huge
     :select-options="alignments"
     :disabled="!editor?.can().setCellAttribute('align', '')"
-    @change="setCellsAlign"
+    @click="setCellsAlign"
   />
 </template>
 
@@ -31,6 +31,9 @@ const alignments = [
 ]
 
 const setCellsAlign = ({ value }: { value: string }) => {
+  if (!value) {
+    return
+  }
   editor.value?.chain().focus().setCellAttribute('align', value).run()
 }
 </script>
