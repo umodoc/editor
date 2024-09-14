@@ -136,8 +136,8 @@ watch(
 
   &:not(.no-shadow) {
     box-shadow:
-      rgba(0, 0, 0, 0.06) 0px 0px 10px 0px,
-      rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
+      rgba(0, 0, 0, 0.06) 0 0 10px 0,
+      rgba(0, 0, 0, 0.04) 0 0 0 1px;
   }
 
   &:not(:first-child) {
