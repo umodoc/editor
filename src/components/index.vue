@@ -53,8 +53,6 @@
 </template>
 
 <script setup lang="ts">
-import '@/assets/styles/index.less'
-
 import type { FocusPosition } from '@tiptap/core'
 import {
   isBoolean,
@@ -68,6 +66,7 @@ import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
 
 import { getSelectionNode, getSelectionText } from '@/extensions/selection'
+import { i18n } from '@/i18n'
 import { propsOptions } from '@/options'
 import type {
   AutoSaveOptions,
@@ -814,6 +813,8 @@ defineExpose({
 </script>
 
 <style lang="less">
+@import '@/assets/styles/index.less';
+
 .umo-editor-container {
   --td-brand-color: var(--umo-primary-color);
   --td-warning-color: var(--umo-warning-color);

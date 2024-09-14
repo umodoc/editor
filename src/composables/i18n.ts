@@ -15,7 +15,5 @@ export const l = (data: string | Record<string, string>) => {
 }
 
 export const useI18n = () => {
-  return { t, l, locale: i18n.global.locale }
+  return i18n.global
 }
-
-export { i18n }

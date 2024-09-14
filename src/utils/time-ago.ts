@@ -1,6 +1,6 @@
 export function timeAgo(timestamp: string | number | Date) {
-  const { t } = useI18n()
   const messages = {
+    // @ts-ignore
     justNow: t('time.justNow'),
     past: (n: string | number | Date) =>
       n.toString().match(/\d/) ? t('time.past', { n }) : n,
@@ -9,8 +9,6 @@ export function timeAgo(timestamp: string | number | Date) {
     hour: (n: string | number | Date) => t('time.hour', { n }),
     minute: (n: string | number | Date) => t('time.minute', { n }),
     second: (n: string | number | Date) => t('time.second', { n }),
-    future: (n: string | number | Date) => t('time.future', { n }),
-    invalid: t('time.invalid'),
   } as const
   const time = useTimeAgo(new Date(timestamp), {
     messages: messages as any,
