@@ -347,7 +347,7 @@ const props = defineProps({
   // Dropdown,Select 相关
   selectOptions: {
     type: Array as PropType<DropdownOption[]>,
-    default: () => [],
+    default: undefined,
   },
   selectValue: {
     type: [String, Number],
@@ -360,7 +360,7 @@ const props = defineProps({
   },
   popupHandle: {
     type: String,
-    default: '',
+    default: undefined,
   },
   // 菜单激活状态
   menuActive: {
