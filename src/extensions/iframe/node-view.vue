@@ -29,6 +29,7 @@
 
 <script setup lang="ts">
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
+import Drager from 'es-drager'
 import type { ComponentPublicInstance } from 'vue'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)

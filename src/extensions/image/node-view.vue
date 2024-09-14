@@ -82,14 +82,15 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import { isRecord } from '@tool-belt/type-predicates'
+import Drager from 'es-drager'
 import { base64ToFile } from 'file64'
 
 import shortId from '@/utils/short-id'
 
-const { node, getPos, updateAttributes } = defineProps(nodeViewProps)
+const { t } = useI18n()
+const { node, updateAttributes } = defineProps(nodeViewProps)
 const { options, editor } = useStore()
 const { imagePreview } = useStore()
 const { isLoading, error } = useImage({ src: node.attrs.src })
