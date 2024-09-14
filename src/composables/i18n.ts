@@ -2,7 +2,6 @@ import { isRecord } from '@tool-belt/type-predicates'
 
 import { i18n } from '../i18n'
 
-//@ts-ignore
 export const { t } = i18n.global
 
 export const l = (data: string | Record<string, string>) => {
