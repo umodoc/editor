@@ -47,6 +47,8 @@
 </template>
 
 <script setup lang="ts">
+import signature from 'vue-esign'
+
 const { t } = useI18n()
 const { editor } = useStore()
 let dialogVisible = $ref(false)
@@ -84,10 +86,10 @@ const setSignature = async () => {
       ?.chain()
       .focus()
       .setImage({
-        // @ts-ignore
         type: 'signature',
         src: image ?? '',
-        width: 80,
+        width: 100,
+        height: 'auto',
         draggable: true,
       })
       .run()

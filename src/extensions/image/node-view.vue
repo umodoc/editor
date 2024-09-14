@@ -108,9 +108,10 @@ const nodeStyle = $computed(() => {
   const marginBottom =
     margin?.bottom && margin?.bottom !== '' ? `${margin.bottom}px` : undefined
   return {
-    'justify-content': nodeAlign,
+    justifyContent: nodeAlign,
     marginTop,
     marginBottom,
+    zIndex: node.attrs.draggable ? 10 : 0,
   }
 })
 
