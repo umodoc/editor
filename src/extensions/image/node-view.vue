@@ -133,17 +133,17 @@ const onLoad = () => {
     maxWidth = containerRef.value?.$el.clientWidth
     const ratio = clientWidth / clientHeight
     maxHeight = containerRef.value?.$el.clientWidth / ratio
-    updateAttributes({ width: 200 * ratio })
+    updateAttributes({ width: (200 * ratio).toFixed(2) })
   }
 }
 
 const onRotate = ({ angle }: { angle: number }) => {
   updateAttributes({ angle })
 }
-const onResize = ({ width, height }: { width: string; height: string }) => {
+const onResize = ({ width, height }: { width: number; height: number }) => {
   updateAttributes({
-    width: Number.parseInt(width),
-    height: Number.parseInt(height),
+    width: width.toFixed(2),
+    height: height.toFixed(2),
   })
 }
 const onResizeStart = () => {
@@ -153,7 +153,7 @@ const onResizeEnd = () => {
   editor.value?.commands.autoPaging(true)
 }
 
-const onDrag = ({ left, top }: { left: string; top: string }) => {
+const onDrag = ({ left, top }: { left: number; top: number }) => {
   updateAttributes({ left, top })
 }
 
