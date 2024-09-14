@@ -3,6 +3,7 @@
     :id="node.attrs.id"
     ref="containerRef"
     class="umo-node-view"
+    :style="{ zIndex: 90 }"
     @dblclick.capture="disabled = true"
   >
     <div class="umo-node-container umo-node-text-box">
@@ -61,10 +62,10 @@ onClickOutside(containerRef, () => (selected = false))
 .umo-node-view {
   .umo-node-text-box {
     position: relative;
-    z-index: 90;
     .es-drager {
       user-select: text !important;
       cursor: default !important;
+      z-index: 90 !important;
       &.disabled {
         outline: none;
         &:after {

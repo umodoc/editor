@@ -13,6 +13,7 @@ export default Node.create({
   name: 'textBox',
   group: 'block',
   content: 'inline*',
+  draggable: false,
   addAttributes() {
     return {
       vnode: {
