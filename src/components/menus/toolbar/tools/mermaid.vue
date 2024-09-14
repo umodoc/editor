@@ -37,7 +37,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 import mermaid from 'mermaid'
 import svg64 from 'svg64'
 
@@ -82,7 +81,7 @@ const renderMermaid = async () => {
 }
 watch(
   () => dialogVisible,
-  (val) => {
+  (val: boolean) => {
     if (val) {
       mermaidCode = props.content ?? defaultCode
     }

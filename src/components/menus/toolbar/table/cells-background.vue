@@ -16,7 +16,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 const emits = defineEmits(['change'])
 
 const { popupVisible, togglePopup } = usePopup()

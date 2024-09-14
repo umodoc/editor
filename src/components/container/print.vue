@@ -27,8 +27,9 @@ const getContentHtml = () => {
 
 const defaultLineHeight = $computed(() => {
   return (
-    options.value.dicts?.lineHeights.find((item) => item.default)?.value ??
-    '1.5'
+    options.value.dicts?.lineHeights.find(
+      (item: { default: any }) => item.default,
+    )?.value ?? '1.5'
   )
 })
 
@@ -91,7 +92,7 @@ const printPage = () => {
 
 watch(
   () => [printing.value, exportPDF.value],
-  (value) => {
+  (value: any[]) => {
     if (value[0] || value[1]) {
       printPage()
     }

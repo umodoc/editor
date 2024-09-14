@@ -51,7 +51,7 @@ const nodeStyle = $computed(() => {
 })
 
 onMounted(async () => {
-  player = mediaPlayer(audiorRef!)
+  player = mediaPlayer(audiorRef)
   if (node.attrs.uploaded === false && node.attrs.file) {
     try {
       const { url } =

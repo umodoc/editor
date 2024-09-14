@@ -76,9 +76,16 @@ export const useStore = createGlobalState(() => {
 
   watch(
     () => options.value.page,
-    ({ defaultBackground, defaultMargin, defaultOrientation, watermark }) => {
+    ({
+      defaultBackground,
+      defaultMargin,
+      defaultOrientation,
+      watermark,
+    }: PageOption) => {
       page.value = {
-        size: options.value.dicts?.pageSizes.find((item) => item.default),
+        size: options.value.dicts?.pageSizes.find(
+          (item: { default: boolean }) => item.default,
+        ),
         margin: defaultMargin,
         background: defaultBackground,
         orientation: defaultOrientation,
@@ -124,7 +131,7 @@ export const useStore = createGlobalState(() => {
 
   watch(
     () => options.value.document?.readOnly,
-    (val) => {
+    (val: boolean) => {
       editor.value?.setEditable(!val)
       toolbarKey.value = shortId()
     },

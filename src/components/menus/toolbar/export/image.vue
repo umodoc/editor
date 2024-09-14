@@ -10,7 +10,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 import domToImageMore from 'dom-to-image-more'
 import { saveAs } from 'file-saver'
 
@@ -38,7 +37,9 @@ const saveImage = async ({
   try {
     page.value.zoomLevel = 100
     await nextTick()
-    const node = document.querySelector(`${container} .umo-page-content`)
+    const node = document.querySelector(
+      `${container} .umo-page-content`,
+    ) as HTMLElement
     const blob = await toBlob(node, { scale: devicePixelRatio })
     const { title } = options.value.document ?? {}
     const filename =

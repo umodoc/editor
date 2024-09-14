@@ -24,7 +24,7 @@
         :attach="container"
         trigger="click"
         placement="right-bottom"
-        @visible-change="(visible) => (moreColorPicker = visible)"
+        @visible-change="(visible: boolean) => (moreColorPicker = visible)"
       >
         <div class="umo-background-more" :class="{ active: moreColorPicker }">
           <div class="umo-background-more-menu">
@@ -50,7 +50,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 const { popupVisible, togglePopup } = usePopup()
 const { container, page } = useStore()
 

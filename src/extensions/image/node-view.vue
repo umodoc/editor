@@ -89,13 +89,12 @@ import { base64ToFile } from 'file64'
 
 import shortId from '@/utils/short-id'
 
-const { t } = useI18n()
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const { options, editor } = useStore()
 const { imagePreview } = useStore()
 const { isLoading, error } = useImage({ src: node.attrs.src })
 
-const containerRef = ref<ComponentPublicInstance | null>(null)
+const containerRef = ref(null)
 const imageRef = $ref<HTMLImageElement | null>(null)
 let selected = $ref(false)
 let maxWidth = $ref(0)
@@ -174,7 +173,7 @@ watch(
 )
 watch(
   () => node.attrs.src,
-  async (src) => {
+  async (src: string) => {
     if (node.attrs.uploaded === false && !error.value) {
       if (src?.startsWith('data:image')) {
         const [imageType] = src.split(';')[0].split(':')
@@ -199,7 +198,7 @@ watch(
 )
 watch(
   () => error.value,
-  (errorValue) => {
+  (errorValue: any) => {
     if (errorValue && isRecord(errorValue) && 'type' in errorValue) {
       updateAttributes({ error: errorValue.type === 'error' })
     } else {

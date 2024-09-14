@@ -12,7 +12,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 import { languages } from 'prism-code-editor/prism'
 
 import { getSelectionNode } from '@/extensions/selection'

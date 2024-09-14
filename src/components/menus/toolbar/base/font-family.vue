@@ -39,7 +39,6 @@
 <script setup lang="ts">
 import { isString } from '@tool-belt/type-predicates'
 
-const { t, l } = useI18n()
 const { options, editor } = useStore()
 const $toolbar = useState('toolbar')
 const $recent = useState('recent')
@@ -100,7 +99,9 @@ const allFonts = computed(() => {
   const getFontsByValues = (values: string[]) => {
     return values.map(
       (item) =>
-        options.value.dicts?.fonts.find(({ value }) => value === item) ?? {
+        options.value.dicts?.fonts.find(
+          ({ value }: { value: string }) => value === item,
+        ) ?? {
           label: item,
           item,
         },
@@ -153,7 +154,7 @@ const setFontFamily = (fontFamily: string) => {
 
 watch(
   () => editor.value,
-  (val) => {
+  (val: any) => {
     if (val) {
       getUsedFonts()
     }

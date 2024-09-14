@@ -41,7 +41,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 import { getSelectionText } from '@/extensions/selection'
 
 const { editor } = useStore()
@@ -73,7 +72,7 @@ const insertLink = () => {
 }
 watch(
   () => dialogVisible,
-  (val) => {
+  (val: boolean) => {
     if (val) {
       text = editor.value ? getSelectionText(editor.value) : ''
       href = editor?.value?.getAttributes('link').href ?? ''

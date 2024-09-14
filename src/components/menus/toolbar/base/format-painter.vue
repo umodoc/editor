@@ -12,7 +12,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 const { editor, painter } = useStore()
 
 const setFormatPainter = (once: boolean) => {

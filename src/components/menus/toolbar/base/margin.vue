@@ -45,7 +45,6 @@
 
 <script setup lang="ts">
 import { getSelectionNode } from '@/extensions/selection'
-const { t } = useI18n()
 
 const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
@@ -84,7 +83,7 @@ const setMargin = () => {
 
 watch(
   () => popupVisible.value,
-  (visible) => {
+  (visible: boolean) => {
     setMarginValue()
     if (!visible && editor.value) {
       editor.value.commands.focus()

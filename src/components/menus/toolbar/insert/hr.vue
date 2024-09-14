@@ -53,7 +53,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 const { popupVisible, togglePopup } = usePopup()
 const { container, editor } = useStore()
 

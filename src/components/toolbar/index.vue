@@ -38,7 +38,7 @@
         :attach="container"
         trigger="click"
         placement="bottom-right"
-        @visible-change="(visible) => (statusPopup = visible)"
+        @visible-change="(visible: boolean) => (statusPopup = visible)"
       >
         <t-button
           class="umo-toolbar-actions-button"
@@ -137,7 +137,6 @@
 import type { DropdownOption } from 'tdesign-vue-next'
 
 import { timeAgo } from '@/utils/time-ago'
-const { t } = useI18n()
 const emits = defineEmits(['menu-change'])
 const { container, options, editor, savedAt } = useStore()
 const $toolbar = useState('toolbar')
@@ -156,7 +155,7 @@ const defaultToolbarMenus = [
 let toolbarMenus = defaultToolbarMenus
 if (options.value.toolbar?.menus) {
   toolbarMenus = options.value.toolbar?.menus.map(
-    (item) => defaultToolbarMenus.filter((menu) => menu.value === item)[0],
+    (item: any) => defaultToolbarMenus.filter((menu) => menu.value === item)[0],
   )
 }
 let currentMenu = $ref(toolbarMenus[0].value)
@@ -167,7 +166,7 @@ const menuChange = (menu: string) => {
 // 监听如果当前编辑元素为table则切换到table菜单
 watch(
   () => editor.value?.isActive('table'),
-  (val, oldVal) => {
+  (val: boolean, oldVal: boolean) => {
     if (val) {
       currentMenu = 'table'
     } else if (!val && oldVal) {

@@ -37,7 +37,6 @@ import Image from '@/extensions/image'
 import Page from '@/extensions/page'
 import { pagePlugin } from '@/extensions/page/page-plugin'
 
-const { l } = useI18n()
 const { options, editor, page, painter, setEditor, editorDestroyed } =
   useStore()
 
@@ -52,7 +51,8 @@ if (
 }
 
 const defaultLineHeight = $computed(() => {
-  return options.value.dicts?.lineHeights?.find((item) => item.default)?.value
+  return options.value.dicts?.lineHeights?.find((item: any) => item.default)
+    ?.value
 })
 
 let isReady = $ref(false)

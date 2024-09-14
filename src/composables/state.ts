@@ -1,6 +1,5 @@
 import type { RemovableRef } from '@vueuse/core'
 
-import { i18n } from '@/i18n'
 import type { DocumentOptions, SupportedLocale } from '@/types'
 
 export type StateKey = 'toolbar' | 'document' | 'recent' | 'print' | 'locale'
@@ -34,28 +33,31 @@ export function useState<T extends StateKey>(
   const storageKey = `umo-editor:${editorKey ?? options.value.editorKey}:${key}`
 
   if (key === 'document') {
-    return useStorage(
+    return useStorage<StateValue<T>>(
       storageKey,
       (options.value.document ?? {}) as StateValue<T>,
     )
   }
   if (key === 'locale') {
-    return useStorage(storageKey, i18n.global.locale.value as StateValue<T>)
+    return useStorage<StateValue<T>>(
+      storageKey,
+      options.value.locale as StateValue<T>,
+    )
   }
   if (key === 'recent') {
-    return useStorage(storageKey, {
+    return useStorage<StateValue<T>>(storageKey, {
       fonts: [] as string[],
       colors: [] as string[],
     } as StateValue<T>)
   }
   if (key === 'print') {
-    return useStorage(storageKey, {
+    return useStorage<StateValue<T>>(storageKey, {
       singleColumn: true,
       showPageNumber: true,
     } as StateValue<T>)
   }
   if (key === 'toolbar') {
-    return useStorage(storageKey, {
+    return useStorage<StateValue<T>>(storageKey, {
       mode: options.value.toolbar?.defaultMode ?? 'classic',
       show: true,
     } as StateValue<T>)

@@ -52,7 +52,7 @@
       :attach="container"
       trigger="click"
       placement="right-bottom"
-      @visible-change="(visible) => (moreColorPicker = visible)"
+      @visible-change="(visible: boolean) => (moreColorPicker = visible)"
     >
       <div class="umo-color-picker-more" :class="{ active: moreColorPicker }">
         <div class="umo-color-picker-more-menu">
@@ -78,7 +78,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 const props = defineProps({
   defaultColor: {
     type: String,
@@ -113,7 +112,7 @@ const colorChange = (color: string, ctx?: { trigger: string }) => {
 }
 watch(
   () => moreColorPicker,
-  (visible) => {
+  (visible: boolean) => {
     if (visible) {
       editor.value?.commands.focus(undefined, { scrollIntoView: false })
     }

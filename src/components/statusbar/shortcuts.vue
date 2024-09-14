@@ -34,7 +34,6 @@
 <script setup lang="ts">
 import { getShortcut } from '@/utils/shortcut'
 
-const { t } = useI18n()
 const $document = useState('document')
 
 const shortcuts = $ref<

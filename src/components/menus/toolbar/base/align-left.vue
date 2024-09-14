@@ -17,7 +17,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 const { editor } = useStore()
 const setAlignLeft = () => {
   if (editor.value?.can().chain().focus().setTextAlign('left').run()) {

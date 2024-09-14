@@ -235,7 +235,6 @@
 <script setup lang="ts">
 import type { InputNumberValue } from 'tdesign-vue-next'
 
-const { t, l } = useI18n()
 const props = defineProps({
   visible: {
     type: Boolean,
@@ -246,7 +245,7 @@ const emits = defineEmits(['close'])
 
 const { container, options, page } = useStore()
 
-let pageOptions = $ref(JSON.parse(JSON.stringify(page.value)))
+const pageOptions = $ref(JSON.parse(JSON.stringify(page.value)))
 
 // 页面大小
 const selectPageSize = (value: number) => {

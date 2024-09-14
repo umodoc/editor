@@ -25,7 +25,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 import nzh from 'nzh/cn'
 
 import { getSelectionText } from '@/extensions/selection'

@@ -10,7 +10,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 import { getSelectionNode } from '@/extensions/selection'
 
 const { editor } = useStore()

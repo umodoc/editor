@@ -10,11 +10,10 @@
 </template>
 
 <script setup lang="ts">
-const { t, l } = useI18n()
 const { options, editor } = useStore()
 
 const lineHeights = computed(() => {
-  return options.value.dicts?.lineHeights.map((item) => {
+  return options.value.dicts?.lineHeights.map((item: any) => {
     return {
       content: item.default
         ? l(item.label) + t('base.lineHeight.default')

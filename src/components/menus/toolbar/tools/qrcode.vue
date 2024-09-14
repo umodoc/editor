@@ -65,13 +65,13 @@
             :text="t('tools.qrcode.color')"
             :default-color="config.color"
             modeless
-            @change="(value) => (config.color = value)"
+            @change="(value: any) => (config.color = value)"
           />
           <menus-toolbar-base-background-color
             :text="t('tools.qrcode.bgColor')"
             :default-color="config.background"
             modeless
-            @change="(value) => (config.background = value)"
+            @change="(value: any) => (config.background = value)"
           />
         </div>
         <div class="umo-qrcode-code">
@@ -110,7 +110,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 import QRCode from 'qrcode-svg'
 import svg64 from 'svg64'
 
@@ -168,7 +167,7 @@ const renderQrcode = () => {
 }
 watch(
   () => dialogVisible,
-  (val) => {
+  (val: boolean) => {
     if (val) {
       config = content ? JSON.parse(content) : { ...defaultConfig }
       setTimeout(() => {

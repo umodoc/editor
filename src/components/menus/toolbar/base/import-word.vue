@@ -9,7 +9,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 const { editor, options } = useStore()
 
 // 动态导入 mammoth.js

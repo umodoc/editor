@@ -44,7 +44,7 @@ function createAutoImportedGlobals() {
 export default [
   eslintJS.configs.recommended,
   {
-    ignores: ['./dist/**/*.*', './node_modules/**/*,*', './*.d.ts'],
+    ignores: ['./dist/**', './node_modules/**', './*.d.ts'],
     languageOptions: {
       globals: {
         ...globals.browser,

@@ -3,8 +3,6 @@ import '@/assets/styles/plyr.less'
 
 import Plyr from 'plyr'
 
-import { i18n } from '@/i18n'
-
 const locales = {
   'zh-CN': {
     restart: '重新播放',
@@ -80,8 +78,9 @@ const locales = {
 }
 
 export const mediaPlayer = (container: HTMLElement) => {
+  const { locale } = useI18n()
   return new Plyr(container, {
-    i18n: locales[i18n.global.locale.value],
+    i18n: locales[locale.value as keyof typeof locales],
     settings: [],
     tooltips: { controls: true },
     storage: { key: 'umo-editor:player' },

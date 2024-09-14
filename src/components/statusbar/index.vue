@@ -288,13 +288,13 @@
 </template>
 
 <script setup lang="ts">
-import type { MaybeElementRef, UseFullscreenReturn } from '@vueuse/core'
+import type { UseFullscreenReturn } from '@vueuse/core'
 import type { DropdownOption } from 'tdesign-vue-next'
 
 import type { SupportedLocale } from '@/types'
 import { getShortcut } from '@/utils/shortcut'
 
-const { t, locale } = useI18n()
+const { locale } = useI18n()
 
 const { container, options, page, editor } = useStore()
 const $document = useState('document')
@@ -331,9 +331,7 @@ const selectionCharacters = computed(() => {
 // 页面全屏
 let fullscreen: UseFullscreenReturn
 onMounted(() => {
-  fullscreen = useFullscreen(
-    document.querySelector(container) as MaybeElementRef,
-  )
+  fullscreen = useFullscreen(document.querySelector(container))
   useHotkeys('f11, command+f11', fullscreen.toggle)
 })
 
@@ -355,7 +353,7 @@ onMounted(() => {
 })
 watch(
   () => page.value.preview?.enabled,
-  (value) => {
+  (value: boolean) => {
     if (value) {
       void fullscreen.enter()
       autoWidth(false, 10)
@@ -367,7 +365,7 @@ watch(
 )
 watch(
   () => fullscreen?.isFullscreen?.value,
-  (value) => {
+  (value: boolean) => {
     if (!value) {
       page.value.preview ??= {}
       page.value.preview.enabled = false

@@ -37,7 +37,6 @@ import { TextSelection } from '@tiptap/pm/state'
 
 import type { TableOfContentItem } from '@/composables/store'
 
-const { t } = useI18n()
 const { container, editor, tableOfContents } = useStore()
 
 defineEmits(['close'])
@@ -47,7 +46,7 @@ const headingClick = (heading: TableOfContentItem) => {
     return
   }
   const activeHeading = tableOfContents.value.find(
-    (item) => 'isActive' in item && item.isActive,
+    (item: any) => 'isActive' in item && item.isActive,
   )
   if (activeHeading && 'isActive' in activeHeading) {
     activeHeading.isActive = false

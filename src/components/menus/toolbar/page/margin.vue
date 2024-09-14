@@ -10,6 +10,5 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 const dialogVisible = $ref(false)
 </script>

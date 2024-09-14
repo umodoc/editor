@@ -123,7 +123,6 @@
 
 <script setup lang="ts">
 import { isString } from '@tool-belt/type-predicates'
-import { ref } from 'vue'
 
 import { getSelectionText } from '@/extensions/selection'
 import type {
@@ -132,9 +131,6 @@ import type {
   AssistantResult,
   CommandItem,
 } from '@/types'
-
-const i18n = useI18n()
-const { t, l } = i18n
 
 const { options, editor, assistantBox } = useStore()
 
@@ -153,8 +149,10 @@ const send = async () => {
   result.value.prompt = ''
   result.value.content = ''
 
+  const { locale } = useI18n()
+
   const payload: AssistantPayload = {
-    lang: i18n.locale.value,
+    lang: locale.value,
     input: editor.value ? getSelectionText(editor.value) : '',
     command: command.value,
     output: 'rich-text',

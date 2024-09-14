@@ -46,7 +46,6 @@ import prettyBytes from 'pretty-bytes'
 
 import { getFileIcon } from '@/utils/file'
 
-const { t } = useI18n()
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const { options } = useStore()
 const containerRef = ref(null)

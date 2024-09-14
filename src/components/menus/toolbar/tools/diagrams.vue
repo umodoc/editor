@@ -24,7 +24,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 import DiagramEditor from '@/utils/diagram-editor'
 
 const props = defineProps({
@@ -91,7 +90,7 @@ const messageListener = (evt: MessageEvent) => {
 
 watch(
   () => dialogVisible,
-  (val) => {
+  (val: boolean) => {
     if (!val) {
       window.removeEventListener('message', messageListener)
       diagramEditor.stopEditing()

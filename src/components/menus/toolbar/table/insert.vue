@@ -61,7 +61,6 @@
 
 <script setup lang="ts">
 const { popupVisible, togglePopup } = usePopup()
-const { t } = useI18n()
 const { editor } = useStore()
 
 const table = Array.from({ length: 8 }, () =>

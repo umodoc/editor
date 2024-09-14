@@ -48,7 +48,7 @@ import { mediaPlayer } from '@/utils/player'
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const { options, editor } = useStore()
 
-const containerRef = ref<ComponentPublicInstance | null>(null)
+const containerRef = ref(null)
 let selected = $ref(false)
 const videoRef = $ref<HTMLVideoElement | null>(null)
 let player = $ref<Plyr | null>(null)
@@ -70,7 +70,7 @@ const nodeStyle = $computed(() => {
 
 onMounted(async () => {
   await nextTick()
-  player = mediaPlayer(videoRef!)
+  player = mediaPlayer(videoRef)
   if (node.attrs.uploaded === false && node.attrs.file) {
     try {
       const { url } =

@@ -28,7 +28,6 @@
 </template>
 
 <script setup lang="ts">
-const { t, l } = useI18n()
 const { popupVisible, togglePopup } = usePopup()
 const { options, editor } = useStore()
 

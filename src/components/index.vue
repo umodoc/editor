@@ -1,9 +1,7 @@
 <template>
   <t-config-provider
     :global-config="{
-      ...(localeConfig[
-        locale.value as SupportedLocale
-      ] as unknown as GlobalConfigProvider),
+      ...localeConfig[locale],
       classPrefix: 'umo',
     }"
   >
@@ -22,7 +20,7 @@
       <header class="umo-toolbar">
         <toolbar
           :key="toolbarKey"
-          @menu-change="(event) => emits('menuChange', event)"
+          @menu-change="(event: any) => emits('menuChange', event)"
         >
           <template
             v-for="item in options.toolbar?.menus"
@@ -148,7 +146,7 @@ watch(
 
 watch(
   () => options.value.theme,
-  (theme) => {
+  (theme: 'light' | 'dark' | 'auto') => {
     setTheme(theme)
   },
 )
@@ -165,7 +163,7 @@ const clearAutoSaveInterval = () => {
 }
 watch(
   () => contentUpdated,
-  (val) => {
+  (val: boolean) => {
     const { autoSave } = options.value.document ?? {}
     if (!autoSave?.enabled) {
       return
@@ -195,29 +193,29 @@ watch(
     if (!editor.value) {
       return
     }
-    editor.value.on('create', ({ editor }) => {
+    editor.value.on('create', ({ editor }: any) => {
       emits('created', { editor })
     })
-    editor.value.on('update', ({ editor }) => {
+    editor.value.on('update', ({ editor }: any) => {
       emits('changed', { editor })
       contentUpdated = true
     })
-    editor.value.on('selectionUpdate', ({ editor }) => {
+    editor.value.on('selectionUpdate', ({ editor }: any) => {
       emits('changed:selection', { editor })
     })
-    editor.value.on('transaction', ({ editor, transaction }) => {
+    editor.value.on('transaction', ({ editor, transaction }: any) => {
       emits('changed:transaction', { editor, transaction })
     })
-    editor.value.on('focus', ({ editor, event }) => {
+    editor.value.on('focus', ({ editor, event }: any) => {
       emits('focus', { editor, event })
     })
     editor.value.on(
       'contentError',
-      ({ editor, error, disableCollaboration }) => {
+      ({ editor, error, disableCollaboration }: any) => {
         emits('contentError', { editor, error, disableCollaboration })
       },
     )
-    editor.value.on('blur', ({ editor, event }) => {
+    editor.value.on('blur', ({ editor, event }: any) => {
       emits('blur', { editor, event })
     })
     editor.value.on('destroy', () => {
@@ -229,7 +227,7 @@ watch(
 
 watch(
   () => $toolbar.value,
-  (toolbar, oldToolbar) => {
+  (toolbar: any, oldToolbar: any) => {
     emits('changed:toolbar', { toolbar, oldToolbar })
   },
   { deep: true },
@@ -237,7 +235,7 @@ watch(
 
 watch(
   () => page.value.size,
-  (pageSize, oldPageSize) => {
+  (pageSize: any, oldPageSize: any) => {
     emits('changed:pageSize', { pageSize, oldPageSize })
   },
   { deep: true },
@@ -245,7 +243,7 @@ watch(
 
 watch(
   () => page.value.margin,
-  (pageMargin, oldPageMargin) => {
+  (pageMargin: any, oldPageMargin: any) => {
     emits('changed:pageMargin', { pageMargin, oldPageMargin })
   },
   { deep: true },
@@ -253,42 +251,42 @@ watch(
 
 watch(
   () => page.value.background,
-  (pageBackground, oldPageBackground) => {
+  (pageBackground: string, oldPageBackground: string) => {
     emits('changed:pageBackground', { pageBackground, oldPageBackground })
   },
 )
 
 watch(
   () => page.value.orientation,
-  (pageOrientation, oldPageOrientation) => {
+  (pageOrientation: string, oldPageOrientation: string) => {
     emits('changed:pageOrientation', { pageOrientation, oldPageOrientation })
   },
 )
 
 watch(
   () => page.value.showToc,
-  (showToc) => {
+  (showToc: boolean) => {
     emits('changed:pageShowToc', showToc)
   },
 )
 
 watch(
   () => page.value.zoomLevel,
-  (zoomLevel, oldZoomLevel) => {
+  (zoomLevel: number, oldZoomLevel: number) => {
     emits('changed:pageZoom', { zoomLevel, oldZoomLevel })
   },
 )
 
 watch(
   () => page.value.preview?.enabled,
-  (previewEnabled) => {
+  (previewEnabled: boolean) => {
     emits('changed:pagePreview', previewEnabled)
   },
 )
 
 watch(
   () => page.value.watermark,
-  (pageWatermark, oldPageWatermark) => {
+  (pageWatermark: any, oldPageWatermark: any) => {
     emits('changed:pageWatermark', { pageWatermark, oldPageWatermark })
   },
   { deep: true },
@@ -305,18 +303,23 @@ watch(
 // i18n Setup
 const { locale } = useI18n()
 const $locale = useState('locale')
+const { appContext } = getCurrentInstance() ?? {}
+if (appContext) {
+  appContext.config.globalProperties.t = t
+  appContext.config.globalProperties.l = l
+}
 locale.value = $locale.value
 watch(
   () => locale.value,
-  (locale, oldLocale) => {
+  (locale: any, oldLocale: any) => {
     emits('changed:locale', { locale, oldLocale })
   },
 )
 
 // Global Locale Config
-const localeConfig = $ref({
-  'zh-CN': cnConfig,
-  'en-US': enConfig,
+const localeConfig = $ref<Record<string, GlobalConfigProvider>>({
+  'zh-CN': cnConfig as unknown as GlobalConfigProvider,
+  'en-US': enConfig as unknown as GlobalConfigProvider,
 })
 
 // Page Header/Footer Visibility
@@ -382,11 +385,11 @@ const setPage = (params: {
       throw new Error('"params.size" must be a string.')
     }
     const size = options.value.dicts?.pageSizes.find(
-      (item) => item.label === params.size,
+      (item: any) => item.label === params.size,
     )
     if (!size) {
       throw new Error(
-        `"params.size" must be one of ${options.value.dicts?.pageSizes.map((item) => item.label)}.`,
+        `"params.size" must be one of ${options.value.dicts?.pageSizes.map((item: any) => item.label)}.`,
       )
     }
     page.value.size = size
@@ -608,7 +611,9 @@ const getImage = async (format: 'blob' | 'jpeg' | 'png' = 'blob') => {
   const { zoomLevel } = page.value
   try {
     page.value.zoomLevel = 100
-    const node = document.querySelector(`${container} .umo-page-content`)
+    const node = document.querySelector(
+      `${container} .umo-page-content`,
+    ) as HTMLElement
     if (format === 'blob') {
       return await toBlob(node)
     }
@@ -735,7 +740,7 @@ const getContentExcerpt = (charLimit = 100, more = ' ...') => {
 // Toolbar Mode Reset
 watch(
   () => $toolbar.value.mode,
-  (val) => {
+  (val: any) => {
     editorDestroyed.value = val === 'source'
   },
 )
@@ -843,3 +848,4 @@ defineExpose({
   }
 }
 </style>
+cnConfig as unknownenConfig as unknown

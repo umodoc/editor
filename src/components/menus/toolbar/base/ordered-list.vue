@@ -53,7 +53,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
 
@@ -81,7 +80,7 @@ const options = [
 let listType = $ref('left')
 watch(
   () => popupVisible.value,
-  (val) => {
+  (val: boolean) => {
     if (val && editor.value) {
       const { listStyleType } = editor.value.getAttributes('orderedList')
       listType = listStyleType?.listStyleType || listStyleType || ''
@@ -121,7 +120,7 @@ const changeOrderedListStart = () => {
 }
 watch(
   () => popupVisible.value,
-  (val) => {
+  (val: boolean) => {
     if (val && editor.value) {
       startAt = editor.value.getAttributes('orderedList').start
     } else {

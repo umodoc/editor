@@ -3,7 +3,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 const { exportPDF } = useStore()
 </script>
 

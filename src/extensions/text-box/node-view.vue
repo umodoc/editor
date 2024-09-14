@@ -36,7 +36,6 @@
 import { NodeViewContent, nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import Drager from 'es-drager'
 
-const { t } = useI18n()
 const { node, updateAttributes } = defineProps(nodeViewProps)
 
 const { options } = useStore()

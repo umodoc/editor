@@ -6,9 +6,11 @@
     trigger="click"
     :destroy-on-close="false"
     :popup-props="{
-      onVisibleChange(visible) {
+      onVisibleChange(visible: boolean) {
         editor?.commands.focus()
+        // @ts-ignore
         blockMenu = visible
+        // @ts-ignore
         menuActive = visible
       },
     }"
@@ -247,7 +249,6 @@ import type { Level } from '@tiptap/extension-heading'
 
 import type { Template } from '@/types'
 
-const { t } = useI18n()
 const { container, options, editor, blockMenu, assistantBox } = useStore()
 
 const menuActive = $ref(false)

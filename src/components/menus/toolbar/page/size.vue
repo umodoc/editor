@@ -35,7 +35,6 @@
 </template>
 
 <script setup lang="ts">
-const { t, l } = useI18n()
 const { options, page } = useStore()
 const dialogVisible = $ref(false)
 </script>

@@ -8,7 +8,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 import { saveAs } from 'file-saver'
 
 const { options, editor } = useStore()

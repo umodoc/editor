@@ -83,7 +83,6 @@ import type { WatermarkText } from 'tdesign-vue-next'
 
 import type { WatermarkOption } from '@/types'
 
-const { t } = useI18n()
 const { page, exportImage } = useStore()
 const { editor, node } = defineProps(nodeViewProps)
 const containerRef = ref(null)

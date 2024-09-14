@@ -11,6 +11,7 @@ export default function (doc: Node): DecorationSet {
     }
 
     Array.from(node.text.matchAll(hexColor)).forEach((match) => {
+      // eslint-disable-next-line prefer-destructuring
       const color = match[0]
       const index = match.index || 0
       const from = position + index

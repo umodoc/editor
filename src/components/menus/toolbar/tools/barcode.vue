@@ -45,13 +45,13 @@
             :text="t('tools.barcode.lineColor')"
             :default-color="config.lineColor"
             modeless
-            @change="(value) => (config.lineColor = value)"
+            @change="(value: any) => (config.lineColor = value)"
           />
           <menus-toolbar-base-background-color
             :text="t('tools.barcode.bgColor')"
             :default-color="config.background"
             modeless
-            @change="(value) => (config.background = value)"
+            @change="(value: any) => (config.background = value)"
           />
           <t-divider layout="vertical" />
           <menus-toolbar-base-bold
@@ -222,8 +222,6 @@
 import JsBarcode from 'jsbarcode'
 import svg64 from 'svg64'
 
-const { t } = useI18n()
-
 const { content } = defineProps({
   content: {
     type: String,
@@ -254,7 +252,7 @@ const formats = [
   { label: 'MSI1110', value: 'MSI1110' },
   { label: 'Pharmacode', value: 'Pharmacode' },
 ]
-const fonts = options.value.dicts?.fonts.map((item) => {
+const fonts = options.value.dicts?.fonts.map((item: any) => {
   return {
     label: l(item.label),
     value: item.value ?? '',
@@ -287,7 +285,7 @@ let changed = $ref(false)
 const changeFontOptions = (val: string) => {
   let fontOptions = config.fontOptions.split(' ')
   if (fontOptions.includes(val)) {
-    fontOptions = fontOptions.filter((item) => item !== val)
+    fontOptions = fontOptions.filter((item: any) => item !== val)
   } else {
     fontOptions.push(val)
   }
@@ -314,7 +312,7 @@ const renderBarcode = async () => {
 }
 watch(
   () => dialogVisible,
-  (val) => {
+  (val: boolean) => {
     if (val) {
       config = content ? JSON.parse(content) : { ...defaultConfig }
       setTimeout(() => {

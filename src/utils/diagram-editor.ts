@@ -1,5 +1,3 @@
-import { i18n } from '@/i18n'
-
 const locales = {
   'zh-CN': 'zh',
   'en-US': 'en',
@@ -70,7 +68,8 @@ class DiagramEditor {
     const params = Object.keys(this.params)
       .map((key) => `${key}=${this.params[key as keyof typeof this.params]}`)
       .join('&')
-    const lang = locales[i18n.global.locale.value]
+    const { locale } = useI18n()
+    const lang = locales[locale.value as keyof typeof locales]
     const frame = document.createElement('iframe')
     frame.setAttribute('class', 'umo-diagrams-iframe')
     frame.setAttribute('src', `${this.domain}?${params}&lang=${lang}`)

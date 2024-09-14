@@ -14,7 +14,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 import { removeBackground } from '@imgly/background-removal'
 
 import { getSelectionNode } from '@/extensions/selection'

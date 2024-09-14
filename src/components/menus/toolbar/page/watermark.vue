@@ -48,7 +48,7 @@
             :default-color="page.watermark?.fontColor"
             modeless
             @change="
-              (value) => {
+              (value: string) => {
                 if (page.watermark) {
                   page.watermark.fontColor = value
                 }
@@ -110,12 +110,11 @@
 </template>
 
 <script setup lang="ts">
-const { t, l } = useI18n()
 const { popupVisible, togglePopup } = usePopup()
 
 const { options, page } = useStore()
 
-const fonts = options.value.dicts?.fonts.map((item) => {
+const fonts = options.value.dicts?.fonts.map((item: any) => {
   return {
     label: l(item.label),
     value: item.value ?? '',

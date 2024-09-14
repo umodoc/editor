@@ -1,5 +1,6 @@
 import 'virtual:svg-icons-register'
 
+// @ts-ignore
 import type { App } from 'vue'
 
 import type { UmoEditorOptions } from '@/types'

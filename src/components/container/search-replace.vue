@@ -87,8 +87,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
-
 const { editor, searchReplace } = useStore()
 
 let searchText = $ref('')
@@ -138,7 +136,7 @@ const goToSelection = () => {
 
 watch(
   () => searchText.trim(),
-  (val, oldVal) => {
+  (val: any, oldVal: any) => {
     if (!val) {
       clear()
     }
@@ -149,12 +147,12 @@ watch(
 )
 watch(
   () => replaceText.trim(),
-  (val, oldVal) => (val === oldVal ? null : search()),
+  (val: any, oldVal: any) => (val === oldVal ? null : search()),
 )
 
 watch(
   () => caseSensitive,
-  (val, oldVal) => (val === oldVal ? null : search(true)),
+  (val: any, oldVal: any) => (val === oldVal ? null : search(true)),
 )
 
 const next = () => {

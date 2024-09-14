@@ -1013,7 +1013,7 @@ const ojbectSchema = new ObjectSchema({
   },
   onFileDelete: {
     merge: 'replace',
-    validate(value: Function) {
+    validate(value: any) {
       if (!isFunction(value)) {
         throw new Error('Key "onFileDelete" must be a function.')
       }

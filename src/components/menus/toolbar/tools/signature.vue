@@ -49,7 +49,6 @@
 <script setup lang="ts">
 import signature from 'vue-esign'
 
-const { t } = useI18n()
 const { editor } = useStore()
 let dialogVisible = $ref(false)
 
@@ -101,7 +100,7 @@ const setSignature = async () => {
 
 watch(
   () => dialogVisible,
-  (val) => {
+  (val: any) => {
     if (!val) {
       reset()
     }

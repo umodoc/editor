@@ -51,7 +51,7 @@ const tippyOpitons = $ref<Partial<Instance>>({
 // AI 助手
 watch(
   () => [assistantBox.value, commentBox.value],
-  (visible) => {
+  (visible: any[]) => {
     tippyInstance?.setProps({
       placement: visible.includes(true) ? 'bottom' : 'top',
     })

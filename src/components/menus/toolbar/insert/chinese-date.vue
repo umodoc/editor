@@ -10,7 +10,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 const formDate = (format: string) => useDateFormat(useNow(), format).value
 const formatDateToChinese = (dateStr: string) => {
   const replaceDigits = (num: string) => {

@@ -45,18 +45,18 @@
   },
   "scripts": {
     "build": "vue-tsc --noEmit && vite build",
-    "check:code": "eslint --cache .",
-    "check:style": "stylelint src",
-    "check:types": "vue-tsc --noEmit",
     "dev": "vite --port 9000 --open --force",
     "format": "prettier --write .",
-    "lint:code": "eslint --cache --fix .",
-    "lint:style": "stylelint --fix src",
-    "prepare": "husky",
-    "prepublishOnly": "pnpm run build",
+    "check:code": "eslint --cache src",
+    "check:style": "stylelint src/**/*.{css,less,vue}",
+    "check:types": "vue-tsc --noEmit",
+    "lint:code": "eslint --cache --fix src",
+    "lint:style": "stylelint --fix src/**/*.{css,less,vue}",
     "test": "NODE_NO_WARNINGS=1 vitest",
     "test:coverage": "pnpm run test --coverage",
-    "test:watch": "pnpm run test --watch --coverage"
+    "test:watch": "pnpm run test --watch --coverage",
+    "prepare": "husky",
+    "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
     "@eslint/object-schema": "^2.1.4",
@@ -159,7 +159,7 @@
     "stylelint-config-recommended-vue": "^1.5.0",
     "stylelint-less": "^3.0.1",
     "tdesign-vue-next": "^1.10.0",
-    "typescript": "^5.6.2",
+    "typescript": "^5.6.0",
     "typescript-eslint": "^8.5.0",
     "unplugin-auto-import": "^0.18.2",
     "unplugin-vue": "^5.1.5",
@@ -178,13 +178,13 @@
   },
   "lint-staged": {
     "*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,vue,less,css,yml,yaml,json,md,html}": [
-      "prettier --write"
+      "prettier --write src"
     ],
     "*.{css,less,vue}": [
-      "stylelint --write"
+      "stylelint --write src/**/*.{css,less,vue}"
     ],
     "*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,vue}": [
-      "eslint --fix"
+      "eslint --fix src"
     ]
   }
 }

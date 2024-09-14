@@ -347,6 +347,7 @@ const props = defineProps({
   // Dropdown,Select 相关
   selectOptions: {
     type: Array as PropType<DropdownOption[]>,
+    default: () => [],
   },
   selectValue: {
     type: [String, Number],
@@ -359,6 +360,7 @@ const props = defineProps({
   },
   popupHandle: {
     type: String,
+    default: 'arrow',
   },
   // 菜单激活状态
   menuActive: {
@@ -403,7 +405,7 @@ const getTooltipContent = () => {
 }
 watch(
   () => props.popupVisible,
-  (val) => {
+  (val: boolean) => {
     tooltipForceHide = val
   },
 )

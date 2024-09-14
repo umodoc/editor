@@ -1,4 +1,5 @@
 export function timeAgo(timestamp: string | number | Date) {
+  const { t } = useI18n()
   const messages = {
     justNow: t('time.justNow'),
     past: (n: string | number | Date) =>
@@ -10,7 +11,9 @@ export function timeAgo(timestamp: string | number | Date) {
     second: (n: string | number | Date) => t('time.second', { n }),
     future: (n: string | number | Date) => t('time.future', { n }),
     invalid: t('time.invalid'),
-  }
-  const time = useTimeAgo(new Date(timestamp), { messages })
+  } as const
+  const time = useTimeAgo(new Date(timestamp), {
+    messages: messages as any,
+  })
   return time.value.replace(/"/gi, '')
 }

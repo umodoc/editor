@@ -6,9 +6,11 @@
     trigger="click"
     :destroy-on-close="false"
     :popup-props="{
-      onVisibleChange(visible) {
+      onVisibleChange(visible: boolean) {
         editor?.commands.focus()
+        // @ts-ignore
         blockMenu = visible
+        // @ts-ignore
         menuActive = visible
       },
     }"
@@ -68,10 +70,10 @@
 </template>
 
 <script setup lang="ts">
+import type { Node } from '@tiptap/pm/model'
+
 import { getSelectionNode } from '@/extensions/selection'
 import getId from '@/utils/short-id'
-
-const { t } = useI18n()
 
 const { container, editor, blockMenu } = useStore()
 
@@ -92,7 +94,7 @@ const duplicateNode = () => {
   const selectionNode = editor.value ? getSelectionNode(editor.value) : null
   const getPosition = () => {
     let point = 0
-    editor.value?.state.doc.descendants((node, pos) => {
+    editor.value?.state.doc.descendants((node: Node, pos: number) => {
       if (node === selectionNode) {
         point = pos + node.nodeSize // 返回节点结束位置
       }

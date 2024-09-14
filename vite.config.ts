@@ -20,7 +20,15 @@ const vuePlugins = {
   }),
   AutoImport: AutoImport({
     dirs: ['./src/composables'],
-    imports: ['vue', '@vueuse/core'],
+    imports: [
+      'vue',
+      '@vueuse/core',
+      {
+        '@/composables/i18n': [
+          ['useI18n', 't'], // 假设 useI18n 导出了 t 方法
+        ],
+      },
+    ],
     resolvers: [TDesignResolver({ library: 'vue-next', esm: true })],
     dts: './imports.d.ts',
   }),
@@ -30,7 +38,7 @@ const vuePlugins = {
     resolvers: [TDesignResolver({ library: 'vue-next', esm: true })],
   }),
   SvgIcons: createSvgIconsPlugin({
-    iconDirs: [process.cwd() + '/src/assets/icons'],
+    iconDirs: [`${process.cwd()}/src/assets/icons`],
     symbolId: 'umo-icon-[name]',
     customDomId: '__umo__svg__icons__dom__',
   }),

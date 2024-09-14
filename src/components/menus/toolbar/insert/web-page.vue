@@ -29,7 +29,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 const { editor } = useStore()
 
 let dialogVisible = $ref(false)
@@ -60,7 +59,7 @@ const insertWebPage = () => {
 }
 watch(
   () => dialogVisible,
-  (val) => {
+  (val: boolean) => {
     if (!val) {
       url = ''
       error = false

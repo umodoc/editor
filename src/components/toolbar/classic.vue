@@ -213,8 +213,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
-
 import { withSuppress } from '@/utils/functional'
 
 const props = defineProps<{

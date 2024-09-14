@@ -18,7 +18,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 import { type Editor, loader } from '@vue-monaco/editor'
 
 const { options, editor } = useStore()

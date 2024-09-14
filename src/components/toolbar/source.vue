@@ -6,9 +6,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-const { t } = useI18n()
-</script>
+<script setup lang="ts"></script>
 
 <style lang="less" scoped>
 .umo-source-container {
