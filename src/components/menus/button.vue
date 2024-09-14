@@ -360,7 +360,7 @@ const props = defineProps({
   },
   popupHandle: {
     type: String,
-    default: 'arrow',
+    default: '',
   },
   // 菜单激活状态
   menuActive: {
