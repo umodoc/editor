@@ -15,6 +15,9 @@ export default Node.create({
   atom: true,
   addAttributes() {
     return {
+      vnode: {
+        default: true,
+      },
       id: {
         default: null,
       },
