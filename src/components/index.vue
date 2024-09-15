@@ -300,6 +300,7 @@ watch(
 )
 
 // i18n Setup
+// @ts-ignore
 const { t, locale } = useI18n()
 const $locale = useState('locale')
 const { appContext } = getCurrentInstance() ?? {}
