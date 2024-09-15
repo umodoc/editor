@@ -33,13 +33,13 @@ const checkScrollPosition = () => {
 }
 
 const scrollLeft = () => {
-  if (contentRef?.scrollLeft) {
+  if (contentRef?.scrollLeft || contentRef.scrollLeft === 0) {
     contentRef.scrollLeft -= 100
   }
 }
 
 const scrollRight = () => {
-  if (contentRef?.scrollLeft) {
+  if (contentRef?.scrollLeft || contentRef.scrollLeft === 0) {
     contentRef.scrollLeft += 100
   }
 }
