@@ -308,6 +308,9 @@
       "title": "插入电子签名",
       "clear": "清空画布",
       "lineWidth": "画笔粗细",
+      "lineColor": "画笔颜色",
+      "smooth": "显示笔锋",
+      "reset": "重置设置",
       "tip": "请在当前区域签名",
       "notEmpty": "没有检测到您的签名"
     }

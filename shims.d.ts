@@ -16,11 +16,6 @@ declare module '@vue/runtime-core' {
 
 declare function t(key: string, ...args: any[]): any
 
-declare module 'vue-esign' {
-  const signature: any
-  export default signature
-}
-
 declare module 'dom-to-image-more' {
   export function toBlob(node: HTMLElement, options?: any): Promise<Blob>
   export function toJpeg(node: HTMLElement, options?: any): Promise<Blob>

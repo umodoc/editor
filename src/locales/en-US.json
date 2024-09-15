@@ -308,6 +308,9 @@
       "title": "Insert Electronic Signature",
       "clear": "Clear",
       "lineWidth": "Pen Thickness",
+      "lineColor": "Pen Color",
+      "smooth": "Show Brush Strokes",
+      "reset": "Reset Options",
       "tip": "Please sign in the this area",
       "notEmpty": "No signature detected"
     }
