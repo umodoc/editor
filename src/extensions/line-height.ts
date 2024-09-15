@@ -29,9 +29,9 @@ export default Extension.create({
             parseHTML: (element) =>
               element.style.lineHeight || this.options.defaultLineHeight,
             renderHTML: (attributes) => {
-              /*if (attributes.lineHeight === this.options.defaultLineHeight) {
+              if (attributes.lineHeight === this.options.defaultLineHeight) {
                 return {}
-              }*/
+              }
               return { style: `line-height: ${attributes.lineHeight}` }
             },
           },
