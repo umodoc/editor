@@ -53,10 +53,10 @@
     "lint:code": "eslint --cache --fix src",
     "lint:style": "stylelint --fix src/**/*.{css,less,vue}",
     "test": "NODE_NO_WARNINGS=1 vitest",
-    "test:coverage": "pnpm run test --coverage",
-    "test:watch": "pnpm run test --watch --coverage",
+    "test:coverage": "npm run test --coverage",
+    "test:watch": "npm run test --watch --coverage",
     "prepare": "husky",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@eslint/object-schema": "^2.1.4",
@@ -165,12 +165,12 @@
     "unplugin-vue": "^5.1.5",
     "unplugin-vue-components": "^0.27.4",
     "unplugin-vue-macros": "^2.11.11",
-    "vite": "^5.4.4",
+    "vite": "^4.5.3",
     "vite-plugin-inspect": "^0.8.7",
     "vite-plugin-svg-icons": "^2.0.1",
     "vite-tsconfig-paths": "^5.0.1",
     "vitest": "^2.0.5",
-    "vue": "^3.5.4",
+    "vue": "^3.0.11",
     "vue-tsc": "^2.1.6"
   },
   "engines": {

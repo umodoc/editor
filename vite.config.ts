@@ -1,5 +1,6 @@
 import Vue from '@vitejs/plugin-vue'
 import ReactivityTransform from '@vue-macros/reactivity-transform/vite'
+import type { RollupWarning } from 'rollup'
 import AutoImport from 'unplugin-auto-import/vite'
 import { TDesignResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
@@ -60,27 +61,12 @@ const buildConfig = {
       /^@tiptap\/.*/,
       /^nzh\/.*/,
     ],
-  },
-}
-
-// Test configuration
-const testConfig = {
-  environment: 'jsdom',
-  globals: true,
-  setupFiles: [],
-  coverage: {
-    include: ['src'],
-    exclude: ['**/*.spec.*', '**/*.d.ts', 'src/types.ts', 'testing/*'],
-  },
-  onConsoleLog(log: string) {
-    if (
-      log.includes(
-        'Error: Not implemented: HTMLFormElement.prototype.requestSubmit',
-      ) ||
-      log.includes('(node:25503) [DEP0040]')
-    ) {
-      return false
-    }
+    onwarn(warning: RollupWarning, warn: (warning: RollupWarning) => void) {
+      if (warning.code === 'UNUSED_EXTERNAL_IMPORT') {
+        return
+      }
+      warn(warning)
+    },
   },
 }
 
@@ -102,7 +88,6 @@ export default defineConfig({
   ],
   css: cssConfig,
   build: buildConfig,
-  test: testConfig,
   resolve: {
     alias: {
       '@': `${process.cwd()}/src`,
