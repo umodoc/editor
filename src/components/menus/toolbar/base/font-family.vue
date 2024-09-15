@@ -4,7 +4,7 @@
     menu-type="select"
     hide-text
     :select-value="editor?.getAttributes('textStyle').fontFamily || null"
-    :style="{ width: $toolbar.mode !== 'classic' ? '105px' : '90px' }"
+    :style="{ width: $toolbar.mode !== 'classic' ? '144px' : '90px' }"
     filterable
     @menu-click="setFontFamily"
   >

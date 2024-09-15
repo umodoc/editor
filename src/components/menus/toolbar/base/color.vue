@@ -1,6 +1,5 @@
 <template>
   <menus-button
-    v-if="currentColor"
     ico="color"
     :text="text || t('base.color')"
     menu-type="popup"
