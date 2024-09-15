@@ -401,6 +401,7 @@ export class PageComputedContext {
   mergeDefaultDocument(count: number) {
     const { tr } = this
     if (this.forcePageId) {
+      // eslint-disable-next-line no-constant-condition
       while (true) {
         // @ts-ignore
         const nodeSize = tr.doc.content.content
