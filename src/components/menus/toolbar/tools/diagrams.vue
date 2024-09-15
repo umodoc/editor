@@ -59,7 +59,8 @@ let image = $ref<
 
 const messageListener = (evt: MessageEvent) => {
   if (
-    evt?.type !== 'message' &&
+    evt?.type !== 'message' ||
+    typeof evt?.data !== 'string' ||
     evt?.origin !== options.value.diagrams?.domain
   ) {
     return
@@ -103,11 +104,8 @@ watch(
     window.addEventListener('message', messageListener)
     image = undefined
   },
+  { immediate: true },
 )
-
-onBeforeMount(() => {
-  window.addEventListener('message', messageListener)
-})
 </script>
 
 <style lang="less">
