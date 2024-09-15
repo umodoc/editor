@@ -17,8 +17,6 @@
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": true,
     "verbatimModuleSyntax": true,
-    "noErrorTruncation": true,
-    "maxNodeModuleJsDepth": 3,
     "sourceMap": true,
     "baseUrl": ".",
     "types": [

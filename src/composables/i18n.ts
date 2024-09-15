@@ -13,7 +13,7 @@ export const l = (data: string | Record<string, string>) => {
   }
 
   if (isRecord(data)) {
-    return data[i18n.global.locale.value.replace('-', '_')]
+    return data[global.locale.value.replace('-', '_')]
   }
 }
 

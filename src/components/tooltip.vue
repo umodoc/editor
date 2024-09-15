@@ -20,5 +20,3 @@ defineProps({
 })
 const { container } = useStore()
 </script>
-
-<style lang="less" scoped></style>

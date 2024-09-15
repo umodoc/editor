@@ -105,7 +105,7 @@ const setMermaid = () => {
     useMessage('error', t('tools.mermaid.notEmpty'))
     return
   }
-  const svg = mermaidRef?.querySelector('svg')
+  const svg = mermaidRef.querySelector('svg')
   const { width, height } = svg.getBoundingClientRect()
   if (!props.content || (props.content && props.content !== mermaidCode)) {
     editor.value

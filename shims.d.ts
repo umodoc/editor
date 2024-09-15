@@ -10,10 +10,11 @@ declare module '*.vue' {
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
-    t: (key: string, ...params: unknown[]) => string
-    l: (key: string, ...params: unknown[]) => string
+    t: (key: string, ...args: any[]) => any
   }
 }
+
+declare function t(key: string, ...args: any[]): any
 
 declare module 'vue-esign' {
   const signature: any

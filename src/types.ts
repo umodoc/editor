@@ -178,7 +178,6 @@ export interface AssistantResult {
   command?: string
 }
 
-//定义一个 异步方法
 export interface UmoEditorOptions {
   editorKey: string
   locale: SupportedLocale
