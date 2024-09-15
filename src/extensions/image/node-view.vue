@@ -176,8 +176,8 @@ watch(
   async (src: string) => {
     if (node.attrs.uploaded === false && !error.value) {
       if (src?.startsWith('data:image')) {
-        const [imageType] = src.split(';')[0].split(':')
-        let [ext] = imageType.split('/')
+        const [data, type] = src.split(';')[0].split(':')
+        let [_, ext] = type.split('/')
         if (ext === 'jpeg') {
           ext = 'jpg'
         }
@@ -186,7 +186,7 @@ watch(
         }
         const filename = shortId(10)
         const file = await base64ToFile(src, `${filename}.${ext}`, {
-          type: imageType,
+          type,
         })
         updateAttributes({ file })
       }
