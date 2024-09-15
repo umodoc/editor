@@ -62,9 +62,7 @@ const buildConfig = {
       /^nzh\/.*/,
     ],
     onwarn(warning: RollupWarning, warn: (warning: RollupWarning) => void) {
-      if (warning.code === 'UNUSED_EXTERNAL_IMPORT') {
-        return
-      }
+      if (warning.code === 'UNUSED_EXTERNAL_IMPORT') return
       warn(warning)
     },
   },
