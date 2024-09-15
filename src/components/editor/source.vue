@@ -18,9 +18,10 @@
 </template>
 
 <script setup lang="ts">
-import { type Editor, loader } from '@vue-monaco/editor'
+import { type Editor, loader, MonacoEditor } from '@vue-monaco/editor'
 
 const { options, editor } = useStore()
+const { locale } = useI18n()
 const $document = useState('document')
 
 loader.config({
@@ -29,7 +30,7 @@ loader.config({
   },
   'vs/nls': {
     availableLanguages: {
-      '*': 'zh-cn',
+      '*': locale.value.toLowerCase(),
     },
   },
 })
@@ -49,12 +50,8 @@ const config = {
 }
 const code = $ref(editor.value?.getHTML() ?? $document.value.content)
 
-const editorMount = async (editor: Editor.ICodeEditor) => {
-  return await Promise.resolve(
-    setTimeout(() => {
-      void editor.getAction('editor.action.formatDocument')?.run()
-    }, 200),
-  )
+const editorMount = (editor: Editor.ICodeEditor) => {
+  editor.getAction('editor.action.formatDocument').run()
 }
 
 const codeChange = () => {
