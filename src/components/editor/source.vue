@@ -52,6 +52,7 @@ const code = $ref(editor.value?.getHTML() ?? $document.value.content)
 
 const editorMount = (editor: Editor.ICodeEditor) => {
   editor.getAction('editor.action.formatDocument').run()
+  editor.getModel().updateOptions({ tabSize: 2 })
 }
 
 const codeChange = () => {
