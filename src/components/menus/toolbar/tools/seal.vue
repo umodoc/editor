@@ -57,28 +57,28 @@ const selectImage = () => {
     if (!file) {
       return
     }
-    try {
-      sealImg = null
-      converting = t('tools.seal.converting1')
-      const img = await removeBackground(file, {
-        publicPath: `${options.value.cdnUrl}/libs/imgly/background-removal-data/`,
-        progress: (key, current, total) => {
-          if (key.startsWith('fetch')) {
-            converting = t('tools.seal.converting2', {
-              ppercentage: ((current / total) * 100).toFixed(1),
-            })
-          } else {
-            converting = t('tools.seal.converting3')
-          }
-        },
-      })
-      sealImg = URL.createObjectURL(img)
-    } catch {
-      useMessage('error', t('tools.seal.convertError'))
-      sealImg = null
-    } finally {
-      converting = null
-    }
+    // try {
+    sealImg = null
+    converting = t('tools.seal.converting1')
+    const img = await removeBackground(file, {
+      publicPath: `${options.value.cdnUrl}/libs/imgly/background-removal-data/`,
+      progress: (key, current, total) => {
+        if (key.startsWith('fetch')) {
+          converting = t('tools.seal.converting2', {
+            ppercentage: ((current / total) * 100).toFixed(1),
+          })
+        } else {
+          converting = t('tools.seal.converting3')
+        }
+      },
+    })
+    sealImg = URL.createObjectURL(img)
+    // } catch {
+    //   useMessage('error', t('tools.seal.convertError'))
+    //   sealImg = null
+    // } finally {
+    //   converting = null
+    // }
   })
 }
 
@@ -94,6 +94,7 @@ const setSeal = () => {
       type: 'seal',
       src: sealImg,
       width: 150,
+      height: 'auto',
       draggable: true,
       rotatable: true,
       file,
