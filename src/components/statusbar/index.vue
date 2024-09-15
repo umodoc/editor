@@ -103,8 +103,14 @@
           <span v-if="selectionCharacters > 0">
             {{ selectionCharacters }}/
           </span>
-          <span> {{ editor.storage.characterCount.characters() }}</span>
-          {{ t('wordCount.characters') }} <icon name="arrow-down" />
+          <span class="umo-word-count">
+            {{ editor.storage.characterCount.characters() }}</span
+          >
+          {{ t('wordCount.characters') }}
+          <icon
+            name="arrow-down"
+            :style="{ transform: `rotate(${showWordCount ? '180deg' : 0})` }"
+          />
         </t-button>
         <template #content>
           <div v-if="showWordCount" class="umo-word-count-detail">
@@ -634,26 +640,29 @@ const toggleSpellcheck = () => {
   margin-right: 3px;
 }
 
-.umo-word-count-detail {
-  padding: 10px 0 8px;
-  width: 160px;
-  font-size: 12px;
-  color: var(--umo-text-color-light);
-  .umo-word-count-title {
+.umo-word-count {
+  margin-right: 0.5em;
+  &-detail {
+    padding: 10px 0 8px;
+    width: 160px;
+    font-size: 12px;
+    color: var(--umo-text-color-light);
+    li {
+      list-style: none;
+      cursor: default;
+      padding: 0 12px;
+      display: flex;
+      justify-content: space-between;
+      line-height: 28px;
+      color: var(--umo-text-color);
+      &:hover {
+        background-color: var(--td-bg-color-container-hover);
+      }
+    }
+  }
+  &-title {
     padding: 0 12px;
     margin-bottom: 3px;
-  }
-  li {
-    list-style: none;
-    cursor: default;
-    padding: 0 12px;
-    display: flex;
-    justify-content: space-between;
-    line-height: 28px;
-    color: var(--umo-text-color);
-    &:hover {
-      background-color: var(--td-bg-color-container-hover);
-    }
   }
 }
 </style>
