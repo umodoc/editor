@@ -51,10 +51,9 @@
 
 <script setup lang="ts">
 const { popupVisible, togglePopup } = usePopup()
-const { container, page } = useStore()
-
+const { container, options, page } = useStore()
 const backgrounds = [
-  { label: t('page.bg.default'), value: page.value.defaultBackground },
+  { label: t('page.bg.default'), value: options.value.page.defaultBackground },
   { label: t('page.bg.color1'), value: 'rgb(233, 246, 227)' },
   { label: t('page.bg.color2'), value: 'rgb(252, 242, 224)' },
   { label: t('page.bg.color3'), value: 'rgb(237, 244, 255)' },
