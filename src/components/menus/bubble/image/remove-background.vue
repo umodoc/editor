@@ -38,7 +38,6 @@ const removeBg = async () => {
     })
   }
   converting = false
-  console.log('ok')
 }
 </script>
 
