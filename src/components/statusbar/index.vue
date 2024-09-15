@@ -71,7 +71,7 @@
           class="umo-status-bar-button"
           variant="text"
           size="small"
-          :href="`https://editor.umodoc.com/${locale.value === 'zh-CN' ? 'cn' : 'en'}/docs`"
+          :href="`https://editor.umodoc.com/${locale === 'zh-CN' ? 'cn' : 'en'}/docs`"
           target="_blank"
         >
           <icon name="home-page" />
