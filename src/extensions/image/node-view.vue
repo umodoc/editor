@@ -84,7 +84,6 @@
 
 <script setup lang="ts">
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
-import { isRecord } from '@tool-belt/type-predicates'
 import Drager from 'es-drager'
 import { base64ToFile } from 'file64'
 
@@ -200,7 +199,7 @@ watch(
 watch(
   () => error.value,
   (errorValue: any) => {
-    if (errorValue && isRecord(errorValue) && 'type' in errorValue) {
+    if (errorValue?.type) {
       updateAttributes({ error: errorValue.type === 'error' })
     } else {
       updateAttributes({ error: false })
