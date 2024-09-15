@@ -3,6 +3,7 @@
     ico="chinese-case"
     :text="t('tools.chineseCase.text')"
     :tooltip="t('tools.chineseCase.tip')"
+    :disabled="selectionText === ''"
     menu-type="dropdown"
     huge
     overlay-class-name="umo-chinese-case-dropdown"
@@ -28,6 +29,7 @@
 import nzh from 'nzh/cn'
 
 import { getSelectionText } from '@/extensions/selection'
+
 const { editor } = useStore()
 
 const options: {
@@ -91,17 +93,24 @@ const options: {
   },
 ]
 
+let selectionText = $ref('')
+onMounted(() => {
+  editor.value.on('selectionUpdate', () => {
+    const text = getSelectionText(editor.value)
+    selectionText = text
+  })
+})
+
 const setChineseCase = (func: (text: string) => string) => {
   if (!editor.value) {
     return
   }
-  const text = getSelectionText(editor.value)
-  if (text === '') {
+  if (selectionText === '') {
     return
   }
   let content = ''
   try {
-    content = func(text)
+    content = func(selectionText)
   } catch {
     useMessage('error', '大小写转化失败，请检查当前选中的文本。')
   }
