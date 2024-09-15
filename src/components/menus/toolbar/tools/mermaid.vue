@@ -106,9 +106,7 @@ const setMermaid = () => {
     return
   }
   const svg = mermaidRef?.querySelector('svg')
-  const width = svg?.width.animVal.value
-  const height = svg?.height.animVal.value
-  const src = svg64(svgCode)
+  const { width, height } = svg.getBoundingClientRect()
   if (!props.content || (props.content && props.content !== mermaidCode)) {
     editor.value
       ?.chain()
@@ -116,10 +114,11 @@ const setMermaid = () => {
       .setImage(
         {
           type: 'mermaid',
-          src,
+          src: svg64(svgCode),
           content: mermaidCode,
           width,
           height,
+          equalProportion: false,
         },
         !!props.content,
       )
