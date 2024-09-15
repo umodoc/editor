@@ -60,7 +60,7 @@
           class="umo-status-bar-button"
           variant="text"
           size="small"
-          @click="reset"
+          @click="reset(false)"
         >
           <icon name="clear-cache" />
         </t-button>
@@ -308,7 +308,7 @@ const $document = useState('document')
 // 快捷键抽屉
 const showShortcut = $ref(false)
 
-const reset = inject('reset') as (e: MouseEvent) => void
+const reset = inject('reset') as (silent: boolean) => void
 
 // 分页
 const togglePagination = () => {
