@@ -37,6 +37,7 @@ let dialogVisible = $ref(false)
 const { options, editor } = useStore()
 
 let sealImg = $ref<string | null>(null)
+let sealFile = $ref<File | null>(null)
 let converting = $ref<string | null>(null)
 let file = $ref<File | null>(null)
 
@@ -57,28 +58,30 @@ const selectImage = () => {
     if (!file) {
       return
     }
-    // try {
-    sealImg = null
-    converting = t('tools.seal.converting1')
-    const img = await removeBackground(file, {
-      publicPath: `${options.value.cdnUrl}/libs/imgly/background-removal-data/`,
-      progress: (key, current, total) => {
-        if (key.startsWith('fetch')) {
-          converting = t('tools.seal.converting2', {
-            ppercentage: ((current / total) * 100).toFixed(1),
-          })
-        } else {
-          converting = t('tools.seal.converting3')
-        }
-      },
-    })
-    sealImg = URL.createObjectURL(img)
-    // } catch {
-    //   useMessage('error', t('tools.seal.convertError'))
-    //   sealImg = null
-    // } finally {
-    //   converting = null
-    // }
+    try {
+      sealImg = null
+      converting = t('tools.seal.converting1')
+      const img = await removeBackground(file, {
+        publicPath: `${options.value.cdnUrl}/libs/imgly/background-removal-data/`,
+        progress: (key, current, total) => {
+          if (key.startsWith('fetch')) {
+            converting = t('tools.seal.converting2', {
+              ppercentage: ((current / total) * 100).toFixed(1),
+            })
+          } else {
+            converting = t('tools.seal.converting3')
+          }
+        },
+      })
+      sealImg = URL.createObjectURL(img)
+      sealFile = img
+    } catch {
+      useMessage('error', t('tools.seal.convertError'))
+      sealImg = null
+      sealFile = null
+    } finally {
+      converting = null
+    }
   })
 }
 
@@ -97,11 +100,12 @@ const setSeal = () => {
       height: 'auto',
       draggable: true,
       rotatable: true,
-      file,
+      file: sealFile,
     })
     .run()
   dialogVisible = false
   sealImg = null
+  sealFile = null
   converting = null
 }
 </script>
@@ -125,6 +129,7 @@ const setSeal = () => {
     overflow: hidden;
     position: relative;
     color: var(--umo-text-color-light);
+    cursor: pointer;
     .umo-seal-img {
       max-height: 100%;
       max-width: 100%;
