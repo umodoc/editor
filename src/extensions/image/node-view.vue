@@ -128,13 +128,18 @@ const uploadImage = async () => {
     useMessage('error', (error as Error).message)
   }
 }
-const onLoad = () => {
+const onLoad = async () => {
   if (node.attrs.width === null) {
     const { clientWidth = 1, clientHeight = 1 } = imageRef ?? {}
     maxWidth = containerRef.value?.$el.clientWidth
     const ratio = clientWidth / clientHeight
     maxHeight = containerRef.value?.$el.clientWidth / ratio
     updateAttributes({ width: (200 * ratio).toFixed(2) })
+  }
+  if ([null, 'auto', 0].includes(node.attrs.height)) {
+    await nextTick()
+    const { height } = imageRef?.getBoundingClientRect() ?? {}
+    updateAttributes({ height: height.toFixed(2) })
   }
 }
 
