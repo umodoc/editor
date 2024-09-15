@@ -2,7 +2,10 @@ import { isRecord } from '@tool-belt/type-predicates'
 
 import { i18n } from '../i18n'
 
-export const { t } = i18n.global
+const { global } = i18n
+
+// @ts-ignore
+export const { t } = global
 
 export const l = (data: string | Record<string, string>) => {
   if (typeof data === 'string') {
@@ -14,6 +17,4 @@ export const l = (data: string | Record<string, string>) => {
   }
 }
 
-export const useI18n = () => {
-  return i18n.global
-}
+export const useI18n = () => global
