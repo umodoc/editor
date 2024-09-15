@@ -92,16 +92,7 @@
               <div
                 class="item"
                 :class="{ active: !pageOptions.margin?.layout }"
-                @click="
-                  selectPageMargin(
-                    options.page?.defaultMargin ?? {
-                      left: 1.27,
-                      right: 1.27,
-                      top: 1.27,
-                      bottom: 1.27,
-                    },
-                  )
-                "
+                @click="selectPageMargin(options.page?.defaultMargin)"
                 v-text="t('pageOptions.margin.default')"
               ></div>
               <div
