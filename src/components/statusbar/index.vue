@@ -497,6 +497,7 @@ const toggleSpellcheck = () => {
     --td-radius-default: 2px;
     font-size: 14px;
     margin: 0 4px;
+    color: var(--umo-text-color);
     &:not(.auto-width) {
       width: var(--td-comp-size-xs);
     }
