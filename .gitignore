@@ -1,9 +1,46 @@
-*.log
-.DS_Store
-.eslintcache
-.idea
-.idea/
-dist/
+# Node modules
 node_modules/
+
+# Build output
+dist/
+
+# Editor directories and files
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Cache
+*.tsbuildinfo
+.npm
+.eslintcache
+.stylelintcache
+.prettiercache
+.biomecache
+vite.config.ts.timestamp*
+vitest.config.ts.timestamp*
+
+# Husky
+.husky/_
+
+# Lock files
+package-lock.json
+yarn.lock
 pnpm-lock.yaml
-vite.config.js.timestamp*
+
+# Auto imports
+imports.d.ts
+components.d.ts
+
+# Other
+.DS_Store
+Thumbs.db
