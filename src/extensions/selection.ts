@@ -52,7 +52,6 @@ export default Extension.create({
           if (parentNode) {
             return chain().setNodeSelection(parentNode.pos).run()
           }
-          // FIXME: The type assertion below might be wrong.
           const { $anchor, node } = editor.state.selection as NodeSelection
           const pos = node?.attrs?.vnode
             ? $anchor.pos

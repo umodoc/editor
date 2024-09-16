@@ -59,7 +59,7 @@ const options = {
     }
   },
 }
-// FIXME: we are hard casting below because there are issues with the types. Namely, a lot of them are partial. This needs to be systematically addressed.
+
 app.use(useUmoEditor, options as unknown as UmoEditorOptions)
 // app.component('UmoEditor', UmoEditor)
 
