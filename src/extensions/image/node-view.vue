@@ -3,9 +3,11 @@
     :id="node.attrs.id"
     ref="containerRef"
     class="umo-node-view"
-    :class="{ 'umo-node-view-empty': node.attrs.draggable }"
+    :class="{
+      'umo-node-view-empty': node.attrs.draggable,
+    }"
     :style="nodeStyle"
-    @dblclick="imagePreview = node.attrs.src"
+    @dblclick="openImageViewer"
   >
     <div
       class="umo-node-container umo-node-image"
@@ -69,6 +71,7 @@
                 ? `rotateX(${node.attrs.flipX ? '180' : '0'}deg) rotateY(${node.attrs.flipY ? '180' : '0'}deg)`
                 : 'none',
           }"
+          :data-id="node.attrs.id"
           loading="lazy"
           @load="onLoad"
         />
@@ -91,8 +94,7 @@ import { base64ToFile } from 'file64'
 import shortId from '@/utils/short-id'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
-const { options, editor } = useStore()
-const { imagePreview } = useStore()
+const { options, editor, imageViewer } = useStore()
 const { isLoading, error } = useImage({ src: node.attrs.src })
 
 const containerRef = ref(null)
@@ -167,6 +169,11 @@ const onDrag = ({ left, top }: { left: number; top: number }) => {
 onClickOutside(containerRef, () => {
   selected = false
 })
+
+const openImageViewer = () => {
+  imageViewer.value.visible = true
+  imageViewer.value.current = node.attrs.id
+}
 
 watch(
   () => node.attrs.equalProportion,

@@ -2,16 +2,17 @@
   <menus-button
     ico="image-preview"
     :text="t('bubbleMenu.image.preview')"
-    @menu-click="viewerVisible = !viewerVisible"
+    @menu-click="openImageViewer"
   />
-  <t-image-viewer
-    v-model:visible="viewerVisible"
-    :images="[editor?.getAttributes('image').src]"
-  >
-  </t-image-viewer>
 </template>
 
 <script setup lang="ts">
-const { editor } = useStore()
-const viewerVisible = $ref(false)
+import { getSelectionNode } from '@/extensions/selection'
+const { editor, imageViewer } = useStore()
+
+const openImageViewer = () => {
+  const image = getSelectionNode(editor.value)
+  imageViewer.value.current = image.attrs.id
+  imageViewer.value.visible = true
+}
 </script>

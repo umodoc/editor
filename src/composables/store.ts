@@ -29,7 +29,10 @@ export const useStore = createGlobalState(() => {
   const assistantBox = ref(false)
   const commentBox = ref(false)
   const tableOfContents = ref<TableOfContentItem[]>([])
-  const imagePreview = ref(false)
+  const imageViewer = ref({
+    visible: false,
+    current: null,
+  })
   const searchReplace = ref(false)
   const savedAt = ref<number | null>(null)
   const printing = ref(false)
@@ -152,7 +155,7 @@ export const useStore = createGlobalState(() => {
     assistantBox,
     commentBox,
     tableOfContents,
-    imagePreview,
+    imageViewer,
     searchReplace,
     savedAt,
     printing,

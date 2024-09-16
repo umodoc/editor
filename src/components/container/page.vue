@@ -32,10 +32,10 @@
       </div>
     </div>
     <t-image-viewer
-      v-model="imagePreviewVisible"
+      v-model:visible="imageViewer.visible"
+      v-model:index="currentImageIndex"
       :images="previewImages"
-      :index="currentImageIndex"
-      @close="imagePreview = false"
+      @close="imageViewer.visible = false"
     />
     <t-back-top
       :container="`${container} .umo-zoomable-container`"
@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-const { container, page, imagePreview } = useStore()
+const { container, page, imageViewer } = useStore()
 
 // 页面大小
 const pageSize = $computed(() => {
@@ -101,32 +101,27 @@ watch(
 // 图片预览
 let previewImages = $ref<string[]>([])
 let currentImageIndex = $ref<number>(0)
-let imagePreviewVisible = $ref<boolean>(false)
 
 watch(
-  () => imagePreview.value,
-  (value: boolean) => {
-    if (value) {
-      const images = document.querySelectorAll(
-        `${container} .umo-page-content img:not(.icon)`,
-      )
-
-      for (const image of images) {
-        const src = image.getAttribute('src')
-        if (src) {
-          previewImages.push(src)
-        }
-      }
-      // TODO: address this issue
-      //currentImageIndex = Array.from(images).findIndex((item) => {
-      // FIXME: 这里需要使用图片的src进行比较
-      //})
-      imagePreviewVisible = true
-    } else {
+  () => imageViewer.value.visible,
+  async (visible: boolean) => {
+    if (!visible) {
       previewImages = []
       currentImageIndex = 0
-      imagePreviewVisible = false
+      return
     }
+    await nextTick()
+    const images = document.querySelectorAll(
+      `${container} .umo-page-content img:not(.umo-icon)`,
+    )
+    Array.from(images).forEach((image, index) => {
+      const src = image.getAttribute('src')
+      const nodeId = image.getAttribute('data-id')
+      previewImages.push(src)
+      if (nodeId === imageViewer.value.current) {
+        currentImageIndex = index
+      }
+    })
   },
 )
 </script>
