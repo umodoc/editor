@@ -34,6 +34,7 @@ const defaultLineHeight = $computed(
 
 const getIframeCode = () => {
   const { orientation, size, background } = page.value
+  /* eslint-disable */
   return `
     <!DOCTYPE html>
     <html lang="zh-CN" theme-mode="${options.value.theme}">
@@ -63,8 +64,24 @@ const getIframeCode = () => {
           ${getContentHtml()}
         </div>
       </div>
+      <script>
+        document.addEventListener("DOMContentLoaded", (event) => {
+          const observer = new MutationObserver(mutations => {
+            mutations.forEach(mutation => {
+              if (mutation.removedNodes) {
+                Array.from(mutation.removedNodes).forEach(node => {
+                  if (node?.classList?.contains('umo-page-watermark')) {
+                    location.reload();
+                  }
+                });
+              }
+            });
+          });
+        });
+      <\/script>
     </body>
     </html>`
+  /* eslint-enable */
 }
 
 const printPage = () => {
