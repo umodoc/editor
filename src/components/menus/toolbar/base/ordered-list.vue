@@ -20,7 +20,7 @@
         >
           <div
             class="umo-ordered-list-item"
-            :class="{ active: listType === item.value }"
+            :class="{ active: listStyleType === item.value }"
             @click="toggleOrderedList(item.value)"
           >
             <icon
@@ -77,33 +77,31 @@ const options = [
 ]
 
 // 列表类型
-let listType = $ref('left')
+let listStyleType = $ref('left')
 watch(
   () => popupVisible.value,
   (val: boolean) => {
     if (val && editor.value) {
-      const { listStyleType } = editor.value.getAttributes('orderedList')
-      listType = listStyleType?.listStyleType || listStyleType || ''
+      const { listType } = editor.value.getAttributes('orderedList')
+      listStyleType = listType
     }
   },
 )
-const toggleOrderedList = (listStyleType: string) => {
+const toggleOrderedList = (listType: string) => {
   const chain = editor.value?.chain().focus()
   if (editor.value?.isActive('orderedList')) {
-    if (
-      editor.value.getAttributes('orderedList').listStyleType === listStyleType
-    ) {
+    if (editor.value.getAttributes('orderedList').listType === listType) {
       chain?.toggleOrderedList().run()
     } else {
-      chain?.updateAttributes('orderedList', { listStyleType }).run()
+      chain?.updateAttributes('orderedList', { listType }).run()
     }
   } else {
     chain
       ?.toggleOrderedList()
-      .updateAttributes('orderedList', { listStyleType })
+      .updateAttributes('orderedList', { listType })
       .run()
   }
-  listType = listStyleType
+  listStyleType = listType
   popupVisible.value = false
 }
 

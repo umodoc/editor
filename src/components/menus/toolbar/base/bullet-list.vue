@@ -20,7 +20,7 @@
         >
           <div
             class="umo-bullet-list-item"
-            :class="{ active: listType === item.value }"
+            :class="{ active: listStyleType === item.value }"
             @click="toggleBulletList(item.value)"
           >
             <icon
@@ -44,33 +44,31 @@ const options = [
   { label: t('list.bullet.square'), value: 'square' },
 ]
 
-let listType = $ref('')
+let listStyleType = $ref('')
 watch(
   () => popupVisible.value,
   (val: boolean) => {
     if (val && editor.value) {
-      const { listStyleType } = editor.value.getAttributes('bulletList')
-      listType = listStyleType?.listStyleType || listStyleType || ''
+      const { listType } = editor.value.getAttributes('bulletList')
+      listStyleType = listType
     }
   },
 )
-const toggleBulletList = (listStyleType: string) => {
+const toggleBulletList = (listType: string) => {
   const chain = editor.value?.chain().focus()
   if (editor.value?.isActive('bulletList')) {
-    if (
-      editor.value.getAttributes('bulletList').listStyleType === listStyleType
-    ) {
+    if (editor.value.getAttributes('bulletList').listType === listType) {
       chain?.toggleBulletList().run()
     } else {
-      chain?.updateAttributes('bulletList', { listStyleType }).run()
+      chain?.updateAttributes('bulletList', { listType }).run()
     }
   } else {
     chain
       ?.toggleBulletList()
-      ?.updateAttributes('bulletList', { listStyleType })
+      ?.updateAttributes('bulletList', { listType })
       ?.run()
   }
-  listType = listStyleType
+  listStyleType = listType
   popupVisible.value = false
 }
 </script>

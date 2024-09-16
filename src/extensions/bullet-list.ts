@@ -6,17 +6,13 @@ export default BulletList.extend({
   addAttributes() {
     return {
       ...this.parent?.(),
-      listStyleType: {
+      listType: {
         default: 'disc',
-        parseHTML: (element: HTMLElement) => {
-          const listStyleType =
-            element.style['list-style-type' as keyof CSSStyleDeclaration] ??
-            'disc'
-          return { listStyleType }
-        },
-        renderHTML: ({ listStyleType }) => {
+        parseHTML: (element) =>
+          element.style.getPropertyValue('list-style-type') || 'disc',
+        renderHTML: ({ listType }) => {
           return {
-            style: `list-style-type: ${listStyleType?.listStyleType || listStyleType}`,
+            style: `list-style-type: ${listType}`,
           }
         },
       },
