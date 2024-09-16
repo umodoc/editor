@@ -127,12 +127,11 @@ const {
 const $toolbar = useState('toolbar', props.editorKey)
 const $document = useState('document', props.editorKey)
 
-consoleCopyright()
-
 // Lifecycle Hooks
 onBeforeMount(() => setOptions(props))
 onMounted(() => {
   setTheme(options.value.theme)
+  consoleCopyright()
 })
 onBeforeUnmount(() => {
   clearAutoSaveInterval()
