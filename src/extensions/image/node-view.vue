@@ -3,6 +3,7 @@
     :id="node.attrs.id"
     ref="containerRef"
     class="umo-node-view"
+    :class="{ 'umo-node-view-empty': node.attrs.draggable }"
     :style="nodeStyle"
     @dblclick="imagePreview = node.attrs.src"
   >
@@ -110,7 +111,7 @@ const nodeStyle = $computed(() => {
     justifyContent: nodeAlign,
     marginTop,
     marginBottom,
-    zIndex: node.attrs.draggable ? 10 : 0,
+    zIndex: selected ? 100 : node.attrs.draggable ? 95 : 0,
   }
 })
 

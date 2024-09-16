@@ -81,10 +81,20 @@
             z-index: -1;
           }
 
-          &:is(div) {
+          &:is(div):not(.umo-node-view-empty) {
             &::before {
               top: -8px !important;
               bottom: -8px !important;
+            }
+          }
+          &.umo-node-view-empty {
+            &::before {
+              top: 3px !important;
+              bottom: auto;
+              height: 2px;
+              left: 0 !important;
+              right: 0 !important;
+              background: var(--umo-primary-color) !important;
             }
           }
 
