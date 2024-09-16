@@ -33,7 +33,9 @@
             }"
             @change="selectPageSize as any"
           >
-            <template #valueDisplay> {{ pageOptions.size?.label }} </template>
+            <template #valueDisplay>
+              {{ l(pageOptions.size?.label) }}
+            </template>
             <t-option
               v-for="(item, index) in options.dicts?.pageSizes"
               :key="index"
