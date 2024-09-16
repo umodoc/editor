@@ -1,5 +1,6 @@
 <template>
   <menus-button
+    v-if="editor?.getAttributes('image')?.draggable"
     ico="image-reset"
     :text="t('bubbleMenu.image.reset')"
     @menu-click="resetPosition"
