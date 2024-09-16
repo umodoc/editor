@@ -643,7 +643,7 @@ const toggleSpellcheck = () => {
 }
 
 .umo-word-count {
-  margin-right: 0.5em;
+  margin-right: 0.25em;
   &-detail {
     padding: 10px 0 8px;
     width: 160px;
