@@ -23,7 +23,7 @@ export default Node.create({
         default: 200,
       },
       height: {
-        default: 40,
+        default: 34,
       },
       angle: {
         default: null,
@@ -39,6 +39,18 @@ export default Node.create({
       },
       rotatable: {
         default: true,
+      },
+      borderWidth: {
+        default: 1,
+      },
+      borderColor: {
+        default: '#000',
+      },
+      borderStyle: {
+        default: 'solid',
+      },
+      backgroundColor: {
+        default: 'transparent',
       },
     }
   },

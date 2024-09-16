@@ -3,7 +3,13 @@
     :id="node.attrs.id"
     ref="containerRef"
     class="umo-node-view"
-    :style="{ zIndex: 90 }"
+    :style="{
+      zIndex: 90,
+      '--umo-textbox-border-color': node.attrs.borderColor,
+      '--umo-textbox-border-width': node.attrs.borderWidth + 'px',
+      '--umo-textbox-border-style': node.attrs.borderStyle,
+      '--umo-textbox-background-color': node.attrs.backgroundColor,
+    }"
     @dblclick.capture="disabled = true"
   >
     <div class="umo-node-container umo-node-text-box">
@@ -24,6 +30,7 @@
         @rotate="onRotate"
         @resize="onResize"
         @drag="onDrag"
+        @dragend="onDragEnd"
         @blur="disabled = false"
         @click="selected = true"
       >
@@ -66,6 +73,10 @@ onClickOutside(containerRef, () => (selected = false))
       user-select: text !important;
       cursor: default !important;
       z-index: 90 !important;
+      background-color: var(--umo-textbox-background-color);
+      &.dragging {
+        caret-color: transparent;
+      }
       &.disabled {
         outline: none;
         &:after {
@@ -73,18 +84,20 @@ onClickOutside(containerRef, () => (selected = false))
         }
       }
       &.selected {
-        .content {
-          border: none;
+        .umo-node-text-box-content {
+          outline: none;
         }
       }
       &.disabled.selected {
-        .content {
-          outline: solid 1px var(--umo-text-color);
+        .umo-node-text-box-content {
+          outline: var(--umo-textbox-border-style)
+            var(--umo-textbox-border-width) var(--umo-textbox-border-color);
         }
       }
     }
     .umo-node-text-box-content {
-      outline: solid 1px var(--umo-text-color);
+      outline: var(--umo-textbox-border-style) var(--umo-textbox-border-width)
+        var(--umo-textbox-border-color);
       height: 100%;
       padding: 5px;
       box-sizing: border-box;

@@ -451,7 +451,6 @@
       },
       "wordWrap": "Word Wrap"
     },
-    "delete": "Delete",
     "file": {
       "download": "Download File"
     },
@@ -467,7 +466,15 @@
       "reset": "Reset Image Position",
       "rotateCC": "Rotate Counter-Clockwise 90°",
       "rotateC": "Rotate Clockwise 90°"
-    }
+    },
+    "textBox": {
+      "background": "Background Color",
+      "border": "Border Settings",
+      "borderColor": "Border Color",
+      "borderStyle": "Border Style",
+      "noBorder": "No Border"
+    },
+    "delete": "Delete"
   },
   "assistant": {
     "text": "AI Assistant",

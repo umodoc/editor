@@ -109,6 +109,11 @@
     <menus-toolbar-base-background-color />
     <menus-toolbar-base-highlight />
     <div class="umo-bubble-menu-divider"></div>
+    <template v-if="editor?.isActive('textBox')">
+      <menus-bubble-text-box-border />
+      <menus-bubble-text-box-background />
+      <div class="umo-bubble-menu-divider"></div>
+    </template>
     <template v-if="options.document?.enableComment">
       <menus-bubble-comment />
       <div class="umo-bubble-menu-divider"></div>
