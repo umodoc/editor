@@ -40,6 +40,7 @@
               v-for="(item, index) in options.dicts?.pageSizes"
               :key="index"
               :value="index"
+              :title="`${l(item.label)} (${item.width}×${item.height}${t('page.size.cm')})`"
             >
               <div class="label" v-text="l(item.label)"></div>
               <div class="desc">
