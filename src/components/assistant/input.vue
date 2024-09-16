@@ -135,8 +135,8 @@ import type {
 const { options, editor, assistantBox } = useStore()
 
 const inputRef = ref<HTMLElement | null>(null)
-const command = ref<string>('')
-const result = ref<AssistantResult>({
+let command = $ref<string>('')
+const result = $ref<AssistantResult>({
   prompt: '',
   content: '',
   error: false,
@@ -145,16 +145,16 @@ const generating = ref<boolean>(false)
 
 const send = async () => {
   generating.value = true
-  result.value.error = false
-  result.value.prompt = ''
-  result.value.content = ''
+  result.error = false
+  result.prompt = ''
+  result.content = ''
 
   const { locale } = useI18n()
 
   const payload: AssistantPayload = {
     lang: locale.value,
     input: editor.value ? getSelectionText(editor.value) : '',
-    command: command.value,
+    command,
     output: 'rich-text',
   }
 
@@ -167,9 +167,9 @@ const send = async () => {
   try {
     const data = await options.value.onAssistant?.(payload, content)
     const errorHandler = () => {
-      if (result.value.content.startsWith('[ERROR]: ')) {
-        result.value.error = true
-        result.value.content = result.value.content.replace('[ERROR]: ', '')
+      if (result.content.startsWith('[ERROR]: ')) {
+        result.error = true
+        result.content = result.content.replace('[ERROR]: ', '')
       }
     }
 
@@ -177,11 +177,11 @@ const send = async () => {
       const stream = new WritableStream({
         write(chunk) {
           errorHandler()
-          result.value.content += chunk
+          result.content += chunk
         },
         close() {
           generating.value = false
-          result.value.command = command.value
+          result.command = command
         },
       })
       void data.pipeTo(stream)
@@ -190,9 +190,9 @@ const send = async () => {
 
     if (isString(data)) {
       generating.value = false
-      result.value.command = command.value
+      result.command = command
       errorHandler()
-      result.value.content = data
+      result.content = data
       return
     }
 
@@ -214,9 +214,9 @@ const send = async () => {
 }
 
 const insertCommand = ({ value, autoSend }: CommandItem) => {
-  command.value = l(value) ?? ''
-  result.value.command = l(value) ?? ''
-  result.value.content = ''
+  command = l(value) ?? ''
+  result.command = l(value) ?? ''
+  result.content = ''
   inputRef.value?.focus()
   if (autoSend !== false) {
     void send()
@@ -229,18 +229,14 @@ const exitAssistant = () => {
 }
 
 const replaceContent = () => {
-  editor.value?.chain().insertContent(result.value.content).run()
+  editor.value?.chain().insertContent(result.content).run()
   exitAssistant()
 }
 
 const insertContentAtAfter = () => {
   const { to } = editor.value?.state.selection ?? {}
   if (to) {
-    editor.value
-      ?.chain()
-      .insertContentAt(to, result.value.content)
-      .focus()
-      .run()
+    editor.value?.chain().insertContentAt(to, result.content).focus().run()
   }
   exitAssistant()
 }
@@ -249,34 +245,31 @@ const insertContentAtBelow = () => {
   editor.value?.commands.selectParentNode()
   const { to } = editor.value?.state.selection ?? {}
   if (to) {
-    editor.value
-      ?.chain()
-      .insertContentAt(to, result.value.content)
-      .focus()
-      .run()
+    editor.value?.chain().insertContentAt(to, result.content).focus().run()
   }
   exitAssistant()
 }
 
 const copyResult = () => {
   const { copy } = useClipboard({
-    source: ref(result.value.content),
+    source: ref(result.content),
   })
   void copy()
   useMessage('success', t('assistant.copySuccess'))
 }
 
 const rewrite = () => {
-  if (result.value.command) {
-    command.value = result.value.command
+  const { command: resultCommand } = result
+  if (resultCommand) {
+    command = resultCommand
   }
   void send()
 }
 
 const deleteResult = () => {
-  command.value = ''
-  result.value.prompt = ''
-  result.value.content = ''
+  command = ''
+  result.prompt = ''
+  result.content = ''
 }
 </script>
 

@@ -236,7 +236,16 @@ const emits = defineEmits(['close'])
 
 const { container, options, page } = useStore()
 
-const pageOptions = $ref(JSON.parse(JSON.stringify(page.value)))
+let pageOptions = $ref({})
+watch(
+  () => props.visible,
+  (visible: boolean) => {
+    if (visible) {
+      pageOptions = JSON.parse(JSON.stringify(page.value))
+    }
+  },
+  { immediate: true },
+)
 
 // 页面大小
 const selectPageSize = (value: number) => {

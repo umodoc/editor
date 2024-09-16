@@ -49,7 +49,6 @@
 </template>
 
 <script setup lang="ts">
-const store = useStore()
 const { container, page, imagePreview } = useStore()
 
 // 页面大小
@@ -90,6 +89,8 @@ watch(
   },
   { immediate: true, deep: true },
 )
+
+const store = useStore()
 watch(
   () => store.editor.value?.getHTML(),
   () => {
@@ -99,8 +100,8 @@ watch(
 
 // 图片预览
 let previewImages = $ref<string[]>([])
-let currentImageIndex = $ref(0)
-let imagePreviewVisible = $ref(false)
+let currentImageIndex = $ref<number>(0)
+let imagePreviewVisible = $ref<boolean>(false)
 
 watch(
   () => imagePreview.value,

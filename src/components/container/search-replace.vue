@@ -90,9 +90,9 @@
 import { getSelectionText } from '@/extensions/selection'
 const { editor, searchReplace } = useStore()
 
-let searchText = $ref('')
-let replaceText = $ref('')
-const caseSensitive = $ref(false)
+let searchText = $ref<string>('')
+let replaceText = $ref<string>('')
+const caseSensitive = $ref<boolean>(false)
 useHotkeys('ctrl+f, command+f', () => {
   searchReplace.value = true
 })
@@ -137,7 +137,7 @@ const goToSelection = () => {
 
 watch(
   () => searchText.trim(),
-  (val: any, oldVal: any) => {
+  (val: string, oldVal: string) => {
     if (!val) {
       clear()
     }
@@ -148,12 +148,16 @@ watch(
 )
 watch(
   () => replaceText.trim(),
-  (val: any, oldVal: any) => (val === oldVal ? null : search()),
+  (val: string, oldVal: string) => (val === oldVal ? null : search()),
 )
 
 watch(
   () => caseSensitive,
-  (val: any, oldVal: any) => (val === oldVal ? null : search(true)),
+  (val: boolean, oldVal: boolean) => {
+    if (val !== oldVal) {
+      search(true)
+    }
+  },
 )
 
 const next = () => {

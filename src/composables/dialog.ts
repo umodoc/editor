@@ -1,9 +1,5 @@
-import {
-  type DialogOptions,
-  DialogPlugin,
-  type MessageOptions,
-  MessagePlugin,
-} from 'tdesign-vue-next'
+import type { DialogOptions, MessageOptions } from 'tdesign-vue-next'
+import { DialogPlugin, MessagePlugin } from 'tdesign-vue-next'
 const { container } = useStore()
 
 export const useAlert = (

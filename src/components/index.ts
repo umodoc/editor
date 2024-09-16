@@ -1,8 +1,5 @@
 import 'virtual:svg-icons-register'
 
-// @ts-ignore
-import type { App } from 'vue'
-
 import type { UmoEditorOptions } from '@/types'
 
 import UmoEditor from './index.vue'
@@ -11,7 +8,7 @@ import UmoDialog from './modal.vue'
 import UmoTooltip from './tooltip.vue'
 
 const useUmoEditor = {
-  install: (app: App, options: UmoEditorOptions) => {
+  install: (app: any, options: UmoEditorOptions) => {
     // 组件配置
     const { setOptions } = useStore()
     setOptions(options)

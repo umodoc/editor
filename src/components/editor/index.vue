@@ -50,15 +50,15 @@ if (
   enableRules = [Mathematics, Typography, Image as Extension]
 }
 
-const defaultLineHeight = $computed(() => {
-  return options.value.dicts?.lineHeights?.find((item: any) => item.default)
-    ?.value
-})
+const defaultLineHeight = $computed(
+  () =>
+    options.value.dicts?.lineHeights?.find((item: any) => item.default)?.value,
+)
 
-let isReady = $ref(false)
-let isEmpty = $ref(false)
+let isReady = $ref<boolean>(false)
+let isEmpty = $ref<boolean>(false)
 
-const editorInstance = new Editor({
+const editorInstance: Editor = new Editor({
   editable: !options.value.document?.readOnly,
   autofocus: options.value.document?.autofocus,
   content: options.value.document?.content,

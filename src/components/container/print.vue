@@ -25,13 +25,12 @@ const getContentHtml = () => {
     .join('')
 }
 
-const defaultLineHeight = $computed(() => {
-  return (
+const defaultLineHeight = $computed(
+  () =>
     options.value.dicts?.lineHeights.find(
       (item: { default: any }) => item.default,
-    )?.value ?? '1.5'
-  )
-})
+    )?.value,
+)
 
 const getIframeCode = () => {
   const { orientation, size, background } = page.value
@@ -49,7 +48,7 @@ const getIframeCode = () => {
         height: auto;
       }
       @page {
-        size: ${(orientation === 'portrait' ? size?.width : size?.height) ?? '1'}cm ${(orientation === 'portrait' ? size?.height : size?.width) ?? '1'}cm; 
+        size: ${orientation === 'portrait' ? size?.width : size?.height}cm ${orientation === 'portrait' ? size?.height : size?.width}cm; 
         margin:0;
         background: ${background};
       }
@@ -92,10 +91,11 @@ const printPage = () => {
 
 watch(
   () => [printing.value, exportPDF.value],
-  (value: any[]) => {
-    if (value[0] || value[1]) {
-      printPage()
+  (value: [boolean, boolean]) => {
+    if (!value[0] && !value[1]) {
+      return
     }
+    printPage()
   },
 )
 </script>

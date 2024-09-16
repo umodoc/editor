@@ -20,8 +20,5 @@ export const useNodePostion = () => {
   // ) {
   //   offsetY = 5
   // }
-  // if (editor.value.isActive('pagination')) {
-  //   offsetY = -4
-  // }
   return { offsetTop, offsetLeft }
 }
