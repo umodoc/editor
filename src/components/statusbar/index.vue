@@ -414,7 +414,8 @@ const autoWidth = (auto = true, padding = 50) => {
     const pageEl = editorEl?.querySelector('.umo-page-content')
     const editorWidth = editorEl?.clientWidth ?? 0
     const pageWidth = pageEl?.clientWidth ?? 0
-    page.value.zoomLevel = ((editorWidth - padding * 2) / pageWidth) * 100
+    page.value.zoomLevel =
+      Number(((editorWidth - padding * 2) / pageWidth).toFixed(2)) * 100
 
     page.value.autoWidth = true
   } catch (e) {
