@@ -87,6 +87,7 @@
 </template>
 
 <script setup lang="ts">
+import { getSelectionText } from '@/extensions/selection'
 const { editor, searchReplace } = useStore()
 
 let searchText = $ref('')
@@ -174,8 +175,8 @@ const replaceAll = () => editor.value?.commands.replaceAll()
 
 watch(
   () => searchReplace.value,
-  () => {
-    clear()
+  (visible: boolean) => {
+    searchText = visible ? getSelectionText(editor.value) : ''
   },
 )
 </script>
