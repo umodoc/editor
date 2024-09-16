@@ -1,4 +1,5 @@
 {
+  "welcome": "%cUmo Editor%c欢迎使用 Umo Editor%c Umo Editor 是完全开源和免费的，更多信息请访问：https://umodoc.com",
   "toolbar": {
     "ribbon": "专业工具栏",
     "classic": "经典工具栏",

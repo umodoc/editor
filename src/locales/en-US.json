@@ -1,4 +1,5 @@
 {
+  "welcome": "%cUmo Editor%c Welcome to Umo Editor%c Umo Editor is completely open-source and free. For more information, please visit: https://umodoc.com",
   "toolbar": {
     "ribbon": "Professional",
     "classic": "Classic",

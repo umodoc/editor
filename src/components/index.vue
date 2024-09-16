@@ -60,7 +60,7 @@ import {
   isRecord,
   isString,
 } from '@tool-belt/type-predicates'
-import domtoimage from 'dom-to-image-more'
+import domToImage from 'dom-to-image-more'
 import type { GlobalConfigProvider } from 'tdesign-vue-next'
 import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
@@ -74,8 +74,9 @@ import type {
   SupportedLocale,
   WatermarkOption,
 } from '@/types'
+import { consoleCopyright } from '@/utils/copyright'
 
-const { toBlob, toJpeg, toPng } = domtoimage
+const { toBlob, toJpeg, toPng } = domToImage
 
 defineOptions({ name: 'UmoEditor' })
 
@@ -125,6 +126,8 @@ const {
 
 const $toolbar = useState('toolbar', props.editorKey)
 const $document = useState('document', props.editorKey)
+
+consoleCopyright()
 
 // Lifecycle Hooks
 onBeforeMount(() => setOptions(props))
@@ -843,11 +846,9 @@ defineExpose({
     &.laser-pointer {
       cursor: url('@/assets/images/laser-pointer.svg'), auto;
     }
-
     .umo-toolbar {
       display: none;
     }
   }
 }
 </style>
-cnConfig as unknownenConfig as unknown
