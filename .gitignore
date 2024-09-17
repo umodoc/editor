@@ -37,10 +37,6 @@ package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
-# Auto imports
-imports.d.ts
-components.d.ts
-
 # Other
 .DS_Store
 Thumbs.db

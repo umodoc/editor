@@ -1,9 +1,9 @@
 import shortId from '@/utils/short-id'
 
+import type { UmoEditorOptions } from '../types/options'
 import App from './app.vue'
 // 插件本地开发
 import { useUmoEditor } from './components'
-import type { UmoEditorOptions } from './types'
 
 // 插件打包测试
 // import UmoEditor from '../dist/umo-editor'

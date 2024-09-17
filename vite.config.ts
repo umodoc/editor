@@ -23,12 +23,13 @@ const vuePlugins = {
     dirs: ['./src/composables'],
     imports: ['vue', '@vueuse/core'],
     resolvers: [TDesignResolver({ library: 'vue-next', esm: true })],
-    dts: './imports.d.ts',
+    dts: './types/imports.d.ts',
   }),
   Components: Components({
     directoryAsNamespace: true,
     dirs: ['./src/components'],
     resolvers: [TDesignResolver({ library: 'vue-next', esm: true })],
+    dts: './types/components.d.ts',
   }),
   SvgIcons: createSvgIconsPlugin({
     iconDirs: [`${process.cwd()}/src/assets/icons`],

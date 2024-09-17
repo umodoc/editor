@@ -10,8 +10,8 @@ import eslintTS from 'typescript-eslint'
 
 function createAutoImportedGlobals() {
   // Read the content of the files synchronously
-  const componentsContent = readFileSync('./components.d.ts', 'utf8')
-  const importsContent = readFileSync('./imports.d.ts', 'utf8')
+  const componentsContent = readFileSync('./types/components.d.ts', 'utf8')
+  const importsContent = readFileSync('./types/imports.d.ts', 'utf8')
 
   // Extract keys from GlobalComponents in components.d.ts
   const globalComponentsMatch = componentsContent.match(

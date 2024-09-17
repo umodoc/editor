@@ -1,7 +1,7 @@
 import 'virtual:svg-icons-register'
 import 'default-passive-events'
 
-import type { UmoEditorOptions } from '@/types'
+import type { UmoEditorOptions } from 'types/options'
 
 import UmoEditor from './index.vue'
 import UmoMenuButton from './menus/button.vue'
