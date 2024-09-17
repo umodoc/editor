@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import SearchReplace from '@sereneinserenade/tiptap-search-and-replace'
 import Bold from '@tiptap/extension-bold'
 import CharacterCount from '@tiptap/extension-character-count'
@@ -19,6 +17,7 @@ import TextColor from '@tiptap/extension-text-style'
 import Typography from '@tiptap/extension-typography'
 import Underline from '@tiptap/extension-underline'
 import StarterKit from '@tiptap/starter-kit'
+import type { Editor } from '@tiptap/vue-3'
 import Mathematics from '@tiptap-pro/extension-mathematics'
 import { TableOfContents } from '@tiptap-pro/extension-table-of-contents'
 import { getHierarchicalIndexes } from '@tiptap-pro/extension-table-of-contents'
@@ -68,7 +67,6 @@ export const extensions = [
     orderedList: false,
     codeBlock: false,
     horizontalRule: false,
-    gapcursor: true,
     dropcursor: false,
   }),
   Document.extend({ content: 'page+' }),
@@ -106,7 +104,8 @@ export const extensions = [
   }),
   LineHeight.configure({
     types: ['heading', 'paragraph'],
-    defaultLineHeight: dicts.lineHeights.find((item) => item.default).value,
+    defaultLineHeight: dicts.lineHeights.find((item: any) => item.default)
+      .value,
   }),
   Margin,
   SearchReplace.configure({
@@ -142,7 +141,9 @@ export const extensions = [
       tableOfContents.value = content
     },
     scrollParent: () =>
-      document.querySelector(`${container} .umo-zoomable-container`),
+      document.querySelector(
+        `${container} .umo-zoomable-container`,
+      ) as HTMLElement,
     getId: () => shortId(6),
   }),
   Typography.configure(doc.typographyRules),
@@ -151,12 +152,12 @@ export const extensions = [
   }),
   FileHandler.configure({
     allowedMimeTypes: file.allowedMimeTypes,
-    onPaste(editor, files) {
+    onPaste(editor: Editor, files: any) {
       for (const file of files) {
         editor.commands.insertFile({ file })
       }
     },
-    onDrop: (editor, files, pos) => {
+    onDrop: (editor: Editor, files: any, pos: number) => {
       for (const file of files) {
         editor.commands.insertFile({ file, pos })
       }
