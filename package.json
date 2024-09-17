@@ -43,6 +43,7 @@
       "import": "./dist/style.css"
     }
   },
+  "types": "./types/index.d.ts",
   "scripts": {
     "build": "vue-tsc --noEmit && vite build",
     "dev": "vite --port 9000 --open --force",
