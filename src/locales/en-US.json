@@ -570,14 +570,14 @@
   "changeLocale": {
     "title": "Switch Language",
     "message": "After changing the language, the page will refresh. Please save your document content first. Are you sure you want to switch now?",
-    "confirm": "Switch Now"
+    "confirm": "Switch"
   },
   "resetAll": {
     "title": "Reset Editor",
     "message": "This action will clear all editor settings and current content, and refresh the page. It's recommended to save your content before resetting. Are you sure you want to reset now?",
-    "reset": "Reset Now"
+    "reset": "Reset"
   },
-  "feedback": "Feedback",
+  "feedback": "Issues / Feedback",
   "poweredBy": "Powered by Umo Editor",
   "wordCount": {
     "characters": "Characters",
