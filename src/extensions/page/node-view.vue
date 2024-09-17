@@ -14,9 +14,12 @@
       '--umo-page-height': pageSize.height + 'cm',
     }"
   >
-    <tooltip placement="right" :content="t('pagination.toggle')">
+    <tooltip
+      v-if="node.attrs.pageNumber > 1"
+      placement="right"
+      :content="t('pagination.toggle')"
+    >
       <div
-        v-if="node.attrs.pageNumber > 1"
         class="umo-page-node-view-handler"
         @dblclick="page.pagination = !page.pagination"
       ></div>
