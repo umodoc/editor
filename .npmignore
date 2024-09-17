@@ -1,22 +1,23 @@
-.DS_Store
-.vscode/
-.gitee/
-.github/
-.git/
+// Ignore all files and folders starting with a dot
+.*
+
+// Ignore logs
+*.log*
+
+// Ignore timestamp files
+*.timestamp*
+
+// Ignore development files
 node_modules
-static/
 src/
 public/
-.eslintrc.json
-.gitignore
-.npmignore
-.prettierrc.json
-imports.d.ts
+biome.json
+eslint.config.mjs
 index.html
-example.html
 jsconfig.json
-stats.html
-vite.config.js
-yarn.lock
-yarn-error.log
+package.json
 TODO
+tsconfig.json
+vite.config.ts
+vitest.config.ts
+yarn.lock

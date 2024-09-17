@@ -3,6 +3,7 @@ node_modules/
 
 # Build output
 dist/
+package/
 
 # Editor directories and files
 .idea/
