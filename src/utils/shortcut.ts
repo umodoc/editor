@@ -1,4 +1,4 @@
-export function getShortcut(shortcut: string) {
+export const getShortcut = (shortcut: string) => {
   if (!shortcut) {
     return ''
   }

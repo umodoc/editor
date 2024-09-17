@@ -17,7 +17,7 @@
 import { removeBackground } from '@imgly/background-removal'
 
 import { getSelectionNode } from '@/extensions/selection'
-import shortId from '@/utils/short-id'
+import { shortId } from '@/utils/short-id'
 
 const { options, editor } = useStore()
 

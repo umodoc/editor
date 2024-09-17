@@ -6,7 +6,7 @@ import { isRecord } from '@tool-belt/type-predicates'
 import { changeComputedHtml } from '@/extensions/page/core'
 import { defaultOptions, ojbectSchema } from '@/options'
 import type { PageOption, UmoEditorOptions } from '@/types'
-import shortId from '@/utils/short-id'
+import { shortId } from '@/utils/short-id'
 
 export type TableOfContentItem = TableOfContentDataItem & { title: string }
 

@@ -91,7 +91,7 @@ import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import Drager from 'es-drager'
 import { base64ToFile } from 'file64'
 
-import shortId from '@/utils/short-id'
+import { shortId } from '@/utils/short-id'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const { options, editor, imageViewer } = useStore()

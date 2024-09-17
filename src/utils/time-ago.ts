@@ -1,6 +1,5 @@
-export function timeAgo(timestamp: string | number | Date) {
+export const timeAgo = (timestamp: string | number | Date) => {
   const messages = {
-    // @ts-ignore
     justNow: t('time.justNow'),
     past: (n: string | number | Date) =>
       n.toString().match(/\d/) ? t('time.past', { n }) : n,

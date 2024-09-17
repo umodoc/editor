@@ -23,7 +23,7 @@ import Mathematics from '@tiptap-pro/extension-mathematics'
 import { TableOfContents } from '@tiptap-pro/extension-table-of-contents'
 import { getHierarchicalIndexes } from '@tiptap-pro/extension-table-of-contents'
 
-import shortId from '@/utils/short-id'
+import { shortId } from '@/utils/short-id'
 
 import Audio from './audio'
 import BulletList from './bullet-list'

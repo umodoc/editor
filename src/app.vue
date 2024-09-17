@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import UmoEditor from '@/components/index.vue'
-import shortId from '@/utils/short-id'
+import { shortId } from '@/utils/short-id'
 
 const editorRef = $ref(null)
 const templates = [

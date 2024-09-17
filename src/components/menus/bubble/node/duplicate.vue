@@ -10,7 +10,7 @@
 import type { Node } from '@tiptap/pm/model'
 
 import { getSelectionNode } from '@/extensions/selection'
-import getId from '@/utils/short-id'
+import { shortId } from '@/utils/short-id'
 
 const { editor } = useStore()
 
@@ -28,7 +28,7 @@ const duplicateNode = () => {
   const copeNode = selectionNode?.type.create(
     {
       ...selectionNode.attrs,
-      id: getId(),
+      id: shortId(),
     },
     selectionNode.content,
     selectionNode.marks,
