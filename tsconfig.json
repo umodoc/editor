@@ -30,7 +30,8 @@
       "./types/components.d.ts"
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/types": ["./types"]
     },
     "lib": ["ESNext", "DOM", "DOM.Iterable", "ScriptHost"]
   },
