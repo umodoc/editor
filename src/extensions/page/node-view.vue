@@ -14,12 +14,13 @@
       '--umo-page-height': pageSize.height + 'cm',
     }"
   >
-    <div
-      v-if="node.attrs.pageNumber > 1"
-      class="umo-page-node-view-handler"
-      :title="t('pagination.toggle')"
-      @dblclick="page.pagination = !page.pagination"
-    ></div>
+    <tooltip placement="right" :content="t('pagination.toggle')">
+      <div
+        v-if="node.attrs.pageNumber > 1"
+        class="umo-page-node-view-handler"
+        @dblclick="page.pagination = !page.pagination"
+      ></div>
+    </tooltip>
     <t-watermark
       v-if="page.watermark"
       class="umo-page-watermark"
@@ -88,7 +89,7 @@ const { editor, node } = defineProps(nodeViewProps)
 const containerRef = ref(null)
 
 const pageSize = $computed(() => {
-  const { width, height } = page.value.size ?? { width: 0, height: 0 }
+  const { width, height } = page.value.size
   return {
     width: page.value.orientation === 'portrait' ? width : height,
     height: page.value.orientation === 'portrait' ? height : width,
@@ -269,7 +270,6 @@ watch(
   }
 
   .umo-page-node-view-handler {
-    cursor: vertical-text;
     background-color: var(--umo-page-background);
     margin-top: -10px;
 
