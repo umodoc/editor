@@ -259,6 +259,17 @@
     </div>
   </div>
   <div v-else class="umo-preview-bar">
+    <statusbar-countdown
+      :visible="countdownSetting"
+      @visible-change="(visible: boolean) => (countdownSetting = visible)"
+      @exit-preivew="exitPreview"
+      @close="countdownSetting = false"
+    >
+      <div class="item" :class="{ active: countdownSetting }">
+        <icon name="time" />
+        {{ t('preview.countdown.title') }}
+      </div>
+    </statusbar-countdown>
     <div
       class="item"
       :class="{ active: page.preview?.laserPointer }"
@@ -354,9 +365,19 @@ const togglePreview = () => {
     zoomableContainer.scrollTop = 0
   }
 }
+const exitPreview = () => {
+  if (page.value.preview.enabled) {
+    page.value.preview ??= {}
+    page.value.preview.enabled = false
+  }
+}
 onMounted(() => {
   useHotkeys('f5', togglePreview)
 })
+
+// 演示模式倒计时
+const countdownSetting = $ref(false)
+
 watch(
   () => page.value.preview?.enabled,
   (value: boolean) => {
@@ -373,8 +394,7 @@ watch(
   () => fullscreen?.isFullscreen?.value,
   (value: boolean) => {
     if (!value) {
-      page.value.preview ??= {}
-      page.value.preview.enabled = false
+      exitPreview()
     }
   },
   { deep: true },

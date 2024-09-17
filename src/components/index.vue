@@ -843,7 +843,9 @@ defineExpose({
   }
   &.preview-mode {
     &.laser-pointer {
-      cursor: url('@/assets/images/laser-pointer.svg'), auto;
+      .umo-main {
+        cursor: url('@/assets/images/laser-pointer.svg'), auto;
+      }
     }
     .umo-toolbar {
       display: none;
