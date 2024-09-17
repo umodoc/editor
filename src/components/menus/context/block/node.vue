@@ -5,15 +5,7 @@
     overlay-class-name="umo-block-menu-dropdown"
     trigger="click"
     :destroy-on-close="false"
-    :popup-props="{
-      onVisibleChange(visible: boolean) {
-        editor?.commands.focus()
-        // @ts-ignore
-        blockMenu = visible
-        // @ts-ignore
-        menuActive = visible
-      },
-    }"
+    :popup-props="popupProps"
   >
     <menus-button
       class="umo-block-menu-button"
@@ -251,7 +243,14 @@ import type { Template } from '@/types'
 
 const { container, options, editor, blockMenu, assistantBox } = useStore()
 
-const menuActive = $ref(false)
+let menuActive = $ref(false)
+const popupProps = {
+  onVisibleChange(visible: boolean) {
+    editor.value.commands.focus()
+    blockMenu.value = visible
+    menuActive = visible
+  },
+}
 
 const headings = $ref<number[]>([1, 2, 3, 4, 5, 6])
 

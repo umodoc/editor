@@ -13,11 +13,10 @@ export default TableHeader.extend({
         default: null,
         parseHTML: (element) => element.getAttribute('data-bg-color'),
         renderHTML: ({ backgroundColor }) => {
-          const attrs = {
+          const attrs: { 'data-bg-color': any; style?: string } = {
             'data-bg-color': backgroundColor,
           }
           if (backgroundColor) {
-            // @ts-ignore
             attrs.style = `background-color: ${backgroundColor}`
           }
           return attrs

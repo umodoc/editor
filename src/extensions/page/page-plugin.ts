@@ -147,8 +147,7 @@ export const pagePlugin = (editor: Editor, nodesComputed: NodesComputed) => {
         },
       },
       transformPasted(slice, view) {
-        slice.content.descendants((node) => {
-          // @ts-ignore
+        slice.content.descendants((node: any) => {
           node.attrs.id = getId()
         })
         return slice

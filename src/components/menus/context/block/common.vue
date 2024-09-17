@@ -5,15 +5,7 @@
     overlay-class-name="umo-block-menu-dropdown"
     trigger="click"
     :destroy-on-close="false"
-    :popup-props="{
-      onVisibleChange(visible: boolean) {
-        editor?.commands.focus()
-        // @ts-ignore
-        blockMenu = visible
-        // @ts-ignore
-        menuActive = visible
-      },
-    }"
+    :popup-props="popupProps"
   >
     <menus-button
       class="umo-block-menu-button"
@@ -77,7 +69,15 @@ import { shortId } from '@/utils/short-id'
 
 const { container, editor, blockMenu } = useStore()
 
-const menuActive = $ref(false)
+let menuActive = $ref(false)
+
+const popupProps = {
+  onVisibleChange(visible: boolean) {
+    editor.value.commands.focus()
+    blockMenu.value = visible
+    menuActive = visible
+  },
+}
 
 const clearTextFormatting = () => {
   editor.value?.chain().focus().setCurrentNodeSelection().unsetAllMarks().run()

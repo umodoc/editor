@@ -20,7 +20,6 @@ const mimeTypes: any = {
 }
 
 const getAccept = (type: string) => {
-  // @ts-ignore
   const accept = options.value.file.allowedMimeTypes
   if (type === 'file' && accept.length === 0) {
     return ''
@@ -109,7 +108,6 @@ export default Node.create({
         ({ file, pos }) =>
         ({ editor, commands }) => {
           const { type, name, size } = file
-          // @ts-ignore
           const { maxSize } = options.value.file
           if (maxSize !== 0 && size > maxSize) {
             useMessage(

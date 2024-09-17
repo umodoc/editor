@@ -32,7 +32,6 @@ const { options, editor, painter, blockMenu, assistantBox, commentBox } =
 // 气泡菜单
 let tippyInstance = $ref<Instance | null>(null)
 const tippyOpitons = $ref<Partial<Instance>>({
-  // @ts-ignore
   appendTo: 'parent',
   maxWidth: 580,
   zIndex: 99,
