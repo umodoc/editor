@@ -139,6 +139,7 @@ const resetCountdown = () => {
   hours = null
   minutes = null
   seconds = null
+  countdownInfo.value = t('preview.countdown.startCountdown')
 }
 const startCountdown = async () => {
   messageBox?.close()
@@ -187,8 +188,7 @@ const startCountdown = async () => {
     }
     remainingTime--
 
-    // FIXME: 英文单复数
-    countdownInfo.value = `${t('preview.countdown.remaining')}: ${Math.floor(remainingTime / 3600)} ${t('preview.countdown.hours')} ${Math.floor((remainingTime % 3600) / 60)} ${t('preview.countdown.minutes')} ${remainingTime % 60} ${t('preview.countdown.seconds')}`
+    countdownInfo.value = `${t('preview.countdown.remaining')}: ${Math.floor(remainingTime / 3600)}:${Math.floor((remainingTime % 3600) / 60)}:${remainingTime % 60}`
   }, 1000)
 
   emits('close')
