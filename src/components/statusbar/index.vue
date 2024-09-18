@@ -346,7 +346,7 @@ const selectionCharacters = computed(() => {
 })
 
 // 页面全屏
-let fullscreen: UseFullscreenReturn
+let fullscreen: UseFullscreenReturn = $ref(null)
 onMounted(() => {
   fullscreen = useFullscreen(document.querySelector(container))
   useHotkeys('f11, command+f11', fullscreen.toggle)
@@ -380,8 +380,8 @@ const countdownSetting = $ref(false)
 
 watch(
   () => page.value.preview?.enabled,
-  (value: boolean) => {
-    if (value) {
+  (enabled: boolean) => {
+    if (enabled) {
       void fullscreen.enter()
       autoWidth(false, 10)
     } else {
@@ -391,13 +391,12 @@ watch(
   },
 )
 watch(
-  () => fullscreen?.isFullscreen?.value,
-  (value: boolean) => {
-    if (!value) {
+  () => fullscreen?.isFullscreen,
+  (isFullscreen: boolean) => {
+    if (!isFullscreen) {
       exitPreview()
     }
   },
-  { deep: true },
 )
 
 // 页面缩放
