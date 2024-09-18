@@ -57,6 +57,7 @@ const buildConfig = {
       },
     ],
     external: [
+      'vue',
       ...Object.keys(pkg.dependencies ?? {}),
       /^@vueuse\/.*/,
       /^@tiptap\/.*/,
@@ -79,7 +80,7 @@ const cssConfig = {
 }
 
 export default defineConfig({
-  base: '/umo-editor/',
+  base: '/umo-editor',
   plugins: [
     tsConfigPaths(),
     ReactivityTransform(),
