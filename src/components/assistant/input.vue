@@ -363,6 +363,7 @@ const deleteResult = () => {
     margin-bottom: 18px;
     width: 450px;
     text-align: justify;
+    min-height: auto;
     * + * {
       margin-top: 6px;
     }
