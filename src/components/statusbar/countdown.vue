@@ -4,12 +4,15 @@
     :attach="container"
     :z-index="2000"
     trigger="click"
-    placement="left-start"
+    placement="top-left"
     :popper-options="popperOptions"
   >
     <slot />
     <template #content>
       <div class="umo-preview-countdown">
+        <div class="umo-preview-countdown-title">
+          <icon name="time" /> {{ t('preview.countdown.title') }}
+        </div>
         <t-form label-align="left" label-width="75px" @submit="startCountdown">
           <t-form-item
             :label="t('preview.countdown.select')"
@@ -79,7 +82,7 @@
               <t-button theme="primary" type="submit">
                 <icon name="time" /> {{ t('preview.countdown.start') }}
               </t-button>
-              <t-button theme="default" variant="base" @click="emits('close')">
+              <t-button theme="default" variant="base" @click="cancelCountdown">
                 {{ t('preview.countdown.cancel') }}
               </t-button>
             </t-space>
@@ -98,7 +101,7 @@ const props = defineProps({
   },
 })
 
-const emits = defineEmits('exit-preivew', 'close')
+const emits = defineEmits('countdown-change', 'exit-preivew', 'close')
 
 const { container } = useStore()
 
@@ -132,14 +135,14 @@ const countdownSelect = (value: number) => {
   minutes = value
 }
 
-const countdownInfo = ref(t('preview.countdown.startCountdown'))
+let countdownInfo = $ref('')
 let messageBox: ReturnType<typeof useMessage> = null
 let countdownInterval: ReturnType<typeof setInterval> | null = null
 const resetCountdown = () => {
   hours = null
   minutes = null
   seconds = null
-  countdownInfo.value = t('preview.countdown.startCountdown')
+  countdownInfo = ''
 }
 const startCountdown = async () => {
   messageBox?.close()
@@ -156,17 +159,7 @@ const startCountdown = async () => {
 
   let remainingTime = totalSeconds
 
-  messageBox = await useMessage('info', {
-    content: countdownInfo,
-    duration: 0,
-    closeBtn: true,
-    zIndex: 9999,
-    onClose() {
-      resetCountdown()
-    },
-  })
-
-  countdownInterval = setInterval(() => {
+  countdownInterval = setInterval(async () => {
     if (remainingTime <= 0) {
       messageBox?.close()
       resetCountdown()
@@ -174,11 +167,11 @@ const startCountdown = async () => {
         clearInterval(countdownInterval)
       }
       if (whenEnd === 'showEndMessage') {
-        useMessage('warning', {
+        countdownInfo = ''
+        messageBox = await useMessage('error', {
           content: t('preview.countdown.endCountdown'),
-          duration: 0,
+          duration: 5000,
           closeBtn: true,
-          zIndex: 9999,
         })
       }
       if (whenEnd === 'exitPreview') {
@@ -187,12 +180,27 @@ const startCountdown = async () => {
       return
     }
     remainingTime--
-
-    countdownInfo.value = `${t('preview.countdown.remaining')}: ${Math.floor(remainingTime / 3600)}:${Math.floor((remainingTime % 3600) / 60)}:${remainingTime % 60}`
+    countdownInfo = `${t('preview.countdown.remaining')}: ${String(Math.floor(remainingTime / 3600)).padStart(2, '0')}:${String(Math.floor((remainingTime % 3600) / 60)).padStart(2, '0')}:${String(remainingTime % 60).padStart(2, '0')}`
   }, 1000)
 
   emits('close')
 }
+
+const cancelCountdown = () => {
+  if (countdownInterval) {
+    clearInterval(countdownInterval)
+  }
+  resetCountdown()
+  emits('close')
+}
+
+watch(
+  () => countdownInfo,
+  (value: string) => {
+    emits('countdown-change', value)
+  },
+  { immediate: true },
+)
 
 onBeforeUnmount(() => {
   if (countdownInterval !== null) {
@@ -204,9 +212,19 @@ onBeforeUnmount(() => {
 
 <style lang="less" scoped>
 .umo-preview-countdown {
-  padding: 29px 30px 26px;
+  padding: 25px;
   width: 320px;
   cursor: default;
+  &-title {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    :deep(.umo-icon) {
+      font-size: 24px;
+      margin: -2px 6px 0 0;
+    }
+  }
   :deep(.umo-form) {
     &__item {
       &:not(:last-child) {
@@ -223,6 +241,9 @@ onBeforeUnmount(() => {
           margin-right: 5px;
         }
       }
+    }
+    &__controls {
+      margin-top: 10px;
     }
   }
   &-input {

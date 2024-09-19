@@ -592,7 +592,7 @@
     "title": "Presentation",
     "disable": "Exit Presentation",
     "countdown": {
-      "title": "Countdown",
+      "title": "Set Countdown",
       "select": "Select",
       "selectTip": "Select the countdown duration",
       "custom": "Custom",
@@ -610,13 +610,11 @@
       "15minutes": "15 Minutes",
       "10minutes": "10 Minutes",
       "5minutes": "5 Minutes",
-      "startCountdown": "Start Countdown",
       "error": "Please set a valid countdown time",
       "endCountdown": "Countdown has ended",
       "remaining": "Remaining time"
     },
-    "laserPointer": "Laser Pointer",
-    "exit": "Exit"
+    "laserPointer": "Laser Pointer"
   },
   "fullscreen": {
     "title": "Fullscreen",

@@ -259,31 +259,58 @@
     </div>
   </div>
   <div v-else class="umo-preview-bar">
+    <div v-if="countdownValue !== ''" class="umo-preview-countdown">
+      {{ countdownValue }}
+    </div>
     <statusbar-countdown
       :visible="countdownSetting"
       @visible-change="(visible: boolean) => (countdownSetting = visible)"
+      @countdown-change="countdownChange"
       @exit-preivew="exitPreview"
       @close="countdownSetting = false"
     >
-      <div class="item" :class="{ active: countdownSetting }">
-        <icon name="time" />
-        {{ t('preview.countdown.title') }}
-      </div>
+      <tooltip :content="t('preview.countdown.title')">
+        <div class="item" :class="{ active: countdownSetting }">
+          <icon name="time" />
+        </div>
+      </tooltip>
     </statusbar-countdown>
-    <div
-      class="item"
-      :class="{ active: page.preview?.laserPointer }"
-      @click="
-        page.preview && (page.preview.laserPointer = !page.preview.laserPointer)
-      "
-    >
-      <icon name="laser-pointer" />
-      {{ t('preview.laserPointer') }}
-    </div>
-    <div class="item" @click="togglePreview">
-      <icon name="exit" />
-      {{ t('preview.exit') }}
-    </div>
+    <tooltip :content="t('preview.laserPointer')">
+      <div
+        class="item"
+        :class="{ active: page.preview?.laserPointer }"
+        @click="
+          page.preview &&
+            (page.preview.laserPointer = !page.preview.laserPointer)
+        "
+      >
+        <icon name="laser-pointer" />
+      </div>
+    </tooltip>
+    <tooltip :content="`${t('zoom.zoomOut')} (${getShortcut('Ctrl-')})`">
+      <div class="item" @click="zoomOut">
+        <icon name="minus" />
+      </div>
+    </tooltip>
+    <tooltip :content="`${t('zoom.autoWidth')} (${getShortcut('Ctrl0')})`">
+      <div
+        class="item"
+        :class="{ active: page.autoWidth }"
+        @click="autoWidth(true)"
+      >
+        <icon name="auto-width" />
+      </div>
+    </tooltip>
+    <tooltip :content="`${t('zoom.zoomIn')} (${getShortcut('Ctrl+')})`">
+      <div class="item" @click="zoomIn">
+        <icon name="plus" />
+      </div>
+    </tooltip>
+    <tooltip :content="`${t('preview.disable')} (${getShortcut('Esc')})`">
+      <div class="item" @click="togglePreview">
+        <icon name="exit" />
+      </div>
+    </tooltip>
   </div>
   <t-drawer
     v-model:visible="showShortcut"
@@ -377,6 +404,10 @@ onMounted(() => {
 
 // 演示模式倒计时
 const countdownSetting = $ref(false)
+let countdownValue = $ref('')
+const countdownChange = (value: string) => {
+  countdownValue = value
+}
 
 watch(
   () => page.value.preview?.enabled,
@@ -443,7 +474,7 @@ const autoWidth = (auto = true, padding = 50) => {
     console.warn('Page auto width calculation error', e)
   }
 }
-useHotkeys('ctrl+0,command+0', autoWidth)
+useHotkeys('Ctrl0,command+0', autoWidth)
 
 watch(
   () => page.value.showToc,
@@ -595,28 +626,30 @@ const toggleSpellcheck = () => {
 }
 .umo-preview-bar {
   position: absolute;
-  right: 50px;
-  bottom: 50px;
-  border-radius: 10px;
-  padding: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 30px;
+  border-radius: var(--umo-radius-medium);
+  padding: 8px;
   overflow: hidden;
-  cursor: pointer;
   user-select: none;
-  &::before {
-    position: absolute;
-    content: '';
-    display: block;
-    left: -20px;
-    right: -20px;
-    top: -20px;
-    bottom: -20px;
-    background-color: rgba(0, 0, 0, 0.3);
-    filter: blur(3px);
-    z-index: 0;
+  display: flex;
+  background: var(--umo-color-white);
+  box-shadow: var(--td-shadow-2), var(--td-shadow-inset-top),
+    var(--td-shadow-inset-right), var(--td-shadow-inset-bottom),
+    var(--td-shadow-inset-left);
+  gap: 5px;
+  .umo-preview-countdown {
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    background-color: var(--umo-button-hover-background);
+    border-radius: var(--umo-radius-medium);
+    font-size: 14px;
+    color: var(--umo-text-color-light);
   }
   .item {
-    color: var(--umo-color-white);
-    padding: 10px 12px;
+    padding: 6px;
     border-radius: 8px;
     text-align: center;
     display: flex;
@@ -624,18 +657,25 @@ const toggleSpellcheck = () => {
     align-items: center;
     position: relative;
     z-index: 1;
-    &:not(:last-child) {
-      margin-bottom: 8px;
-    }
+    font-size: 12px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--umo-text-color-light);
+    border-radius: var(--umo-radius-medium);
+    cursor: pointer;
     &:hover {
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: var(--umo-button-hover-background);
+      color: var(--umo-text-color);
     }
     &.active {
-      background-color: var(--umo-primary-color);
+      background-color: var(--umo-button-hover-background);
+      color: var(--umo-primary-color);
     }
     :deep(.umo-icon) {
-      font-size: 24px;
-      margin-bottom: 5px;
+      font-size: 20px;
     }
   }
 }
