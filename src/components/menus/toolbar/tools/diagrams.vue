@@ -25,6 +25,7 @@
 
 <script setup lang="ts">
 import DiagramEditor from '@/utils/diagram-editor'
+import { shortId } from '@/utils/short-id'
 
 const props = defineProps({
   content: {
@@ -50,6 +51,8 @@ let image = $ref<
   | {
       type: string
       src: string
+      name: string
+      size: number
       width: number
       height: number
       content: string
@@ -71,10 +74,16 @@ const messageListener = (evt: MessageEvent) => {
     loading = false
   }
   if (event === 'export') {
-    const { width, height } = bounds
     if (!props.content || (props.content && props.content !== data)) {
+      const { width, height } = bounds
+      const name = `diagrams-${shortId()}.svg`
+      const { size } = new Blob([data], {
+        type: 'image/svg+xml',
+      })
       image = {
         type: 'diagrams',
+        name,
+        size,
         src: data,
         width,
         height,

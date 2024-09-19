@@ -154,12 +154,12 @@ export const extensions = [
     allowedMimeTypes: file.allowedMimeTypes,
     onPaste(editor: Editor, files: any) {
       for (const file of files) {
-        editor.commands.insertFile({ file })
+        editor.commands.insertFile({ file, autoType: true })
       }
     },
     onDrop: (editor: Editor, files: any, pos: number) => {
       for (const file of files) {
-        editor.commands.insertFile({ file, pos })
+        editor.commands.insertFile({ file, autoType: true, pos })
       }
     },
   }),

@@ -24,6 +24,12 @@ export default Node.create({
       file: {
         default: null,
       },
+      name: {
+        default: null,
+      },
+      size: {
+        default: null,
+      },
       src: {
         default: null,
       },
@@ -38,6 +44,9 @@ export default Node.create({
       },
       uploaded: {
         default: false,
+      },
+      previewType: {
+        default: 'video',
       },
     }
   },

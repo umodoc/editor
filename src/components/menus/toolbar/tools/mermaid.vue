@@ -40,6 +40,8 @@
 import mermaid from 'mermaid'
 import svg64 from 'svg64'
 
+import { shortId } from '@/utils/short-id'
+
 const props = defineProps({
   content: {
     type: String,
@@ -105,15 +107,21 @@ const setMermaid = () => {
     useMessage('error', t('tools.mermaid.notEmpty'))
     return
   }
-  const svg = mermaidRef.querySelector('svg')
-  const { width, height } = svg.getBoundingClientRect()
   if (!props.content || (props.content && props.content !== mermaidCode)) {
+    const svg = mermaidRef.querySelector('svg')
+    const { width, height } = svg.getBoundingClientRect()
+    const name = `mermaid-${shortId()}.svg`
+    const { size } = new Blob([svg.outerHTML], {
+      type: 'image/svg+xml',
+    })
     editor.value
       ?.chain()
       .focus()
       .setImage(
         {
           type: 'mermaid',
+          name,
+          size,
           src: svg64(svgCode),
           content: mermaidCode,
           width,

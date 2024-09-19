@@ -218,9 +218,10 @@
 </template>
 
 <script setup lang="ts">
-// https://github.com/lindell/JsBarcode/wiki/Options
 import JsBarcode from 'jsbarcode'
 import svg64 from 'svg64'
+
+import { shortId } from '@/utils/short-id'
 
 const { content } = defineProps({
   content: {
@@ -343,8 +344,13 @@ const setBarcode = () => {
     useMessage('error', t('tools.barcode.notEmpty'))
     return
   }
+  const name = `barcode-${shortId()}.svg`
+  const { size } = new Blob([barcodeSvgRef.outerHTML], {
+    type: 'image/svg+xml',
+  })
   const width = barcodeSvgRef?.width.animVal.value
   const height = barcodeSvgRef?.height.animVal.value
+
   if (changed) {
     editor.value
       ?.chain()
@@ -352,6 +358,8 @@ const setBarcode = () => {
       .setImage(
         {
           type: 'barcode',
+          name,
+          size,
           src: svg64(barcodeSvgRef?.outerHTML ?? ''),
           content: JSON.stringify(config),
           width,

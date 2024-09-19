@@ -47,6 +47,9 @@
         editor?.isActive('image') && editor?.getAttributes('image').draggable
       "
     />
+    <menus-bubble-node-tofile
+      v-if="editor?.getAttributes('image').previewType !== null"
+    />
     <menus-bubble-node-delete />
   </template>
   <template
@@ -67,6 +70,9 @@
         editor?.isActive('video') ||
         editor?.isActive('audio')
       "
+    />
+    <menus-bubble-node-tofile
+      v-if="editor?.isActive('video') || editor?.isActive('audio')"
     />
     <menus-bubble-node-delete />
   </template>

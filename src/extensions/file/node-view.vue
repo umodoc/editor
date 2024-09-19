@@ -11,11 +11,27 @@
       <div class="umo-file-icon">
         <img :src="filePath" class="icon-file" />
       </div>
-      <div class="umo-file-info">
-        <div class="umo-file-name" :title="node.attrs.name">
-          {{ node.attrs.name }}
+      <div
+        class="umo-file-info"
+        :style="{
+          width: supportPreviewTypes.includes(node.attrs.previewType)
+            ? '200px'
+            : '237px',
+        }"
+      >
+        <div
+          class="umo-file-name"
+          :title="node.attrs.name || t('file.unknownName')"
+        >
+          {{ node.attrs.name || t('file.unknownName') }}
         </div>
-        <div class="umo-file-meta">{{ prettyBytes(node.attrs.size) }}</div>
+        <div class="umo-file-meta">
+          {{
+            node.attrs.size
+              ? prettyBytes(node.attrs.size)
+              : t('file.unknownSize')
+          }}
+        </div>
       </div>
       <div class="umo-file-action">
         <div
@@ -25,16 +41,25 @@
         >
           <icon class="loading" name="loading" />
         </div>
-        <a
-          v-else
-          :href="node.attrs.url"
-          :download="node.attrs.name"
-          target="_blank"
-          class="umo-action-item"
-          :title="t('file.download')"
-        >
-          <icon name="download" />
-        </a>
+        <template v-else>
+          <div
+            v-if="supportPreviewTypes.includes(node.attrs.previewType)"
+            class="umo-action-item"
+            :title="t('file.preview')"
+            @click.stop="togglePreview"
+          >
+            <icon name="view" />
+          </div>
+          <a
+            :href="node.attrs.url"
+            :download="node.attrs.name"
+            target="_blank"
+            class="umo-action-item"
+            :title="t('file.download')"
+          >
+            <icon name="download" />
+          </a>
+        </template>
       </div>
     </div>
   </node-view-wrapper>
@@ -47,7 +72,7 @@ import prettyBytes from 'pretty-bytes'
 import { getFileIcon } from '@/utils/file'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
-const { options } = useStore()
+const { options, editor } = useStore()
 const containerRef = ref(null)
 let filePath = $ref('')
 
@@ -82,6 +107,19 @@ onMounted(async () => {
     }
   }
 })
+
+const supportPreviewTypes = ['image', 'video', 'audio']
+
+const togglePreview = () => {
+  const { attrs } = node
+  editor.value.commands.insertContent({
+    type: attrs.previewType,
+    attrs: {
+      ...attrs,
+      src: attrs.url,
+    },
+  })
+}
 </script>
 
 <style lang="less">
@@ -109,13 +147,14 @@ onMounted(async () => {
     .umo-file-name {
       font-size: 12px;
       font-weight: 500;
-      line-height: 1;
+      line-height: 1.2;
       text-overflow: ellipsis;
       overflow: hidden;
       word-break: break-all;
       white-space: nowrap;
-      width: 200px;
-      margin-right: 10px;
+      width: 100%;
+      padding-right: 10px;
+      box-sizing: border-box;
     }
 
     .umo-file-meta {

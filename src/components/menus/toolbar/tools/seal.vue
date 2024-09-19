@@ -101,6 +101,7 @@ const setSeal = () => {
       draggable: true,
       rotatable: true,
       file: sealFile,
+      previewType: null,
     })
     .run()
   dialogVisible = false

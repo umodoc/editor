@@ -22,6 +22,12 @@ export default Image.extend({
       type: {
         default: 'image',
       },
+      name: {
+        default: null,
+      },
+      size: {
+        default: null,
+      },
       file: {
         default: null,
       },
@@ -66,6 +72,9 @@ export default Image.extend({
       },
       error: {
         default: false,
+      },
+      previewType: {
+        default: 'image',
       },
     }
   },

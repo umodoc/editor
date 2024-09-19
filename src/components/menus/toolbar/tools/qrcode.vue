@@ -113,6 +113,8 @@
 import QRCode from 'qrcode-svg'
 import svg64 from 'svg64'
 
+import { shortId } from '@/utils/short-id'
+
 const { content } = defineProps({
   content: {
     type: String,
@@ -200,6 +202,10 @@ const setQrcode = () => {
   }
   const { width, height } = config
   const src = svg64(svgCode)
+  const name = `qrcode-${shortId()}.svg`
+  const { size } = new Blob([svgCode], {
+    type: 'image/svg+xml',
+  })
   if (changed) {
     editor.value
       ?.chain()
@@ -207,6 +213,8 @@ const setQrcode = () => {
       .setImage(
         {
           type: 'qrcode',
+          name,
+          size,
           src,
           content: JSON.stringify(config),
           width,

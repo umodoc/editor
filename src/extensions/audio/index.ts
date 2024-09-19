@@ -25,11 +25,20 @@ export default Node.create({
       file: {
         default: null,
       },
+      name: {
+        default: null,
+      },
+      size: {
+        default: null,
+      },
       src: {
         default: null,
       },
       uploaded: {
         default: false,
+      },
+      previewType: {
+        default: 'audio',
       },
     }
   },

@@ -80,6 +80,15 @@ export default Node.create({
       uploaded: {
         default: false,
       },
+      previewType: {
+        default: null,
+      },
+      width: {
+        default: null,
+      },
+      height: {
+        default: 200,
+      },
     }
   },
   parseHTML() {
@@ -105,7 +114,7 @@ export default Node.create({
           })
         },
       insertFile:
-        ({ file, pos }) =>
+        ({ file, autoType, pos }) =>
         ({ editor, commands }) => {
           const { type, name, size } = file
           const { maxSize } = options.value.file
@@ -120,33 +129,35 @@ export default Node.create({
             return false
           }
           const position = pos || editor.state.selection.anchor
-          let nodeType = 'file'
+          let previewType = null
           // 图片
           if (type.startsWith('image/') && mimeTypes.image.includes(type)) {
-            nodeType = 'image'
+            previewType = 'image'
           }
           // 视频
           if (type.startsWith('video/') && mimeTypes.video.includes(type)) {
-            nodeType = 'video'
+            previewType = 'video'
           }
           // 音频
           if (type.startsWith('audio/') && mimeTypes.audio.includes(type)) {
-            nodeType = 'audio'
+            previewType = 'audio'
           }
           // 插入节点
           return commands.insertContentAt(position, {
-            type: nodeType,
+            type: autoType ? (previewType ?? 'file') : 'file',
             attrs: {
-              [nodeType === 'file' ? 'url' : 'src']: URL.createObjectURL(file),
+              [previewType === 'file' ? 'url' : 'src']:
+                URL.createObjectURL(file),
               name,
               type,
               size,
               file,
+              previewType,
             },
           })
         },
       selectFiles:
-        (type) =>
+        (type, autoType = false) =>
         ({ editor }) => {
           const accept = getAccept(type)
           if ((!accept && accept !== '') || accept === 'notAllow') {
@@ -174,7 +185,7 @@ export default Node.create({
               return
             }
             for (const file of files) {
-              bool = editor.chain().focus().insertFile({ file }).run()
+              bool = editor.chain().focus().insertFile({ file, autoType }).run()
             }
           })
           return bool

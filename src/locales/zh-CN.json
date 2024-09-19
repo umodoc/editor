@@ -475,6 +475,7 @@
       "borderStyle": "边框样式",
       "noBorder": "不显示边框"
     },
+    "toFile": "转为文件",
     "delete": "删除"
   },
   "assistant": {
@@ -642,8 +643,11 @@
   },
   "file": {
     "uploading": "文件上传中...",
+    "preview": "预览文件",
     "download": "下载文件",
     "limit": "文件”{filename}“大小超过 {size}MB 的限制",
+    "unknownName": "未知名称",
+    "unknownSize": "未知大小",
     "notAllow": {
       "title": "错误提示",
       "message": "当前文档不允许插入该类型的文件。"
