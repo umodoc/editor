@@ -1,5 +1,4 @@
 import 'virtual:svg-icons-register'
-import 'default-passive-events'
 
 import type { UmoEditorOptions } from '@/types'
 
