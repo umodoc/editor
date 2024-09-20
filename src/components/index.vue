@@ -790,6 +790,7 @@ defineExpose({
   saveContent,
   getContentExcerpt,
   getEditor: () => editor,
+  useEditor: () => editor.value,
   getTableOfContents: () => tableOfContents.value,
   getSelectionText: () => (editor.value ? getSelectionText(editor.value) : ''),
   getSelectionNode: () =>
