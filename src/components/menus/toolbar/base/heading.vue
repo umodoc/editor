@@ -71,7 +71,7 @@
   </menus-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { popupVisible } = usePopup()
 const { container, editor } = useStore()
 const $toolbar = useState('toolbar')
@@ -90,7 +90,7 @@ for (const i of Array.from({ length: 6 }).keys()) {
 }
 
 const currentValue = computed(() => {
-  const heading = (level) => editor.value?.isActive('heading', { level })
+  const heading = (level: any) => editor.value?.isActive('heading', { level })
   if (editor.value) {
     if (editor.value?.isActive('paragraph')) {
       return 'paragraph'
@@ -117,7 +117,7 @@ const currentValue = computed(() => {
   return ''
 })
 
-const setHeading = (value) => {
+const setHeading = (value: any) => {
   if (value === 'paragraph') {
     editor.value?.chain().focus().setParagraph().run()
   } else {
