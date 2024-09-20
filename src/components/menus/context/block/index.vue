@@ -43,7 +43,7 @@ const updateMenuPostion = () => {
 onMounted(() => {
   if (editor) {
     editor.value?.on('selectionUpdate', updateMenuPostion)
-    // editor.value.on('focus', updateMenuPostion)
+    editor.value.on('focus', updateMenuPostion)
   } else {
     visible = false
   }
@@ -51,22 +51,9 @@ onMounted(() => {
 onUnmounted(() => {
   if (editor) {
     editor.value?.off('selectionUpdate', updateMenuPostion)
-    // editor.value?.off('focus', updateMenuPostion)
+    editor.value?.off('focus', updateMenuPostion)
   }
 })
-// watch(
-//   editor,
-//   (val) => {
-//     if (val) {
-//       editor.value.on('selectionUpdate', updateMenuPostion)
-//       editor.value.on('focus', updateMenuPostion)
-//       // editor.value.on('blur', () => (visible = false))
-//     } else {
-//       visible = false
-//     }
-//   },
-//   { immediate: true },
-// )
 watch(() => page.value.pagination, updateMenuPostion)
 </script>
 
