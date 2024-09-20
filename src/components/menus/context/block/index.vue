@@ -51,7 +51,7 @@ onMounted(() => {
 onUnmounted(() => {
   if (editor) {
     editor.value?.off('selectionUpdate', updateMenuPostion)
-    editor.value?.off('focus', updateMenuPostion)
+    // editor.value?.off('focus', updateMenuPostion)
   }
 })
 // watch(
