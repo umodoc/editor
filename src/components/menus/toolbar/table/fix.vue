@@ -4,7 +4,7 @@
     :text="t('table.fix.text')"
     :tooltip="t('table.fix.tip')"
     huge
-    :disabled="!editor?.can().fixTables()"
+    :disabled="!editor?.isActive('table')"
     @menu-click="editor?.chain().focus().fixTables().run()"
   />
 </template>
