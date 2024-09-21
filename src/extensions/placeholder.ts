@@ -18,9 +18,8 @@ export default Extension.create({
           if (!editor.isEmpty || state.doc.content.size > 4) {
             return false
           }
-          const { content } = editor.getJSON()
-          // @ts-ignore
-          return chain().setContent(content[0]).focus(3).run()
+          const content = editor.getJSON()
+          return chain().setContent(content).focus(3).run()
         },
     }
   },
