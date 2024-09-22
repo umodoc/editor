@@ -46,6 +46,7 @@ const buildConfig = {
     fileName: 'umo-editor',
   },
   outDir: 'dist',
+  copyPublicDir: false,
   minify: 'esbuild' as const,
   cssMinify: true,
   rollupOptions: {
