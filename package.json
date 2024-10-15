@@ -33,14 +33,14 @@
     "email": "support@umodoc.com"
   },
   "files": [
-    "dist"
+    "../outDist"
   ],
   "exports": {
     ".": {
-      "import": "./dist/umo-editor.js"
+      "import": "../outDist/umo-editor.js"
     },
     "./style": {
-      "import": "./dist/style.css"
+      "import": "../outDist/style.css"
     }
   },
   "types": "./types/index.d.ts",
