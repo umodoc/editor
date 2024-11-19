@@ -33,6 +33,7 @@ const options = $ref({
   document: {
     // title: '测试文档',
     content: localStorage.getItem('document.content') ?? '<p>测试文档</p>',
+    enableComment: false
   },
   templates,
   cdnUrl: 'https://cdn.umodoc.com',
