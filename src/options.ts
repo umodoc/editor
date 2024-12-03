@@ -204,7 +204,7 @@ const defaultOptions: UmoEditorOptions = {
       },
     ],
     pageSizes: [
-      { label: 'A4', width: 21.0, height: 29.4, default: true },
+      { label: 'A4', width: 21.0, height: 29.7, default: true },
       { label: 'A3', width: 29.7, height: 42.0 },
       { label: 'A5', width: 14.8, height: 21.0 },
       { label: 'B5', width: 17.6, height: 25.0 },
