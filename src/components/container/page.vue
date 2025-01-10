@@ -28,7 +28,9 @@
             </template>
           </editor>
         </div>
-        <container-comments />
+        <template v-if="options.document?.enableComment">
+          <container-comments />
+        </template>
       </div>
     </div>
     <t-image-viewer
@@ -49,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-const { container, page, imageViewer } = useStore()
+const { container, page, imageViewer, options } = useStore()
 
 // 页面大小
 const pageSize = $computed(() => {

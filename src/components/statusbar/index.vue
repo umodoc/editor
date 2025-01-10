@@ -474,7 +474,7 @@ const autoWidth = (auto = true, padding = 50) => {
     console.warn('Page auto width calculation error', e)
   }
 }
-useHotkeys('Ctrl0,command+0', autoWidth)
+useHotkeys('Ctrl+0,command+0', autoWidth)
 
 watch(
   () => page.value.showToc,
@@ -489,6 +489,7 @@ watch(
 const langs = [
   { content: '🇨🇳 简体中文', value: 'zh-CN' },
   { content: '🇱🇷 English', value: 'en-US' },
+  { content: '🇷🇺 Русский', value: 'ru-RU' },
 ]
 const setLocale = inject('setLocale') as (value: SupportedLocale) => void
 
