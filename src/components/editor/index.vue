@@ -16,15 +16,14 @@
       options.document?.enableSpellcheck && $document.enableSpellcheck
     "
   />
-  <menus-bubble v-if="editor && !page.preview?.enabled && !editorDestroyed" />
-  <menus-context-block
+  <template
     v-if="
-      options.document?.enableBlockMenu &&
-      !page.preview?.enabled &&
-      editor &&
-      !editorDestroyed
+      editor && !editorDestroyed && !page.preview?.enabled && !editorDestroyed
     "
-  />
+  >
+    <menus-context-block v-if="options.document?.enableBlockMenu" />
+    <menus-bubble />
+  </template>
 </template>
 
 <script setup lang="ts">
