@@ -70,6 +70,8 @@ import type {
 } from '@/types'
 import { consoleCopyright } from '@/utils/copyright'
 
+import ruConfig from '../locales/td-next-vue/ru-RU'
+
 const { toBlob, toJpeg, toPng } = domToImage
 
 defineOptions({ name: 'UmoEditor' })
@@ -316,6 +318,7 @@ watch(
 const localeConfig = $ref<Record<string, GlobalConfigProvider>>({
   'zh-CN': cnConfig as unknown as GlobalConfigProvider,
   'en-US': enConfig as unknown as GlobalConfigProvider,
+  'ru-RU': ruConfig as unknown as GlobalConfigProvider,
 })
 
 // Theme Setup
@@ -554,8 +557,8 @@ const getContent = (format = 'html') => {
 
 // Locale Methods
 const setLocale = (params: SupportedLocale) => {
-  if (!['zh-CN', 'en-US'].includes(params)) {
-    throw new Error('"params" must be one of "zh-CN" or "en-US".')
+  if (!['zh-CN', 'en-US', 'ru-RU'].includes(params)) {
+    throw new Error('"params" must be one of "zh-CN", "en-US" or "ru-RU".')
   }
   if (locale.value === params) {
     return

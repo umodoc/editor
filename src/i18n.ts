@@ -5,6 +5,7 @@ import { createI18n } from 'vue-i18n'
 import type { SupportedLocale } from '@/types'
 
 import en_US from './locales/en-US.json'
+import ru_RU from './locales/ru-RU.json'
 import zh_CN from './locales/zh-CN.json'
 
 const { options } = useStore()
@@ -24,5 +25,6 @@ export const i18n = createI18n({
   messages: {
     'en-US': merge(en_US, getLocale('en-US')),
     'zh-CN': merge(zh_CN, getLocale('zh-CN')),
+    'ru-RU': merge(ru_RU, getLocale('ru-RU')),
   },
 })
