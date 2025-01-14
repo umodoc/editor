@@ -64,7 +64,6 @@ import domToImage from 'dom-to-image-more'
 import type { GlobalConfigProvider } from 'tdesign-vue-next'
 import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
-import ruConfig from 'tdesign-vue-next/esm/locale/ru_RU'
 
 import { getSelectionNode, getSelectionText } from '@/extensions/selection'
 import { i18n } from '@/i18n'
@@ -76,6 +75,8 @@ import type {
   WatermarkOption,
 } from '@/types'
 import { consoleCopyright } from '@/utils/copyright'
+
+import ruConfig from '../locales/td-next-vue/ru-RU'
 
 const { toBlob, toJpeg, toPng } = domToImage
 
