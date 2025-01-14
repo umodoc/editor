@@ -59,9 +59,6 @@ export default Node.create({
       vnode: {
         default: true,
       },
-      id: {
-        default: null,
-      },
       file: {
         default: null,
       },

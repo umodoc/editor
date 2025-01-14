@@ -3,9 +3,6 @@
     :id="node.attrs.id"
     ref="containerRef"
     class="umo-node-view"
-    :class="{
-      'umo-node-view-empty': node.attrs.draggable,
-    }"
     :style="nodeStyle"
     @dblclick="openImageViewer"
   >
@@ -57,8 +54,6 @@
         :equal-proportion="node.attrs.equalProportion"
         @rotate="onRotate"
         @resize="onResize"
-        @resize-start="onResizeStart"
-        @resize-end="onResizeEnd"
         @drag="onDrag"
         @click="selected = true"
       >
@@ -154,12 +149,6 @@ const onResize = ({ width, height }: { width: number; height: number }) => {
     width: width.toFixed(2),
     height: height.toFixed(2),
   })
-}
-const onResizeStart = () => {
-  editor.value?.commands.autoPaging(false)
-}
-const onResizeEnd = () => {
-  editor.value?.commands.autoPaging(true)
 }
 
 const onDrag = ({ left, top }: { left: number; top: number }) => {

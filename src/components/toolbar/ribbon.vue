@@ -211,6 +211,7 @@
           </div>
           <div class="umo-virtual-group">
             <menus-toolbar-page-break />
+            <menus-toolbar-page-break-marks />
             <menus-toolbar-page-line-number />
             <menus-toolbar-page-watermark />
             <menus-toolbar-page-background />
@@ -226,7 +227,6 @@
           <div class="umo-virtual-group">
             <menus-toolbar-export-image />
             <menus-toolbar-export-pdf />
-            <menus-toolbar-export-word />
             <menus-toolbar-export-text />
           </div>
           <div class="umo-virtual-group">

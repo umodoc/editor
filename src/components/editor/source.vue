@@ -48,7 +48,7 @@ const config = {
     horizontal: 'hidden',
   },
 }
-const code = $ref(editor.value?.getHTML() ?? $document.value.content)
+const code = $ref($document.value.content)
 
 const editorMount = (editor: Editor.ICodeEditor) => {
   if (editor) {

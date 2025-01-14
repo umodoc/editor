@@ -33,12 +33,6 @@
       </header>
       <main class="umo-main">
         <container-page v-if="$toolbar.mode !== 'source'">
-          <template #page_header="slotProps">
-            <slot name="page_header" v-bind="slotProps" />
-          </template>
-          <template #page_footer="slotProps">
-            <slot name="page_footer" v-bind="slotProps" />
-          </template>
           <template #bubble_menu="slotProps">
             <slot name="bubble_menu" v-bind="slotProps" />
           </template>
@@ -324,16 +318,6 @@ const localeConfig = $ref<Record<string, GlobalConfigProvider>>({
   'en-US': enConfig as unknown as GlobalConfigProvider,
 })
 
-// Page Header/Footer Visibility
-const { hidePageHeader, hidePageFooter } = useStore()
-const slots = useSlots()
-if (slots.page_header) {
-  hidePageHeader.value = false
-}
-if (slots.page_footer) {
-  hidePageFooter.value = false
-}
-
 // Theme Setup
 const setTheme = (theme: 'light' | 'dark' | 'auto') => {
   if (!isString(theme) || !['light', 'dark', 'auto'].includes(theme)) {
@@ -550,9 +534,6 @@ const setContent = (
     .setContent(content, options.emitUpdate)
     .focus(options.focusPosition as FocusPosition, options.focusOptions)
     .run()
-  setTimeout(() => {
-    editor.value?.commands.autoPaging()
-  }, 200)
 }
 
 const getContent = (format = 'html') => {
@@ -569,27 +550,6 @@ const getContent = (format = 'html') => {
     return editor.value.getJSON()
   }
   throw new Error('format must be html, text or json')
-}
-
-// Pagination Methods
-const setPagination = (enabled: boolean) => {
-  if (!editor.value) {
-    throw new Error('editor is not ready!')
-  }
-  if (!isBoolean(enabled)) {
-    throw new Error('"enabled" must be a boolean.')
-  }
-  page.value.pagination = enabled
-}
-
-const autoPagination = (enabled: boolean) => {
-  if (!editor.value) {
-    throw new Error('editor is not ready!')
-  }
-  if (typeof enabled !== 'boolean') {
-    throw new Error('"enabled" must be a boolean.')
-  }
-  editor.value.commands.autoPaging(enabled)
 }
 
 // Locale Methods
@@ -781,8 +741,6 @@ defineExpose({
   setLocale,
   setTheme,
   getContent,
-  setPagination,
-  autoPagination,
   getImage,
   getText,
   getHTML,

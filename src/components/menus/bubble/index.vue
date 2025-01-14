@@ -14,7 +14,7 @@
       </template>
     </menus-bubble-menus>
     <assistant-input v-if="options?.assistant?.enabled && assistantBox" />
-    <comment-input v-if="options?.document?.enableComment && commentBox" />
+    <!-- <comment-input v-if="options?.document?.enableComment && commentBox" /> -->
   </bubble-menu>
 </template>
 
@@ -30,7 +30,7 @@ let tippyInstance = $ref<Instance | null>(null)
 const tippyOpitons = $ref<Partial<Instance>>({
   appendTo: 'parent',
   maxWidth: 580,
-  zIndex: 99,
+  zIndex: 110,
   onShow(instance: Instance) {
     tippyInstance = instance
   },

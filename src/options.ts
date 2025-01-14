@@ -260,6 +260,7 @@ const defaultOptions: UmoEditorOptions = {
     },
     defaultOrientation: 'portrait',
     defaultBackground: '#fff',
+    showBreakMarks: true,
     watermark: {
       type: 'compact',
       alpha: 0.2,
@@ -268,24 +269,6 @@ const defaultOptions: UmoEditorOptions = {
       fontFamily: 'SimSun',
       fontWeight: 'normal',
       text: '',
-    },
-    /*
-     * 新添加的 bolck 自定义节点如果需要参与分页，需要给 types 添加对应的类型 types:["myBlock"],
-     * 如果是用 nodeView 实现的节点，需要自定义节点外层添加代码 :id="node.attrs.id"，可以参考 image 扩展
-     * 如果需要添加自定义计算方法，请在 nodesComputedOption 中添加
-     * 例如新添加节点名字为 'myBlock'
-     * nodesComputedOption:{
-     *   types: ["myBlock"],
-     *   nodesComputed: {
-     *    'myBlock': (splitContex, node, pos, parent, dom) => {
-     *      //分页计算代码
-     *    }
-     *  }
-     * } 否则走默认的计算
-     **/
-    nodesComputedOption: {
-      types: [],
-      nodesComputed: {},
     },
   },
   document: {
@@ -299,7 +282,7 @@ const defaultOptions: UmoEditorOptions = {
     enableMarkdown: true,
     enableBubbleMenu: true,
     enableBlockMenu: true,
-    enableComment: true,
+    // enableComment: false,
     readOnly: false,
     autofocus: true,
     characterLimit: 0,
@@ -691,6 +674,11 @@ const ojbectSchema = new ObjectSchema({
         validate: 'string',
         required: false,
       },
+      showBreakMarks: {
+        merge: 'replace',
+        validate: 'boolean',
+        required: false,
+      },
       watermark: {
         required: false,
         merge: 'replace',
@@ -745,23 +733,6 @@ const ojbectSchema = new ObjectSchema({
           },
         },
       },
-      nodesComputedOption: {
-        merge: 'replace',
-        validate: 'object',
-        required: false,
-        schema: {
-          types: {
-            merge: 'replace',
-            validate() {},
-            required: false,
-          },
-          nodesComputed: {
-            merge: 'replace',
-            validate() {},
-            required: false,
-          },
-        },
-      },
     },
   },
   document: {
@@ -810,11 +781,11 @@ const ojbectSchema = new ObjectSchema({
         validate: 'boolean',
         required: false,
       },
-      enableComment: {
-        merge: 'replace',
-        validate: 'boolean',
-        required: false,
-      },
+      // enableComment: {
+      //   merge: 'replace',
+      //   validate: 'boolean',
+      //   required: false,
+      // },
       readOnly: {
         merge: 'replace',
         validate: 'boolean',

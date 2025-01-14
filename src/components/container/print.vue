@@ -18,11 +18,9 @@ const getPlyrSprite = () => {
 }
 
 const getContentHtml = () => {
-  return Array.from(
-    document.querySelectorAll(`${container} .umo-page-node-view`),
+  return (
+    document.querySelector(`${container} .umo-page-content`)?.outerHTML ?? ''
   )
-    .map((page) => page.outerHTML)
-    .join('')
 }
 
 const defaultLineHeight = $computed(
@@ -33,7 +31,7 @@ const defaultLineHeight = $computed(
 )
 
 const getIframeCode = () => {
-  const { orientation, size, background } = page.value
+  const { orientation, size, margin, background } = page.value
   /* eslint-disable */
   return `
     <!DOCTYPE html>
@@ -47,11 +45,19 @@ const getIframeCode = () => {
       body{
         overflow: auto;
         height: auto;
+        background-color: ${background};
+        -webkit-print-color-adjust: exact;
       }
       @page {
         size: ${orientation === 'portrait' ? size?.width : size?.height}cm ${orientation === 'portrait' ? size?.height : size?.width}cm; 
-        margin:0;
-        background: ${background};
+        padding: ${margin?.top}cm 0 ${margin?.bottom}cm;
+        margin: 0;
+      }
+      @page:first {
+        padding-top: 0;
+      }
+      @page:last {
+        padding-top: 0;
       }
       </style>
     </head>

@@ -1,7 +1,6 @@
 import type { Extension } from '@tiptap/core'
 import type { AsyncFunction } from '@tool-belt/type-predicates'
 
-import type { NodesComputed } from '@/extensions/page/types'
 export type SupportedLocale = 'en-US' | 'zh-CN'
 export interface MarginOption {
   left: number
@@ -18,17 +17,12 @@ export interface WatermarkOption {
   fontWeight: string
   text: string
 }
-export interface NodesComputedOption {
-  types: string[]
-  nodesComputed: NodesComputed
-}
-
 export interface PageOption {
   defaultMargin?: MarginOption
   defaultOrientation?: string
   defaultBackground?: string
+  showBreakMarks?: boolean
   watermark?: WatermarkOption
-  nodesComputedOption?: NodesComputedOption
   size?: {
     width: number
     height: number
@@ -47,7 +41,6 @@ export interface PageOption {
   footer?: boolean
   showLineNumber?: boolean
   showToc?: boolean
-  pagination?: boolean
   zoomLevel?: number
   bodyHeight?: number
   autoWidth?: boolean

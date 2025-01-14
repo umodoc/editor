@@ -17,8 +17,6 @@
         :min-height="200"
         :max-width="maxWidth"
         @resize="onResize"
-        @resize-start="onResizeStart"
-        @resize-end="onResizeEnd"
         @click="selected = true"
       >
         <iframe :src="node.attrs.src"></iframe>
@@ -62,12 +60,6 @@ onMounted(() => {
 })
 const onResize = ({ width, height }: { width: number; height: number }) => {
   updateAttributes({ width, height })
-}
-const onResizeStart = () => {
-  editor.value?.commands.autoPaging(false)
-}
-const onResizeEnd = () => {
-  editor.value?.commands.autoPaging(true)
 }
 onClickOutside(containerRef, () => {
   selected = false

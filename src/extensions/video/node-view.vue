@@ -18,8 +18,6 @@
         :max-height="maxHeight"
         :equal-proportion="true"
         @resize="onResize"
-        @resize-start="onResizeStart"
-        @resize-end="onResizeEnd"
         @click="selected = true"
       >
         <video
@@ -101,12 +99,6 @@ const onLoad = () => {
 }
 const onResize = ({ width, height }: { width: number; height: number }) => {
   updateAttributes({ width, height })
-}
-const onResizeStart = () => {
-  editor.value?.commands.autoPaging(false)
-}
-const onResizeEnd = () => {
-  editor.value?.commands.autoPaging(true)
 }
 onBeforeUnmount(() => {
   if (player) {

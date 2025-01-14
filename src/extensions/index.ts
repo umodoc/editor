@@ -2,66 +2,63 @@ import SearchReplace from '@sereneinserenade/tiptap-search-and-replace'
 import Bold from '@tiptap/extension-bold'
 import CharacterCount from '@tiptap/extension-character-count'
 import Color from '@tiptap/extension-color'
-import Document from '@tiptap/extension-document'
 import Dropcursor from '@tiptap/extension-dropcursor'
 import Focus from '@tiptap/extension-focus'
 import FontFamily from '@tiptap/extension-font-family'
 import Highlight from '@tiptap/extension-highlight'
-// 插入
 import Link from '@tiptap/extension-link'
+import Placeholder from '@tiptap/extension-placeholder'
 import Subscript from '@tiptap/extension-subscript'
 import Superscript from '@tiptap/extension-superscript'
+import Table from '@tiptap/extension-table'
 import TableRow from '@tiptap/extension-table-row'
 import TaskItem from '@tiptap/extension-task-item'
+import TaskList from '@tiptap/extension-task-list'
 import TextColor from '@tiptap/extension-text-style'
 import Typography from '@tiptap/extension-typography'
 import Underline from '@tiptap/extension-underline'
 import StarterKit from '@tiptap/starter-kit'
-import type { Editor } from '@tiptap/vue-3'
+import type { Editor, Extension } from '@tiptap/vue-3'
+import InvisibleCharacters, {
+  HardBreakNode,
+  ParagraphNode,
+} from '@tiptap-pro/extension-invisible-characters'
 import Mathematics from '@tiptap-pro/extension-mathematics'
-import { TableOfContents } from '@tiptap-pro/extension-table-of-contents'
 import { getHierarchicalIndexes } from '@tiptap-pro/extension-table-of-contents'
+import { TableOfContents } from '@tiptap-pro/extension-table-of-contents'
 
 import { shortId } from '@/utils/short-id'
 
 import Audio from './audio'
 import BulletList from './bullet-list'
 import CodeBlock from './code-block'
-import { ColorHighlighter } from './color-highlighter'
 import File from './file'
 import FileHandler from './file-handler'
 import FontSize from './font-size'
-// 基本
 import FormatPainter from './format-painter'
 import hr from './hr'
 import Iframe from './iframe'
 import Image from './image'
 import Indent from './indent'
+import InvisibleNode from './invisible-node'
 import LineHeight from './line-height'
-// 表格
-import Table from './list/table'
-import TaskList from './list/tasklist'
 import Margin from './margin'
 import NodeAlign from './node-align'
 import OrderedList from './ordered-list'
-import Placeholder from './placeholder'
-// 其他
 import Selection from './selection'
 import TableCell from './table-cell'
 import TableHeader from './table-header'
 import TextAlign from './text-align'
 import TextBox from './text-box'
-// 页面
 import Toc from './toc'
 import Video from './video'
 
-const { options, container, tableOfContents } = useStore()
+const { options, container, page, tableOfContents } = useStore()
 
 const { dicts, document: doc, file } = options.value
 
 export const extensions = [
   StarterKit.configure({
-    document: false,
     bold: false,
     bulletList: false,
     orderedList: false,
@@ -69,9 +66,8 @@ export const extensions = [
     horizontalRule: false,
     dropcursor: false,
   }),
-  Document.extend({ content: 'page+' }),
   Placeholder.configure({
-    placeholder: l(doc.placeholder),
+    placeholder: l(options.value.document.placeholder),
   }),
   Focus.configure({
     className: 'umo-node-focused',
@@ -118,7 +114,6 @@ export const extensions = [
   File,
   TextBox,
   CodeBlock,
-  ColorHighlighter,
   hr,
   Iframe,
   Mathematics,
@@ -133,6 +128,10 @@ export const extensions = [
   TableCell,
   // 页面
   Toc,
+  InvisibleCharacters.configure({
+    visible: page.value.showBreakMarks,
+    builders: [new HardBreakNode(), new ParagraphNode(), new InvisibleNode()],
+  }),
   // 其他
   Selection,
   TableOfContents.configure({
@@ -167,3 +166,15 @@ export const extensions = [
     color: 'var(--umo-primary-color)',
   }),
 ]
+
+export const inputAndPasteRules = () => {
+  let enableRules: boolean | Extension[] = true
+  const $document = useState('document')
+  if (
+    !options.value.document?.enableMarkdown ||
+    !$document.value?.enableMarkdown
+  ) {
+    enableRules = [Mathematics, Typography, Image as Extension]
+  }
+  return enableRules
+}

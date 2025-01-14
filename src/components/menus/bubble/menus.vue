@@ -2,7 +2,6 @@
   <template
     v-if="
       editor?.isActive('toc') ||
-      editor?.isActive('pagination') ||
       editor?.isActive('horizontalRule') ||
       editor?.getAttributes('image').error
     "
@@ -125,10 +124,10 @@
       <menus-bubble-text-box-background />
       <div class="umo-bubble-menu-divider"></div>
     </template>
-    <template v-if="options.document?.enableComment">
+    <!-- <template v-if="options.document?.enableComment && commentBox">
       <menus-bubble-comment />
       <div class="umo-bubble-menu-divider"></div>
-    </template>
+    </template> -->
     <slot name="bubble_menu" />
   </template>
 </template>
