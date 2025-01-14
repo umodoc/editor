@@ -469,6 +469,7 @@
       "borderStyle": "Стиль границы",
       "noBorder": "Без границы"
     },
+    "toFile": "Сохранить в файл",
     "delete": "Удалить"
   },
   "assistant": {
