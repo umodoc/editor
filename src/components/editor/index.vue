@@ -54,7 +54,6 @@ const defaultLineHeight = $computed(
     options.value.dicts?.lineHeights?.find((item: any) => item.default)?.value,
 )
 
-let isReady = $ref<boolean>(false)
 let isEmpty = $ref<boolean>(false)
 
 const editorInstance: Editor = new Editor({
@@ -83,32 +82,20 @@ const editorInstance: Editor = new Editor({
   },
   onUpdate({ editor }) {
     isEmpty = editor.commands.setPlaceholder('')
-    isReady = true
     $document.value.content = editor.getHTML()
   },
 })
 setEditor(editorInstance)
 
 // 注册分页组件
-const registerPagePlugin = async () => {
-  await nextTick()
+window.onload = () => {
   const { nodesComputed } = options.value.page.nodesComputedOption ?? {}
-
   editorInstance.registerPlugin(pagePlugin(editorInstance, nodesComputed ?? {}))
   setTimeout(() => {
     const tr = editorInstance.state.tr.setMeta('initSplit', true)
     editorInstance.view.dispatch(tr)
   }, 500)
 }
-watch(
-  () => isReady,
-  () => {
-    if (isReady) {
-      void registerPagePlugin()
-    }
-  },
-  { once: true },
-)
 
 // 动态导入 katex 样式
 const loadTatexStyle = () => {
