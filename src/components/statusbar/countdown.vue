@@ -32,8 +32,8 @@
                 v-model="hours"
                 theme="normal"
                 align="center"
+                decimal-places="0"
                 :placeholder="t('preview.countdown.hours')"
-                :decimal-places="0"
                 :min="0"
                 :max="60"
                 :step="1"
@@ -43,8 +43,8 @@
                 v-model="minutes"
                 theme="normal"
                 align="center"
+                decimal-places="0"
                 :placeholder="t('preview.countdown.minutes')"
-                :decimal-places="0"
                 :min="0"
                 :max="60"
                 :step="1"
@@ -54,8 +54,8 @@
                 v-model="seconds"
                 theme="normal"
                 align="center"
+                decimal-places="0"
                 :placeholder="t('preview.countdown.seconds')"
-                :decimal-places="0"
                 :min="0"
                 :max="60"
                 :step="1"
@@ -101,7 +101,7 @@ const props = defineProps({
   },
 })
 
-const emits = defineEmits('countdown-change', 'exit-preivew', 'close')
+const emits = defineEmits(['countdown-change', 'exit-preivew', 'close'])
 
 const { container } = useStore()
 

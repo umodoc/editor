@@ -8,3 +8,7 @@ export const useHotkeys = (keys: string, callback: CallableFunction) => {
     return false
   })
 }
+
+export const removeAllHotkeys = () => {
+  hotkeys.unbind()
+}

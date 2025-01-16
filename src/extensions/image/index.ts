@@ -16,9 +16,6 @@ export default Image.extend({
       vnode: {
         default: true,
       },
-      id: {
-        default: null,
-      },
       type: {
         default: 'image',
       },

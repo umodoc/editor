@@ -33,12 +33,6 @@
       </header>
       <main class="umo-main">
         <container-page v-if="$toolbar.mode !== 'source'">
-          <template #page_header="slotProps">
-            <slot name="page_header" v-bind="slotProps" />
-          </template>
-          <template #page_footer="slotProps">
-            <slot name="page_footer" v-bind="slotProps" />
-          </template>
           <template #bubble_menu="slotProps">
             <slot name="bubble_menu" v-bind="slotProps" />
           </template>
@@ -75,6 +69,8 @@ import type {
   WatermarkOption,
 } from '@/types'
 import { consoleCopyright } from '@/utils/copyright'
+
+import ruConfig from '../locales/td-next-vue/ru-RU'
 
 const { toBlob, toJpeg, toPng } = domToImage
 
@@ -322,17 +318,8 @@ watch(
 const localeConfig = $ref<Record<string, GlobalConfigProvider>>({
   'zh-CN': cnConfig as unknown as GlobalConfigProvider,
   'en-US': enConfig as unknown as GlobalConfigProvider,
+  'ru-RU': ruConfig as unknown as GlobalConfigProvider,
 })
-
-// Page Header/Footer Visibility
-const { hidePageHeader, hidePageFooter } = useStore()
-const slots = useSlots()
-if (slots.page_header) {
-  hidePageHeader.value = false
-}
-if (slots.page_footer) {
-  hidePageFooter.value = false
-}
 
 // Theme Setup
 const setTheme = (theme: 'light' | 'dark' | 'auto') => {
@@ -550,9 +537,6 @@ const setContent = (
     .setContent(content, options.emitUpdate)
     .focus(options.focusPosition as FocusPosition, options.focusOptions)
     .run()
-  setTimeout(() => {
-    editor.value?.commands.autoPaging()
-  }, 200)
 }
 
 const getContent = (format = 'html') => {
@@ -571,31 +555,10 @@ const getContent = (format = 'html') => {
   throw new Error('format must be html, text or json')
 }
 
-// Pagination Methods
-const setPagination = (enabled: boolean) => {
-  if (!editor.value) {
-    throw new Error('editor is not ready!')
-  }
-  if (!isBoolean(enabled)) {
-    throw new Error('"enabled" must be a boolean.')
-  }
-  page.value.pagination = enabled
-}
-
-const autoPagination = (enabled: boolean) => {
-  if (!editor.value) {
-    throw new Error('editor is not ready!')
-  }
-  if (typeof enabled !== 'boolean') {
-    throw new Error('"enabled" must be a boolean.')
-  }
-  editor.value.commands.autoPaging(enabled)
-}
-
 // Locale Methods
 const setLocale = (params: SupportedLocale) => {
-  if (!['zh-CN', 'en-US'].includes(params)) {
-    throw new Error('"params" must be one of "zh-CN" or "en-US".')
+  if (!['zh-CN', 'en-US', 'ru-RU'].includes(params)) {
+    throw new Error('"params" must be one of "zh-CN", "en-US" or "ru-RU".')
   }
   if (locale.value === params) {
     return
@@ -678,6 +641,7 @@ const reset = (silent: boolean) => {
 
 const destroy = () => {
   editor.value?.destroy()
+  removeAllHotkeys()
   resetStore()
 }
 
@@ -780,9 +744,8 @@ defineExpose({
   setContent,
   setLocale,
   setTheme,
+  getPage: () => page.value,
   getContent,
-  setPagination,
-  autoPagination,
   getImage,
   getText,
   getHTML,

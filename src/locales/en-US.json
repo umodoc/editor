@@ -147,6 +147,16 @@
       "hrefTip": "Enter the link URL, usually starting with http:// or https://"
     },
     "math": "Mathematics",
+    "bookmark": {
+      "text": "Bookmark",
+      "set": "Set bookmarks",
+      "ok": "Confirmed",
+      "textName": "Bookmark name",
+      "placeholder": " Please enter the bookmark name...",
+      "actions": "Actions",
+      "delete": "Delete bookmark",
+      "emptyError": "Please enter the bookmark name or select the bookmark!"
+    },
     "symbol": "Symbol",
     "template": "Template",
     "textBox": "Text Box",
@@ -327,15 +337,8 @@
       "color4": "Sky Blue",
       "color5": "Dark Night\nBlack"
     },
+    "breakMarks": "Line Breaks",
     "break": "Page Break",
-    "footer": {
-      "show": "Show Footer",
-      "hide": "Hide Footer"
-    },
-    "header": {
-      "show": "Show Header",
-      "hide": "Hide Header"
-    },
     "lineNumber": "Line Numbers",
     "margin": "Margins",
     "orientation": {
@@ -545,11 +548,6 @@
     "enable": "Enable Spell Check",
     "disable": "Disable Spell Check"
   },
-  "pagination": {
-    "title": "Page Break",
-    "disable": "Exit Page Break",
-    "toggle": "Double Click to Switch Paging"
-  },
   "shortcut": {
     "title": "Keyboard Shortcuts",
     "text": "Text",
@@ -584,9 +582,7 @@
     "title": "Document Statistics",
     "input": "Characters Typed",
     "selection": "Selected Characters",
-    "limit": "Character Limit",
-    "currentPage": "Current Page",
-    "totalPage": "Total Pages"
+    "limit": "Character Limit"
   },
   "preview": {
     "title": "Presentation",

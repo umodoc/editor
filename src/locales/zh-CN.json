@@ -147,6 +147,16 @@
       "hrefTip": "请输入链接地址，一般以 http:// 或 https:// 开头"
     },
     "math": "数学公式",
+    "bookmark": {
+      "text": "书签",
+      "set": "设置书签",
+      "ok": "确定",
+      "textName": "书签名称",
+      "placeholder": "请输入书签名称...",
+      "actions": "操作",
+      "delete": "删除书签",
+      "emptyError": "请输入书签名称或者选择书签"
+    },
     "symbol": "特殊字符",
     "template": "模板",
     "textBox": "文本框",
@@ -327,15 +337,8 @@
       "color4": "天空蓝",
       "color5": "暗夜黑"
     },
+    "breakMarks": "显示换行",
     "break": "分页符",
-    "footer": {
-      "show": "显示页脚",
-      "hide": "隐藏页脚"
-    },
-    "header": {
-      "show": "显示页眉",
-      "hide": "隐藏页眉"
-    },
     "lineNumber": "显示行号",
     "margin": "页边距",
     "orientation": {
@@ -546,11 +549,6 @@
     "enable": "开启拼写检查",
     "disable": "关闭拼写检查"
   },
-  "pagination": {
-    "title": "分页模式",
-    "disable": "退出分页模式",
-    "toggle": "双击切换分页"
-  },
   "shortcut": {
     "title": "快捷键列表",
     "text": "文字",
@@ -585,9 +583,7 @@
     "title": "文档信息统计",
     "input": "已输入字数",
     "selection": "已选中字数",
-    "limit": "字数限制",
-    "currentPage": "当前页码",
-    "totalPage": "总页码数"
+    "limit": "字数限制"
   },
   "preview": {
     "title": "演示模式",

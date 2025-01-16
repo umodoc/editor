@@ -63,7 +63,6 @@ watch(
   },
   { immediate: true },
 )
-watch(() => page.value.pagination, updatePostion)
 </script>
 
 <style lang="less" scoped>

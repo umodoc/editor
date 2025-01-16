@@ -1,29 +1,9 @@
 @import '@/assets/styles/_mixins.less';
 
-.umo-editor-container {
-  flex: 1;
-  width: 100%;
-
-  @media print {
-    overflow: auto;
-    height: auto;
-  }
-
-  &.is-empty {
-    .umo-page-node-content > :first-child {
-      &::after {
-        content: var(--umo-editor-placeholder);
-        color: var(--umo-content-placeholder-color);
-        position: absolute;
-        top: 0;
-        cursor: text;
-      }
-    }
-  }
-
+.umo-editor-content {
   &.show-line-number {
-    .umo-page-node-content {
-      > *:not([data-line-number='false']):not(div):not(.umo-node-focused) {
+    .umo-editor {
+      > *:not([data-line-number='false']):not(div) {
         position: relative;
 
         &::before {
@@ -45,82 +25,67 @@
     cursor: url('@/assets/images/format-painter.svg'), text;
   }
 
+  &:not(.show-bookmark) {
+    .umo-editor-bookmark {
+      display: none;
+    }
+  }
+
   .umo-editor {
-    height: 100%;
-    width: 100%;
     outline: none;
     counter-reset: title;
     color: var(--umo-content-text-color);
+    min-height: 100px;
+    width: 100%;
+    float: left;
+    > * {
+      position: relative;
+      z-index: 1;
 
-    @media print {
-      height: auto;
-      width: auto;
-    }
+      + * {
+        margin-top: var(--umo-content-node-bottom);
+      }
 
-    .umo-page-node-content {
-      > * {
-        position: relative;
-        z-index: 1;
-
-        + * {
-          margin-top: var(--umo-content-node-bottom);
+      &.umo-node-focused {
+        &:not(.is-editor-empty):not(hr):not(.tableWrapper):not(table):before {
+          content: '';
+          display: block;
+          position: absolute;
+          left: -8px;
+          top: -5px;
+          right: -8px;
+          bottom: -5px;
+          border-radius: var(--umo-radius);
+          background: var(--umo-content-node-selected-background);
+          pointer-events: none;
+          z-index: -1;
+        }
+        &.umo-page-divider {
+          border-radius: var(--umo-radius);
+          background: var(--umo-content-node-selected-background);
+          margin-left: -8px;
+          margin-right: -8px;
+          padding-left: 8px;
+          padding-right: 8px;
         }
 
-        &.umo-node-focused {
-          &:not(hr):not(.tableWrapper):not(table):before {
-            content: '';
-            display: block;
-            position: absolute;
-            left: -8px;
-            top: -5px;
-            right: -8px;
-            bottom: -5px;
-            border-radius: var(--umo-radius);
-            background: var(--umo-content-node-selected-background);
-            pointer-events: none;
-            z-index: -1;
-          }
-
-          &:is(div):not(.umo-node-view-empty) {
-            &::before {
-              top: -8px !important;
-              bottom: -8px !important;
-            }
-          }
-          &.umo-node-view-empty {
-            &::before {
-              top: 3px !important;
-              bottom: auto;
-              height: 2px;
-              left: 0 !important;
-              right: 0 !important;
-              background: var(--umo-primary-color) !important;
-            }
-          }
-
-          &.umo-page-divider {
-            border-radius: var(--umo-radius);
-            background: var(--umo-content-node-selected-background);
-            margin-left: -8px;
-            margin-right: -8px;
-            padding-left: 8px;
-            padding-right: 8px;
-          }
-
-          .umo-select-outline {
-            outline: solid 1px var(--umo-primary-color);
-          }
+        .umo-select-outline {
+          outline: solid 1px var(--umo-primary-color);
         }
       }
     }
 
-    .is-editor-empty {
+    > .is-editor-empty {
       &:first-child {
         > * {
           display: none;
         }
 
-        &::before {
+        + * {
+          margin-top: 0;
+        }
+
+        &::after {
           color: var(--umo-content-placeholder-color);
           content: attr(data-placeholder);
           float: left;
@@ -427,6 +392,18 @@
     }
   }
 
+  .Tiptap-invisible-character {
+    text-indent: 0;
+    &--break::before {
+      content: '↓';
+      color: var(--umo-content-invisible-break-color);
+    }
+    &--paragraph::before {
+      content: '↵';
+      color: var(--umo-content-invisible-break-color);
+    }
+  }
+
   .Tiptap-mathematics {
     &-editor {
       background: var(--umo-content-node-selected-background);
@@ -469,10 +446,14 @@
     }
   }
 }
+.umo-editor-bookmark {
+  color: hsl(0, 1%, 68%);
+}
 
-.umo-editor-page-computed {
-  width: 100%;
-  height: 0;
-  position: absolute;
-  border: none;
+.umo-editor-bookmark::after {
+  content: '}';
+}
+
+.umo-editor-bookmark::before {
+  content: '{';
 }

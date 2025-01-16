@@ -84,6 +84,7 @@
           />
           <menus-toolbar-insert-emoji v-if="!disableItem('emoji')" />
           <menus-toolbar-insert-math v-if="!disableItem('math')" />
+          <menus-toolbar-insert-bookmark v-if="!disableItem('bookmark')" />
         </div>
         <div class="umo-virtual-group">
           <menus-toolbar-insert-hard-break />
@@ -173,15 +174,9 @@
             <menus-toolbar-page-orientation />
           </div>
         </div>
-        <div
-          v-if="!hidePageHeader || !hidePageFooter"
-          class="umo-virtual-group"
-        >
-          <menus-toolbar-page-header v-if="!hidePageHeader" />
-          <menus-toolbar-page-footer v-if="!hidePageFooter" />
-        </div>
         <div class="umo-virtual-group">
           <menus-toolbar-page-break />
+          <menus-toolbar-page-break-marks />
           <menus-toolbar-page-line-number />
           <menus-toolbar-page-watermark />
           <menus-toolbar-page-background />
@@ -197,7 +192,6 @@
         <div class="umo-virtual-group">
           <menus-toolbar-export-image />
           <menus-toolbar-export-pdf />
-          <menus-toolbar-export-word />
           <menus-toolbar-export-text />
         </div>
         <div class="umo-virtual-group">
@@ -225,7 +219,7 @@ const props = defineProps<{
 
 const emits = defineEmits(['menu-change'])
 
-const { container, options, hidePageHeader, hidePageFooter } = useStore()
+const { container, options } = useStore()
 const disableItem = (name: string) => {
   return options.value.toolbar?.disableMenuItems.includes(name)
 }
