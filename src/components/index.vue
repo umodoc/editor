@@ -641,6 +641,7 @@ const reset = (silent: boolean) => {
 
 const destroy = () => {
   editor.value?.destroy()
+  removeAllHotkeys()
   resetStore()
 }
 
