@@ -743,6 +743,7 @@ defineExpose({
   setContent,
   setLocale,
   setTheme,
+  getPage: () => page.value,
   getContent,
   getImage,
   getText,
