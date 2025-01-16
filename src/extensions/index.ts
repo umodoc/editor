@@ -52,6 +52,7 @@ import TextAlign from './text-align'
 import TextBox from './text-box'
 import Toc from './toc'
 import Video from './video'
+import BookMark from './book-mark'
 
 const { options, container, page, tableOfContents } = useStore()
 
@@ -164,6 +165,9 @@ export const extensions = [
   }),
   Dropcursor.configure({
     color: 'var(--umo-primary-color)',
+  }),
+  BookMark.configure({
+    class:"umo-editor-bookmark"
   }),
 ]
 

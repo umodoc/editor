@@ -147,6 +147,16 @@
       "hrefTip": "请输入链接地址，一般以 http:// 或 https:// 开头"
     },
     "math": "数学公式",
+    "bookmark": {
+      "text": "书签",
+      "set": "设置书签",
+      "ok": "确定",
+      "textName": "书签名称",
+      "placeholder": "请输入书签名称...",
+      "proName":"操作",
+      "delete":"删除",
+      "inputnmName":"请输入书签名称！"
+    },
     "symbol": "特殊字符",
     "template": "模板",
     "textBox": "文本框",
