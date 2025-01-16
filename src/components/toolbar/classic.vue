@@ -173,13 +173,6 @@
             <menus-toolbar-page-orientation />
           </div>
         </div>
-        <div
-          v-if="!hidePageHeader || !hidePageFooter"
-          class="umo-virtual-group"
-        >
-          <menus-toolbar-page-header v-if="!hidePageHeader" />
-          <menus-toolbar-page-footer v-if="!hidePageFooter" />
-        </div>
         <div class="umo-virtual-group">
           <menus-toolbar-page-break />
           <menus-toolbar-page-break-marks />
@@ -225,7 +218,7 @@ const props = defineProps<{
 
 const emits = defineEmits(['menu-change'])
 
-const { container, options, hidePageHeader, hidePageFooter } = useStore()
+const { container, options } = useStore()
 const disableItem = (name: string) => {
   return options.value.toolbar?.disableMenuItems.includes(name)
 }

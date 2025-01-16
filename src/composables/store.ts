@@ -37,8 +37,6 @@ export const useStore = createGlobalState(() => {
   const printing = ref(false)
   const exportImage = ref(false)
   const exportPDF = ref(false)
-  const hidePageHeader = ref(true)
-  const hidePageFooter = ref(true)
   const editorDestroyed = ref(false)
 
   const setOptions = (value: unknown) => {
@@ -98,8 +96,6 @@ export const useStore = createGlobalState(() => {
         orientation: defaultOrientation,
         showBreakMarks,
         watermark,
-        header: true,
-        footer: true,
         showLineNumber: false,
         showToc: false,
         zoomLevel: 100,
@@ -149,8 +145,6 @@ export const useStore = createGlobalState(() => {
     printing,
     exportImage,
     exportPDF,
-    hidePageHeader,
-    hidePageFooter,
     editorDestroyed,
     setOptions,
     setEditor,
