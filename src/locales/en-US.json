@@ -147,6 +147,16 @@
       "hrefTip": "Enter the link URL, usually starting with http:// or https://"
     },
     "math": "Mathematics",
+    "bookmark": {
+      "text": "Bookmark",
+      "set": "Set bookmarks",
+      "ok": "Confirmed",
+      "textName": "The bookmark name",
+      "placeholder": " Please enter the bookmark name...",
+      "proName":"Operation",
+      "delete":"Del",
+      "inputnmName":" Please enter the bookmark name!"
+    },
     "symbol": "Symbol",
     "template": "Template",
     "textBox": "Text Box",
