@@ -153,9 +153,9 @@
       "ok": "确定",
       "textName": "书签名称",
       "placeholder": "请输入书签名称...",
-      "proName":"操作",
-      "delete":"删除",
-      "inputnmName":"请输入书签名称！"
+      "actions": "操作",
+      "delete": "删除书签",
+      "emptyError": "请输入书签名称或者选择书签"
     },
     "symbol": "特殊字符",
     "template": "模板",

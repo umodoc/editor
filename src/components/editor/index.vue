@@ -2,6 +2,7 @@
   <editor-content
     class="umo-editor-content"
     :class="{
+      'show-bookmark': bookmark,
       'show-line-number': page.showLineNumber,
       'format-painter': painter.enabled,
       'is-empty': editor?.isEmpty,
@@ -29,7 +30,7 @@ import { Editor, EditorContent, type Extension } from '@tiptap/vue-3'
 
 import { extensions, inputAndPasteRules } from '@/extensions'
 
-const { options, editor, page, painter, setEditor, editorDestroyed } =
+const { options, editor, page, painter, bookmark, setEditor, editorDestroyed } =
   useStore()
 
 const $document = useState('document')

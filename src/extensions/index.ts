@@ -30,6 +30,7 @@ import { TableOfContents } from '@tiptap-pro/extension-table-of-contents'
 import { shortId } from '@/utils/short-id'
 
 import Audio from './audio'
+import Bookmark from './bookmark'
 import BulletList from './bullet-list'
 import CodeBlock from './code-block'
 import File from './file'
@@ -52,7 +53,6 @@ import TextAlign from './text-align'
 import TextBox from './text-box'
 import Toc from './toc'
 import Video from './video'
-import BookMark from './book-mark'
 
 const { options, container, page, tableOfContents } = useStore()
 
@@ -166,8 +166,8 @@ export const extensions = [
   Dropcursor.configure({
     color: 'var(--umo-primary-color)',
   }),
-  BookMark.configure({
-    class:"umo-editor-bookmark"
+  Bookmark.configure({
+    class: 'umo-editor-bookmark',
   }),
 ]
 

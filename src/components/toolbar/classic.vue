@@ -84,7 +84,7 @@
           />
           <menus-toolbar-insert-emoji v-if="!disableItem('emoji')" />
           <menus-toolbar-insert-math v-if="!disableItem('math')" />
-          <menus-toolbar-insert-book-mark v-if="!disableItem('bookmark')" />
+          <menus-toolbar-insert-bookmark v-if="!disableItem('bookmark')" />
         </div>
         <div class="umo-virtual-group">
           <menus-toolbar-insert-hard-break />

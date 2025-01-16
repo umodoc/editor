@@ -25,6 +25,12 @@
     cursor: url('@/assets/images/format-painter.svg'), text;
   }
 
+  &:not(.show-bookmark) {
+    .umo-editor-bookmark {
+      display: none;
+    }
+  }
+
   .umo-editor {
     outline: none;
     counter-reset: title;
@@ -446,7 +452,6 @@
 
 .umo-editor-bookmark::after {
   content: '}';
-
 }
 
 .umo-editor-bookmark::before {

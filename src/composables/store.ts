@@ -23,7 +23,7 @@ export const useStore = createGlobalState(() => {
     once: true,
     marks: [],
   })
-
+  const bookmark = ref(true)
   const blockMenu = ref(false)
   const assistantBox = ref(false)
   const commentBox = ref(false)
@@ -135,6 +135,7 @@ export const useStore = createGlobalState(() => {
     page,
     editor,
     painter,
+    bookmark,
     blockMenu,
     assistantBox,
     commentBox,
