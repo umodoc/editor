@@ -82,6 +82,9 @@ const options = $ref({
       size: file.size,
     }
   },
+  onFileDelete:function(id,url){
+
+  },
   async onAssistant() {
     return await Promise.resolve('<p>AI助手测试</p>')
   },

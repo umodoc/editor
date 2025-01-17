@@ -73,6 +73,9 @@ export default Image.extend({
       previewType: {
         default: 'image',
       },
+      id: {
+        default: null,
+      }
     }
   },
   parseHTML() {
@@ -85,7 +88,7 @@ export default Image.extend({
     return {
       setImage:
         (
-          options: { src: string; alt?: string; title?: string },
+          options: { src: string; alt?: string; title?: string;id?:string },
           replace?: boolean,
         ) =>
         ({ commands, editor }: CommandProps) => {
