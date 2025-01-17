@@ -47,7 +47,9 @@
       }
 
       &.umo-node-focused {
-        &:not(.is-editor-empty):not(hr):not(.tableWrapper):not(table):before {
+        &:not(.is-editor-empty):not(hr):not(.tableWrapper):not(
+            .umo-page-break
+          ):not(table):before {
           content: '';
           display: block;
           position: absolute;
@@ -67,6 +69,13 @@
           margin-right: -8px;
           padding-left: 8px;
           padding-right: 8px;
+        }
+        &.umo-page-break {
+          background-color: var(--umo-primary-color);
+          color: var(--umo-primary-color);
+          &::after {
+            border-color: var(--umo-primary-color);
+          }
         }
 
         .umo-select-outline {
@@ -366,6 +375,38 @@
 
   .umo-page-divider {
     .umo-page-divider();
+  }
+
+  .umo-page-break {
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: var(--umo-content-node-border);
+    break-before: page;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    position: relative;
+    &::after {
+      content: attr(data-content);
+      font-size: 10px;
+      border: solid 1px var(--umo-content-node-border);
+      padding: 1px 8px;
+      border-radius: 2px;
+      background-color: var(--umo-color-white);
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+    @media print {
+      height: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+      page-break-before: always;
+      &::after {
+        display: none;
+      }
+    }
   }
 
   .umo-node-view {

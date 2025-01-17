@@ -46,6 +46,7 @@ import LineHeight from './line-height'
 import Margin from './margin'
 import NodeAlign from './node-align'
 import OrderedList from './ordered-list'
+import PageBreak from './page-break'
 import Selection from './selection'
 import TableCell from './table-cell'
 import TableHeader from './table-header'
@@ -133,6 +134,7 @@ export const extensions = [
     visible: page.value.showBreakMarks,
     builders: [new HardBreakNode(), new ParagraphNode(), new InvisibleNode()],
   }),
+  PageBreak,
   // 其他
   Selection,
   TableOfContents.configure({
