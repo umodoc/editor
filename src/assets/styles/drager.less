@@ -26,18 +26,15 @@
     &:after {
       display: block;
     }
-    &.border {
-      outline: 1px solid var(--umo-primary-color);
-    }
-    .es-drager-dot {
-      display: block;
-      @media print {
-        display: none;
+
+    @media screen {
+      &.border {
+        outline: 1px solid var(--umo-primary-color);
+      }
+      .es-drager-dot {
+        display: block;
       }
     }
-  }
-  @media print {
-    outline: unset;
   }
   &-dot {
     display: none;

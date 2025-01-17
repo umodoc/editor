@@ -390,7 +390,7 @@
     "pdf": {
       "text": "PDF Document",
       "title": "Export PDF Document",
-      "message": "Before exporting the PDF document, make sure that all images on the pages have finished loading. Then, in the print dialog box that appears, select 'Printer - Save as PDF', and click 'Save' button to save the document. If node backgrounds are not displayed, please check the 'Background graphics' option in the print dialog box.",
+      "message": "Before exporting the PDF document, please ensure that all images on the pages have finished loading. Then, in the pop-up print dialog, select 'Printer - Save as PDF', and click the 'Save' button. To ensure that all content is displayed correctly, please check the 'Background graphics' option in the print dialog box and set the 'Margins' to 'None.'",
       "confirm": "I Understand"
     },
     "text": "Text"
@@ -669,7 +669,7 @@
   "print": {
     "text": "Print",
     "title": "Print Document",
-    "message": "Before printing the document, please ensure that all images on the pages have finished loading. If node backgrounds are not displayed, please check the 'Background graphics' option in the print dialog box.",
+    "message": "Before printing the document, please ensure that all images on the pages have finished loading. To ensure that all content is displayed correctly, please check the 'Background graphics' option in the print dialog box and set the 'Margins' to 'None.'",
     "confirm": "Print Now"
   },
   "time": {

@@ -48,16 +48,20 @@ const getIframeCode = () => {
         background-color: ${background};
         -webkit-print-color-adjust: exact;
       }
+      .umo-page-content{
+        transform: scale(1) !important;
+      }
       @page {
         size: ${orientation === 'portrait' ? size?.width : size?.height}cm ${orientation === 'portrait' ? size?.height : size?.width}cm; 
-        padding: ${margin?.top}cm 0 ${margin?.bottom}cm;
-        margin: 0;
+        margin: ${margin?.top}cm 0 ${margin?.bottom}cm;
+        padding: 0;
       }
       @page:first {
-        padding-top: 0;
+        margin-top: 0;
       }
       @page:last {
-        padding-top: 0;
+        margin-bottom: 0;
+        page-break-after: avoid;
       }
       </style>
     </head>

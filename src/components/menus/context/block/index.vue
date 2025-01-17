@@ -57,11 +57,11 @@ onUnmounted(() => {
   z-index: 20;
   margin-left: -190px;
   top: 0;
+  @media print {
+    display: none;
+  }
   .umo-menu-button {
     background-color: var(--umo-page-background);
-    @media print {
-      display: none;
-    }
     .umo-button-content {
       color: rgba(0, 0, 0, 0.5);
     }
