@@ -140,11 +140,11 @@
     "link": {
       "text": "Link",
       "title": "Insert Link",
-      "insert": "Insert",
+      "submit": "Confirm",
       "hrefText": "Link Text:",
       "hrefTextTip": "Enter or select link text",
       "href": "Link URL:",
-      "hrefTip": "Enter the link URL, usually starting with http:// or https://"
+      "hrefTip": "Usually starting with http:// or https://"
     },
     "math": "Mathematics",
     "bookmark": {

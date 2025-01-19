@@ -2,49 +2,47 @@
   <menus-button
     ico="link"
     :text="t('insert.link.text')"
+    menu-type="popup"
     huge
-    @menu-click="dialogVisible = true"
-  />
-  <modal
-    :visible="dialogVisible"
-    icon="link"
-    :header="t('insert.link.title')"
-    width="420px"
-    draggable
-    destroy-on-close
-    :confirm-btn="t('insert.link.insert')"
-    @confirm="insertLink"
-    @close="dialogVisible = false"
+    :popup-visible="popupVisible"
+    @toggle-popup="togglePopup"
   >
-    <div class="umo-link-container">
-      <t-form label-align="top">
-        <t-form-item :label="t('insert.link.hrefText')">
-          <t-input
-            v-model.trim="text"
-            :status="error.text ? 'error' : 'default'"
-            :placeholder="t('insert.link.hrefTextTip')"
-            clearable
-          />
-        </t-form-item>
-        <t-form-item :label="t('insert.link.href')">
-          <t-input
-            v-model="href"
-            :status="error.href ? 'error' : 'default'"
-            type="url"
-            clearable
-            :placeholder="t('insert.link.hrefTip')"
-          />
-        </t-form-item>
-      </t-form>
-    </div>
-  </modal>
+    <template #content>
+      <div class="umo-link-container">
+        <t-form label-align="top">
+          <t-form-item :label="t('insert.link.hrefText')">
+            <t-input
+              v-model.trim="text"
+              :status="error.text ? 'error' : 'default'"
+              :placeholder="t('insert.link.hrefTextTip')"
+              clearable
+            />
+          </t-form-item>
+          <t-form-item :label="t('insert.link.href')">
+            <t-input
+              v-model="href"
+              :status="error.href ? 'error' : 'default'"
+              type="url"
+              clearable
+              :placeholder="t('insert.link.hrefTip')"
+            />
+          </t-form-item>
+          <t-form-item>
+            <t-button theme="primary" type="submit" @click="insertLink">{{
+              t('insert.link.submit')
+            }}</t-button>
+          </t-form-item>
+        </t-form>
+      </div>
+    </template>
+  </menus-button>
 </template>
 
 <script setup lang="ts">
 import { getSelectionText } from '@/extensions/selection'
 
+const { popupVisible, togglePopup } = usePopup()
 const { editor } = useStore()
-let dialogVisible = $ref(false)
 
 let text = $ref('')
 let href = $ref('')
@@ -68,10 +66,11 @@ const insertLink = () => {
   error.href = false
   editor.value?.commands.setLink({ href, target: '_blank' })
   editor.value?.chain().focus().insertContent(text).run()
-  dialogVisible = false
+  popupVisible.value = false
 }
+
 watch(
-  () => dialogVisible,
+  () => popupVisible.value,
   (val: boolean) => {
     if (val) {
       text = editor.value ? getSelectionText(editor.value) : ''
@@ -89,9 +88,11 @@ watch(
 <style lang="less" scoped>
 .umo-link-container {
   padding: 2px;
+  width: 320px;
   :deep(.umo-form__item) {
-    &:not(:last-child) {
-      margin-bottom: 10px;
+    margin-bottom: 10px;
+    &:last-child {
+      margin-top: 20px;
     }
   }
 }

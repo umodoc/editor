@@ -139,12 +139,11 @@
     "image": "图片",
     "link": {
       "text": "链接",
-      "title": "插入链接",
-      "insert": "插入",
+      "submit": "确定",
       "hrefText": "链接文本：",
       "hrefTextTip": "请输入或选中链接文本",
       "href": "链接地址：",
-      "hrefTip": "请输入链接地址，一般以 http:// 或 https:// 开头"
+      "hrefTip": "一般以 http:// 或 https:// 开头"
     },
     "math": "数学公式",
     "bookmark": {

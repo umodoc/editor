@@ -115,6 +115,7 @@
     <menus-toolbar-base-strike />
     <div class="umo-bubble-menu-divider"></div>
     <menus-toolbar-base-align-dropdown />
+    <menus-toolbar-insert-link />
     <div class="umo-bubble-menu-divider"></div>
     <menus-toolbar-base-color />
     <menus-toolbar-base-background-color />
