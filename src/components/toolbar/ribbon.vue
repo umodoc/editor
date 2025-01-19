@@ -87,7 +87,7 @@
             <menus-toolbar-insert-code-block
               v-if="!disableItem('code-block')"
             />
-            <menus-toolbar-insert-symbol v-if="!disableItem('symbol')"/>
+            <menus-toolbar-insert-symbol v-if="!disableItem('symbol')" />
             <menus-toolbar-insert-chinese-date
               v-if="!disableItem('chineseDate')"
             />
@@ -99,11 +99,11 @@
             <menus-toolbar-insert-hard-break />
             <menus-toolbar-insert-hr />
             <menus-toolbar-insert-toc />
-            <menus-toolbar-insert-text-box v-if="!disableItem('textbox')"/>
+            <menus-toolbar-insert-text-box v-if="!disableItem('textBox')" />
           </div>
           <div class="umo-virtual-group">
             <menus-toolbar-insert-template />
-            <menus-toolbar-insert-web-page v-if="!disableItem('webpage')"/>
+            <menus-toolbar-insert-web-page v-if="!disableItem('webPage')" />
           </div>
           <div class="virtual-group is-slot">
             <slot name="toolbar_insert" toolbar-mode="ribbon" />
@@ -220,7 +220,7 @@
         <template v-if="currentMenu === 'export'">
           <div class="umo-virtual-group">
             <menus-toolbar-export-image />
-            <menus-toolbar-export-pdf v-if="!disableItem('exportpdf')"/>
+            <menus-toolbar-export-pdf v-if="!disableItem('exportPDF')" />
             <menus-toolbar-export-text />
           </div>
           <div class="umo-virtual-group">
