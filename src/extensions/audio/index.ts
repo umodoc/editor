@@ -22,6 +22,9 @@ export default Node.create({
       file: {
         default: null,
       },
+      id: {
+        default: null,
+      },
       name: {
         default: null,
       },

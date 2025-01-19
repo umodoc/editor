@@ -40,7 +40,7 @@
           <icon name="shortcut" />
         </t-button>
       </tooltip>
-      <tooltip :content="t('resetAll.title')" v-if="!disableItem('resetAll')">
+      <tooltip :content="t('resetAll.title')">
         <t-button
           class="umo-status-bar-button"
           variant="text"
@@ -51,7 +51,7 @@
         </t-button>
       </tooltip>
       <div class="bar-split"></div>
-      <tooltip :content="t('poweredBy')" v-if="!disableItem('poweredBy')">
+      <tooltip :content="t('poweredBy')">
         <t-button
           class="umo-status-bar-button"
           variant="text"
@@ -62,7 +62,7 @@
           <icon name="home-page" />
         </t-button>
       </tooltip>
-      <tooltip :content="t('feedback')" v-if="!disableItem('feedback')">
+      <tooltip :content="t('feedback')">
         <t-button
           class="umo-status-bar-button"
           variant="text"
@@ -125,7 +125,6 @@
     <div class="umo-status-bar-right">
       <tooltip
         :content="`${page.preview?.enabled ? t('preview.disable') : t('preview.title')} (F5)`"
-        v-if="!disableItem('preview')"
       >
         <t-button
           class="umo-status-bar-button"
@@ -215,7 +214,6 @@
         </tooltip>
       </div>
       <t-dropdown
-       v-if="!disableItem('pagelang')"
         :attach="container"
         :options="langs"
         placement="top-left"
@@ -322,10 +320,7 @@ const $document = useState('document')
 const showShortcut = $ref(false)
 
 const reset = inject('reset') as (silent: boolean) => void
-//显示隐藏按钮
-const disableItem = (name: string) => {
-  return options.value.toolbar?.disableMenuItems.includes(name)
-}
+
 // 字数统计
 const showWordCount = $ref(false)
 const selectionCharacters = computed(() => {
