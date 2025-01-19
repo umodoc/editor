@@ -173,6 +173,15 @@ export interface AssistantResult {
   command?: string
 }
 
+export interface FileOptions {
+  allowedMimeTypes: string[]
+  maxSize: number
+  preview: {
+    extensions?: string[]
+    url: string
+  }[]
+}
+
 export interface UmoEditorOptions {
   editorKey: string
   locale: SupportedLocale
@@ -194,7 +203,7 @@ export interface UmoEditorOptions {
   cdnUrl?: string
   shareUrl?: string
   diagrams?: Record<string, unknown>
-  file?: { allowedMimeTypes: string[]; maxSize: number }
+  file?: FileOptions
   user?: Record<string, unknown>
   extensions?: Extension[]
   translations?: Record<string, unknown>

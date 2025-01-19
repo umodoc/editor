@@ -9,14 +9,12 @@
       class="umo-node-container hover-shadow umo-select-outline umo-node-file"
     >
       <div class="umo-file-icon">
-        <img :src="filePath" class="icon-file" />
+        <img :src="fileIcon" class="icon-file" />
       </div>
       <div
         class="umo-file-info"
         :style="{
-          width: supportPreviewTypes.includes(node.attrs.previewType)
-            ? '200px'
-            : '237px',
+          width: supportPreview ? '200px' : '237px',
         }"
       >
         <div
@@ -43,7 +41,7 @@
         </div>
         <template v-else>
           <div
-            v-if="supportPreviewTypes.includes(node.attrs.previewType)"
+            v-if="supportPreview"
             class="umo-action-item"
             :title="t('file.preview')"
             @click.stop="togglePreview"
@@ -62,6 +60,30 @@
         </template>
       </div>
     </div>
+    <modal
+      dialog-class-name="umo-file-preview-modal"
+      :visible="previewModal"
+      :header="false"
+      :footer="false"
+      width="90vw"
+    >
+      <div class="umo-file-preview-modal-header">
+        <img :src="fileIcon" class="file-icon" />
+        <h3>{{ node.attrs.name || t('file.unknownName') }}</h3>
+        <t-button
+          class="close-btn"
+          size="small"
+          shape="square"
+          variant="text"
+          @click="previewModal = false"
+        >
+          <icon name="close" :size="18" />
+        </t-button>
+      </div>
+      <div class="umo-file-preview-modal-body">
+        <iframe :src="previewURL"></iframe>
+      </div>
+    </modal>
   </node-view-wrapper>
 </template>
 
@@ -69,12 +91,12 @@
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import prettyBytes from 'pretty-bytes'
 
-import { getFileIcon } from '@/utils/file'
+import { getFileExtname, getFileIcon } from '@/utils/file'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const { options, editor } = useStore()
 const containerRef = ref(null)
-let filePath = $ref('')
+let fileIcon = $ref('')
 
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs
@@ -89,9 +111,21 @@ const nodeStyle = $computed(() => {
   }
 })
 
+let previewModal = $ref(false)
+let previewURL = $ref(null)
+const setPreviewURL = (fileName: string) => {
+  const { preview } = options.value.file
+  const extName = getFileExtname(fileName)
+  const match = preview.find((item: any) => item.extensions.includes(extName))
+  if (match?.url.includes('{url}')) {
+    previewURL = match.url
+      .replace(/{{url}}/g, encodeURIComponent(node.attrs.url))
+      .replace(/{url}/g, node.attrs.url)
+  }
+}
+
 onMounted(async () => {
-  const fileIcon = getFileIcon(node.attrs.name)
-  filePath = `${options.value.cdnUrl}/icons/file/${fileIcon}.svg`
+  fileIcon = `${options.value.cdnUrl}/icons/file/${getFileIcon(node.attrs.name)}.svg`
   if (
     node.attrs.uploaded === false &&
     node.attrs.file &&
@@ -106,11 +140,18 @@ onMounted(async () => {
       useMessage('error', (e as Error).message)
     }
   }
+  setPreviewURL(node.attrs.name)
 })
 
-const supportPreviewTypes = ['image', 'video', 'audio']
-
+const supportPreview = $computed(() => {
+  const supportNodes = ['image', 'video', 'audio']
+  return supportNodes.includes(node.attrs.previewType) || previewURL !== null
+})
 const togglePreview = () => {
+  if (previewURL !== null) {
+    previewModal = true
+    return
+  }
   const { attrs } = node
   editor.value.commands.insertContent({
     type: attrs.previewType,
@@ -193,6 +234,53 @@ const togglePreview = () => {
           animation: turn 1s linear infinite;
         }
       }
+    }
+  }
+}
+
+.umo-file-preview-modal {
+  padding: 0 !important;
+  overflow: hidden;
+  .umo-dialog {
+    &__header {
+      display: none !important;
+    }
+    &__body {
+      padding: 0 !important;
+    }
+  }
+  &-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 15px;
+    position: relative;
+    .file-icon {
+      height: 24px;
+      display: block;
+    }
+    h3 {
+      margin: 0;
+      font-size: 18px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      word-break: break-all;
+      white-space: nowrap;
+      width: calc(100% - 100px);
+    }
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+  }
+  &-body {
+    iframe {
+      display: block;
+      width: 100%;
+      height: calc(90vh - 164px);
+      border: solid 1px var(--umo-border-color-light);
+      box-sizing: border-box;
     }
   }
 }
