@@ -337,8 +337,8 @@ const defaultOptions: UmoEditorOptions = {
         value: { en_US: 'Expansion', zh_CN: '扩写', ru_RU: 'Расширение' },
       },
       {
-        label: { en_US: 'Polish', zh_CN: '润色', ru_RU: 'Польский' },
-        value: { en_US: 'Polish', zh_CN: '润色', ru_RU: 'Польский' },
+        label: { en_US: 'Polish', zh_CN: '润色', ru_RU: 'Полировать' },
+        value: { en_US: 'Polish', zh_CN: '润色', ru_RU: 'Полировать' },
       },
       {
         label: { en_US: 'Proofread', zh_CN: '校阅', ru_RU: 'Корректура' },
@@ -741,6 +741,28 @@ const ojbectSchema = new ObjectSchema({
             required: false,
           },
           text: {
+            merge: 'replace',
+            validate: 'string',
+            required: false,
+          },
+        },
+      },
+      size: {
+        required: false,
+        merge: 'replace',
+        validate: 'object',
+        schema: {
+          width: {
+            merge: 'replace',
+            validate: 'number',
+            required: false,
+          },
+          height: {
+            merge: 'replace',
+            validate: 'number',
+            required: false,
+          },
+          label: {
             merge: 'replace',
             validate: 'string',
             required: false,
