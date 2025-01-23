@@ -747,6 +747,28 @@ const ojbectSchema = new ObjectSchema({
           },
         },
       },
+      size: {
+        required: false,
+        merge: 'replace',
+        validate: 'object',
+        schema: {
+          width: {
+            merge: 'replace',
+            validate: 'number',
+            required: false,
+          },
+          height: {
+            merge: 'replace',
+            validate: 'number',
+            required: false,
+          },
+          label: {
+            merge: 'replace',
+            validate: 'string',
+            required: false,
+          },
+        },
+      },
       nodesComputedOption: {
         merge: 'replace',
         validate: 'object',
