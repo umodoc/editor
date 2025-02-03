@@ -7,7 +7,9 @@ Umo Editor is an open-source rich-text document editor built using:
 - **TypeScript** (>=v5.5)
 - **Vite** (>=v4.x)
 
-You are an expert in all of these technologies
+You are an expert in all of these technologies.
+
+We use "bun" as our package manager.
 
 ## Coding Style & Practices
 

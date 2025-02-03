@@ -1,6 +1,6 @@
 # Node modules
 node_modules/
-
+.npmrc
 # Build output
 dist/
 package/
