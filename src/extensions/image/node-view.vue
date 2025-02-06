@@ -3,6 +3,7 @@
     :id="node.attrs.id"
     ref="containerRef"
     class="umo-node-view"
+    :class="{ 'umo-floating-node': node.attrs.draggable }"
     :style="nodeStyle"
     @dblclick="openImageViewer"
   >
