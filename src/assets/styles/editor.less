@@ -35,9 +35,11 @@
     outline: none;
     counter-reset: title;
     color: var(--umo-content-text-color);
-    min-height: 100px;
     width: 100%;
-    float: left;
+    min-height: calc(
+      var(--umo-page-height) - var(--umo-page-margin-top) -
+        var(--umo-page-margin-bottom)
+    );
     > * {
       position: relative;
       z-index: 1;
@@ -87,6 +89,7 @@
     }
 
     > .is-editor-empty {
+      line-height: 1.2;
       &:first-child {
         > * {
           display: none;
@@ -99,8 +102,6 @@
         &::after {
           color: var(--umo-content-placeholder-color);
           content: attr(data-placeholder);
-          float: left;
-          height: 0;
           pointer-events: none;
         }
       }
