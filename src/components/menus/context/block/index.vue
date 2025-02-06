@@ -4,7 +4,7 @@
     class="umo-block-menu-hander"
     :style="
       {
-        transform: `translate(${page.margin?.left ?? 0}cm, ${scrollTop}px)`,
+        transform: `translate(-68px, ${scrollTop}px)`,
       } as CSSProperties
     "
   >
@@ -55,7 +55,6 @@ onUnmounted(() => {
 .umo-block-menu-hander {
   position: absolute;
   z-index: 20;
-  margin-left: -190px;
   top: 0;
   @media print {
     display: none;
