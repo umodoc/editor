@@ -53,14 +53,14 @@ const getIframeCode = () => {
       }
       @page {
         size: ${orientation === 'portrait' ? size?.width : size?.height}cm ${orientation === 'portrait' ? size?.height : size?.width}cm; 
-        margin: ${margin?.top}cm 0 ${margin?.bottom}cm;
-        padding: 0;
+        padding: ${margin?.top}cm 0 ${margin?.bottom}cm;
+        margin: 0;
       }
       @page:first {
-        margin-top: 0;
+        padding-top: 0;
       }
       @page:last {
-        margin-bottom: 0;
+        padding-bottom: 0;
         page-break-after: avoid;
       }
       </style>
