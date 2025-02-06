@@ -118,14 +118,17 @@
     <menus-toolbar-insert-link />
     <div class="umo-bubble-menu-divider"></div>
     <menus-toolbar-base-color />
-    <menus-toolbar-base-background-color />
-    <menus-toolbar-base-highlight />
-    <div class="umo-bubble-menu-divider"></div>
-    <template v-if="editor?.isActive('textBox')">
+    <template v-if="!editor?.isActive('textBox')">
+      <menus-toolbar-base-background-color />
+      <menus-toolbar-base-highlight />
+    </template>
+    <template v-else>
       <menus-bubble-text-box-border />
       <menus-bubble-text-box-background />
       <div class="umo-bubble-menu-divider"></div>
+      <menus-bubble-node-delete />
     </template>
+    <div class="umo-bubble-menu-divider"></div>
     <!-- <template v-if="options.document?.enableComment && commentBox">
       <menus-bubble-comment />
       <div class="umo-bubble-menu-divider"></div>

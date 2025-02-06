@@ -2,7 +2,7 @@
   <node-view-wrapper
     :id="node.attrs.id"
     ref="containerRef"
-    class="umo-node-view"
+    class="umo-node-view umo-floating-node"
     :style="{
       zIndex: 90,
       '--umo-textbox-border-color': node.attrs.borderColor,
@@ -10,7 +10,6 @@
       '--umo-textbox-border-style': node.attrs.borderStyle,
       '--umo-textbox-background-color': node.attrs.backgroundColor,
     }"
-    @dblclick.capture="disabled = true"
   >
     <div class="umo-node-container umo-node-text-box">
       <drager
@@ -32,8 +31,9 @@
         @drag="onDrag"
         @blur="disabled = false"
         @click="selected = true"
+        @dblclick="editTextBox"
       >
-        <node-view-content class="umo-node-text-box-content" />
+        <node-view-content ref="contentRef" class="umo-node-text-box-content" />
       </drager>
     </div>
   </node-view-wrapper>
@@ -48,8 +48,9 @@ const { node, updateAttributes } = defineProps(nodeViewProps)
 const { options } = useStore()
 
 const containerRef = ref(null)
+const contentRef = $ref(null)
 let selected = $ref(false)
-const disabled = $ref(false)
+let disabled = $ref(false)
 
 const onRotate = ({ angle }: { angle: number }) => {
   updateAttributes({ angle })
@@ -61,7 +62,20 @@ const onDrag = ({ left, top }: { left: number; top: number }) => {
   updateAttributes({ left, top })
 }
 
-onClickOutside(containerRef, () => (selected = false))
+onClickOutside(containerRef, () => {
+  selected = false
+  disabled = false
+})
+
+const editTextBox = () => {
+  disabled = true
+  const range = document.createRange()
+  range.selectNodeContents(contentRef.$el)
+  const sel = window.getSelection()
+  sel?.removeAllRanges()
+  sel?.addRange(range)
+  contentRef.$el.focus()
+}
 </script>
 
 <style lang="less">
