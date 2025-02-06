@@ -15,7 +15,7 @@ export default Extension.create({
     return {
       defaultAlignment: 'center',
       alignments: ['flex-start', 'center', 'flex-end'],
-      types: ['image', 'video', 'audio', 'iframe', 'file','echarts'],
+      types: ['image', 'video', 'audio', 'iframe', 'file'],
     }
   },
   addGlobalAttributes() {

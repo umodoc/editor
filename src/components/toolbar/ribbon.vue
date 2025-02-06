@@ -183,11 +183,6 @@
             />
           </div>
           <div class="umo-virtual-group">
-            <menus-toolbar-tools-echarts
-              v-if="!disableItem('echarts')"
-            />
-          </div>
-          <div class="umo-virtual-group">
             <slot name="toolbar_tools" toolbar-mode="ribbon" />
           </div>
         </template>

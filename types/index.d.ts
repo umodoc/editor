@@ -148,14 +148,6 @@ export interface AssistantOptions {
   enabled: boolean
 }
 
-export interface echartsOptions{
-    isRelative: boolean
-    cdnUrl: string
-    filePath: string
-    mode: number
-    haveImage:boolean
-}
-
 export interface CommandItem {
   label: LocaleLabel
   value: LocaleLabel
@@ -207,7 +199,6 @@ export interface UmoEditorOptions {
   page: PageOption
   document?: DocumentOptions
   assistant?: AssistantOptions
-  echarts?:echartsOptions
   templates?: Template[]
   cdnUrl?: string
   shareUrl?: string
@@ -219,7 +210,6 @@ export interface UmoEditorOptions {
   onSave?: AsyncFunction
   onFileUpload?: (file: File) => Promise<{ id: string; url: string }>
   onFileDelete?: CallableFunction
-  onCustomizeChartSettings?: CallableFunction
   onAssistant?: AsyncFunction
   onCustomImportWordMethod?: AsyncFunction
 }
