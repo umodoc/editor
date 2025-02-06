@@ -29,8 +29,15 @@
           </t-form-item>
           <t-form-item>
             <t-button theme="primary" type="submit" @click="insertLink">{{
-              t('insert.link.submit')
+              t('insert.link.insert')
             }}</t-button>
+            <t-button
+              theme="default"
+              variant="text"
+              style="margin-left: 10px"
+              @click="removeLink"
+              >{{ t('insert.link.remove') }}</t-button
+            >
           </t-form-item>
         </t-form>
       </div>
@@ -66,6 +73,10 @@ const insertLink = () => {
   error.href = false
   editor.value?.commands.setLink({ href, target: '_blank' })
   editor.value?.chain().focus().insertContent(text).run()
+  popupVisible.value = false
+}
+const removeLink = () => {
+  editor.value?.chain().focus().unsetLink().run()
   popupVisible.value = false
 }
 

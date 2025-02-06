@@ -139,8 +139,8 @@
     "image": "Image",
     "link": {
       "text": "Link",
-      "title": "Insert Link",
-      "submit": "Confirm",
+      "insert": "Insert",
+      "remove": "Remove",
       "hrefText": "Link Text:",
       "hrefTextTip": "Enter or select link text",
       "href": "Link URL:",
