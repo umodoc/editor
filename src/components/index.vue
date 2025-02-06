@@ -667,7 +667,7 @@ const saveContent = async (showMessage = true) => {
       $document.value,
     )
     if (!success) {
-      message.closeAll()
+      MessagePlugin.closeAll()
       useMessage('error', {
         content: t('save.failed'),
         placement: 'bottom',
@@ -677,7 +677,7 @@ const saveContent = async (showMessage = true) => {
     }
     emits('saved')
     if (showMessage) {
-      message.closeAll()
+      MessagePlugin.closeAll()
       useMessage('success', {
         content: t('save.success'),
         placement: 'bottom',
