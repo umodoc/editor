@@ -85,6 +85,9 @@ const options = $ref({
   onFileDelete(id: string, url: string) {
     console.log(id, url)
   },
+  onCustomizeChartSettings(data: any, config: any) {
+    return null
+  },
   async onAssistant() {
     return await Promise.resolve('<p>AI助手测试</p>')
   },

@@ -102,6 +102,15 @@
     <menus-bubble-code-copy />
     <menus-bubble-node-delete />
   </template>
+  <template v-if="editor?.isActive('echarts')">
+    <menus-toolbar-base-align-left />
+    <menus-toolbar-base-align-center />
+    <menus-toolbar-base-align-right />
+    <div class="umo-bubble-menu-divider"></div>
+    <menus-toolbar-tools-echarts/>
+    <div class="umo-bubble-menu-divider"></div>
+    <menus-bubble-node-delete />
+  </template>
   <template v-else>
     <template v-if="options.assistant?.enabled">
       <menus-bubble-assistant />

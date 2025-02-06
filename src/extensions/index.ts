@@ -54,6 +54,7 @@ import TextAlign from './text-align'
 import TextBox from './text-box'
 import Toc from './toc'
 import Video from './video'
+import Echarts from './echarts'
 
 const { options, container, page, tableOfContents } = useStore()
 
@@ -171,6 +172,7 @@ export const extensions = [
   Bookmark.configure({
     class: 'umo-editor-bookmark',
   }),
+  Echarts
 ]
 
 export const inputAndPasteRules = () => {

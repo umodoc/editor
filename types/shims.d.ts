@@ -21,3 +21,4 @@ declare module 'dom-to-image-more' {
   export function toJpeg(node: HTMLElement, options?: any): Promise<Blob>
   export function toPng(node: HTMLElement, options?: any): Promise<Blob>
 }
+declare const echarts: any;
