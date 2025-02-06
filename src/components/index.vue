@@ -127,7 +127,7 @@ const $document = useState('document', props.editorKey)
 onBeforeMount(() => setOptions(props))
 onMounted(() => {
   setTheme(options.value.theme)
-  consoleCopyright()
+  setTimeout(consoleCopyright)
 })
 onBeforeUnmount(() => {
   clearAutoSaveInterval()
