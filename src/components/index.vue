@@ -70,7 +70,7 @@ import type {
 } from '@/types'
 import { consoleCopyright } from '@/utils/copyright'
 
-import ruConfig from '../locales/td-next-vue/ru-RU'
+import ruConfig from '../locales/td-next/ru-RU
 
 const { toBlob, toJpeg, toPng } = domToImage
 
