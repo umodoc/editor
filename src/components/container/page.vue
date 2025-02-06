@@ -163,7 +163,7 @@ watch(
     }
     await nextTick()
     const images = document.querySelectorAll(
-      `${container} .umo-page-content img:not(.umo-icon)`,
+      `${container} .umo-page-node-content img[src]:not(.umo-icon)`,
     )
     Array.from(images).forEach((image, index) => {
       const src = image.getAttribute('src')
