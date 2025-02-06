@@ -28,7 +28,7 @@ export default Extension.create({
         'bulletList',
         'orderedList',
         'taskList',
-        'echarts'
+        'echarts',
       ],
       margin: { top: 0, bottom: 0 },
     }

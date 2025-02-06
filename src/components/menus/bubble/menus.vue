@@ -107,7 +107,7 @@
     <menus-toolbar-base-align-center />
     <menus-toolbar-base-align-right />
     <div class="umo-bubble-menu-divider"></div>
-    <menus-toolbar-tools-echarts/>
+    <menus-toolbar-tools-echarts />
     <div class="umo-bubble-menu-divider"></div>
     <menus-bubble-node-delete />
   </template>

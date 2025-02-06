@@ -148,12 +148,12 @@ export interface AssistantOptions {
   enabled: boolean
 }
 
-export interface echartsOptions{
-    isRelative: boolean
-    cdnUrl: string
-    filePath: string
-    mode: number
-    haveImage:boolean
+export interface echartsOptions {
+  isRelative: boolean
+  cdnUrl: string
+  filePath: string
+  mode: number
+  haveImage: boolean
 }
 
 export interface CommandItem {
@@ -207,7 +207,7 @@ export interface UmoEditorOptions {
   page: PageOption
   document?: DocumentOptions
   assistant?: AssistantOptions
-  echarts?:echartsOptions
+  echarts?: echartsOptions
   templates?: Template[]
   cdnUrl?: string
   shareUrl?: string

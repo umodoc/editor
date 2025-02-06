@@ -172,7 +172,7 @@ export const extensions = [
   Bookmark.configure({
     class: 'umo-editor-bookmark',
   }),
-  Echarts
+  Echarts,
 ]
 
 export const inputAndPasteRules = () => {
