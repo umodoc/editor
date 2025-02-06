@@ -30,7 +30,6 @@
         @rotate="onRotate"
         @resize="onResize"
         @drag="onDrag"
-        @dragend="onDragEnd"
         @blur="disabled = false"
         @click="selected = true"
       >
