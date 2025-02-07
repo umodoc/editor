@@ -119,6 +119,9 @@ export const extensions = [
   hr,
   Iframe,
   Mathematics,
+  Bookmark.configure({
+    class: 'umo-editor-bookmark',
+  }),
 
   // 表格
   Table.configure({
@@ -128,6 +131,7 @@ export const extensions = [
   TableRow,
   TableHeader,
   TableCell,
+
   // 页面
   Toc,
   InvisibleCharacters.configure({
@@ -135,6 +139,7 @@ export const extensions = [
     builders: [new HardBreakNode(), new ParagraphNode(), new InvisibleNode()],
   }),
   PageBreak,
+
   // 其他
   Selection,
   TableOfContents.configure({
@@ -167,9 +172,6 @@ export const extensions = [
   }),
   Dropcursor.configure({
     color: 'var(--umo-primary-color)',
-  }),
-  Bookmark.configure({
-    class: 'umo-editor-bookmark',
   }),
 ]
 
