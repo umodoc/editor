@@ -417,7 +417,6 @@ const defaultOptions: UmoEditorOptions = {
     enableMarkdown: true,
     enableBubbleMenu: true,
     enableBlockMenu: true,
-    enableComment: false,
     readOnly: false,
     autofocus: true,
     characterLimit: 0,
@@ -931,11 +930,6 @@ const ojbectSchema = new ObjectSchema({
         required: false,
       },
       enableBlockMenu: {
-        merge: 'replace',
-        validate: 'boolean',
-        required: false,
-      },
-      enableComment: {
         merge: 'replace',
         validate: 'boolean',
         required: false,

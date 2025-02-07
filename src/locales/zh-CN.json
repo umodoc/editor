@@ -497,9 +497,6 @@
       "message": "AI 文档助手生成结果出现错误，请重试！"
     }
   },
-  "comment": {
-    "text": "批注/评论"
-  },
   "pageOptions": {
     "title": "页面设置",
     "size": {

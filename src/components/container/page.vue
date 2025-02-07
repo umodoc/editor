@@ -28,9 +28,6 @@
             </template>
           </editor>
         </div>
-        <template v-if="options.document?.enableComment">
-          <container-comments />
-        </template>
       </div>
     </div>
     <t-image-viewer

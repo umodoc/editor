@@ -496,9 +496,6 @@
       "message": "An error occurred with the AI Document Assistant result. Please try again!"
     }
   },
-  "comment": {
-    "text": "Comment"
-  },
   "pageOptions": {
     "title": "Page Settings",
     "size": {

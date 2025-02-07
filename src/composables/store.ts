@@ -27,7 +27,6 @@ export const useStore = createGlobalState(() => {
 
   const blockMenu = ref(false)
   const assistantBox = ref(false)
-  const commentBox = ref(false)
   const tableOfContents = ref<TableOfContentItem[]>([])
   const imageViewer = ref({
     visible: false,
@@ -153,7 +152,6 @@ export const useStore = createGlobalState(() => {
     painter,
     blockMenu,
     assistantBox,
-    commentBox,
     tableOfContents,
     imageViewer,
     searchReplace,

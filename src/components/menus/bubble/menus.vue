@@ -125,10 +125,6 @@
       <menus-bubble-text-box-background />
       <div class="umo-bubble-menu-divider"></div>
     </template>
-    <template v-if="options.document?.enableComment">
-      <menus-bubble-comment />
-      <div class="umo-bubble-menu-divider"></div>
-    </template>
     <slot name="bubble_menu" />
   </template>
 </template>
