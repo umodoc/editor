@@ -4,12 +4,12 @@
     class="umo-block-menu-hander"
     :style="
       {
-        transform: `translate(-68px, ${scrollTop}px)`,
+        transform: `translate(${editor.isEmpty ? -34 : -68}px, ${scrollTop}px)`,
       } as CSSProperties
     "
   >
     <menus-context-block-node />
-    <menus-context-block-common />
+    <menus-context-block-common v-if="!editor.isEmpty" />
   </div>
 </template>
 
