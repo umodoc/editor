@@ -57,7 +57,6 @@
             ></div>
           </div>
         </t-watermark>
-        <container-comments v-if="commentBox" />
       </div>
     </div>
     <t-image-viewer
@@ -80,7 +79,7 @@
 <script setup lang="ts">
 import type { WatermarkOption } from '@/types'
 
-const { container, page, commentBox, imageViewer } = useStore()
+const { container, page, imageViewer } = useStore()
 
 // 页面大小
 const pageSize = $computed(() => {

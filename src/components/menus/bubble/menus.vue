@@ -129,10 +129,6 @@
       <menus-bubble-node-delete />
     </template>
     <div class="umo-bubble-menu-divider"></div>
-    <!-- <template v-if="options.document?.enableComment && commentBox">
-      <menus-bubble-comment />
-      <div class="umo-bubble-menu-divider"></div>
-    </template> -->
     <slot name="bubble_menu" />
   </template>
 </template>

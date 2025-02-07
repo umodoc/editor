@@ -26,7 +26,6 @@ export const useStore = createGlobalState(() => {
   const bookmark = ref(true)
   const blockMenu = ref(false)
   const assistantBox = ref(false)
-  const commentBox = ref(false)
   const tableOfContents = ref<TableOfContentItem[]>([])
   const imageViewer = ref({
     visible: false,
@@ -138,7 +137,6 @@ export const useStore = createGlobalState(() => {
     bookmark,
     blockMenu,
     assistantBox,
-    commentBox,
     tableOfContents,
     imageViewer,
     searchReplace,
