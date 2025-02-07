@@ -230,16 +230,16 @@ let curNode = $ref(null)
 let sourceOptions = $ref(null)
 
 //高级模式下mychart展示对象
-let sourceMyChart:any = null
+let sourceMyChart: any = null
 //基础模式下mychart展示对象//避免响应式
-let settingMyChart:any = null
+let settingMyChart: any = null
 
 //基础模型下默认设置界面 0 图形界面 1 数据界面
 let baseModeSet = $ref(0)
 // baseConfig 可视化界面下的配置，需要保存的动态数据
 let baseConfig = $ref({ data: [], config: {} })
 //基础数据 不会改变的数据
-let baseData:any ={}
+let baseData: any = {}
 //弹出窗显示
 const menuClick = () => {
   if (dialogVisible) {
@@ -289,10 +289,8 @@ const setConfirm = () => {
   if (resOptions.mode === 1) {
     //可配置模式
     const newData = calbaseConfigData(baseConfig.data)
-    if( resOptions.chartConfig===null){
-      resOptions.chartConfig= {data:newData,config:baseConfig.config} as any
-    }
-   
+    resOptions.chartConfig = { data: newData, config: baseConfig.config } as any
+
     if (settingMyChart === null) {
       const dialog = useAlert({
         theme: 'warning',
@@ -342,8 +340,12 @@ const setConfirm = () => {
       backgroundColor: '#fff', // 背景颜色，默认是透明
     })
     var byteString = atob(dataURI.split(',')[1])
-    const [typePart] = dataURI.split(',');
-    const [protocol, mimeString] = typePart.split(':').slice(1).toString().split(';');
+    const [typePart] = dataURI.split(',')
+    const [protocol, mimeString] = typePart
+      .split(':')
+      .slice(1)
+      .toString()
+      .split(';')
     // 分离出MIME类型
     //var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
     // 写入字节流到Blob
@@ -366,19 +368,17 @@ const setConfirm = () => {
 
 watch(
   () => [sourceOptions, modelMode, baseConfig.config, baseModeSet],
-  async ([newSourceOptions, newModelMode, newbaseConfigConfig,newbaseModeSet]: [
-    any,
-    number,
-    any,
-    number,
-  ]) => {
-    try{
+  async ([
+    newSourceOptions,
+    newModelMode,
+    newbaseConfigConfig,
+    newbaseModeSet,
+  ]: [any, number, any, number]) => {
+    try {
       disposeChart()
       await nextTick()
       await loadModeEchart()
-    }
-    catch(e){
-    }
+    } catch (e) {}
   },
   { deep: true, immediate: false },
 )
@@ -390,27 +390,30 @@ async function loadModeEchart() {
   if (typeof echarts !== 'undefined') {
     //  根据参数不同 实现效果不同
     disposeChart()
-    const _curDomSetting=document.getElementById('echartsSettingModeId')
-    const _curDomSource=document.getElementById('echartsSourceModeId')
-    if (modelMode === 1&&_curDomSetting!==null) {
+    const _curDomSetting = document.getElementById('echartsSettingModeId')
+    const _curDomSource = document.getElementById('echartsSourceModeId')
+    if (modelMode === 1 && _curDomSetting !== null) {
       //  实际的参数设置
       const newData = calbaseConfigData(baseConfig.data)
       if (!(newData === null || newData.length === 0)) {
-        const newOptions = calbaseConfigOptions(JSON.parse(JSON.stringify(newData)), JSON.parse(JSON.stringify(baseConfig.config)))
-       
-        settingMyChart = echarts.init(
-            _curDomSetting,
+        const newOptions = calbaseConfigOptions(
+          JSON.parse(JSON.stringify(newData)),
+          JSON.parse(JSON.stringify(baseConfig.config)),
         )
+
+        settingMyChart = echarts.init(_curDomSetting)
         try {
           settingMyChart.setOption(newOptions)
         } catch (e) {
           disposeChart()
         }
       }
-    } else if (modelMode === 0&&sourceOptions !== null&&_curDomSource!==null) {
-      sourceMyChart = echarts.init(
-        _curDomSource,
-      )
+    } else if (
+      modelMode === 0 &&
+      sourceOptions !== null &&
+      _curDomSource !== null
+    ) {
+      sourceMyChart = echarts.init(_curDomSource)
       try {
         const calOptions = normalizeJsonString(sourceOptions)
         if (calOptions !== sourceOptions) {
@@ -553,8 +556,8 @@ function LoadBaseConfig(cachebaseConfig: any) {
     baseConfig.data = cachebaseConfig.data
   }
   for (const item of baseConfig.data) {
-  item.tabkey = shortId();
-}
+    item.tabkey = shortId()
+  }
   for (let i = 0; i < 10; i++) {
     baseConfig.data.push({ tabkey: shortId(), A: '', B: '' })
   }

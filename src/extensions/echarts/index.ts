@@ -51,23 +51,31 @@ export default Node.create({
         default: null,
         // 当从HTML解析时，尝试将chartOptions从字符串解析回对象
         parseHTML: (element) => {
-          const _data=element.hasAttribute('chart-options')?element.getAttribute('chart-options'):null
-         return _data? JSON.parse(_data):null
+          const _data = element.hasAttribute('chart-options')
+            ? element.getAttribute('chart-options')
+            : null
+          return _data ? JSON.parse(_data) : null
         },
         renderHTML: (attributes) => ({
           // 在渲染HTML时，确保chartOptions被序列化为字符串
-          'chart-options': attributes.chartOptions ? JSON.stringify(attributes.chartOptions) : null,
+          'chart-options': attributes.chartOptions
+            ? JSON.stringify(attributes.chartOptions)
+            : null,
         }),
       },
       chartConfig: {
         //基础配置 后续适配自定义的数据集合和配置信息 mode==1时使用
         default: null,
         parseHTML: (element) => {
-          const _data=element.hasAttribute('chart-config')?element.getAttribute('chart-config'):null
-         return _data? JSON.parse(_data):null
+          const _data = element.hasAttribute('chart-config')
+            ? element.getAttribute('chart-config')
+            : null
+          return _data ? JSON.parse(_data) : null
         },
         renderHTML: (attributes) => ({
-          'chart-config': attributes.chartConfig ? JSON.stringify(attributes.chartConfig) : null,
+          'chart-config': attributes.chartConfig
+            ? JSON.stringify(attributes.chartConfig)
+            : null,
         }),
       },
       src: '', //图片地址路径，也记录图片唯一标识

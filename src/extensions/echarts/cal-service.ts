@@ -13,7 +13,7 @@ export function calbaseConfigData(data: any) {
     if (i === 0) {
       continue
     }
-    if (!data[i].A|| data[i].A === '') {
+    if (!data[i].A || data[i].A === '') {
       data.splice(i, 1)
     }
   }
@@ -21,14 +21,13 @@ export function calbaseConfigData(data: any) {
 }
 //计算配置 根据手工设置的配置信息和数据进行Options生成，此方法会逐步扩充
 export function calbaseConfigOptions(data: any, config: any) {
-
   //声明的最终返回的options
   let resOption: any = {}
-  if (!data||!config) {
+  if (!data || !config) {
     return resOption
   }
   //1.0 标题 title
-  if (config.titleText&&config.titleText !== '') {
+  if (config.titleText && config.titleText !== '') {
     resOption.title = {}
     resOption.title.text = config.titleText
     resOption.title.left = config.titleleft ? config.titleleft : 'center' // 标题位置
@@ -53,7 +52,7 @@ export function calbaseConfigOptions(data: any, config: any) {
     colNameList = []
     for (let i = 1; i < alphabet.length; i++) {
       const curColName = alphabet[i]
-      if (!data[0][curColName]||data[0][curColName] === '') {
+      if (!data[0][curColName] || data[0][curColName] === '') {
         continue
       }
       resOption.legend.data.push(data[0][curColName])

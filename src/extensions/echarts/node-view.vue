@@ -12,7 +12,7 @@
         'umo-hover-shadow': !options.document?.readOnly,
         'umo-select-outline': !node.attrs.draggable,
       }"
-      >
+    >
       <drager
         :selected="selected"
         :rotatable="false"
@@ -57,7 +57,7 @@ const { options, editor } = useStore()
 const containerRef = ref(null)
 const maxWidth = $ref(0)
 let selected = $ref(false)
-let myChart:any = null
+let myChart: any = null
 
 //钩子 加载数据
 onMounted(async () => {
@@ -77,16 +77,18 @@ const nodeStyle = $computed(() => {
     marginBottom,
   }
 })
-let resizeTimeout:any=null
+let resizeTimeout: any = null
 const onResize = ({ width, height }: { width: number; height: number }) => {
-  updateAttributes({  width: Number(width.toFixed(2)),
-    height: Number(height.toFixed(2)), })
+  updateAttributes({
+    width: Number(width.toFixed(2)),
+    height: Number(height.toFixed(2)),
+  })
   clearTimeout(resizeTimeout)
   resizeTimeout = setTimeout(() => {
-  if (myChart !== null) {
-    myChart.resize()
-  }
-},300)
+    if (myChart !== null) {
+      myChart.resize()
+    }
+  }, 300)
 }
 
 // onBeforeUnmount(() => {
@@ -151,21 +153,25 @@ watch(
   () => node.attrs,
   async (newAttrs: any, oldAttrs: any) => {
     // 避免初次挂载时重复调用 loadData
-    if (newAttrs!==undefined&&oldAttrs !== undefined && newAttrs !== oldAttrs) {
-        //如果只有高度和宽度变化，则不走重新加载逻辑
-        let isLoad=false
-        for(const attr1 in oldAttrs){
-            if(attr1==="height"||attr1==="width"||attr1==="src"){
-                continue
-            }
-            if(oldAttrs[attr1]!==newAttrs[attr1]){
-                isLoad=true
-                break
-            }
+    if (
+      newAttrs !== undefined &&
+      oldAttrs !== undefined &&
+      newAttrs !== oldAttrs
+    ) {
+      //如果只有高度和宽度变化，则不走重新加载逻辑
+      let isLoad = false
+      for (const attr1 in oldAttrs) {
+        if (attr1 === 'height' || attr1 === 'width' || attr1 === 'src') {
+          continue
         }
-        if(isLoad){
-            await loadData() // 第二次及之后的调用 loadData，在属性变化时
+        if (oldAttrs[attr1] !== newAttrs[attr1]) {
+          isLoad = true
+          break
         }
+      }
+      if (isLoad) {
+        await loadData() // 第二次及之后的调用 loadData，在属性变化时
+      }
     }
   },
   { deep: true, immediate: false },
