@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="visible"
+    v-if="visible && editor.isEditable"
     class="umo-block-menu-hander"
     :style="
       {
@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
 
-const { page, editor } = useStore()
+const { editor } = useStore()
 
 let visible = $ref(false)
 let scrollTop = $ref(0)
