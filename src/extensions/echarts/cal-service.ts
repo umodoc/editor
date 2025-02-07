@@ -117,12 +117,28 @@ export function calbaseConfigOptions(data: any, config: any) {
 
   calbaseConfigOptionsInType()
 
-  //4.0 自定义扩展，可以在外部自定义实现展示效果，扩展个性化样式
+  //4.0 grid 属性设置
+  resOption.grid = {
+    left: '3%',
+    right: '4%',
+    top: 30,
+    bottom: 30,
+    containLabel: true,
+  }
+  if (resOption?.legend?.show) {
+    if (resOption?.legend?.bottom) {
+      resOption.grid.bottom = 60
+    } else {
+      resOption.grid.top = 60
+    }
+  }
+
+  //9.0 自定义扩展，可以在外部自定义实现展示效果，扩展个性化样式
   const { options } = useStore()
   const newOptions = options.value.onCustomizeChartSettings?.(data, config)
   if (newOptions !== null && typeof newOptions === 'object') {
     resOption = newOptions
   }
-  //5.0 返回值 必须JSON.parse(JSON.stringify( 一下，个别情况下echart不展示问题
+  //10.0 返回值 必须JSON.parse(JSON.stringify( 一下，个别情况下echart不展示问题
   return JSON.parse(JSON.stringify(resOption))
 }
