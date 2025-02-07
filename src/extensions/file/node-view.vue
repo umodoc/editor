@@ -77,7 +77,7 @@
           variant="text"
           @click="previewModal = false"
         >
-          <icon name="close" :size="18" />
+          <icon name="close" size="18" />
         </t-button>
       </div>
       <div class="umo-file-preview-modal-body">
