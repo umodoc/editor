@@ -102,7 +102,7 @@
     <menus-bubble-code-copy />
     <menus-bubble-node-delete />
   </template>
-  <template v-if="editor?.isActive('echarts')">
+  <template v-else-if="editor?.isActive('echarts')">
     <menus-toolbar-base-align-left />
     <menus-toolbar-base-align-center />
     <menus-toolbar-base-align-right />

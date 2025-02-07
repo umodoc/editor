@@ -39,16 +39,17 @@
 
 <script setup lang="ts">
 //tiptap组件
-import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import { NodeSelection } from '@tiptap/pm/state'
+import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 //拖拽组件
 import Drager from 'es-drager'
-// 引入echart服务 用此方法初始化加载cdn echart.js脚本 否则
-import { useEchartsLoader } from '@/extensions/echarts/init-service'
+
 import {
   calbaseConfigData,
   calbaseConfigOptions,
 } from '@/extensions/echarts/cal-service'
+// 引入echart服务 用此方法初始化加载cdn echart.js脚本 否则
+import { useEchartsLoader } from '@/extensions/echarts/init-service'
 const { loadEchartScript } = useEchartsLoader()
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
@@ -56,7 +57,7 @@ const { options, editor } = useStore()
 const containerRef = ref(null)
 const maxWidth = $ref(0)
 let selected = $ref(false)
-let myChart = null
+let myChart:any = null
 
 //钩子 加载数据
 onMounted(async () => {

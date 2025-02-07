@@ -35,7 +35,7 @@
             <t-radio :value="0">{{ t('tools.echarts.source') }}</t-radio>
           </t-radio-group>
         </div>
-        <div v-if="modelMode == 0" class="umo-echarts-sourceCenter">
+        <div v-if="modelMode == 0" class="umo-echarts-source-center">
           <t-textarea
             v-model="sourceOptions"
             class="umo-echarts-code"
@@ -48,7 +48,7 @@
         </div>
         <div
           v-if="modelMode == 1 && baseModeSet == 0"
-          class="umo-echarts-sourceCenter"
+          class="umo-echarts-source-center"
         >
           <div class="umo-echarts-render" style="margin-left: 2px">
             <div id="echartsSettingModeId" class="umo-echarts-svg"></div>
@@ -183,7 +183,7 @@
         </div>
         <div
           v-if="modelMode == 1 && baseModeSet == 1"
-          class="umo-echarts-sourceCenter"
+          class="umo-echarts-source-center"
         >
           <div class="umo-echarts-render" style="margin-left: 2px">
             <t-table
@@ -206,14 +206,15 @@
   </menus-button>
 </template>
 <script setup lang="ts">
-import { shortId } from '@/utils/short-id'
 import { Input } from 'tdesign-vue-next'
-import { getSelectionNode } from '@/extensions/selection'
-import { useEchartsLoader } from '@/extensions/echarts/init-service'
+
 import {
   calbaseConfigData,
   calbaseConfigOptions,
 } from '@/extensions/echarts/cal-service'
+import { useEchartsLoader } from '@/extensions/echarts/init-service'
+import { getSelectionNode } from '@/extensions/selection'
+import { shortId } from '@/utils/short-id'
 const { loadEchartScript } = useEchartsLoader()
 
 const { options, editor } = useStore()
@@ -229,16 +230,16 @@ let curNode = $ref(null)
 let sourceOptions = $ref(null)
 
 //高级模式下mychart展示对象
-let sourceMyChart = null
-//基础模式下mychart展示对象
-let settingMyChart = null
+let sourceMyChart:any = null
+//基础模式下mychart展示对象//避免响应式
+let settingMyChart:any = null
 
 //基础模型下默认设置界面 0 图形界面 1 数据界面
 let baseModeSet = $ref(0)
 // baseConfig 可视化界面下的配置，需要保存的动态数据
-let baseConfig = $ref({})
+let baseConfig = $ref({ data: [], config: {} })
 //基础数据 不会改变的数据
-let baseData = $ref({})
+let baseData:any ={}
 //弹出窗显示
 const menuClick = () => {
   if (dialogVisible) {
@@ -287,10 +288,11 @@ const setConfirm = () => {
   }
   if (resOptions.mode === 1) {
     //可配置模式
-    resOptions.chartConfig = baseConfig
-    if(resOptions.chartConfig){
-      resOptions.chartConfig.data=calbaseConfigData(resOptions.chartConfig.data)
+    const newData = calbaseConfigData(baseConfig.data)
+    if( resOptions.chartConfig===null){
+      resOptions.chartConfig= {data:newData,config:baseConfig.config} as any
     }
+   
     if (settingMyChart === null) {
       const dialog = useAlert({
         theme: 'warning',
@@ -363,15 +365,20 @@ const setConfirm = () => {
 }
 
 watch(
-  () => [sourceOptions, modelMode, baseConfig, baseModeSet],
-  ([newSourceOptions, newModelMode, newConfigData]: [
-    any | null,
-    Number,
-    any | null,
-    Number,
+  () => [sourceOptions, modelMode, baseConfig.config, baseModeSet],
+  async ([newSourceOptions, newModelMode, newbaseConfigConfig,newbaseModeSet]: [
+    any,
+    number,
+    any,
+    number,
   ]) => {
-    DisposeChart()
-    loadModeEchart()
+    try{
+      disposeChart()
+      await nextTick()
+      await loadModeEchart()
+    }
+    catch(e){
+    }
   },
   { deep: true, immediate: false },
 )
@@ -382,14 +389,14 @@ async function loadModeEchart() {
   // 接下来的使用就跟之前一样，初始化图表，设置配置项
   if (typeof echarts !== 'undefined') {
     //  根据参数不同 实现效果不同
-    DisposeChart()
+    disposeChart()
     const _curDomSetting=document.getElementById('echartsSettingModeId')
     const _curDomSource=document.getElementById('echartsSourceModeId')
-    if (modelMode === 1&&_curDomSetting!=null) {
+    if (modelMode === 1&&_curDomSetting!==null) {
       //  实际的参数设置
       const newData = calbaseConfigData(baseConfig.data)
       if (!(newData === null || newData.length === 0)) {
-        const newOptions = calbaseConfigOptions(newData, baseConfig.config)
+        const newOptions = calbaseConfigOptions(JSON.parse(JSON.stringify(newData)), JSON.parse(JSON.stringify(baseConfig.config)))
        
         settingMyChart = echarts.init(
             _curDomSetting,
@@ -397,10 +404,10 @@ async function loadModeEchart() {
         try {
           settingMyChart.setOption(newOptions)
         } catch (e) {
-          DisposeChart()
+          disposeChart()
         }
       }
-    } else if (modelMode === 0&&sourceOptions !== null&&_curDomSource!=null) {
+    } else if (modelMode === 0&&sourceOptions !== null&&_curDomSource!==null) {
       sourceMyChart = echarts.init(
         _curDomSource,
       )
@@ -411,13 +418,13 @@ async function loadModeEchart() {
         }
         sourceMyChart.setOption(JSON.parse(sourceOptions))
       } catch (e) {
-        DisposeChart()
+        disposeChart()
       }
     }
   }
 }
 //控件每次加载之前需要销毁下，防止出现重复加载不成功的问题
-function DisposeChart() {
+function disposeChart() {
   if (sourceMyChart !== null) {
     sourceMyChart.dispose()
     sourceMyChart = null
@@ -545,9 +552,9 @@ function LoadBaseConfig(cachebaseConfig: any) {
   if (cachebaseConfig.data !== null && cachebaseConfig.data.length > 0) {
     baseConfig.data = cachebaseConfig.data
   }
-  for (let i = 0; i < baseConfig.data.length; i++) {
-    baseConfig.data[i].tabkey = shortId()
-  }
+  for (const item of baseConfig.data) {
+  item.tabkey = shortId();
+}
   for (let i = 0; i < 10; i++) {
     baseConfig.data.push({ tabkey: shortId(), A: '', B: '' })
   }
@@ -577,7 +584,7 @@ function editableCellState(cellParams: any) {
     padding-top: 3px;
   }
 
-  .umo-echarts-sourceCenter {
+  .umo-echarts-source-center {
     display: flex;
     height: calc(100% - 30px);
 

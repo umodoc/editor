@@ -13,7 +13,7 @@ const defaultFilePath = 'dist/echarts.min.js'
 export function useEchartsLoader() {
   return {
     //调用此方法，实现初始化加载js脚本
-    loadEchartScript: async () => {
+    loadEchartScript:  () => {
       const { options } = useStore()
       if (!options.value.toolbar?.disableMenuItems.includes('echarts')) {
         if (!echartsLoadPromise.value) {
@@ -41,7 +41,7 @@ export function useEchartsLoader() {
               script.id = 'echarts-script'
               script.type = 'text/javascript'
               script.onload = () => resolve()
-              script.onerror = (error) => reject(error)
+              script.onerror = (error) => reject(new Error(`load Echarts ERROR`))
               document.querySelector('head')!.append(script)
             } else {
               // 如果脚本已存在，则立即解析 Promise

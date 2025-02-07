@@ -33,6 +33,7 @@ import Audio from './audio'
 import Bookmark from './bookmark'
 import BulletList from './bullet-list'
 import CodeBlock from './code-block'
+import Echarts from './echarts'
 import File from './file'
 import FileHandler from './file-handler'
 import FontSize from './font-size'
@@ -54,7 +55,6 @@ import TextAlign from './text-align'
 import TextBox from './text-box'
 import Toc from './toc'
 import Video from './video'
-import Echarts from './echarts'
 
 const { options, container, page, tableOfContents } = useStore()
 
