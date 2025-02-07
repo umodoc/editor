@@ -97,8 +97,10 @@ Umo Editor 的发展，离不开社区的支持，以下是为 Umo Editor 贡献
 - [Umo Team](https://github.com/umodoc)：👨‍💻 核心开发者
 - [Cassielxd](https://github.com/Cassielxd)：💪🏻 为 Umo Editor 实现了分页和很多重要的功能
 - [Na'aman Hirschfeld](https://github.com/Goldziher)：💪🏻 增强对 TypeScript 的支持，添加测试，为 Umo Editor 的发展提供更好的基础
-- [ChenErik](https://github.com/ChenErik)：🛠️ 为 Umo Editor 贡献了部分代码
-- [Sherman Xu](https://github.com/xuzhenjun130)：🛠️ 为 Umo Editor 贡献了部分代码
+- [SerRashin](https://github.com/SerRashin): 🛠️ 为 Umo Editor 添加了俄语支持
+- [ChenErik](https://github.com/ChenErik): 🛠️ 为 Umo Editor 贡献了部分代码
+- [china-wangxu](https://github.com/china-wangxu): 🛠️ 为 Umo Editor 贡献了部分代码
+- [Sherman Xu](https://github.com/xuzhenjun130): 🛠️ 为 Umo Editor 贡献了部分代码
 
 我们欢迎任何形式的贡献，包括但不限于提交 Bug 报告、功能请求、代码贡献等。
 
