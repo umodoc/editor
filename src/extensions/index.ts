@@ -33,6 +33,7 @@ import Audio from './audio'
 import Bookmark from './bookmark'
 import BulletList from './bullet-list'
 import CodeBlock from './code-block'
+import Echarts from './echarts'
 import File from './file'
 import FileHandler from './file-handler'
 import FontSize from './font-size'
@@ -173,6 +174,7 @@ export const extensions = [
   Dropcursor.configure({
     color: 'var(--umo-primary-color)',
   }),
+  Echarts,
 ]
 
 export const inputAndPasteRules = () => {
