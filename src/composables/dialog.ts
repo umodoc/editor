@@ -31,3 +31,5 @@ export const useMessage = (type: string, parmas: string | MessageOptions) => {
     ...options,
   })
 }
+
+export { DialogPlugin, MessagePlugin }

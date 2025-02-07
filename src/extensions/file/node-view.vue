@@ -77,7 +77,7 @@
           variant="text"
           @click="previewModal = false"
         >
-          <icon name="close" :size="18" />
+          <icon name="close" size="18" />
         </t-button>
       </div>
       <div class="umo-file-preview-modal-body">
@@ -115,8 +115,10 @@ let previewModal = $ref(false)
 let previewURL = $ref(null)
 const setPreviewURL = (fileName: string) => {
   const { preview } = options.value.file
-  const extName = getFileExtname(fileName)
-  const match = preview.find((item: any) => item.extensions.includes(extName))
+  const extname = getFileExtname(fileName)
+  const match = preview.find(
+    (item: any) => extname && item.extensions.includes(extname),
+  )
   if (match?.url.includes('{url}')) {
     previewURL = match.url
       .replace(/{{url}}/g, encodeURIComponent(node.attrs.url))

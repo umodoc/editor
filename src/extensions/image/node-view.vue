@@ -3,6 +3,7 @@
     :id="node.attrs.id"
     ref="containerRef"
     class="umo-node-view"
+    :class="{ 'umo-floating-node': node.attrs.draggable }"
     :style="nodeStyle"
     @dblclick="openImageViewer"
   >
@@ -49,7 +50,6 @@
         :min-width="14"
         :min-height="14"
         :max-width="maxWidth"
-        :max-height="node.attrs.equalProportion ? maxHeight : undefined"
         :z-index="10"
         :equal-proportion="node.attrs.equalProportion"
         @rotate="onRotate"
@@ -96,7 +96,6 @@ const containerRef = ref(null)
 const imageRef = $ref<HTMLImageElement | null>(null)
 let selected = $ref(false)
 let maxWidth = $ref(0)
-let maxHeight = $ref(200)
 
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs
@@ -131,7 +130,6 @@ const onLoad = async () => {
     const { clientWidth = 1, clientHeight = 1 } = imageRef ?? {}
     maxWidth = containerRef.value?.$el.clientWidth
     const ratio = clientWidth / clientHeight
-    maxHeight = containerRef.value?.$el.clientWidth / ratio
     updateAttributes({ width: (200 * ratio).toFixed(2) })
   }
   if ([null, 'auto', 0].includes(node.attrs.height)) {
