@@ -6,16 +6,28 @@
     :style="nodeStyle"
   >
     <div
-      class="umo-node-container umo-hover-shadow umo-select-outline umo-node-echarts"
-    >
+      class="umo-node-container umo-node-echarts"
+      :class="{
+        'is-draggable': node.attrs.draggable,
+        'umo-hover-shadow': !options.document?.readOnly,
+        'umo-select-outline': !node.attrs.draggable,
+      }"
+      >
       <drager
         :selected="selected"
         :rotatable="false"
-        :width="node.attrs.width"
-        :height="node.attrs.height"
+        :boundary="false"
+        :draggable="
+          Boolean(node.attrs.draggable) && !options.document?.readOnly
+        "
+        :disabled="options.document?.readOnly"
+        :angle="0"
+        :width="Number(node.attrs.width)"
+        :height="Number(node.attrs.height)"
         :min-width="400"
         :min-height="200"
         :max-width="maxWidth"
+        :z-index="10"
         @resize="onResize"
         @click="dragerClick"
       >
@@ -44,7 +56,7 @@ const { options, editor } = useStore()
 const containerRef = ref(null)
 const maxWidth = $ref(0)
 let selected = $ref(false)
-let myChart = $ref(null)
+let myChart = null
 
 //钩子 加载数据
 onMounted(async () => {
@@ -64,11 +76,16 @@ const nodeStyle = $computed(() => {
     marginBottom,
   }
 })
+let resizeTimeout:any=null
 const onResize = ({ width, height }: { width: number; height: number }) => {
-  updateAttributes({ width, height })
-  if (myChart !== null&&myChart._dom!==null) {
+  updateAttributes({  width: Number(width.toFixed(2)),
+    height: Number(height.toFixed(2)), })
+  clearTimeout(resizeTimeout)
+  resizeTimeout = setTimeout(() => {
+  if (myChart !== null) {
     myChart.resize()
   }
+},300)
 }
 
 // onBeforeUnmount(() => {
@@ -133,8 +150,21 @@ watch(
   () => node.attrs,
   async (newAttrs: any, oldAttrs: any) => {
     // 避免初次挂载时重复调用 loadData
-    if (oldAttrs !== undefined && newAttrs !== oldAttrs) {
-      await loadData() // 第二次及之后的调用 loadData，在属性变化时
+    if (newAttrs!==undefined&&oldAttrs !== undefined && newAttrs !== oldAttrs) {
+        //如果只有高度和宽度变化，则不走重新加载逻辑
+        let isLoad=false
+        for(const attr1 in oldAttrs){
+            if(attr1==="height"||attr1==="width"||attr1==="src"){
+                continue
+            }
+            if(oldAttrs[attr1]!==newAttrs[attr1]){
+                isLoad=true
+                break
+            }
+        }
+        if(isLoad){
+            await loadData() // 第二次及之后的调用 loadData，在属性变化时
+        }
     }
   },
   { deep: true, immediate: false },
@@ -145,13 +175,12 @@ watch(
 .umo-node-view {
   .umo-node-echarts {
     max-width: 100%;
-
-    .es-drager {
-      &:not(.selected) {
-        outline: solid 1px var(--umo-content-node-border);
-      }
+    position: relative;
+    &:not(.is-draggable) .es-drager {
+      max-width: 100%;
+      max-height: 100%;
+      transform: translateX(0px) translateY(0px) rotate(0deg) !important;
     }
-
     .umo-node-echarts-body {
       display: block;
       min-width: 400px;

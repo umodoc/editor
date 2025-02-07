@@ -5,7 +5,7 @@ echarts相关的一些公共处理方法 主要用于基础模式
 
 //基础模式下，对界面数据进行加工处理，根据第一列 为空时不作为有效数据
 export function calbaseConfigData(data: any) {
-  if (data === null) {
+  if (!data) {
     return data
   }
   data = JSON.parse(JSON.stringify(data))
@@ -13,7 +13,7 @@ export function calbaseConfigData(data: any) {
     if (i === 0) {
       continue
     }
-    if (data[i].A === '' || data[i].A===undefined || data[i].A === null) {
+    if (!data[i].A|| data[i].A === '') {
       data.splice(i, 1)
     }
   }
@@ -21,13 +21,14 @@ export function calbaseConfigData(data: any) {
 }
 //计算配置 根据手工设置的配置信息和数据进行Options生成，此方法会逐步扩充
 export function calbaseConfigOptions(data: any, config: any) {
+
   //声明的最终返回的options
   let resOption: any = {}
-  if (data === null || config === null) {
+  if (!data||!config) {
     return resOption
   }
   //1.0 标题 title
-  if (config.titleText !== '' &&config.titleText===undefined&& config.titleText !== null) {
+  if (config.titleText&&config.titleText !== '') {
     resOption.title = {}
     resOption.title.text = config.titleText
     resOption.title.left = config.titleleft ? config.titleleft : 'center' // 标题位置
@@ -52,7 +53,7 @@ export function calbaseConfigOptions(data: any, config: any) {
     colNameList = []
     for (let i = 1; i < alphabet.length; i++) {
       const curColName = alphabet[i]
-      if (data[0][curColName] === ''|| data[0][curColName]===undefined || data[0][curColName] === null) {
+      if (!data[0][curColName]||data[0][curColName] === '') {
         continue
       }
       resOption.legend.data.push(data[0][curColName])

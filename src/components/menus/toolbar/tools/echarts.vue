@@ -229,9 +229,9 @@ let curNode = $ref(null)
 let sourceOptions = $ref(null)
 
 //高级模式下mychart展示对象
-let sourceMyChart = $ref(null)
+let sourceMyChart = null
 //基础模式下mychart展示对象
-let settingMyChart = $ref(null)
+let settingMyChart = null
 
 //基础模型下默认设置界面 0 图形界面 1 数据界面
 let baseModeSet = $ref(0)
@@ -288,6 +288,9 @@ const setConfirm = () => {
   if (resOptions.mode === 1) {
     //可配置模式
     resOptions.chartConfig = baseConfig
+    if(resOptions.chartConfig){
+      resOptions.chartConfig.data=calbaseConfigData(resOptions.chartConfig.data)
+    }
     if (settingMyChart === null) {
       const dialog = useAlert({
         theme: 'warning',
