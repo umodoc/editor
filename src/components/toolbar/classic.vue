@@ -151,6 +151,7 @@
         </div>
         <div class="umo-virtual-group">
           <menus-toolbar-tools-diagrams v-if="!disableItem('diagrams')" />
+          <menus-toolbar-tools-echarts v-if="!disableItem('echarts')" />
           <!-- <menus-toolbar-tools-mind-map v-if="!disableItem('mind-map')" /> -->
           <menus-toolbar-tools-mermaid v-if="!disableItem('mermaid')" />
         </div>
@@ -158,9 +159,6 @@
           <menus-toolbar-tools-chinese-case
             v-if="!disableItem('chineseCase')"
           />
-        </div>
-        <div class="umo-virtual-group">
-          <menus-toolbar-tools-echarts v-if="!disableItem('echarts')" />
         </div>
         <div class="virtual-group is-slot">
           <slot name="toolbar_tools" toolbar-mode="classic" />

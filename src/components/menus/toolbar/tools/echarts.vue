@@ -18,24 +18,32 @@
       <div class="umo-echarts-container">
         <div class="umo-echarts-header">
           <t-radio-group
-            v-if="modelMode == 1"
+            v-if="modelMode === 1"
             v-model="baseModeSet"
+            variant="default-filled"
             default-value="0"
-            style="float: left"
           >
-            <t-radio :value="0">{{ t('tools.echarts.setting') }}</t-radio>
-            <t-radio :value="1">{{ t('tools.echarts.dataGrid') }}</t-radio>
+            <t-radio-button :value="0">{{
+              t('tools.echarts.setting')
+            }}</t-radio-button>
+            <t-radio-button :value="1">{{
+              t('tools.echarts.dataGrid')
+            }}</t-radio-button>
           </t-radio-group>
           <t-radio-group
             v-model="modelMode"
+            variant="default-filled"
             default-value="0"
-            style="float: right"
           >
-            <t-radio :value="1">{{ t('tools.echarts.visualization') }}</t-radio>
-            <t-radio :value="0">{{ t('tools.echarts.source') }}</t-radio>
+            <t-radio-button :value="1">{{
+              t('tools.echarts.visualization')
+            }}</t-radio-button>
+            <t-radio-button :value="0">{{
+              t('tools.echarts.source')
+            }}</t-radio-button>
           </t-radio-group>
         </div>
-        <div v-if="modelMode == 0" class="umo-echarts-source-center">
+        <div v-if="modelMode === 0" class="umo-echarts-source-center">
           <t-textarea
             v-model="sourceOptions"
             class="umo-echarts-code"
@@ -47,14 +55,14 @@
           </div>
         </div>
         <div
-          v-if="modelMode == 1 && baseModeSet == 0"
+          v-if="modelMode === 1 && baseModeSet === 0"
           class="umo-echarts-source-center"
         >
-          <div class="umo-echarts-render" style="margin-left: 2px">
+          <div class="umo-echarts-render">
             <div id="echartsSettingModeId" class="umo-echarts-svg"></div>
           </div>
           <div class="umo-echarts-settting">
-            <t-form>
+            <t-form label-align="top">
               <!--图形类型-->
               <t-form-item
                 :label="t('tools.echarts.set.seriesType')"
@@ -74,10 +82,10 @@
                   </t-option>
                 </t-select>
               </t-form-item>
-              <t-form-item v-if="baseConfig.config.seriesType == 'line'">
+              <t-form-item v-if="baseConfig.config.seriesType === 'line'">
                 <!--平滑折线-->
                 <t-checkbox
-                  v-if="baseConfig.config.seriesType == 'line'"
+                  v-if="baseConfig.config.seriesType === 'line'"
                   v-model="baseConfig.config.smooth"
                   >{{ t('tools.echarts.set.smooth') }}</t-checkbox
                 >
@@ -182,7 +190,7 @@
           </div>
         </div>
         <div
-          v-if="modelMode == 1 && baseModeSet == 1"
+          v-if="modelMode === 1 && baseModeSet === 1"
           class="umo-echarts-source-center"
         >
           <div class="umo-echarts-render" style="margin-left: 2px">
@@ -192,7 +200,7 @@
               row-key="tabkey"
               :columns="baseData.Columns"
               :data="baseConfig.data"
-              :size="'small'"
+              size="small"
               :show-header="false"
               :fixed-rows="[1]"
               :editable-cell-state="editableCellState"
@@ -332,14 +340,14 @@ const setConfirm = () => {
   //设置了保存图片或者高级模式时，自动保存图片
   if (options.value.echarts?.haveImage || resOptions.mode === 0) {
     //源码模式或havImage
-    var dataURI = (
+    const dataURI = (
       resOptions.mode === 1 ? settingMyChart : sourceMyChart
     ).getDataURL({
       type: 'png', // 可以是'png'或'jpeg'
       pixelRatio: 5, // 提高分辨率，默认是1
       backgroundColor: '#fff', // 背景颜色，默认是透明
     })
-    var byteString = atob(dataURI.split(',')[1])
+    const byteString = atob(dataURI.split(',')[1])
     const [typePart] = dataURI.split(',')
     const [protocol, mimeString] = typePart
       .split(':')
@@ -349,9 +357,9 @@ const setConfirm = () => {
     // 分离出MIME类型
     //var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
     // 写入字节流到Blob
-    var ab = new ArrayBuffer(byteString.length)
-    var ia = new Uint8Array(ab)
-    for (var i = 0; i < byteString.length; i++) {
+    const ab = new ArrayBuffer(byteString.length)
+    const ia = new Uint8Array(ab)
+    for (let i = 0; i < byteString.length; i++) {
       ia[i] = byteString.charCodeAt(i)
     }
     const fileBlob = new Blob([ab], { type: mimeString })
@@ -477,6 +485,7 @@ function InitBaseConfig() {
         props: {
           clearable: false,
           autofocus: false,
+          placeholder: '',
         },
         // 除了点击非自身元素退出编辑态之外，还有哪些事件退出编辑态
         abortEditOnEvent: ['onEnter'],
@@ -582,14 +591,15 @@ function editableCellState(cellParams: any) {
   overflow: hidden;
 
   .umo-echarts-header {
-    height: 30px;
-    padding-right: 10px;
-    padding-top: 3px;
+    display: flex;
+    justify-content: space-between;
   }
 
   .umo-echarts-source-center {
     display: flex;
     height: calc(100% - 30px);
+    width: 100%;
+    margin-top: 10px;
 
     .umo-echarts-code {
       width: 320px;
@@ -602,20 +612,26 @@ function editableCellState(cellParams: any) {
     }
 
     .umo-echarts-settting {
+      --td-comp-margin-xxl: 10px;
       width: 360px;
-      padding: 10px;
-      margin-left: 20px;
-      border: solid 1px var(--td-border-level-2-color);
+      padding: 20px;
+      margin-left: 10px;
+      border: solid 1px var(--umo-border-color);
       border-radius: var(--umo-radius);
       max-height: 420px;
       overflow: auto;
       .umo-scrollbar();
+      :deep(.umo-form__controls) {
+        &,
+        &-content {
+          min-height: auto;
+        }
+      }
     }
 
     .umo-echarts-render {
       flex: 1;
-      margin-left: 20px;
-      border: solid 1px var(--td-border-level-2-color);
+      border: solid 1px var(--umo-border-color);
       border-radius: var(--umo-radius);
       position: relative;
       overflow: hidden;
@@ -624,13 +640,17 @@ function editableCellState(cellParams: any) {
       .umo-echarts-svg {
         box-sizing: border-box;
         height: 420px;
-        padding: 30px 20px 20px;
+        padding: 20px 15px 15px;
         overflow: auto;
         display: flex;
         justify-content: center;
       }
 
       .umo-echarts-table {
+        --td-comp-paddingTB-s: 3px;
+        --td-comp-paddingLR-s: 5px;
+        --td-comp-size-m: 18px;
+        --td-component-border: var(--umo-border-color);
         box-sizing: border-box;
         height: 420px;
         padding: 0px;
@@ -638,6 +658,22 @@ function editableCellState(cellParams: any) {
         overflow: auto;
         display: flex;
         justify-content: center;
+        :deep(.umo-table) {
+          &__content {
+            border: none;
+          }
+          &__cell--editable {
+            cursor: text;
+          }
+        }
+        :deep(.t-input) {
+          border: none;
+          box-shadow: none;
+          cursor: text;
+          input {
+            text-align: center;
+          }
+        }
       }
     }
   }

@@ -5,10 +5,11 @@ onMounted 钩子在初次加载时容易出现  echarts-script 已经存在，�
 loadEchartScript :解决同时加载多个图表时只有第一个图表展示问题。
 */
 
+const { options } = useStore()
 const echartsLoadPromise = ref<Promise<void> | null>(null)
 // npm包引入echarts会导致整个打包的包变大，为了解决这个问题，现使用sdn方式引入
-const defaultcdnUrl = 'https://cdn.jsdelivr.net/npm/echarts/'
-const defaultFilePath = 'dist/echarts.min.js'
+const defaultcdnUrl = `${options.value.cdnUrl}/libs/echarts/`
+const defaultFilePath = 'echarts.min.js'
 
 export function useEchartsLoader() {
   return {

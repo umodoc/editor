@@ -126,6 +126,13 @@
             />
           </t-dropdown-item>
           <t-dropdown-item>
+            <menus-toolbar-tools-echarts
+              v-if="!disableItem('echarts')"
+              :huge="false"
+              :tooltip="false"
+            />
+          </t-dropdown-item>
+          <t-dropdown-item>
             <menus-toolbar-tools-mermaid
               v-if="!disableItem('mermaid')"
               :huge="false"
