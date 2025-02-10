@@ -213,6 +213,7 @@
     </modal>
   </menus-button>
 </template>
+
 <script setup lang="ts">
 import { Input } from 'tdesign-vue-next'
 
@@ -234,40 +235,40 @@ const { mode } = defineProps({
 const { loadEchartScript } = useEchartsLoader()
 
 const { options, editor } = useStore()
-//弹窗口显示隐藏 true显示 默认隐藏
+// 弹窗口显示隐藏 true 显示 默认隐藏
 let dialogVisible = $ref(false)
-//弹窗 后 标题 是编辑还是新增  true 新增 fasle 编辑
+// 弹窗后标题是编辑还是新增，true: 新增 fasle: 编辑
 let dialogAddOrEdit = $ref(true)
-//界面显示模式
+// 界面显示模式
 let modelMode = $ref(0)
-//当前节点缓存信息
+// 当前节点缓存信息
 let curNode = $ref(null)
 // sourceOptions 高级模型-配置信息信息
 let sourceOptions = $ref(null)
 
-//高级模式下mychart展示对象
+// 高级模式下 mychart 展示对象
 let sourceMyChart: any = null
-//基础模式下mychart展示对象//避免响应式
+// 基础模式下 mychart 展示对象，避免响应式
 let settingMyChart: any = null
 
-//基础模型下默认设置界面 0 图形界面 1 数据界面
+// 基础模型下默认设置界面，0: 图形界面 1: 数据界面
 let baseModeSet = $ref(0)
 // baseConfig 可视化界面下的配置，需要保存的动态数据
 let baseConfig = $ref({ data: [], config: {} })
-//基础数据 不会改变的数据
+// 基础数据，不会改变的数据
 let baseData: any = {}
-//弹出窗显示
+// 弹出窗显示
 const menuClick = () => {
   if (dialogVisible) {
     return
   }
-  baseModeSet = 0 //默认打开都是设置界面
+  baseModeSet = 0 // 默认打开都是设置界面
 
   const openAddMode = () => {
     dialogAddOrEdit = true
     modelMode = options.value.echarts?.mode
     sourceOptions = null
-    InitBaseConfig()
+    initBaseConfig()
     dialogVisible = true
   }
 
@@ -277,25 +278,25 @@ const menuClick = () => {
     return
   }
   curNode = getSelectionNode(editor.value)
-  //选中节点为echarts节点时，去读取界面上的配置信息
+  // 选中节点为 echarts 节点时，去读取界面上的配置信息
   if (curNode?.type?.name !== 'echarts') {
     openAddMode()
     return
   }
 
-  //更新模式
+  // 更新模式
   dialogAddOrEdit = false
   modelMode = curNode.attrs?.mode
   sourceOptions = null
   if (curNode.attrs?.chartOptions !== null) {
     sourceOptions = JSON.stringify(curNode.attrs?.chartOptions)
   }
-  InitBaseConfig()
-  LoadBaseConfig(curNode.attrs?.chartConfig)
+  initBaseConfig()
+  loadBaseConfig(curNode.attrs?.chartConfig)
   // 弹窗点击显示
   dialogVisible = true
 }
-//弹窗点击确定时 对父界面的影响设置
+// 弹窗点击确定时，对父界面的影响设置
 const setConfirm = () => {
   let resOptions = {
     id: '',
@@ -314,7 +315,7 @@ const setConfirm = () => {
     resOptions.mode = modelMode
   }
   if (resOptions.mode === 1) {
-    //可配置模式
+    // 可配置模式
     const newData = calbaseConfigData(baseConfig.data)
     resOptions.chartConfig = { data: newData, config: baseConfig.config } as any
 
@@ -322,7 +323,7 @@ const setConfirm = () => {
       const dialog = useAlert({
         theme: 'warning',
         header: t('tools.echarts.text'),
-        body: t('tools.echarts.settingerror'), //请确认预览视图是否正确显示！
+        body: t('tools.echarts.settingerror'), // 请确认预览视图是否正确显示！
         onConfirm() {
           dialog.destroy()
         },
@@ -330,14 +331,14 @@ const setConfirm = () => {
       return
     }
   } else {
-    //源码模式
+    // 源码模式
     try {
       resOptions.chartOptions = JSON.parse(sourceOptions)
     } catch (e) {
       const dialog = useAlert({
         theme: 'warning',
         header: t('tools.echarts.text'),
-        body: t('tools.echarts.sourceerror'), //结构不正确
+        body: t('tools.echarts.sourceerror'), // 结构不正确
         onConfirm() {
           dialog.destroy()
         },
@@ -348,7 +349,7 @@ const setConfirm = () => {
       const dialog = useAlert({
         theme: 'warning',
         header: t('tools.echarts.text'),
-        body: t('tools.echarts.sourceerror2'), //结构不正确或未定义
+        body: t('tools.echarts.sourceerror2'), // 结构不正确或未定义
         onConfirm() {
           dialog.destroy()
         },
@@ -356,9 +357,9 @@ const setConfirm = () => {
       return
     }
   }
-  //设置了保存图片或者高级模式时，自动保存图片
+  // 设置了保存图片或者高级模式时，自动保存图片
   if (options.value.echarts?.haveImage || resOptions.mode === 0) {
-    //源码模式或havImage
+    // 源码模式或 havImage
     const dataURI = (
       resOptions.mode === 1 ? settingMyChart : sourceMyChart
     ).getDataURL({
@@ -374,7 +375,7 @@ const setConfirm = () => {
       .toString()
       .split(';')
     // 分离出MIME类型
-    //var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+    // var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
     // 写入字节流到Blob
     const ab = new ArrayBuffer(byteString.length)
     const ia = new Uint8Array(ab)
@@ -395,12 +396,7 @@ const setConfirm = () => {
 
 watch(
   () => [sourceOptions, modelMode, baseConfig.config, baseModeSet],
-  async ([
-    newSourceOptions,
-    newModelMode,
-    newbaseConfigConfig,
-    newbaseModeSet,
-  ]: [any, number, any, number]) => {
+  async () => {
     try {
       disposeChart()
       await nextTick()
@@ -409,8 +405,9 @@ watch(
   },
   { deep: true, immediate: false },
 )
-//界面数据加载
-async function loadModeEchart() {
+
+// 界面数据加载
+const loadModeEchart = async () => {
   await nextTick()
   await loadEchartScript()
   // 接下来的使用就跟之前一样，初始化图表，设置配置项
@@ -453,8 +450,8 @@ async function loadModeEchart() {
     }
   }
 }
-//控件每次加载之前需要销毁下，防止出现重复加载不成功的问题
-function disposeChart() {
+// 控件每次加载之前需要销毁下，防止出现重复加载不成功的问题
+const disposeChart = () => {
   if (sourceMyChart !== null) {
     sourceMyChart.dispose()
     sourceMyChart = null
@@ -464,8 +461,8 @@ function disposeChart() {
     settingMyChart = null
   }
 }
-//对输入json处理，属性和单引号需要转换成双引号
-function normalizeJsonString(jsonString: any) {
+// 对输入json处理，属性和单引号需要转换成双引号
+const normalizeJsonString = (jsonString: any) => {
   // 正则表达式，用于匹配键名（假设键名是有效的JavaScript标识符）
   const keyPattern = /(\s*)([a-zA-Z_$][\w$]*)(\s*:\s*)/g
   // 正则表达式，用于匹配单引号字符串并将其转为双引号
@@ -478,10 +475,9 @@ function normalizeJsonString(jsonString: any) {
   return jsonString
 }
 
-//--基础模型下的相关方法和设置-开始
-
-//  let tableLayout='fixed'
-function InitBaseConfig() {
+// --基础模型下的相关方法和设置-开始
+// let tableLayout='fixed'
+const initBaseConfig = () => {
   baseData = {}
   baseData.Columns = []
   // 创建字母表A-Z
@@ -534,23 +530,23 @@ function InitBaseConfig() {
 
   //基础设置配置 不需要多语
   baseData.seriesType = [
-    { code: 'bar', name: t('tools.echarts.set.bar') }, //"柱状图"
-    { code: 'line', name: t('tools.echarts.set.line') }, //"折线图"
-    { code: 'pie', name: t('tools.echarts.set.pie') }, //饼图
+    { code: 'bar', name: t('tools.echarts.set.bar') }, // "柱状图"
+    { code: 'line', name: t('tools.echarts.set.line') }, // "折线图"
+    { code: 'pie', name: t('tools.echarts.set.pie') }, // "饼图"
   ]
   baseData.legendorient = [
-    { code: 'horizontal', name: t('tools.echarts.set.horizontal') }, //  "水平"
-    { code: 'vertical', name: t('tools.echarts.set.vertical') }, //垂直
+    { code: 'horizontal', name: t('tools.echarts.set.horizontal') }, // "水平"
+    { code: 'vertical', name: t('tools.echarts.set.vertical') }, // "垂直"
   ]
   baseData.legendlocation = [
-    { code: 'top', name: t('tools.echarts.set.top') }, //  "顶部"
-    { code: 'bottom', name: t('tools.echarts.set.bottom') }, //底部
+    { code: 'top', name: t('tools.echarts.set.top') }, // "顶部"
+    { code: 'bottom', name: t('tools.echarts.set.bottom') }, // "底部"
   ]
   baseData.titleleft = [
-    { code: 'left', name: t('tools.echarts.set.left') }, //"居左"
-    { code: 'center', name: t('tools.echarts.set.center') }, //"居中"
-    { code: 'right', name: t('tools.echarts.set.right') },
-  ] //"居右"
+    { code: 'left', name: t('tools.echarts.set.left') }, // "居左"
+    { code: 'center', name: t('tools.echarts.set.center') }, // "居中"
+    { code: 'right', name: t('tools.echarts.set.right') }, // "居右"
+  ]
   //
   baseConfig = { data: [], config: {} }
   //
@@ -567,16 +563,16 @@ function InitBaseConfig() {
 
   //config 默认值
   baseConfig.config.seriesType = 'bar'
-  baseConfig.config.smooth = false //平滑折线
-  baseConfig.config.legend = true //图例 是否显示图例
-  baseConfig.config.legendorient = 'horizontal' //图例方向 默认水平
-  baseConfig.config.legendlocation = 'bottom' //图例位置底部
-  baseConfig.config.legendleft = 'center' //图例横向位置 居中
-  baseConfig.config.titleText = '' //标题名称
-  baseConfig.config.titleleft = 'center' //标题位置
+  baseConfig.config.smooth = false // 平滑折线
+  baseConfig.config.legend = true // 图例 是否显示图例
+  baseConfig.config.legendorient = 'horizontal' // 图例方向 默认水平
+  baseConfig.config.legendlocation = 'bottom' // 图例位置底部
+  baseConfig.config.legendleft = 'center' // 图例横向位置 居中
+  baseConfig.config.titleText = '' // 标题名称
+  baseConfig.config.titleleft = 'center' // 标题位置
 }
-//从缓存配置中读取数据到当前展示配置中
-function LoadBaseConfig(cachebaseConfig: any) {
+// 从缓存配置中读取数据到当前展示配置中
+const loadBaseConfig = (cachebaseConfig: any) => {
   if (cachebaseConfig === null) {
     return
   }
@@ -597,17 +593,17 @@ function LoadBaseConfig(cachebaseConfig: any) {
     }
   }
 }
-function editableCellState(cellParams: any) {
+const editableCellState = () => {
   return true
 }
-//--基础模式下的相关方法和设置-结束
+// --基础模式下的相关方法和设置-结束
 </script>
+
 <style lang="less" scoped>
 @import '@/assets/styles/_mixins.less';
 
 .umo-echarts-container {
   min-height: 300px;
-  overflow: hidden;
 
   .umo-echarts-header {
     display: flex;
@@ -619,10 +615,11 @@ function editableCellState(cellParams: any) {
     height: calc(100% - 30px);
     width: 100%;
     margin-top: 10px;
+    overflow: visible;
 
     .umo-echarts-code {
       width: 320px;
-      margin-left: 2px;
+      margin-right: 10px;
 
       :deep(.umo-textarea__inner) {
         height: 100%;

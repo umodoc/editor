@@ -3,7 +3,7 @@
 echarts相关的一些公共处理方法 主要用于基础模式
 */
 
-//基础模式下，对界面数据进行加工处理，根据第一列 为空时不作为有效数据
+// 基础模式下，对界面数据进行加工处理，根据第一列为空时不作为有效数据
 export function calbaseConfigData(data: any) {
   if (!data) {
     return data
@@ -19,33 +19,33 @@ export function calbaseConfigData(data: any) {
   }
   return data
 }
-//计算配置 根据手工设置的配置信息和数据进行Options生成，此方法会逐步扩充
+// 计算配置 根据手工设置的配置信息和数据进行 Options 生成，此方法会逐步扩充
 export function calbaseConfigOptions(data: any, config: any) {
-  //声明的最终返回的options
+  // 声明的最终返回的options
   let resOption: any = {}
   if (!data || !config) {
     return resOption
   }
-  //1.0 标题 title
+  // 1.0 标题 title
   if (config.titleText && config.titleText !== '') {
     resOption.title = {}
     resOption.title.text = config.titleText
     resOption.title.left = config.titleleft ? config.titleleft : 'center' // 标题位置
   }
-  //2.0 图例位置 legend
+  // 2.0 图例位置 legend
   let colNameList: any = []
   function calbaseConfigOptionsInlegend() {
     resOption.legend = {}
-    //图例显示隐藏
+    // 图例显示隐藏
     resOption.legend.show = config.legend ? true : false
-    //图例纵向位置
+    // 图例纵向位置
     resOption.legend[config.legendlocation] = 10
-    //图例横向位置
+    // 图例横向位置
     resOption.legend.left = config.legendleft
-    //图例布局
+    // 图例布局
     resOption.legend.orient = config.legendorient
     resOption.legend.data = []
-    //目前只支持26个图例 图例名称为空时，不展示
+    // 目前只支持 26 个图例，图例名称为空时，不展示
     const alphabet = Array.from({ length: 26 }, (_, i) =>
       String.fromCharCode(i + 65),
     )
@@ -56,18 +56,18 @@ export function calbaseConfigOptions(data: any, config: any) {
         continue
       }
       resOption.legend.data.push(data[0][curColName])
-      colNameList.push(curColName) //有那些列需要展示到系列中
+      colNameList.push(curColName) // 有那些列需要展示到系列中
       if (config.seriesType === 'pie' && colNameList.length === 1) {
         break
-        //饼图只需要显示一个图例
+        // 饼图只需要显示一个图例
       }
     }
   }
   calbaseConfigOptionsInlegend()
 
-  //3.0 图例 yAxis xAxis series处理
+  // 3.0 图例 yAxis xAxis series处理
   function calbaseConfigOptionsInType() {
-    //y轴
+    // y轴
     if (config.seriesType === 'bar' || config.seriesType === 'line') {
       resOption.yAxis = {
         type: 'value',
@@ -85,7 +85,7 @@ export function calbaseConfigOptions(data: any, config: any) {
 
     for (let i = 0; i < colNameList.length; i++) {
       const seriesdata = []
-      //从第二行开始
+      // 从第二行开始
       for (let j = 1; j < data.length; j++) {
         let _value = data[j][colNameList[i]]
         if (isNaN(Number(_value))) {
@@ -102,7 +102,7 @@ export function calbaseConfigOptions(data: any, config: any) {
         type: config.seriesType,
         data: seriesdata,
       })
-      //平滑折线
+      // 平滑折线
       if (
         config.smooth &&
         resOption.series[resOption.series.length - 1].type === 'line'
@@ -117,7 +117,7 @@ export function calbaseConfigOptions(data: any, config: any) {
 
   calbaseConfigOptionsInType()
 
-  //4.0 grid 属性设置
+  // 4.0 grid 属性设置
   resOption.grid = {
     left: '3%',
     right: '4%',
@@ -133,7 +133,7 @@ export function calbaseConfigOptions(data: any, config: any) {
     }
   }
 
-  //9.0 自定义扩展，可以在外部自定义实现展示效果，扩展个性化样式
+  // 9.0 自定义扩展，可以在外部自定义实现展示效果，扩展个性化样式
   const { options } = useStore()
   const newOptions = options.value.onCustomizeChartSettings?.(data, config)
   if (newOptions !== null && typeof newOptions === 'object') {

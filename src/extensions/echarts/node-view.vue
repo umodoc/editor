@@ -38,17 +38,17 @@
 </template>
 
 <script setup lang="ts">
-//tiptap组件
+// tiptap 组件
 import { NodeSelection } from '@tiptap/pm/state'
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
-//拖拽组件
+// 拖拽组件
 import Drager from 'es-drager'
 
 import {
   calbaseConfigData,
   calbaseConfigOptions,
 } from '@/extensions/echarts/cal-service'
-// 引入echart服务 用此方法初始化加载cdn echart.js脚本 否则
+// 引入 echart 服务 用此方法初始化加载 cdn echart.js 脚本 否则
 import { useEchartsLoader } from '@/extensions/echarts/init-service'
 const { loadEchartScript } = useEchartsLoader()
 
@@ -59,12 +59,12 @@ const maxWidth = $ref(0)
 let selected = $ref(false)
 let myChart: any = null
 
-//钩子 加载数据
+// 加载数据
 onMounted(async () => {
   await loadData()
 })
 
-//初始化样式 需要在 margin 和 nodeAlign里面增加name才可以
+// 初始化样式，需要在 margin 和 nodeAlign 里面增加 name 才可以
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs
   const marginTop =
@@ -97,15 +97,15 @@ const onResize = ({ width, height }: { width: number; height: number }) => {
 onClickOutside(containerRef, () => {
   selected = false
 })
-//数据加载
-async function loadData() {
+// 数据加载
+const loadData = async () => {
   await nextTick()
   // 确保 loadData 在 echarts 加载完毕后调用
   await loadEchartScript()
   // 接下来的使用就跟之前一样，初始化图表，设置配置项
   if (typeof echarts !== 'undefined') {
     const { chartOptions, chartConfig, id, mode } = node.attrs
-    //  根据参数不同 实现效果不同
+    // 根据参数不同 实现效果不同
     if (myChart !== null) {
       myChart.dispose()
       myChart = null
@@ -126,7 +126,7 @@ async function loadData() {
   }
 }
 
-async function dragerClick() {
+const dragerClick = async () => {
   selected = true
   await nextTick()
   const curId = node.attrs?.id
@@ -158,7 +158,7 @@ watch(
       oldAttrs !== undefined &&
       newAttrs !== oldAttrs
     ) {
-      //如果只有高度和宽度变化，则不走重新加载逻辑
+      // 如果只有高度和宽度变化，则不走重新加载逻辑
       let isLoad = false
       for (const attr1 in oldAttrs) {
         if (attr1 === 'height' || attr1 === 'width' || attr1 === 'src') {
