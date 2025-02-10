@@ -223,6 +223,14 @@ import {
 import { useEchartsLoader } from '@/extensions/echarts/init-service'
 import { getSelectionNode } from '@/extensions/selection'
 import { shortId } from '@/utils/short-id'
+
+const { mode } = defineProps({
+  mode: {
+    type: String,
+    default: undefined,
+  },
+})
+
 const { loadEchartScript } = useEchartsLoader()
 
 const { options, editor } = useStore()
@@ -254,25 +262,36 @@ const menuClick = () => {
     return
   }
   baseModeSet = 0 //默认打开都是设置界面
-  curNode = getSelectionNode(editor.value)
-  //选中节点为echarts节点时，去读取界面上的配置信息
-  if (curNode?.type?.name === 'echarts') {
-    //更新模式
-    dialogAddOrEdit = false
-    modelMode = curNode.attrs?.mode
-    sourceOptions = null
-    if (curNode.attrs?.chartOptions !== null) {
-      sourceOptions = JSON.stringify(curNode.attrs?.chartOptions)
-    }
-    InitBaseConfig()
-    LoadBaseConfig(curNode.attrs?.chartConfig)
-  } else {
-    //新建模式
+
+  const openAddMode = () => {
     dialogAddOrEdit = true
     modelMode = options.value.echarts?.mode
     sourceOptions = null
     InitBaseConfig()
+    dialogVisible = true
   }
+
+  // 新增模式
+  if (mode === 'add') {
+    openAddMode()
+    return
+  }
+  curNode = getSelectionNode(editor.value)
+  //选中节点为echarts节点时，去读取界面上的配置信息
+  if (curNode?.type?.name !== 'echarts') {
+    openAddMode()
+    return
+  }
+
+  //更新模式
+  dialogAddOrEdit = false
+  modelMode = curNode.attrs?.mode
+  sourceOptions = null
+  if (curNode.attrs?.chartOptions !== null) {
+    sourceOptions = JSON.stringify(curNode.attrs?.chartOptions)
+  }
+  InitBaseConfig()
+  LoadBaseConfig(curNode.attrs?.chartConfig)
   // 弹窗点击显示
   dialogVisible = true
 }

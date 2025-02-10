@@ -130,6 +130,7 @@
               v-if="!disableItem('echarts')"
               :huge="false"
               :tooltip="false"
+              mode="add"
             />
           </t-dropdown-item>
           <t-dropdown-item>
