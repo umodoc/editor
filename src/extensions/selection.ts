@@ -69,6 +69,9 @@ export default Extension.create({
               const { id, src } = node.attrs
               options.value.onFileDelete?.(id, src)
             }
+            if (editor.isActive('textBox')) {
+              return chain().focus().deleteNode('textBox').run()
+            }
             chain().focus().deleteSelection().run()
             return true
           }

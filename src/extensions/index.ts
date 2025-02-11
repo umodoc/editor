@@ -33,6 +33,7 @@ import Audio from './audio'
 import Bookmark from './bookmark'
 import BulletList from './bullet-list'
 import CodeBlock from './code-block'
+import Echarts from './echarts'
 import File from './file'
 import FileHandler from './file-handler'
 import FontSize from './font-size'
@@ -46,6 +47,7 @@ import LineHeight from './line-height'
 import Margin from './margin'
 import NodeAlign from './node-align'
 import OrderedList from './ordered-list'
+import PageBreak from './page-break'
 import Selection from './selection'
 import TableCell from './table-cell'
 import TableHeader from './table-header'
@@ -118,6 +120,9 @@ export const extensions = [
   hr,
   Iframe,
   Mathematics,
+  Bookmark.configure({
+    class: 'umo-editor-bookmark',
+  }),
 
   // 表格
   Table.configure({
@@ -127,12 +132,15 @@ export const extensions = [
   TableRow,
   TableHeader,
   TableCell,
+
   // 页面
   Toc,
   InvisibleCharacters.configure({
     visible: page.value.showBreakMarks,
     builders: [new HardBreakNode(), new ParagraphNode(), new InvisibleNode()],
   }),
+  PageBreak,
+
   // 其他
   Selection,
   TableOfContents.configure({
@@ -166,9 +174,7 @@ export const extensions = [
   Dropcursor.configure({
     color: 'var(--umo-primary-color)',
   }),
-  Bookmark.configure({
-    class: 'umo-editor-bookmark',
-  }),
+  Echarts,
 ]
 
 export const inputAndPasteRules = () => {

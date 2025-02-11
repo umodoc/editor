@@ -2,6 +2,7 @@
   <template
     v-if="
       editor?.isActive('toc') ||
+      editor?.isActive('pageBreak') ||
       editor?.isActive('horizontalRule') ||
       editor?.getAttributes('image').error
     "
@@ -101,6 +102,14 @@
     <menus-bubble-code-copy />
     <menus-bubble-node-delete />
   </template>
+  <template v-else-if="editor?.isActive('echarts')">
+    <menus-toolbar-base-align-left />
+    <menus-toolbar-base-align-center />
+    <menus-toolbar-base-align-right />
+    <div class="umo-bubble-menu-divider"></div>
+    <menus-toolbar-tools-echarts ico="setting" />
+    <menus-bubble-node-delete />
+  </template>
   <template v-else>
     <template v-if="options.assistant?.enabled">
       <menus-bubble-assistant />
@@ -114,20 +123,20 @@
     <menus-toolbar-base-strike />
     <div class="umo-bubble-menu-divider"></div>
     <menus-toolbar-base-align-dropdown />
+    <menus-toolbar-insert-link />
     <div class="umo-bubble-menu-divider"></div>
     <menus-toolbar-base-color />
-    <menus-toolbar-base-background-color />
-    <menus-toolbar-base-highlight />
-    <div class="umo-bubble-menu-divider"></div>
-    <template v-if="editor?.isActive('textBox')">
+    <template v-if="!editor?.isActive('textBox')">
+      <menus-toolbar-base-background-color />
+      <menus-toolbar-base-highlight />
+    </template>
+    <template v-else>
       <menus-bubble-text-box-border />
       <menus-bubble-text-box-background />
       <div class="umo-bubble-menu-divider"></div>
+      <menus-bubble-node-delete />
     </template>
-    <!-- <template v-if="options.document?.enableComment && commentBox">
-      <menus-bubble-comment />
-      <div class="umo-bubble-menu-divider"></div>
-    </template> -->
+    <div class="umo-bubble-menu-divider"></div>
     <slot name="bubble_menu" />
   </template>
 </template>

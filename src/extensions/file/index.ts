@@ -62,6 +62,9 @@ export default Node.create({
       file: {
         default: null,
       },
+      id: {
+        default: null,
+      },
       url: {
         default: null,
       },

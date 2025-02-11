@@ -55,16 +55,19 @@ const fileTypes: Record<string, string[]> = {
 }
 
 export const getFileExtname = (filename: string) => {
-  const splitFileName = filename.split('.')
-  return splitFileName[splitFileName.length - 1]
+  const splitFileName = filename?.split('.')
+  return splitFileName ? splitFileName[splitFileName.length - 1] : undefined
 }
 
 export const getFileIcon = (filename: string) => {
+  let iconName = 'common'
   const extname = getFileExtname(filename)
-  for (const type of Object.keys(fileTypes)) {
-    if (fileTypes[type].includes(extname)) {
-      return type
+  if (extname) {
+    for (const type of Object.keys(fileTypes)) {
+      if (fileTypes[type].includes(extname)) {
+        iconName = type
+      }
     }
   }
-  return 'common'
+  return iconName
 }

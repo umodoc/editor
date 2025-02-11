@@ -1,22 +1,22 @@
 <template>
   <div
-    v-if="visible"
+    v-if="visible && editor.isEditable"
     class="umo-block-menu-hander"
     :style="
       {
-        transform: `translate(${page.margin?.left ?? 0}cm, ${scrollTop}px)`,
+        transform: `translate(${editor.isEmpty ? -34 : -68}px, ${scrollTop}px)`,
       } as CSSProperties
     "
   >
     <menus-context-block-node />
-    <menus-context-block-common />
+    <menus-context-block-common v-if="!editor.isEmpty" />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
 
-const { page, editor } = useStore()
+const { editor } = useStore()
 
 let visible = $ref(false)
 let scrollTop = $ref(0)
@@ -55,13 +55,12 @@ onUnmounted(() => {
 .umo-block-menu-hander {
   position: absolute;
   z-index: 20;
-  margin-left: -190px;
   top: 0;
+  @media print {
+    display: none;
+  }
   .umo-menu-button {
     background-color: var(--umo-page-background);
-    @media print {
-      display: none;
-    }
     .umo-button-content {
       color: rgba(0, 0, 0, 0.5);
     }

@@ -71,10 +71,10 @@ onMounted(async () => {
   player = mediaPlayer(videoRef)
   if (node.attrs.uploaded === false && node.attrs.file) {
     try {
-      const { url } =
+      const { id,url } =
         (await options.value?.onFileUpload?.(node.attrs.file)) ?? {}
       if (containerRef.value) {
-        updateAttributes({ src: url, file: null, uploaded: true })
+        updateAttributes({ id,src: url, file: null, uploaded: true })
       }
     } catch (error) {
       useMessage('error', (error as Error).message)

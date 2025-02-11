@@ -28,6 +28,9 @@ export default Image.extend({
       file: {
         default: null,
       },
+      id: {
+        default: null,
+      },
       src: {
         default: null,
       },
@@ -85,7 +88,7 @@ export default Image.extend({
     return {
       setImage:
         (
-          options: { src: string; alt?: string; title?: string },
+          options: { src: string; alt?: string; title?: string; id?: string },
           replace?: boolean,
         ) =>
         ({ commands, editor }: CommandProps) => {

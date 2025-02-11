@@ -139,12 +139,12 @@
     "image": "图片",
     "link": {
       "text": "链接",
-      "title": "插入链接",
       "insert": "插入",
+      "remove": "移除",
       "hrefText": "链接文本：",
       "hrefTextTip": "请输入或选中链接文本",
       "href": "链接地址：",
-      "hrefTip": "请输入链接地址，一般以 http:// 或 https:// 开头"
+      "hrefTip": "一般以 http:// 或 https:// 开头"
     },
     "math": "数学公式",
     "bookmark": {
@@ -282,6 +282,40 @@
       "preview": "预览",
       "notEmpty": "Mermaid 内容不能为空"
     },
+    "echarts": {
+      "text": "图表",
+      "add": "新建图表",
+      "edit": "更改图表",
+      "source": "高级模式",
+      "visualization": "基础模式",
+      "placeholder": "请输入 echarts 格式的数据",
+      "sourceerror": "echarts 结构不正确，请确认！",
+      "sourceerror2": "echarts 结构不正确或未定义！",
+      "dataGrid": "数据",
+      "setting": "设置",
+      "settingerror": "请确认预览视图是否正确显示！",
+      "set": {
+        "bar": "柱状图",
+        "line": "折线图",
+        "pie": "饼图",
+        "top": "顶部",
+        "bottom": "底部",
+        "left": "居左",
+        "center": "居中",
+        "right": "居右",
+        "horizontal": "水平",
+        "vertical": "垂直",
+        "smooth": "平滑折线",
+        "seriesType": "图表类型",
+        "legend": "显示图例",
+        "legendorient": "图例布局",
+        "legendlocation": "图例纵向位置",
+        "legendleft": "图例横向位置",
+        "titleText": "标题名称",
+        "titleTextPlaceholder": "请输入标题名称...",
+        "titleleft": "标题位置"
+      }
+    },
     "mindMap": "思维导图",
     "qrcode": {
       "text": "二维码",
@@ -390,7 +424,7 @@
     "pdf": {
       "text": "PDF文档",
       "title": "导出 PDF 文档",
-      "message": "导出 PDF 文档前，请确保所有页面中的图片已加载完毕。然后在弹出的打印框中选择”打印机 - 另存为PDF“，再点击”保存“按钮即可。如果遇到节点背景不显示，请在打印框中勾选 “背景图形”选项。",
+      "message": "导出 PDF 文档前，请确保所有页面中的图片已加载完毕。然后在弹出的打印框中选择“打印机 - 另存为PDF”，再点击“保存”按钮即可。为确保所有内容正确显示，请在打印框中勾选 “背景图形”选项，并将 “边距”设为“无”。",
       "confirm": "我知道了"
     },
     "text": "文本文档"
@@ -499,9 +533,6 @@
       "title": "错误提示",
       "message": "AI 文档助手生成结果出现错误，请重试！"
     }
-  },
-  "comment": {
-    "text": "批注/评论"
   },
   "pageOptions": {
     "title": "页面设置",
@@ -673,7 +704,7 @@
   "print": {
     "text": "打印",
     "title": "打印文档",
-    "message": "打印文档前，请确保所有页面中的图片已加载完毕。如果遇到节点背景不显示，请在打印框中勾选 “背景图形”选项。",
+    "message": "打印文档前，请确保所有页面中的图片已加载完毕。为确保所有内容正确显示，请在打印框中勾选 “背景图形”选项，并将 “边距”设为“无”。",
     "confirm": "立即打印"
   },
   "time": {

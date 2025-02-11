@@ -70,7 +70,7 @@ import type {
 } from '@/types'
 import { consoleCopyright } from '@/utils/copyright'
 
-import ruConfig from '../locales/td-next-vue/ru-RU'
+import ruConfig from '../locales/tdesign/ru-RU'
 
 const { toBlob, toJpeg, toPng } = domToImage
 
@@ -127,7 +127,7 @@ const $document = useState('document', props.editorKey)
 onBeforeMount(() => setOptions(props))
 onMounted(() => {
   setTheme(options.value.theme)
-  consoleCopyright()
+  setTimeout(consoleCopyright)
 })
 onBeforeUnmount(() => {
   clearAutoSaveInterval()
@@ -646,7 +646,7 @@ const destroy = () => {
 }
 
 // Content Saving Methods
-const saveContent = async () => {
+const saveContent = async (showMessage = true) => {
   if ($toolbar.value.mode === 'source' || options.value.document?.readOnly) {
     return
   }
@@ -667,7 +667,7 @@ const saveContent = async () => {
       $document.value,
     )
     if (!success) {
-      message.close()
+      MessagePlugin.closeAll()
       useMessage('error', {
         content: t('save.failed'),
         placement: 'bottom',
@@ -676,12 +676,14 @@ const saveContent = async () => {
       return
     }
     emits('saved')
-    message.close()
-    useMessage('success', {
-      content: t('save.success'),
-      placement: 'bottom',
-      offset: [0, -20],
-    })
+    if (showMessage) {
+      MessagePlugin.closeAll()
+      useMessage('success', {
+        content: t('save.success'),
+        placement: 'bottom',
+        offset: [0, -20],
+      })
+    }
     const time = useTimestamp({ offset: 0 })
     savedAt.value = time.value
   } catch (e) {

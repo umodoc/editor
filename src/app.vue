@@ -33,7 +33,6 @@ const options = $ref({
   document: {
     // title: '测试文档',
     content: localStorage.getItem('document.content') ?? '<p>测试文档</p>',
-    // enableComment: false
   },
   templates,
   cdnUrl: 'https://cdn.umodoc.com',
@@ -81,6 +80,12 @@ const options = $ref({
       type: file.type,
       size: file.size,
     }
+  },
+  onFileDelete(id: string, url: string) {
+    console.log(id, url)
+  },
+  onCustomizeChartSettings(data: any, config: any) {
+    return null
   },
   async onAssistant() {
     return await Promise.resolve('<p>AI助手测试</p>')

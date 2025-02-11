@@ -7,14 +7,13 @@
     :tippy-options="tippyOpitons"
   >
     <menus-bubble-menus
-      v-if="options?.document?.enableBubbleMenu && !assistantBox && !commentBox"
+      v-if="options?.document?.enableBubbleMenu && !assistantBox"
     >
       <template #bubble_menu="props">
         <slot name="bubble_menu" v-bind="props" />
       </template>
     </menus-bubble-menus>
     <assistant-input v-if="options?.assistant?.enabled && assistantBox" />
-    <!-- <comment-input v-if="options?.document?.enableComment && commentBox" /> -->
   </bubble-menu>
 </template>
 
@@ -22,8 +21,7 @@
 import { BubbleMenu } from '@tiptap/vue-3'
 import type { Instance } from 'tippy.js'
 
-const { options, editor, painter, blockMenu, assistantBox, commentBox } =
-  useStore()
+const { options, editor, painter, blockMenu, assistantBox } = useStore()
 
 // 气泡菜单
 let tippyInstance = $ref<Instance | null>(null)
@@ -36,7 +34,6 @@ const tippyOpitons = $ref<Partial<Instance>>({
   },
   onHide() {
     assistantBox.value = false
-    commentBox.value = false
   },
   onDestroy() {
     tippyInstance = null
@@ -45,7 +42,7 @@ const tippyOpitons = $ref<Partial<Instance>>({
 
 // AI 助手
 watch(
-  () => [assistantBox.value, commentBox.value],
+  () => [assistantBox.value],
   (visible: any[]) => {
     tippyInstance?.setProps({
       placement: visible.includes(true) ? 'bottom' : 'top',
