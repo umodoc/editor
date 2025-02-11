@@ -55,7 +55,7 @@
         @rotate="onRotate"
         @resize="onResize"
         @drag="onDrag"
-        @click="dragerClick"
+        @focus="selected = true"
       >
         <img
           ref="imageRef"
@@ -153,27 +153,7 @@ const onResize = ({ width, height }: { width: number; height: number }) => {
 const onDrag = ({ left, top }: { left: number; top: number }) => {
   updateAttributes({ left, top })
 }
-const dragerClick = async () => {
-  selected = true
-  await nextTick()
-  const dataId = node.attrs?.id
-  if (!dataId) {
-    return
-  }
-  const element = document.querySelector(`img[data-id="${dataId}"]`)
-  if (element) {
-    const pos = editor.value?.view.posAtDOM(element, 0)
-    if (pos !== null) {
-      const tr = editor.value?.state.tr.setSelection(
-        NodeSelection.create(editor.value.state.doc, pos),
-      )
-      if (tr !== null) {
-        // 应用交易以更新编辑器状态
-        editor.value?.view.dispatch(tr)
-      }
-    }
-  }
-}
+
 onClickOutside(containerRef, () => {
   selected = false
 })
@@ -224,6 +204,27 @@ watch(
       updateAttributes({ error: errorValue.type === 'error' })
     } else {
       updateAttributes({ error: false })
+    }
+  },
+)
+watch(
+  () => selected,
+  () => {
+    if (!selected) {
+      return
+    }
+    if (imageRef) {
+      const pos = editor.value?.view.posAtDOM(imageRef, 0)
+      if (pos === null) {
+        return
+      }
+      const tr = editor.value?.state.tr.setSelection(
+        NodeSelection.create(editor.value.state.doc, pos),
+      )
+      if (tr !== null) {
+        // 更新编辑器状态
+        editor.value?.view.dispatch(tr)
+      }
     }
   },
 )
