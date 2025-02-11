@@ -661,7 +661,7 @@ const saveContent = async (showMessage = true) => {
       {
         html: editor.value?.getHTML(),
         json: editor.value?.getJSON(),
-        text: editor.value?.getHTML(),
+        text: editor.value?.getText(),
       },
       page.value,
       $document.value,
