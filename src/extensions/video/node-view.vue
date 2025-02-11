@@ -18,7 +18,7 @@
         :max-height="maxHeight"
         :equal-proportion="true"
         @resize="onResize"
-        @click="selected = true"
+        @focus="selected = true"
       >
         <video
           ref="videoRef"
