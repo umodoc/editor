@@ -254,7 +254,7 @@
         :class="{ active: page.preview?.laserPointer }"
         @click="
           page.preview &&
-            (page.preview.laserPointer = !page.preview.laserPointer)
+          (page.preview.laserPointer = !page.preview.laserPointer)
         "
       >
         <icon name="laser-pointer" />
