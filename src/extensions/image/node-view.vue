@@ -82,7 +82,6 @@
 </template>
 
 <script setup lang="ts">
-import { NodeSelection } from '@tiptap/pm/state'
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import Drager from 'es-drager'
 import { base64ToFile } from 'file64'
@@ -90,7 +89,7 @@ import { base64ToFile } from 'file64'
 import { shortId } from '@/utils/short-id'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
-const { options, editor, imageViewer } = useStore()
+const { options, imageViewer } = useStore()
 const { isLoading, error } = useImage({ src: node.attrs.src })
 
 const containerRef = ref(null)
@@ -204,27 +203,6 @@ watch(
       updateAttributes({ error: errorValue.type === 'error' })
     } else {
       updateAttributes({ error: false })
-    }
-  },
-)
-watch(
-  () => selected,
-  () => {
-    if (!selected) {
-      return
-    }
-    if (imageRef) {
-      const pos = editor.value?.view.posAtDOM(imageRef, 0)
-      if (pos === null) {
-        return
-      }
-      const tr = editor.value?.state.tr.setSelection(
-        NodeSelection.create(editor.value.state.doc, pos),
-      )
-      if (tr !== null) {
-        // 更新编辑器状态
-        editor.value?.view.dispatch(tr)
-      }
     }
   },
 )
