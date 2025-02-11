@@ -153,7 +153,7 @@ const onResize = ({ width, height }: { width: number; height: number }) => {
 const onDrag = ({ left, top }: { left: number; top: number }) => {
   updateAttributes({ left, top })
 }
-async function dragerClick() {
+const dragerClick = async () => {
   selected = true
   await nextTick()
   const dataId = node.attrs?.id
