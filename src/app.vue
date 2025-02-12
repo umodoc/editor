@@ -48,6 +48,12 @@ const options = $ref({
   assistant: {
     enabled: true,
   },
+  page: {
+    showBreakMarks: true,
+    watermark: {
+      text: 'Umo Editor',
+    },
+  },
   user: {
     userId: 'umoeditor',
     nickName: 'Umo Editor',

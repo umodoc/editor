@@ -609,7 +609,10 @@ const editableCellState = () => {
     display: flex;
     justify-content: space-between;
   }
-
+  /* 当容器中只有一个子元素时，将该子元素推到结束边缘 */
+  .umo-echarts-header :only-child {
+    margin-left: auto;
+  }
   .umo-echarts-source-center {
     display: flex;
     height: calc(100% - 30px);
