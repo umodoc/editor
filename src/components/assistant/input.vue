@@ -205,6 +205,7 @@ const send = async () => {
       theme: 'warning',
       header: t('assistant.error.title'),
       body: t('assistant.error.message'),
+      confirmBtn: t('assistant.error.confirm'),
       onConfirm() {
         dialog.destroy()
       },
