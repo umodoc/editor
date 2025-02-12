@@ -141,11 +141,10 @@ export const useStore = createGlobalState(() => {
           if (!wmConfig[attr]) {
             continue
           }
-          if (
-            (attr === 'alpha' || attr === 'fontSize') &&
-            !isNumber(wmConfig[attr])
-          ) {
-            page.value.watermark[attr] = wmConfig[attr]
+          if (attr === 'alpha' || attr === 'fontSize') {
+            if (isNumber(wmConfig[attr])) {
+              page.value.watermark[attr] = wmConfig[attr]
+            }
           } else if (isString(wmConfig[attr])) {
             page.value.watermark[attr] = wmConfig[attr]
           }
