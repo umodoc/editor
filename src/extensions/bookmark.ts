@@ -46,7 +46,7 @@ export default Mark.create<BookmarkOptions>({
         default: 'bookmarkName',
       },
       class: {
-        default: this.options.class ? this.options.class : undefined,
+        default: this.options.class ?? undefined,
       },
     }
   },
