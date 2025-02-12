@@ -2,11 +2,11 @@ import type { Mark } from '@tiptap/pm/model'
 import type { Editor } from '@tiptap/vue-3'
 import type { TableOfContentDataItem } from '@tiptap-pro/extension-table-of-contents'
 import { isRecord } from '@tool-belt/type-predicates'
+import { isNumber, isString } from '@tool-belt/type-predicates'
 
 import { defaultOptions, ojbectSchema } from '@/options'
 import type { PageOption, UmoEditorOptions } from '@/types'
 import { shortId } from '@/utils/short-id'
-
 export type TableOfContentItem = TableOfContentDataItem & { title: string }
 
 export const useStore = createGlobalState(() => {
@@ -118,6 +118,42 @@ export const useStore = createGlobalState(() => {
     savedAt.value = null
     editorDestroyed.value = true
   }
+  //初始化showBreakMarks和默认值不相同是处理
+  watch(
+    () => options.value.page?.showBreakMarks,
+    (val: boolean) => {
+      if (val) {
+        editor.value?.commands.showInvisibleCharacters()
+        page.value.showBreakMarks = true
+      } else {
+        editor.value?.commands.hideInvisibleCharacters()
+        page.value.showBreakMarks = false
+      }
+    },
+    { immediate: false, once: true },
+  )
+  //初始配置中有水印设置时默认显示处理
+  watch(
+    () => options.value.page?.watermark,
+    (wmConfig: any) => {
+      if (wmConfig && page.value.watermark) {
+        for (const attr in page.value.watermark) {
+          if (!wmConfig[attr]) {
+            continue
+          }
+          if (
+            (attr === 'alpha' || attr === 'fontSize') &&
+            !isNumber(wmConfig[attr])
+          ) {
+            page.value.watermark[attr] = wmConfig[attr]
+          } else if (isString(wmConfig[attr])) {
+            page.value.watermark[attr] = wmConfig[attr]
+          }
+        }
+      }
+    },
+    { immediate: false, once: true, deep: true },
+  )
 
   watch(
     () => options.value.document?.readOnly,
