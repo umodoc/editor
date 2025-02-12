@@ -47,7 +47,8 @@ const nodeStyle = $computed(() => {
   }
 })
 
-onMounted(() => {
+onMounted(async () => {
+  await nextTick()
   if (containerRef.value) {
     const { offsetWidth } = containerRef.value.$el
 
