@@ -1,6 +1,5 @@
 import Vue from '@vitejs/plugin-vue'
 import ReactivityTransform from '@vue-macros/reactivity-transform/vite'
-import type { RollupWarning } from 'rollup'
 import AutoImport from 'unplugin-auto-import/vite'
 import { TDesignResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
@@ -64,7 +63,7 @@ const buildConfig = {
       /^@tiptap\/.*/,
       /^nzh\/.*/,
     ],
-    onwarn(warning: RollupWarning, warn: (warning: RollupWarning) => void) {
+    onwarn(warning: any, warn: (warning: any) => void) {
       if (warning.code === 'UNUSED_EXTERNAL_IMPORT') return
       warn(warning)
     },
