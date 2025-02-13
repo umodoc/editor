@@ -104,8 +104,13 @@ export const useStore = createGlobalState(() => {
           laserPointer: true,
         },
       }
+      if (showBreakMarks) {
+        editor.value?.commands.showInvisibleCharacters()
+      } else {
+        editor.value?.commands.hideInvisibleCharacters()
+      }
     },
-    { immediate: true, once: true },
+    { immediate: true, deep: true },
   )
 
   const setEditor = (editorInstance: Editor) => {
