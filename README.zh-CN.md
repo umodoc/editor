@@ -122,7 +122,7 @@ Umo Editor 的发展，离不开社区的支持，以下是为 Umo Editor 贡献
 - 🔗 如果您在项目中使用了 Umo Editor，请添加一个链接到 [https://github.com/umodoc/editor](https://github.com/umodoc/editor)。
 - 💰 请我们喝杯咖啡。
 
-![请我们喝杯咖啡](https://editor.umodoc.com/images/wepay.png)
+![请我们喝杯咖啡](https://unpkg.com/@umoteam/editor-external@latest/static/wepay.png)
 
 ## 定制开发
 
