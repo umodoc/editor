@@ -4,7 +4,7 @@
     :text="t('base.markdown.text')"
     ico="markdown"
     :tooltip="
-      options.document?.enableMarkdown
+      $document.enableMarkdown
         ? t('base.markdown.disable')
         : t('base.markdown.enable')
     "
