@@ -120,6 +120,8 @@ Umo Editor 的发展，离不开社区的支持，以下是为 Umo Editor 贡献
 
 - ⭐ 给 [Umo Editor 仓库](https://github.com/umodoc/editor) 点个 Star，表示对项目的支持。
 - 🔗 如果您在项目中使用了 Umo Editor，请添加一个链接到 [https://github.com/umodoc/editor](https://github.com/umodoc/editor)。
+- 💰 请我们喝杯咖啡。
+  <img src="https://editor.umodoc.com/images/wepay.png" alt="请我们喝杯咖啡" style="margin: 1rem 0 0 1rem; width: 175px; border:1px solid rgba(0, 0, 0, 0.05)'; border-radius: 4px" />
 
 ## 定制开发
 
