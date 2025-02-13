@@ -608,8 +608,10 @@ const editableCellState = () => {
   .umo-echarts-header {
     display: flex;
     justify-content: space-between;
+    :only-child {
+      margin-left: auto;
+    }
   }
-
   .umo-echarts-source-center {
     display: flex;
     height: calc(100% - 30px);
