@@ -5,7 +5,7 @@
       'show-bookmark': bookmark,
       'show-line-number': page.showLineNumber,
       'format-painter': painter.enabled,
-      'is-empty': editor?.isEmpty,
+      'is-empty': editor?.isEmpty && editor?.state.doc.childCount <= 1,
     }"
     :editor="editor"
     :style="{

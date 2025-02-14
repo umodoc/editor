@@ -99,23 +99,26 @@
         }
       }
     }
+  }
 
-    > .is-editor-empty {
-      line-height: 1.2;
-      &:first-child {
-        > * {
-          display: none;
-        }
+  &.is-empty .is-editor-empty:not(.tableWrapper) {
+    &::after {
+      display: inline-block;
+      transform: translateY(-2px);
+    }
+    &:first-child {
+      > *:not(table) {
+        display: none;
+      }
 
-        + * {
-          margin-top: 0;
-        }
+      // + * {
+      //   margin-top: 0;
+      // }
 
-        &::after {
-          color: var(--umo-content-placeholder-color);
-          content: attr(data-placeholder);
-          pointer-events: none;
-        }
+      &::after {
+        color: var(--umo-content-placeholder-color);
+        content: attr(data-placeholder);
+        pointer-events: none;
       }
     }
   }
