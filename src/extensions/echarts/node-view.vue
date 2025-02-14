@@ -29,7 +29,7 @@
         :max-width="maxWidth"
         :z-index="10"
         @resize="onResize"
-        @click="dragerClick"
+        @focus="selected = true"
       >
         <div :id="'chart-' + node.attrs.id" class="umo-node-echarts-body"></div>
       </drager>
@@ -39,7 +39,6 @@
 
 <script setup lang="ts">
 // tiptap 组件
-import { NodeSelection } from '@tiptap/pm/state'
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 // 拖拽组件
 import Drager from 'es-drager'
@@ -126,28 +125,6 @@ const loadData = async () => {
   }
 }
 
-const dragerClick = async () => {
-  selected = true
-  await nextTick()
-  const curId = node.attrs?.id
-  if (curId !== null && curId !== '') {
-    const element = editor.value?.view.dom.querySelector(`#chart-${curId}`)
-    if (element) {
-      const pos = editor.value?.view.posAtDOM(element, 0)
-      if (pos !== null) {
-        const tr = editor.value?.state.tr.setSelection(
-          NodeSelection.create(editor.value.state.doc, pos),
-        )
-        if (tr !== null) {
-          // 应用交易以更新编辑器状态
-          editor.value?.view.dispatch(tr)
-          // 确保编辑器获得焦点
-          editor.value?.focus?.()
-        }
-      }
-    }
-  }
-}
 // 监听 node.attrs 变化并在变化时重新加载数据
 watch(
   () => node.attrs,
