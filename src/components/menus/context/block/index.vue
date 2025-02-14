@@ -4,12 +4,14 @@
     class="umo-block-menu-hander"
     :style="
       {
-        transform: `translate(${editor.isEmpty ? -34 : -68}px, ${scrollTop}px)`,
+        transform: `translate(${editor.isEmpty && !editor.isActive('table') ? -34 : -68}px, ${scrollTop}px)`,
       } as CSSProperties
     "
   >
     <menus-context-block-node />
-    <menus-context-block-common v-if="!editor.isEmpty" />
+    <menus-context-block-common
+      v-if="!editor.isEmpty || editor.isActive('table')"
+    />
   </div>
 </template>
 

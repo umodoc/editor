@@ -70,7 +70,7 @@ export const extensions = [
     dropcursor: false,
   }),
   Placeholder.configure({
-    placeholder: l(options.value.document.placeholder),
+    placeholder: () => String(l(options.value.document.placeholder)),
   }),
   Focus.configure({
     className: 'umo-node-focused',

@@ -14,6 +14,10 @@ export const useNodePostion = () => {
   // 微修正菜单位置
   offsetTop = currentNode.tagName === 'DIV' ? offsetTop - 8 : offsetTop - 5
 
+  if (currentNode.classList.contains('is-editor-empty')) {
+    offsetTop = offsetTop + 2
+  }
+
   if (
     editor.value.isActive('horizontalRule') ||
     editor.value.isActive('table') ||
