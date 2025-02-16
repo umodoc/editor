@@ -80,10 +80,7 @@ onUnmounted(() => {
   }
 }
 .umo-block-menu-dropdown {
-  max-height: 300px;
   .umo-block-menu-group-name {
-    // padding-top: 8px !important;
-    // line-height: 1;
     padding-left: 15px !important;
   }
   .umo-dropdown__menu,
