@@ -147,6 +147,7 @@
       "hrefTip": "一般以 http:// 或 https:// 开头"
     },
     "math": "数学公式",
+    "tag": "标签",
     "bookmark": {
       "text": "书签",
       "set": "设置书签",
@@ -511,6 +512,11 @@
       "borderColor": "边框颜色",
       "borderStyle": "边框样式",
       "noBorder": "不显示边框"
+    },
+    "tag": {
+      "background": "背景颜色",
+      "color": "文字颜色",
+      "delete": "删除标签"
     },
     "toFile": "转为文件",
     "delete": "删除"

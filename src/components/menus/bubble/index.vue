@@ -1,6 +1,11 @@
 <template>
   <bubble-menu
-    v-show="!blockMenu && !painter.enabled && !editor!.isEmpty"
+    v-show="
+      !blockMenu &&
+      !painter.enabled &&
+      !editor!.isEmpty &&
+      editor?.isActive('tag')
+    "
     class="umo-editor-bubble-menu"
     :class="{ assistant: assistantBox }"
     :editor="editor!"
