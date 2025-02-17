@@ -695,7 +695,50 @@ const saveContent = async (showMessage = true) => {
     console.error((e as Error).message)
   }
 }
-
+const getAllBookmarks = () => {
+  let bookmarkData:any = []
+  editor.value?.commands.getAllBookmarks(function (_data:any) {
+    bookmarkData = _data
+  })
+  return bookmarkData
+}
+const focusBookmark = (bookmarkName: string) => {
+  return editor.value?.commands.focusBookmark(bookmarkName)
+}
+const setBookmark = (bookmarkName: string) => {
+  return editor.value?.commands.setBookmark({ bookmarkName })
+}
+const deleteBookmark = (bookmarkName: string) => {
+  if (!bookmarkName) {
+    return false
+  }
+  const element = editor.value?.view.dom.querySelector(
+    `bookmark[bookmarkName="${bookmarkName}"]`,
+  )
+  if (!element) {
+    return false
+  }
+  const pos = editor.value?.view.posAtDOM(element, 0)
+  const { tr } = editor.value?.view.state ?? {}
+  if (!tr) {
+    return false
+  }
+  const marks = editor.value?.view.state.doc.resolve(pos + 1)?.marks()
+  if (marks !== null && marks.length > 0) {
+    for (const mark of marks) {
+      if (mark.type.name === 'bookmark') {
+        editor.value?.view.dispatch(
+          tr.removeMark(pos, pos + element.outerText.length, mark),
+        )
+      }
+    }
+  } else {
+    editor.value?.view.dispatch(
+      tr.removeMark(pos, pos + element.outerText.length),
+    )
+  }
+  return true
+}
 // Content Excerpt Methods
 const getContentExcerpt = (charLimit = 100, more = ' ...') => {
   const text = editor.value?.getText()
@@ -778,6 +821,10 @@ defineExpose({
   useConfirm,
   useMessage,
   destroy,
+  focusBookmark,
+  getAllBookmarks,
+  setBookmark,
+  deleteBookmark,
 })
 </script>
 
