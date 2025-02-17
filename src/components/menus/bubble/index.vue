@@ -1,11 +1,6 @@
 <template>
   <bubble-menu
-    v-show="
-      !blockMenu &&
-      !painter.enabled &&
-      !editor!.isEmpty &&
-      editor?.isActive('tag')
-    "
+    v-show="!painter.enabled && !editor!.isEmpty"
     class="umo-editor-bubble-menu"
     :class="{ assistant: assistantBox }"
     :editor="editor!"
@@ -26,7 +21,7 @@
 import { BubbleMenu } from '@tiptap/vue-3'
 import type { Instance } from 'tippy.js'
 
-const { options, editor, painter, blockMenu, assistantBox } = useStore()
+const { options, editor, painter, assistantBox } = useStore()
 
 // 气泡菜单
 let tippyInstance = $ref<Instance | null>(null)
