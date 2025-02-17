@@ -79,7 +79,11 @@ export default Extension.create({
             chain().focus().deleteTable().run()
             return true
           }
-          return chain().focus().deleteNode(node.type.name).run()
+          return chain()
+            .focus()
+            .deleteSelection()
+            .deleteNode(node.type.name)
+            .run()
         },
     }
   },
