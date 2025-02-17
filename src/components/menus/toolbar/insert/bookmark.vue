@@ -61,18 +61,14 @@
   </modal>
 </template>
 <script setup lang="ts">
-import { TextSelection } from '@tiptap/pm/state'
-
 import Tooltip from '@/components/tooltip.vue'
-import { getSelectionText } from '@/extensions/selection'
-import { shortId } from '@/utils/short-id'
 const { editor, bookmark } = useStore()
 //弹窗口显示隐藏 true显示 默认隐藏
 let dialogVisible = $ref(false)
 //书签名称
 let bookmarkText = $ref('')
 //书签数据
-let bookmarkData = $ref([])
+let bookmarkData :any= []
 //书签表格显示列
 const bookmarkColumns = [
   {
@@ -93,7 +89,7 @@ const bookmarkColumns = [
 //书签插入
 const insertbookmark = () => {
   //书签名称不为空时不处理
-  if (bookmarkText !== null && bookmarkText !== '') {
+  if (bookmarkText) {
     let existbmName = ''
     if (bookmarkData.length > 0) {
       for (const item of bookmarkData) {
@@ -104,29 +100,14 @@ const insertbookmark = () => {
       }
     }
     //存在-1
-    if (existbmName === '') {
-      editor.value?.commands.setBookmark({ bookmarkName: bookmarkText })
-      const data = getSelectionText(editor.value)
-      if (data === null || data === '') {
-        //无选中值时，用书签名称
-        editor.value?.chain().focus().insertContent(bookmarkText).run()
+    if (!existbmName) {
+      if (editor.value?.commands.setBookmark({ bookmarkName: bookmarkText })) {
+        dialogVisible = false
       }
-      dialogVisible = false
     } else {
-      //querySelector(`bookmark[bookmarkid="${bookmarkId}"]`)
-      const element = editor.value?.view.dom.querySelector(
-        `bookmark[bookmarkName="${existbmName}"]`,
-      )
-      if (element) {
-        element.scrollIntoView()
-        const pos = editor.value?.view.posAtDOM(element, 0)
-        const { tr } = editor.value?.view.state ?? {}
-        tr?.setSelection(new TextSelection(tr.doc.resolve(pos ?? 0)))
-        if (tr) {
-          editor.value?.view.dispatch(tr)
-        }
+      if (editor.value?.commands.focusBookmark(existbmName)) {
+        dialogVisible = false
       }
-      dialogVisible = false
     }
   } else {
     const dialog = useAlert({
@@ -143,6 +124,7 @@ const onActiveChange = (highlightRowKeys: any, ctx: any) => {
   //重置文档
   bookmarkText = ctx.currentRowData?.bookmarkRowName
 }
+//这个方法本来也想封装到addCommands 中，但经过多次验证，每次都会有一个额外的事务异常
 const rowDelete = (row: any) => {
   const element = editor.value?.view.dom.querySelector(
     `bookmark[bookmarkName="${row.bookmarkRowName}"]`,
@@ -171,29 +153,9 @@ const rowDelete = (row: any) => {
 }
 const getCurWordAllBookmark = () => {
   try {
-    bookmarkData = []
     bookmarkText = ''
-    const alltext = editor.value?.getHTML()
-    const parser = new DOMParser()
-    const doc = parser.parseFromString(alltext, 'text/html')
-    // 获取所有的 <bookmark> 元素
-    const bookmarks = doc.body.querySelectorAll('bookmark')
-    const keyNode: string[] = []
-    Array.from(bookmarks).forEach((node) => {
-      if (node !== null) {
-        const bookName = node.getAttribute('bookmarkName')
-        if (
-          bookName !== null &&
-          bookName !== '' &&
-          !keyNode.includes(bookName)
-        ) {
-          keyNode.push(bookName)
-          bookmarkData.push({
-            bookmarkRowId: shortId(),
-            bookmarkRowName: bookName,
-          })
-        }
-      }
+    editor.value?.commands.getAllBookmarks(function (_data:any) {
+      bookmarkData = _data
     })
   } catch (e) {
     dialogVisible = false
