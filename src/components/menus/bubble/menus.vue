@@ -25,7 +25,7 @@
     <div class="umo-bubble-menu-divider"></div>
     <menus-bubble-image-remove-background
       v-if="
-        editor?.getAttributes('image')?.type === 'image' ||
+        editor?.getAttributes('image')?.type.startsWith('image') ||
         ['image/png', 'image/jpeg'].includes(
           editor?.getAttributes('image')?.type,
         )
@@ -33,7 +33,7 @@
     />
     <menus-bubble-image-preview
       v-if="
-        editor?.getAttributes('image')?.type === 'image' ||
+        editor?.getAttributes('image')?.type.startsWith('image') ||
         ['image/png', 'image/jpeg'].includes(
           editor?.getAttributes('image')?.type,
         )
@@ -48,7 +48,10 @@
       "
     />
     <menus-bubble-node-tofile
-      v-if="editor?.getAttributes('image').previewType !== null"
+      v-if="
+        editor?.getAttributes('image').previewType !== null &&
+        editor?.getAttributes('image').type.startsWith('image')
+      "
     />
     <menus-bubble-node-delete />
   </template>
@@ -101,6 +104,15 @@
     <div class="umo-bubble-menu-divider"></div>
     <menus-bubble-code-copy />
     <menus-bubble-node-delete />
+  </template>
+  <template v-else-if="editor?.isActive('tag')">
+    <menus-bubble-tag-input />
+    <menus-bubble-tag-builtin />
+    <div class="umo-bubble-menu-divider"></div>
+    <menus-bubble-tag-color />
+    <menus-bubble-tag-background />
+    <div class="umo-bubble-menu-divider"></div>
+    <menus-bubble-tag-delete />
   </template>
   <template v-else-if="editor?.isActive('echarts')">
     <menus-toolbar-base-align-left />
