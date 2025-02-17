@@ -17,11 +17,15 @@
   />
   <template
     v-if="
-      editor && !editorDestroyed && !page.preview?.enabled && !editorDestroyed
+      editor &&
+      !editorDestroyed &&
+      !page.preview?.enabled &&
+      !editorDestroyed &&
+      editor.isEditable
     "
   >
     <menus-context-block v-if="options.document?.enableBlockMenu" />
-    <menus-bubble />
+    <menus-bubble v-if="options.document?.enableBubbleMenu" />
   </template>
 </template>
 

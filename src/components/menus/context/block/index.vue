@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="visible && editor.isEditable"
+    v-show="visible"
     class="umo-block-menu-hander"
     :style="
       {
