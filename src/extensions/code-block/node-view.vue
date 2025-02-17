@@ -74,18 +74,6 @@ const containerRef = $ref(null)
 const code = $ref(node.attrs.code)
 let codeEditor = $ref<PrismEditor | null>(null)
 
-const nodeStyle = $computed(() => {
-  const { margin } = node.attrs
-  const marginTop =
-    margin?.top && margin?.top !== '' ? `${margin.top}px` : undefined
-  const marginBottom =
-    margin?.bottom && margin?.bottom !== '' ? `${margin.bottom}px` : undefined
-  return {
-    marginTop,
-    marginBottom,
-  }
-})
-
 onMounted(() => {
   codeEditor = createEditor(containerRef, {
     readOnly: options.value.document?.readOnly,
