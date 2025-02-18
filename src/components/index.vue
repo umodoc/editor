@@ -191,6 +191,7 @@ watch(
       return
     }
     editor.value.on('create', ({ editor }: any) => {
+      editorDestroyed.value = false
       emits('created', { editor })
     })
     editor.value.on('update', ({ editor }: any) => {
@@ -643,6 +644,7 @@ const destroy = () => {
   editor.value?.destroy()
   removeAllHotkeys()
   resetStore()
+  editorDestroyed.value = true
 }
 
 // Content Saving Methods
@@ -696,8 +698,8 @@ const saveContent = async (showMessage = true) => {
   }
 }
 const getAllBookmarks = () => {
-  let bookmarkData:any = []
-  editor.value?.commands.getAllBookmarks(function (_data:any) {
+  let bookmarkData: any = []
+  editor.value?.commands.getAllBookmarks(function (_data: any) {
     bookmarkData = _data
   })
   return bookmarkData

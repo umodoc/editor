@@ -121,7 +121,6 @@ export const useStore = createGlobalState(() => {
     tableOfContents.value = []
     searchReplace.value = false
     savedAt.value = null
-    editorDestroyed.value = true
   }
 
   watch(
