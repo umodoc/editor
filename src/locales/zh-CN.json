@@ -467,7 +467,7 @@
     "insert": "插入新内容",
     "select": "插入节点",
     "template": "插入模板",
-    "toogleNode": "切换节点类型",
+    "toogleNode": "切换类型",
     "common": "常用操作",
     "clearFormat": "清除格式",
     "duplicate": "复制节点",
@@ -537,7 +537,8 @@
     "delete": "删除结果",
     "error": {
       "title": "错误提示",
-      "message": "AI 文档助手生成结果出现错误，请重试！"
+      "message": "AI 文档助手生成结果出现错误，请重试！",
+      "confirm": "确定"
     }
   },
   "pageOptions": {

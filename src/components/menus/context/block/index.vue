@@ -93,7 +93,7 @@ onUnmounted(() => {
     }
     .umo-dropdown__item {
       padding: 2px 0;
-      min-width: 180px !important;
+      min-width: 140px !important;
       .umo-menu-button {
         background-color: transparent;
         padding: 0 15px;
