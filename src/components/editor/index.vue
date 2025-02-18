@@ -17,11 +17,7 @@
   />
   <template
     v-if="
-      editor &&
-      !editorDestroyed &&
-      !page.preview?.enabled &&
-      !editorDestroyed &&
-      editor.isEditable
+      editor && !editorDestroyed && !page.preview?.enabled && editor.isEditable
     "
   >
     <menus-context-block v-if="options.document?.enableBlockMenu" />
