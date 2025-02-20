@@ -18,7 +18,18 @@
       }"
     >
       <div
-        v-if="node.attrs.src && isLoading"
+        v-if="options?.document?.lazyImage && !node.attrs.loaded"
+        class="loading"
+        :style="{
+          height: `${node.attrs.height}px`,
+          width: `${node.attrs.width}px`,
+        }"
+      >
+        <icon name="loading" class="loading-icon" />
+        {{ t('node.image.loading') }}
+      </div>
+      <div
+        v-else-if="node.attrs.src && isLoading"
         class="loading"
         :style="{ height: `${node.attrs.height}px` }"
       >
@@ -59,7 +70,11 @@
       >
         <img
           ref="imageRef"
-          :src="node.attrs.src"
+          :src="
+            options?.document?.lazyImage && !node.attrs.loaded
+              ? ''
+              : node.attrs.src
+          "
           :style="{
             transform:
               node.attrs.flipX || node.attrs.flipY
@@ -137,6 +152,7 @@ const onLoad = async () => {
     const { height } = imageRef?.getBoundingClientRect() ?? {}
     updateAttributes({ height: height.toFixed(2) })
   }
+  updateAttributes({ loaded: true })
 }
 
 const onRotate = ({ angle }: { angle: number }) => {
@@ -161,6 +177,28 @@ const openImageViewer = () => {
   imageViewer.value.visible = true
   imageViewer.value.current = node.attrs.id
 }
+let observer: IntersectionObserver | null = null
+onMounted(() => {
+  if (options.value?.document?.lazyImage && !node.attrs.loaded) {
+    observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          // 元素进入可视区域，设置一个定时器，确保停留 0.3 秒以上
+          setTimeout(() => {
+            if (entry.isIntersecting && !node.attrs.loaded) {
+              // 元素仍然在可视区域，并且图片还没有加载过，开始加载图片
+              updateAttributes({ src: node.attrs.src, loaded: true })
+              observer?.unobserve(entry.target)
+            }
+          }, 300)
+        }
+      })
+    })
+    if (containerRef.value) {
+      observer.observe(containerRef.value.$el)
+    }
+  }
+})
 
 watch(
   () => node.attrs.equalProportion,

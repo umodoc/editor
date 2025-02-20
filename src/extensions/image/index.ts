@@ -76,6 +76,10 @@ export default Image.extend({
       previewType: {
         default: 'image',
       },
+      // 新增属性，标记图片是否已经加载过
+      loaded: {
+        default: false,
+      },
     }
   },
   parseHTML() {
@@ -95,12 +99,18 @@ export default Image.extend({
           if (replace) {
             return commands.insertContent({
               type: this.name,
-              attrs: options,
+              attrs: {
+                ...options, // 初始化时标记为未加载
+                loaded: false,
+              },
             })
           }
           return commands.insertContentAt(editor.state.selection.anchor, {
             type: this.name,
-            attrs: options,
+            attrs: {
+              ...options, // 初始化时标记为未加载
+              loaded: false,
+            },
           })
         },
     }

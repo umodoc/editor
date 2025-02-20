@@ -414,6 +414,7 @@ const defaultOptions: UmoEditorOptions = {
       enabled: true,
       interval: 300000,
     },
+    lazyImage: false, //图片懒加载
   },
   assistant: {
     enabled: false,
@@ -1003,6 +1004,11 @@ const ojbectSchema = new ObjectSchema({
             required: false,
           },
         },
+      },
+      lazyImage: {
+        merge: 'replace',
+        validate: 'boolean',
+        required: false,
       },
     },
   },
