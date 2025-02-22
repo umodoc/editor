@@ -57,131 +57,133 @@ import TextBox from './text-box'
 import Toc from './toc'
 import Video from './video'
 
-const { options, container, page, tableOfContents } = useStore()
+export const getDefaultExtensions = ({
+  container,
+  options,
+}: {
+  container: string
+  options: any
+}) => {
+  const { dicts, document: doc, file } = options.value
+  return [
+    StarterKit.configure({
+      bold: false,
+      bulletList: false,
+      orderedList: false,
+      codeBlock: false,
+      horizontalRule: false,
+      dropcursor: false,
+    }),
+    Placeholder.configure({
+      placeholder: () => String(l(options.value.document.placeholder)),
+    }),
+    Focus.configure({
+      className: 'umo-node-focused',
+      mode: 'all',
+    }),
+    FormatPainter,
+    FontFamily,
+    FontSize,
+    Bold.extend({
+      renderHTML: ({ HTMLAttributes }) => ['b', HTMLAttributes, 0],
+    }),
+    Underline,
+    Subscript,
+    Superscript,
+    Color,
+    TextColor,
+    Highlight.configure({
+      multicolor: true,
+    }),
+    Indent,
+    BulletList,
+    OrderedList,
+    TextAlign,
+    NodeAlign,
+    TaskItem.configure({ nested: true }),
+    TaskList.configure({
+      HTMLAttributes: {
+        class: 'umo-task-list',
+      },
+    }),
+    LineHeight.configure({
+      types: ['heading', 'paragraph'],
+      defaultLineHeight: dicts.lineHeights.find((item: any) => item.default)
+        .value,
+    }),
+    Margin,
+    SearchReplace.configure({
+      searchResultClass: 'umo-search-result',
+    }),
+    Link,
+    Image,
+    Video,
+    Audio,
+    File,
+    TextBox,
+    CodeBlock,
+    hr,
+    Iframe,
+    Mathematics,
+    Tag,
+    Bookmark.configure({
+      class: 'umo-editor-bookmark',
+    }),
 
-const { dicts, document: doc, file } = options.value
+    // 表格
+    Table.configure({
+      allowTableNodeSelection: true,
+      resizable: true,
+    }),
+    TableRow,
+    TableHeader,
+    TableCell,
 
-export const extensions = [
-  StarterKit.configure({
-    bold: false,
-    bulletList: false,
-    orderedList: false,
-    codeBlock: false,
-    horizontalRule: false,
-    dropcursor: false,
-  }),
-  Placeholder.configure({
-    placeholder: () => String(l(options.value.document.placeholder)),
-  }),
-  Focus.configure({
-    className: 'umo-node-focused',
-    mode: 'all',
-  }),
-  FormatPainter,
-  FontFamily,
-  FontSize,
-  Bold.extend({
-    renderHTML: ({ HTMLAttributes }) => ['b', HTMLAttributes, 0],
-  }),
-  Underline,
-  Subscript,
-  Superscript,
-  Color,
-  TextColor,
-  Highlight.configure({
-    multicolor: true,
-  }),
-  Indent,
-  BulletList,
-  OrderedList,
-  TextAlign,
-  NodeAlign,
-  TaskItem.configure({ nested: true }),
-  TaskList.configure({
-    HTMLAttributes: {
-      class: 'umo-task-list',
-    },
-  }),
-  LineHeight.configure({
-    types: ['heading', 'paragraph'],
-    defaultLineHeight: dicts.lineHeights.find((item: any) => item.default)
-      .value,
-  }),
-  Margin,
-  SearchReplace.configure({
-    searchResultClass: 'umo-search-result',
-  }),
-  Link,
-  Image,
-  Video,
-  Audio,
-  File,
-  TextBox,
-  CodeBlock,
-  hr,
-  Iframe,
-  Mathematics,
-  Tag,
-  Bookmark.configure({
-    class: 'umo-editor-bookmark',
-  }),
+    // 页面
+    Toc,
+    InvisibleCharacters.configure({
+      visible: options.value.page.showBreakMarks,
+      builders: [new HardBreakNode(), new ParagraphNode(), new InvisibleNode()],
+    }),
+    PageBreak,
 
-  // 表格
-  Table.configure({
-    allowTableNodeSelection: true,
-    resizable: true,
-  }),
-  TableRow,
-  TableHeader,
-  TableCell,
+    // 其他
+    Selection,
+    TableOfContents.configure({
+      getIndex: getHierarchicalIndexes,
+      scrollParent: () =>
+        document.querySelector(
+          `${container} .umo-zoomable-container`,
+        ) as HTMLElement,
+      getId: () => shortId(6),
+    }),
+    Typography.configure(doc.typographyRules),
+    CharacterCount.configure({
+      limit: doc.characterLimit !== 0 ? doc.characterLimit : undefined,
+    }),
+    FileHandler.configure({
+      allowedMimeTypes: file.allowedMimeTypes,
+      onPaste(editor: Editor, files: any) {
+        for (const file of files) {
+          editor.commands.insertFile({ file, autoType: true })
+        }
+      },
+      onDrop: (editor: Editor, files: any, pos: number) => {
+        for (const file of files) {
+          editor.commands.insertFile({ file, autoType: true, pos })
+        }
+      },
+    }),
+    Dropcursor.configure({
+      color: 'var(--umo-primary-color)',
+    }),
+    Echarts,
+  ]
+}
 
-  // 页面
-  Toc,
-  InvisibleCharacters.configure({
-    visible: page.value.showBreakMarks,
-    builders: [new HardBreakNode(), new ParagraphNode(), new InvisibleNode()],
-  }),
-  PageBreak,
-
-  // 其他
-  Selection,
-  TableOfContents.configure({
-    getIndex: getHierarchicalIndexes,
-    onUpdate: (content) => {
-      tableOfContents.value = content
-    },
-    scrollParent: () =>
-      document.querySelector(
-        `${container} .umo-zoomable-container`,
-      ) as HTMLElement,
-    getId: () => shortId(6),
-  }),
-  Typography.configure(doc.typographyRules),
-  CharacterCount.configure({
-    limit: doc.characterLimit !== 0 ? doc.characterLimit : undefined,
-  }),
-  FileHandler.configure({
-    allowedMimeTypes: file.allowedMimeTypes,
-    onPaste(editor: Editor, files: any) {
-      for (const file of files) {
-        editor.commands.insertFile({ file, autoType: true })
-      }
-    },
-    onDrop: (editor: Editor, files: any, pos: number) => {
-      for (const file of files) {
-        editor.commands.insertFile({ file, autoType: true, pos })
-      }
-    },
-  }),
-  Dropcursor.configure({
-    color: 'var(--umo-primary-color)',
-  }),
-  Echarts,
-]
-
-export const inputAndPasteRules = () => {
+export const inputAndPasteRules = (options: any) => {
   let enableRules: boolean | Extension[] = true
-  const $document = useState('document')
+  const $document = useState('document', options)
   if (
     !options.value.document?.enableMarkdown ||
     !$document.value?.enableMarkdown

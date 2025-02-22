@@ -86,8 +86,10 @@ const props = defineProps({
 })
 const emits = defineEmits(['change'])
 
-const { editor, container, options } = useStore()
-const $recent = useState('recent')
+const container = inject('container')
+const editor = inject('editor')
+const options = inject('options')
+const $recent = useState('recent', options)
 // prettier-ignore
 const standardColors = ['#B12318', '#EB3323', '#F6C143', '#FFFE55', '#A0CD63', '#4FAD5B', '#4CAFEA', '#2D70BA', '#06215C', '#68389B']
 
@@ -99,7 +101,7 @@ const colorChange = (color: string, ctx?: { trigger: string }) => {
   if (ctx && ctx.trigger !== 'palette-saturation-brightness') {
     return
   }
-  $recent.value.colors.forEach((item, index) => {
+  $recent.value.colors.forEach((item: string, index: number) => {
     if (item === color) {
       $recent.value.colors.splice(index, 1)
     }

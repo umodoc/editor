@@ -25,7 +25,10 @@
           :text="t('blockMenu.toogleNode')"
           :tooltip="false"
         />
-        <t-dropdown-menu overlay-class-name="umo-block-menu-dropdown">
+        <t-dropdown-menu
+          overlay-class-name="umo-block-menu-dropdown"
+          placement="right"
+        >
           <t-dropdown-item>
             <menus-button
               ico="paragraph"
@@ -41,7 +44,10 @@
               :text="t('base.heading.text')"
               :tooltip="false"
             />
-            <t-dropdown-menu overlay-class-name="umo-block-menu-dropdown">
+            <t-dropdown-menu
+              overlay-class-name="umo-block-menu-dropdown"
+              placement="right"
+            >
               <t-dropdown-item
                 v-for="item in headings"
                 :key="item"
@@ -155,7 +161,9 @@ import type { Node } from '@tiptap/pm/model'
 import { getSelectionNode } from '@/extensions/selection'
 import { shortId } from '@/utils/short-id'
 
-const { container, editor, blockMenu } = useStore()
+const container = inject('container')
+const editor = inject('editor')
+const blockMenu = inject('blockMenu')
 
 let menuActive = $ref(false)
 

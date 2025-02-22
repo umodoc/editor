@@ -94,7 +94,9 @@ import prettyBytes from 'pretty-bytes'
 import { getFileExtname, getFileIcon } from '@/utils/file'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
-const { options, editor } = useStore()
+const editor = inject('editor')
+const options = inject('options')
+const container = inject('container')
 const containerRef = ref(null)
 let fileIcon = $ref('')
 
@@ -139,7 +141,7 @@ onMounted(async () => {
         updateAttributes({ id, url, file: null, uploaded: true })
       }
     } catch (e) {
-      useMessage('error', (e as Error).message)
+      useMessage('error', { attach: container, content: (e as Error).message })
     }
   }
   setPreviewURL(node.attrs.name)

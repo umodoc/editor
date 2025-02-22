@@ -28,9 +28,8 @@
 <script setup lang="ts">
 import { TextSelection } from '@tiptap/pm/state'
 
-import type { TableOfContentItem } from '@/composables/store'
-
-const { container, editor, tableOfContents } = useStore()
+const container = inject('container')
+const editor = inject('editor')
 
 defineEmits(['close'])
 
@@ -65,8 +64,8 @@ const buildTocTree = (tocArray: Record<string, any>[]): TocItem[] => {
 }
 
 watch(
-  () => tableOfContents.value,
-  (toc: TableOfContentItem[]) => {
+  () => editor.value?.storage.tableOfContents.content,
+  (toc: any[]) => {
     tocTreeData = buildTocTree(toc)
   },
   { immediate: true },

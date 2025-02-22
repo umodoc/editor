@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 const { popupVisible, togglePopup } = usePopup()
-const { editor } = useStore()
+const editor = inject('editor')
 
 const options = [
   { label: t('list.bullet.disc'), value: 'disc' },

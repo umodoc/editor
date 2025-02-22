@@ -61,7 +61,7 @@
 
 <script setup lang="ts">
 const { popupVisible, togglePopup } = usePopup()
-const { editor } = useStore()
+const editor = inject('editor')
 
 const table = Array.from({ length: 8 }, () =>
   Array.from({ length: 10 }, () => ''),

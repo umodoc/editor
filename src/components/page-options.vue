@@ -237,7 +237,9 @@ const props = defineProps({
 })
 const emits = defineEmits(['close'])
 
-const { container, options, page } = useStore()
+const container = inject('container')
+const page = inject('page')
+const options = inject('options')
 
 let pageOptions = $ref({})
 watch(

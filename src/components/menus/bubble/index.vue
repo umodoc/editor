@@ -1,19 +1,19 @@
 <template>
   <bubble-menu
-    v-show="!painter.enabled && !editor!.isEmpty"
+    v-show="!editor?.view?.painter?.enabled && !editor?.isEmpty"
     class="umo-editor-bubble-menu"
-    :class="{ assistant: assistantBox }"
+    :class="{ assistant }"
     :editor="editor!"
     :tippy-options="tippyOpitons"
   >
     <menus-bubble-menus
-      v-if="options?.document?.enableBubbleMenu && !assistantBox"
+      v-if="options?.document?.enableBubbleMenu && !assistant"
     >
       <template #bubble_menu="props">
         <slot name="bubble_menu" v-bind="props" />
       </template>
     </menus-bubble-menus>
-    <assistant-input v-if="options?.assistant?.enabled && assistantBox" />
+    <assistant-input v-if="options?.assistant?.enabled && assistant" />
   </bubble-menu>
 </template>
 
@@ -21,7 +21,9 @@
 import { BubbleMenu } from '@tiptap/vue-3'
 import type { Instance } from 'tippy.js'
 
-const { options, editor, painter, assistantBox } = useStore()
+const editor = inject('editor')
+const assistant = inject('assistant')
+const options = inject('options')
 
 // 气泡菜单
 let tippyInstance = $ref<Instance | null>(null)
@@ -33,7 +35,7 @@ const tippyOpitons = $ref<Partial<Instance>>({
     tippyInstance = instance
   },
   onHide() {
-    assistantBox.value = false
+    assistant.value = false
   },
   onDestroy() {
     tippyInstance = null
@@ -42,7 +44,7 @@ const tippyOpitons = $ref<Partial<Instance>>({
 
 // AI 助手
 watch(
-  () => [assistantBox.value],
+  () => [assistant.value],
   (visible: any[]) => {
     tippyInstance?.setProps({
       placement: visible.includes(true) ? 'bottom' : 'top',

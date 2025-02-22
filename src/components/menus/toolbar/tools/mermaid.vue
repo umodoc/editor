@@ -50,7 +50,8 @@ const props = defineProps({
 })
 
 let dialogVisible = $ref(false)
-const { editor } = useStore()
+const editor = inject('editor')
+const container = inject('container')
 
 //  初始化 Mermaid
 const mermaidInit = () => {
@@ -104,7 +105,10 @@ watch(
 // 创建或更新 Mermaid
 const setMermaid = () => {
   if (mermaidCode === '') {
-    useMessage('error', t('tools.mermaid.notEmpty'))
+    useMessage('error', {
+      attach: container,
+      content: t('tools.mermaid.notEmpty'),
+    })
     return
   }
   if (!props.content || (props.content && props.content !== mermaidCode)) {

@@ -9,11 +9,14 @@
 </template>
 
 <script setup lang="ts">
-const { editor } = useStore()
-const $toolbar = useState('toolbar')
+const container = inject('container')
+const editor = inject('editor')
+const options = inject('options')
+const $toolbar = useState('toolbar', options)
 
 const deleteRow = () => {
   const dialog = useConfirm({
+    attach: container,
     theme: 'danger',
     header: t('table.deleteRow.title'),
     body: t('table.deleteRow.message'),
@@ -23,7 +26,10 @@ const deleteRow = () => {
     },
     onConfirm() {
       editor.value?.chain().focus().deleteRow().run()
-      useMessage('success', t('table.deleteRow.success'))
+      useMessage('success', {
+        attach: container,
+        content: t('table.deleteRow.success'),
+      })
       dialog.destroy()
     },
   })

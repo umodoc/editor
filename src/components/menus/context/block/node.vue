@@ -26,7 +26,7 @@
           ico="assistant"
           :text="t('assistant.text')"
           :tooltip="false"
-          @menu-click="openAssistantBox"
+          @menu-click="openAssistant"
         />
       </t-dropdown-item>
       <t-dropdown-item class="umo-block-menu-group-name" disabled>
@@ -38,7 +38,10 @@
           :text="t('blockMenu.select')"
           :tooltip="false"
         />
-        <t-dropdown-menu overlay-class-name="umo-block-menu-dropdown">
+        <t-dropdown-menu
+          overlay-class-name="umo-block-menu-dropdown"
+          placement="right"
+        >
           <t-dropdown-item>
             <menus-button
               ico="table"
@@ -148,7 +151,10 @@
           :text="t('blockMenu.template')"
           :tooltip="false"
         />
-        <t-dropdown-menu overlay-class-name="umo-block-menu-dropdown">
+        <t-dropdown-menu
+          overlay-class-name="umo-block-menu-dropdown"
+          placement="right"
+        >
           <t-dropdown-item
             v-for="item in options.templates"
             :key="item.value"
@@ -167,7 +173,11 @@
 <script setup lang="ts">
 import type { Template } from '@/types'
 
-const { container, options, editor, blockMenu, assistantBox } = useStore()
+const container = inject('container')
+const editor = inject('editor')
+const blockMenu = inject('blockMenu')
+const assistant = inject('assistant')
+const options = inject('options')
 
 let menuActive = $ref(false)
 const popupProps = {
@@ -182,8 +192,8 @@ const disableItem = (name: string) => {
   return options.value.toolbar?.disableMenuItems.includes(name)
 }
 
-const openAssistantBox = () => {
-  assistantBox.value = true
+const openAssistant = () => {
+  assistant.value = true
   editor.value?.commands.selectParentNode()
   editor.value?.commands.focus()
   const { from, to } = editor.value?.state.selection ?? {}

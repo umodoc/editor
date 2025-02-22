@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-const { editor } = useStore()
+const editor = inject('editor')
 let value = $ref('')
 
 const setValue = () => {

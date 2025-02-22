@@ -27,7 +27,8 @@
 </template>
 
 <script setup lang="ts">
-const { options } = useStore()
+const options = inject('options')
+const container = inject('container')
 let dialogVisible = $ref(false)
 
 const embedValue = computed(() => {
@@ -37,7 +38,10 @@ const embedValue = computed(() => {
 const copyEmbed = () => {
   const { copy } = useClipboard({ source: embedValue })
   void copy()
-  useMessage('success', t('export.embed.copied'))
+  useMessage('success', {
+    attach: container,
+    content: t('export.embed.copied'),
+  })
   dialogVisible = false
 }
 </script>

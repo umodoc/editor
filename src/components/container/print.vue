@@ -3,7 +3,12 @@
 </template>
 
 <script setup lang="ts">
-const { container, options, editor, page, printing, exportPDF } = useStore()
+const container = inject('container')
+const editor = inject('editor')
+const printing = inject('printing')
+const exportFile = inject('exportFile')
+const page = inject('page')
+const options = inject('options')
 
 const iframeRef = $ref<HTMLIFrameElement | null>(null)
 let iframeCode = $ref('')
@@ -128,6 +133,7 @@ const printPage = () => {
   iframeCode = getIframeCode()
 
   const dialog = useConfirm({
+    attach: container,
     theme: 'info',
     header: printing.value ? t('print.title') : t('export.pdf.title'),
     body: printing.value ? t('print.message') : t('export.pdf.message'),
@@ -140,13 +146,13 @@ const printPage = () => {
     },
     onClosed() {
       printing.value = false
-      exportPDF.value = false
+      exportFile.value.pdf = false
     },
   })
 }
 
 watch(
-  () => [printing.value, exportPDF.value],
+  () => [printing.value, exportFile.value.pdf],
   (value: [boolean, boolean]) => {
     if (!value[0] && !value[1]) {
       return

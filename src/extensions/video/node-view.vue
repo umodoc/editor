@@ -44,7 +44,8 @@ import Drager from 'es-drager'
 import { mediaPlayer } from '@/utils/player'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
-const { options, editor } = useStore()
+const options = inject('options')
+const container = inject('container')
 
 const containerRef = ref(null)
 let selected = $ref(false)
@@ -77,7 +78,10 @@ onMounted(async () => {
         updateAttributes({ id, src: url, file: null, uploaded: true })
       }
     } catch (error) {
-      useMessage('error', (error as Error).message)
+      useMessage('error', {
+        attach: container,
+        content: (error as Error).message,
+      })
     }
   }
 })

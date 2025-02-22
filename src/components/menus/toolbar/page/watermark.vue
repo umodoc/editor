@@ -112,7 +112,8 @@
 <script setup lang="ts">
 const { popupVisible, togglePopup } = usePopup()
 
-const { options, page } = useStore()
+const page = inject('page')
+const options = inject('options')
 
 const fonts = options.value.dicts?.fonts.map((item: any) => {
   return {

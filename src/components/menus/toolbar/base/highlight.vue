@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-const { editor } = useStore()
+const editor = inject('editor')
 
 interface HighlightOption {
   label: string

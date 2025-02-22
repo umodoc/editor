@@ -19,7 +19,8 @@ import { removeBackground } from '@imgly/background-removal'
 import { getSelectionNode } from '@/extensions/selection'
 import { shortId } from '@/utils/short-id'
 
-const { options, editor } = useStore()
+const editor = inject('editor')
+const options = inject('options')
 
 let converting = $ref(false)
 const removeBg = async () => {

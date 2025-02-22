@@ -111,10 +111,10 @@
                 {{ t('wordCount.selection') }}
                 <span>{{ selectionCharacters }}</span>
               </li>
-              <li v-if="options.document?.characterLimit ?? 0 > 0">
+              <li v-if="options.document?.characterLimit > 0">
                 {{ t('wordCount.limit') }}
                 <span>
-                  {{ options.document?.characterLimit ?? 0 }}
+                  {{ options.document?.characterLimit }}
                 </span>
               </li>
             </ul>
@@ -312,9 +312,11 @@ import type { SupportedLocale } from '@/types'
 import { getShortcut } from '@/utils/shortcut'
 
 const { locale } = useI18n()
-
-const { container, options, page, editor } = useStore()
-const $document = useState('document')
+const container = inject('container')
+const editor = inject('editor')
+const page = inject('page')
+const options = inject('options')
+const $document = useState('document', options)
 
 // 快捷键抽屉
 const showShortcut = $ref(false)
@@ -340,7 +342,6 @@ const selectionCharacters = computed(() => {
 let fullscreen: UseFullscreenReturn = $ref(null)
 onMounted(() => {
   fullscreen = useFullscreen(document.querySelector(container))
-  useHotkeys('f11, command+f11', fullscreen.toggle)
 })
 
 // 演示模式
@@ -362,9 +363,6 @@ const exitPreview = () => {
     page.value.preview.enabled = false
   }
 }
-onMounted(() => {
-  useHotkeys('f5', togglePreview)
-})
 
 // 演示模式倒计时
 const countdownSetting = $ref(false)
@@ -411,9 +409,6 @@ const zoomReset = () => {
   page.value.zoomLevel = 100
   page.value.autoWidth = false
 }
-useHotkeys('ctrl+-,command+-', zoomOut)
-useHotkeys('ctrl+=,command+=', zoomIn)
-useHotkeys('ctrl+1,command+1', zoomReset)
 
 // 最佳宽度
 const autoWidth = (auto = true, padding = 50) => {
@@ -435,11 +430,13 @@ const autoWidth = (auto = true, padding = 50) => {
     page.value.autoWidth = true
   } catch (e) {
     page.value.autoWidth = false
-    useMessage('error', t('zoom.autoWidthError'))
+    useMessage('error', {
+      attach: container,
+      content: t('zoom.autoWidthError'),
+    })
     console.warn('Page auto width calculation error', e)
   }
 }
-useHotkeys('Ctrl+0,command+0', autoWidth)
 
 watch(
   () => page.value.showToc,
@@ -467,6 +464,7 @@ const changeLang = (dropdownItem: DropdownOption) => {
     return
   }
   const dialog = useConfirm({
+    attach: container,
     theme: 'warning',
     header: t('changeLocale.title'),
     body: t('changeLocale.message'),
@@ -486,6 +484,22 @@ const toggleSpellcheck = () => {
     $document.value.enableSpellcheck = !$document.value.enableSpellcheck
   }
 }
+
+// 快捷键
+watch(
+  () => editor.value,
+  () => {
+    editor.value?.on('focus', () => {
+      useHotkeys('f5', togglePreview)
+      useHotkeys('f11, command+f11', fullscreen.toggle)
+      useHotkeys('Ctrl+0,command+0', autoWidth)
+      useHotkeys('ctrl+-,command+-', zoomOut)
+      useHotkeys('ctrl+=,command+=', zoomIn)
+      useHotkeys('ctrl+1,command+1', zoomReset)
+    })
+  },
+  { immediate: true },
+)
 </script>
 
 <style lang="less" scoped>

@@ -45,7 +45,7 @@ import Drager from 'es-drager'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 
-const { options } = useStore()
+const options = inject('options')
 
 const containerRef = ref(null)
 const contentRef = $ref(null)

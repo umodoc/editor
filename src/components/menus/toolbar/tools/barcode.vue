@@ -233,7 +233,9 @@ const { content } = defineProps({
 const { popupVisible, togglePopup } = usePopup()
 
 let dialogVisible = $ref(false)
-const { container, options, editor } = useStore()
+const container = inject('container')
+const editor = inject('editor')
+const options = inject('options')
 
 // 工具栏
 const formats = [
@@ -337,11 +339,17 @@ watch(
 // 创建或更新条形码
 const setBarcode = () => {
   if (renderError) {
-    useMessage('error', t('tools.barcode.renderError'))
+    useMessage('error', {
+      attach: container,
+      content: t('tools.barcode.renderError'),
+    })
     return
   }
   if (config.content === '') {
-    useMessage('error', t('tools.barcode.notEmpty'))
+    useMessage('error', {
+      attach: container,
+      content: t('tools.barcode.notEmpty'),
+    })
     return
   }
   const name = `barcode-${shortId()}.svg`

@@ -33,7 +33,8 @@
 </template>
 
 <script setup lang="ts">
-const { options, editor } = useStore()
+const editor = inject('editor')
+const options = inject('options')
 
 const setTemplate = ({ content }: { content: string }) => {
   if (!content || !editor.value) {

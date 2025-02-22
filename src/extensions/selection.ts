@@ -65,9 +65,9 @@ export default Extension.create({
               editor.isActive('audio') ||
               editor.isActive('file')
             ) {
-              const { options } = useStore()
+              const { options } = editor.storage
               const { id, src } = node.attrs
-              options.value.onFileDelete?.(id, src)
+              options.onFileDelete?.(id, src)
             }
             if (editor.isActive('textBox')) {
               return chain().focus().deleteNode('textBox').run()

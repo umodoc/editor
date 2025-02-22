@@ -18,7 +18,7 @@
         <t-button
           class="umo-menu-button"
           :class="{
-            huge: huge && $toolbar.mode === 'ribbon',
+            huge: (huge && $toolbar.mode === 'ribbon') || forceHuge,
             'show-text': !hideText,
             active: menuActive && editor?.isEditable !== false,
           }"
@@ -32,7 +32,11 @@
           <div class="umo-button-content">
             <slot />
             <template v-if="ico">
-              <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
+              <span
+                v-if="ico?.startsWith('<')"
+                class="umo-button-icon-svg"
+                v-html="ico"
+              >
               </span>
               <icon v-else class="umo-button-icon" :name="ico" />
             </template>
@@ -48,7 +52,7 @@
           <t-button
             class="umo-menu-button has-arrow"
             :class="{
-              huge: huge && $toolbar.mode === 'ribbon',
+              huge: (huge && $toolbar.mode === 'ribbon') || forceHuge,
               'show-text': !hideText,
               active: tooltipForceHide,
             }"
@@ -60,7 +64,11 @@
             <div class="umo-button-content" @click="menuClick">
               <slot />
               <template v-if="ico">
-                <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
+                <span
+                  v-if="ico?.startsWith('<')"
+                  class="umo-button-icon-svg"
+                  v-html="ico"
+                >
                 </span>
                 <icon v-else class="umo-button-icon" :name="ico" />
               </template>
@@ -115,7 +123,7 @@
             <t-button
               class="umo-menu-button has-arrow"
               :class="{
-                huge: huge && $toolbar.mode === 'ribbon',
+                huge: (huge && $toolbar.mode === 'ribbon') || forceHuge,
                 'show-text': !hideText,
                 active: tooltipForceHide,
               }"
@@ -129,7 +137,7 @@
                 <template v-if="ico">
                   <span
                     v-if="ico?.startsWith('<')"
-                    class="icon-svg"
+                    class="umo-button-icon-svg"
                     v-html="ico"
                   >
                   </span>
@@ -191,7 +199,11 @@
             <div class="umo-button-content" @click="menuClick">
               <slot />
               <template v-if="ico">
-                <span v-if="ico?.startsWith('<')" class="icon-svg" v-html="ico">
+                <span
+                  v-if="ico?.startsWith('<')"
+                  class="umo-button-icon-svg"
+                  v-html="ico"
+                >
                 </span>
                 <icon v-else class="umo-button-icon" :name="ico" />
               </template>
@@ -245,7 +257,7 @@
               ref="popupHandleRef"
               class="umo-menu-button has-arrow"
               :class="{
-                huge: huge && $toolbar.mode === 'ribbon',
+                huge: (huge && $toolbar.mode === 'ribbon') || forceHuge,
                 'show-text': !hideText,
                 active: popupVisible,
               }"
@@ -260,7 +272,7 @@
                 <template v-if="ico">
                   <span
                     v-if="ico?.startsWith('<')"
-                    class="icon-svg"
+                    class="umo-button-icon-svg"
                     v-html="ico"
                   >
                   </span>
@@ -313,6 +325,11 @@ const props = defineProps({
   },
   // 是否为大按钮
   huge: {
+    type: Boolean,
+    default: false,
+  },
+  // 是否强制为大按钮，用于测试，不建议使用
+  forceHuge: {
     type: Boolean,
     default: false,
   },
@@ -375,8 +392,10 @@ const props = defineProps({
 const emits = defineEmits(['toggle-popup'])
 
 const attrs = useAttrs()
-const { container, editor } = useStore()
-const $toolbar = useState('toolbar')
+const container = inject('container')
+const editor = inject('editor')
+const options = inject('options')
+const $toolbar = useState('toolbar', options)
 const menuClick = (...args: any[]) => {
   if (attrs.onMenuClickThrough) {
     ;(attrs.onMenuClickThrough as (...args: any[]) => void)(...args)

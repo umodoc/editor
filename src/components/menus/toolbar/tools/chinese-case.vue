@@ -30,7 +30,8 @@ import nzh from 'nzh/cn'
 
 import { getSelectionText } from '@/extensions/selection'
 
-const { editor } = useStore()
+const editor = inject('editor')
+const container = inject('container')
 
 const options: {
   label: string
@@ -112,7 +113,10 @@ const setChineseCase = (func: (text: string) => string) => {
   try {
     content = func(selectionText)
   } catch {
-    useMessage('error', '大小写转化失败，请检查当前选中的文本。')
+    useMessage('error', {
+      attach: container,
+      content: '大小写转化失败，请检查当前选中的文本。',
+    })
   }
   if (!content) {
     throw new Error('转换失败')

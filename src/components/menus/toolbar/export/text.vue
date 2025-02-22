@@ -10,7 +10,8 @@
 <script setup lang="ts">
 import { saveAs } from 'file-saver'
 
-const { options, editor } = useStore()
+const editor = inject('editor')
+const options = inject('options')
 
 const saveTextFile = () => {
   if (!editor.value) {

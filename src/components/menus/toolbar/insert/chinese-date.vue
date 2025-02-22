@@ -60,7 +60,7 @@ const options = [
   { content: formatDateToChinese(formDate('YYYY年M月D日 dddd')) },
 ]
 
-const { editor } = useStore()
+const editor = inject('editor')
 
 const setDate = ({ content }: { content: string }) => {
   if (!content) {

@@ -34,7 +34,9 @@ const props = defineProps({
   },
 })
 
-const { container, options, editor } = useStore()
+const container = inject('container')
+const editor = inject('editor')
+const options = inject('options')
 
 let dialogVisible = $ref(false)
 let loading = $ref(false)

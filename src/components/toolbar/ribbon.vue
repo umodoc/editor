@@ -248,7 +248,7 @@ const props = defineProps<{
 }>()
 const emits = defineEmits(['menu-change'])
 
-const { options } = useStore()
+const options = inject('options')
 const disableItem = (name: string) => {
   return options.value.toolbar?.disableMenuItems.includes(name)
 }

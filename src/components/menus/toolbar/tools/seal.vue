@@ -34,7 +34,9 @@ import { removeBackground } from '@imgly/background-removal'
 const hasRemoveBackgroundFunction = typeof removeBackground === 'function'
 
 let dialogVisible = $ref(false)
-const { options, editor } = useStore()
+const editor = inject('editor')
+const options = inject('options')
+const container = inject('container')
 
 let sealImg = $ref<string | null>(null)
 let sealFile = $ref<File | null>(null)
@@ -76,7 +78,10 @@ const selectImage = () => {
       sealImg = URL.createObjectURL(img)
       sealFile = img
     } catch {
-      useMessage('error', t('tools.seal.convertError'))
+      useMessage('error', {
+        attach: container,
+        content: t('tools.seal.convertError'),
+      })
       sealImg = null
       sealFile = null
     } finally {
@@ -87,7 +92,10 @@ const selectImage = () => {
 
 const setSeal = () => {
   if (!sealImg) {
-    useMessage('error', t('tools.seal.notEmpty'))
+    useMessage('error', {
+      attach: container,
+      content: t('tools.seal.notEmpty'),
+    })
     return
   }
   editor.value

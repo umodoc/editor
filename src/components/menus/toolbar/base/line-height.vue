@@ -10,7 +10,8 @@
 </template>
 
 <script setup lang="ts">
-const { options, editor } = useStore()
+const editor = inject('editor')
+const options = inject('options')
 
 const lineHeights = computed(() => {
   return options.value.dicts?.lineHeights.map((item: any) => {

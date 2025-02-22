@@ -78,7 +78,8 @@
 import { getSelectionNode } from '@/extensions/selection'
 
 const { popupVisible, togglePopup } = usePopup()
-const { container, editor } = useStore()
+const container = inject('container')
+const editor = inject('editor')
 
 const styles = [
   { style: 'solid', width: 1 },

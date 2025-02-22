@@ -34,7 +34,8 @@
 <script setup lang="ts">
 import { getShortcut } from '@/utils/shortcut'
 
-const $document = useState('document')
+const options = inject('options')
+const $document = useState('document', options)
 
 const shortcuts = $ref<
   {

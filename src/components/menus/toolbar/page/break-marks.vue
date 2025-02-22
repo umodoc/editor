@@ -9,7 +9,8 @@
 </template>
 
 <script setup lang="ts">
-const { page, editor } = useStore()
+const editor = inject('editor')
+const page = inject('page')
 
 const toggleInvisibleCharacters = () => {
   page.value.showBreakMarks = !page.value.showBreakMarks

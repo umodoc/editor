@@ -18,5 +18,5 @@ defineProps({
     required: true,
   },
 })
-const { container } = useStore()
+const container = inject('container')
 </script>

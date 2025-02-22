@@ -138,8 +138,12 @@ import type { DropdownOption } from 'tdesign-vue-next'
 
 import { timeAgo } from '@/utils/time-ago'
 const emits = defineEmits(['menu-change'])
-const { container, options, editor, savedAt } = useStore()
-const $toolbar = useState('toolbar')
+
+const container = inject('container')
+const editor = inject('editor')
+const savedAt = inject('savedAt')
+const options = inject('options')
+const $toolbar = useState('toolbar', options)
 let statusPopup = $ref(false)
 const online = useOnline()
 
@@ -228,10 +232,11 @@ const saveContent = () => {
 
 // 从缓存中恢复文档
 const setContentFromCache = () => {
-  const document = useState('document')
+  const document = useState('document', options)
   const { content } = document.value
   if (!content || content === '' || content === '<p></p>') {
     const dialog = useAlert({
+      attach: container,
       theme: 'info',
       header: t('save.cache.error.title'),
       body: t('save.cache.error.message'),

@@ -49,7 +49,7 @@
 import { getSelectionText } from '@/extensions/selection'
 
 const { popupVisible, togglePopup } = usePopup()
-const { editor } = useStore()
+const editor = inject('editor')
 
 let text = $ref('')
 let href = $ref('')

@@ -67,7 +67,7 @@ import { matchTags } from 'prism-code-editor/match-tags'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 
-const { options } = useStore()
+const options = inject('options')
 
 const containerRef = $ref(null)
 
@@ -103,7 +103,7 @@ onBeforeUnmount(() => {
 watch(
   () => options.value.document?.readOnly,
   (val: boolean) => {
-    codeEditor?.setOptions({
+    codeEditor?.useOptions({
       readOnly: val,
     })
   },
@@ -111,7 +111,7 @@ watch(
 watch(
   () => [node.attrs.language, node.attrs.lineNumbers, node.attrs.wordWrap],
   () => {
-    codeEditor?.setOptions(node.attrs)
+    codeEditor?.useOptions(node.attrs)
   },
 )
 </script>

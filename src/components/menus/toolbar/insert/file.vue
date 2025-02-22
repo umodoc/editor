@@ -3,10 +3,11 @@
     ico="file"
     :text="t('insert.file')"
     huge
-    @menu-click="editor?.chain().focus().selectFiles('file').run()"
+    @menu-click="editor?.chain().focus().selectFiles('file', container).run()"
   />
 </template>
 
 <script setup lang="ts">
-const { editor } = useStore()
+const container = inject('container')
+const editor = inject('editor')
 </script>

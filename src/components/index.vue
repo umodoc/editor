@@ -1,5 +1,6 @@
 <template>
   <t-config-provider
+    :key="options.editorKey"
     :global-config="{
       ...localeConfig[locale],
       classPrefix: 'umo',
@@ -55,13 +56,18 @@ import {
   isString,
 } from '@tool-belt/type-predicates'
 import domToImage from 'dom-to-image-more'
-import type { GlobalConfigProvider } from 'tdesign-vue-next'
+import type {
+  DialogOptions,
+  GlobalConfigProvider,
+  MessageOptions,
+} from 'tdesign-vue-next'
 import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
 
 import { getSelectionNode, getSelectionText } from '@/extensions/selection'
 import { i18n } from '@/i18n'
 import { propsOptions } from '@/options'
+import type { PageOption, UmoEditorOptions } from '@/types'
 import type {
   AutoSaveOptions,
   DocumentOptions,
@@ -69,6 +75,8 @@ import type {
   WatermarkOption,
 } from '@/types'
 import { consoleCopyright } from '@/utils/copyright'
+import { getOpitons } from '@/utils/options'
+import { shortId } from '@/utils/short-id'
 
 import ruConfig from '../locales/tdesign/ru-RU'
 
@@ -105,26 +113,90 @@ const emits = defineEmits([
   'menuChange',
 ])
 
-// Store Setup
-const {
-  container,
-  toolbarKey,
-  options,
-  page,
-  tableOfContents,
-  savedAt,
-  editorDestroyed,
-  editor,
-  setOptions,
-  printing,
-  resetStore,
-} = useStore()
+// state Setup
+const container = $ref(`#umo-editor-${shortId(4)}`)
+const defaultOptions = inject('defaultOptions', {})
+const options = ref(getOpitons(props, defaultOptions))
+const editor = ref(null)
+const savedAt = ref(null)
+const page = ref({})
+const blockMenu = ref(false)
+const assistant = ref(false)
+const imageViewer = ref({ visible: false, current: null })
+const searchReplace = ref(false)
+const printing = ref(false)
+const exportFile = ref({ pdf: false, image: false })
+const bookmark = ref(false)
+const destroyed = ref(false)
+provide('container', container)
+provide('options', options)
+provide('editor', editor)
+provide('savedAt', savedAt)
+provide('page', page)
+provide('blockMenu', blockMenu)
+provide('assistant', assistant)
+provide('imageViewer', imageViewer)
+provide('searchReplace', searchReplace)
+provide('printing', printing)
+provide('exportFile', exportFile)
+provide('bookmark', bookmark)
+provide('destroyed', destroyed)
 
-const $toolbar = useState('toolbar', props.editorKey)
-const $document = useState('document', props.editorKey)
+watch(
+  () => options.value.page,
+  ({
+    defaultBackground,
+    defaultMargin,
+    defaultOrientation,
+    watermark,
+    showBreakMarks,
+  }: PageOption) => {
+    page.value = {
+      size: options.value.dicts?.pageSizes.find(
+        (item: { default: boolean }) => item.default,
+      ),
+      margin: defaultMargin,
+      background: defaultBackground,
+      orientation: defaultOrientation,
+      watermark,
+      showBreakMarks,
+      showLineNumber: false,
+      showToc: false,
+      zoomLevel: 100,
+      autoWidth: false,
+      preview: {
+        enabled: false,
+        scale: 1,
+        zoom: 100,
+      },
+    }
+    if (showBreakMarks) {
+      editor.value?.commands.showInvisibleCharacters()
+    } else {
+      editor.value?.commands.hideInvisibleCharacters()
+    }
+  },
+  { immediate: true, deep: true },
+)
+watch(
+  () => options.value.document?.readOnly,
+  (val: boolean) => {
+    editor.value?.setEditable(!val)
+  },
+)
+
+const $toolbar = useState('toolbar', options)
+const $document = useState('document', options)
+
+let toolbarKey = $ref(shortId())
+watch(
+  () => options.value.document?.readOnly,
+  () => {
+    toolbarKey = shortId()
+  },
+)
 
 // Lifecycle Hooks
-onBeforeMount(() => setOptions(props))
 onMounted(() => {
   setTheme(options.value.theme)
   setTimeout(consoleCopyright)
@@ -145,6 +217,13 @@ watch(
   () => options.value.theme,
   (theme: 'light' | 'dark' | 'auto') => {
     setTheme(theme)
+  },
+)
+
+watch(
+  () => options.value.document,
+  (val: any) => {
+    $document.value = val
   },
 )
 
@@ -191,7 +270,7 @@ watch(
       return
     }
     editor.value.on('create', ({ editor }: any) => {
-      editorDestroyed.value = false
+      destroyed.value = false
       emits('created', { editor })
     })
     editor.value.on('update', ({ editor }: any) => {
@@ -217,7 +296,6 @@ watch(
       emits('blur', { editor, event })
     })
     editor.value.on('destroy', () => {
-      resetStore()
       emits('destroy')
     })
   },
@@ -300,14 +378,22 @@ watch(
 
 // i18n Setup
 // @ts-ignore
-const { t, locale } = useI18n()
-const $locale = useState('locale')
+const { t, locale, mergeLocaleMessage } = useI18n()
+const $locale = useStorage('umo-editor:locale', options.value.locale)
+locale.value = $locale.value
+const getLocaleMessage = (lang: SupportedLocale) => {
+  const translations = options.value.translations?.[lang.replaceAll('-', '_')]
+  if (isRecord(translations)) {
+    return translations
+  }
+  return {}
+}
+mergeLocaleMessage(locale.value, getLocaleMessage(locale.value))
 const { appContext } = getCurrentInstance() ?? {}
 if (appContext) {
   appContext.config.globalProperties.t = t
   appContext.config.globalProperties.l = l
 }
-locale.value = $locale.value
 watch(
   () => locale.value,
   (locale: any, oldLocale: any) => {
@@ -321,6 +407,16 @@ const localeConfig = $ref<Record<string, GlobalConfigProvider>>({
   'en-US': enConfig as unknown as GlobalConfigProvider,
   'ru-RU': ruConfig as unknown as GlobalConfigProvider,
 })
+
+// Options Setup
+const setOptions = (value: UmoEditorOptions) => {
+  options.value = getOpitons(value)
+  const $locale = useStorage('umo-editor:locale', options.value.locale)
+  if (!$locale.value) {
+    $locale.value = options.value.locale
+  }
+  return options.value
+}
 
 // Theme Setup
 const setTheme = (theme: 'light' | 'dark' | 'auto') => {
@@ -564,7 +660,6 @@ const setLocale = (params: SupportedLocale) => {
   if (locale.value === params) {
     return
   }
-  const $locale = useState('locale')
   $locale.value = params
   location.reload()
 }
@@ -626,6 +721,7 @@ const reset = (silent: boolean) => {
     return
   }
   const dialog = useConfirm({
+    attach: container,
     theme: 'warning',
     header: t('resetAll.title'),
     body: t('resetAll.message'),
@@ -643,8 +739,7 @@ const reset = (silent: boolean) => {
 const destroy = () => {
   editor.value?.destroy()
   removeAllHotkeys()
-  resetStore()
-  editorDestroyed.value = true
+  destroyed.value = true
 }
 
 // Content Saving Methods
@@ -653,7 +748,8 @@ const saveContent = async (showMessage = true) => {
     return
   }
   try {
-    const message = await useMessage('loading', {
+    useMessage('loading', {
+      attach: container,
       content: t('save.saving'),
       placement: 'bottom',
       closeBtn: true,
@@ -665,12 +761,13 @@ const saveContent = async (showMessage = true) => {
         json: editor.value?.getJSON(),
         text: editor.value?.getText(),
       },
-      page.value,
+      page.value.value,
       $document.value,
     )
     if (!success) {
       MessagePlugin.closeAll()
       useMessage('error', {
+        attach: container,
         content: t('save.failed'),
         placement: 'bottom',
         offset: [0, -20],
@@ -681,6 +778,7 @@ const saveContent = async (showMessage = true) => {
     if (showMessage) {
       MessagePlugin.closeAll()
       useMessage('success', {
+        attach: container,
         content: t('save.success'),
         placement: 'bottom',
         offset: [0, -20],
@@ -690,6 +788,7 @@ const saveContent = async (showMessage = true) => {
     savedAt.value = time.value
   } catch (e) {
     useMessage('error', {
+      attach: container,
       content: t('save.error'),
       placement: 'bottom',
       offset: [0, -20],
@@ -754,26 +853,39 @@ const getContentExcerpt = (charLimit = 100, more = ' ...') => {
 watch(
   () => $toolbar.value.mode,
   (val: any) => {
-    editorDestroyed.value = val === 'source'
+    destroyed.value = val === 'source'
   },
 )
 
 // Hotkeys Setup
-const unsetFormatPainter = () => editor.value?.commands.unsetFormatPainter()
-useHotkeys('ctrl+s,command+s', () => {
-  void saveContent()
-  unsetFormatPainter()
-})
-useHotkeys('ctrl+p,command+p', () => {
-  print()
-  unsetFormatPainter()
-})
-useHotkeys('esc', () => {
-  if (page.value.preview) {
-    page.value.preview.enabled = false
-  }
-  unsetFormatPainter()
-})
+watch(
+  () => editor.value,
+  () => {
+    const unsetFormatPainter = () => editor.value?.commands.unsetFormatPainter()
+    editor.value?.on('focus', () => {
+      useHotkeys('ctrl+s,command+s', () => {
+        void saveContent()
+        unsetFormatPainter()
+      })
+      useHotkeys('ctrl+p,command+p', () => {
+        print()
+        unsetFormatPainter()
+      })
+      useHotkeys('esc', () => {
+        if (page.value.preview) {
+          page.value.preview.enabled = false
+        }
+        unsetFormatPainter()
+      })
+      useHotkeys('ctrl+f, command+f', () => {
+        searchReplace.value = true
+      })
+    })
+    editor.value?.on('blur', () => {
+      removeAllHotkeys()
+    })
+  },
+)
 
 // Methods Exposed to Descendants
 provide('saveContent', saveContent)
@@ -801,7 +913,7 @@ defineExpose({
   getContentExcerpt,
   getEditor: () => editor,
   useEditor: () => editor.value,
-  getTableOfContents: () => tableOfContents.value,
+  getTableOfContents: () => editor.value?.storage.tableOfContents.content,
   getSelectionText: () => (editor.value ? getSelectionText(editor.value) : ''),
   getSelectionNode: () =>
     editor.value ? getSelectionNode(editor.value) : null,
@@ -819,9 +931,15 @@ defineExpose({
   focus,
   blur,
   reset,
-  useAlert,
-  useConfirm,
-  useMessage,
+  useAlert(pramas: DialogOptions) {
+    return useAlert({ attach: container, ...pramas })
+  },
+  useConfirm(pramas: DialogOptions) {
+    return useConfirm({ attach: container, ...pramas })
+  },
+  useMessage(type: string, pramas: MessageOptions) {
+    return useMessage(type, { attach: container, ...pramas })
+  },
   destroy,
   focusBookmark,
   getAllBookmarks,

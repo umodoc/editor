@@ -49,7 +49,7 @@ const tags = [
   },
 ]
 
-const { editor } = useStore()
+const editor = inject('editor')
 
 const selectStyle = (item: (typeof tags)[0]) => {
   const tag = editor.value?.state?.selection?.$from?.node()

@@ -88,8 +88,10 @@ import { base64ToFile } from 'file64'
 
 import { shortId } from '@/utils/short-id'
 
+const container = inject('container')
+const imageViewer = inject('imageViewer')
 const { node, updateAttributes } = defineProps(nodeViewProps)
-const { options, imageViewer } = useStore()
+const options = inject('options')
 const { isLoading, error } = useImage({ src: node.attrs.src })
 
 const containerRef = ref(null)
@@ -122,7 +124,10 @@ const uploadImage = async () => {
       updateAttributes({ id, src: url, file: null, uploaded: true })
     }
   } catch (error) {
-    useMessage('error', (error as Error).message)
+    useMessage('error', {
+      attach: container,
+      content: (error as Error).message,
+    })
   }
 }
 const onLoad = async () => {

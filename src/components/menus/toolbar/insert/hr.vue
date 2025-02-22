@@ -54,7 +54,8 @@
 
 <script setup lang="ts">
 const { popupVisible, togglePopup } = usePopup()
-const { container, editor } = useStore()
+const container = inject('container')
+const editor = inject('editor')
 
 const options = [
   { label: t('insert.hr.signle'), value: 'signle' },

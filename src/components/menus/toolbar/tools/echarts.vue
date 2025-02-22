@@ -232,9 +232,12 @@ const { mode } = defineProps({
   },
 })
 
-const { loadEchartScript } = useEchartsLoader()
+const container = inject('container')
+const editor = inject('editor')
+const options = inject('options')
 
-const { options, editor } = useStore()
+const { loadEchartScript } = useEchartsLoader(options.value)
+
 // 弹窗口显示隐藏 true 显示 默认隐藏
 let dialogVisible = $ref(false)
 // 弹窗后标题是编辑还是新增，true: 新增 fasle: 编辑
@@ -321,6 +324,7 @@ const setConfirm = () => {
 
     if (settingMyChart === null) {
       const dialog = useAlert({
+        attach: container,
         theme: 'warning',
         header: t('tools.echarts.text'),
         body: t('tools.echarts.settingerror'), // 请确认预览视图是否正确显示！
@@ -336,6 +340,7 @@ const setConfirm = () => {
       resOptions.chartOptions = JSON.parse(sourceOptions)
     } catch (e) {
       const dialog = useAlert({
+        attach: container,
         theme: 'warning',
         header: t('tools.echarts.text'),
         body: t('tools.echarts.sourceerror'), // 结构不正确
@@ -347,6 +352,7 @@ const setConfirm = () => {
     }
     if (sourceMyChart === null) {
       const dialog = useAlert({
+        attach: container,
         theme: 'warning',
         header: t('tools.echarts.text'),
         body: t('tools.echarts.sourceerror2'), // 结构不正确或未定义
@@ -423,6 +429,7 @@ const loadModeEchart = async () => {
         const newOptions = calbaseConfigOptions(
           JSON.parse(JSON.stringify(newData)),
           JSON.parse(JSON.stringify(baseConfig.config)),
+          options.value,
         )
 
         settingMyChart = echarts.init(_curDomSetting)

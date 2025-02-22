@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { getSelectionNode } from '@/extensions/selection'
 
-const { editor } = useStore()
+const editor = inject('editor')
 
 const themes = [
   { label: t('bubbleMenu.code.themes.dark'), value: 'dark' },

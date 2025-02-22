@@ -23,5 +23,5 @@ const props = defineProps({
     default: false,
   },
 })
-const { container } = useStore()
+const container = inject('container', 'body')
 </script>

@@ -9,7 +9,8 @@
 <script setup lang="ts">
 import { getSelectionNode } from '@/extensions/selection'
 
-const { editor } = useStore()
+const editor = inject('editor')
+const container = inject('container')
 
 const copyCode = () => {
   const codeBlock = editor.value ? getSelectionNode(editor.value) : null
@@ -18,7 +19,10 @@ const copyCode = () => {
       source: ref(codeBlock.attrs.code),
     })
     void copy()
-    useMessage('success', t('bubbleMenu.code.copy.success'))
+    useMessage('success', {
+      attach: container,
+      content: t('bubbleMenu.code.copy.success'),
+    })
   }
 }
 </script>

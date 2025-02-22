@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-const { editor } = useStore()
+const editor = inject('editor')
 
 let dialogVisible = $ref(false)
 let url = $ref('')

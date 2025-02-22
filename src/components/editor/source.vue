@@ -20,9 +20,9 @@
 <script setup lang="ts">
 import { type Editor, loader, MonacoEditor } from '@vue-monaco/editor'
 
-const { options, editor } = useStore()
+const options = inject('options')
 const { locale } = useI18n()
-const $document = useState('document')
+const $document = useState('document', options)
 
 loader.config({
   paths: {
