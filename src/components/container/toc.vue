@@ -22,6 +22,8 @@
         @click="headingClick"
       />
     </div>
+    <!-- 添加拖拽手柄 -->
+    <div class="umo-toc-resize-handle" @mousedown="startResize"></div>
   </div>
 </template>
 
@@ -37,20 +39,24 @@ interface TocItem {
   [key: string]: any
   children?: TocItem[]
 }
-
+// 最终可视化数据
 let tocTreeData = $ref([])
+let watchTreeData = [] //可视化监听数据
 const buildTocTree = (tocArray: Record<string, any>[]): TocItem[] => {
   const root: TocItem[] = []
   const stack: TocItem[] = []
   for (const item of tocArray) {
     const node: TocItem = {
       textContent: item.textContent,
-      level: item.level,
+      level: item.originalLevel,
       id: item.id,
-      actived: item.isActive,
+      actived: false, // item.isActive,
       children: [],
     }
-    while (stack.length > 0 && stack[stack.length - 1].level >= item.level) {
+    while (
+      stack.length > 0 &&
+      stack[stack.length - 1].level >= item.originalLevel
+    ) {
       stack.pop()
     }
     if (stack.length === 0) {
@@ -66,7 +72,13 @@ const buildTocTree = (tocArray: Record<string, any>[]): TocItem[] => {
 watch(
   () => editor.value?.storage.tableOfContents.content,
   (toc: any[]) => {
-    tocTreeData = buildTocTree(toc)
+    //每次都监听 但不是每次发生变化，重复赋值导致toc数据双击生效
+    const curTocTreeData = buildTocTree(toc)
+    if (JSON.stringify(watchTreeData) !== JSON.stringify(curTocTreeData)) {
+      watchTreeData = curTocTreeData
+      tocTreeData = JSON.parse(JSON.stringify(curTocTreeData))
+    }
+    // tocTreeData = buildTocTree(toc)
   },
   { immediate: true },
 )
@@ -93,6 +105,50 @@ const headingClick = ({ node }: any) => {
   editor.value.view.dispatch(tr)
   editor.value.view.focus()
 }
+
+//基础宽度 以下部分是大纲区域支持拖拽代码 使用umo-toc-container 及一下元素拖拽不流畅
+const umoPageContainer = document.querySelector('.umo-page-container')
+const baseTocWidth = 320
+//是否在拖动的标记
+const isResizing = ref(false)
+const startX = ref(0)
+const initialWidth = ref(baseTocWidth)
+const startResize = (e: MouseEvent) => {
+  if (!umoPageContainer) {
+    return
+  }
+  isResizing.value = true
+  startX.value = e.clientX
+  initialWidth.value = parseInt(
+    getComputedStyle(
+      umoPageContainer.querySelector('.umo-toc-container') as HTMLElement,
+    ).width,
+    10,
+  )
+  umoPageContainer.addEventListener('mousemove', resize)
+  umoPageContainer.addEventListener('mouseup', stopResize)
+}
+
+const resize = (e: MouseEvent) => {
+  if (isResizing.value) {
+    const offsetX = e.clientX - startX.value
+    const newWidth = initialWidth.value + offsetX
+    const minWidth = baseTocWidth / 1.5
+    const maxWidth = baseTocWidth * 2
+    if (newWidth >= minWidth && newWidth <= maxWidth) {
+      const tocContainer = umoPageContainer.querySelector(
+        '.umo-toc-container',
+      ) as HTMLElement
+      tocContainer.style.width = `${newWidth}px`
+    }
+  }
+}
+
+const stopResize = () => {
+  isResizing.value = false
+  umoPageContainer.removeEventListener('mousemove', resize)
+  umoPageContainer.removeEventListener('mouseup', stopResize)
+}
 </script>
 
 <style lang="less" scoped>
@@ -103,6 +159,21 @@ const headingClick = ({ node }: any) => {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  position: relative; /* 添加相对定位 */
+  /* 拖拽手柄样式 */
+  .umo-toc-resize-handle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 5px;
+    height: 100%;
+    border-radius: 2px;
+    background-color: transparent;
+    &:hover {
+      background-color: var(--umo-scrollbar-thumb-color);
+      cursor: col-resize; /* 确保悬停时也显示左右箭头样式 */
+    }
+  }
   .umo-toc-title {
     border-bottom: solid 1px var(--umo-border-color-light);
     display: flex;
