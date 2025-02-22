@@ -39,20 +39,24 @@ interface TocItem {
   [key: string]: any
   children?: TocItem[]
 }
-
+// 最终可视化数据
 let tocTreeData = $ref([])
+let watchTreeData = [] //可视化监听数据
 const buildTocTree = (tocArray: Record<string, any>[]): TocItem[] => {
   const root: TocItem[] = []
   const stack: TocItem[] = []
   for (const item of tocArray) {
     const node: TocItem = {
       textContent: item.textContent,
-      level: item.level,
+      level: item.originalLevel,
       id: item.id,
-      actived: item.isActive,
+      actived: false, // item.isActive,
       children: [],
     }
-    while (stack.length > 0 && stack[stack.length - 1].level >= item.level) {
+    while (
+      stack.length > 0 &&
+      stack[stack.length - 1].level >= item.originalLevel
+    ) {
       stack.pop()
     }
     if (stack.length === 0) {
@@ -68,7 +72,13 @@ const buildTocTree = (tocArray: Record<string, any>[]): TocItem[] => {
 watch(
   () => editor.value?.storage.tableOfContents.content,
   (toc: any[]) => {
-    tocTreeData = buildTocTree(toc)
+    //每次都监听 但不是每次发生变化，重复赋值导致toc数据双击生效
+    const curTocTreeData = buildTocTree(toc)
+    if (JSON.stringify(watchTreeData) !== JSON.stringify(curTocTreeData)) {
+      watchTreeData = curTocTreeData
+      tocTreeData = JSON.parse(JSON.stringify(curTocTreeData))
+    }
+    // tocTreeData = buildTocTree(toc)
   },
   { immediate: true },
 )

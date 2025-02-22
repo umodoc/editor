@@ -16,7 +16,7 @@
           v-for="heading in tableOfContents"
           :key="heading.id"
           class="umo-node-toc-item"
-          :class="`level-${heading.level}`"
+          :class="`level-${heading.originalLevel}`"
         >
           <a @click="headingClick(heading.id)">{{ heading.textContent }}</a>
         </li>
