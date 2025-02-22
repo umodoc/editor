@@ -63,11 +63,7 @@ let image = $ref<
 >()
 
 const messageListener = (evt: MessageEvent) => {
-  if (
-    evt?.type !== 'message' ||
-    typeof evt?.data !== 'string' ||
-    evt?.origin !== options.value.diagrams?.domain
-  ) {
+  if (evt?.type !== 'message' || typeof evt?.data !== 'string') {
     return
   }
 

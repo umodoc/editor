@@ -31,7 +31,7 @@ class DiagramEditor {
     container: string
   }) {
     this.domain = domain ?? this.domain
-    this.params = { ...params, ...this.params }
+    this.params = { ...this.params, ...params }
     this.container = container
   }
 
