@@ -22,7 +22,6 @@
         @click="headingClick"
       />
     </div>
-    <!-- 添加拖拽手柄 -->
     <div class="umo-toc-resize-handle" @mousedown="startResize"></div>
   </div>
 </template>
@@ -41,7 +40,7 @@ interface TocItem {
 }
 // 最终可视化数据
 let tocTreeData = $ref([])
-let watchTreeData = [] //可视化监听数据
+let watchTreeData: TocItem[] = [] //可视化监听数据
 const buildTocTree = (tocArray: Record<string, any>[]): TocItem[] => {
   const root: TocItem[] = []
   const stack: TocItem[] = []
@@ -72,13 +71,12 @@ const buildTocTree = (tocArray: Record<string, any>[]): TocItem[] => {
 watch(
   () => editor.value?.storage.tableOfContents.content,
   (toc: any[]) => {
-    //每次都监听 但不是每次发生变化，重复赋值导致toc数据双击生效
+    // 每次都监听 但不是每次发生变化，重复赋值导致toc数据双击生效
     const curTocTreeData = buildTocTree(toc)
     if (JSON.stringify(watchTreeData) !== JSON.stringify(curTocTreeData)) {
       watchTreeData = curTocTreeData
       tocTreeData = JSON.parse(JSON.stringify(curTocTreeData))
     }
-    // tocTreeData = buildTocTree(toc)
   },
   { immediate: true },
 )
@@ -106,10 +104,10 @@ const headingClick = ({ node }: any) => {
   editor.value.view.focus()
 }
 
-//基础宽度 以下部分是大纲区域支持拖拽代码 使用umo-toc-container 及一下元素拖拽不流畅
-const umoPageContainer = document.querySelector('.umo-page-container')
+const umoPageContainer = document.querySelector(
+  '.umo-page-container',
+) as HTMLElement
 const baseTocWidth = 320
-//是否在拖动的标记
 const isResizing = ref(false)
 const startX = ref(0)
 const initialWidth = ref(baseTocWidth)
@@ -121,7 +119,7 @@ const startResize = (e: MouseEvent) => {
   startX.value = e.clientX
   initialWidth.value = parseInt(
     getComputedStyle(
-      umoPageContainer.querySelector('.umo-toc-container') as HTMLElement,
+      umoPageContainer?.querySelector('.umo-toc-container') as HTMLElement,
     ).width,
     10,
   )
@@ -159,19 +157,17 @@ const stopResize = () => {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  position: relative; /* 添加相对定位 */
-  /* 拖拽手柄样式 */
+  position: relative;
   .umo-toc-resize-handle {
     position: absolute;
     top: 0;
-    right: 0;
-    width: 5px;
+    right: -1px;
+    width: 2px;
     height: 100%;
-    border-radius: 2px;
     background-color: transparent;
     &:hover {
-      background-color: var(--umo-scrollbar-thumb-color);
-      cursor: col-resize; /* 确保悬停时也显示左右箭头样式 */
+      background-color: var(--umo-primary-color);
+      cursor: col-resize;
     }
   }
   .umo-toc-title {
