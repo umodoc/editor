@@ -465,7 +465,6 @@
   },
   "blockMenu": {
     "insert": "插入新内容",
-    "select": "插入节点",
     "template": "插入模板",
     "toogleNode": "切换类型",
     "common": "常用操作",

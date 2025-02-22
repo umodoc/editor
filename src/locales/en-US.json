@@ -465,7 +465,6 @@
   },
   "blockMenu": {
     "insert": "Insert Content",
-    "select": "Insert Node",
     "template": "Insert Template",
     "toogleNode": "Switch Node Type",
     "common": "Common actions",
