@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-const { editor } = useStore()
+const editor = inject('editor')
 const type = computed(() => {
   return editor.value?.getAttributes('image').type
 })

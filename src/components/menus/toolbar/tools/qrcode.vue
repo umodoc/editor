@@ -123,7 +123,8 @@ const { content } = defineProps({
 })
 
 let dialogVisible = $ref(false)
-const { editor } = useStore()
+const editor = inject('editor')
+const container = inject('container')
 
 const menuClick = () => {
   renderQrcode()
@@ -193,11 +194,17 @@ watch(
 // 创建或更新条形码
 const setQrcode = () => {
   if (renderError || !svgCode) {
-    useMessage('error', t('tools.qrcode.renderError'))
+    useMessage('error', {
+      attach: container,
+      content: t('tools.qrcode.renderError'),
+    })
     return
   }
   if (config.content === '') {
-    useMessage('error', t('tools.qrcode.notEmpty'))
+    useMessage('error', {
+      attach: container,
+      content: t('tools.qrcode.notEmpty'),
+    })
     return
   }
   const { width, height } = config

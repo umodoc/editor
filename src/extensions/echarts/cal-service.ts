@@ -20,7 +20,7 @@ export function calbaseConfigData(data: any) {
   return data
 }
 // 计算配置 根据手工设置的配置信息和数据进行 Options 生成，此方法会逐步扩充
-export function calbaseConfigOptions(data: any, config: any) {
+export function calbaseConfigOptions(data: any, config: any, options: any) {
   // 声明的最终返回的options
   let resOption: any = {}
   if (!data || !config) {
@@ -134,8 +134,7 @@ export function calbaseConfigOptions(data: any, config: any) {
   }
 
   // 9.0 自定义扩展，可以在外部自定义实现展示效果，扩展个性化样式
-  const { options } = useStore()
-  const newOptions = options.value.onCustomizeChartSettings?.(data, config)
+  const newOptions = options.onCustomizeChartSettings?.(data, config)
   if (newOptions !== null && typeof newOptions === 'object') {
     resOption = newOptions
   }

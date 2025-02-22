@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-const { editor } = useStore()
+const editor = inject('editor')
 
 const alignments = [
   { content: t('table.cellAlign.lt'), value: 'left-top' },

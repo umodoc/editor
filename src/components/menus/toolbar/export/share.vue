@@ -27,13 +27,17 @@
 </template>
 
 <script setup lang="ts">
-const { options } = useStore()
+const options = inject('options')
+const container = inject('container')
 let dialogVisible = $ref(false)
 
 const copyLink = () => {
   const { copy } = useClipboard({ source: options.value.shareUrl })
   void copy()
-  useMessage('success', t('export.share.copied'))
+  useMessage('success', {
+    attach: container,
+    content: t('export.share.copied'),
+  })
   dialogVisible = false
 }
 </script>

@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import { getSelectionNode } from '@/extensions/selection'
 
-const { editor } = useStore()
+const editor = inject('editor')
 
 const setFlip = (flip: 'flipX' | 'flipY') => {
   const image = editor.value ? getSelectionNode(editor.value) : null

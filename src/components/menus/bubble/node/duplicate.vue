@@ -12,7 +12,7 @@ import type { Node } from '@tiptap/pm/model'
 import { getSelectionNode } from '@/extensions/selection'
 import { shortId } from '@/utils/short-id'
 
-const { editor } = useStore()
+const editor = inject('editor')
 
 const duplicateNode = () => {
   const selectionNode = editor.value ? getSelectionNode(editor.value) : null

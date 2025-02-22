@@ -35,7 +35,8 @@
 </template>
 
 <script setup lang="ts">
-const { options, page } = useStore()
+const page = inject('page')
+const options = inject('options')
 const dialogVisible = $ref(false)
 </script>
 

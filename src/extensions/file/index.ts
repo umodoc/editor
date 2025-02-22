@@ -4,8 +4,6 @@ import { ReplaceStep } from 'prosemirror-transform'
 
 import NodeView from './node-view.vue'
 
-const { options } = useStore()
-
 const mimeTypes: any = {
   image: [
     'image/jpeg',
@@ -19,8 +17,7 @@ const mimeTypes: any = {
   audio: ['audio/mp3', 'audio/wav', 'audio/ogg', 'audio/aac', 'audio/flac'],
 }
 
-const getAccept = (type: string) => {
-  const accept = options.value.file.allowedMimeTypes
+const getAccept = (type: string, accept: string[]) => {
   if (type === 'file' && accept.length === 0) {
     return ''
   }
@@ -46,7 +43,11 @@ declare module '@tiptap/core' {
       insertFile: (options: any) => ReturnType
     }
     selectFiles: {
-      selectFiles: (options: any) => ReturnType
+      selectFiles: (
+        type: string,
+        container: string,
+        autoType: boolean,
+      ) => ReturnType
     }
   }
 }
@@ -117,15 +118,16 @@ export default Node.create({
         ({ file, autoType, pos }) =>
         ({ editor, commands }) => {
           const { type, name, size } = file
-          const { maxSize } = options.value.file
+          const { options } = editor.storage
+          const { maxSize } = options.file
           if (maxSize !== 0 && size > maxSize) {
-            useMessage(
-              'error',
-              t('file.limit', {
+            useMessage('error', {
+              attach: editor.storage.container,
+              content: t('file.limit', {
                 filename: file.name,
                 size: maxSize / 1024 / 1024,
               }),
-            )
+            })
             return false
           }
           const position = pos || editor.state.selection.anchor
@@ -157,11 +159,13 @@ export default Node.create({
           })
         },
       selectFiles:
-        (type, autoType = false) =>
+        (type, container = 'body', autoType = false) =>
         ({ editor }) => {
-          const accept = getAccept(type)
+          const { options } = editor.storage
+          const accept = getAccept(type, options.file.allowedMimeTypes)
           if ((!accept && accept !== '') || accept === 'notAllow') {
             const dialog = useAlert({
+              attach: container,
               theme: 'danger',
               header: t('file.notAllow.title'),
               body: t('file.notAllow.message'),
@@ -192,20 +196,18 @@ export default Node.create({
         },
     }
   },
-  onTransaction({ transaction }) {
+  onTransaction({ editor, transaction }) {
     transaction.steps.forEach((step: any) => {
       if (step instanceof ReplaceStep && step.slice.size === 0) {
-        // 使用事务前的文档状态来获取被删除的页面节点
-        const deletedPages = transaction.before.content.cut(step.from, step.to)
-        deletedPages.forEach((page: any) => {
-          // 遍历删除的页面节点
-          page.content.forEach((node: any) => {
-            // 如果是文件节点，调用删除方法删除文件
-            if (['image', 'video', 'audio', 'file'].includes(node.attrs.type)) {
-              const { id, src, url } = node.attrs
-              options.value.onFileDelete(id, src || url)
-            }
-          })
+        // 使用事务前的文档状态来获取被删除的节点
+        const deletedNodes = transaction.before.content.cut(step.from, step.to)
+        const { options } = editor.storage
+        deletedNodes.content.forEach((node: any) => {
+          // 如果是文件节点，调用删除方法删除文件
+          if (['image', 'video', 'audio', 'file'].includes(node.attrs.type)) {
+            const { id, src, url } = node.attrs
+            options.onFileDelete(id, src || url)
+          }
         })
       }
     })

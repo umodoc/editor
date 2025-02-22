@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { getSelectionNode } from '@/extensions/selection'
-const { editor } = useStore()
+const editor = inject('editor')
 
 const ndoeTofile = () => {
   const { attrs } = getSelectionNode(editor.value)

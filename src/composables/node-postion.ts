@@ -1,6 +1,4 @@
-const { container, editor } = useStore()
-
-export const useNodePostion = () => {
+export const useNodePostion = (container: string, editor: any) => {
   const currentNode = document.querySelector(
     `${container} .umo-page-node-content .umo-node-focused, ${container} .umo-page-node-content .ProseMirror-gapcursor`,
   ) as HTMLElement

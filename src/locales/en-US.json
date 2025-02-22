@@ -147,6 +147,7 @@
       "hrefTip": "Usually starting with http:// or https://"
     },
     "math": "Mathematics",
+    "tag": "Tag",
     "bookmark": {
       "text": "Bookmark",
       "set": "Set bookmarks",
@@ -466,7 +467,7 @@
     "insert": "Insert Content",
     "select": "Insert Node",
     "template": "Insert Template",
-    "toogleNode": "Switch Block Type",
+    "toogleNode": "Switch Node Type",
     "common": "Common actions",
     "clearFormat": "Clear formatting",
     "duplicate": "Duplicate",
@@ -512,6 +513,12 @@
       "borderStyle": "Border Style",
       "noBorder": "No Border"
     },
+    "tag": {
+      "background": "Background Color",
+      "color": "Text Color",
+      "delete": "Delete Tag"
+    },
+    "toFile": "Convert to File",
     "delete": "Delete"
   },
   "assistant": {

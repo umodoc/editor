@@ -6,18 +6,25 @@ export default TableCell.extend({
       ...this.parent?.(),
       align: {
         default: null,
-        parseHTML: (element) => element.getAttribute('data-align'),
-        renderHTML: ({ align }) => ({ 'data-align': align }),
+        parseHTML: (element) => {
+          const align = element.getAttribute('align') ?? null
+          return align
+        },
+        renderHTML: ({ align }) => ({ align }),
       },
       backgroundColor: {
         default: null,
-        parseHTML: (element) => element.getAttribute('data-bg-color'),
+        parseHTML: (element) => {
+          const style = element.getAttribute('style') ?? ''
+          const match = style.match(/background(?:-color)?:\s*([^;]+)/i)
+          return match ? match[1].trim() : null
+        },
         renderHTML: ({ backgroundColor }) => {
-          const attrs: { 'data-bg-color': any; style?: string } = {
+          const attrs: { 'data-bg-color'?: any; style?: string } = {
             'data-bg-color': backgroundColor,
           }
           if (backgroundColor) {
-            attrs.style = `background-color: ${backgroundColor}`
+            attrs.style = `background-color: ${backgroundColor};`
           }
           return attrs
         },

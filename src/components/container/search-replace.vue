@@ -88,14 +88,13 @@
 
 <script setup lang="ts">
 import { getSelectionText } from '@/extensions/selection'
-const { editor, searchReplace } = useStore()
+
+const editor = inject('editor')
+const searchReplace = inject('searchReplace')
 
 let searchText = $ref<string>('')
 let replaceText = $ref<string>('')
 const caseSensitive = $ref<boolean>(false)
-useHotkeys('ctrl+f, command+f', () => {
-  searchReplace.value = true
-})
 
 const resultLength = computed(
   () => editor.value?.storage.searchAndReplace?.results.length || 0,

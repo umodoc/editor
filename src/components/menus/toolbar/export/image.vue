@@ -14,8 +14,10 @@ import domtoimage from 'dom-to-image-more'
 import { saveAs } from 'file-saver'
 
 const { toBlob } = domtoimage
-
-const { container, options, page, exportImage } = useStore()
+const container = inject('container')
+const exportFile = inject('exportFile')
+const page = inject('page')
+const options = inject('options')
 
 const formats = [
   { content: t('export.image.png'), value: 'png' },
@@ -33,7 +35,7 @@ const saveImage = async ({
     return
   }
   const { zoomLevel } = page.value
-  exportImage.value = true
+  exportFile.value.image = true
   try {
     page.value.zoomLevel = 100
     await nextTick()
@@ -50,6 +52,7 @@ const saveImage = async ({
     )
   } catch {
     const dialog = useAlert({
+      attach: container,
       theme: 'warning',
       header: t('export.image.error.title'),
       body: t('export.image.error.message'),
@@ -59,7 +62,7 @@ const saveImage = async ({
     })
   } finally {
     page.value.zoomLevel = zoomLevel
-    exportImage.value = false
+    exportFile.value.image = false
   }
 }
 </script>

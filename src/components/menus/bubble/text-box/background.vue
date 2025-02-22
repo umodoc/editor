@@ -18,7 +18,7 @@ import { getSelectionNode } from '@/extensions/selection'
 const emits = defineEmits(['change'])
 
 const { popupVisible, togglePopup } = usePopup()
-const { editor } = useStore()
+const editor = inject('editor')
 
 const colorChange = (color: any) => {
   popupVisible.value = false

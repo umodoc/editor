@@ -35,8 +35,9 @@ const props = defineProps({
   },
 })
 
-const { editor } = useStore()
-const $toolbar = useState('toolbar')
+const editor = inject('editor')
+const options = inject('options')
+const $toolbar = useState('toolbar', options)
 
 const fontSizes = [
   { label: t('base.fontSize.default'), value: '14px', order: 4 },

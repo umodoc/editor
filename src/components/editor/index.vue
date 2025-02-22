@@ -4,8 +4,9 @@
     :class="{
       'show-bookmark': bookmark,
       'show-line-number': page.showLineNumber,
-      'format-painter': painter.enabled,
+      'format-painter': editor?.view?.painter?.enabled,
       'is-empty': editor?.isEmpty && editor?.state.doc.childCount <= 1,
+      'is-readonly': !editor?.editable,
     }"
     :editor="editor"
     :style="{
@@ -16,9 +17,7 @@
     "
   />
   <template
-    v-if="
-      editor && !editorDestroyed && !page.preview?.enabled && editor.isEditable
-    "
+    v-if="editor && !destroyed && !page.preview?.enabled && editor.isEditable"
   >
     <menus-context-block v-if="options.document?.enableBlockMenu" />
     <menus-bubble v-if="options.document?.enableBubbleMenu" />
@@ -26,26 +25,34 @@
 </template>
 
 <script setup lang="ts">
-import { Editor, EditorContent, type Extension } from '@tiptap/vue-3'
+import { Editor, EditorContent } from '@tiptap/vue-3'
 
-import { extensions, inputAndPasteRules } from '@/extensions'
+import { getDefaultExtensions, inputAndPasteRules } from '@/extensions'
 
-const { options, editor, page, painter, bookmark, setEditor, editorDestroyed } =
-  useStore()
+const bookmark = inject('bookmark')
+const destroyed = inject('destroyed')
+const page = inject('page')
+const options = inject('options')
 
-const $document = useState('document')
+const $document = useState('document', options)
 
 const defaultLineHeight = $computed(
   () =>
     options.value.dicts?.lineHeights?.find((item: any) => item.default)?.value,
 )
 
+const container = inject('container')
+const extensions: any[] = getDefaultExtensions({
+  container,
+  options,
+})
+
 const editorInstance: Editor = new Editor({
   editable: !options.value.document?.readOnly,
   autofocus: options.value.document?.autofocus,
   content: options.value.document?.content,
-  enableInputRules: inputAndPasteRules(),
-  enablePasteRules: inputAndPasteRules(),
+  enableInputRules: inputAndPasteRules(options),
+  enablePasteRules: inputAndPasteRules(options),
   editorProps: {
     attributes: {
       class: 'umo-editor',
@@ -53,12 +60,21 @@ const editorInstance: Editor = new Editor({
     ...options.value.document?.editorProps,
   },
   parseOptions: options.value.document?.parseOptions,
-  extensions: [...extensions, ...(options.value.extensions as Extension[])],
+  extensions: [...extensions, ...options.value.extensions],
   onUpdate({ editor }) {
     $document.value.content = editor.getHTML()
   },
 })
-setEditor(editorInstance)
+const editor = inject('editor')
+editor.value = editorInstance
+editor.value.storage.container = container
+watch(
+  () => options.value,
+  () => {
+    editor.value.storage.options = options.value
+  },
+  { immediate: true, deep: true },
+)
 
 // 动态导入 katex 样式
 const loadTatexStyle = () => {

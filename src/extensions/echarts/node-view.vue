@@ -49,10 +49,10 @@ import {
 } from '@/extensions/echarts/cal-service'
 // 引入 echart 服务 用此方法初始化加载 cdn echart.js 脚本 否则
 import { useEchartsLoader } from '@/extensions/echarts/init-service'
-const { loadEchartScript } = useEchartsLoader()
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
-const { options, editor } = useStore()
+const options = inject('options')
+const { loadEchartScript } = useEchartsLoader(options.value)
 const containerRef = ref(null)
 const maxWidth = $ref(0)
 let selected = $ref(false)
@@ -112,7 +112,11 @@ const loadData = async () => {
     if (mode === 1) {
       if (chartConfig !== null) {
         const newData = calbaseConfigData(chartConfig.data)
-        const resOptions = calbaseConfigOptions(newData, chartConfig.config)
+        const resOptions = calbaseConfigOptions(
+          newData,
+          chartConfig.config,
+          options.value,
+        )
         if (resOptions !== null) {
           myChart = echarts.init(document.getElementById(`chart-${id}`))
           myChart.setOption(resOptions)

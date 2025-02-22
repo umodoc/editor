@@ -9,5 +9,5 @@
 </template>
 
 <script setup lang="ts">
-const { searchReplace } = useStore()
+const searchReplace = inject('searchReplace')
 </script>

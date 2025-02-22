@@ -147,6 +147,7 @@
       "hrefTip": "一般以 http:// 或 https:// 开头"
     },
     "math": "数学公式",
+    "tag": "标签",
     "bookmark": {
       "text": "书签",
       "set": "设置书签",
@@ -466,7 +467,7 @@
     "insert": "插入新内容",
     "select": "插入节点",
     "template": "插入模板",
-    "toogleNode": "切换节点类型",
+    "toogleNode": "切换类型",
     "common": "常用操作",
     "clearFormat": "清除格式",
     "duplicate": "复制节点",
@@ -512,6 +513,11 @@
       "borderStyle": "边框样式",
       "noBorder": "不显示边框"
     },
+    "tag": {
+      "background": "背景颜色",
+      "color": "文字颜色",
+      "delete": "删除标签"
+    },
     "toFile": "转为文件",
     "delete": "删除"
   },
@@ -531,7 +537,8 @@
     "delete": "删除结果",
     "error": {
       "title": "错误提示",
-      "message": "AI 文档助手生成结果出现错误，请重试！"
+      "message": "AI 文档助手生成结果出现错误，请重试！",
+      "confirm": "确定"
     }
   },
   "pageOptions": {

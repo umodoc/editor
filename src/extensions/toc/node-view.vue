@@ -31,9 +31,10 @@ import { TextSelection } from '@tiptap/pm/state'
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 
 const { node } = defineProps(nodeViewProps)
-
-const { editor, tableOfContents } = useStore()
-
+const editor = inject('editor')
+const tableOfContents = computed(
+  () => editor.value?.storage.tableOfContents.content,
+)
 const nodeStyle = $computed(() => {
   const { margin } = node.attrs
   const marginTop =

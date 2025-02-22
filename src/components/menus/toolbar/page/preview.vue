@@ -11,5 +11,5 @@
 </template>
 
 <script setup lang="ts">
-const { page } = useStore()
+const page = inject('page')
 </script>

@@ -65,9 +65,9 @@ export default Extension.create({
               editor.isActive('audio') ||
               editor.isActive('file')
             ) {
-              const { options } = useStore()
+              const { options } = editor.storage
               const { id, src } = node.attrs
-              options.value.onFileDelete?.(id, src)
+              options.onFileDelete?.(id, src)
             }
             if (editor.isActive('textBox')) {
               return chain().focus().deleteNode('textBox').run()
@@ -79,7 +79,11 @@ export default Extension.create({
             chain().focus().deleteTable().run()
             return true
           }
-          return chain().focus().deleteNode(node.type.name).run()
+          return chain()
+            .focus()
+            .deleteSelection()
+            .deleteNode(node.type.name)
+            .run()
         },
     }
   },

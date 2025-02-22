@@ -11,7 +11,8 @@
 </template>
 
 <script setup lang="ts">
-const { editor, printing } = useStore()
+const editor = inject('editor')
+const printing = inject('printing')
 </script>
 
 <style lang="less" scoped></style>

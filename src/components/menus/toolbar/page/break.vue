@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-const { editor } = useStore()
+const editor = inject('editor')
 
 const setPageBreak = () => {
   editor.value?.chain().focus().setPageBreak().run()

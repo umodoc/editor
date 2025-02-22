@@ -8,7 +8,9 @@
 
 <script setup lang="ts">
 import { getSelectionNode } from '@/extensions/selection'
-const { editor, imageViewer } = useStore()
+
+const editor = inject('editor')
+const imageViewer = inject('imageViewer')
 
 const openImageViewer = () => {
   const image = getSelectionNode(editor.value)

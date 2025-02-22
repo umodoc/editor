@@ -55,7 +55,7 @@
           ico="image-reset"
           :text="t('tools.signature.reset')"
           hide-text
-          @menu-click="resetOptions"
+          @menu-click="reuseOptions"
         />
       </div>
       <div class="umo-signature-container" :data-tip="t('tools.signature.tip')">
@@ -68,7 +68,8 @@
 <script setup lang="ts">
 import SmoothSignature from 'smooth-signature'
 
-const { editor } = useStore()
+const editor = inject('editor')
+const container = inject('container')
 let dialogVisible = $ref(false)
 let openSmooth = $ref(false)
 
@@ -93,7 +94,7 @@ const options = $ref({
 let signature = $ref(null)
 const signatureRef = $ref(null)
 
-const resetOptions = () => {
+const reuseOptions = () => {
   signature.width = 600
   signature.height = 200
   signature.minWidth = 4
@@ -133,7 +134,10 @@ const setSignature = () => {
       .run()
     dialogVisible = false
   } catch {
-    useMessage('error', t('tools.signature.notEmpty'))
+    useMessage('error', {
+      attach: container,
+      content: t('tools.signature.notEmpty'),
+    })
   }
 }
 

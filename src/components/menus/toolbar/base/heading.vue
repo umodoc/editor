@@ -73,8 +73,9 @@
 
 <script setup lang="ts">
 const { popupVisible } = usePopup()
-const { container, editor } = useStore()
-const $toolbar = useState('toolbar')
+const container = inject('container')
+const editor = inject('editor')
+const $toolbar = useState('toolbar', inject('options'))
 const popupContentRef = ref(null)
 
 const options = $ref([

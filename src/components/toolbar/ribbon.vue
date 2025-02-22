@@ -93,6 +93,7 @@
             />
             <menus-toolbar-insert-emoji v-if="!disableItem('emoji')" />
             <menus-toolbar-insert-math v-if="!disableItem('math')" />
+            <menus-toolbar-insert-tag v-if="!disableItem('tag')" />
             <menus-toolbar-insert-bookmark v-if="!disableItem('bookmark')" />
           </div>
           <div class="umo-virtual-group">
@@ -247,7 +248,7 @@ const props = defineProps<{
 }>()
 const emits = defineEmits(['menu-change'])
 
-const { options } = useStore()
+const options = inject('options')
 const disableItem = (name: string) => {
   return options.value.toolbar?.disableMenuItems.includes(name)
 }

@@ -18,13 +18,15 @@
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
 
-const { editor } = useStore()
+const editor = inject('editor')
 
 let visible = $ref(false)
 let scrollTop = $ref(0)
+
 // 更新菜单位置
+const container = inject('container')
 const updateMenuPostion = () => {
-  const { offsetTop } = useNodePostion()
+  const { offsetTop } = useNodePostion(container, editor)
   if (offsetTop === null) {
     return
   }
@@ -93,7 +95,7 @@ onUnmounted(() => {
     }
     .umo-dropdown__item {
       padding: 2px 0;
-      min-width: 180px !important;
+      min-width: 140px !important;
       .umo-menu-button {
         background-color: transparent;
         padding: 0 15px;
@@ -156,9 +158,6 @@ onUnmounted(() => {
       }
     }
   }
-  .umo-dropdown__submenu {
-    margin-left: 10px;
-  }
 
   .umo-delete-node {
     .umo-button {
@@ -167,8 +166,5 @@ onUnmounted(() => {
       }
     }
   }
-}
-.umo-block-submenu-dropdown {
-  margin-left: 10px;
 }
 </style>

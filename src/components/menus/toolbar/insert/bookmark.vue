@@ -61,14 +61,15 @@
   </modal>
 </template>
 <script setup lang="ts">
-import Tooltip from '@/components/tooltip.vue'
-const { editor, bookmark } = useStore()
+const container = inject('container')
+const editor = inject('editor')
+const bookmark = inject('bookmark')
 //弹窗口显示隐藏 true显示 默认隐藏
 let dialogVisible = $ref(false)
 //书签名称
 let bookmarkText = $ref('')
 //书签数据
-let bookmarkData :any= []
+let bookmarkData: any = []
 //书签表格显示列
 const bookmarkColumns = [
   {
@@ -111,6 +112,7 @@ const insertbookmark = () => {
     }
   } else {
     const dialog = useAlert({
+      attach: container,
       theme: 'warning',
       header: t('insert.bookmark.text'),
       body: t('insert.bookmark.emptyError'), // "请输入书签名称！",//t('base.importWord.loadScript.message'),
@@ -154,7 +156,7 @@ const rowDelete = (row: any) => {
 const getCurWordAllBookmark = () => {
   try {
     bookmarkText = ''
-    editor.value?.commands.getAllBookmarks(function (_data:any) {
+    editor.value?.commands.getAllBookmarks(function (_data: any) {
       bookmarkData = _data
     })
   } catch (e) {

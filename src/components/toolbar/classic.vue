@@ -84,6 +84,7 @@
           />
           <menus-toolbar-insert-emoji v-if="!disableItem('emoji')" />
           <menus-toolbar-insert-math v-if="!disableItem('math')" />
+          <menus-toolbar-insert-tag v-if="!disableItem('tag')" />
           <menus-toolbar-insert-bookmark v-if="!disableItem('bookmark')" />
         </div>
         <div class="umo-virtual-group">
@@ -169,11 +170,9 @@
           <menus-toolbar-page-toggle-toc />
         </div>
         <div class="umo-virtual-group">
-          <div class="virtual-group-row">
-            <menus-toolbar-page-margin />
-            <menus-toolbar-page-size />
-            <menus-toolbar-page-orientation />
-          </div>
+          <menus-toolbar-page-margin />
+          <menus-toolbar-page-size />
+          <menus-toolbar-page-orientation />
         </div>
         <div class="umo-virtual-group">
           <menus-toolbar-page-break />
@@ -220,7 +219,8 @@ const props = defineProps<{
 
 const emits = defineEmits(['menu-change'])
 
-const { container, options } = useStore()
+const container = inject('container')
+const options = inject('options')
 const disableItem = (name: string) => {
   return options.value.toolbar?.disableMenuItems.includes(name)
 }

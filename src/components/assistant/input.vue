@@ -132,7 +132,10 @@ import type {
   CommandItem,
 } from '@/types'
 
-const { options, editor, assistantBox } = useStore()
+const container = inject('container')
+const editor = inject('editor')
+const assistant = inject('assistant')
+const options = inject('options')
 
 const inputRef = ref<HTMLElement | null>(null)
 let command = $ref<string>('')
@@ -202,6 +205,7 @@ const send = async () => {
   } catch (err) {
     console.error(err)
     const dialog = useAlert({
+      attach: container,
       theme: 'warning',
       header: t('assistant.error.title'),
       body: t('assistant.error.message'),
@@ -210,7 +214,7 @@ const send = async () => {
         dialog.destroy()
       },
     })
-    assistantBox.value = false
+    assistant.value = false
   }
 }
 
@@ -225,7 +229,7 @@ const insertCommand = ({ value, autoSend }: CommandItem) => {
 }
 
 const exitAssistant = () => {
-  assistantBox.value = false
+  assistant.value = false
   editor.value?.commands.focus()
 }
 
@@ -256,7 +260,10 @@ const copyResult = () => {
     source: ref(result.content),
   })
   void copy()
-  useMessage('success', t('assistant.copySuccess'))
+  useMessage('success', {
+    attach: container,
+    content: t('assistant.copySuccess'),
+  })
 }
 
 const rewrite = () => {

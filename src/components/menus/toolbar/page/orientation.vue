@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-const { page } = useStore()
+const page = inject('page')
 
 const orientations = [
   { label: t('page.orientation.landscape'), value: 'landscape' },

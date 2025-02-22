@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { getSelectionNode } from '@/extensions/selection'
 
-const { editor } = useStore()
+const editor = inject('editor')
 
 const openImage = () => {
   const node = editor.value ? getSelectionNode(editor?.value) : null

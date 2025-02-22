@@ -30,7 +30,7 @@ import type { ReactiveVariable } from '@vue-macros/reactivity-transform/macros'
 import { mediaPlayer } from '@/utils/player'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
-const { options } = useStore()
+const options = inject('options')
 
 const containerRef = ref<HTMLElement | null>(null)
 const audiorRef = $ref<ReactiveVariable<HTMLAudioElement> | null>(null)

@@ -9,10 +9,12 @@
 </template>
 
 <script setup lang="ts">
-const { editor } = useStore()
+const container = inject('container')
+const editor = inject('editor')
 
 const deleteTable = () => {
   const dialog = useConfirm({
+    attach: container,
     theme: 'danger',
     header: t('table.delete.title'),
     body: t('table.delete.message'),
@@ -22,7 +24,10 @@ const deleteTable = () => {
     },
     onConfirm() {
       editor.value?.chain().focus().deleteTable().run()
-      useMessage('success', t('table.delete.success'))
+      useMessage('success', {
+        attach: container,
+        content: t('table.delete.success'),
+      })
       dialog.destroy()
     },
   })

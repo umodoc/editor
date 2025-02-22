@@ -29,7 +29,8 @@
 
 <script setup lang="ts">
 const { popupVisible, togglePopup } = usePopup()
-const { options, editor } = useStore()
+const editor = inject('editor')
+const options = inject('options')
 
 const selectSymbol = (char: string) => {
   editor.value?.chain().focus().insertContent(char).run()

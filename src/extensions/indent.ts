@@ -6,6 +6,9 @@ import {
   type Transaction,
 } from '@tiptap/pm/state'
 import { isFunction } from '@tool-belt/type-predicates'
+
+import { getSelectionNode } from './selection'
+
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     indent: {
@@ -16,6 +19,7 @@ declare module '@tiptap/core' {
     }
   }
 }
+
 // @weiruo/tiptap-extension-indent Version:2.0.4-1
 const classAttrPrefix = 'indent-'
 export default Extension.create({
@@ -144,9 +148,11 @@ export default Extension.create({
   addKeyboardShortcuts() {
     return {
       Tab: () => {
+        getSelectionNode(this.editor)
         return this.editor.commands.indent()
       },
       'Shift-Tab': () => {
+        getSelectionNode(this.editor)
         return this.editor.commands.outdent()
       },
     }

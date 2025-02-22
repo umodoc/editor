@@ -103,7 +103,7 @@ const props = defineProps({
 
 const emits = defineEmits(['countdown-change', 'exit-preivew', 'close'])
 
-const { container } = useStore()
+const container = inject('container')
 
 const popperOptions = {
   modifiers: [
@@ -153,7 +153,10 @@ const startCountdown = async () => {
     (hours || 0) * 3600 + (minutes || 0) * 60 + (seconds || 0)
 
   if (totalSeconds <= 0) {
-    messageBox = await useMessage('error', t('preview.countdown.error'))
+    messageBox = await useMessage('error', {
+      attach: container,
+      content: t('preview.countdown.error'),
+    })
     return
   }
 
@@ -169,6 +172,7 @@ const startCountdown = async () => {
       if (whenEnd === 'showEndMessage') {
         countdownInfo = ''
         messageBox = await useMessage('error', {
+          attach: container,
           content: t('preview.countdown.endCountdown'),
           duration: 5000,
           closeBtn: true,

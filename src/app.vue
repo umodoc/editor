@@ -1,13 +1,16 @@
 <template>
-  <div class="box">
-    <umo-editor ref="editorRef" v-bind="options" />
+  <div class="examples">
+    <div class="box">
+      <umo-editor ref="editorRef" v-bind="options" />
+    </div>
+    <div class="box">
+      <umo-editor editor-key="testaaa" :toolbar="{ defaultMode: 'classic' }" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { shortId } from '@/utils/short-id'
-
-// import { UmoEditor } from '../dist/umo-editor'
 
 const editorRef = $ref(null)
 const templates = [
@@ -31,8 +34,9 @@ const options = $ref({
     enableSourceEditor: true,
   },
   document: {
-    // title: '测试文档',
+    title: '测试文档',
     content: localStorage.getItem('document.content') ?? '<p>测试文档</p>',
+    characterLimit: 10000,
   },
   templates,
   cdnUrl: 'https://cdn.umodoc.com',
@@ -99,12 +103,17 @@ const options = $ref({
 </script>
 
 <style>
-.box {
+.examples {
   margin: 20px;
+  display: flex;
   height: calc(100vh - 40px);
+}
+.box {
   border: solid 1px #ddd;
   box-sizing: border-box;
   position: relative;
+  width: 50%;
+  height: 100%;
 }
 
 html,

@@ -18,7 +18,7 @@
 const emits = defineEmits(['change'])
 
 const { popupVisible, togglePopup } = usePopup()
-const { editor } = useStore()
+const editor = inject('editor')
 
 const colorBorderChange = (color: string) => {
   popupVisible.value = false

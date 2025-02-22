@@ -1,6 +1,9 @@
 <template>
   <div class="umo-page-container">
-    <container-toc v-if="page.showToc" @close="page.showToc = false" />
+    <container-toc
+      v-if="pageOptions.showToc"
+      @close="pageOptions.showToc = false"
+    />
     <div class="umo-zoomable-container umo-scrollbar">
       <div
         class="umo-zoomable-content"
@@ -11,19 +14,21 @@
       >
         <t-watermark
           class="umo-page-content"
-          :alpha="page.watermark.alpha"
+          :alpha="pageOptions.watermark.alpha"
           v-bind="watermarkOptions"
-          :watermark-content="page.watermark"
+          :watermark-content="pageOptions.watermark"
           :style="{
-            '--umo-page-background': page.background,
-            '--umo-page-margin-top': (page.margin?.top ?? '0') + 'cm',
-            '--umo-page-margin-bottom': (page.margin?.bottom ?? '0') + 'cm',
-            '--umo-page-margin-left': (page.margin?.left ?? '0') + 'cm',
-            '--umo-page-margin-right': (page.margin?.right ?? '0') + 'cm',
+            '--umo-page-background': pageOptions.background,
+            '--umo-page-margin-top': (pageOptions.margin?.top ?? '0') + 'cm',
+            '--umo-page-margin-bottom':
+              (pageOptions.margin?.bottom ?? '0') + 'cm',
+            '--umo-page-margin-left': (pageOptions.margin?.left ?? '0') + 'cm',
+            '--umo-page-margin-right':
+              (pageOptions.margin?.right ?? '0') + 'cm',
             '--umo-page-width': pageSize.width + 'cm',
             '--umo-page-height': pageSize.height + 'cm',
             width: pageSize.width + 'cm',
-            transform: `scale(${page.zoomLevel ? page.zoomLevel / 100 : 1})`,
+            transform: `scale(${pageOptions.zoomLevel ? pageOptions.zoomLevel / 100 : 1})`,
           }"
         >
           <div class="umo-page-node-header" contenteditable="false">
@@ -79,19 +84,21 @@
 <script setup lang="ts">
 import type { WatermarkOption } from '@/types'
 
-const { container, page, imageViewer } = useStore()
+const container = inject('container')
+const imageViewer = inject('imageViewer')
+const pageOptions = inject('page')
 
 // 页面大小
 const pageSize = $computed(() => {
-  const { width, height } = page.value.size ?? { width: 0, height: 0 }
+  const { width, height } = pageOptions.value.size ?? { width: 0, height: 0 }
   return {
-    width: page.value.orientation === 'portrait' ? width : height,
-    height: page.value.orientation === 'portrait' ? height : width,
+    width: pageOptions.value.orientation === 'portrait' ? width : height,
+    height: pageOptions.value.orientation === 'portrait' ? height : width,
   }
 })
 // 页面缩放后的大小
 const pageZoomWidth = $computed(() => {
-  return `calc(${pageSize.width}cm * ${page.value.zoomLevel ? page.value.zoomLevel / 100 : 1})`
+  return `calc(${pageSize.width}cm * ${pageOptions.value.zoomLevel ? pageOptions.value.zoomLevel / 100 : 1})`
 })
 
 // 页面内容变化后更新页面高度
@@ -102,10 +109,14 @@ const setPageZoomHeight = () => {
     console.warn('The element <.umo-page-content> does not exist.')
     return
   }
-  pageZoomHeight = `${(el.clientHeight * (page.value.zoomLevel ?? 1)) / 100}px`
+  pageZoomHeight = `${(el.clientHeight * (pageOptions.value.zoomLevel ?? 1)) / 100}px`
 }
 watch(
-  () => [page.value.zoomLevel, page.value.size, page.value.orientation],
+  () => [
+    pageOptions.value.zoomLevel,
+    pageOptions.value.size,
+    pageOptions.value.orientation,
+  ],
   async () => {
     await nextTick()
     setTimeout(() => {
@@ -113,6 +124,15 @@ watch(
     }, 100)
   },
   { immediate: true, deep: true },
+)
+
+// FIXME:
+const editorInstance = inject('editor')
+watch(
+  () => editorInstance.value?.getHTML(),
+  () => {
+    setPageZoomHeight()
+  },
 )
 
 // 水印
@@ -127,7 +147,7 @@ const watermarkOptions = $ref<{
   height: 0,
 })
 watch(
-  () => page.value.watermark,
+  () => pageOptions.value.watermark,
   ({ type }: Partial<WatermarkOption> = { type: '' }) => {
     if (type === 'compact') {
       watermarkOptions.width = 320
@@ -138,14 +158,6 @@ watch(
     }
   },
   { deep: true, immediate: true },
-)
-
-const store = useStore()
-watch(
-  () => store.editor.value?.getHTML(),
-  () => {
-    setPageZoomHeight()
-  },
 )
 
 // 图片预览

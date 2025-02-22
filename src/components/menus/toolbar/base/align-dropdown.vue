@@ -23,7 +23,7 @@
 <script setup lang="ts">
 const { popupVisible, togglePopup } = usePopup()
 
-const { editor } = useStore()
+const editor = inject('editor')
 
 const textAlign = computed(() => {
   if (!editor.value) {

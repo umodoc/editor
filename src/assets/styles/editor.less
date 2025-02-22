@@ -120,7 +120,7 @@
   }
 
   @media screen {
-    .umo-text-selection {
+    &:not(.is-readonly) .umo-text-selection {
       background-color: var(--umo-text-selection-background);
     }
 
@@ -157,6 +157,11 @@
 
     li {
       padding: 0.25em 0 0.25em 3px;
+      ol,
+      ul {
+        margin-top: 0.25em;
+        padding-left: 1.5em;
+      }
 
       p {
         display: inline;
@@ -165,7 +170,6 @@
   }
 
   ol li p {
-    margin-left: 0.25em;
     word-break: break-all;
   }
 

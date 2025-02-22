@@ -15,11 +15,14 @@
 </template>
 
 <script setup lang="ts">
-const { options, editorDestroyed } = useStore()
-const $document = useState('document')
+const container = inject('container')
+const destroyed = inject('destroyed')
+const options = inject('options')
+const $document = useState('document', options)
 
 const toggleMarkdownMode = () => {
   const dialog = useConfirm({
+    attach: container,
     theme: 'warning',
     header: $document.value.enableMarkdown
       ? t('base.markdown.disable')
@@ -33,9 +36,9 @@ const toggleMarkdownMode = () => {
       $document.value.enableMarkdown = !$document.value.enableMarkdown
       dialog.destroy()
       await nextTick()
-      editorDestroyed.value = true
+      destroyed.value = true
       await nextTick()
-      editorDestroyed.value = false
+      destroyed.value = false
     },
   })
 }
