@@ -108,7 +108,7 @@ Umo Editor 的发展，离不开社区的支持，以下是为 Umo Editor 贡献
 
 - 反馈：[https://github.com/umodoc/editor/issues](https://github.com/umodoc/editor/issues) | [https://gitee.com/umodoc/editor/issues](https://gitee.com/umodoc/editor/issues)
 - 社区：[https://github.com/umodoc/editor/discussions](https://github.com/umodoc/editor/discussions)
-- 邮件：[contact@umoteam.com](mailto:contact@umoteam.com)
+- 邮件：[contact@umodoc.com](mailto:contact@umodoc.com)
 
 ## QQ 技术交流群
 

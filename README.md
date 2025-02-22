@@ -110,7 +110,7 @@ If you have any questions or suggestions, please contact us through the followin
 
 - Feedback: https://github.com/umodoc/editor/issues
 - Community: https://github.com/umodoc/editor/discussions
-- Email: [contact@umoteam.com](mailto:contact@umoteam.com)
+- Email: [contact@umodoc.com](mailto:contact@umodoc.com)
 
 ## Support Us
 
