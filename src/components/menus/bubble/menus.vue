@@ -158,7 +158,7 @@ const editor = inject('editor')
 const options = inject('options')
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .umo-bubble-menu-divider {
   width: 1px;
   border-right: solid 1px var(--umo-border-color-light);

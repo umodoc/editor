@@ -148,6 +148,7 @@
     },
     "math": "Mathematics",
     "tag": "Tag",
+    "callout": "Callout",
     "bookmark": {
       "text": "Bookmark",
       "set": "Set bookmarks",
@@ -512,6 +513,10 @@
       "borderStyle": "Border Style",
       "noBorder": "No Border"
     },
+    "callout": {
+      "removeEmoji": "Remove Emoji",
+      "background": "Background Color"
+    },
     "tag": {
       "background": "Background Color",
       "color": "Text Color",
@@ -682,6 +687,9 @@
       "title": "Error Message",
       "message": "Insertion of this file type is not allowed in the current document."
     }
+  },
+  "callout": {
+    "placeholder": "Please enter content"
   },
   "save": {
     "text": "Save",

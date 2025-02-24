@@ -34,7 +34,7 @@ const tags = [
   },
   {
     color: 'rgba(63, 133, 255, 1)',
-    backgroundColor: 'rgb(217, 231, 255',
+    backgroundColor: 'rgb(217, 231, 255)',
     type: 'primary',
   },
   {
