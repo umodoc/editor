@@ -100,6 +100,7 @@ export interface DocumentOptions {
   editorProps?: Record<string, unknown>
   parseOptions?: Record<string, unknown>
   autoSave?: AutoSaveOptions
+  lazyImage?: boolean
 }
 
 export type LocaleLabel =
