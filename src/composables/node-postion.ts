@@ -26,5 +26,8 @@ export const useNodePostion = (container: string, editor: any) => {
   if (editor.value.isActive('pageBreak')) {
     offsetTop = offsetTop - 3
   }
+  if (editor.value.isActive('callout')) {
+    offsetTop = offsetTop + 2
+  }
   return { offsetTop, offsetLeft }
 }
