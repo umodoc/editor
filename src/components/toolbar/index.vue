@@ -7,7 +7,7 @@
       @menu-change="menuChange"
     >
       <template
-        v-for="item in options.toolbar?.menus"
+        v-for="item in calMenus"
         :key="item"
         #[`toolbar_${item}`]="props"
       >
@@ -21,7 +21,7 @@
       @menu-change="menuChange"
     >
       <template
-        v-for="item in options.toolbar?.menus"
+        v-for="item in calMenus"
         :key="item"
         #[`toolbar_${item}`]="props"
       >
@@ -156,11 +156,31 @@ const defaultToolbarMenus = [
   { label: t('toolbar.page'), value: 'page' },
   { label: t('toolbar.export'), value: 'export' },
 ]
+//快速提取所有value
+const defaultMenus = defaultToolbarMenus.map((item) => item.value)
+//标准输入的menus
+const calMenus = [...(options.value.toolbar?.menus ?? [])]
+
 let toolbarMenus = defaultToolbarMenus
-if (options.value.toolbar?.menus) {
-  toolbarMenus = options.value.toolbar?.menus.map(
+if (calMenus) {
+  toolbarMenus = calMenus.map(
     (item: any) => defaultToolbarMenus.filter((menu) => menu.value === item)[0],
   )
+}
+//工具栏扩展
+const toolbarextensions = options.value.toolbar?.extensions
+if (toolbarextensions) {
+  for (const ext of toolbarextensions) {
+    if (!ext.name || !ext.value || defaultMenus.includes(ext.value)) {
+      continue
+    }
+    //tab上显示
+    toolbarMenus.push({ label: ext.name, value: ext.value })
+    //传递插槽内容
+    if (!calMenus.includes(ext.value)) {
+      calMenus.push(ext.value)
+    }
+  }
 }
 let currentMenu = $ref(toolbarMenus[0].value)
 const menuChange = (menu: string) => {

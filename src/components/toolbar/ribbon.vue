@@ -77,7 +77,7 @@
             <slot name="toolbar_base" toolbar-mode="ribbon" />
           </div>
         </template>
-        <template v-if="currentMenu === 'insert'">
+        <template v-else-if="currentMenu === 'insert'">
           <div class="umo-virtual-group">
             <menus-toolbar-insert-link />
             <menus-toolbar-insert-image />
@@ -111,7 +111,7 @@
             <slot name="toolbar_insert" toolbar-mode="ribbon" />
           </div>
         </template>
-        <template v-if="currentMenu === 'table'">
+        <template v-else-if="currentMenu === 'table'">
           <div class="umo-virtual-group">
             <menus-toolbar-table-insert />
             <menus-toolbar-table-fix />
@@ -165,7 +165,7 @@
             <slot name="toolbar_table" toolbar-mode="ribbon" />
           </div>
         </template>
-        <template v-if="currentMenu === 'tools'">
+        <template v-else-if="currentMenu === 'tools'">
           <div class="umo-virtual-group">
             <menus-toolbar-tools-qrcode />
             <menus-toolbar-tools-barcode />
@@ -189,7 +189,7 @@
             <slot name="toolbar_tools" toolbar-mode="ribbon" />
           </div>
         </template>
-        <template v-if="currentMenu === 'page'">
+        <template v-else-if="currentMenu === 'page'">
           <div class="umo-virtual-group">
             <menus-toolbar-page-toggle-toc />
           </div>
@@ -220,7 +220,7 @@
             <slot name="toolbar_page" toolbar-mode="ribbon" />
           </div>
         </template>
-        <template v-if="currentMenu === 'export'">
+        <template v-else-if="currentMenu === 'export'">
           <div class="umo-virtual-group">
             <menus-toolbar-export-image />
             <menus-toolbar-export-pdf v-if="!disableItem('exportPDF')" />
@@ -234,12 +234,18 @@
             <slot name="toolbar_export" toolbar-mode="ribbon" />
           </div>
         </template>
+        <template v-else>
+          <div class="virtual-group is-slot">
+            <slot :name="`toolbar_${currentMenu}`" toolbar-mode="ribbon" />
+          </div>
+        </template>
       </div>
     </toolbar-scrollable>
   </div>
 </template>
 
 <script setup lang="ts">
+import { withSuppress } from '@/utils/functional'
 const props = defineProps<{
   menus: {
     value: string
@@ -253,7 +259,17 @@ const options = inject('options')
 const disableItem = (name: string) => {
   return options.value.toolbar?.disableMenuItems.includes(name)
 }
-
+// eslint-disable-next-line vue/no-dupe-keys
+let currentMenu = $ref('')
+watch(
+  () => props.currentMenu,
+  withSuppress(async (val) => {
+    currentMenu = val
+    await nextTick()
+    scrollableRef?.update()
+  }),
+  { immediate: true },
+)
 const scrollableRef = $ref<{ update: () => void }>()
 const changeMenu = async (menu: string) => {
   emits('menu-change', menu)

@@ -39,6 +39,7 @@ const defaultOptions: UmoEditorOptions = {
       options: {},
       useCustomMethod: false,
     },
+    extensions: [],
   },
   page: {
     defaultMargin: {
@@ -58,6 +59,12 @@ const defaultOptions: UmoEditorOptions = {
       fontFamily: 'SimSun',
       fontWeight: 'normal',
       text: '',
+    },
+    right: {
+      show: false, //页面key 默认不展开
+      pageKey: '', //要展示的具体区域的值
+      pageTitle: '', //显示标题
+      extensions: [], //[{title:"扩展标题",pageKey:"页面关键字,唯一标识"}]
     },
   },
   document: {
@@ -440,6 +447,11 @@ const ojbectSchema = new ObjectSchema({
         validate: 'object',
         required: false,
       },
+      extensions: {
+        merge: 'replace',
+        validate: 'array',
+        required: false,
+      },
     },
   },
   page: {
@@ -545,6 +557,33 @@ const ojbectSchema = new ObjectSchema({
           text: {
             merge: 'replace',
             validate: 'string',
+            required: false,
+          },
+        },
+      },
+      right: {
+        required: false,
+        merge: 'replace',
+        validate: 'object',
+        schema: {
+          show: {
+            merge: 'replace',
+            validate: 'boolean',
+            required: false,
+          },
+          pageKey: {
+            merge: 'replace',
+            validate: 'string',
+            required: false,
+          },
+          pageTitle: {
+            merge: 'replace',
+            validate: 'string',
+            required: false,
+          },
+          extensions: {
+            merge: 'replace',
+            validate: 'array',
             required: false,
           },
         },

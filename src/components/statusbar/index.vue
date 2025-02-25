@@ -349,7 +349,7 @@ const togglePreview = () => {
   page.value.showToc = false
   page.value.preview ??= {}
   page.value.preview.enabled = !page.value.preview.enabled
-
+  page.value.right.show = false
   const zoomableContainer = document.querySelector(
     `${container} .umo-zoomable-container`,
   )
@@ -615,8 +615,7 @@ watch(
   user-select: none;
   display: flex;
   background: var(--umo-color-white);
-  box-shadow:
-    var(--td-shadow-2), var(--td-shadow-inset-top),
+  box-shadow: var(--td-shadow-2), var(--td-shadow-inset-top),
     var(--td-shadow-inset-right), var(--td-shadow-inset-bottom),
     var(--td-shadow-inset-left);
   gap: 5px;

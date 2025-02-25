@@ -24,7 +24,7 @@
           @menu-change="(event: any) => emits('menuChange', event)"
         >
           <template
-            v-for="item in options.toolbar?.menus"
+            v-for="item in calMenus"
             :key="item"
             #[`toolbar_${item}`]="slotProps"
           >
@@ -36,6 +36,13 @@
         <container-page v-if="$toolbar.mode !== 'source'">
           <template #bubble_menu="slotProps">
             <slot name="bubble_menu" v-bind="slotProps" />
+          </template>
+          <template
+            v-for="item in props?.page?.right?.extensions"
+            :key="item.pageKey"
+            #[`page_right_${item.pageKey}`]="slotProps"
+          >
+            <slot :name="`page_right_${item.pageKey}`" v-bind="slotProps" />
           </template>
         </container-page>
         <editor-source v-else />
@@ -149,6 +156,7 @@ watch(
     defaultMargin,
     defaultOrientation,
     watermark,
+    right,
     showBreakMarks,
   }: PageOption) => {
     page.value = {
@@ -168,6 +176,13 @@ watch(
         enabled: false,
         scale: 1,
         zoom: 100,
+      },
+      right: {
+        //防止出现同一存储域问题
+        show: right?.show,
+        pageKey: right?.pageKey,
+        pageTitle: right?.pageTitle,
+        extensions: right?.extensions,
       },
     }
     if (showBreakMarks) {
@@ -212,6 +227,17 @@ watch(
   () => setOptions(props),
   { deep: true },
 )
+//记录重新构造后的menus 内容，包含扩展tab
+const calMenus = [...(options.value.toolbar?.menus ?? [])]
+const toolbarextensions = props?.toolbar?.extensions
+if (toolbarextensions) {
+  for (const ext of toolbarextensions) {
+    if (!ext.name || !ext.value || calMenus.includes(ext.value)) {
+      continue
+    }
+    calMenus.push(ext.value)
+  }
+}
 
 watch(
   () => options.value.theme,
@@ -840,6 +866,19 @@ const deleteBookmark = (bookmarkName: string) => {
   }
   return true
 }
+
+const setPageRight = (pageRight: any) => {
+  if (pageRight.show === true || pageRight.show === false) {
+    page.value.right.show = pageRight.show
+  }
+  if (pageRight.pageKey) {
+    page.value.right.pageKey = pageRight.pageKey
+  }
+  if (pageRight.pageTitle) {
+    page.value.right.pageTitle = pageRight.pageTitle
+  }
+}
+
 // Content Excerpt Methods
 const getContentExcerpt = (charLimit = 100, more = ' ...') => {
   const text = editor.value?.getText()
@@ -945,6 +984,7 @@ defineExpose({
   getAllBookmarks,
   setBookmark,
   deleteBookmark,
+  setPageRight,
 })
 </script>
 
