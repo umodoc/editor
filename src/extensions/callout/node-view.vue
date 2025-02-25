@@ -82,8 +82,7 @@ const selectEmoji = (emoji: string) => {
       }
       :deep(p) {
         vertical-align: middle;
-        height: 1em;
-        line-height: 1em;
+        line-height: 1;
         * {
           display: none;
         }
