@@ -16,6 +16,8 @@ import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import TextColor from '@tiptap/extension-text-style'
 import Typography from '@tiptap/extension-typography'
+import Mention from './mention'
+import getUsersSuggestion from './mention/suggestion'
 import Underline from '@tiptap/extension-underline'
 import StarterKit from '@tiptap/starter-kit'
 import type { Editor, Extension } from '@tiptap/vue-3'
@@ -150,6 +152,9 @@ export const getDefaultExtensions = ({
     PageBreak,
 
     // 其他
+    Mention.configure({
+      suggestion: getUsersSuggestion(options.value.users),
+    }),
     Selection,
     TableOfContents.configure({
       getIndex: getHierarchicalIndexes,

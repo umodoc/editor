@@ -156,6 +156,12 @@ export interface EchartsOptions {
   haveImage: boolean
 }
 
+export interface UserItem {
+  id: string
+  label: string
+  avatar?: string
+}
+
 export interface WebPageItem {
   label: LocaleLabel
   icon: string
@@ -222,6 +228,7 @@ export interface UmoEditorOptions {
   diagrams?: Record<string, unknown>
   file?: FileOptions
   user?: Record<string, unknown>
+  users?: UserItem[]
   extensions?: Extension[]
   translations?: Record<string, unknown>
   onSave?: AsyncFunction

@@ -53,10 +53,20 @@ const options = $ref({
     enabled: true,
   },
   user: {
-    userId: 'umoeditor',
-    nickName: 'Umo Editor',
-    avatarUrl: 'https://tdesign.gtimg.com/site/avatar.jpg',
+    id: 'umoeditor',
+    label: 'Umo Editor',
+    avatar: 'https://tdesign.gtimg.com/site/avatar.jpg',
   },
+  users: [
+    { id: 'umodoc', label: 'Umo Team' },
+    { id: 'Cassielxd', label: 'Cassielxd' },
+    { id: 'Goldziher', label: "Na'aman Hirschfeld" },
+    { id: 'SerRashin', label: 'SerRashin' },
+    { id: 'ChenErik', label: 'ChenErik' },
+    { id: 'china-wangxu', label: 'china-wangxu' },
+    { id: 'Sherman Xu', label: 'xuzhenjun130' },
+    { id: 'testuser', label: '测试用户' },
+  ],
   async onSave(content: string, page: number, document: { content: string }) {
     localStorage.setItem('document.content', document.content)
     return new Promise((resolve, reject) => {
