@@ -148,6 +148,7 @@
     },
     "math": "数学公式",
     "tag": "标签",
+    "callout": "高亮块",
     "bookmark": {
       "text": "书签",
       "set": "设置书签",
@@ -514,6 +515,10 @@
       "borderStyle": "边框样式",
       "noBorder": "不显示边框"
     },
+    "callout": {
+      "removeEmoji": "移除表情",
+      "background": "背景颜色"
+    },
     "tag": {
       "background": "背景颜色",
       "color": "文字颜色",
@@ -691,6 +696,9 @@
       "title": "错误提示",
       "message": "当前文档不允许插入该类型的文件。"
     }
+  },
+  "callout": {
+    "placeholder": "请输入内容"
   },
   "save": {
     "text": "保存文档",

@@ -28,12 +28,19 @@
 </template>
 
 <script setup lang="ts">
+const props = defineProps({
+  onSelectEmoji: Function,
+})
 const { popupVisible, togglePopup } = usePopup()
 const editor = inject('editor')
 const options = inject('options')
 
 const selectEmoji = (emoji: string) => {
-  editor.value?.chain().focus().insertContent(emoji).run()
+  if (props.onSelectEmoji) {
+    props.onSelectEmoji(emoji)
+  } else {
+    editor.value?.chain().focus().insertContent(emoji).run()
+  }
   popupVisible.value = false
 }
 </script>
@@ -54,9 +61,11 @@ const selectEmoji = (emoji: string) => {
     font-size: 12px;
     position: sticky;
     line-height: 2.4;
-    top: 0;
+    top: 0.5px;
+    margin-left: 0.5px;
     background-color: var(--umo-button-hover-background);
     padding-left: calc(var(--umo-popup-content-padding) + 5px);
+    border-top-left-radius: var(--umo-radius);
     &:first-child {
       margin-top: 0;
     }

@@ -74,6 +74,13 @@
         />
       </t-dropdown-item>
       <t-dropdown-item>
+        <menus-toolbar-insert-callout
+          v-if="!disableItem('callout')"
+          :huge="false"
+          :tooltip="false"
+        />
+      </t-dropdown-item>
+      <t-dropdown-item>
         <menus-button
           ico="hr"
           :text="t('insert.hr.text')"

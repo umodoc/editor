@@ -3,9 +3,9 @@
     <div class="box">
       <umo-editor ref="editorRef" v-bind="options" />
     </div>
-    <div class="box">
+    <!-- <div class="box">
       <umo-editor editor-key="testaaa" :toolbar="{ defaultMode: 'classic' }" />
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -112,7 +112,7 @@ const options = $ref({
   border: solid 1px #ddd;
   box-sizing: border-box;
   position: relative;
-  width: 50%;
+  width: 100%;
   height: 100%;
 }
 

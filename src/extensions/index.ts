@@ -52,6 +52,7 @@ import Selection from './selection'
 import TableCell from './table-cell'
 import TableHeader from './table-header'
 import Tag from './tag'
+import Callout from './callout'
 import TextAlign from './text-align'
 import TextBox from './text-box'
 import Toc from './toc'
@@ -126,6 +127,7 @@ export const getDefaultExtensions = ({
     Iframe,
     Mathematics,
     Tag,
+    Callout,
     Bookmark.configure({
       class: 'umo-editor-bookmark',
     }),
