@@ -166,6 +166,7 @@ watch(
       autoWidth: false,
       preview: {
         enabled: false,
+        editable: editor.value?.isEditable,
         scale: 1,
         zoom: 100,
       },
@@ -874,6 +875,7 @@ watch(
       useHotkeys('esc', () => {
         if (page.value.preview) {
           page.value.preview.enabled = false
+          editor.value.setEditable(page.value.preview.editable)
         }
         unsetFormatPainter()
       })

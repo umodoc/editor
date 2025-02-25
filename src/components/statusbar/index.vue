@@ -349,6 +349,10 @@ const togglePreview = () => {
   page.value.showToc = false
   page.value.preview ??= {}
   page.value.preview.enabled = !page.value.preview.enabled
+  if (page.value.preview.enabled) {
+    page.value.preview.editable = editor.value.isEditable
+    editor.value.setEditable(false)
+  }
 
   const zoomableContainer = document.querySelector(
     `${container} .umo-zoomable-container`,
@@ -358,6 +362,7 @@ const togglePreview = () => {
   }
 }
 const exitPreview = () => {
+  editor.value.setEditable(page.value.preview.editable)
   if (page.value.preview.enabled) {
     page.value.preview ??= {}
     page.value.preview.enabled = false
