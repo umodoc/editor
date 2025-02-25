@@ -190,7 +190,7 @@ const $document = useState('document', options)
 
 let toolbarKey = $ref(shortId())
 watch(
-  () => options.value.document?.readOnly,
+  () => [options.value.document?.readOnly, editor.value?.isEditable],
   () => {
     toolbarKey = shortId()
   },

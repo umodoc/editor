@@ -33,7 +33,7 @@
     />
     <div class="umo-toolbar-actions" :class="$toolbar.mode">
       <t-popup
-        v-if="$toolbar.mode !== 'source' && editor?.isEditable"
+        v-if="$toolbar.mode !== 'source' && options.document.readOnly !== true"
         v-model="statusPopup"
         :attach="container"
         trigger="click"

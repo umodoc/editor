@@ -349,12 +349,6 @@ const togglePreview = () => {
   page.value.showToc = false
   page.value.preview ??= {}
   page.value.preview.enabled = !page.value.preview.enabled
-  if (page.value.preview.enabled) {
-    page.value.preview.editable = editor.value.isEditable
-    editor.value.setEditable(false)
-  } else {
-    editor.value.setEditable(page.value.preview.editable)
-  }
 
   const zoomableContainer = document.querySelector(
     `${container} .umo-zoomable-container`,
@@ -369,6 +363,18 @@ const exitPreview = () => {
     page.value.preview.enabled = false
   }
 }
+
+watch(
+  () => page.value.preview?.enabled,
+  (enabled: boolean) => {
+    if (enabled) {
+      page.value.preview.editable = editor.value.isEditable
+      editor.value.setEditable(false)
+    } else {
+      editor.value.setEditable(page.value.preview.editable)
+    }
+  },
+)
 
 // 演示模式倒计时
 const countdownSetting = $ref(false)
