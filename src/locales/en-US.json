@@ -168,6 +168,8 @@
       "insert": "Insert",
       "title": "Insert Web Page",
       "tip": "Some web pages may not support embedding.",
+      "type": "Link Type:",
+      "url": "Page URL:",
       "placeholder": "Enter a web address, starting with http:// or https://"
     }
   },
@@ -516,6 +518,10 @@
       "background": "Background Color",
       "color": "Text Color",
       "delete": "Delete Tag"
+    },
+    "webpage": {
+      "clickable": "Toggle Clickable",
+      "open": "Open in a new window"
     },
     "toFile": "Convert to File",
     "delete": "Delete"

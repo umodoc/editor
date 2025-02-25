@@ -19,7 +19,10 @@
         @resize="onResize"
         @focus="selected = true"
       >
-        <iframe :src="node.attrs.src"></iframe>
+        <iframe
+          :src="node.attrs.src"
+          :style="{ pointerEvents: node.attrs.clickable ? 'auto' : 'none' }"
+        ></iframe>
       </drager>
     </div>
   </node-view-wrapper>
@@ -63,6 +66,7 @@ const onResize = ({ width, height }: { width: number; height: number }) => {
 }
 onClickOutside(containerRef, () => {
   selected = false
+  updateAttributes({ clickable: false })
 })
 </script>
 
@@ -77,12 +81,11 @@ onClickOutside(containerRef, () => {
     }
     iframe {
       display: block;
-      min-width: 400px;
+      min-width: 200px;
       min-height: 200px;
       width: 100%;
       height: 100%;
       border: none;
-      pointer-events: none;
       background-color: var(--umo-color-white);
     }
   }

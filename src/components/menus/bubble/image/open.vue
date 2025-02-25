@@ -1,7 +1,7 @@
 <template>
   <menus-button
-    ico="image-open"
-    :text="t('bubbleMenu.image.open')"
+    ico="new-window"
+    :text="t('bubbleMenu.webpage.open')"
     @menu-click="openImage"
   />
 </template>

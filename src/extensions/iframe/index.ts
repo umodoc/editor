@@ -19,14 +19,20 @@ export default Node.create({
       vnode: {
         default: true,
       },
+      type: {
+        default: 0,
+      },
       src: {
         default: null,
       },
       width: {
-        default: 400,
+        default: null,
       },
       height: {
         default: 200,
+      },
+      clickable: {
+        default: false,
       },
     }
   },

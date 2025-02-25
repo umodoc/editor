@@ -3,7 +3,7 @@
     :attach="`${container} .umo-page-container`"
     placement="bottom-right"
     overlay-class-name="umo-block-menu-dropdown"
-    max-height="320"
+    :max-height="320"
     trigger="click"
     :destroy-on-close="false"
     :popup-props="popupProps"

@@ -67,6 +67,14 @@
     <menus-toolbar-base-align-center />
     <menus-toolbar-base-align-right />
     <div class="umo-bubble-menu-divider"></div>
+    <menus-bubble-webpage-clickable />
+    <menus-toolbar-insert-web-page
+      ico="edit"
+      :page-type="editor?.getAttributes('iframe')?.type"
+      :page-url="editor?.getAttributes('iframe')?.src"
+    />
+    <menus-bubble-webpage-open />
+    <div class="umo-bubble-menu-divider"></div>
     <menus-bubble-file-download
       v-if="
         editor?.isActive('file') ||

@@ -168,6 +168,8 @@
       "insert": "插入",
       "title": "插入网页",
       "tip": "某些网页可能不支持嵌入。",
+      "type": "链接类型：",
+      "url": "网页地址：",
       "placeholder": "请输入网页地址，以 http:// 或 https:// 开头"
     }
   },
@@ -516,6 +518,10 @@
       "background": "背景颜色",
       "color": "文字颜色",
       "delete": "删除标签"
+    },
+    "webpage": {
+      "clickable": "切换到可点击",
+      "open": "新窗口打开"
     },
     "toFile": "转为文件",
     "delete": "删除"
