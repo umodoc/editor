@@ -352,6 +352,8 @@ const togglePreview = () => {
   if (page.value.preview.enabled) {
     page.value.preview.editable = editor.value.isEditable
     editor.value.setEditable(false)
+  } else {
+    editor.value.setEditable(page.value.preview.editable)
   }
 
   const zoomableContainer = document.querySelector(
@@ -362,8 +364,8 @@ const togglePreview = () => {
   }
 }
 const exitPreview = () => {
-  editor.value.setEditable(page.value.preview.editable)
   if (page.value.preview.enabled) {
+    editor.value.setEditable(page.value.preview.editable)
     page.value.preview ??= {}
     page.value.preview.enabled = false
   }
@@ -496,8 +498,8 @@ watch(
   () => {
     editor.value?.on('focus', () => {
       useHotkeys('f5', togglePreview)
-      useHotkeys('f11, command+f11', fullscreen.toggle)
-      useHotkeys('Ctrl+0,command+0', autoWidth)
+      useHotkeys('f11,command+f11', fullscreen.toggle)
+      useHotkeys('ctrl+0,command+0', autoWidth)
       useHotkeys('ctrl+-,command+-', zoomOut)
       useHotkeys('ctrl+=,command+=', zoomIn)
       useHotkeys('ctrl+1,command+1', zoomReset)
