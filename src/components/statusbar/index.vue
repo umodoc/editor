@@ -365,7 +365,6 @@ const togglePreview = () => {
 }
 const exitPreview = () => {
   if (page.value.preview.enabled) {
-    editor.value.setEditable(page.value.preview.editable)
     page.value.preview ??= {}
     page.value.preview.enabled = false
   }
