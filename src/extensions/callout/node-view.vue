@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts" setup>
-import { nodeViewProps, NodeViewWrapper, NodeViewContent } from '@tiptap/vue-3'
+import { NodeViewContent, nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 const { node } = defineProps(nodeViewProps)
 
 const container = inject('container')
@@ -81,8 +81,8 @@ const selectEmoji = (emoji: string) => {
         opacity: 0.5;
       }
       :deep(p) {
-        vertical-align: text-bottom;
-        line-height: 1;
+        vertical-align: middle;
+        line-height: 1.2;
         * {
           display: none;
         }

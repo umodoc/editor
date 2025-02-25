@@ -1,6 +1,6 @@
-import { Node, mergeAttributes, wrappingInputRule } from '@tiptap/core'
+import { mergeAttributes, Node, wrappingInputRule } from '@tiptap/core'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
-import { shortId } from '@/utils/short-id'
+
 import NodeView from './node-view.vue'
 
 declare module '@tiptap/core' {
@@ -14,15 +14,12 @@ declare module '@tiptap/core' {
 export default Node.create({
   name: 'callout',
   group: 'block',
-  content: 'paragraph+',
+  content: '(paragraph|orderedList|bulletList)+',
   defining: true,
   exitable: true,
   selectable: false,
   addAttributes() {
     return {
-      id: {
-        default: shortId(6),
-      },
       type: { default: 'primary' },
       icon: {
         default: '⭐️',
@@ -56,6 +53,12 @@ export default Node.create({
             .insertContent({
               type: this.name,
               attrs: options,
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [],
+                },
+              ],
             })
             .run()
         },
