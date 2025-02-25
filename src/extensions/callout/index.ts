@@ -24,7 +24,9 @@ export default Node.create({
       icon: {
         default: '⭐️',
       },
-      backgroundColor: { default: 'rgb(217, 231, 255)' },
+      backgroundColor: {
+        default: 'rgb(217, 231, 255)',
+      },
     }
   },
   parseHTML() {
