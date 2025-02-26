@@ -21,15 +21,18 @@ const { node } = defineProps(nodeViewProps)
 .umo-node-tag {
   margin: 0 0.2em;
   background-color: transparent !important;
-  transform: translateY(-1px);
+  vertical-align: middle;
   display: inline-block;
+  transform: translateY(-0.05em);
   &-text {
     border-radius: 0.2em;
     padding: 0.1em 0.4em;
     font-size: 0.9em;
-    margin: 0 2px;
+    margin: 0 0.2em;
     cursor: pointer;
+    white-space: nowrap;
     border: 1px solid rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
   }
 }
 </style>

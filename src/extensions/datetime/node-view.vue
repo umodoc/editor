@@ -41,24 +41,22 @@ const datetimeChange = (value: any) => {
 .umo-node-datetime {
   margin: 0 0.2em;
   background-color: transparent !important;
-  transform: translateY(-1px);
-  display: inline-block;
+  vertical-align: middle;
   &-text {
     box-decoration-break: clone;
-    padding: 0.1em 0.2em;
-    margin: 0 0.1em;
-    border-radius: 0.1em;
+    margin: 0 0.2em;
+    border-radius: 0.2em;
     cursor: default;
     display: inline-flex;
     align-items: center;
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.03);
-    }
+    white-space: nowrap;
   }
   &-icon {
-    font-size: 1em;
     color: var(--umo-text-color-light);
     margin-right: 0.3em;
+  }
+  &:hover {
+    color: var(--umo-primary-color);
   }
 }
 </style>

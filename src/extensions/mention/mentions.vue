@@ -88,15 +88,14 @@ defineExpose({
 
 <style lang="less">
 .umo-node-mention {
+  vertical-align: middle;
   box-decoration-break: clone;
   color: var(--umo-primary-color);
   padding: 0.1em 0.2em;
   margin: 0 0.1em;
-  border-radius: 0.1em;
+  border-radius: 0.2em;
+  white-space: nowrap;
   cursor: default;
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.03);
-  }
 }
 .umo-mention-popup {
   .umo-dropdown {
