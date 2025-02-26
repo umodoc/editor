@@ -38,6 +38,9 @@ const options = $ref({
     content: localStorage.getItem('document.content') ?? '<p>测试文档</p>',
     characterLimit: 10000,
   },
+  page: {
+    showBookmark: true,
+  },
   templates,
   cdnUrl: 'https://cdn.umodoc.com',
   shareUrl: 'https://umodoc.com',

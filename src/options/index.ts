@@ -50,7 +50,7 @@ const defaultOptions: UmoEditorOptions = {
     defaultOrientation: 'portrait',
     defaultBackground: '#fff',
     showBreakMarks: true,
-    showBookmark: false, //书签展示
+    showBookmark: false,
     watermark: {
       type: 'compact',
       alpha: 0.2,
