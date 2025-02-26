@@ -2,7 +2,7 @@
   <editor-content
     class="umo-editor-content"
     :class="{
-      'show-bookmark': bookmark,
+      'show-bookmark': page.showBookmark,
       'show-line-number': page.showLineNumber,
       'format-painter': editor?.view?.painter?.enabled,
       'is-empty': editor?.isEmpty && editor?.state.doc.childCount <= 1,
@@ -29,7 +29,6 @@ import { Editor, EditorContent } from '@tiptap/vue-3'
 
 import { getDefaultExtensions, inputAndPasteRules } from '@/extensions'
 
-const bookmark = inject('bookmark')
 const destroyed = inject('destroyed')
 const page = inject('page')
 const options = inject('options')

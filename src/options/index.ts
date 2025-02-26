@@ -50,6 +50,7 @@ const defaultOptions: UmoEditorOptions = {
     defaultOrientation: 'portrait',
     defaultBackground: '#fff',
     showBreakMarks: true,
+    showBookmark: false, //书签展示
     watermark: {
       type: 'compact',
       alpha: 0.2,
@@ -492,6 +493,11 @@ const ojbectSchema = new ObjectSchema({
         required: false,
       },
       showBreakMarks: {
+        merge: 'replace',
+        validate: 'boolean',
+        required: false,
+      },
+      showBookmark: {
         merge: 'replace',
         validate: 'boolean',
         required: false,
