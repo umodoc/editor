@@ -13,7 +13,9 @@
             {{ item.label }}
           </li>
         </div>
-        <div v-else class="umo-mention-dropdown-menu-empty">No result</div>
+        <div v-else class="umo-mention-popup-empty">
+          {{ t('mention.noResult') }}
+        </div>
       </div>
     </div>
   </div>
@@ -101,6 +103,11 @@ defineExpose({
     &__item--active {
       font-weight: 600;
     }
+  }
+  &-empty {
+    padding: 3px 5px;
+    min-width: 100px;
+    color: var(--umo-text-color-light);
   }
 }
 </style>

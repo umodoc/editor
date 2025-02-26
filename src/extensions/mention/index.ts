@@ -1,5 +1,12 @@
 import Mention from '@tiptap/extension-mention'
-import mentionSuggestion from './suggestion'
+
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    insertMention: {
+      insertMention: (options: any) => ReturnType
+    }
+  }
+}
 
 const CustomMention = Mention.extend({
   addAttributes() {
@@ -10,6 +17,18 @@ const CustomMention = Mention.extend({
       label: {
         default: null,
       },
+    }
+  },
+  addCommands() {
+    return {
+      insertMention:
+        () =>
+        ({ commands }) => {
+          console.log(this.options)
+          return commands.insertContent(
+            ' ' + (this.options?.suggestion?.char || '@'),
+          )
+        },
     }
   },
 })
