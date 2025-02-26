@@ -45,9 +45,9 @@ const datetimeChange = (value: any) => {
   display: inline-block;
   &-text {
     box-decoration-break: clone;
-    padding: 0.1rem 0.2rem;
-    margin: 0 0.1rem;
-    border-radius: 0.1rem;
+    padding: 0.1em 0.2em;
+    margin: 0 0.1em;
+    border-radius: 0.1em;
     cursor: default;
     display: inline-flex;
     align-items: center;

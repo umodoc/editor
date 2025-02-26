@@ -90,9 +90,9 @@ defineExpose({
 .umo-node-mention {
   box-decoration-break: clone;
   color: var(--umo-primary-color);
-  padding: 0.1rem 0.2rem;
-  margin: 0 0.1rem;
-  border-radius: 0.1rem;
+  padding: 0.1em 0.2em;
+  margin: 0 0.1em;
+  border-radius: 0.1em;
   cursor: default;
   &:hover {
     background-color: rgba(0, 0, 0, 0.03);
