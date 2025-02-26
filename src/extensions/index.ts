@@ -35,6 +35,7 @@ import Audio from './audio'
 import Bookmark from './bookmark'
 import BulletList from './bullet-list'
 import Callout from './callout'
+import Datetime from './datetime'
 import CodeBlock from './code-block'
 import Echarts from './echarts'
 import File from './file'
@@ -130,6 +131,7 @@ export const getDefaultExtensions = ({
     Mathematics,
     Tag,
     Callout,
+    Datetime,
     Bookmark.configure({
       class: 'umo-editor-bookmark',
     }),
