@@ -7,6 +7,7 @@ import Focus from '@tiptap/extension-focus'
 import FontFamily from '@tiptap/extension-font-family'
 import Highlight from '@tiptap/extension-highlight'
 import Link from '@tiptap/extension-link'
+import NodeRange from '@tiptap-pro/extension-node-range'
 import Placeholder from '@tiptap/extension-placeholder'
 import Subscript from '@tiptap/extension-subscript'
 import Superscript from '@tiptap/extension-superscript'
@@ -158,6 +159,7 @@ export const getDefaultExtensions = ({
       suggestion: getUsersSuggestion(options.value.users),
     }),
     Selection,
+    NodeRange,
     TableOfContents.configure({
       getIndex: getHierarchicalIndexes,
       scrollParent: () =>

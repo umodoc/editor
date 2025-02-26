@@ -12,6 +12,7 @@
       :menu-active="menuActive"
       ico="block-menu"
       hide-text
+      style="cursor: grab"
     />
     <t-dropdown-menu>
       <t-dropdown-item class="umo-block-menu-group-name" disabled>
@@ -161,6 +162,10 @@ import type { Node } from '@tiptap/pm/model'
 import { getSelectionNode } from '@/extensions/selection'
 import { shortId } from '@/utils/short-id'
 
+const emits = defineEmits<{
+  dropdownVisible: (visible: boolean) => void
+}>()
+
 const container = inject('container')
 const editor = inject('editor')
 const blockMenu = inject('blockMenu')
@@ -172,6 +177,7 @@ const popupProps = {
     editor.value.commands.focus()
     blockMenu.value = visible
     menuActive = visible
+    emits('dropdownVisible', visible)
   },
 }
 
