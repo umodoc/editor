@@ -22,6 +22,7 @@ export interface PageOption {
   defaultOrientation?: string
   defaultBackground?: string
   showBreakMarks?: boolean
+  showBookmark?: boolean
   watermark?: WatermarkOption
   size?: {
     width: number

@@ -54,7 +54,7 @@
           </t-table>
         </t-form-item>
         <t-form-item>
-          <t-checkbox v-model="bookmark">显示书签</t-checkbox>
+          <t-checkbox v-model="page.showBookmark">显示书签</t-checkbox>
         </t-form-item>
       </t-form>
     </div>
@@ -63,7 +63,8 @@
 <script setup lang="ts">
 const container = inject('container')
 const editor = inject('editor')
-const bookmark = inject('bookmark')
+const page = inject('page')
+
 //弹窗口显示隐藏 true显示 默认隐藏
 let dialogVisible = $ref(false)
 //书签名称
