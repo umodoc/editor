@@ -12,7 +12,6 @@
       :footer="false"
       class="umo-diagrams-dialog"
       mode="full-screen"
-      @opened="openDiagramEditor"
       @close="dialogVisible = false"
     >
       <div v-if="loading" class="umo-diagrams-loading">
@@ -45,9 +44,6 @@ const diagramEditor = new DiagramEditor({
   params: (options.value.diagrams?.params ?? {}) as Record<string, any>,
   container: `${container} .umo-diagrams-container`,
 })
-const openDiagramEditor = () => {
-  diagramEditor.edit(props.content ?? '')
-}
 
 let image = $ref<
   | {
@@ -98,7 +94,7 @@ const messageListener = (evt: MessageEvent) => {
 
 watch(
   () => dialogVisible,
-  (val: boolean) => {
+  async (val: boolean) => {
     if (!val) {
       window.removeEventListener('message', messageListener)
       diagramEditor.stopEditing()
@@ -107,7 +103,9 @@ watch(
       }
       return
     }
+    await nextTick()
     loading = true
+    diagramEditor.edit(props.content ?? '')
     window.addEventListener('message', messageListener)
     image = undefined
   },
