@@ -1,6 +1,7 @@
 import SearchReplace from '@sereneinserenade/tiptap-search-and-replace'
 import Bold from '@tiptap/extension-bold'
 import CharacterCount from '@tiptap/extension-character-count'
+import { ColumnsExtension as Columns } from '@tiptap-extend/columns'
 import Color from '@tiptap/extension-color'
 import Dropcursor from '@tiptap/extension-dropcursor'
 import Focus from '@tiptap/extension-focus'
@@ -130,6 +131,7 @@ export const getDefaultExtensions = ({
     hr,
     Iframe,
     Mathematics,
+    Columns,
     Tag,
     Callout,
     Datetime,

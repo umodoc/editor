@@ -147,6 +147,7 @@
       "hrefTip": "一般以 http:// 或 https:// 开头"
     },
     "math": "数学公式",
+    "columns": "分栏",
     "tag": "标签",
     "callout": "高亮块",
     "mention": "提及某人",

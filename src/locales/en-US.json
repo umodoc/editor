@@ -147,6 +147,7 @@
       "hrefTip": "Usually starting with http:// or https://"
     },
     "math": "Mathematics",
+    "columns": "Columns",
     "tag": "Tag",
     "callout": "Callout",
     "mention": "Mention",

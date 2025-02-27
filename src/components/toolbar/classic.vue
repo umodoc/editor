@@ -84,6 +84,7 @@
           />
           <menus-toolbar-insert-emoji v-if="!disableItem('emoji')" />
           <menus-toolbar-insert-math v-if="!disableItem('math')" />
+          <menus-toolbar-insert-columns v-if="!disableItem('columns')" />
           <menus-toolbar-insert-tag v-if="!disableItem('tag')" />
           <menus-toolbar-insert-callout v-if="!disableItem('callout')" />
           <menus-toolbar-insert-mention v-if="!disableItem('mention')" />

@@ -63,6 +63,7 @@
   "dependencies": {
     "@eslint/object-schema": "^2.1.4",
     "@imgly/background-removal": "1.5.5",
+    "@tiptap-extend/columns": "^2.1.6",
     "@tiptap/core": "2.11.5",
     "@tiptap/extension-bold": "2.11.5",
     "@tiptap/extension-bubble-menu": "2.11.5",

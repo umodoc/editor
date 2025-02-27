@@ -102,7 +102,9 @@
     }
   }
 
-  &.is-empty .is-editor-empty:not(.umo-node-view):not(.tableWrapper) {
+  &.is-empty
+    .is-editor-empty:not(.umo-node-view):not(.tableWrapper)
+    :not(.column-block) {
     &::after {
       display: inline-block;
       vertical-align: text-top;
@@ -506,6 +508,24 @@
       margin-right: 0.1em;
       vertical-align: middle;
       width: 1em;
+    }
+  }
+
+  .column-block {
+    width: 100%;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 12px;
+  }
+
+  .column {
+    overflow: auto;
+    background-color: var(--umo-content-table-selected-background);
+    border-radius: var(--umo-radius);
+    padding: 8px 12px;
+    &.umo-node-focused {
+      outline: 2px dashed var(--umo-primary-color);
     }
   }
 }
