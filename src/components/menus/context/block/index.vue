@@ -30,8 +30,31 @@ import type { Instance } from 'tippy.js'
 const editor = inject('editor')
 let selectedNode = $ref(null)
 
+let tippyInstance = $ref<Instance | null>(null)
 const tippyOpitons = $ref<Partial<Instance>>({
   zIndex: 20,
+  onMount(instance: Instance) {
+    tippyInstance = instance
+    console.log(instance)
+  },
+})
+
+// 菜单位置更新
+const updateMenuPostion = () => {
+  try {
+    const { state, view } = editor.value
+    const topPos = state.selection.$from.before(1)
+    const topDOM = view.nodeDOM(topPos)
+    const rect = topDOM?.getBoundingClientRect()
+    if (rect) {
+      tippyInstance.setProps({
+        getReferenceClientRect: () => rect,
+      })
+    }
+  } catch {}
+}
+onMounted(() => {
+  editor.value.on('selectionUpdate', updateMenuPostion)
 })
 
 const nodeChange = ({ node }: any) => {
