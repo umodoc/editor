@@ -723,10 +723,10 @@ const toggleFullscreen = (isFullscreen?: boolean) => {
     if (!isBoolean(isFullscreen)) {
       throw new Error('"isFullscreen" must be a boolean.')
     }
-    void fullscreen.value?.[isFullscreen ? 'exit' : 'enter']()
+    void fullscreen.value?.[isFullscreen ? 'enter' : 'exit']()
     return
   }
-  void fullscreen.value?.[fullscreen.value?.isFullscreen ? 'exit' : 'enter']()
+  void fullscreen.value?.toggle()
 }
 
 const reset = (silent: boolean) => {
