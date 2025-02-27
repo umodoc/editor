@@ -37,36 +37,23 @@ const vuePlugins = {
   }),
 }
 
-// Build configuration
+// Build configuration for standalone application
 const buildConfig = {
-  lib: {
-    entry: `${process.cwd()}/src/components/index.ts`,
-    name: pkg.name,
-    fileName: 'umo-editor',
-  },
   outDir: 'dist',
-  copyPublicDir: false,
-  minify: 'esbuild' as const,
+  assetsDir: 'assets',
+  sourcemap: true,
+  assetsInlineLimit: 4096,
+  minify: 'esbuild' as const, // 明确指定类型
   cssMinify: true,
   rollupOptions: {
-    output: [
-      {
-        banner: copyright,
-        intro: `import './style.css'`,
-        format: 'es' as const,
+    output: {
+      manualChunks(id: string) {
+        // 添加类型声明
+        if (id.includes('node_modules')) {
+          return 'vendor'
+        }
+        return undefined
       },
-    ],
-    external: [
-      'vue',
-      ...Object.keys(pkg.dependencies ?? {}),
-      /^@vueuse\/.*/,
-      /^@tiptap\/.*/,
-      /^nzh\/.*/,
-      /^prism-code-editor\/.*/,
-    ],
-    onwarn(warning: any, warn: (warning: any) => void) {
-      if (warning.code === 'UNUSED_EXTERNAL_IMPORT') return
-      warn(warning)
     },
   },
 }
@@ -81,7 +68,7 @@ const cssConfig = {
 }
 
 export default defineConfig({
-  base: '/umo-editor',
+  base: '/',
   plugins: [
     tsConfigPaths(),
     ReactivityTransform(),

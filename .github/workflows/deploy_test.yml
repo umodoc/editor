@@ -1,0 +1,60 @@
+name: 测试环境发布
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: '测试组件名称'
+        required: true
+        default: 'editor'
+        type: choice
+        options:
+          - editor
+
+# ***************** 前端组件 *****************
+jobs:
+  web_deploy:
+    runs-on: self-hosted
+    timeout-minutes: 15
+    env:
+      APP: ${{ github.event.inputs.app }}
+      ENV: test
+      COMPONENT: w_br_${{ github.event.inputs.app }}
+    outputs:
+      image_tag: ${{ steps.step_env.outputs.image_tag }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        # with:
+        #   submodules: true
+      - name: Print Env
+        id: step_env
+        run: |
+          git fetch --prune --unshallow
+          make ver
+          echo "image_tag=`make frontend-image-tag`" >> $GITHUB_OUTPUT
+
+      - name: Build image
+        run: |
+          make build-frontend-image
+
+      - name: Push image
+        run: |
+          echo "${{ secrets.ALI_CR_PASSWORD }}" | docker login registry.ap-southeast-1.aliyuncs.com -u ${{ secrets.ALI_CR_USERNAME }} --password-stdin
+          make push-frontend-image
+
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: t5.luv.gift
+          username: deployer
+          key: ${{ secrets.SSH_KEY_T2 }}
+          script: |
+            ./upgrade_sgp.sh ${{env.PRJ}}_${{ env.APP }} ${{ steps.step_env.outputs.image_tag }}
+
+      - name: Notify Message
+        run: |
+          curl -H "Content-Type: application/json;charset=utf-8"  -d "{\"msgtype\": \"text\",\"text\": {\"content\":\"【测试环境】网页组件${{ steps.step_env.outputs.image_tag }}更新成功\"}}" "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=badfc85d-68f4-4f06-a47e-5518560f1e13"
+      - name: Notify Failed
+        if: failure()
+        run: |
+          curl -H "Content-Type: application/json;charset=utf-8"  -d "{\"msgtype\": \"text\",\"text\": {\"content\":\"【测试环境】网页组件${{ steps.step_env.outputs.image_tag }}更新失败\"}}" "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=badfc85d-68f4-4f06-a47e-5518560f1e13"
