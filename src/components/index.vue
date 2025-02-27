@@ -125,6 +125,7 @@ const assistant = ref(false)
 const imageViewer = ref({ visible: false, current: null })
 const searchReplace = ref(false)
 const printing = ref(false)
+const fullscreen = ref(null)
 const exportFile = ref({ pdf: false, image: false })
 // const bookmark = ref(false)
 const destroyed = ref(false)
@@ -138,6 +139,7 @@ provide('assistant', assistant)
 provide('imageViewer', imageViewer)
 provide('searchReplace', searchReplace)
 provide('printing', printing)
+provide('fullscreen', fullscreen)
 provide('exportFile', exportFile)
 // provide('bookmark', bookmark)
 provide('destroyed', destroyed)
@@ -186,6 +188,9 @@ watch(
     editor.value?.setEditable(!val)
   },
 )
+onMounted(() => {
+  fullscreen.value = useFullscreen(document.querySelector(container))
+})
 
 const $toolbar = useState('toolbar', options)
 const $document = useState('document', options)
@@ -713,6 +718,17 @@ const print = () => {
   }
 }
 
+const toggleFullscreen = (isFullscreen?: boolean) => {
+  if (isFullscreen !== undefined) {
+    if (!isBoolean(isFullscreen)) {
+      throw new Error('"isFullscreen" must be a boolean.')
+    }
+    void fullscreen.value?.[isFullscreen ? 'exit' : 'enter']()
+    return
+  }
+  void fullscreen.value?.[fullscreen.value?.isFullscreen ? 'exit' : 'enter']()
+}
+
 const reset = (silent: boolean) => {
   const resetFn = () => {
     localStorage.clear()
@@ -932,6 +948,7 @@ defineExpose({
   print,
   focus,
   blur,
+  toggleFullscreen,
   reset,
   useAlert(pramas: DialogOptions) {
     return useAlert({ attach: container, ...pramas })

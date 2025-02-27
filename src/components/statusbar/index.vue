@@ -339,10 +339,7 @@ const selectionCharacters = computed(() => {
 })
 
 // 页面全屏
-let fullscreen: UseFullscreenReturn = $ref(null)
-onMounted(() => {
-  fullscreen = useFullscreen(document.querySelector(container))
-})
+const fullscreen = inject('fullscreen')
 
 // 演示模式
 const togglePreview = () => {
@@ -387,16 +384,16 @@ watch(
   () => page.value.preview?.enabled,
   (enabled: boolean) => {
     if (enabled) {
-      void fullscreen.enter()
+      void fullscreen.value?.enter()
       autoWidth(false, 10)
     } else {
-      void fullscreen.exit()
+      void fullscreen.value?.exit()
       zoomReset()
     }
   },
 )
 watch(
-  () => fullscreen?.isFullscreen,
+  () => fullscreen.value?.isFullscreen,
   (isFullscreen: boolean) => {
     if (!isFullscreen) {
       exitPreview()
@@ -503,7 +500,7 @@ watch(
   () => {
     editor.value?.on('focus', () => {
       useHotkeys('f5', togglePreview)
-      useHotkeys('f11,command+f11', fullscreen.toggle)
+      useHotkeys('f11,command+f11', fullscreen.value?.toggle)
       useHotkeys('ctrl+0,command+0', autoWidth)
       useHotkeys('ctrl+-,command+-', zoomOut)
       useHotkeys('ctrl+=,command+=', zoomIn)
