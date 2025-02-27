@@ -5,7 +5,7 @@
     :tooltip="t('table.cellBgColor.tip')"
     menu-type="popup"
     huge
-    :disabled="!editor?.can().setCellAttribute('backgroundColor', '')"
+    :disabled="!editor?.can().setCellAttribute('background', '')"
     :popup-visible="popupVisible"
     @toggle-popup="togglePopup"
   >
@@ -23,11 +23,7 @@ const editor = inject('editor')
 
 const colorChange = (color: string) => {
   popupVisible.value = false
-  const backgroundColor = color === '' ? null : color
-  editor.value
-    ?.chain()
-    .focus()
-    .setCellAttribute('backgroundColor', backgroundColor)
-    .run()
+  const background = color === '' ? null : color
+  editor.value?.chain().focus().setCellAttribute('background', background).run()
 }
 </script>
