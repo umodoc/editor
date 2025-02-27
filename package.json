@@ -33,7 +33,8 @@
     "email": "support@umodoc.com"
   },
   "files": [
-    "dist"
+    "dist",
+    "types/index.d.ts"
   ],
   "exports": {
     ".": {
