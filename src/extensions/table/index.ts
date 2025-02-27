@@ -34,9 +34,10 @@ const extractStyles = (styleText: string) => {
   return styles
 }
 
-export default Table.extend({
+const CustomTable = Table.extend({
   addProseMirrorPlugins() {
     return [
+      ...(this.parent?.() || []),
       // 处理从 Microsoft Excel 粘贴的表格样式问题
       new Plugin({
         key: new PluginKey('handleExcelPaste'),
@@ -95,4 +96,9 @@ export default Table.extend({
       }),
     ]
   },
+})
+
+export default CustomTable.configure({
+  allowTableNodeSelection: true,
+  resizable: true,
 })

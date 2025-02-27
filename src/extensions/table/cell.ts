@@ -18,7 +18,6 @@ const TableCellOptions = {
           return match ? match[1].trim() : null
         },
         renderHTML: ({ background }: any) => {
-          console.log({ background })
           return background ? { style: `background-color: ${background}` } : {}
         },
       },

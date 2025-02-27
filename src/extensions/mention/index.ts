@@ -24,7 +24,6 @@ const CustomMention = Mention.extend({
       insertMention:
         () =>
         ({ commands }) => {
-          console.log(this.options)
           return commands.insertContent(
             ' ' + (this.options?.suggestion?.char || '@'),
           )
@@ -34,10 +33,8 @@ const CustomMention = Mention.extend({
 })
 
 // 配置并导出扩展
-const mentionExtension = CustomMention.configure({
+export default CustomMention.configure({
   HTMLAttributes: {
     class: 'umo-node-mention',
   },
 })
-
-export default mentionExtension

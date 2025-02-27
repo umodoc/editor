@@ -140,10 +140,7 @@ export const getDefaultExtensions = ({
     }),
 
     // 表格
-    Table.configure({
-      allowTableNodeSelection: true,
-      resizable: true,
-    }),
+    Table,
     TableRow,
     TableHeader,
     TableCell,
