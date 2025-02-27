@@ -51,6 +51,7 @@ const defaultOptions: UmoEditorOptions = {
     defaultOrientation: 'portrait',
     defaultBackground: '#fff',
     showBreakMarks: true,
+    showBookmark: false,
     watermark: {
       type: 'compact',
       alpha: 0.2,
@@ -161,6 +162,7 @@ const defaultOptions: UmoEditorOptions = {
     ],
   },
   user: {},
+  users: [],
   extensions: [],
   translations: {
     en_US: {},
@@ -503,6 +505,11 @@ const ojbectSchema = new ObjectSchema({
         required: false,
       },
       showBreakMarks: {
+        merge: 'replace',
+        validate: 'boolean',
+        required: false,
+      },
+      showBookmark: {
         merge: 'replace',
         validate: 'boolean',
         required: false,
@@ -909,6 +916,27 @@ const ojbectSchema = new ObjectSchema({
   user: {
     merge: 'assign',
     validate: 'object',
+    required: false,
+  },
+  users: {
+    merge: 'replace',
+    validate(value) {
+      value.forEach((item: { id: [any]; label: string }) => {
+        if (typeof item !== 'object') {
+          throw new Error(
+            'Key "users": Key "item" must be an array of objects.',
+          )
+        }
+        if (!item.id) {
+          throw new Error('Key "users": Key "item": Key "id" cannot be empty.')
+        }
+        if (!item.label) {
+          throw new Error(
+            'Key "users": Key "item": Key "label" cannot be empty.',
+          )
+        }
+      })
+    },
     required: false,
   },
   extensions: {

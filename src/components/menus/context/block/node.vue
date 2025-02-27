@@ -167,6 +167,10 @@
 <script setup lang="ts">
 import type { Template } from '@/types'
 
+const emits = defineEmits<{
+  dropdownVisible: (visible: boolean) => void
+}>()
+
 const container = inject('container')
 const editor = inject('editor')
 const blockMenu = inject('blockMenu')
@@ -179,6 +183,7 @@ const popupProps = {
     editor.value.commands.focus()
     blockMenu.value = visible
     menuActive = visible
+    emits('dropdownVisible', visible)
   },
 }
 

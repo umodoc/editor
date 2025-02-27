@@ -149,6 +149,7 @@
     "math": "数学公式",
     "tag": "标签",
     "callout": "高亮块",
+    "mention": "提及某人",
     "bookmark": {
       "text": "书签",
       "set": "设置书签",
@@ -699,6 +700,9 @@
   },
   "callout": {
     "placeholder": "请输入内容"
+  },
+  "mention": {
+    "noResult": "无结果"
   },
   "save": {
     "text": "保存文档",

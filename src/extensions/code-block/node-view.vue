@@ -103,7 +103,7 @@ onBeforeUnmount(() => {
 watch(
   () => options.value.document?.readOnly,
   (val: boolean) => {
-    codeEditor?.useOptions({
+    codeEditor?.setOptions({
       readOnly: val,
     })
   },
@@ -111,7 +111,7 @@ watch(
 watch(
   () => [node.attrs.language, node.attrs.lineNumbers, node.attrs.wordWrap],
   () => {
-    codeEditor?.useOptions(node.attrs)
+    codeEditor?.setOptions(node.attrs)
   },
 )
 </script>

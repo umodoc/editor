@@ -5,7 +5,7 @@
     menu-type="dropdown"
     huge
     :select-options="options"
-    @click="setDate"
+    @click="insertDate"
   />
 </template>
 
@@ -49,23 +49,36 @@ const formatDateToChinese = (dateStr: string) => {
 }
 
 const options = [
+  { content: '自定义日期' },
+  { content: '自定义时间', value: 'withTime', divider: true },
   { content: formDate('YYYY年M月D日') },
   { content: formDate('YYYY-M-D') },
   { content: formDate('YYYY/M/D') },
   { content: formDate('YYYY.M.D') },
   { content: formDate('YYYY年M月') },
-  { content: formDate('YYYY年M月D日 dddd'), divider: true },
+  {
+    content: formDate('YYYY年M月D日 HH:mm:ss'),
+    value: 'withTime',
+    divider: true,
+  },
   { content: formatDateToChinese(formDate('YYYY年M月D日')) },
   { content: formatDateToChinese(formDate('YYYY年M月')) },
-  { content: formatDateToChinese(formDate('YYYY年M月D日 dddd')) },
 ]
 
 const editor = inject('editor')
 
-const setDate = ({ content }: { content: string }) => {
+const insertDate = ({ content, value }: any) => {
   if (!content) {
     return
   }
-  editor.value?.chain().focus().insertContent(content).run()
+  editor.value
+    ?.chain()
+    .insertDatetime({
+      text: content.includes('自定义') ? `[${content}]` : content,
+      date: formDate('YYYY-MM-DD HH:mm:ss'),
+      withTime: value === 'withTime',
+    })
+    .focus()
+    .run()
 }
 </script>

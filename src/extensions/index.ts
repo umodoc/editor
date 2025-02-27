@@ -7,6 +7,7 @@ import Focus from '@tiptap/extension-focus'
 import FontFamily from '@tiptap/extension-font-family'
 import Highlight from '@tiptap/extension-highlight'
 import Link from '@tiptap/extension-link'
+import NodeRange from '@tiptap-pro/extension-node-range'
 import Placeholder from '@tiptap/extension-placeholder'
 import Subscript from '@tiptap/extension-subscript'
 import Superscript from '@tiptap/extension-superscript'
@@ -16,6 +17,8 @@ import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import TextColor from '@tiptap/extension-text-style'
 import Typography from '@tiptap/extension-typography'
+import Mention from './mention'
+import getUsersSuggestion from './mention/suggestion'
 import Underline from '@tiptap/extension-underline'
 import StarterKit from '@tiptap/starter-kit'
 import type { Editor, Extension } from '@tiptap/vue-3'
@@ -33,6 +36,7 @@ import Audio from './audio'
 import Bookmark from './bookmark'
 import BulletList from './bullet-list'
 import Callout from './callout'
+import Datetime from './datetime'
 import CodeBlock from './code-block'
 import Echarts from './echarts'
 import File from './file'
@@ -128,6 +132,7 @@ export const getDefaultExtensions = ({
     Mathematics,
     Tag,
     Callout,
+    Datetime,
     Bookmark.configure({
       class: 'umo-editor-bookmark',
     }),
@@ -150,7 +155,11 @@ export const getDefaultExtensions = ({
     PageBreak,
 
     // 其他
+    Mention.configure({
+      suggestion: getUsersSuggestion(options.value.users),
+    }),
     Selection,
+    NodeRange,
     TableOfContents.configure({
       getIndex: getHierarchicalIndexes,
       scrollParent: () =>

@@ -149,6 +149,7 @@
     "math": "Mathematics",
     "tag": "Tag",
     "callout": "Callout",
+    "mention": "Mention",
     "bookmark": {
       "text": "Bookmark",
       "set": "Set bookmarks",
@@ -696,6 +697,9 @@
   },
   "callout": {
     "placeholder": "Please enter content"
+  },
+  "mention": {
+    "noResult": "No result"
   },
   "save": {
     "text": "Save",

@@ -5,7 +5,9 @@
       overlay-inner-class-name="umo-editor-bubble-menu"
       trigger="click"
       :visible="
-        bubbleMenu && editor.state.selection.to === editor.state.selection.from
+        editor?.isEditable &&
+        bubbleMenu &&
+        editor.state.selection.to === editor.state.selection.from
       "
       @visible-change="(visible: boolean) => (bubbleMenu = visible)"
     >
@@ -81,8 +83,8 @@ const selectEmoji = (emoji: string) => {
         opacity: 0.5;
       }
       :deep(p) {
-        vertical-align: middle;
-        line-height: 1.2;
+        height: 1em;
+        line-height: 1em;
         * {
           display: none;
         }

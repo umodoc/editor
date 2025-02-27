@@ -75,8 +75,8 @@ const headingClick = (id: string) => {
       margin: 0;
       position: absolute;
       top: 0;
-      left: 1rem;
-      padding: 0.25rem 0.5rem;
+      left: 1em;
+      padding: 0.25em 0.5em;
       border-bottom-left-radius: 3px;
       border-bottom-right-radius: 3px;
       font-size: 12px;

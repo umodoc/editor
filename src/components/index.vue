@@ -133,7 +133,7 @@ const imageViewer = ref({ visible: false, current: null })
 const searchReplace = ref(false)
 const printing = ref(false)
 const exportFile = ref({ pdf: false, image: false })
-const bookmark = ref(false)
+// const bookmark = ref(false)
 const destroyed = ref(false)
 provide('container', container)
 provide('options', options)
@@ -146,7 +146,7 @@ provide('imageViewer', imageViewer)
 provide('searchReplace', searchReplace)
 provide('printing', printing)
 provide('exportFile', exportFile)
-provide('bookmark', bookmark)
+// provide('bookmark', bookmark)
 provide('destroyed', destroyed)
 
 watch(
@@ -158,6 +158,7 @@ watch(
     watermark,
     right,
     showBreakMarks,
+    showBookmark,
   }: PageOption) => {
     page.value = {
       size: options.value.dicts?.pageSizes.find(
@@ -168,6 +169,7 @@ watch(
       orientation: defaultOrientation,
       watermark,
       showBreakMarks,
+      showBookmark,
       showLineNumber: false,
       showToc: false,
       zoomLevel: 100,
@@ -205,7 +207,7 @@ const $document = useState('document', options)
 
 let toolbarKey = $ref(shortId())
 watch(
-  () => options.value.document?.readOnly,
+  () => [options.value.document?.readOnly, editor.value?.isEditable],
   () => {
     toolbarKey = shortId()
   },
