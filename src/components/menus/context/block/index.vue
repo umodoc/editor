@@ -35,7 +35,6 @@ const tippyOpitons = $ref<Partial<Instance>>({
   zIndex: 20,
   onMount(instance: Instance) {
     tippyInstance = instance
-    console.log(instance)
   },
 })
 
