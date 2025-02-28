@@ -4,10 +4,10 @@
       <div class="umo-dropdown__menu" style="padding: 5px; max-height: 320px">
         <div v-if="items.length">
           <li
-            class="umo-dropdown__item umo-dropdown__item--theme-default umo-dropdown__item"
-            :class="{ 'umo-dropdown__item--active': index === selectedIndex }"
             v-for="(item, index) in items"
             :key="index"
+            class="umo-dropdown__item umo-dropdown__item--theme-default umo-dropdown__item"
+            :class="{ 'umo-dropdown__item--active': index === selectedIndex }"
             @click="selectItem(index)"
           >
             {{ item.label }}

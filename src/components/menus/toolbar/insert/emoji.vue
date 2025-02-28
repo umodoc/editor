@@ -29,7 +29,10 @@
 
 <script setup lang="ts">
 const props = defineProps({
-  onSelectEmoji: Function,
+  onSelectEmoji: {
+    type: Function,
+    default: () => () => {}, // 设置默认值为空函数
+  },
 })
 const { popupVisible, togglePopup } = usePopup()
 const editor = inject('editor')

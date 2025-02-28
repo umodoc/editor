@@ -12,12 +12,12 @@
     >
       <menus-context-block-node @dropdown-visible="dropdownVisible" />
       <menus-context-block-common
-        @dropdown-visible="dropdownVisible"
         v-if="
           !editor.isEmpty ||
           editor.isActive('table') ||
           editor.isActive('callout')
         "
+        @dropdown-visible="dropdownVisible"
       />
     </div>
   </drag-handle>

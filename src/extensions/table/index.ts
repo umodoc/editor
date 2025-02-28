@@ -1,6 +1,6 @@
 import Table from '@tiptap/extension-table'
-import { Plugin, PluginKey } from 'prosemirror-state'
 import { DOMParser as ProseMirrorDOMParser } from 'prosemirror-model'
+import { Plugin, PluginKey } from 'prosemirror-state'
 
 // 解析剪切板中 excel 的 CSS 规则（将 CSS 字符串转换为对象）
 const parseCSS = (cssRules: string) => {
@@ -25,8 +25,9 @@ const extractStyles = (styleText: string) => {
   const styles: any = {}
 
   while ((match = regex.exec(styleText)) !== null) {
-    const className = match[1]
-    const cssRules = match[2]
+    // const className = match[1]
+    // const cssRules = match[2]
+    const [, className, cssRules] = match
     const parsedRules = parseCSS(cssRules)
     styles[className] = parsedRules
   }
@@ -37,13 +38,13 @@ const extractStyles = (styleText: string) => {
 const CustomTable = Table.extend({
   addProseMirrorPlugins() {
     return [
-      ...(this.parent?.() || []),
+      ...(this.parent?.() ?? []),
       // 处理从 Microsoft Excel 粘贴的表格样式问题
       new Plugin({
         key: new PluginKey('handleExcelPaste'),
         props: {
           handlePaste(view, event) {
-            const clipboardData = event.clipboardData
+            const {clipboardData} = event
             if (!clipboardData) return false
 
             const html = clipboardData.getData('text/html')
@@ -84,7 +85,7 @@ const CustomTable = Table.extend({
             })
 
             // 使用 ProseMirror 的 DOMParser 将表格转换为 ProseMirror 节点
-            const schema = view.state.schema
+            const {schema} = view.state
             const fragment =
               ProseMirrorDOMParser.fromSchema(schema).parse(table)
             const transaction = view.state.tr.replaceSelectionWith(fragment)
