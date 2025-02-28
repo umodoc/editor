@@ -22,10 +22,6 @@ import getUsersSuggestion from './mention/suggestion'
 import Underline from '@tiptap/extension-underline'
 import StarterKit from '@tiptap/starter-kit'
 import type { Editor, Extension } from '@tiptap/vue-3'
-import InvisibleCharacters, {
-  HardBreakNode,
-  ParagraphNode,
-} from '@tiptap-pro/extension-invisible-characters'
 import Mathematics from '@tiptap-pro/extension-mathematics'
 import { getHierarchicalIndexes } from '@tiptap-pro/extension-table-of-contents'
 import { TableOfContents } from '@tiptap-pro/extension-table-of-contents'
@@ -47,11 +43,11 @@ import hr from './hr'
 import Iframe from './iframe'
 import Image from './image'
 import Indent from './indent'
-import InvisibleNode from './invisible-node'
 import LineHeight from './line-height'
 import Margin from './margin'
 import NodeAlign from './node-align'
 import OrderedList from './ordered-list'
+import BreakMarks from './break-marks'
 import PageBreak from './page-break'
 import Selection from './selection'
 import Table from './table'
@@ -147,9 +143,8 @@ export const getDefaultExtensions = ({
 
     // 页面
     Toc,
-    InvisibleCharacters.configure({
+    BreakMarks.configure({
       visible: options.value.page.showBreakMarks,
-      builders: [new HardBreakNode(), new ParagraphNode(), new InvisibleNode()],
     }),
     PageBreak,
 
