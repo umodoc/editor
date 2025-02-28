@@ -153,27 +153,29 @@
     margin-right: 0.25em;
   }
 
+  ul {
+    padding-left: 1em;
+  }
+  ol {
+    padding-left: 2em;
+    li {
+      word-break: break-all;
+    }
+  }
   ul,
   ol {
-    list-style-position: inside;
-    padding-left: 0;
-
     li {
       padding: 0.25em 0 0.25em 3px;
+      display: list-item;
       ol,
       ul {
         margin-top: 0.25em;
         padding-left: 1.5em;
       }
-
-      p {
-        display: inline;
-      }
     }
-  }
-
-  ol li p {
-    word-break: break-all;
+    > * {
+      display: list-item;
+    }
   }
 
   blockquote {
