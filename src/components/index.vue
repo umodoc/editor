@@ -183,6 +183,14 @@ watch(
   { immediate: true, deep: true },
 )
 watch(
+  () => fullscreen.value,
+  () => {
+    if (editor.value) {
+      editor.value.storage.fullscreen = fullscreen.value
+    }
+  },
+)
+watch(
   () => options.value.document?.readOnly,
   (val: boolean) => {
     editor.value?.setEditable(!val)

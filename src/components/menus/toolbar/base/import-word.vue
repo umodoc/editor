@@ -12,6 +12,7 @@
 const container = inject('container')
 const editor = inject('editor')
 const options = inject('options')
+const fullscreen = inject('fullscreen')
 
 // 动态导入 mammoth.js
 onMounted(() => {
@@ -27,6 +28,10 @@ onMounted(() => {
   }
 })
 
+const enterFullscreen = (isFullscreen: boolean) => {
+  if (isFullscreen) fullscreen.value.enter()
+}
+
 const importWord = () => {
   // @ts-expect-error, global variable injected by script
   if (!mammoth) {
@@ -41,7 +46,8 @@ const importWord = () => {
     })
     return
   }
-  const { open, onChange } = useFileDialog({
+  const { isFullscreen } = fullscreen.value
+  const { open, onChange, onCancel } = useFileDialog({
     accept: '.docx',
     reset: true,
     multiple: false,
@@ -50,6 +56,7 @@ const importWord = () => {
   open()
   // 插入文件
   onChange(async (files: FileList | null) => {
+    enterFullscreen(isFullscreen)
     const [file] = Array.from(files ?? [])
     if (!file) {
       return
@@ -136,6 +143,9 @@ const importWord = () => {
         content: t('base.importWord.importError'),
       })
     }
+  })
+  onCancel(() => {
+    enterFullscreen(isFullscreen)
   })
 }
 </script>
