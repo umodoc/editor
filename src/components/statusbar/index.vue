@@ -305,7 +305,6 @@
 </template>
 
 <script setup lang="ts">
-import type { UseFullscreenReturn } from '@vueuse/core'
 import type { DropdownOption } from 'tdesign-vue-next'
 
 import type { SupportedLocale } from '@/types'
