@@ -182,6 +182,12 @@
     "addRowAfter": "插入行(后)",
     "addRowBefore": "插入行(前)",
     "borderColor": "边框颜色",
+    "nodeAlign": {
+      "left": "左对齐",
+      "center": "居中对齐",
+      "right": "右对齐",
+      "text": "表格对齐方式"
+    },
     "cellAlign": {
       "text": "对齐方式",
       "tip": "单元格对齐方式",

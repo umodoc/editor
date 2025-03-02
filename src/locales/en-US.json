@@ -182,6 +182,12 @@
     "addRowAfter": "Insert Row Below",
     "addRowBefore": "Insert Row Above",
     "borderColor": "Border Color",
+    "nodeAlign": {
+      "left": "left justifying",
+      "center": "center aligned",
+      "right": "right alignment",
+      "text": "Table alignment method"
+    },
     "cellAlign": {
       "text": "Alignment",
       "tip": "Cell Alignment",
