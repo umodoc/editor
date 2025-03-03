@@ -10,7 +10,9 @@
 </template>
 
 <script setup lang="ts">
+  //月份
 const formDate = (format: string) => useDateFormat(useNow(), format).value
+
 const formatDateToChinese = (dateStr: string) => {
   const replaceDigits = (num: string) => {
     const digits = ['〇', '一', '二', '三', '四', '五', '六', '七', '八', '九']
@@ -49,25 +51,27 @@ const formatDateToChinese = (dateStr: string) => {
 }
 
 const options = [
-  { content: '自定义日期' },
-  { content: '自定义时间', value: 'withTime', divider: true },
-  { content: formDate('YYYY年M月D日') },
-  { content: formDate('YYYY-M-D') },
-  { content: formDate('YYYY/M/D') },
-  { content: formDate('YYYY.M.D') },
-  { content: formDate('YYYY年M月') },
+  { content: '自定义日期',format:'YYYY-M-D',capitalize:false },
+  { content: '自定义时间', value: 'withTime',format:'YYYY-M-D HH:mm:ss', capitalize:false,divider: true },
+  { content: formDate('YYYY年M月D日'),format:'YYYY年M月D日',capitalize:false },
+  { content: formDate('YYYY-M-D'),format:'YYYY-M-D',capitalize:false },
+  { content: formDate('YYYY/M/D'),format:'YYYY/M/D' ,capitalize:false},
+  { content: formDate('YYYY.M.D'),format:'YYYY.M.D' ,capitalize:false},
+  { content: formDate('YYYY年M月'),format:'YYYY年M月' ,capitalize:false},
   {
     content: formDate('YYYY年M月D日 HH:mm:ss'),
     value: 'withTime',
+    format:'YYYY年M月D日 HH:mm:ss',
+    capitalize:false,
     divider: true,
   },
-  { content: formatDateToChinese(formDate('YYYY年M月D日')) },
-  { content: formatDateToChinese(formDate('YYYY年M月')) },
+  { content: formatDateToChinese(formDate('YYYY年M月D日')),format:'YYYY年M月D日',capitalize:true },
+  { content: formatDateToChinese(formDate('YYYY年M月')),format:'YYYY年M月',capitalize:true },
 ]
 
 const editor = inject('editor')
 
-const insertDate = ({ content, value }: any) => {
+const insertDate = ({ content,format, capitalize,value }: any) => {
   if (!content) {
     return
   }
@@ -75,8 +79,10 @@ const insertDate = ({ content, value }: any) => {
     ?.chain()
     .insertDatetime({
       text: content.includes('自定义') ? `[${content}]` : content,
-      date: formDate('YYYY-MM-DD HH:mm:ss'),
+      date: formDate(format),//formDate('YYYY-MM-DD HH:mm:ss'),
       withTime: value === 'withTime',
+      format,
+      capitalize
     })
     .focus()
     .run()

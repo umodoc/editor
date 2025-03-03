@@ -25,6 +25,7 @@ export default Node.create({
       text: { default: '[日期]' },
       format: { default: null },
       withTime: { default: false },
+      capitalize:{default:false}
     }
   },
 
