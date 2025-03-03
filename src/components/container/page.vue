@@ -64,6 +64,15 @@
         </t-watermark>
       </div>
     </div>
+    <container-right v-if="pageOptions.right.show">
+      <template
+        v-for="item in pageOptions.right?.extensions"
+        :key="item.pageKey"
+        #[`page_right_${item.pageKey}`]="slotProps"
+      >
+        <slot :name="`page_right_${item.pageKey}`" v-bind="slotProps" />
+      </template>
+    </container-right>
     <t-image-viewer
       v-model:visible="imageViewer.visible"
       v-model:index="currentImageIndex"

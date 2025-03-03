@@ -70,7 +70,7 @@
           <slot name="toolbar_base" toolbar-mode="classic" />
         </div>
       </template>
-      <template v-if="currentMenu === 'insert'">
+      <template v-else-if="currentMenu === 'insert'">
         <div class="umo-virtual-group">
           <menus-toolbar-insert-link />
           <menus-toolbar-insert-image />
@@ -104,7 +104,7 @@
           <slot name="toolbar_insert" toolbar-mode="classic" />
         </div>
       </template>
-      <template v-if="currentMenu === 'table'">
+      <template v-else-if="currentMenu === 'table'">
         <div class="umo-virtual-group">
           <menus-toolbar-table-insert />
           <menus-toolbar-table-fix />
@@ -144,7 +144,7 @@
           <slot name="toolbar_table" toolbar-mode="classic" />
         </div>
       </template>
-      <template v-if="currentMenu === 'tools'">
+      <template v-else-if="currentMenu === 'tools'">
         <div class="umo-virtual-group">
           <menus-toolbar-tools-qrcode />
           <menus-toolbar-tools-barcode />
@@ -168,7 +168,7 @@
           <slot name="toolbar_tools" toolbar-mode="classic" />
         </div>
       </template>
-      <template v-if="currentMenu === 'page'">
+      <template v-else-if="currentMenu === 'page'">
         <div class="umo-virtual-group">
           <menus-toolbar-page-toggle-toc />
         </div>
@@ -191,7 +191,7 @@
           <slot name="toolbar_page" toolbar-mode="classic" />
         </div>
       </template>
-      <template v-if="currentMenu === 'export'">
+      <template v-else-if="currentMenu === 'export'">
         <div class="umo-virtual-group">
           <menus-toolbar-export-image />
           <menus-toolbar-export-pdf v-if="!disableItem('exportPDF')" />
@@ -203,6 +203,11 @@
         </div>
         <div class="virtual-group is-slot">
           <slot name="toolbar_export" toolbar-mode="classic" />
+        </div>
+      </template>
+      <template v-else>
+        <div class="virtual-group is-slot">
+          <slot :name="`toolbar_${currentMenu}`" toolbar-mode="classic" />
         </div>
       </template>
     </div>

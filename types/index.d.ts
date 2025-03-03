@@ -17,6 +17,12 @@ export interface WatermarkOption {
   fontWeight: string
   text: string
 }
+export interface PageRightOption {
+  show: boolean
+  pageKey: string
+  pageTitle: string
+  extensions: Array[]
+}
 export interface PageOption {
   defaultMargin?: MarginOption
   defaultOrientation?: string
@@ -24,6 +30,7 @@ export interface PageOption {
   showBreakMarks?: boolean
   showBookmark?: boolean
   watermark?: WatermarkOption
+  right?: PageRightOption
   size?: {
     width: number
     height: number
@@ -77,6 +84,7 @@ export interface ToolbarOptions {
       messages: { type: string; message: string }
     }>
   }
+  extensions: Array[]
 }
 
 export interface AutoSaveOptions {
