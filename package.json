@@ -153,6 +153,7 @@
     "@vue-macros/reactivity-transform": "^1.0.4",
     "@vue-macros/volar": "^0.29.1",
     "@vue/eslint-config-prettier": "^9.0.0",
+    "eslint": "^9.21.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-functional": "^5.0.8",
     "eslint-plugin-simple-import-sort": "^12.1.1",

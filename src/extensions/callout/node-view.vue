@@ -55,6 +55,7 @@ const container = inject('container')
 const bubbleMenu = $ref(false)
 
 const selectEmoji = (emoji: string) => {
+  // eslint-disable-next-line
   node.attrs.icon = emoji
 }
 </script>

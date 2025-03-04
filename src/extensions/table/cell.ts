@@ -1,7 +1,7 @@
 import TableCell from '@tiptap/extension-table-cell'
 
 const TableCellOptions = {
-  addAttributes():any {
+  addAttributes(): any {
     return {
       // @ts-ignore
       ...this.parent?.(),

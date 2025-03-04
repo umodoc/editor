@@ -18,7 +18,7 @@
             `YYYY-MM-DD${node.attrs.withTime ? ' HH:mm:ss' : ''}`
           "
           :enable-time-picker="node.attrs.withTime"
-          :mode="node.attrs.format==='YYYY年M月'?'month':'date'"
+          :mode="node.attrs.format === 'YYYY年M月' ? 'month' : 'date'"
           @change="datetimeChange"
         />
       </template>
@@ -70,9 +70,9 @@ const formatDateToChinese = (dateStr: string) => {
 }
 
 const datetimeChange = (value: any) => {
-  let selectDate=value
-  if(selectDate&&node?.attrs?.capitalize){
-    selectDate= formatDateToChinese(value)
+  let selectDate = value
+  if (selectDate && node?.attrs?.capitalize) {
+    selectDate = formatDateToChinese(value)
   }
   updateAttributes({ date: selectDate, text: selectDate })
   popupVisible = false

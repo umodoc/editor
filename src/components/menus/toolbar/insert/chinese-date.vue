@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-  //月份
+//月份
 const formDate = (format: string) => useDateFormat(useNow(), format).value
 
 const formatDateToChinese = (dateStr: string) => {
@@ -51,27 +51,45 @@ const formatDateToChinese = (dateStr: string) => {
 }
 
 const options = [
-  { content: '自定义日期',format:'YYYY-M-D',capitalize:false },
-  { content: '自定义时间', value: 'withTime',format:'YYYY-M-D HH:mm:ss', capitalize:false,divider: true },
-  { content: formDate('YYYY年M月D日'),format:'YYYY年M月D日',capitalize:false },
-  { content: formDate('YYYY-M-D'),format:'YYYY-M-D',capitalize:false },
-  { content: formDate('YYYY/M/D'),format:'YYYY/M/D' ,capitalize:false},
-  { content: formDate('YYYY.M.D'),format:'YYYY.M.D' ,capitalize:false},
-  { content: formDate('YYYY年M月'),format:'YYYY年M月' ,capitalize:false},
+  { content: '自定义日期', format: 'YYYY-M-D', capitalize: false },
+  {
+    content: '自定义时间',
+    value: 'withTime',
+    format: 'YYYY-M-D HH:mm:ss',
+    capitalize: false,
+    divider: true,
+  },
+  {
+    content: formDate('YYYY年M月D日'),
+    format: 'YYYY年M月D日',
+    capitalize: false,
+  },
+  { content: formDate('YYYY-M-D'), format: 'YYYY-M-D', capitalize: false },
+  { content: formDate('YYYY/M/D'), format: 'YYYY/M/D', capitalize: false },
+  { content: formDate('YYYY.M.D'), format: 'YYYY.M.D', capitalize: false },
+  { content: formDate('YYYY年M月'), format: 'YYYY年M月', capitalize: false },
   {
     content: formDate('YYYY年M月D日 HH:mm:ss'),
     value: 'withTime',
-    format:'YYYY年M月D日 HH:mm:ss',
-    capitalize:false,
+    format: 'YYYY年M月D日 HH:mm:ss',
+    capitalize: false,
     divider: true,
   },
-  { content: formatDateToChinese(formDate('YYYY年M月D日')),format:'YYYY年M月D日',capitalize:true },
-  { content: formatDateToChinese(formDate('YYYY年M月')),format:'YYYY年M月',capitalize:true },
+  {
+    content: formatDateToChinese(formDate('YYYY年M月D日')),
+    format: 'YYYY年M月D日',
+    capitalize: true,
+  },
+  {
+    content: formatDateToChinese(formDate('YYYY年M月')),
+    format: 'YYYY年M月',
+    capitalize: true,
+  },
 ]
 
 const editor = inject('editor')
 
-const insertDate = ({ content,format, capitalize,value }: any) => {
+const insertDate = ({ content, format, capitalize, value }: any) => {
   if (!content) {
     return
   }
@@ -79,10 +97,10 @@ const insertDate = ({ content,format, capitalize,value }: any) => {
     ?.chain()
     .insertDatetime({
       text: content.includes('自定义') ? `[${content}]` : content,
-      date: formDate(format),//formDate('YYYY-MM-DD HH:mm:ss'),
+      date: formDate(format), //formDate('YYYY-MM-DD HH:mm:ss'),
       withTime: value === 'withTime',
       format,
-      capitalize
+      capitalize,
     })
     .focus()
     .run()
