@@ -157,6 +157,7 @@
       "ok": "Confirmed",
       "textName": "Bookmark name",
       "placeholder": " Please enter the bookmark name...",
+      "show": "Show bookmarks",
       "actions": "Actions",
       "delete": "Delete bookmark",
       "emptyError": "Please enter the bookmark name or select the bookmark!"

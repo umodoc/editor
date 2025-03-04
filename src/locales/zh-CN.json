@@ -157,6 +157,7 @@
       "ok": "确定",
       "textName": "书签名称",
       "placeholder": "请输入书签名称...",
+      "show": "显示书签",
       "actions": "操作",
       "delete": "删除书签",
       "emptyError": "请输入书签名称或者选择书签"
