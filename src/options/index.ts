@@ -28,7 +28,7 @@ const defaultOptions: UmoEditorOptions = {
   locale: 'zh-CN',
   theme: 'light',
   height: '100%',
-  fullscreenZIndex: 100000,
+  fullscreenZIndex: 10,
   dicts: defaultDicts,
   toolbar: {
     defaultMode: 'ribbon',

@@ -139,7 +139,7 @@
         </t-button>
       </tooltip>
       <tooltip
-        :content="`${fullscreen ? t('fullscreen.disable') : t('fullscreen.title')} (Ctrl+F11 / ⌘+F11)`"
+        :content="`${fullscreen?.isFullscreen ? t('fullscreen.disable') : t('fullscreen.title')} (${getShortcut('Ctrl+F11')})`"
       >
         <t-button
           class="umo-status-bar-button"
