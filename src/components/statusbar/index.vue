@@ -124,7 +124,9 @@
     </div>
     <div class="umo-status-bar-right">
       <tooltip
-        :content="`${page.preview?.enabled ? t('preview.disable') : t('preview.title')} (F5)`"
+        :content="
+          page.preview?.enabled ? t('preview.disable') : t('preview.title')
+        "
       >
         <t-button
           class="umo-status-bar-button"
@@ -137,19 +139,15 @@
         </t-button>
       </tooltip>
       <tooltip
-        :content="`${fullscreen?.isFullscreen ? t('fullscreen.disable') : t('fullscreen.title')} (F11 / ⌘+F11)`"
+        :content="`${fullscreen ? t('fullscreen.disable') : t('fullscreen.title')} (Ctrl+F11 / ⌘+F11)`"
       >
         <t-button
           class="umo-status-bar-button"
           variant="text"
           size="small"
-          @click="fullscreen?.toggle"
+          @click="toggleFullscreen"
         >
-          <icon
-            :name="
-              fullscreen?.isFullscreen ? 'full-screen-exit' : 'full-screen'
-            "
-          />
+          <icon :name="fullscreen ? 'full-screen-exit' : 'full-screen'" />
         </t-button>
       </tooltip>
       <div class="umo-status-bar-split"></div>
@@ -305,6 +303,7 @@
 </template>
 
 <script setup lang="ts">
+import type { UseFullscreenReturn } from '@vueuse/core'
 import type { DropdownOption } from 'tdesign-vue-next'
 
 import type { SupportedLocale } from '@/types'
@@ -339,6 +338,14 @@ const selectionCharacters = computed(() => {
 
 // 页面全屏
 const fullscreen = inject('fullscreen')
+const toggleFullscreen = () => {
+  fullscreen.value = !fullscreen.value
+}
+
+let documentFullscreen: UseFullscreenReturn = $ref(null)
+onMounted(() => {
+  documentFullscreen = useFullscreen(document.querySelector(container))
+})
 
 // 演示模式
 const togglePreview = () => {
@@ -383,16 +390,16 @@ watch(
   () => page.value.preview?.enabled,
   (enabled: boolean) => {
     if (enabled) {
-      void fullscreen.value?.enter()
+      void documentFullscreen.enter()
       autoWidth(false, 10)
     } else {
-      void fullscreen.value?.exit()
+      void documentFullscreen.exit()
       zoomReset()
     }
   },
 )
 watch(
-  () => fullscreen.value?.isFullscreen,
+  () => documentFullscreen?.isFullscreen,
   (isFullscreen: boolean) => {
     if (!isFullscreen) {
       exitPreview()
@@ -498,8 +505,7 @@ watch(
   () => editor.value,
   () => {
     editor.value?.on('focus', () => {
-      useHotkeys('f5', togglePreview)
-      useHotkeys('f11,command+f11', fullscreen.value?.toggle)
+      useHotkeys('ctrl+f11, command+f11', toggleFullscreen)
       useHotkeys('ctrl+0,command+0', autoWidth)
       useHotkeys('ctrl+-,command+-', zoomOut)
       useHotkeys('ctrl+=,command+=', zoomIn)

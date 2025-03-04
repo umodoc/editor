@@ -175,14 +175,7 @@ export default Node.create({
             })
             return false
           }
-          const enterFullscreen = (isFullscreen: boolean) => {
-            const { container } = editor.storage
-            if (isFullscreen) {
-              document.querySelector(container).requestFullscreen()
-            }
-          }
-          const { isFullscreen } = editor.storage.fullscreen
-          const { open, onChange, onCancel } = useFileDialog({
+          const { open, onChange } = useFileDialog({
             accept,
             reset: true,
           })
@@ -191,14 +184,10 @@ export default Node.create({
           let bool = false
           // 插入文件
           onChange((fileList) => {
-            enterFullscreen(isFullscreen)
             const files = Array.from(fileList ?? [])
             for (const file of files) {
               bool = editor.chain().focus().insertFile({ file, autoType }).run()
             }
-          })
-          onCancel(() => {
-            enterFullscreen(isFullscreen)
           })
           return bool
         },

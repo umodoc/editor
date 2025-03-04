@@ -37,20 +37,14 @@ let dialogVisible = $ref(false)
 const editor = inject('editor')
 const options = inject('options')
 const container = inject('container')
-const fullscreen = inject('fullscreen')
 
 let sealImg = $ref<string | null>(null)
 let sealFile = $ref<File | null>(null)
 let converting = $ref<string | null>(null)
 let file = $ref<File | null>(null)
 
-const enterFullscreen = (isFullscreen: boolean) => {
-  if (isFullscreen) fullscreen.value.enter()
-}
-
 const selectImage = () => {
-  const { isFullscreen } = fullscreen.value
-  const { open, onChange, onCancel } = useFileDialog({
+  const { open, onChange } = useFileDialog({
     accept: 'image/png,image/jpeg',
     multiple: false,
     reset: true,
@@ -59,7 +53,6 @@ const selectImage = () => {
   open()
   // 选择图片
   onChange(async (files) => {
-    enterFullscreen(isFullscreen)
     if (!files) {
       return
     }
@@ -94,9 +87,6 @@ const selectImage = () => {
     } finally {
       converting = null
     }
-  })
-  onCancel(() => {
-    enterFullscreen(isFullscreen)
   })
 }
 
