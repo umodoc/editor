@@ -34,13 +34,17 @@ const checkScrollPosition = () => {
 
 const scrollLeft = () => {
   if (contentRef?.scrollLeft || contentRef.scrollLeft === 0) {
-    contentRef.scrollLeft -= 100
+    contentRef.scrollLeft -= contentRef?.offsetWidth
+      ? contentRef.offsetWidth - 10
+      : 100
   }
 }
 
 const scrollRight = () => {
   if (contentRef?.scrollLeft || contentRef.scrollLeft === 0) {
-    contentRef.scrollLeft += 100
+    contentRef.scrollLeft += contentRef?.offsetWidth
+      ? contentRef.offsetWidth - 10
+      : 100
   }
 }
 
