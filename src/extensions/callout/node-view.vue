@@ -49,14 +49,15 @@
 
 <script lang="ts" setup>
 import { NodeViewContent, nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
-const { node } = defineProps(nodeViewProps)
+const { node, updateAttributes } = defineProps(nodeViewProps)
 
 const container = inject('container')
 const bubbleMenu = $ref(false)
 
 const selectEmoji = (emoji: string) => {
-  // eslint-disable-next-line
-  node.attrs.icon = emoji
+  updateAttributes({
+    icon: emoji,
+  })
 }
 </script>
 
