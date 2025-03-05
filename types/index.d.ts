@@ -209,6 +209,7 @@ export interface UmoEditorOptions {
   locale: SupportedLocale
   theme: 'light' | 'dark'
   height: string
+  fullscreenZIndex: number
   dicts?: {
     pageSizes: PageSize[]
     fonts: Font[]

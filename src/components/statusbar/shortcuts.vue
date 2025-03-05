@@ -100,8 +100,7 @@ const shortcuts = $ref<
       { label: t('shortcut.pageZoomOut'), keys: ['Ctrl', '-'] },
       { label: t('shortcut.pageZoomReset'), keys: ['Ctrl', '1'] },
       { label: t('shortcut.pageAutoWidth'), keys: ['Ctrl', '0'] },
-      { label: t('preview.title'), keys: ['F5'] },
-      { label: t('fullscreen.title'), keys: ['F11'] },
+      { label: t('fullscreen.title'), keys: ['Ctrl', 'F11'] },
     ],
   },
 ])

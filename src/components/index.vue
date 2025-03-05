@@ -15,8 +15,12 @@
         'toolbar-source': isRecord($toolbar) && $toolbar.mode === 'source',
         'preview-mode': page.preview?.enabled,
         'laser-pointer': page.preview?.enabled && page.preview?.laserPointer,
+        'umo-editor-is-fullscreen': fullscreen,
       }"
-      :style="{ height: options.height }"
+      :style="{
+        height: options.height,
+        zIndex: fullscreen ? options.fullscreenZIndex : 'unset',
+      }"
     >
       <header class="umo-toolbar">
         <toolbar
@@ -125,7 +129,7 @@ const assistant = ref(false)
 const imageViewer = ref({ visible: false, current: null })
 const searchReplace = ref(false)
 const printing = ref(false)
-const fullscreen = ref(null)
+const fullscreen = ref(false)
 const exportFile = ref({ pdf: false, image: false })
 // const bookmark = ref(false)
 const destroyed = ref(false)
@@ -183,22 +187,11 @@ watch(
   { immediate: true, deep: true },
 )
 watch(
-  () => fullscreen.value,
-  () => {
-    if (editor.value) {
-      editor.value.storage.fullscreen = fullscreen.value
-    }
-  },
-)
-watch(
   () => options.value.document?.readOnly,
   (val: boolean) => {
     editor.value?.setEditable(!val)
   },
 )
-onMounted(() => {
-  fullscreen.value = useFullscreen(document.querySelector(container))
-})
 
 const $toolbar = useState('toolbar', options)
 const $document = useState('document', options)
@@ -731,10 +724,10 @@ const toggleFullscreen = (isFullscreen?: boolean) => {
     if (!isBoolean(isFullscreen)) {
       throw new Error('"isFullscreen" must be a boolean.')
     }
-    void fullscreen.value?.[isFullscreen ? 'enter' : 'exit']()
+    fullscreen.value = isFullscreen
     return
   }
-  void fullscreen.value?.toggle()
+  fullscreen.value = !fullscreen.value
 }
 
 const reset = (silent: boolean) => {
@@ -1010,6 +1003,13 @@ defineExpose({
     .umo-toolbar {
       display: none;
     }
+  }
+  &.umo-editor-is-fullscreen {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
 }
 </style>

@@ -54,7 +54,9 @@
           </t-table>
         </t-form-item>
         <t-form-item>
-          <t-checkbox v-model="page.showBookmark">显示书签</t-checkbox>
+          <t-checkbox v-model="page.showBookmark">{{
+            t('insert.bookmark.show')
+          }}</t-checkbox>
         </t-form-item>
       </t-form>
     </div>

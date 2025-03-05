@@ -28,6 +28,7 @@ const defaultOptions: UmoEditorOptions = {
   locale: 'zh-CN',
   theme: 'light',
   height: '100%',
+  fullscreenZIndex: 10,
   dicts: defaultDicts,
   toolbar: {
     defaultMode: 'ribbon',
@@ -251,6 +252,11 @@ const ojbectSchema = new ObjectSchema({
   height: {
     merge: 'replace',
     validate: 'string!',
+    required: false,
+  },
+  fullscreenZIndex: {
+    merge: 'replace',
+    validate: 'number',
     required: false,
   },
   dicts: {

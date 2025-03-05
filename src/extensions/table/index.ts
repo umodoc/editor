@@ -44,7 +44,7 @@ const CustomTable = Table.extend({
         key: new PluginKey('handleExcelPaste'),
         props: {
           handlePaste(view, event) {
-            const {clipboardData} = event
+            const { clipboardData } = event
             if (!clipboardData) return false
 
             const html = clipboardData.getData('text/html')
@@ -85,7 +85,7 @@ const CustomTable = Table.extend({
             })
 
             // 使用 ProseMirror 的 DOMParser 将表格转换为 ProseMirror 节点
-            const {schema} = view.state
+            const { schema } = view.state
             const fragment =
               ProseMirrorDOMParser.fromSchema(schema).parse(table)
             const transaction = view.state.tr.replaceSelectionWith(fragment)
