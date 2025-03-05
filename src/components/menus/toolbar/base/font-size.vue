@@ -14,12 +14,14 @@
   >
   </menus-button>
   <menus-button
+    v-if="!disableItem('font-size-increase')"
     ico="font-size-increase"
     :text="t('base.fontSize.increase')"
     hide-text
     @menu-click="increaseFontSize"
   />
   <menus-button
+    v-if="!disableItem('font-size-decrease')"
     ico="font-size-decrease"
     :text="t('base.fontSize.increase')"
     hide-text
@@ -38,6 +40,9 @@ const props = defineProps({
 const editor = inject('editor')
 const options = inject('options')
 const $toolbar = useState('toolbar', options)
+const disableItem = (name: string) => {
+  return options.value.toolbar?.disableMenuItems.includes(name)
+}
 
 const fontSizes = [
   { label: t('base.fontSize.default'), value: '14px', order: 4 },

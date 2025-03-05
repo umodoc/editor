@@ -69,6 +69,7 @@
     <div class="umo-bubble-menu-divider"></div>
     <menus-bubble-webpage-clickable />
     <menus-toolbar-insert-web-page
+      v-if="!disableItem('webPage')"
       ico="edit"
       :page-type="editor?.getAttributes('iframe')?.type"
       :page-url="editor?.getAttributes('iframe')?.src"
@@ -136,19 +137,24 @@
       <div class="umo-bubble-menu-divider"></div>
     </template>
     <menus-toolbar-base-font-size :select="false" />
-    <div class="umo-bubble-menu-divider"></div>
+    <div
+      v-if="
+        !disableItem('font-size-increase') || !disableItem('font-size-decrease')
+      "
+      class="umo-bubble-menu-divider"
+    ></div>
     <menus-toolbar-base-bold />
     <menus-toolbar-base-italic />
     <menus-toolbar-base-underline />
     <menus-toolbar-base-strike />
     <div class="umo-bubble-menu-divider"></div>
     <menus-toolbar-base-align-dropdown />
-    <menus-toolbar-insert-link />
+    <menus-toolbar-insert-link v-if="!disableItem('link')" />
     <div class="umo-bubble-menu-divider"></div>
     <menus-toolbar-base-color />
     <template v-if="!editor?.isActive('textBox')">
       <menus-toolbar-base-background-color />
-      <menus-toolbar-base-highlight />
+      <menus-toolbar-base-highlight v-if="!disableItem('highlight')" />
     </template>
     <template v-else>
       <menus-bubble-text-box-border />
@@ -164,6 +170,9 @@
 <script setup lang="ts">
 const editor = inject('editor')
 const options = inject('options')
+const disableItem = (name: string) => {
+  return options.value.toolbar?.disableMenuItems.includes(name)
+}
 </script>
 
 <style lang="less">
