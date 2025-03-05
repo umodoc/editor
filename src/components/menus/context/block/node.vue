@@ -41,46 +41,29 @@
           @menu-click="editor?.chain().focus().insertTable().run()"
         />
       </t-dropdown-item>
-      <t-dropdown-item>
+      <t-dropdown-item v-if="!disableItem('image')">
         <menus-toolbar-insert-image :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item>
-        <menus-toolbar-insert-video
-          v-if="!disableItem('video')"
-          :huge="false"
-          :tooltip="false"
-        />
+      <t-dropdown-item v-if="!disableItem('video')">
+        <menus-toolbar-insert-video :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item>
-        <menus-toolbar-insert-audio
-          v-if="!disableItem('audio')"
-          :huge="false"
-          :tooltip="false"
-        />
+      <t-dropdown-item v-if="!disableItem('audio')">
+        <menus-toolbar-insert-audio :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item>
-        <menus-toolbar-insert-file
-          v-if="!disableItem('file')"
-          :huge="false"
-          :tooltip="false"
-        />
+      <t-dropdown-item v-if="!disableItem('file')">
+        <menus-toolbar-insert-file :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item>
+      <t-dropdown-item v-if="!disableItem('code-block')">
         <menus-toolbar-insert-code-block
-          v-if="!disableItem('code-block')"
           :huge="false"
           shortcut-text="Ctrl+Alt+C"
           :tooltip="false"
         />
       </t-dropdown-item>
-      <t-dropdown-item>
-        <menus-toolbar-insert-callout
-          v-if="!disableItem('callout')"
-          :huge="false"
-          :tooltip="false"
-        />
+      <t-dropdown-item v-if="!disableItem('callout')">
+        <menus-toolbar-insert-callout :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item>
+      <t-dropdown-item v-if="!disableItem('hr')">
         <menus-button
           ico="hr"
           :text="t('insert.hr.text')"
@@ -88,56 +71,39 @@
           @menu-click="editor?.chain().focus().setHr({ type: 'signle' }).run()"
         />
       </t-dropdown-item>
-      <t-dropdown-item>
+      <t-dropdown-item v-if="!disableItem('toc')">
         <menus-toolbar-insert-toc :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item>
+      <t-dropdown-item v-if="!disableItem('textBox')">
         <menus-toolbar-insert-text-box :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item>
+      <t-dropdown-item v-if="!disableItem('webPage')">
         <menus-toolbar-insert-web-page :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item>
+      <t-dropdown-item v-if="!disableItem('qrcode')">
         <menus-toolbar-tools-qrcode :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item>
+      <t-dropdown-item v-if="!disableItem('barcode')">
         <menus-toolbar-tools-barcode :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item>
-        <menus-toolbar-tools-signature
-          v-if="!disableItem('signature')"
-          :huge="false"
-          :tooltip="false"
-        />
+      <t-dropdown-item v-if="!disableItem('signature')">
+        <menus-toolbar-tools-signature :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item>
-        <menus-toolbar-tools-seal
-          v-if="!disableItem('seal')"
-          :huge="false"
-          :tooltip="false"
-        />
+      <t-dropdown-item v-if="!disableItem('seal')">
+        <menus-toolbar-tools-seal :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item>
-        <menus-toolbar-tools-diagrams
-          v-if="!disableItem('diagrams')"
-          :huge="false"
-          :tooltip="false"
-        />
+      <t-dropdown-item v-if="!disableItem('diagrams')">
+        <menus-toolbar-tools-diagrams :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item>
+      <t-dropdown-item v-if="!disableItem('echarts')">
         <menus-toolbar-tools-echarts
-          v-if="!disableItem('echarts')"
           :huge="false"
           :tooltip="false"
           mode="add"
         />
       </t-dropdown-item>
-      <t-dropdown-item>
-        <menus-toolbar-tools-mermaid
-          v-if="!disableItem('mermaid')"
-          :huge="false"
-          :tooltip="false"
-        />
+      <t-dropdown-item v-if="!disableItem('mermaid')">
+        <menus-toolbar-tools-mermaid :huge="false" :tooltip="false" />
       </t-dropdown-item>
       <t-dropdown-item v-if="options.templates.length > 0">
         <menus-button

@@ -644,6 +644,25 @@ const setContent = (
     .run()
 }
 
+// Content Methods
+const insertContent = (
+  content: string,
+  options = {
+    updateSelection: true,
+    focusPosition: 'start',
+    focusOptions: { scrollIntoView: true },
+  },
+) => {
+  if (!editor.value) {
+    throw new Error('editor is not ready!')
+  }
+  editor.value
+    .chain()
+    .insertContent(content, { updateSelection: options.updateSelection })
+    .focus(options.focusPosition as FocusPosition, options.focusOptions)
+    .run()
+}
+
 const getContent = (format = 'html') => {
   if (!editor.value) {
     throw new Error('editor is not ready!')
@@ -920,6 +939,7 @@ defineExpose({
   setWatermark,
   setDocument,
   setContent,
+  insertContent,
   setLocale,
   setTheme,
   getPage: () => page.value,
