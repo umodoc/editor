@@ -167,6 +167,7 @@
       </template>
       <template v-else-if="menuType === 'select'">
         <t-select
+          v-if="selectVisible"
           size="small"
           placement="bottom-left"
           :on-popup-visible-change="popupVisileChange"
@@ -316,6 +317,8 @@ import { isString } from '@tool-belt/type-predicates'
 import type { DropdownOption } from 'tdesign-vue-next'
 
 import { getShortcut } from '@/utils/shortcut'
+
+const { selectVisible } = useSelect()
 
 const props = defineProps({
   // 菜单类型

@@ -3,6 +3,7 @@
     <div class="umo-classic-menu">
       <div v-if="menus.length > 1" class="umo-virtual-group">
         <t-select
+          v-if="selectVisible"
           v-model="currentMenu"
           :popup-props="{
             destroyOnClose: true,
@@ -11,7 +12,7 @@
           size="small"
           auto-width
           borderless
-          @change="toggoleMenu as any"
+          @change="toggoleMenu"
         >
           <template #prefixIcon>
             <icon name="menu" />
@@ -219,6 +220,8 @@ const props = defineProps<{
   }[]
   currentMenu: string
 }>()
+
+const { selectVisible } = useSelect()
 
 const emits = defineEmits(['menu-change'])
 
