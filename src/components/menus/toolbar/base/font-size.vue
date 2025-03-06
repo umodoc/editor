@@ -23,7 +23,7 @@
   <menus-button
     v-if="!disableItem('font-size-decrease')"
     ico="font-size-decrease"
-    :text="t('base.fontSize.increase')"
+    :text="t('base.fontSize.decrease')"
     hide-text
     @menu-click="decreaseFontSize"
   />
