@@ -900,7 +900,18 @@ watch(
   () => editor.value,
   () => {
     const unsetFormatPainter = () => editor.value?.commands.unsetFormatPainter()
+    const bindEscKey = () => {
+      useHotkeys('esc', () => {
+        if (page.value.preview) {
+          page.value.preview.enabled = false
+        }
+        if (fullscreen.value) {
+          fullscreen.value = false
+        }
+      })
+    }
     editor.value?.on('focus', () => {
+      useHotkeys('esc', unsetFormatPainter)
       useHotkeys('ctrl+s,command+s', () => {
         void saveContent()
         unsetFormatPainter()
@@ -909,18 +920,14 @@ watch(
         print()
         unsetFormatPainter()
       })
-      useHotkeys('esc', () => {
-        if (page.value.preview) {
-          page.value.preview.enabled = false
-        }
-        unsetFormatPainter()
-      })
       useHotkeys('ctrl+f, command+f', () => {
         searchReplace.value = true
       })
     })
+    bindEscKey()
     editor.value?.on('blur', () => {
       removeAllHotkeys()
+      bindEscKey()
     })
   },
 )
