@@ -817,17 +817,19 @@ const saveContent = async (showMessage = true) => {
       MessagePlugin.closeAll()
       useMessage('success', {
         attach: container,
-        content: t('save.success'),
+        content:
+          success === false || success === true ? t('save.success') : success,
         placement: 'bottom',
         offset: [0, -20],
       })
     }
     const time = useTimestamp({ offset: 0 })
     savedAt.value = time.value
-  } catch (e) {
+  } catch (e: unknown) {
+    const error = e as Error
     useMessage('error', {
       attach: container,
-      content: t('save.error'),
+      content: error?.message ? error.message : t('save.error'),
       placement: 'bottom',
       offset: [0, -20],
     })
