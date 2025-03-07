@@ -45,7 +45,7 @@
             <div class="umo-virtual-group-row">
               <menus-toolbar-base-ordered-list />
               <menus-toolbar-base-bullet-list />
-              <menus-toolbar-base-task-list />
+              <menus-toolbar-base-task-list v-if="!disableItem('task-list')" />
               <menus-toolbar-base-indent />
               <menus-toolbar-base-outdent />
               <menus-toolbar-base-line-height
@@ -59,7 +59,7 @@
               <menus-toolbar-base-align-right />
               <menus-toolbar-base-align-justify />
               <menus-toolbar-base-align-distributed />
-              <menus-toolbar-base-quote />
+              <menus-toolbar-base-quote v-if="!disableItem('quote')" />
               <menus-toolbar-base-code v-if="!disableItem('code')" />
               <menus-toolbar-base-select-all
                 v-if="!disableItem('select-all')"
