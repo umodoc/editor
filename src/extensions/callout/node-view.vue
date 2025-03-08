@@ -67,6 +67,7 @@ const selectEmoji = (emoji: string) => {
   border-radius: var(--umo-radius);
   display: flex;
   width: 100%;
+  min-height: 38px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   &-icon {
     font-size: 16px;
