@@ -49,13 +49,13 @@
         <div class="umo-virtual-group">
           <menus-toolbar-base-ordered-list />
           <menus-toolbar-base-bullet-list />
-          <menus-toolbar-base-task-list />
+          <menus-toolbar-base-task-list v-if="!disableItem('task-list')" />
           <menus-toolbar-base-indent />
           <menus-toolbar-base-outdent />
           <menus-toolbar-base-line-height v-if="!disableItem('line-height')" />
           <menus-toolbar-base-margin v-if="!disableItem('margin')" />
           <menus-toolbar-base-align-dropdown />
-          <menus-toolbar-base-quote />
+          <menus-toolbar-base-quote v-if="!disableItem('quote')" />
           <menus-toolbar-base-code v-if="!disableItem('code')" />
           <menus-toolbar-base-select-all v-if="!disableItem('select-all')" />
         </div>
