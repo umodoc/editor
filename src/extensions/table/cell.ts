@@ -25,7 +25,7 @@ const TableCellOptions = {
         default: null,
         parseHTML: (element: any) => {
           const style = element.getAttribute('style') ?? ''
-          const match = style.match(/color:\s*([^;]+)/i)
+          const match = style.match(/(?<!background-)color:\s*([^;]+)/i)
           if (style.includes('background-color')) return null
           return match ? match[1].trim() : null
         },
