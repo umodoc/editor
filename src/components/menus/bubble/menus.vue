@@ -90,7 +90,6 @@
   </template>
   <template v-else-if="editor?.isActive('table')">
     <menus-toolbar-table-cells-align />
-    <menus-toolbar-table-node-align />
     <menus-toolbar-table-cells-background />
     <!-- <menus-toolbar-table-border-color  /> -->
     <div class="umo-bubble-menu-divider"></div>
