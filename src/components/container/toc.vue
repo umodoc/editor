@@ -19,7 +19,7 @@
         activable
         hover
         expand-all
-        @click="headingClick"
+        @active="headingActive"
       />
     </div>
     <div class="umo-toc-resize-handle" @mousedown="startResize"></div>
@@ -81,12 +81,12 @@ watch(
   { immediate: true },
 )
 
-const headingClick = ({ node }: any) => {
+const headingActive = (value: any) => {
   if (!editor.value) {
     return
   }
   const nodeElement = editor.value.view.dom.querySelector(
-    `[data-toc-id="${node.value}"]`,
+    `[data-toc-id="${value[0]}"]`,
   )
   const pageContainer = document.querySelector(
     `${container} .umo-zoomable-container`,
@@ -161,9 +161,10 @@ const stopResize = () => {
   .umo-toc-resize-handle {
     position: absolute;
     top: 0;
-    right: -1px;
-    width: 2px;
+    right: -2px;
+    width: 3px;
     height: 100%;
+    opacity: 0.5;
     background-color: transparent;
     &:hover {
       background-color: var(--umo-primary-color);
