@@ -7,8 +7,6 @@ import {
 } from '@tiptap/pm/state'
 import { isFunction } from '@tool-belt/type-predicates'
 
-import { getSelectionNode } from './selection'
-
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     indent: {
@@ -131,20 +129,6 @@ export default Extension.create({
         dispatch: Dispatch
         editor: Editor
       }) => {
-        if (editor.isActive('bulletList') || editor.isActive('orderedList')) {
-          if (direction === 1) {
-            return editor.commands.sinkListItem('listItem')
-          } else {
-            return editor.commands.liftListItem('listItem')
-          }
-        }
-        if (editor.isActive('taskList')) {
-          if (direction === 1) {
-            return editor.commands.sinkListItem('taskItem')
-          } else {
-            return editor.commands.liftListItem('taskItem')
-          }
-        }
         const { selection } = state
         tr.setSelection(selection)
         tr = updateIndentLevel(tr, direction)
@@ -164,11 +148,27 @@ export default Extension.create({
   addKeyboardShortcuts() {
     return {
       Tab: () => {
-        getSelectionNode(this.editor)
+        if (
+          this.editor.isActive('bulletList') ||
+          this.editor.isActive('orderedList')
+        ) {
+          return this.editor.commands.sinkListItem('listItem')
+        }
+        if (this.editor.isActive('taskList')) {
+          return this.editor.commands.sinkListItem('taskItem')
+        }
         return this.editor.commands.indent()
       },
       'Shift-Tab': () => {
-        getSelectionNode(this.editor)
+        if (
+          this.editor.isActive('bulletList') ||
+          this.editor.isActive('orderedList')
+        ) {
+          return this.editor.commands.liftListItem('listItem')
+        }
+        if (this.editor.isActive('taskList')) {
+          return this.editor.commands.liftListItem('taskItem')
+        }
         return this.editor.commands.outdent()
       },
     }
