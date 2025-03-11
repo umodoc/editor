@@ -153,29 +153,57 @@
     margin-right: 0.25em;
   }
 
-  ul {
-    padding-left: 1em;
-  }
-  ol {
-    padding-left: 2em;
-    li {
-      word-break: break-all;
-    }
-  }
   ul,
   ol {
-    list-style-position: outside !important;
+    counter-reset: section;
+    list-style-type: none;
     li {
-      padding: 0.25em 0 0.25em 3px;
-      display: list-item;
+      word-break: break-all;
+      list-style-type: none;
+      > p:before {
+        counter-increment: section;
+        display: inline;
+        margin-right: 0.5em;
+      }
       ol,
       ul {
         margin-top: 0.25em;
         padding-left: 1.5em;
       }
     }
-    > * {
-      display: list-item;
+  }
+  ol {
+    &[type='decimal'] li > p:before {
+      content: counters(section, '.') '. ';
+    }
+    &[type='decimal-leading-zero'] li > p:before {
+      content: counters(section, '.', decimal-leading-zero) '.';
+    }
+    &[type='lower-roman'] li > p:before {
+      content: counters(section, '.', lower-roman) '.';
+    }
+    &[type='upper-roman'] li > p:before {
+      content: counters(section, '.', upper-roman) '.';
+    }
+    &[type='lower-latin'] li > p:before {
+      content: counters(section, '.', lower-latin) '.';
+    }
+    &[type='trad-chinese-informal'] li > p:before {
+      content: counters(section, '.', trad-chinese-informal) '.';
+    }
+    &[type='simp-chinese-formal'] li > p:before {
+      content: counters(section, '.', simp-chinese-formal) '.';
+    }
+  }
+  ul {
+    &[type='disc'] li > p:before {
+      content: '•';
+    }
+    &[type='circle'] li > p:before {
+      content: '◦';
+    }
+    &[type='square'] li > p:before {
+      content: '▪';
     }
   }
 

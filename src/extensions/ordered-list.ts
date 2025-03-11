@@ -13,6 +13,7 @@ export default OrderedList.extend({
         renderHTML: ({ listType }) => {
           return {
             style: `list-style-type: ${listType}`,
+            type: listType,
           }
         },
       },
