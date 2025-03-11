@@ -1,5 +1,12 @@
 <template>
-  <div ref="wraperRef" class="umo-scrollable-container">
+  <div
+    ref="wraperRef"
+    class="umo-scrollable-container"
+    :style="{
+      paddingLeft: hidePrev ? '10px' : '32px',
+      paddingRight: hideNext ? '10px' : '32px',
+    }"
+  >
     <div
       v-if="!hidePrev"
       class="umo-scrollable-control scrollable-left"
@@ -29,22 +36,18 @@ let hideNext = $ref(true)
 const checkScrollPosition = () => {
   const { scrollLeft = 0, scrollWidth = 0, clientWidth = 0 } = contentRef ?? {}
   hidePrev = scrollLeft === 0
-  hideNext = scrollLeft + clientWidth + 1 >= scrollWidth
+  hideNext = scrollLeft + clientWidth + 100 >= scrollWidth
 }
 
 const scrollLeft = () => {
   if (contentRef?.scrollLeft || contentRef.scrollLeft === 0) {
-    contentRef.scrollLeft -= contentRef?.offsetWidth
-      ? contentRef.offsetWidth - 10
-      : 100
+    contentRef.scrollLeft -= contentRef.offsetWidth - 10 || 100
   }
 }
 
 const scrollRight = () => {
   if (contentRef?.scrollLeft || contentRef.scrollLeft === 0) {
-    contentRef.scrollLeft += contentRef?.offsetWidth
-      ? contentRef.offsetWidth - 10
-      : 100
+    contentRef.scrollLeft += contentRef.offsetWidth - 10 || 100
   }
 }
 
@@ -76,7 +79,7 @@ defineExpose({
 .umo-scrollable-container {
   width: 100%;
   overflow: hidden;
-  display: flex;
+  position: relative;
   .umo-scrollable-control {
     display: flex;
     align-items: center;
@@ -85,18 +88,21 @@ defineExpose({
     border-radius: var(--umo-radius);
     cursor: pointer;
     color: var(--umo-text-color-light);
-    position: relative;
     overflow: visible;
     background-color: var(--umo-button-hover-background);
     z-index: 10;
     font-size: 20px;
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     &:hover {
       border-color: var(--umo-primary-color);
       background-color: var(--umo-primary-color);
       color: var(--umo-color-white);
     }
     &.scrollable-left {
-      margin-right: 5px;
+      left: 10px;
       :deep(.umo-icon) {
         transform: rotate(90deg);
       }
@@ -109,15 +115,15 @@ defineExpose({
           var(--umo-color-white)
         );
         position: absolute;
-        left: 22px;
+        left: 21px;
         top: 0;
         bottom: 0;
-        width: 40px;
+        width: 20px;
         pointer-events: none;
       }
     }
     &.scrollable-right {
-      margin-left: 5px;
+      right: 10px;
       :deep(.umo-icon) {
         transform: rotate(-90deg);
       }
@@ -130,10 +136,10 @@ defineExpose({
           var(--umo-color-white)
         );
         position: absolute;
-        right: 22px;
+        right: 21px;
         top: 0;
         bottom: 0;
-        width: 40px;
+        width: 20px;
         pointer-events: none;
       }
     }
