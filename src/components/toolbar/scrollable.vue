@@ -96,6 +96,7 @@ defineExpose({
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+    height: calc(100% - 20px);
     &:hover {
       border-color: var(--umo-primary-color);
       background-color: var(--umo-primary-color);
