@@ -1,4 +1,4 @@
-import { type Dispatch, Extension } from '@tiptap/core'
+import { type Dispatch, type Editor, Extension } from '@tiptap/core'
 import {
   AllSelection,
   type EditorState,
@@ -124,11 +124,27 @@ export default Extension.create({
         tr,
         state,
         dispatch,
+        editor,
       }: {
         tr: Transaction
         state: EditorState
         dispatch: Dispatch
+        editor: Editor
       }) => {
+        if (editor.isActive('bulletList') || editor.isActive('orderedList')) {
+          if (direction === 1) {
+            return editor.commands.sinkListItem('listItem')
+          } else {
+            return editor.commands.liftListItem('listItem')
+          }
+        }
+        if (editor.isActive('taskList')) {
+          if (direction === 1) {
+            return editor.commands.sinkListItem('taskItem')
+          } else {
+            return editor.commands.liftListItem('taskItem')
+          }
+        }
         const { selection } = state
         tr.setSelection(selection)
         tr = updateIndentLevel(tr, direction)
