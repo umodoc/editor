@@ -47,8 +47,8 @@
           <menus-toolbar-base-highlight v-if="!disableItem('highlight')" />
         </div>
         <div class="umo-virtual-group">
-          <menus-toolbar-base-ordered-list />
-          <menus-toolbar-base-bullet-list />
+          <menus-toolbar-base-ordered-list v-if="!disableItem('ordered-list')" />
+          <menus-toolbar-base-bullet-list v-if="!disableItem('bullet-list')" />
           <menus-toolbar-base-task-list v-if="!disableItem('task-list')" />
           <menus-toolbar-base-indent />
           <menus-toolbar-base-outdent />
