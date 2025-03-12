@@ -5,6 +5,11 @@
       :attach="`${container} .umo-zoomable-container`"
       trigger="click"
       placement="bottom-start"
+      :disabled="
+        page.preview?.enabled ||
+        options.document?.readOnly ||
+        !editor?.isEditable
+      "
     >
       <span class="umo-node-datetime-text">
         <icon name="date" class="umo-node-datetime-icon" />
@@ -30,6 +35,8 @@
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const container = inject('container')
+const options = inject('options')
+const page = inject('page')
 let popupVisible = $ref(false)
 
 const formatDateToChinese = (dateStr: string) => {
