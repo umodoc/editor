@@ -677,11 +677,6 @@ watch(
 </style>
 
 <style lang="less">
-.umo-editor-container.preview-mode {
-  .umo-zoomable-container {
-    padding: 50px 30px !important;
-  }
-}
 .umo-shortcuts-drawer-header {
   display: flex;
   align-items: center;
