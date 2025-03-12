@@ -33,6 +33,14 @@ let selectedNode = $ref(null)
 let tippyInstance = $ref<Instance | null>(null)
 const tippyOpitons = $ref<Partial<Instance>>({
   zIndex: 20,
+  popperOptions: {
+    modifiers: [
+      {
+        name: 'eventListeners',
+        options: { scroll: false, resize: false },
+      },
+    ],
+  },
   onMount(instance: Instance) {
     tippyInstance = instance
   },
