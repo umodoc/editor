@@ -50,6 +50,7 @@
         :min-width="14"
         :min-height="14"
         :max-width="maxWidth"
+        :max-height="maxHeight"
         :z-index="10"
         :equal-proportion="node.attrs.equalProportion"
         @rotate="onRotate"
@@ -98,6 +99,7 @@ const containerRef = ref(null)
 const imageRef = $ref<HTMLImageElement | null>(null)
 let selected = $ref(false)
 let maxWidth = $ref(0)
+let maxHeight = $ref(0)
 
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs
@@ -133,8 +135,9 @@ const uploadImage = async () => {
 const onLoad = async () => {
   if (node.attrs.width === null) {
     const { clientWidth = 1, clientHeight = 1 } = imageRef ?? {}
-    maxWidth = containerRef.value?.$el.clientWidth
     const ratio = clientWidth / clientHeight
+    maxWidth = containerRef.value?.$el.clientWidth
+    maxHeight = maxWidth / ratio
     updateAttributes({ width: (200 * ratio).toFixed(2) })
   }
   if ([null, 'auto', 0].includes(node.attrs.height)) {
@@ -169,11 +172,12 @@ const openImageViewer = () => {
 
 watch(
   () => node.attrs.equalProportion,
-  async () => {
+  async (equalProportion: boolean) => {
     await nextTick()
     const width = imageRef?.offsetWidth ?? 1
     const height = imageRef?.offsetHeight ?? 1
     updateAttributes({ width, height })
+    maxHeight = equalProportion ? maxWidth / (width / height) : 0
   },
 )
 watch(
