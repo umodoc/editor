@@ -294,7 +294,6 @@ watch(
 .umo-page-node-content {
   position: relative;
   box-sizing: border-box;
-  padding: 0 var(--umo-page-margin-right) 0 var(--umo-page-margin-left);
   min-height: calc(
     var(--umo-page-height) - var(--umo-page-margin-top) -
       var(--umo-page-margin-bottom)
