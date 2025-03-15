@@ -1,8 +1,8 @@
 <template>
-  <div class="umo-popup umo-mention-popup">
+  <div v-if="items.length > 0" class="umo-popup umo-mention-popup">
     <div class="umo-popup__content umo-dropdown">
       <div class="umo-dropdown__menu" style="padding: 5px; max-height: 320px">
-        <div v-if="items.length">
+        <div>
           <li
             v-for="(item, index) in items"
             :key="index"
@@ -12,9 +12,6 @@
           >
             {{ item.label }}
           </li>
-        </div>
-        <div v-else class="umo-mention-popup-empty">
-          {{ t('mention.noResult') }}
         </div>
       </div>
     </div>
@@ -54,6 +51,9 @@ const onKeyDown = ({ event }: any) => {
   }
 
   if (event.key === 'Enter') {
+    if (props.items.length === 0) {
+      return false
+    }
     enterHandler()
     return true
   }
@@ -88,7 +88,6 @@ defineExpose({
 
 <style lang="less">
 .umo-node-mention {
-  vertical-align: middle;
   box-decoration-break: clone;
   color: var(--umo-primary-color);
   padding: 0.1em 0.2em;
