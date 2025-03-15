@@ -14,7 +14,7 @@ declare module '@tiptap/core' {
 export default Node.create({
   name: 'callout',
   group: 'block',
-  content: '(paragraph|orderedList|bulletList)+',
+  content: 'paragraph+',
   defining: true,
   exitable: true,
   selectable: false,
@@ -24,9 +24,7 @@ export default Node.create({
       icon: {
         default: '⭐️',
       },
-      backgroundColor: {
-        default: 'rgb(217, 231, 255)',
-      },
+      backgroundColor: { default: 'rgb(217, 231, 255)' },
     }
   },
   parseHTML() {
@@ -76,5 +74,35 @@ export default Node.create({
         },
       }),
     ]
+  },
+  addKeyboardShortcuts() {
+    return {
+      Enter: ({ editor }: any) => {
+        const { state, view } = editor
+        const { dispatch } = view
+        const { selection } = state
+        const { $from } = selection
+        const node = $from.node(-1) // 获取 `callout` 节点
+
+        if (node?.type.name === 'callout') {
+          if (node.content.size <= 2) {
+            const pos = selection.from + 1 // 计算新段落插入的位置
+            // 创建新的 `paragraph` 并插入
+            const tr = state.tr.insert(
+              pos,
+              state.schema.nodes.paragraph.create(),
+            )
+            // 将光标移动到新段落
+            tr.setSelection(
+              state.selection.constructor.near(tr.doc.resolve(pos)),
+            )
+            dispatch(tr)
+            return true
+          }
+        }
+
+        return false
+      },
+    }
   },
 })
