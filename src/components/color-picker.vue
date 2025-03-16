@@ -56,7 +56,7 @@
     >
       <div class="umo-color-picker-more" :class="{ active: moreColorPicker }">
         <div class="umo-color-picker-more-menu">
-          <icon :style="{ color }" name="palette-color" />
+          <icon name="palette-color" />
           <span v-text="t('colorPicker.more')"></span>
         </div>
         <div class="umo-color-picker-more-arrow">
