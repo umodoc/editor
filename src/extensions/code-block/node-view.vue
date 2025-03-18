@@ -6,7 +6,7 @@
       :class="node.attrs.theme"
     >
       <div
-        v-if="!options.document?.readOnly"
+        v-if="!options.document?.readOnly && !page.preview?.enabled"
         class="umo-show-code-block-toolbar"
         v-text="t('node.codeBlock.menu')"
       ></div>
@@ -68,6 +68,7 @@ import { matchTags } from 'prism-code-editor/match-tags'
 const { node, updateAttributes } = defineProps(nodeViewProps)
 
 const options = inject('options')
+const page = inject('page')
 
 const containerRef = $ref(null)
 
@@ -101,10 +102,10 @@ onBeforeUnmount(() => {
 })
 
 watch(
-  () => options.value.document?.readOnly,
-  (val: boolean) => {
+  () => [options.value.document?.readOnly, page.value.preview?.enabled],
+  (val: [boolean, boolean]) => {
     codeEditor?.setOptions({
-      readOnly: val,
+      readOnly: val[0] || val[1],
     })
   },
 )
