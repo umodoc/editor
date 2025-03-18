@@ -38,14 +38,14 @@ export default Extension.create({
             },
           },
         },
-      }
+      },
     ]
   },
   addCommands() {
     return {
       setNodeAlign:
         (alignment) =>
-        ({ commands}) => {
+        ({ commands }) => {
           if (!this.options.alignments.includes(alignment)) {
             return false
           }

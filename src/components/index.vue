@@ -86,6 +86,8 @@ import ruConfig from '../locales/tdesign/ru-RU'
 
 const { toBlob, toJpeg, toPng } = domToImage
 
+import { setTypeWriter } from '@/extensions/type-writer'
+
 defineOptions({ name: 'UmoEditor' })
 
 // Props and Emits
@@ -663,6 +665,22 @@ const insertContent = (
     .run()
 }
 
+const setContentTypeWriter = (
+  content: object,
+  options = {
+    timerCount: 1,
+    state: 0, //0 初始  1刷新  2 停止 3 重新开始 4 清空打字机
+  },
+) => {
+  if (!editor.value) {
+    throw new Error('editor is not ready!')
+  }
+  if (typeof content !== 'object') {
+    throw new Error('content is not object!')
+  }
+  setTypeWriter(editor, content, options)
+}
+
 const getContent = (format = 'html') => {
   if (!editor.value) {
     throw new Error('editor is not ready!')
@@ -949,6 +967,7 @@ defineExpose({
   setDocument,
   setContent,
   insertContent,
+  setContentTypeWriter,
   setLocale,
   setTheme,
   getPage: () => page.value,
