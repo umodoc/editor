@@ -98,7 +98,6 @@ const editor = inject('editor')
 const options = inject('options')
 const container = inject('container')
 const containerRef = ref(null)
-let fileIcon = $ref('')
 
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs
@@ -111,6 +110,10 @@ const nodeStyle = $computed(() => {
     marginTop,
     marginBottom,
   }
+})
+
+const fileIcon = $computed(() => {
+  return `${options.value.cdnUrl}/icons/file/${getFileIcon(node.attrs.name)}.svg`
 })
 
 let previewModal = $ref(false)
