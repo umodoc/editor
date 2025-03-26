@@ -67,15 +67,17 @@
     <menus-toolbar-base-align-center />
     <menus-toolbar-base-align-right />
     <div class="umo-bubble-menu-divider"></div>
-    <menus-bubble-webpage-clickable />
-    <menus-toolbar-insert-web-page
-      v-if="!disableItem('webPage')"
-      ico="edit"
-      :page-type="editor?.getAttributes('iframe')?.type"
-      :page-url="editor?.getAttributes('iframe')?.src"
-    />
-    <menus-bubble-webpage-open />
-    <div class="umo-bubble-menu-divider"></div>
+    <template v-if="editor?.isActive('iframe')">
+      <menus-bubble-webpage-clickable />
+      <menus-toolbar-insert-web-page
+        v-if="!disableItem('webPage')"
+        ico="edit"
+        :page-type="editor?.getAttributes('iframe')?.type"
+        :page-url="editor?.getAttributes('iframe')?.src"
+      />
+      <menus-bubble-webpage-open />
+      <div class="umo-bubble-menu-divider"></div>
+    </template>
     <menus-bubble-file-download
       v-if="
         editor?.isActive('file') ||
