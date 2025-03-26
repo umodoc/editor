@@ -76,18 +76,14 @@ const nodeStyle = $computed(() => {
     marginBottom,
   }
 })
-let resizeTimeout: any = null
 const onResize = ({ width, height }: { width: number; height: number }) => {
   updateAttributes({
     width: Number(width.toFixed(2)),
     height: Number(height.toFixed(2)),
   })
-  clearTimeout(resizeTimeout)
-  resizeTimeout = setTimeout(() => {
-    if (myChart !== null) {
-      myChart.resize()
-    }
-  }, 300)
+  if (myChart !== null) {
+    myChart.resize()
+  }
 }
 
 // onBeforeUnmount(() => {
