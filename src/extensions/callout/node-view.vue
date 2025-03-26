@@ -69,6 +69,7 @@ const selectEmoji = (emoji: string) => {
   width: 100%;
   min-height: 38px;
   border: 1px solid rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
   &-icon {
     font-size: 16px;
     margin-right: 10px;
