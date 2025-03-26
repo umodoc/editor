@@ -7,7 +7,7 @@
       editor
         ?.chain()
         .focus()
-        .selectFiles('video', container, uploadFileMap, true)
+        .selectFiles('video', container, uploadFileMap)
         .run()
     "
   />

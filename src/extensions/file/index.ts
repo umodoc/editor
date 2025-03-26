@@ -15,8 +15,15 @@ const mimeTypes: any = {
     'image/svg+xml',
     'image/apng',
   ],
-  video: ['video/mp4', 'video/webm', 'video/ogg'],
-  audio: ['audio/mp3', 'audio/wav', 'audio/ogg', 'audio/aac', 'audio/flac'],
+  video: ['video/mp4', 'video/mpeg', 'video/webm', 'video/ogg'],
+  audio: [
+    'audio/mp3',
+    'audio/mpeg',
+    'audio/wav',
+    'audio/ogg',
+    'audio/aac',
+    'audio/flac',
+  ],
 }
 
 const getAccept = (type: string, accept: string[]) => {
@@ -133,7 +140,7 @@ export default Node.create({
             return false
           }
           const position = pos || editor.state.selection.anchor
-          let previewType = null
+          let previewType = 'file'
           // 图片
           if (type.startsWith('image/') && mimeTypes.image.includes(type)) {
             previewType = 'image'
@@ -150,7 +157,7 @@ export default Node.create({
           const id = shortId(10)
           uploadFileMap.set(id, file)
           return commands.insertContentAt(position, {
-            type: autoType && previewType ? previewType : 'file',
+            type: autoType ? previewType : 'file',
             attrs: {
               id,
               [previewType === 'file' ? 'url' : 'src']:
@@ -163,7 +170,7 @@ export default Node.create({
           })
         },
       selectFiles:
-        (type, container = 'body', uploadFileMap, autoType = false) =>
+        (type, container = 'body', uploadFileMap, autoType = true) =>
         ({ editor }) => {
           const { options } = editor.storage
           const accept = getAccept(type, options.file.allowedMimeTypes)

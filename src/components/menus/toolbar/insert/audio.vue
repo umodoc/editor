@@ -7,7 +7,7 @@
       editor
         ?.chain()
         .focus()
-        .selectFiles('audio', container, uploadFileMap, true)
+        .selectFiles('audio', container, uploadFileMap)
         .run()
     "
   />

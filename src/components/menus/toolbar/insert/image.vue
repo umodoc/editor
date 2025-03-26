@@ -1,13 +1,13 @@
 <template>
   <menus-button
-    ico="file"
-    :text="t('insert.file')"
+    ico="image"
+    :text="t('insert.image')"
     huge
     @menu-click="
       editor
         ?.chain()
         .focus()
-        .selectFiles('file', container, uploadFileMap)
+        .selectFiles('image', container, uploadFileMap)
         .run()
     "
   />
