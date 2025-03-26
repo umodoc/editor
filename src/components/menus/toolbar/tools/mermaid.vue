@@ -52,6 +52,7 @@ const props = defineProps({
 let dialogVisible = $ref(false)
 const editor = inject('editor')
 const container = inject('container')
+const uploadFileMap = inject('uploadFileMap')
 
 //  初始化 Mermaid
 const mermaidInit = () => {
@@ -112,20 +113,26 @@ const setMermaid = () => {
     return
   }
   if (!props.content || (props.content && props.content !== mermaidCode)) {
+    const id = shortId(10)
     const svg = mermaidRef.querySelector('svg')
     const { width, height } = svg.getBoundingClientRect()
     const name = `mermaid-${shortId()}.svg`
-    const { size } = new Blob([svg.outerHTML], {
+    const blob = new Blob([svg.outerHTML], {
       type: 'image/svg+xml',
     })
+    const file = new File([blob], name, {
+      type: 'image/svg+xml',
+    })
+    uploadFileMap.value.set(id, file)
     editor.value
       ?.chain()
       .focus()
       .setImage(
         {
+          id,
           type: 'mermaid',
           name,
-          size,
+          size: file.size,
           src: svg64(svgCode),
           content: mermaidCode,
           width,

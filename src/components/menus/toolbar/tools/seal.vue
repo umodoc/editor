@@ -31,15 +31,17 @@
 <script setup lang="ts">
 import { removeBackground } from '@imgly/background-removal'
 
+import { shortId } from '@/utils/short-id'
+
 const hasRemoveBackgroundFunction = typeof removeBackground === 'function'
 
 let dialogVisible = $ref(false)
 const editor = inject('editor')
 const options = inject('options')
 const container = inject('container')
+const uploadFileMap = inject('uploadFileMap')
 
 let sealImg = $ref<string | null>(null)
-let sealFile = $ref<File | null>(null)
 let converting = $ref<string | null>(null)
 let file = $ref<File | null>(null)
 
@@ -76,21 +78,19 @@ const selectImage = () => {
         },
       })
       sealImg = URL.createObjectURL(img)
-      sealFile = img
     } catch {
       useMessage('error', {
         attach: container,
         content: t('tools.seal.convertError'),
       })
       sealImg = null
-      sealFile = null
     } finally {
       converting = null
     }
   })
 }
 
-const setSeal = () => {
+const setSeal = async () => {
   if (!sealImg) {
     useMessage('error', {
       attach: container,
@@ -98,23 +98,31 @@ const setSeal = () => {
     })
     return
   }
+  const id = shortId(10)
+  const name = `seal-${id}.png`
+  const file = await fetch(sealImg)
+    .then((res) => res.blob())
+    .then((blob) => new File([blob], name, { type: blob.type }))
+  uploadFileMap.value.set(id, file)
+
   editor.value
     ?.chain()
     .focus()
     .setImage({
+      id,
       type: 'seal',
+      name,
+      size: file.size,
       src: sealImg,
       width: 150,
       height: 'auto',
       draggable: true,
       rotatable: true,
-      file: sealFile,
       previewType: null,
     })
     .run()
   dialogVisible = false
   sealImg = null
-  sealFile = null
   converting = null
 }
 </script>

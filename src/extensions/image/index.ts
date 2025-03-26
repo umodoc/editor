@@ -25,9 +25,6 @@ export default Image.extend({
       size: {
         default: null,
       },
-      file: {
-        default: null,
-      },
       id: {
         default: null,
       },

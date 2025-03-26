@@ -125,6 +125,7 @@ const { content } = defineProps({
 let dialogVisible = $ref(false)
 const editor = inject('editor')
 const container = inject('container')
+const uploadFileMap = inject('uploadFileMap')
 
 const menuClick = () => {
   renderQrcode()
@@ -207,21 +208,27 @@ const setQrcode = () => {
     })
     return
   }
+  const id = shortId(10)
   const { width, height } = config
   const src = svg64(svgCode)
-  const name = `qrcode-${shortId()}.svg`
-  const { size } = new Blob([svgCode], {
+  const name = `qrcode-${id}.svg`
+  const blob = new Blob([svgCode], {
     type: 'image/svg+xml',
   })
+  const file = new File([blob], name, {
+    type: 'image/svg+xml',
+  })
+  uploadFileMap.value.set(id, file)
   if (changed) {
     editor.value
       ?.chain()
       .focus()
       .setImage(
         {
+          id,
           type: 'qrcode',
           name,
-          size,
+          size: file.size,
           src,
           content: JSON.stringify(config),
           width,

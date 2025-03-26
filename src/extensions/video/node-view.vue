@@ -29,7 +29,7 @@
           @canplay="onLoad"
         ></video>
         <div
-          v-if="!node.attrs.uploaded && node.attrs.file !== null"
+          v-if="!node.attrs.uploaded && node.attrs.id !== null"
           class="uploading"
         ></div>
       </drager>
@@ -46,6 +46,7 @@ import { mediaPlayer } from '@/utils/player'
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const options = inject('options')
 const container = inject('container')
+const uploadFileMap = inject('uploadFileMap')
 
 const containerRef = ref(null)
 let selected = $ref(false)
@@ -70,18 +71,19 @@ const nodeStyle = $computed(() => {
 onMounted(async () => {
   await nextTick()
   player = mediaPlayer(videoRef)
-  if (node.attrs.uploaded === false && node.attrs.file) {
+  if (node.attrs.uploaded || !node.attrs.id) {
+    return
+  }
+  if (uploadFileMap.value.has(node.attrs.id)) {
     try {
-      const { id, url } =
-        (await options.value?.onFileUpload?.(node.attrs.file)) ?? {}
+      const file = uploadFileMap.value.get(node.attrs.id)
+      const { id, url } = (await options.value?.onFileUpload?.(file)) ?? {}
       if (containerRef.value) {
-        updateAttributes({ id, src: url, file: null, uploaded: true })
+        updateAttributes({ id, src: url, uploaded: true })
       }
-    } catch (error) {
-      useMessage('error', {
-        attach: container,
-        content: (error as Error).message,
-      })
+      uploadFileMap.value.delete(node.attrs.id)
+    } catch (e) {
+      useMessage('error', { attach: container, content: (e as Error).message })
     }
   }
 })

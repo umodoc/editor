@@ -32,6 +32,7 @@ import { getDefaultExtensions, inputAndPasteRules } from '@/extensions'
 const destroyed = inject('destroyed')
 const page = inject('page')
 const options = inject('options')
+const uploadFileMap = inject('uploadFileMap')
 
 const $document = useState('document', options)
 
@@ -44,6 +45,7 @@ const container = inject('container')
 const extensions: any[] = getDefaultExtensions({
   container,
   options,
+  uploadFileMap,
 })
 
 const editorInstance: Editor = new Editor({

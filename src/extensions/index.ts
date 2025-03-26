@@ -24,6 +24,7 @@ import NodeRange from '@tiptap-pro/extension-node-range'
 import { getHierarchicalIndexes } from '@tiptap-pro/extension-table-of-contents'
 import { TableOfContents } from '@tiptap-pro/extension-table-of-contents'
 
+import type { UmoEditorOptions } from '@/types'
 import { shortId } from '@/utils/short-id'
 
 import Audio from './audio'
@@ -62,12 +63,15 @@ import Video from './video'
 export const getDefaultExtensions = ({
   container,
   options,
+  uploadFileMap,
 }: {
   container: string
-  options: any
+  options: { value: UmoEditorOptions }
+  uploadFileMap: { value: any }
 }) => {
-  const { dicts, document: doc, file } = options.value
-  return [
+  const { dicts, page, document: doc, users, file } = options.value
+
+  const extensions = [
     StarterKit.configure({
       bold: false,
       bulletList: false,
@@ -77,7 +81,7 @@ export const getDefaultExtensions = ({
       dropcursor: false,
     }),
     Placeholder.configure({
-      placeholder: () => String(l(options.value.document.placeholder)),
+      placeholder: () => String(l(doc?.placeholder ?? '')),
     }),
     Focus.configure({
       className: 'umo-node-focused',
@@ -110,8 +114,9 @@ export const getDefaultExtensions = ({
     }),
     LineHeight.configure({
       types: ['heading', 'paragraph'],
-      defaultLineHeight: dicts.lineHeights.find((item: any) => item.default)
-        .value,
+      defaultLineHeight:
+        dicts?.lineHeights?.find((item: any) => item.default)?.value ??
+        undefined,
     }),
     Margin,
     SearchReplace.configure({
@@ -144,13 +149,13 @@ export const getDefaultExtensions = ({
     // 页面
     Toc,
     BreakMarks.configure({
-      visible: options.value.page.showBreakMarks,
+      visible: page.showBreakMarks,
     }),
     PageBreak,
 
     // 其他
     Mention.configure({
-      suggestion: getUsersSuggestion(options.value.users),
+      suggestion: getUsersSuggestion(users ?? []),
     }),
     Selection,
     NodeRange,
@@ -162,20 +167,29 @@ export const getDefaultExtensions = ({
         ) as HTMLElement,
       getId: () => shortId(6),
     }),
-    Typography.configure(doc.typographyRules),
+    Typography.configure(doc?.typographyRules),
     CharacterCount.configure({
-      limit: doc.characterLimit !== 0 ? doc.characterLimit : undefined,
+      limit: doc?.characterLimit !== 0 ? doc?.characterLimit : undefined,
     }),
     FileHandler.configure({
-      allowedMimeTypes: file.allowedMimeTypes,
+      allowedMimeTypes: file?.allowedMimeTypes,
       onPaste(editor: Editor, files: any) {
         for (const file of files) {
-          editor.commands.insertFile({ file, autoType: true })
+          editor.commands.insertFile({
+            file,
+            uploadFileMap: uploadFileMap.value,
+            autoType: true,
+          })
         }
       },
       onDrop: (editor: Editor, files: any, pos: number) => {
         for (const file of files) {
-          editor.commands.insertFile({ file, autoType: true, pos })
+          editor.commands.insertFile({
+            file,
+            uploadFileMap: uploadFileMap.value,
+            autoType: true,
+            pos,
+          })
         }
       },
     }),
@@ -184,6 +198,8 @@ export const getDefaultExtensions = ({
     }),
     Echarts,
   ]
+
+  return extensions
 }
 
 export const inputAndPasteRules = (options: any) => {

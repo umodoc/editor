@@ -4,7 +4,11 @@
     :text="t('insert.video')"
     huge
     @menu-click="
-      editor?.chain().focus().selectFiles('video', container, true).run()
+      editor
+        ?.chain()
+        .focus()
+        .selectFiles('video', container, uploadFileMap, true)
+        .run()
     "
   />
 </template>
@@ -12,4 +16,5 @@
 <script setup lang="ts">
 const container = inject('container')
 const editor = inject('editor')
+const uploadFileMap = inject('uploadFileMap')
 </script>

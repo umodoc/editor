@@ -1,10 +1,14 @@
 <template>
   <menus-button
-    ico="image"
-    :text="t('insert.image')"
+    ico="file"
+    :text="t('insert.file')"
     huge
     @menu-click="
-      editor?.chain().focus().selectFiles('image', container, true).run()
+      editor
+        ?.chain()
+        .focus()
+        .selectFiles('file', container, uploadFileMap)
+        .run()
     "
   />
 </template>
@@ -12,4 +16,5 @@
 <script setup lang="ts">
 const container = inject('container')
 const editor = inject('editor')
+const uploadFileMap = inject('uploadFileMap')
 </script>

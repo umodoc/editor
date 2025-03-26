@@ -16,7 +16,7 @@
         preload="metadata"
       ></audio>
       <div
-        v-if="!node.attrs.uploaded && node.attrs.file !== null"
+        v-if="!node.attrs.uploaded && node.attrs.id !== null"
         class="uploading"
       ></div>
     </div>
@@ -31,6 +31,7 @@ import { mediaPlayer } from '@/utils/player'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const options = inject('options')
+const uploadFileMap = inject('uploadFileMap')
 
 const containerRef = ref<HTMLElement | null>(null)
 const audiorRef = $ref<ReactiveVariable<HTMLAudioElement> | null>(null)
@@ -52,16 +53,20 @@ const nodeStyle = $computed(() => {
 
 onMounted(async () => {
   player = mediaPlayer(audiorRef)
-  if (node.attrs.uploaded === false && node.attrs.file) {
-    try {
-      const { id, url } =
-        (await options.value?.onFileUpload?.(node.attrs.file)) ?? {}
+  if (node.attrs.uploaded || !node.attrs.id) {
+    return
+  }
+  try {
+    if (uploadFileMap.value.has(node.attrs.id)) {
+      const file = uploadFileMap.value.get(node.attrs.id)
+      const { id, url } = (await options.value?.onFileUpload?.(file)) ?? {}
       if (containerRef.value) {
-        updateAttributes({ id, src: url, file: null, uploaded: true })
+        updateAttributes({ id, url, uploaded: true })
       }
-    } catch (error) {
-      useMessage('error', (error as Error).message)
+      uploadFileMap.value.delete(node.attrs.id)
     }
+  } catch (error) {
+    useMessage('error', (error as Error).message)
   }
 })
 

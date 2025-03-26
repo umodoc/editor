@@ -68,8 +68,11 @@
 <script setup lang="ts">
 import SmoothSignature from 'smooth-signature'
 
+import { shortId } from '@/utils/short-id'
+
 const editor = inject('editor')
 const container = inject('container')
+const uploadFileMap = inject('uploadFileMap')
 let dialogVisible = $ref(false)
 let openSmooth = $ref(false)
 
@@ -117,15 +120,24 @@ const changeSmooth = () => {
   signature.maxWidth = openSmooth ? signature.minWidth * 2 : signature.minWidth
 }
 
-const setSignature = () => {
+const setSignature = async () => {
   try {
+    const id = shortId(10)
+    const name = `seal-${id}.png`
     const image = signature.getPNG()
+    const file = await fetch(image)
+      .then((res) => res.blob())
+      .then((blob) => new File([blob], name, { type: blob.type }))
+    uploadFileMap.value.set(id, file)
     editor.value
       ?.chain()
       .focus()
       .setImage({
+        id,
         type: 'signature',
+        name,
         src: image ?? '',
+        size: file.size,
         width: 120,
         height: 40,
         draggable: true,

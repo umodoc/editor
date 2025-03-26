@@ -36,6 +36,7 @@ const props = defineProps({
 const container = inject('container')
 const editor = inject('editor')
 const options = inject('options')
+const uploadFileMap = inject('uploadFileMap')
 
 let dialogVisible = $ref(false)
 let loading = $ref(false)
@@ -47,6 +48,7 @@ const diagramEditor = new DiagramEditor({
 
 let image = $ref<
   | {
+      id: string
       type: string
       src: string
       name: string
@@ -58,7 +60,7 @@ let image = $ref<
   | undefined
 >()
 
-const messageListener = (evt: MessageEvent) => {
+const messageListener = async (evt: MessageEvent) => {
   if (evt?.type !== 'message' || typeof evt?.data !== 'string') {
     return
   }
@@ -69,15 +71,19 @@ const messageListener = (evt: MessageEvent) => {
   }
   if (event === 'export') {
     if (!props.content || (props.content && props.content !== data)) {
+      const id = shortId(10)
       const { width, height } = bounds
       const name = `diagrams-${shortId()}.svg`
-      const { size } = new Blob([data], {
-        type: 'image/svg+xml',
-      })
+      // 将 data URL 转换为 Blob
+      const file = await fetch(data)
+        .then((res) => res.blob())
+        .then((blob) => new File([blob], name, { type: blob.type }))
+      uploadFileMap.value.set(id, file)
       image = {
+        id,
         type: 'diagrams',
         name,
-        size,
+        size: file.size,
         src: data,
         width,
         height,

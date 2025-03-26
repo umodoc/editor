@@ -236,6 +236,7 @@ let dialogVisible = $ref(false)
 const container = inject('container')
 const editor = inject('editor')
 const options = inject('options')
+const uploadFileMap = inject('uploadFileMap')
 
 // 工具栏
 const formats = [
@@ -352,12 +353,17 @@ const setBarcode = () => {
     })
     return
   }
-  const name = `barcode-${shortId()}.svg`
-  const { size } = new Blob([barcodeSvgRef.outerHTML], {
-    type: 'image/svg+xml',
-  })
+  const id = shortId(10)
+  const name = `barcode-${id}.svg`
   const width = barcodeSvgRef?.width.animVal.value
   const height = barcodeSvgRef?.height.animVal.value
+  const blob = new Blob([barcodeSvgRef.outerHTML], {
+    type: 'image/svg+xml',
+  })
+  const file = new File([blob], name, {
+    type: 'image/svg+xml',
+  })
+  uploadFileMap.value.set(id, file)
 
   if (changed) {
     editor.value
@@ -365,9 +371,10 @@ const setBarcode = () => {
       .focus()
       .setImage(
         {
+          id,
           type: 'barcode',
           name,
-          size,
+          size: file.size,
           src: svg64(barcodeSvgRef?.outerHTML ?? ''),
           content: JSON.stringify(config),
           width,
