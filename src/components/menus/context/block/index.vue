@@ -17,6 +17,8 @@
           editor.isActive('table') ||
           editor.isActive('callout')
         "
+        :node="selectedNode"
+        :pos="selectedNodePos"
         @dropdown-visible="dropdownVisible"
       />
     </div>
@@ -29,6 +31,7 @@ import type { Instance } from 'tippy.js'
 
 const editor = inject('editor')
 let selectedNode = $ref(null)
+let selectedNodePos = $ref(null)
 
 let tippyInstance = $ref<Instance | null>(null)
 const tippyOpitons = $ref<Partial<Instance>>({
@@ -64,8 +67,11 @@ onMounted(() => {
   editor.value.on('selectionUpdate', updateMenuPostion)
 })
 
-const nodeChange = ({ node }: any) => {
-  selectedNode = node || null
+const nodeChange = ({ node, pos }: { node: Node | null; pos: number }) => {
+  selectedNode = node ?? null
+  if (pos !== null) {
+    selectedNodePos = pos
+  }
 }
 
 const dropdownVisible = (visible: boolean) => {

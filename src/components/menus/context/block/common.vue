@@ -159,9 +159,10 @@
 import type { Level } from '@tiptap/extension-heading'
 import type { Node } from '@tiptap/pm/model'
 
-import { getSelectionNode } from '@/extensions/selection'
-import { shortId } from '@/utils/short-id'
-
+const props = defineProps<{
+  node: Node | null
+  pos: number | null
+}>()
 const emits = defineEmits<{
   dropdownVisible: (visible: boolean) => void
 }>()
@@ -215,39 +216,31 @@ const toggleNodeType = (
 }
 
 const clearTextFormatting = () => {
-  editor.value?.chain().focus().setCurrentNodeSelection().unsetAllMarks().run()
+  editor.value
+    ?.chain()
+    .setNodeSelection(props.pos)
+    .focus()
+    .unsetAllMarks()
+    .run()
 }
 const copyNodeToClipboard = () => {
-  editor.value?.commands.setCurrentNodeSelection()
+  editor.value?.commands.setNodeSelection(props.pos)
   document.execCommand('copy')
 }
 const cutNodeToClipboard = () => {
-  editor.value?.commands.setCurrentNodeSelection()
+  editor.value?.commands.setNodeSelection(props.pos)
   document.execCommand('cut')
 }
 const duplicateNode = () => {
-  const selectionNode = editor.value ? getSelectionNode(editor.value) : null
-  const getPosition = () => {
-    let point = 0
-    editor.value?.state.doc.descendants((node: Node, pos: number) => {
-      if (node === selectionNode) {
-        point = pos + node.nodeSize // 返回节点结束位置
-      }
-    })
-    return point
-  }
-  const copeNode = selectionNode?.type.create(
-    {
-      ...selectionNode.attrs,
-      id: shortId(),
-    },
-    selectionNode.content,
-    selectionNode.marks,
-  )
-  editor.value?.commands.insertContentAt(getPosition(), copeNode?.toJSON())
+  editor.value?.commands.insertContentAt(props.pos, props.node?.toJSON())
 }
 const deleteNode = () => {
-  editor.value?.chain().focus().deleteSelectionNode().run()
+  editor.value
+    ?.chain()
+    .setNodeSelection(props.pos)
+    .focus()
+    .deleteSelectionNode()
+    .run()
 }
 </script>
 
