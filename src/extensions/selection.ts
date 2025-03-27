@@ -76,9 +76,12 @@ export default Extension.create({
   },
 })
 export function getSelectionNode(editor: Editor) {
-  editor.commands.selectParentNode()
   // @ts-ignore
   const { $anchor, node } = editor.state.selection
+  if (node?.type?.isAtom) {
+    return node
+  }
+  editor.commands.selectParentNode()
   return $anchor.node(1) || node
 }
 export function getSelectionText(editor: Editor) {
