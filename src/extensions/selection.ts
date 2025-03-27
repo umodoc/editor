@@ -70,7 +70,10 @@ export default Extension.create({
               options.onFileDelete?.(id, src)
             }
           }
-          return commands.deleteSelection()
+          if (commands.deleteSelection()) {
+            return true
+          }
+          return commands.deleteNode(node.type.name)
         },
     }
   },
