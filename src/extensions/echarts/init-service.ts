@@ -18,23 +18,7 @@ export function useEchartsLoader(options: any) {
             const existingScript = document.querySelector('#echarts-script')
             if (!existingScript) {
               const script = document.createElement('script')
-              let _cdnUrl = `${options.cdnUrl}/libs/echarts/`
-              let _filePath = 'echarts.min.js'
-              if (
-                options.echarts?.isRelative &&
-                options.echarts?.filePath !== ''
-              ) {
-                // 相对路径
-                script.src = options.echarts?.filePath
-              } else {
-                if (options.echarts?.cdnUrl !== '') {
-                  _cdnUrl = options.echarts.cdnUrl
-                }
-                if (options.echarts?.filePath !== '') {
-                  _filePath = options.echarts.filePath
-                }
-                script.src = _cdnUrl + _filePath
-              }
+              script.src = `${options.cdnUrl}/libs/echarts/echarts.min.js`
               script.id = 'echarts-script'
               script.type = 'text/javascript'
               script.onload = () => resolve()

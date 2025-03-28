@@ -101,7 +101,7 @@ const options = $ref({
   onFileDelete(id: string, url: string) {
     console.log(id, url)
   },
-  onCustomizeChartSettings(data: any, config: any) {
+  onCustomEChartSettings(data: any, config: any) {
     return null
   },
   async onAssistant() {

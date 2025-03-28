@@ -150,11 +150,8 @@ export interface AssistantOptions {
 }
 
 export interface EchartsOptions {
-  isRelative: boolean
-  cdnUrl: string
-  filePath: string
   mode: number
-  haveImage: boolean
+  renderImage: boolean
 }
 
 export interface UserItem {
@@ -236,7 +233,7 @@ export interface UmoEditorOptions {
   onSave?: AsyncFunction
   onFileUpload?: (file: File) => Promise<{ id: string; url: string }>
   onFileDelete?: CallableFunction
-  onCustomizeChartSettings?: CallableFunction
+  onCustomEChartSettings?: CallableFunction
   onAssistant?: AsyncFunction
   onCustomImportWordMethod?: AsyncFunction
 }

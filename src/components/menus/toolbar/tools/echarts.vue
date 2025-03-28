@@ -364,7 +364,7 @@ const setConfirm = () => {
     }
   }
   // 设置了保存图片或者高级模式时，自动保存图片
-  if (options.value.echarts?.haveImage || resOptions.mode === 0) {
+  if (options.value.echarts?.renderImage || resOptions.mode === 0) {
     // 源码模式或 havImage
     const dataURI = (
       resOptions.mode === 1 ? settingMyChart : sourceMyChart

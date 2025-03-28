@@ -134,7 +134,7 @@ export function calbaseConfigOptions(data: any, config: any, options: any) {
   }
 
   // 9.0 自定义扩展，可以在外部自定义实现展示效果，扩展个性化样式
-  const newOptions = options.onCustomizeChartSettings?.(data, config)
+  const newOptions = options.onCustomEChartSettings?.(data, config)
   if (newOptions !== null && typeof newOptions === 'object') {
     resOption = newOptions
   }

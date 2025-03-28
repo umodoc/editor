@@ -1001,6 +1001,11 @@ defineExpose({
   blur,
   toggleFullscreen,
   reset,
+  destroy,
+  focusBookmark,
+  getAllBookmarks,
+  setBookmark,
+  deleteBookmark,
   useAlert(pramas: DialogOptions) {
     return useAlert({ attach: container, ...pramas })
   },
@@ -1010,11 +1015,6 @@ defineExpose({
   useMessage(type: string, pramas: MessageOptions) {
     return useMessage(type, { attach: container, ...pramas })
   },
-  destroy,
-  focusBookmark,
-  getAllBookmarks,
-  setBookmark,
-  deleteBookmark,
 })
 </script>
 

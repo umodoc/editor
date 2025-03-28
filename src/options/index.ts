@@ -129,11 +129,8 @@ const defaultOptions: UmoEditorOptions = {
     ],
   },
   echarts: {
-    isRelative: false, //相对还是绝对路径 true 相对路径  false 绝对路径
-    cdnUrl: '', //cdn的地址路径
-    filePath: '', //文件路径  cdn+filepath 可以完整访问此 echarts脚本
-    mode: 1, //图表设置时，默认打开的模式 0 表示直接使用echarts的options json  源码模式   1：可视化模式，可以通过配置创建图表
-    haveImage: false, //是否生成图片 如果是则在图片展示的同时保存一张echart图片，主要用于复杂图形模式word无法生成但又要有类似效果场景
+    mode: 1,
+    renderImage: false,
   },
   webPages: defaultWebPages,
   templates: [],
@@ -187,9 +184,9 @@ const defaultOptions: UmoEditorOptions = {
       reject(new Error('Key "onAssistant": Please set the onAssistant method'))
     })
   },
-  onCustomizeChartSettings() {
+  onCustomEChartSettings() {
     console.error(
-      'Custom chart settings are required, please configure onCustomizeChartSettings.',
+      'Custom chart settings are required, please configure onCustomEChartSettings.',
     )
   },
   async onCustomImportWordMethod() {
@@ -746,27 +743,12 @@ const ojbectSchema = new ObjectSchema({
     validate: 'object',
     required: false,
     schema: {
-      isRelative: {
-        merge: 'replace',
-        validate: 'boolean',
-        required: false,
-      },
-      cdnUrl: {
-        merge: 'replace',
-        validate: 'string',
-        required: false,
-      },
-      filePath: {
-        merge: 'replace',
-        validate: 'string',
-        required: false,
-      },
       mode: {
         merge: 'replace',
         validate: 'number',
         required: false,
       },
-      haveImage: {
+      renderImage: {
         merge: 'replace',
         validate: 'boolean',
         required: false,
@@ -943,11 +925,11 @@ const ojbectSchema = new ObjectSchema({
     },
     required: false,
   },
-  onCustomizeChartSettings: {
+  onCustomEChartSettings: {
     merge: 'replace',
     validate(value: any) {
       if (!isFunction(value)) {
-        throw new Error('Key "onCustomizeChartSettings" must be a function.')
+        throw new Error('Key "onCustomEChartSettings" must be a function.')
       }
     },
     required: false,
