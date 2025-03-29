@@ -12,7 +12,6 @@
       :class="{
         'toolbar-classic': isRecord($toolbar) && $toolbar.mode === 'classic',
         'toolbar-ribbon': isRecord($toolbar) && $toolbar.mode === 'ribbon',
-        'toolbar-source': isRecord($toolbar) && $toolbar.mode === 'source',
         'preview-mode': page.preview?.enabled,
         'laser-pointer': page.preview?.enabled && page.preview?.laserPointer,
         'umo-editor-is-fullscreen': fullscreen,
@@ -37,14 +36,13 @@
         </toolbar>
       </header>
       <main class="umo-main">
-        <container-page v-if="$toolbar.mode !== 'source'">
+        <container-page>
           <template #bubble_menu="slotProps">
             <slot name="bubble_menu" v-bind="slotProps" />
           </template>
         </container-page>
-        <editor-source v-else />
       </main>
-      <footer v-if="$toolbar.mode !== 'source'" class="umo-footer">
+      <footer class="umo-footer">
         <statusbar />
       </footer>
     </div>
@@ -753,7 +751,7 @@ const print = () => {
   if (toolbar?.disableMenuItems.includes('print') || editor.value?.isEmpty) {
     return
   }
-  if ($toolbar.value.mode !== 'source' && !document?.readOnly) {
+  if (!document?.readOnly) {
     printing.value = true
   }
 }
@@ -802,7 +800,7 @@ const destroy = () => {
 
 // Content Saving Methods
 const saveContent = async (showMessage = true) => {
-  if ($toolbar.value.mode === 'source' || options.value.document?.readOnly) {
+  if (options.value.document?.readOnly) {
     return
   }
   try {
@@ -908,14 +906,6 @@ const getContentExcerpt = (charLimit = 100, more = ' ...') => {
   }
   return text?.substring(0, charLimit) + more
 }
-
-// Toolbar Mode Reset
-watch(
-  () => $toolbar.value.mode,
-  (val: any) => {
-    destroyed.value = val === 'source'
-  },
-)
 
 // Hotkeys Setup
 watch(

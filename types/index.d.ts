@@ -63,7 +63,6 @@ export type ToolbarMenu =
 
 export interface ToolbarOptions {
   defaultMode: 'classic' | 'ribbon'
-  enableSourceEditor: boolean
   menus: ToolbarMenu[]
   disableMenuItems: string[]
   importWord: {

@@ -6,7 +6,6 @@
     "toggle": "切换工具栏",
     "show": "显示工具栏",
     "hide": "隐藏工具栏",
-    "source": "编辑源代码",
     "base": "开始",
     "insert": "插入",
     "table": "表格",
@@ -573,9 +572,6 @@
       "bottom": "下:",
       "left": "左:"
     }
-  },
-  "source": {
-    "loading": "正在加载编辑器..."
   },
   "document": {
     "untitled": "未命名文档"

@@ -32,7 +32,6 @@ const defaultOptions: UmoEditorOptions = {
   dicts: defaultDicts,
   toolbar: {
     defaultMode: 'ribbon',
-    enableSourceEditor: false,
     menus: ['base', 'insert', 'table', 'tools', 'page', 'export'],
     disableMenuItems: [],
     importWord: {
@@ -402,11 +401,6 @@ const ojbectSchema = new ObjectSchema({
             )
           }
         },
-        required: false,
-      },
-      enableSourceEditor: {
-        merge: 'replace',
-        validate: 'boolean',
         required: false,
       },
       menus: {

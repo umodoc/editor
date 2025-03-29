@@ -28,12 +28,9 @@
         <slot :name="`toolbar_${item}`" v-bind="props" />
       </template>
     </toolbar-classic>
-    <toolbar-source
-      v-if="$toolbar.mode === 'source' && options.toolbar?.enableSourceEditor"
-    />
     <div class="umo-toolbar-actions" :class="$toolbar.mode">
       <t-popup
-        v-if="$toolbar.mode !== 'source' && options.document.readOnly !== true"
+        v-if="options.document.readOnly !== true"
         v-model="statusPopup"
         :attach="container"
         trigger="click"
@@ -180,39 +177,23 @@ watch(
 )
 
 // 切换编辑器模式
-const editorModeOptions = computed(() => {
-  const modeOptions: {
-    value: string
-    label: string
-    prefixIcon: string
-    divider?: boolean
-  }[] = [
-    {
-      label: t('toolbar.ribbon'),
-      value: 'ribbon',
-      prefixIcon: 'toolbar-ribbon',
-    },
-    {
-      label: t('toolbar.classic'),
-      value: 'classic',
-      prefixIcon: 'toolbar-classic',
-    },
-    {
-      label: t('toolbar.hide'),
-      value: 'hideToolbar',
-      prefixIcon: 'hide-toolbar',
-    },
-  ]
-  if (options.value.toolbar?.enableSourceEditor) {
-    modeOptions.splice(2, 0, {
-      label: t('toolbar.source'),
-      value: 'source',
-      prefixIcon: 'toolbar-source',
-      divider: true,
-    })
-  }
-  return modeOptions
-})
+const editorModeOptions = [
+  {
+    label: t('toolbar.ribbon'),
+    value: 'ribbon',
+    prefixIcon: 'toolbar-ribbon',
+  },
+  {
+    label: t('toolbar.classic'),
+    value: 'classic',
+    prefixIcon: 'toolbar-classic',
+  },
+  {
+    label: t('toolbar.hide'),
+    value: 'hideToolbar',
+    prefixIcon: 'hide-toolbar',
+  },
+]
 
 const toggleToolbarMode = ({ value }: DropdownOption) => {
   if (value === 'hideToolbar') {

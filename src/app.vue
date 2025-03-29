@@ -31,7 +31,6 @@ const options = $ref({
   toolbar: {
     // defaultMode: 'classic',
     // menus: ['base'],
-    enableSourceEditor: true,
   },
   document: {
     title: '测试文档',

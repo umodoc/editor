@@ -6,7 +6,6 @@
     "toggle": "Toolbar",
     "show": "Show Toolbar",
     "hide": "Hide Toolbar",
-    "source": "Edit Source Code",
     "base": "Home",
     "insert": "Insert",
     "table": "Table",
@@ -573,9 +572,6 @@
       "bottom": "Bottom:",
       "left": "Left:"
     }
-  },
-  "source": {
-    "loading": "Loading Source Editor..."
   },
   "document": {
     "untitled": "Untitled Document"
