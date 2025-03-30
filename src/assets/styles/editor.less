@@ -1,6 +1,7 @@
 @import '@/assets/styles/_mixins.less';
 
 .umo-editor-content {
+  accent-color: var(--umo-primary-color);
   &.show-line-number {
     .umo-editor {
       > *:not([data-line-number='false']):not(div) {
@@ -377,7 +378,6 @@
 
     li {
       display: flex;
-      align-items: first baseline;
 
       &[data-checked='true'] {
         p {
@@ -392,15 +392,27 @@
             text-decoration: line-through;
           }
         }
+        input[type='checkbox'] {
+          background-color: var(--umo-primary-color);
+          border: none;
+          &::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNMyA4TDYgMTFMMTMgMyIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+')
+              0 1px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+        }
       }
 
       > label {
         flex: 0 0 auto;
         margin-right: 10px;
         user-select: none;
-        input {
-          transform: translateY(0.2em);
-        }
       }
 
       > div {
@@ -409,17 +421,20 @@
     }
 
     input[type='checkbox'] {
+      appearance: none;
       cursor: pointer;
-      font-family: unset;
-      color: var(--umo-primary-color);
-      border: 1px solid var(--umo-primary-color);
-      border-radius: 0;
-      margin: 0.25em;
       width: 16px;
       height: 16px;
       padding: 0.1em 0.4em;
-      background: white;
-      opacity: 0.5;
+      opacity: 0.6;
+      border: 1px solid var(--umo-text-color);
+      border-radius: 2px;
+      background-color: white;
+      position: relative;
+      color: #fff;
+      &:hover {
+        border-color: var(--umo-primary-color);
+      }
     }
   }
 
