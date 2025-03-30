@@ -16,7 +16,7 @@
     @confirm="insertbookmark"
     @close="dialogVisible = false"
   >
-    <div class="umo-link-container">
+    <div class="umo-bookmark-container">
       <t-form label-align="top" colon>
         <t-form-item
           :label="t('insert.bookmark.textName')"

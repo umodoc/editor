@@ -98,12 +98,13 @@ watch(
 
 <style lang="less" scoped>
 .umo-link-container {
-  padding: 2px;
+  padding: 0 2px 2px;
+  margin-top: -6px;
   width: 320px;
   :deep(.umo-form__item) {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     &:last-child {
-      margin-top: 20px;
+      margin-top: 15px;
     }
   }
 }

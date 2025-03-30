@@ -115,6 +115,11 @@ const options = $ref({
 </script>
 
 <style>
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
 .examples {
   margin: 20px;
   display: flex;

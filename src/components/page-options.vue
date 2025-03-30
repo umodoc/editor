@@ -3,7 +3,7 @@
     :visible="visible"
     icon="page-margin"
     :header="t('pageOptions.title')"
-    width="460px"
+    width="450px"
     @close="emits('close')"
     @confirm="onConfirm"
   >
