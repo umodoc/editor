@@ -172,7 +172,12 @@ onClickOutside(containerRef, () => {
   selected = false
 })
 
-const openImageViewer = () => {
+const openImageViewer = async () => {
+  const id = shortId(10)
+  if (node.attrs.id === null) {
+    updateAttributes({ id })
+  }
+  await nextTick()
   imageViewer.value.visible = true
   imageViewer.value.current = node.attrs.id
 }
