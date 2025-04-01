@@ -5,7 +5,7 @@ import NodeView from './node-view.vue'
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     addTableOfContents: {
-      addTableOfContents: () => ReturnType
+      addTableOfContents: (option: any) => ReturnType
     }
   }
 }
@@ -40,9 +40,14 @@ export default Node.create({
   addCommands() {
     return {
       addTableOfContents:
-        () =>
-        ({ editor }) => {
-          return editor.chain().focus().insertContent({ type: this.name }).run()
+        (options) =>
+        ({ chain }) => {
+          return chain()
+            .insertContent({
+              type: this.name,
+              attrs: options,
+            })
+            .run()
         },
     }
   },
