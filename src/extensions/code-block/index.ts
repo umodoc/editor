@@ -1,66 +1,31 @@
-import { mergeAttributes, Node } from '@tiptap/core'
+import CodeBlock from '@tiptap/extension-code-block-lowlight'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
+import { common, createLowlight } from 'lowlight'
 
 import NodeView from './node-view.vue'
 
-declare module '@tiptap/core' {
-  interface Commands<ReturnType> {
-    setCodeBlock: {
-      setCodeBlock: (options: any) => ReturnType
-    }
-  }
-}
+const lowlight = createLowlight(common)
 
-export default Node.create({
-  name: 'codeBlock',
-  group: 'block',
-  atom: true,
+const customCodeBlock = CodeBlock.extend({
   addAttributes() {
     return {
-      vnode: {
-        default: true,
-      },
-      code: {
-        default: '',
-      },
+      ...this.parent?.(),
       language: {
         default: 'plaintext',
       },
       theme: {
         default: 'light',
       },
-      lineNumbers: {
+      wordWrap: {
         default: true,
       },
-      wordWrap: {
-        default: false,
-      },
     }
-  },
-  parseHTML() {
-    return [{ tag: 'pre' }]
-  },
-  renderHTML({ HTMLAttributes }) {
-    return ['pre', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
   },
   addNodeView() {
     return VueNodeViewRenderer(NodeView)
   },
-  addCommands() {
-    return {
-      setCodeBlock:
-        (options) =>
-        ({ commands }) => {
-          return commands.insertContent({
-            type: this.name,
-            attrs: options,
-          })
-        },
-    }
-  },
-  addKeyboardShortcuts() {
-    return {
-      'Mod-Alt-c': () => this.editor.commands.setCodeBlock(),
-    }
-  },
+})
+
+export default customCodeBlock.configure({
+  lowlight,
 })

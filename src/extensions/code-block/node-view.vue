@@ -1,508 +1,340 @@
 <template>
-  <node-view-wrapper :id="node.attrs.id" class="umo-node-view">
+  <node-view-wrapper ref="containerRef" class="umo-node-view umo-code-block">
     <div
-      ref="containerRef"
-      class="umo-node-container umo-hover-shadow umo-select-outline umo-node-code-block"
-      :class="node.attrs.theme"
+      :class="`umo-node-container hover-shadow umo-node-code-block umo-node-code-block-theme-${node.attrs.theme}`"
     >
-      <div
-        v-if="!options.document?.readOnly && !page.preview?.enabled"
-        class="umo-show-code-block-toolbar"
-        v-text="t('node.codeBlock.menu')"
-      ></div>
+      <div class="umo-node-code-block-toolbar">
+        <div class="umo-node-code-block-toolbar-left">
+          <menus-button
+            :text="t('bubbleMenu.code.languages')"
+            menu-type="select"
+            style="width: 100px"
+            :select-options="languageOptions"
+            :select-value="node.attrs.language"
+            :popup-props="{
+              attach: container,
+              overlayClassName: 'umo-code-block-language',
+            }"
+            filterable
+            borderless
+            @menu-click="(value: string) => updateAttribute('language', value)"
+          />
+          <menus-button
+            :text="t('bubbleMenu.code.themes.text')"
+            menu-type="select"
+            style="width: 100px"
+            :select-options="themeOptions"
+            :select-value="node.attrs.theme"
+            borderless
+            @menu-click="(value: string) => updateAttribute('theme', value)"
+          />
+        </div>
+        <div class="umo-node-code-block-toolbar-right">
+          <menus-button
+            :text="t('bubbleMenu.code.wordWrap')"
+            ico="code-word-wrap"
+            :menu-active="node.attrs.wordWrap"
+            hide-text
+            @menu-click="updateAttribute('wordWrap', !node.attrs.wordWrap)"
+          />
+          <menus-button
+            ico="copy"
+            :text="t('bubbleMenu.code.copy.text')"
+            hide-text
+            @menu-click="copyCode"
+          />
+          <menus-bubble-node-delete shortcut="" hide-text />
+        </div>
+      </div>
+      <pre
+        class="umo-node-code-block-content"
+        :class="{
+          'umo-node-code-block-word-wrap': node.attrs.wordWrap,
+        }"
+      ><node-view-content
+        :class="`hljs language-${node.attrs.language}`"
+        :style="`white-space: pre${node.attrs.wordWrap ? '-wrap' : ''} !important;`"
+        as="code"
+      /></pre>
     </div>
   </node-view-wrapper>
 </template>
 
 <script setup lang="ts">
-import 'prism-code-editor/prism/languages/bash'
-import 'prism-code-editor/prism/languages/css'
-import 'prism-code-editor/prism/languages/css-extras'
-import 'prism-code-editor/prism/languages/ini'
-import 'prism-code-editor/prism/languages/kotlin'
-import 'prism-code-editor/prism/languages/xml'
-import 'prism-code-editor/prism/languages/markup'
-import 'prism-code-editor/prism/languages/r'
-import 'prism-code-editor/prism/languages/basic'
-import 'prism-code-editor/prism/languages/vbnet'
-import 'prism-code-editor/prism/languages/c'
-import 'prism-code-editor/prism/languages/opencl'
-import 'prism-code-editor/prism/languages/diff'
-import 'prism-code-editor/prism/languages/java'
-import 'prism-code-editor/prism/languages/less'
-import 'prism-code-editor/prism/languages/objectivec'
-import 'prism-code-editor/prism/languages/ruby'
-import 'prism-code-editor/prism/languages/sql'
-import 'prism-code-editor/prism/languages/wasm'
-import 'prism-code-editor/prism/languages/cpp'
-import 'prism-code-editor/prism/languages/go'
-import 'prism-code-editor/prism/languages/javascript'
-import 'prism-code-editor/prism/languages/js-templates'
-import 'prism-code-editor/prism/languages/jsx'
-import 'prism-code-editor/prism/languages/lua'
-import 'prism-code-editor/prism/languages/perl'
-import 'prism-code-editor/prism/languages/python'
-import 'prism-code-editor/prism/languages/rust'
-import 'prism-code-editor/prism/languages/swift'
-import 'prism-code-editor/prism/languages/clike'
-import 'prism-code-editor/prism/languages/csharp'
-import 'prism-code-editor/prism/languages/graphql'
-import 'prism-code-editor/prism/languages/json'
-import 'prism-code-editor/prism/languages/makefile'
-import 'prism-code-editor/prism/languages/scss'
-import 'prism-code-editor/prism/languages/typescript'
-import 'prism-code-editor/prism/languages/tsx'
-import 'prism-code-editor/prism/languages/yaml'
-import 'prism-code-editor/prism/languages/regex'
-import 'prism-code-editor/layout.css'
-
-import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
-import { createEditor, type PrismEditor } from 'prism-code-editor'
-import { defaultCommands, editHistory } from 'prism-code-editor/commands'
-import { cursorPosition } from 'prism-code-editor/cursor'
-import { indentGuides } from 'prism-code-editor/guides'
-import { highlightBracketPairs } from 'prism-code-editor/highlight-brackets'
-import { matchBrackets } from 'prism-code-editor/match-brackets'
-import { matchTags } from 'prism-code-editor/match-tags'
+import { NodeViewContent, nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
+import { common, createLowlight } from 'lowlight'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
+const lowlight = createLowlight(common)
 
-const options = inject('options')
-const page = inject('page')
+const container = inject('container')
+const containerRef = ref(null)
 
-const containerRef = $ref(null)
+const languageOptions = lowlight.listLanguages().map((item) => {
+  return { label: item, value: item }
+})
+const themeOptions = [
+  { label: t('bubbleMenu.code.themes.dark'), value: 'dark' },
+  { label: t('bubbleMenu.code.themes.light'), value: 'light' },
+]
 
-const code = $ref(node.attrs.code)
-let codeEditor = $ref<PrismEditor | null>(null)
+const updateAttribute = (type: string, value: string) => {
+  updateAttributes({ [type]: value })
+}
 
-onMounted(() => {
-  codeEditor = createEditor(containerRef, {
-    readOnly: options.value.document?.readOnly,
-    language: node.attrs.language,
-    tabSize: 2,
-    lineNumbers: node.attrs.lineNumbers,
-    wordWrap: node.attrs.wordWrap,
-    value: code,
-    onUpdate(value) {
-      updateAttributes({ code: value })
-    },
+const copyCode = () => {
+  const { copy } = useClipboard({
+    source: node.textContent,
   })
-  codeEditor.addExtensions(
-    matchBrackets(),
-    matchTags(),
-    indentGuides(),
-    highlightBracketPairs(),
-    cursorPosition(),
-    defaultCommands(),
-    editHistory(),
-  )
-})
-onBeforeUnmount(() => {
-  codeEditor?.remove()
-})
-
-watch(
-  () => [options.value.document?.readOnly, page.value.preview?.enabled],
-  (val: [boolean, boolean]) => {
-    codeEditor?.setOptions({
-      readOnly: val[0] || val[1],
-    })
-  },
-)
-watch(
-  () => [node.attrs.language, node.attrs.lineNumbers, node.attrs.wordWrap],
-  () => {
-    codeEditor?.setOptions(node.attrs)
-  },
-)
+  void copy()
+  useMessage('success', {
+    attach: container,
+    content: t('bubbleMenu.code.copy.success'),
+  })
+}
 </script>
 
 <style lang="less">
 @import '@/assets/styles/_mixins.less';
 
-.umo-node-view {
+.umo-code-block {
+  display: block !important;
   .umo-node-code-block {
-    width: 100%;
-    outline: solid 1px var(--umo-content-node-border);
-    overflow: hidden;
-    border-radius: var(--umo-content-node-radius);
-    position: relative;
-    .umo-show-code-block-toolbar {
-      position: absolute;
-      right: 5px;
-      top: 5px;
-      font-size: 12px;
-      padding: 3px 6px;
-      cursor: pointer;
-      background-color: var(--umo-color-white);
-      border: solid 1px var(--umo-border-color);
-      z-index: 10;
-      border-radius: var(--umo-radius);
-      display: none;
-    }
-    &.dark {
-      .umo-show-code-block-toolbar {
-        color: #999;
-        background-color: var(--umo-color-black);
+    border: solid 1px var(--umo-content-node-border);
+    border-radius: 3px;
+    &-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+      border-bottom: 1px solid var(--umo-content-node-border);
+      height: 36px;
+      border-top-left-radius: 2px;
+      border-top-right-radius: 2px;
+      background-color: var(--umo-content-node-selected-background);
+      &-right {
+        display: flex;
+        align-items: center;
+        display: none;
+      }
+      .umo-button-content {
+        color: var(--umo-text-color-light);
+        &:hover {
+          color: var(--umo-text-color);
+        }
       }
     }
     &:hover {
-      .umo-show-code-block-toolbar {
+      .umo-node-code-block-toolbar {
+        &-right {
+          display: flex;
+        }
+      }
+    }
+    &-theme-dark {
+      .umo-node-code-block-toolbar {
+        filter: invert(1);
+      }
+    }
+    &-content {
+      font-family: var(--umo-content-code-family);
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: hidden;
+      max-height: 500px;
+      border-radius: 0;
+      border-bottom-left-radius: 2px;
+      border-bottom-right-radius: 2px;
+      .umo-scrollbar();
+
+      code {
         display: block;
-        &:hover {
-          opacity: 1;
+        padding: 10px 20px !important;
+        width: 100%;
+        color: inherit;
+        font-size: 0.8rem;
+        box-sizing: border-box;
+        border-radius: 0;
+        background: none;
+        &:first-child {
+          margin-left: -0.4em;
         }
       }
     }
   }
-}
-
-.prism-code-editor {
-  max-height: 560px;
-  font-size: 14px;
-  .umo-scrollbar();
-  textarea {
-    caret-color: var(--umo-color-black);
-  }
-  textarea[aria-readonly='true'] {
-    caret-color: transparent;
-  }
-}
-.dark > {
-  .prism-code-editor {
-    font-family: var(--umo-content-code-family);
-    --editor__bg: #0d1117;
-    --widget__border: #303741;
-    --widget__bg: #161b22;
-    --widget__color: #b8bfc7;
-    --widget__color-active: #fff;
-    --widget__color-options: #757e8a;
-    --widget__bg-input: #0d1117;
-    --widget__bg-hover: #5a5d5e4f;
-    --widget__bg-active: #1f6feb66;
-    --widget__focus-ring: #007acc;
-    --search__bg-find: #f2cc6080;
-    --widget__bg-error: #5a1d1d;
-    --widget__error-ring: #be1100;
-    --editor__bg-highlight: #6e76811a;
-    --editor__bg-selection-match: #3fb95040;
-    --editor__line-number: #6e7681;
-    --editor__bg-scrollbar: 210, 10%, 32%;
-    --editor__bg-fold: #7d8590;
-    --bg-guide-indent: #e6edf31f;
-    color-scheme: dark;
-    color: #fff;
-  }
-  textarea {
-    caret-color: var(--umo-color-white);
-    &::selection {
-      color: #0000;
-      background: #264f78;
+  &.umo-node-focused {
+    .umo-node-code-block {
+      border-color: var(--umo-primary-color);
     }
   }
-  .pce-matches .match {
-    --search__bg-find: #8c8d6c;
-  }
-  .active-line {
-    --editor__line-number: #e6edf3;
-  }
-  .guide-indents .active {
-    --bg-guide-indent: #e6edf33d;
-  }
-  [class*='language-'],
-  .language-markdown .url > .operator,
-  .token.punctuation,
-  .token.attr-equals,
-  .token.code.keyword {
-    color: #e6edf3;
-  }
-  .token.atrule,
-  .token.variable,
-  .language-css .token.url,
-  .token.parameter,
-  .token.list.punctuation,
-  .token.class-name,
-  .token.maybe-class-name {
-    color: #ffa657;
-  }
-  .token.atrule .rule,
-  .token.unit,
-  .token.selector .combinator,
-  .token.operator,
-  .token.regex-flags,
-  .token.token.anchor,
-  .token.number.quantifier,
-  .token.keyword {
-    color: #ff7b72;
-  }
-  .token.tag,
-  .token.selector,
-  .token.doctype,
-  .language-regex .escape {
-    color: #7ee787;
-  }
-  .token.token.interpolation-punctuation,
-  .token.attr-value,
-  .token.string,
-  .token.regex,
-  .language-regex,
-  .token.string-property,
-  .language-markdown .url .content,
-  .language-markdown .url .variable {
-    color: #a5d6ff;
-  }
-  .token.builtin,
-  .token.selector .class,
-  .token.selector .id,
-  .token.pseudo-class,
-  .token.pseudo-element,
-  .token.attr-name,
-  .language-css .token.property,
-  .token.number,
-  .token.color,
-  .token.boolean,
-  .token.constant,
-  .token.title.important,
-  .title.important .punctuation,
-  .language-css .token.function,
-  .token.code-snippet.code,
-  .token.doctype .name,
-  .token.property-access,
-  .token.keyword-null,
-  .token.keyword-this,
-  .token.char-class,
-  .token.char-set,
-  .token.regex .punctuation,
-  .language-jsx .tag > .punctuation,
-  .language-tsx .tag > .punctuation {
-    color: #79c0ff;
-  }
-  .token.function {
-    color: #d2a8ff;
-  }
-  .token.comment,
-  .token.cdata {
-    color: #8b949e;
-  }
-  .token.important,
-  .token.bold {
-    font-weight: 700;
-  }
-  .token.italic {
-    font-style: italic;
-  }
-  .token.bracket-level-0,
-  .token.bracket-level-6 {
-    color: #79c0ff;
-  }
-  .token.bracket-level-1,
-  .token.bracket-level-7 {
-    color: #56d364;
-  }
-  .token.bracket-level-2,
-  .token.bracket-level-8 {
-    color: #e3b341;
-  }
-  .token.bracket-level-3,
-  .token.bracket-level-9 {
-    color: #ffa198;
-  }
-  .token.bracket-level-4,
-  .token.bracket-level-10 {
-    color: #ff9bce;
-  }
-  .token.bracket-level-5,
-  .token.bracket-level-11 {
-    color: #d2a8ff;
-  }
-  .token.bracket-error {
-    color: #7d8590;
-  }
-  .token.markup-bracket {
-    color: inherit;
-  }
-  .active-bracket {
-    box-shadow:
-      inset 0 0 0 1px #3fb95099,
-      inset 0 0 0 9in #3fb95040;
-  }
-  .active-tagname,
-  .word-matches span {
-    box-shadow:
-      inset 0 0 0 1px #6e768199,
-      inset 0 0 0 9in #6e768180;
+}
+.umo-code-block-language {
+  .umo-select__list {
+    max-height: 200px;
   }
 }
-.light {
-  > .prism-code-editor {
-    caret-color: #24292e;
-    font-family: var(--umo-content-code-family);
-    --editor__bg: #fff;
-    --widget__border: #bfbfbf;
-    --widget__bg: #f6f8fa;
-    --widget__color: #434d56;
-    --widget__color-active: var(--umo-color-black);
-    --widget__color-options: #5a6772;
-    --widget__bg-input: #fafbfc;
-    --widget__bg-hover: #b8b8b84f;
-    --widget__bg-active: #2188ff33;
-    --widget__focus-ring: #007acc;
-    --search__bg-find: #ffdf5d66;
-    --widget__bg-error: #f2dede;
-    --widget__error-ring: #be1100;
-    --editor__bg-highlight: #f6f8fa;
-    --editor__bg-selection-match: #34d05840;
-    --editor__line-number: #1b1f2380;
-    --editor__bg-scrollbar: 210, 7%, 55%;
-    --editor__bg-fold: #656d76;
-    --bg-guide-indent: #1f23281f;
-    color-scheme: light;
-    color: var(--umo-text-color);
+</style>
+
+<style lang="less">
+.umo-node-code-block-theme {
+  &-light {
+    pre {
+      color: #24292e;
+      background: #ffffff;
+    }
+    .hljs-doctag,
+    .hljs-keyword,
+    .hljs-meta .hljs-keyword,
+    .hljs-template-tag,
+    .hljs-template-variable,
+    .hljs-type,
+    .hljs-variable.language_ {
+      color: #d73a49;
+    }
+    .hljs-title,
+    .hljs-title.class_,
+    .hljs-title.class_.inherited__,
+    .hljs-title.function_ {
+      color: #6f42c1;
+    }
+    .hljs-attr,
+    .hljs-attribute,
+    .hljs-literal,
+    .hljs-meta,
+    .hljs-number,
+    .hljs-operator,
+    .hljs-variable,
+    .hljs-selector-attr,
+    .hljs-selector-class,
+    .hljs-selector-id {
+      color: #005cc5;
+    }
+    .hljs-regexp,
+    .hljs-string,
+    .hljs-meta .hljs-string {
+      color: #032f62;
+    }
+    .hljs-built_in,
+    .hljs-symbol {
+      color: #e36209;
+    }
+    .hljs-comment,
+    .hljs-code,
+    .hljs-formula {
+      color: #6a737d;
+    }
+    .hljs-name,
+    .hljs-quote,
+    .hljs-selector-tag,
+    .hljs-selector-pseudo {
+      color: #22863a;
+    }
+    .hljs-subst {
+      color: #24292e;
+    }
+    .hljs-section {
+      color: #005cc5;
+      font-weight: bold;
+    }
+    .hljs-bullet {
+      color: #735c0f;
+    }
+    .hljs-emphasis {
+      color: #24292e;
+      font-style: italic;
+    }
+    .hljs-strong {
+      color: #24292e;
+      font-weight: bold;
+    }
+    .hljs-addition {
+      color: #22863a;
+      background-color: #f0fff4;
+    }
+    .hljs-deletion {
+      color: #b31d28;
+      background-color: #ffeef0;
+    }
   }
-  textarea::selection {
-    color: #0000;
-    background: #add6ff;
-  }
-  .pce-matches .match {
-    --search__bg-find: #e9e5ba;
-  }
-  .active-line {
-    --editor__line-number: #1f2328;
-  }
-  .guide-indents .active {
-    --bg-guide-indent: #1f23284d;
-  }
-  [class*='language-'],
-  .language-markdown .url > .operator,
-  .token.attr-equals,
-  .token.punctuation {
-    color: #24292e;
-  }
-  .token.doctype,
-  .token.builtin {
-    color: #005cc5;
-  }
-  .token.atrule,
-  .token.variable,
-  .language-css .token.url,
-  .token.parameter,
-  .token.list.punctuation,
-  .token.maybe-class-name,
-  .token.class-name {
-    color: #e36209;
-  }
-  .token.keyword,
-  .token.doctype .name,
-  .token.atrule .rule,
-  .token.unit,
-  .token.selector .combinator,
-  .token.regex-flags,
-  .token.token.anchor,
-  .token.number.quantifier,
-  .token.operator {
-    color: #d73a49;
-  }
-  .token.tag,
-  .token.selector,
-  .language-regex .escape {
-    color: #22863a;
-  }
-  .token.selector .class,
-  .token.selector .id,
-  .token.pseudo-class,
-  .token.pseudo-element,
-  .token.function {
-    color: #6f42c1;
-  }
-  .token.token.interpolation-punctuation,
-  .token.attr-value,
-  .token.string,
-  .token.regex,
-  .language-regex,
-  .token.string-property,
-  .language-markdown .url .content,
-  .language-markdown .url .variable {
-    color: #032f62;
-  }
-  .token.code.keyword {
-    color: #24292e;
-  }
-  .token.attr-name,
-  .language-css .token.property,
-  .token.number,
-  .token.constant,
-  .token.color,
-  .token.boolean,
-  .token.title.important,
-  .title.important .punctuation,
-  .token.property-access,
-  .token.char-class,
-  .token.char-set,
-  .token.regex .punctuation,
-  .language-css .token.function,
-  .token.code-snippet.code {
-    color: #005cc5;
-  }
-  .token.comment,
-  .token.cdata {
-    color: #6a737d;
-  }
-  .token.important,
-  .token.bold {
-    font-weight: 700;
-  }
-  .token.italic {
-    font-style: italic;
-  }
-  .language-jsx .tag > .punctuation,
-  .language-tsx .tag > .punctuation {
-    color: #0550ae;
-  }
-  .token.bracket-level-0,
-  .token.bracket-level-6 {
-    color: #0366d6;
-  }
-  .token.bracket-level-1,
-  .token.bracket-level-7 {
-    color: #138934;
-  }
-  .token.bracket-level-2,
-  .token.bracket-level-8 {
-    color: #b37700;
-  }
-  .token.bracket-level-3,
-  .token.bracket-level-9 {
-    color: #cb2431;
-  }
-  .token.bracket-level-4,
-  .token.bracket-level-10 {
-    color: #a43276;
-  }
-  .token.bracket-level-5,
-  .token.bracket-level-11 {
-    color: #8a3ddb;
-  }
-  .token.bracket-error {
-    color: #ff1212cc;
-  }
-  .token.markup-bracket {
-    color: inherit;
-  }
-  .active-bracket {
-    box-shadow:
-      inset 0 0 0 1px #34d05899,
-      inset 0 0 0 9in #35d05940;
-  }
-  .active-tagname,
-  .word-matches span {
-    box-shadow:
-      inset 0 0 0 1px #afb8c199,
-      inset 0 0 0 9in #eaeef280;
-  }
-}
-[contenteditable='false'] {
-  .umo-node-code-block {
-    outline: solid 1px var(--umo-content-node-border);
+  &-dark {
+    pre {
+      color: #c9d1d9;
+      background: #1d2229;
+    }
+
+    .hljs-doctag,
+    .hljs-keyword,
+    .hljs-meta .hljs-keyword,
+    .hljs-template-tag,
+    .hljs-template-variable,
+    .hljs-type,
+    .hljs-variable.language_ {
+      color: #ff7b72;
+    }
+    .hljs-title,
+    .hljs-title.class_,
+    .hljs-title.class_.inherited__,
+    .hljs-title.function_ {
+      color: #d2a8ff;
+    }
+    .hljs-attr,
+    .hljs-attribute,
+    .hljs-literal,
+    .hljs-meta,
+    .hljs-number,
+    .hljs-operator,
+    .hljs-variable,
+    .hljs-selector-attr,
+    .hljs-selector-class,
+    .hljs-selector-id {
+      color: #79c0ff;
+    }
+    .hljs-regexp,
+    .hljs-string,
+    .hljs-meta .hljs-string {
+      color: #a5d6ff;
+    }
+    .hljs-built_in,
+    .hljs-symbol {
+      color: #ffa657;
+    }
+    .hljs-comment,
+    .hljs-code,
+    .hljs-formula {
+      color: #8b949e;
+    }
+    .hljs-name,
+    .hljs-quote,
+    .hljs-selector-tag,
+    .hljs-selector-pseudo {
+      color: #7ee787;
+    }
+    .hljs-subst {
+      color: #c9d1d9;
+    }
+    .hljs-section {
+      color: #1f6feb;
+      font-weight: bold;
+    }
+    .hljs-bullet {
+      color: #f2cc60;
+    }
+    .hljs-emphasis {
+      color: #c9d1d9;
+      font-style: italic;
+    }
+    .hljs-strong {
+      color: #c9d1d9;
+      font-weight: bold;
+    }
+    .hljs-addition {
+      color: #aff5b4;
+      background-color: #033a16;
+    }
+    .hljs-deletion {
+      color: #ffdcd7;
+      background-color: #67060c;
+    }
   }
 }
 </style>

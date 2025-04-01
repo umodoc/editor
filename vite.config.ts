@@ -62,7 +62,6 @@ const buildConfig = {
       /^@vueuse\/.*/,
       /^@tiptap\/.*/,
       /^nzh\/.*/,
-      /^prism-code-editor\/.*/,
     ],
     onwarn(warning: any, warn: (warning: any) => void) {
       if (warning.code === 'UNUSED_EXTERNAL_IMPORT') return

@@ -4,6 +4,7 @@
       editor?.isActive('toc') ||
       editor?.isActive('pageBreak') ||
       editor?.isActive('horizontalRule') ||
+      editor?.isActive('codeBlock') ||
       editor?.getAttributes('image').error
     "
   >
@@ -105,16 +106,6 @@
     <div class="umo-bubble-menu-divider"></div>
     <menus-toolbar-table-merge-cells />
     <menus-toolbar-table-split-cell />
-  </template>
-  <template v-else-if="editor?.isActive('codeBlock')">
-    <menus-bubble-code-languages />
-    <menus-bubble-code-themes />
-    <div class="umo-bubble-menu-divider"></div>
-    <menus-bubble-code-line-numbers />
-    <menus-bubble-code-word-wrap />
-    <div class="umo-bubble-menu-divider"></div>
-    <menus-bubble-code-copy />
-    <menus-bubble-node-delete />
   </template>
   <template v-else-if="editor?.isActive('tag')">
     <menus-bubble-tag-input />
