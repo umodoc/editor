@@ -535,7 +535,7 @@ const initBaseConfig = () => {
     })
   })
 
-  //基础设置配置 不需要多语
+  // 基础设置配置 不需要多语
   baseData.seriesType = [
     { code: 'bar', name: t('tools.echarts.set.bar') }, // "柱状图"
     { code: 'line', name: t('tools.echarts.set.line') }, // "折线图"
@@ -568,7 +568,7 @@ const initBaseConfig = () => {
     baseConfig.data.push({ tabkey: shortId(), A: '', B: '', C: '', D: '' })
   }
 
-  //config 默认值
+  // config 默认值
   baseConfig.config.seriesType = 'bar'
   baseConfig.config.smooth = false // 平滑折线
   baseConfig.config.legend = true // 图例 是否显示图例

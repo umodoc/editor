@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-//月份
+// 月份
 const formDate = (format: string) => useDateFormat(useNow(), format).value
 
 const formatDateToChinese = (dateStr: string) => {
@@ -97,7 +97,7 @@ const insertDate = ({ content, format, capitalize, value }: any) => {
     ?.chain()
     .insertDatetime({
       text: content.includes('自定义') ? `[${content}]` : content,
-      date: formDate(format), //formDate('YYYY-MM-DD HH:mm:ss'),
+      date: formDate(format), // formDate('YYYY-MM-DD HH:mm:ss'),
       withTime: value === 'withTime',
       format,
       capitalize,

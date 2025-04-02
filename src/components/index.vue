@@ -669,7 +669,7 @@ const setContentTypeWriter = (
   content: object,
   options = {
     timerCount: 1,
-    state: 0, //0 初始  1刷新  2 停止 3 重新开始 4 清空打字机
+    state: 0, // 0 初始  1刷新  2 停止 3 重新开始 4 清空打字机
   },
 ) => {
   if (!editor.value) {

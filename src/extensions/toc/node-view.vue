@@ -40,7 +40,7 @@ interface TocItem {
 }
 // 最终可视化数据
 let tocTreeData = $ref([])
-let watchTreeData: TocItem[] = [] //可视化监听数据
+let watchTreeData: TocItem[] = [] // 可视化监听数据
 const buildTocTree = (tocArray: Record<string, any>[]): TocItem[] => {
   const root: TocItem[] = []
   const stack: TocItem[] = []

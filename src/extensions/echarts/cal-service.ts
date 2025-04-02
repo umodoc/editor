@@ -138,6 +138,6 @@ export function calbaseConfigOptions(data: any, config: any, options: any) {
   if (newOptions !== null && typeof newOptions === 'object') {
     resOption = newOptions
   }
-  //10.0 返回值 必须JSON.parse(JSON.stringify( 一下，个别情况下echart不展示问题
+  // 10.0 返回值 必须JSON.parse(JSON.stringify( 一下，个别情况下echart不展示问题
   return JSON.parse(JSON.stringify(resOption))
 }

@@ -67,13 +67,13 @@ const container = inject('container')
 const editor = inject('editor')
 const page = inject('page')
 
-//弹窗口显示隐藏 true显示 默认隐藏
+// 弹窗口显示隐藏 true显示 默认隐藏
 let dialogVisible = $ref(false)
-//书签名称
+// 书签名称
 let bookmarkText = $ref('')
-//书签数据
+// 书签数据
 let bookmarkData: any = []
-//书签表格显示列
+// 书签表格显示列
 const bookmarkColumns = [
   {
     colKey: 'bookmarkRowName',
@@ -83,16 +83,16 @@ const bookmarkColumns = [
   },
   {
     colKey: 'operation',
-    title: t('insert.bookmark.actions'), //'操作',
+    title: t('insert.bookmark.actions'), // '操作',
     width: 70,
     fixed: 'right',
     align: 'center',
   },
 ]
 
-//书签插入
+// 书签插入
 const insertbookmark = () => {
-  //书签名称不为空时不处理
+  // 书签名称不为空时不处理
   if (bookmarkText) {
     let existbmName = ''
     if (bookmarkData.length > 0) {
@@ -103,7 +103,7 @@ const insertbookmark = () => {
         }
       }
     }
-    //存在-1
+    // 存在-1
     if (!existbmName) {
       if (editor.value?.commands.setBookmark({ bookmarkName: bookmarkText })) {
         dialogVisible = false
@@ -126,10 +126,10 @@ const insertbookmark = () => {
   }
 }
 const onActiveChange = (highlightRowKeys: any, ctx: any) => {
-  //重置文档
+  // 重置文档
   bookmarkText = ctx.currentRowData?.bookmarkRowName
 }
-//这个方法本来也想封装到addCommands 中，但经过多次验证，每次都会有一个额外的事务异常
+// 这个方法本来也想封装到addCommands 中，但经过多次验证，每次都会有一个额外的事务异常
 const rowDelete = (row: any) => {
   const element = editor.value?.view.dom.querySelector(
     `bookmark[bookmarkName="${row.bookmarkRowName}"]`,

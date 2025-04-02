@@ -27,9 +27,9 @@ const getContentHtml = () => {
     document.querySelector(`${container} .umo-page-content`)?.outerHTML ?? ''
   return prepareEchartsForPrint(originalContent)
 }
-//因echart依赖于组件动态展示，打印时效果无法通过html实现，所以通过转成图片方式解决
+// 因echart依赖于组件动态展示，打印时效果无法通过html实现，所以通过转成图片方式解决
 const prepareEchartsForPrint = (htmlContent: any) => {
-  //创建一个临时DOM容器用于处理HTML内容
+  // 创建一个临时DOM容器用于处理HTML内容
   const tempDiv = document.createElement('div')
   tempDiv.innerHTML = htmlContent
 

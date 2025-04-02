@@ -46,20 +46,20 @@ const disableItem = (name: string) => {
 
 const fontSizes = [
   { label: t('base.fontSize.default'), value: '14px', order: 4 },
-  { label: t('base.fontSize.42pt'), value: '42pt', order: 20 }, //56
-  { label: t('base.fontSize.36pt'), value: '36pt', order: 19 }, //48
-  { label: t('base.fontSize.26pt'), value: '26pt', order: 16 }, //35
-  { label: t('base.fontSize.24pt'), value: '24pt', order: 15 }, //32
-  { label: t('base.fontSize.22pt'), value: '22pt', order: 14 }, //29
-  { label: t('base.fontSize.18pt'), value: '18pt', order: 11 }, //24
-  { label: t('base.fontSize.16pt'), value: '16pt', order: 10 }, //22
-  { label: t('base.fontSize.15pt'), value: '15pt', order: 9 }, //21
-  { label: t('base.fontSize.14pt'), value: '14pt', order: 7 }, //19
-  { label: t('base.fontSize.12pt'), value: '12pt', order: 4 }, //16
-  { label: t('base.fontSize.10_5pt'), value: '10.5pt', order: 1 }, //14
-  { label: t('base.fontSize.9pt'), value: '9pt', order: 3 }, //12
-  { label: t('base.fontSize.7_5pt'), value: '7.5pt', order: 1 }, //10
-  { label: t('base.fontSize.6_5pt'), value: '6.5pt', order: 0 }, //9
+  { label: t('base.fontSize.42pt'), value: '42pt', order: 20 }, // 56
+  { label: t('base.fontSize.36pt'), value: '36pt', order: 19 }, // 48
+  { label: t('base.fontSize.26pt'), value: '26pt', order: 16 }, // 35
+  { label: t('base.fontSize.24pt'), value: '24pt', order: 15 }, // 32
+  { label: t('base.fontSize.22pt'), value: '22pt', order: 14 }, // 29
+  { label: t('base.fontSize.18pt'), value: '18pt', order: 11 }, // 24
+  { label: t('base.fontSize.16pt'), value: '16pt', order: 10 }, // 22
+  { label: t('base.fontSize.15pt'), value: '15pt', order: 9 }, // 21
+  { label: t('base.fontSize.14pt'), value: '14pt', order: 7 }, // 19
+  { label: t('base.fontSize.12pt'), value: '12pt', order: 4 }, // 16
+  { label: t('base.fontSize.10_5pt'), value: '10.5pt', order: 1 }, // 14
+  { label: t('base.fontSize.9pt'), value: '9pt', order: 3 }, // 12
+  { label: t('base.fontSize.7_5pt'), value: '7.5pt', order: 1 }, // 10
+  { label: t('base.fontSize.6_5pt'), value: '6.5pt', order: 0 }, // 9
   { label: '10', value: '10px', order: 1 },
   { label: '11', value: '11px', order: 2 },
   { label: '12', value: '12px', order: 3 },

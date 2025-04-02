@@ -1,12 +1,17 @@
 import { readFileSync } from 'node:fs'
 
 import eslintJS from '@eslint/js'
+import { FlatCompat } from '@eslint/eslintrc'
 import eslintConfigPrettier from 'eslint-config-prettier'
 import eslintPluginSimpleImportSort from 'eslint-plugin-simple-import-sort'
 import eslintPluginUnusedImports from 'eslint-plugin-unused-imports'
 import pluginVue from 'eslint-plugin-vue'
 import globals from 'globals'
 import eslintTS from 'typescript-eslint'
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+})
 
 function createAutoImportedGlobals() {
   // Read the content of the files synchronously
@@ -43,6 +48,7 @@ function createAutoImportedGlobals() {
 
 export default [
   eslintJS.configs.recommended,
+  ...compat.extends('plugin:prettier/recommended'),
   {
     ignores: ['./dist/**', './node_modules/**', './*.d.ts'],
     languageOptions: {
@@ -67,6 +73,7 @@ export default [
       'no-undef': 'off',
       'no-unused-vars': 'off',
       'no-empty': 'off',
+      'spaced-comment': ['error', 'always'],
     },
   },
   ...eslintTS.configs.recommended,

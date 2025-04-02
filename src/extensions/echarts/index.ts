@@ -14,7 +14,7 @@ declare module '@tiptap/core' {
     }
   }
 }
-//组件扩展于 echarts，适配标准 echarts，也可以自定义属性进行转换
+// 组件扩展于 echarts，适配标准 echarts，也可以自定义属性进行转换
 export default Node.create({
   name: 'echarts',
   inline: false,
@@ -47,7 +47,7 @@ export default Node.create({
         default: 1,
       },
       chartOptions: {
-        //展示配置，echarts 的 options，mode==0 时使用
+        // 展示配置，echarts 的 options，mode==0 时使用
         default: null,
         // 当从 HTML 解析时，尝试将 chartOptions 从字符串解析回对象
         parseHTML: (element) => {
@@ -78,7 +78,7 @@ export default Node.create({
             : null,
         }),
       },
-      src: '', //图片地址路径，也记录图片唯一标识
+      src: '', // 图片地址路径，也记录图片唯一标识
       describe: {
         // 描述信息
         default: null,

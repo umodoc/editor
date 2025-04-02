@@ -39,7 +39,7 @@ declare module '@tiptap/core' {
     }
   }
 }
-//书签格式 创建一个书签
+// 书签格式 创建一个书签
 export default Mark.create<BookmarkOptions>({
   name: 'bookmark',
   priority: 1000,
@@ -76,7 +76,7 @@ export default Mark.create<BookmarkOptions>({
 
   addCommands() {
     return {
-      //设置书签 若书签有选中区域数据 否则默认值为书签名称
+      // 设置书签 若书签有选中区域数据 否则默认值为书签名称
       setBookmark:
         (attributes) =>
         ({ chain, editor }) => {

@@ -5,7 +5,7 @@ export const setTypeWriter = (
   content: object,
   options = {
     timerCount: 1,
-    state: 0, //0 初始  1刷新  2 停止 3 重新开始 4 清空打字机
+    state: 0, // 0 初始  1刷新  2 停止 3 重新开始 4 清空打字机
   },
 ) => {
   editor = _editor
@@ -13,9 +13,9 @@ export const setTypeWriter = (
     typeWriterTimer = null
     return
   } else if (options.state === 3) {
-    //不用初始
+    // 不用初始
   } else {
-    //初始 刷新 都需要重置一下计时器
+    // 初始 刷新 都需要重置一下计时器
     typeWriterCurIndex.value = {
       paragraph: 0,
       textNode: 0,
@@ -41,7 +41,7 @@ let typeWriterTimer: any = null
 
 const typeWriterProcess = (complexContent: any) => {
   const { paragraph, textNode, char } = typeWriterCurIndex.value
-  //段落执行完成后 终止
+  // 段落执行完成后 终止
   if (paragraph >= complexContent.content.length) {
     clearInterval(typeWriterTimer)
     return
@@ -53,7 +53,7 @@ const typeWriterProcess = (complexContent: any) => {
         console.log(currentNode)
         if (currentNode.content && textNode < currentNode.content.length) {
           const currentTextNode = currentNode.content[textNode]
-          //真正的打字機
+          // 真正的打字機
           if (currentTextNode.text && currentTextNode.type === 'text') {
             if (char < currentTextNode.text.length) {
               const newText = currentTextNode.text[char]
@@ -123,4 +123,4 @@ const typeWriterInsertContent = (curContent: any) => {
     })
     .run()
 }
-//---打字机效果结束
+// ---打字机效果结束
