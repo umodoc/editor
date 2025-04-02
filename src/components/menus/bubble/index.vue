@@ -13,7 +13,7 @@
         <slot name="bubble_menu" v-bind="props" />
       </template>
     </menus-bubble-menus>
-    <assistant-input v-if="options?.assistant?.enabled && assistant" />
+    <assistant-input v-if="options?.ai?.assistant?.enabled && assistant" />
   </bubble-menu>
 </template>
 

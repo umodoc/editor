@@ -17,7 +17,7 @@
     <t-dropdown-menu>
       <t-dropdown-item
         v-if="
-          options.assistant?.enabled &&
+          options.ai?.assistant?.enabled &&
           (editor?.isActive('paragraph') || editor?.isActive('heading')) &&
           editor?.state?.selection?.$from?.nodeAfter
         "

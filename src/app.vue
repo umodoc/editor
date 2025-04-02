@@ -51,8 +51,10 @@ const options = $ref({
     //   'audio/*',
     // ],
   },
-  assistant: {
-    enabled: true,
+  ai: {
+    assistant: {
+      enabled: true,
+    },
   },
   user: {
     id: 'umoeditor',
@@ -103,7 +105,7 @@ const options = $ref({
   onCustomEChartSettings(data: any, config: any) {
     return null
   },
-  async onAssistant() {
+  async onAIAssistant() {
     return await Promise.resolve('<p>AI助手测试</p>')
   },
   async onCustomImportWordMethod() {

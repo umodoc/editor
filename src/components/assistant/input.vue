@@ -8,7 +8,7 @@
         ref="inputRef"
         v-model="command"
         class="input"
-        :maxlength="options.assistant?.maxlength"
+        :maxlength="options.ai?.assistant?.maxlength"
         :readonly="generating"
         autocomplete="false"
         :placeholder="t('assistant.placeholder')"
@@ -44,7 +44,7 @@
         <div class="title" v-text="t('assistant.commands')"></div>
         <div class="commands">
           <t-button
-            v-for="(item, index) in options.assistant?.commands"
+            v-for="(item, index) in options.ai?.assistant?.commands"
             :key="index"
             size="small"
             variant="outline"
@@ -57,7 +57,7 @@
       <div v-if="result.content !== ''" class="result-container">
         <div class="title" v-text="t('assistant.result')"></div>
         <div
-          class="result umo-editor-container"
+          class="result umo-editor-container umo-scrollbar"
           :class="{ error: result.error }"
           v-html="result.content"
         ></div>
@@ -168,7 +168,7 @@ const send = async () => {
   }
 
   try {
-    const data = await options.value.onAssistant?.(payload, content)
+    const data = await options.value.onAIAssistant?.(payload, content)
     const errorHandler = () => {
       if (result.content.startsWith('[ERROR]: ')) {
         result.error = true
@@ -200,7 +200,7 @@ const send = async () => {
     }
 
     console.error(
-      'onAssistant method returns data in an incorrect format, it can be a ReadableStream or plain text.',
+      'onAIAssistant method returns data in an incorrect format, it can be a ReadableStream or plain text.',
     )
   } catch (err) {
     console.error(err)
@@ -372,6 +372,7 @@ const deleteResult = () => {
     width: 450px;
     text-align: justify;
     min-height: auto;
+    max-height: 240px;
     * + * {
       margin-top: 6px;
     }

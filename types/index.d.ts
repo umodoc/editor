@@ -217,7 +217,9 @@ export interface UmoEditorOptions {
   toolbar?: ToolbarOptions
   page: PageOption
   document?: DocumentOptions
-  assistant?: AssistantOptions
+  ai?: {
+    assistant: AssistantOptions
+  }
   echarts?: EchartsOptions
   webPages?: WebPageItem[]
   templates?: Template[]
@@ -233,6 +235,6 @@ export interface UmoEditorOptions {
   onFileUpload?: (file: File) => Promise<{ id: string; url: string }>
   onFileDelete?: CallableFunction
   onCustomEChartSettings?: CallableFunction
-  onAssistant?: AsyncFunction
+  onAIAssistant?: AsyncFunction
   onCustomImportWordMethod?: AsyncFunction
 }

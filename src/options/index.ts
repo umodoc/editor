@@ -19,6 +19,7 @@ import type {
   WebPageItem,
 } from '@/types'
 
+import { defaultAiOptions } from './ai'
 import { defaultDicts } from './dicts'
 import { defaultWebPages } from './web-pages'
 
@@ -88,45 +89,7 @@ const defaultOptions: UmoEditorOptions = {
       interval: 300000,
     },
   },
-  assistant: {
-    enabled: false,
-    maxlength: 100,
-    commands: [
-      {
-        label: { en_US: 'Continuation', zh_CN: '续写', ru_RU: 'Продолжение' },
-        value: { en_US: 'Continuation', zh_CN: '续写', ru_RU: 'Продолжение' },
-      },
-      {
-        label: { en_US: 'Rewrite', zh_CN: '重写', ru_RU: 'Переписать' },
-        value: { en_US: 'Rewrite', zh_CN: '重写', ru_RU: 'Переписать' },
-      },
-      {
-        label: { en_US: 'Abbreviation', zh_CN: '缩写', ru_RU: 'Аббревиатура' },
-        value: { en_US: 'Abbreviation', zh_CN: '缩写', ru_RU: 'Аббревиатура' },
-      },
-      {
-        label: { en_US: 'Expansion', zh_CN: '扩写', ru_RU: 'Расширение' },
-        value: { en_US: 'Expansion', zh_CN: '扩写', ru_RU: 'Расширение' },
-      },
-      {
-        label: { en_US: 'Polish', zh_CN: '润色', ru_RU: 'Полировать' },
-        value: { en_US: 'Polish', zh_CN: '润色', ru_RU: 'Полировать' },
-      },
-      {
-        label: { en_US: 'Proofread', zh_CN: '校阅', ru_RU: 'Корректура' },
-        value: { en_US: 'Proofread', zh_CN: '校阅', ru_RU: 'Корректура' },
-      },
-      {
-        label: { en_US: 'Translate', zh_CN: '翻译', ru_RU: 'Перевести' },
-        value: {
-          en_US: 'Translate to chinese',
-          zh_CN: '翻译成英文',
-          ru_RU: 'Перевести на китайский',
-        },
-        autoSend: false,
-      },
-    ],
-  },
+  ai: defaultAiOptions,
   echarts: {
     mode: 1,
     renderImage: false,
@@ -178,9 +141,11 @@ const defaultOptions: UmoEditorOptions = {
       'The file has been deleted. Please configure the onFileDelete to completely delete the file from the server.',
     )
   },
-  async onAssistant() {
+  async onAIAssistant() {
     return await new Promise((_, reject) => {
-      reject(new Error('Key "onAssistant": Please set the onAssistant method'))
+      reject(
+        new Error('Key "onAIAssistant": Please set the onAIAssistant method'),
+      )
     })
   },
   onCustomEChartSettings() {
@@ -192,7 +157,7 @@ const defaultOptions: UmoEditorOptions = {
     return await new Promise((_, reject) => {
       reject(
         new Error(
-          'Key "onCustomImportWordMethod": Please set the onAssistant method',
+          'Key "onCustomImportWordMethod": Please set the onAIAssistant method',
         ),
       )
     })
@@ -683,52 +648,61 @@ const ojbectSchema = new ObjectSchema({
       },
     },
   },
-  assistant: {
+  ai: {
     merge: 'replace',
     validate: 'object',
     required: false,
     schema: {
-      enabled: {
+      assistant: {
         merge: 'replace',
-        validate: 'boolean',
+        validate: 'object',
         required: false,
-      },
-      maxlength: {
-        merge: 'replace',
-        validate(value: number) {
-          if (!isNumber(value) || !Number.isInteger(value) || value <= 0) {
-            throw new Error(
-              'Key "assistant": Key "maxlength" must be a number.',
-            )
-          }
+        schema: {
+          enabled: {
+            merge: 'replace',
+            validate: 'boolean',
+            required: false,
+          },
+          maxlength: {
+            merge: 'replace',
+            validate(value: number) {
+              if (!isNumber(value) || !Number.isInteger(value) || value <= 0) {
+                throw new Error(
+                  'Key "assistant": Key "maxlength" must be a number.',
+                )
+              }
+            },
+            required: false,
+          },
+          commands: {
+            merge: 'replace',
+            validate(value: { label: LocaleLabel; value: LocaleLabel }[]) {
+              if (value && !Array.isArray(value)) {
+                throw new Error(
+                  'Key "assistant": Key "commands" must be a array.',
+                )
+              }
+              value.forEach((item, index: number) => {
+                if (!item.label || !item.value) {
+                  throw new Error(
+                    'Key "assistant": Key "commands" must be a array of objects with "label" and "value" properties.',
+                  )
+                }
+                if (!isLocale(item.label)) {
+                  throw new Error(
+                    `Key "assistant": Key "commands[${index}]": Key "label" must be string, or a object with "en_US" and "zh_CN" properties.`,
+                  )
+                }
+                if (!isLocale(item.value)) {
+                  throw new Error(
+                    `Key "assistant": Key "commands[${index}]": Key "value" must be string, or a object with "en_US" and "zh_CN" properties.`,
+                  )
+                }
+              })
+            },
+            required: false,
+          },
         },
-        required: false,
-      },
-      commands: {
-        merge: 'replace',
-        validate(value: { label: LocaleLabel; value: LocaleLabel }[]) {
-          if (value && !Array.isArray(value)) {
-            throw new Error('Key "assistant": Key "commands" must be a array.')
-          }
-          value.forEach((item, index: number) => {
-            if (!item.label || !item.value) {
-              throw new Error(
-                'Key "assistant": Key "commands" must be a array of objects with "label" and "value" properties.',
-              )
-            }
-            if (!isLocale(item.label)) {
-              throw new Error(
-                `Key "assistant": Key "commands[${index}]": Key "label" must be string, or a object with "en_US" and "zh_CN" properties.`,
-              )
-            }
-            if (!isLocale(item.value)) {
-              throw new Error(
-                `Key "assistant": Key "commands[${index}]": Key "value" must be string, or a object with "en_US" and "zh_CN" properties.`,
-              )
-            }
-          })
-        },
-        required: false,
       },
     },
   },
@@ -928,11 +902,11 @@ const ojbectSchema = new ObjectSchema({
     },
     required: false,
   },
-  onAssistant: {
+  onAIAssistant: {
     merge: 'replace',
     validate(value: AsyncFunction) {
       if (!isAsyncFunction(value)) {
-        throw new Error('Key "onAssistant" must be a async function.')
+        throw new Error('Key "onAIAssistant" must be a async function.')
       }
     },
     required: false,
