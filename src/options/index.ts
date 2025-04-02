@@ -647,7 +647,7 @@ const ojbectSchema = new ObjectSchema({
     required: false,
     schema: {
       assistant: {
-        merge: 'replace',
+        merge: 'assign',
         validate: 'object',
         required: false,
         schema: {
