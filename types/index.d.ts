@@ -146,6 +146,7 @@ export interface AssistantOptions {
   maxlength: number
   commands: CommandItem[]
   enabled: boolean
+  onMessage?: AsyncFunction
 }
 
 export interface EchartsOptions {
@@ -235,6 +236,5 @@ export interface UmoEditorOptions {
   onFileUpload?: (file: File) => Promise<{ id: string; url: string }>
   onFileDelete?: CallableFunction
   onCustomEChartSettings?: CallableFunction
-  onAIAssistant?: AsyncFunction
   onCustomImportWordMethod?: AsyncFunction
 }

@@ -141,13 +141,6 @@ const defaultOptions: UmoEditorOptions = {
       'The file has been deleted. Please configure the onFileDelete to completely delete the file from the server.',
     )
   },
-  async onAIAssistant() {
-    return await new Promise((_, reject) => {
-      reject(
-        new Error('Key "onAIAssistant": Please set the onAIAssistant method'),
-      )
-    })
-  },
   onCustomEChartSettings() {
     console.error(
       'Custom chart settings are required, please configure onCustomEChartSettings.',
@@ -157,7 +150,7 @@ const defaultOptions: UmoEditorOptions = {
     return await new Promise((_, reject) => {
       reject(
         new Error(
-          'Key "onCustomImportWordMethod": Please set the onAIAssistant method',
+          'Key "onCustomImportWordMethod": Please set the onCustomImportWordMethod method',
         ),
       )
     })
@@ -702,6 +695,15 @@ const ojbectSchema = new ObjectSchema({
             },
             required: false,
           },
+          onMessage: {
+            merge: 'replace',
+            validate(value: AsyncFunction) {
+              if (!isAsyncFunction(value)) {
+                throw new Error('Key "onMessage" must be a async function.')
+              }
+            },
+            required: false,
+          },
         },
       },
     },
@@ -898,15 +900,6 @@ const ojbectSchema = new ObjectSchema({
     validate(value: any) {
       if (!isFunction(value)) {
         throw new Error('Key "onCustomEChartSettings" must be a function.')
-      }
-    },
-    required: false,
-  },
-  onAIAssistant: {
-    merge: 'replace',
-    validate(value: AsyncFunction) {
-      if (!isAsyncFunction(value)) {
-        throw new Error('Key "onAIAssistant" must be a async function.')
       }
     },
     required: false,

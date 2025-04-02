@@ -37,5 +37,12 @@ export const defaultAiOptions = {
         autoSend: false,
       },
     ],
+    async onMessage() {
+      return await new Promise((_, reject) => {
+        reject(
+          new Error('Key "onAIAssistant": Please set the onAIAssistant method'),
+        )
+      })
+    },
   },
 }

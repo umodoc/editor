@@ -168,7 +168,10 @@ const send = async () => {
   }
 
   try {
-    const data = await options.value.onAIAssistant?.(payload, content)
+    const data = await options.value.ai?.assistant?.onMessage?.(
+      payload,
+      content,
+    )
     const errorHandler = () => {
       if (result.content.startsWith('[ERROR]: ')) {
         result.error = true
