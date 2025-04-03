@@ -143,9 +143,9 @@ export interface Template {
 }
 
 export interface AssistantOptions {
+  enabled: boolean
   maxlength: number
   commands: CommandItem[]
-  enabled: boolean
   onMessage?: AsyncFunction
 }
 
