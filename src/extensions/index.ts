@@ -58,6 +58,7 @@ import Tag from './tag'
 import TextAlign from './text-align'
 import TextBox from './text-box'
 import Toc from './toc'
+import typeWriter from './type-writer'
 import Video from './video'
 
 export const getDefaultExtensions = ({
@@ -197,6 +198,7 @@ export const getDefaultExtensions = ({
       color: 'var(--umo-primary-color)',
     }),
     Echarts,
+    typeWriter,
   ]
 
   return extensions
