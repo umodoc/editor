@@ -84,8 +84,6 @@ import ruConfig from '../locales/tdesign/ru-RU'
 
 const { toBlob, toJpeg, toPng } = domToImage
 
-import { setTypeWriter } from '@/extensions/type-writer'
-
 defineOptions({ name: 'UmoEditor' })
 
 // Props and Emits
@@ -665,20 +663,25 @@ const insertContent = (
     .run()
 }
 
-const setContentTypeWriter = (
-  content: object,
-  options = {
-    timerCount: 1,
-    state: 0, // 0 初始  1刷新  2 停止 3 重新开始 4 清空打字机
-  },
-) => {
+const startTypewriter = (content: object, options: any) => {
   if (!editor.value) {
     throw new Error('editor is not ready!')
   }
   if (typeof content !== 'object') {
     throw new Error('content is not object!')
   }
-  setTypeWriter(editor, content, options)
+  setTimeout(() => {
+    editor?.value?.commands.focus('end')
+    editor?.value?.commands.startTypewriter(content, options)
+  }, 100)
+}
+
+const stopTypewriter = () => {
+  editor?.value?.commands.stopTypewriter()
+}
+
+const getTypewriterState = () => {
+  editor?.value?.commands.getTypewriterState()
 }
 
 const getContent = (format = 'html') => {
@@ -959,7 +962,9 @@ defineExpose({
   setDocument,
   setContent,
   insertContent,
-  setContentTypeWriter,
+  startTypewriter,
+  stopTypewriter,
+  getTypewriterState,
   setLocale,
   setTheme,
   getPage: () => page.value,
