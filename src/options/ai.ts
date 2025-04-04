@@ -1,4 +1,8 @@
-export const defaultAiOptions = {
+import type { AssistantOptions } from '@/types'
+
+export const defaultAiOptions: {
+  assistant: AssistantOptions
+} = {
   assistant: {
     enabled: false,
     maxlength: 100,
@@ -40,7 +44,9 @@ export const defaultAiOptions = {
     async onMessage() {
       return await new Promise((_, reject) => {
         reject(
-          new Error('Key "onAIAssistant": Please set the onAIAssistant method'),
+          new Error(
+            'Key "ai": Key "assistant": Key "onMessage": Please set the onMessage method',
+          ),
         )
       })
     },
