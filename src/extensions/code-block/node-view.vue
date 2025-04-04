@@ -43,7 +43,12 @@
             hide-text
             @menu-click="copyCode"
           />
-          <menus-bubble-node-delete shortcut="" hide-text />
+          <menus-button
+            ico="node-delete"
+            :text="t('bubbleMenu.delete')"
+            hide-text
+            @menu-click="deleteNode"
+          />
         </div>
       </div>
       <pre
@@ -64,7 +69,7 @@
 import { NodeViewContent, nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import { common, createLowlight } from 'lowlight'
 
-const { node, updateAttributes } = defineProps(nodeViewProps)
+const { node, updateAttributes, deleteNode } = defineProps(nodeViewProps)
 const lowlight = createLowlight(common)
 
 const container = inject('container')
