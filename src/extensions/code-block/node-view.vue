@@ -25,6 +25,7 @@
             style="width: 100px"
             :select-options="themeOptions"
             :select-value="node.attrs.theme"
+            force-enabled
             borderless
             @menu-click="(value: string) => updateAttribute('theme', value)"
           />
@@ -35,15 +36,18 @@
             ico="code-word-wrap"
             :menu-active="node.attrs.wordWrap"
             hide-text
+            force-enabled
             @menu-click="updateAttribute('wordWrap', !node.attrs.wordWrap)"
           />
           <menus-button
             ico="copy"
             :text="t('bubbleMenu.code.copy.text')"
             hide-text
+            force-enabled
             @menu-click="copyCode"
           />
           <menus-button
+            v-if="editor?.isEditable"
             ico="node-delete"
             :text="t('bubbleMenu.delete')"
             hide-text
@@ -73,6 +77,7 @@ const { node, updateAttributes, deleteNode } = defineProps(nodeViewProps)
 const lowlight = createLowlight(common)
 
 const container = inject('container')
+const editor = inject('editor')
 const containerRef = ref(null)
 
 const languageOptions = lowlight.listLanguages().map((item) => {

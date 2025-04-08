@@ -25,7 +25,9 @@
           shape="square"
           variant="text"
           size="small"
-          :disabled="disabled || editor?.isEditable === false"
+          :disabled="
+            !forceEnabled && (disabled || editor?.isEditable === false)
+          "
           v-bind="attrs"
           @click="menuClick"
         >
@@ -59,7 +61,9 @@
             variant="text"
             size="small"
             v-bind="attrs"
-            :disabled="disabled || editor?.isEditable === false"
+            :disabled="
+              !forceEnabled && (disabled || editor?.isEditable === false)
+            "
           >
             <div class="umo-button-content" @click="menuClick">
               <slot />
@@ -130,7 +134,9 @@
               variant="text"
               size="small"
               v-bind="attrs"
-              :disabled="disabled || editor?.isEditable === false"
+              :disabled="
+                !forceEnabled && (disabled || editor?.isEditable === false)
+              "
             >
               <div class="umo-button-content" @click="menuClick">
                 <slot />
@@ -178,7 +184,9 @@
           }"
           v-bind="attrs"
           :options="selectOptions"
-          :disabled="disabled || editor?.isEditable === false"
+          :disabled="
+            !forceEnabled && (disabled || editor?.isEditable === false)
+          "
           @change="menuClick"
         >
           <slot />
@@ -195,7 +203,9 @@
             variant="text"
             size="small"
             v-bind="attrs"
-            :disabled="disabled || editor?.isEditable === false"
+            :disabled="
+              !forceEnabled && (disabled || editor?.isEditable === false)
+            "
           >
             <div class="umo-button-content" @click="menuClick">
               <slot />
@@ -265,7 +275,9 @@
               variant="text"
               size="small"
               v-bind="attrs"
-              :disabled="disabled || editor?.isEditable === false"
+              :disabled="
+                !forceEnabled && (disabled || editor?.isEditable === false)
+              "
               @click="togglePopup(!popupVisible)"
             >
               <div class="umo-button-content">
@@ -388,6 +400,10 @@ const props = defineProps({
     default: false,
   },
   disabled: {
+    type: Boolean,
+    default: false,
+  },
+  forceEnabled: {
     type: Boolean,
     default: false,
   },
