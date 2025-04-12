@@ -50,7 +50,10 @@ const tippyOpitons = $ref<Partial<Instance>>({
 })
 
 // 菜单位置更新
-const updateMenuPostion = () => {
+const updateMenuPostion = useThrottleFn(() => {
+  if (!tippyInstance) {
+    return
+  }
   try {
     const { state, view } = editor.value
     const topPos = state.selection.$from.before(1)
@@ -62,7 +65,8 @@ const updateMenuPostion = () => {
       })
     }
   } catch {}
-}
+}, 200)
+
 onMounted(() => {
   editor.value.on('selectionUpdate', updateMenuPostion)
 })

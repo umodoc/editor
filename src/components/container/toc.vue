@@ -68,15 +68,20 @@ const buildTocTree = (tocArray: Record<string, any>[]): TocItem[] => {
   return root
 }
 
-watch(
-  () => editor.value?.storage.tableOfContents.content,
-  (toc: any[]) => {
+const throttleTocTreeData = (toc: any) =>
+  useThrottleFn(() => {
     // 每次都监听 但不是每次发生变化，重复赋值导致toc数据双击生效
     const curTocTreeData = buildTocTree(toc)
     if (JSON.stringify(watchTreeData) !== JSON.stringify(curTocTreeData)) {
       watchTreeData = curTocTreeData
       tocTreeData = JSON.parse(JSON.stringify(curTocTreeData))
     }
+  }, 200)()
+
+watch(
+  () => editor.value?.storage.tableOfContents.content,
+  (toc: any[]) => {
+    void throttleTocTreeData(toc)
   },
   { immediate: true },
 )

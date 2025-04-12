@@ -63,7 +63,10 @@ const editorInstance: Editor = new Editor({
   parseOptions: options.value.document?.parseOptions,
   extensions: [...extensions, ...options.value.extensions],
   onUpdate({ editor }) {
-    $document.value.content = editor.getHTML()
+    const throttleFn = useThrottleFn(() => {
+      $document.value.content = editor.getHTML()
+    }, 1000)
+    void throttleFn()
   },
 })
 const editor = inject('editor')

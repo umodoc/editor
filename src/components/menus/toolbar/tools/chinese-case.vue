@@ -97,8 +97,11 @@ const options: {
 let selectionText = $ref('')
 onMounted(() => {
   editor.value.on('selectionUpdate', () => {
-    const text = getSelectionText(editor.value)
-    selectionText = text
+    const throttleFn = useThrottleFn(() => {
+      const text = getSelectionText(editor.value)
+      selectionText = text
+    }, 200)
+    void throttleFn()
   })
 })
 
