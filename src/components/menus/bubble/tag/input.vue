@@ -4,7 +4,7 @@
       v-model.trim="value"
       type="search"
       size="small"
-      placeholder="标签内容"
+      :placeholder="t('bubbleMenu.tag.placeholder')"
       :status="value === '' ? 'error' : 'default'"
       @enter="onInput"
     >

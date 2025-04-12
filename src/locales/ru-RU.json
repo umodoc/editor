@@ -521,6 +521,7 @@
       "background": "Цвет фона"
     },
     "tag": {
+      "placeholder": "Название тега",
       "background": "Цвет фона",
       "color": "Цвет текста",
       "delete": "Удалить тег"

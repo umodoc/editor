@@ -522,6 +522,7 @@
       "background": "Background Color"
     },
     "tag": {
+      "placeholder": "Tag Name",
       "background": "Background Color",
       "color": "Text Color",
       "delete": "Delete Tag"

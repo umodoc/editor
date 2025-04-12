@@ -522,6 +522,7 @@
       "background": "背景颜色"
     },
     "tag": {
+      "placeholder": "标签名称",
       "background": "背景颜色",
       "color": "文字颜色",
       "delete": "删除标签"
