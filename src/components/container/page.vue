@@ -294,10 +294,7 @@ watch(
 .umo-page-node-content {
   position: relative;
   box-sizing: border-box;
-  min-height: calc(
-    var(--umo-page-height) - var(--umo-page-margin-top) -
-      var(--umo-page-margin-bottom)
-  );
+  flex-shrink: 1;
 }
 
 :deep(.umo-back-top) {

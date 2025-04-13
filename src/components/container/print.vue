@@ -76,14 +76,20 @@ const getIframeCode = () => {
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       ${getStylesHtml()}
       <style>
+      html{
+        margin: 0;
+        padding: 0;
+        overflow: visible;
+      }
       body{
-        overflow: auto;
-        height: auto;
+        margin: 0;
+        padding: 0;
         background-color: ${background};
         -webkit-print-color-adjust: exact;
       }
       .umo-page-content{
         transform: scale(1) !important;
+        overflow: hidden;
       }
       @page {
         size: ${orientation === 'portrait' ? size?.width : size?.height}cm ${orientation === 'portrait' ? size?.height : size?.width}cm; 
