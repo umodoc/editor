@@ -69,7 +69,7 @@ const importWord = () => {
     // 使用用户自定义导入方法
     if (options.value.toolbar?.importWord?.useCustomMethod) {
       const result =
-        await options.value.toolbar?.importWord.onCustomImportWordMethod?.(file)
+        await options.value.toolbar?.importWord.onCustomImportMethod?.(file)
       message.close()
       try {
         if (result?.messages?.type === 'error') {

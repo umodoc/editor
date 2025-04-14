@@ -69,7 +69,7 @@ export interface ToolbarOptions {
     enabled: boolean
     options: unknown
     useCustomMethod?: boolean
-    onCustomImportWordMethod?: (file: File) => Promise<{
+    onCustomImportMethod?: (file: File) => Promise<{
       id: string
       url: string
       value: string
@@ -152,6 +152,7 @@ export interface AssistantOptions {
 export interface EchartsOptions {
   mode: number
   renderImage: boolean
+  onCustomSettings?: CallableFunction
 }
 
 export interface UserItem {
@@ -235,6 +236,4 @@ export interface UmoEditorOptions {
   onSave?: AsyncFunction
   onFileUpload?: (file: File) => Promise<{ id: string; url: string }>
   onFileDelete?: CallableFunction
-  onCustomEChartSettings?: CallableFunction
-  onCustomImportWordMethod?: AsyncFunction
 }

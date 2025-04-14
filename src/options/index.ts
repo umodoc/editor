@@ -39,6 +39,15 @@ const defaultOptions: UmoEditorOptions = {
       enabled: true,
       options: {},
       useCustomMethod: false,
+      async onCustomImportMethod() {
+        return await new Promise((_, reject) => {
+          reject(
+            new Error(
+              'Key "toolbar": Key "importWord": Key "onCustomImportMethod": Please set the onCustomImportMethod method',
+            ),
+          )
+        })
+      },
     },
   },
   page: {
@@ -93,6 +102,9 @@ const defaultOptions: UmoEditorOptions = {
   echarts: {
     mode: 1,
     renderImage: false,
+    onCustomSettings() {
+      return null
+    },
   },
   webPages: defaultWebPages,
   templates: [],
@@ -140,20 +152,6 @@ const defaultOptions: UmoEditorOptions = {
     console.error(
       'The file has been deleted. Please configure the onFileDelete to completely delete the file from the server.',
     )
-  },
-  onCustomEChartSettings() {
-    console.error(
-      'Custom chart settings are required, please configure onCustomEChartSettings.',
-    )
-  },
-  async onCustomImportWordMethod() {
-    return await new Promise((_, reject) => {
-      reject(
-        new Error(
-          'Key "onCustomImportWordMethod": Please set the onCustomImportWordMethod method',
-        ),
-      )
-    })
   },
 }
 
@@ -723,6 +721,15 @@ const ojbectSchema = new ObjectSchema({
         validate: 'boolean',
         required: false,
       },
+      onCustomSettings: {
+        merge: 'replace',
+        validate(value: any) {
+          if (!isFunction(value)) {
+            throw new Error('Key "onCustomSettings" must be a function.')
+          }
+        },
+        required: false,
+      },
     },
   },
   webPages: {
@@ -891,26 +898,6 @@ const ojbectSchema = new ObjectSchema({
     validate(value: any) {
       if (!isFunction(value)) {
         throw new Error('Key "onFileDelete" must be a function.')
-      }
-    },
-    required: false,
-  },
-  onCustomEChartSettings: {
-    merge: 'replace',
-    validate(value: any) {
-      if (!isFunction(value)) {
-        throw new Error('Key "onCustomEChartSettings" must be a function.')
-      }
-    },
-    required: false,
-  },
-  onCustomImportWordMethod: {
-    merge: 'replace',
-    validate(value: AsyncFunction) {
-      if (!isAsyncFunction(value)) {
-        throw new Error(
-          'Key "onCustomImportWordMethod" must be a async function.',
-        )
       }
     },
     required: false,
