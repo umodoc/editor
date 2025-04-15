@@ -31,6 +31,13 @@ const options = $ref({
   toolbar: {
     // defaultMode: 'classic',
     // menus: ['base'],
+    importWord: {
+      async onCustomImportMethod() {
+        return await Promise.resolve({
+          value: '<p>测试导入word</p>',
+        })
+      },
+    },
   },
   document: {
     title: '测试文档',
@@ -104,14 +111,6 @@ const options = $ref({
   },
   onFileDelete(id: string, url: string) {
     console.log(id, url)
-  },
-  onCustomEChartSettings(data: any, config: any) {
-    return null
-  },
-  async onCustomImportWordMethod() {
-    return await Promise.resolve({
-      value: '<p>测试导入word</p>',
-    })
   },
 })
 </script>
