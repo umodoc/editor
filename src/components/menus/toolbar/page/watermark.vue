@@ -67,7 +67,7 @@
         </div>
         <t-input
           v-if="page.watermark"
-          v-model.trim="page.watermark.text"
+          v-model="page.watermark.text"
           maxlength="30"
           clearable
           :placeholder="t('page.watermark.content')"
