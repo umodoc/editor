@@ -577,6 +577,24 @@
       outline: 2px dashed var(--umo-primary-color);
     }
   }
+  h1 {
+    font-size: 2.5em;
+  }
+  h2 {
+    font-size: 2em;
+  }
+  h3 {
+    font-size: 1.5em;
+  }
+  h4 {
+    font-size: 1.25em;
+  }
+  h5 {
+    font-size: 1em;
+  }
+  h6 {
+    font-size: 0.85em;
+  }
 }
 .umo-editor-bookmark {
   color: hsl(0, 1%, 68%);
@@ -591,4 +609,27 @@
 
 .umo-editor-bookmark::before {
   content: '{';
+}
+
+:-webkit-any(article, aside, nav, section) {
+  .umo-editor {
+    h1 {
+      font-size: 2.5em;
+    }
+    h2 {
+      font-size: 2em;
+    }
+    h3 {
+      font-size: 1.5em;
+    }
+    h4 {
+      font-size: 1.25em;
+    }
+    h5 {
+      font-size: 1em;
+    }
+    h6 {
+      font-size: 0.85em;
+    }
+  }
 }
