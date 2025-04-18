@@ -29,8 +29,11 @@ import type { ReactiveVariable } from '@vue-macros/reactivity-transform/macros'
 
 import { mediaPlayer } from '@/utils/player'
 
-const { node, updateAttributes } = defineProps(nodeViewProps)
+import { updateAttributesWithoutHistory } from '../file'
+
+const { node, getPos } = defineProps(nodeViewProps)
 const options = inject('options')
+const editor = inject('editor')
 const uploadFileMap = inject('uploadFileMap')
 
 const containerRef = ref<HTMLElement | null>(null)
@@ -61,7 +64,11 @@ onMounted(async () => {
       const file = uploadFileMap.value.get(node.attrs.id)
       const { id, url } = (await options.value?.onFileUpload?.(file)) ?? {}
       if (containerRef.value) {
-        updateAttributes({ id, url, uploaded: true })
+        updateAttributesWithoutHistory(
+          editor.value,
+          { id, url, uploaded: true },
+          getPos(),
+        )
       }
       uploadFileMap.value.delete(node.attrs.id)
     }

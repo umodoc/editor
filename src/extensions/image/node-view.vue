@@ -88,10 +88,13 @@ import { base64ToFile } from 'file64'
 
 import { shortId } from '@/utils/short-id'
 
+import { updateAttributesWithoutHistory } from '../file'
+
 const container = inject('container')
+const editor = inject('editor')
 const uploadFileMap = inject('uploadFileMap')
 const imageViewer = inject('imageViewer')
-const { node, updateAttributes } = defineProps(nodeViewProps)
+const { node, updateAttributes, getPos } = defineProps(nodeViewProps)
 const options = inject('options')
 const { isLoading, error } = useImage({ src: node.attrs.src })
 
@@ -121,14 +124,18 @@ const uploadImage = async () => {
     !node.attrs.id ||
     !uploadFileMap.value.has(node.attrs.id)
   ) {
-    updateAttributes({ uploaded: true })
+    updateAttributesWithoutHistory(editor.value, { uploaded: true }, getPos())
     return
   }
   try {
     const file = uploadFileMap.value.get(node.attrs.id)
     const { id, url } = (await options.value?.onFileUpload?.(file)) ?? {}
     if (containerRef.value) {
-      updateAttributes({ id, src: url, uploaded: true })
+      updateAttributesWithoutHistory(
+        editor.value,
+        { id, src: url, uploaded: true },
+        getPos(),
+      )
     }
     uploadFileMap.value.delete(node.attrs.id)
   } catch (error) {
@@ -175,7 +182,7 @@ onClickOutside(containerRef, () => {
 const openImageViewer = async () => {
   const id = shortId(10)
   if (node.attrs.id === null) {
-    updateAttributes({ id })
+    updateAttributesWithoutHistory(editor.value, { id }, getPos())
   }
   await nextTick()
   imageViewer.value.visible = true
@@ -209,7 +216,7 @@ watch(
         const file = await base64ToFile(src, `${filename}.${ext}`, {
           type,
         })
-        updateAttributes({ file })
+        uploadFileMap.value.set(node.attrs.id, file)
       }
       await nextTick()
       void uploadImage()
@@ -221,9 +228,13 @@ watch(
   () => error.value,
   (errorValue: any) => {
     if (errorValue?.type) {
-      updateAttributes({ error: errorValue.type === 'error' })
+      updateAttributesWithoutHistory(
+        editor.value,
+        { error: errorValue.type === 'error' },
+        getPos(),
+      )
     } else {
-      updateAttributes({ error: false })
+      updateAttributesWithoutHistory(editor.value, { error: false }, getPos())
     }
   },
 )

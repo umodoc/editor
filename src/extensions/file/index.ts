@@ -1,5 +1,5 @@
 import { mergeAttributes, Node } from '@tiptap/core'
-import { VueNodeViewRenderer } from '@tiptap/vue-3'
+import { type Editor, VueNodeViewRenderer } from '@tiptap/vue-3'
 import { ReplaceStep } from 'prosemirror-transform'
 
 import { shortId } from '@/utils/short-id'
@@ -225,3 +225,24 @@ export default Node.create({
     })
   },
 })
+
+export const updateAttributesWithoutHistory = (
+  editor: Editor,
+  attrs: Record<string, any>,
+  pos?: number,
+) => {
+  const { state, view } = editor
+
+  if (typeof pos !== 'number') return
+
+  const node = state.doc.nodeAt(pos)
+  if (!node) return
+
+  const tr = state.tr.setNodeMarkup(pos, undefined, {
+    ...node.attrs,
+    ...attrs,
+  })
+
+  tr.setMeta('addToHistory', false)
+  view.dispatch(tr)
+}

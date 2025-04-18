@@ -93,7 +93,9 @@ import prettyBytes from 'pretty-bytes'
 
 import { getFileExtname, getFileIcon } from '@/utils/file'
 
-const { node, updateAttributes } = defineProps(nodeViewProps)
+import { updateAttributesWithoutHistory } from './'
+
+const { node, getPos } = defineProps(nodeViewProps)
 const editor = inject('editor')
 const options = inject('options')
 const container = inject('container')
@@ -141,7 +143,11 @@ onMounted(async () => {
       const file = uploadFileMap.value.get(node.attrs.id)
       const { id, url } = (await options.value?.onFileUpload?.(file)) ?? {}
       if (containerRef.value) {
-        updateAttributes({ id, url, uploaded: true })
+        updateAttributesWithoutHistory(
+          editor.value,
+          { id, url, uploaded: true },
+          getPos(),
+        )
       }
       uploadFileMap.value.delete(node.attrs.id)
     } catch (e) {

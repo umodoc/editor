@@ -43,8 +43,11 @@ import Drager from 'es-drager'
 
 import { mediaPlayer } from '@/utils/player'
 
-const { node, updateAttributes } = defineProps(nodeViewProps)
+import { updateAttributesWithoutHistory } from '../file'
+
+const { node, updateAttributes, getPos } = defineProps(nodeViewProps)
 const options = inject('options')
+const editor = inject('editor')
 const container = inject('container')
 const uploadFileMap = inject('uploadFileMap')
 
@@ -79,7 +82,11 @@ onMounted(async () => {
       const file = uploadFileMap.value.get(node.attrs.id)
       const { id, url } = (await options.value?.onFileUpload?.(file)) ?? {}
       if (containerRef.value) {
-        updateAttributes({ id, src: url, uploaded: true })
+        updateAttributesWithoutHistory(
+          editor.value,
+          { id, src: url, uploaded: true },
+          getPos(),
+        )
       }
       uploadFileMap.value.delete(node.attrs.id)
     } catch (e) {
