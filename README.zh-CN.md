@@ -124,4 +124,6 @@ Umo Editor 的发展离不开社区的支持，以下是为 Umo Editor 贡献过
 
 ## 开源协议
 
-Umo Editor 采用 [MIT 许可证](./LICENSE)，您可以免费使用、修改和使用本软件。
+Umo Editor 采用 [MIT 许可证](./LICENSE)，您可以免费使用、修改和使用本软件，但这不代表您可以随意删除版权信息，请保留 Umo Editor 的版权信息和界面上的链接地址，否则视为侵权，请支持开源项目。
+
+如果您不想保留版权信息，请联系我们或者购买商业版本 [Umo Editor Next](https://editor.umodoc.com/cn/docs/next)。
