@@ -16,27 +16,37 @@
 <script setup lang="ts">
 import { removeBackground } from '@imgly/background-removal'
 
+import { updateAttributesWithoutHistory } from '@/extensions/file'
 import { getSelectionNode } from '@/extensions/selection'
-import { shortId } from '@/utils/short-id'
 
 const editor = inject('editor')
 const options = inject('options')
+const uploadFileMap = inject('uploadFileMap')
 
 let converting = $ref(false)
 const removeBg = async () => {
   const image = editor.value ? getSelectionNode(editor.value) : null
-  const { src } = image?.attrs ?? {}
+  const { src, id } = image?.attrs ?? {}
   converting = true
   const blob = await removeBackground(src, {
     publicPath: `${options.value.cdnUrl}/libs/imgly/background-removal-data/`,
   })
-  const file = new File([blob], `${shortId(10)}.png`, { type: 'image/png' })
+  const file = new File([blob], `image-${id}.png`, { type: 'image/png' })
   if (image) {
-    editor.value?.commands.updateAttributes(image.type, {
-      src: URL.createObjectURL(blob),
-      uploaded: false,
-      file,
-    })
+    const { $from } = editor.value?.state.selection ?? {}
+    const pos = $from.start()
+    updateAttributesWithoutHistory(
+      editor.value,
+      { src: URL.createObjectURL(blob), uploaded: false },
+      pos,
+    )
+    // eslint-disable-next-line no-unsafe-optional-chaining
+    const { id, url } = await options.value?.onFileUpload?.(file)
+    updateAttributesWithoutHistory(
+      editor.value,
+      { id, src: url, uploaded: true },
+      pos,
+    )
   }
   converting = false
 }
