@@ -14,9 +14,13 @@
 
 Umo Editor 是一个基于 Vue3 和 Tiptap 的本土化开源文档编辑器，专为国人用户设计。它提供了强大的文档编辑能力和 AI 创作功能，支持分页模式、Markdown 语法、富文本编辑、多种格式的节点插入、页面样式设置、文档导出与打印等功能。此外，Umo Editor 还支持自定义扩展、多语言设置和暗色主题。
 
+Umo Editor 最大的特点是支持内网部署，完全自主可控，您可以内网环境中使用，无需担心数据安全问题。
+
 ## Introduction
 
 Umo Editor is an open-source document editor based on Vue3 and Tiptap. It provides powerful document editing capabilities and AI-assisted creation features. Umo Editor supports pagination, Markdown syntax, rich text editing, insertion of various node types, page style settings, document export, and printing. Additionally, it supports custom extensions, multi-language settings, and a dark theme.
+
+Umo Editor's largest feature is that it supports deployment in the internal network, which is completely autonomous and controllable. You can use it in the internal network environment without worrying about data security issues.
 
 <img src="https://unpkg.com/@umoteam/editor-external@latest/static/umo-editor-en@2x.png" alt="umo editor" />
 
