@@ -213,7 +213,7 @@ watch(
       background-color: var(--umo-page-background);
       width: var(--umo-page-width);
       min-height: var(--umo-page-height);
-      overflow: hidden;
+      overflow: visible !important;
       display: flex;
       flex-direction: column;
       [contenteditable] {
