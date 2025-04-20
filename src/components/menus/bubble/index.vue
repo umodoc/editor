@@ -1,6 +1,5 @@
 <template>
   <bubble-menu
-    v-show="!editor?.view?.painter?.enabled && !editor?.isEmpty"
     class="umo-editor-bubble-menu"
     :class="{ assistant }"
     :editor="editor!"
@@ -46,11 +45,21 @@ const tippyOpitons = $ref<Partial<Instance>>({
 watch(
   () => [assistant.value],
   (visible: any[]) => {
-    tippyInstance?.setProps({
-      placement: visible.includes(true) ? 'bottom' : 'top',
-    })
+    if (tippyInstance) {
+      tippyInstance?.setProps({
+        placement: visible.includes(true) ? 'bottom' : 'top',
+      })
+    }
   },
 )
+
+// 销毁 tippy
+onUnmounted(() => {
+  if (tippyInstance) {
+    tippyInstance.destroy()
+    tippyInstance = null
+  }
+})
 </script>
 
 <style lang="less">
