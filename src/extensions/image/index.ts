@@ -1,3 +1,4 @@
+import { nodeInputRule, nodePasteRule } from '@tiptap/core'
 import Image from '@tiptap/extension-image'
 import { type CommandProps, VueNodeViewRenderer } from '@tiptap/vue-3'
 
@@ -101,5 +102,31 @@ export default Image.extend({
           })
         },
     }
+  },
+  addPasteRules() {
+    return [
+      ...(this.parent?.() ?? []),
+      nodePasteRule({
+        find: /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]+)"?)?\)/g,
+        type: this.type,
+        getAttributes: (match) => {
+          const [, alt, src, title] = match
+          return { src, alt, title }
+        },
+      }),
+    ]
+  },
+  addInputRules() {
+    return [
+      ...(this.parent?.() ?? []),
+      nodeInputRule({
+        find: /!\[([\S]+)\]\(([^)\s]+)(?:\s+"([\S]+)"?)?\)/g,
+        type: this.type,
+        getAttributes: (match) => {
+          const [, alt, src, title] = match
+          return { src, alt, title }
+        },
+      }),
+    ]
   },
 })
