@@ -1,5 +1,5 @@
 import Table from '@tiptap/extension-table'
-import { DOMParser as ProseMirrorDOMParser } from 'prosemirror-model'
+import { DOMParser as ProseMirrorDOMParser } from '@tiptap/pm/model'
 import { Plugin, PluginKey } from 'prosemirror-state'
 
 // 解析剪切板中 excel 的 CSS 规则（将 CSS 字符串转换为对象）
