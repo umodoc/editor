@@ -143,7 +143,11 @@
       "hrefText": "链接文本：",
       "hrefTextTip": "请输入或选中链接文本",
       "href": "链接地址：",
-      "hrefTip": "一般以 http:// 或 https:// 开头"
+      "hrefTip": "一般以 http:// 或 https:// 开头",
+      "copy": "复制链接",
+      "copySuccess": "复制成功",
+      "open": "打开链接",
+      "edit": "编辑链接"
     },
     "math": "数学公式",
     "columns": "分栏",

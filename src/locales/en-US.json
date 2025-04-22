@@ -143,7 +143,11 @@
       "hrefText": "Link Text:",
       "hrefTextTip": "Enter or select link text",
       "href": "Link URL:",
-      "hrefTip": "Usually starting with http:// or https://"
+      "hrefTip": "Usually starting with http:// or https://",
+      "copy": "Copy Link",
+      "copySuccess": "Copy successful",
+      "open": "Open Link",
+      "edit": "Edit Link"
     },
     "math": "Mathematics",
     "columns": "Columns",

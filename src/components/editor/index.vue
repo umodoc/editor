@@ -24,6 +24,7 @@
       v-if="options.document?.enableBubbleMenu"
       v-show="!editor?.view?.painter?.enabled && !editor?.isEmpty"
     />
+    <menus-bubble-link v-if="editor?.storage.link.edit" />
   </template>
 </template>
 
