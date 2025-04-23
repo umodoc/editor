@@ -3,7 +3,11 @@
     :text="t('base.fontFamily.text')"
     menu-type="select"
     hide-text
-    :select-value="editor?.getAttributes('textStyle').fontFamily || null"
+    :select-value="
+      isTypeRunning
+        ? null
+        : editor?.getAttributes('textStyle').fontFamily || null
+    "
     :style="{ width: $toolbar.mode !== 'classic' ? '144px' : '90px' }"
     filterable
     @menu-click="setFontFamily"
@@ -44,6 +48,14 @@ const options = inject('options')
 const $toolbar = useState('toolbar', options)
 const $recent = useState('recent', options)
 
+import { getTypewriterRunState } from '@/extensions/type-writer'
+let isTypeRunning = $ref(false)
+watch(
+  () => getTypewriterRunState(),
+  (newValue: boolean) => {
+    isTypeRunning = newValue
+  },
+)
 const usedFonts = $ref<string[]>([])
 // https://www.cnblogs.com/gaidalou/p/8479452.html
 const fontDetect = (font?: string) => {

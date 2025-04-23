@@ -97,23 +97,29 @@ export default Extension.create({
                 typedChars: 0,
               }
               //插入内容
-              const typeWriterInsertContent = (curContent: any) => {
-                // editor.commands.insertContent(curContent)
-                try {
-                  editor
-                    .chain()
-                    .insertContent(curContent)
-                    .focus('end', {
-                      scrollIntoView: true,
-                    })
-                    .run()
-                } catch (e) {}
+              const typeWriterInsertContent = async (curContent: any) => {
+                await new Promise<void>((resolve) => {
+                  setTimeout(() => {
+                    try {
+                      editor
+                        .chain()
+                        .insertContent(curContent)
+                        .focus('end', {
+                          scrollIntoView: true,
+                        })
+                        .run()
+                    } catch (e) {}
+                    resolve()
+                  }, 0)
+                })
               }
+              // 取非负数
+              const speed = Math.max(options?.speed ?? 1, 0)
               // 处理内容
               const processNode = async (node: any, isTopLevel = false) => {
                 if (node.type === 'paragraph') {
                   //当前为段落时 插入段落样式
-                  typeWriterInsertContent([
+                  await typeWriterInsertContent([
                     { type: 'paragraph', attrs: node.attrs },
                   ])
                   // 处理段落内容
@@ -136,9 +142,9 @@ export default Extension.create({
                     const endIndex = Math.min(i + step, text.length)
                     const currentText = text.slice(i, endIndex)
                     await new Promise<void>((resolve) => {
-                      typewriterTimer = setTimeout(() => {
+                      typewriterTimer = setTimeout(async () => {
                         // 插入当前字符
-                        typeWriterInsertContent([
+                        await typeWriterInsertContent([
                           {
                             type: 'text',
                             text: currentText,
@@ -162,17 +168,17 @@ export default Extension.create({
                         }
 
                         resolve()
-                      }, options?.speed ?? 1)
+                      }, speed)
                     })
                   }
                 } else if (node.type === 'table') {
-                  typeWriterInsertContent([node, { type: 'paragraph' }])
+                  await typeWriterInsertContent([node, { type: 'paragraph' }])
                   editor.commands.enter()
                 } else {
                   if (isTopLevel) {
-                    typeWriterInsertContent([node, { type: 'paragraph' }])
+                    await typeWriterInsertContent([node, { type: 'paragraph' }])
                   } else {
-                    typeWriterInsertContent([node])
+                    await typeWriterInsertContent([node])
                   }
                 }
               }
@@ -213,3 +219,7 @@ export default Extension.create({
     }
   },
 })
+
+export const getTypewriterRunState = () => {
+  return typewriterState.value.isRunning
+}
