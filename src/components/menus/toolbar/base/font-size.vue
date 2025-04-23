@@ -6,7 +6,11 @@
     hide-text
     style="width: 80px"
     :select-options="fontSizes"
-    :select-value="editor?.getAttributes('textStyle').fontSize || '14px'"
+    :select-value="
+      isTypeRunning
+        ? null
+        : editor?.getAttributes('textStyle').fontSize || '14px'
+    "
     v-bind="$attrs"
     :placeholder="t('base.fontSize.text')"
     filterable
@@ -43,7 +47,14 @@ const $toolbar = useState('toolbar', options)
 const disableItem = (name: string) => {
   return options.value.toolbar?.disableMenuItems.includes(name)
 }
-
+import { getTypewriterRunState } from '@/extensions/type-writer'
+let isTypeRunning = $ref(false)
+watch(
+  () => getTypewriterRunState(),
+  (newValue: boolean) => {
+    isTypeRunning = newValue
+  },
+)
 const fontSizes = [
   { label: t('base.fontSize.default'), value: '14px', order: 4 },
   { label: t('base.fontSize.42pt'), value: '42pt', order: 20 }, // 56

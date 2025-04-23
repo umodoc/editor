@@ -219,3 +219,7 @@ export default Extension.create({
     }
   },
 })
+
+export const getTypewriterRunState = () => {
+  return typewriterState.value.isRunning
+}
