@@ -49,14 +49,14 @@ export default Extension.create({
           if (!this.options.alignments.includes(alignment)) {
             return false
           }
-          return this.options.types.some((type: string) =>
+          return this.options.types.every((type: string) =>
             commands.updateAttributes(type, { nodeAlign: alignment }),
           )
         },
       unsetNodeAlign:
         () =>
         ({ commands }) => {
-          return this.options.types.some((type: string) =>
+          return this.options.types.every((type: string) =>
             commands.resetAttributes(type, 'nodeAlign'),
           )
         },
