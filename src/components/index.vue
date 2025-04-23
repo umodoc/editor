@@ -157,6 +157,8 @@ watch(
     watermark,
     showBreakMarks,
     showBookmark,
+    showLineNumber,
+    showToc,
   }: PageOption) => {
     page.value = {
       size: options.value.dicts?.pageSizes.find(
@@ -168,8 +170,8 @@ watch(
       watermark,
       showBreakMarks,
       showBookmark,
-      showLineNumber: false,
-      showToc: false,
+      showLineNumber,
+      showToc,
       zoomLevel: 100,
       autoWidth: false,
       preview: {

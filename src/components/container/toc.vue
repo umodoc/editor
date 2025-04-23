@@ -44,6 +44,9 @@ let watchTreeData: TocItem[] = [] // 可视化监听数据
 const buildTocTree = (tocArray: Record<string, any>[]): TocItem[] => {
   const root: TocItem[] = []
   const stack: TocItem[] = []
+  if (!tocArray || tocArray.length === 0) {
+    return root
+  }
   for (const item of tocArray) {
     const node: TocItem = {
       textContent: item.textContent,

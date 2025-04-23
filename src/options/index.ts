@@ -60,7 +60,9 @@ const defaultOptions: UmoEditorOptions = {
     defaultOrientation: 'portrait',
     defaultBackground: '#fff',
     showBreakMarks: true,
+    showLineNumber: false,
     showBookmark: false,
+    showToc: false,
     watermark: {
       type: 'compact',
       alpha: 0.2,
@@ -451,6 +453,16 @@ const ojbectSchema = new ObjectSchema({
         required: false,
       },
       showBookmark: {
+        merge: 'replace',
+        validate: 'boolean',
+        required: false,
+      },
+      showLineNumber: {
+        merge: 'replace',
+        validate: 'boolean',
+        required: false,
+      },
+      showToc: {
         merge: 'replace',
         validate: 'boolean',
         required: false,
