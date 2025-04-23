@@ -175,12 +175,24 @@ export const getDefaultExtensions = ({
     FileHandler.configure({
       allowedMimeTypes: file?.allowedMimeTypes,
       onPaste(editor: Editor, files: any) {
+        //记录 已有位置
+        const pageContainer = document.querySelector(
+          `${container} .umo-zoomable-container`,
+        ) as HTMLElement
+        const scrollTop = pageContainer?.scrollTop || 0
         for (const file of files) {
           editor.commands.insertFile({
             file,
             uploadFileMap: uploadFileMap.value,
             autoType: true,
           })
+        }
+        // 恢复滚动位置
+        if (pageContainer) {
+          // 使用 setTimeout 确保 DOM 更新完成后再恢复滚动位置
+          setTimeout(() => {
+            pageContainer.scrollTop = scrollTop
+          }, 0)
         }
       },
       onDrop: (editor: Editor, files: any, pos: number) => {
