@@ -124,7 +124,7 @@
 <script setup lang="ts">
 import { isString } from '@tool-belt/type-predicates'
 
-import { getSelectionText } from '@/extensions/selection'
+import { getSelectionText, setSelectionText } from '@/extensions/selection'
 import type {
   AssistantContent,
   AssistantPayload,
@@ -237,23 +237,32 @@ const exitAssistant = () => {
 }
 
 const replaceContent = () => {
+  // 记录插入前的选区位置
+  const { from, to } = editor.value?.state.selection ?? {}
+  const prevDocLength = editor.value?.state.doc.content.size || 0
   editor.value?.chain().insertContent(result.content).run()
+  setSelectionText(editor.value, prevDocLength, from, to)
   exitAssistant()
 }
 
 const insertContentAtAfter = () => {
   const { to } = editor.value?.state.selection ?? {}
+  const prevDocLength = editor.value?.state.doc.content.size || 0
   if (to) {
     editor.value?.chain().insertContentAt(to, result.content).focus().run()
+    setSelectionText(editor.value, prevDocLength, to, to)
   }
+
   exitAssistant()
 }
 
 const insertContentAtBelow = () => {
   editor.value?.commands.selectParentNode()
   const { to } = editor.value?.state.selection ?? {}
+  const prevDocLength = editor.value?.state.doc.content.size || 0
   if (to) {
     editor.value?.chain().insertContentAt(to, result.content).focus().run()
+    setSelectionText(editor.value, prevDocLength, to, to)
   }
   exitAssistant()
 }
