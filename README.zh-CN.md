@@ -113,9 +113,10 @@ Umo Editor 的发展离不开社区的支持，以下是为 Umo Editor 贡献过
 - 社区：[GitHub Discussions](https://github.com/umodoc/editor/discussions)
 - 邮件：[contact@umodoc.com](mailto:contact@umodoc.com)
 
-## QQ 技术交流群
+## 技术交流
 
-- [Umo Editor 技术交流1群：994500039](https://qm.qq.com/cgi-bin/qm/qr?k=BH_TYEK3Om0BkN4VMT9TQLRvHzEhkUvp&jump_from=webapi&authKey=xIMvInBso7hjJHh8+44+8IMHhLjvpegQJC0wFtZRir76+vgrBFcw98FVoqCxV7XX)
+- Umo Editor 技术交流1群：[994500039](https://qm.qq.com/cgi-bin/qm/qr?k=BH_TYEK3Om0BkN4VMT9TQLRvHzEhkUvp&jump_from=webapi&authKey=xIMvInBso7hjJHh8+44+8IMHhLjvpegQJC0wFtZRir76+vgrBFcw98FVoqCxV7XX)
+- Discord：[Umo Editor](https://discord.gg/yBwBmm8e)
 
 ## 支持我们
 
@@ -127,6 +128,15 @@ Umo Editor 的发展离不开社区的支持，以下是为 Umo Editor 贡献过
 ## 定制开发
 
 如果您需要定制化开发，请联系我们，我们可以提供付费的定制化解决方案和商业支持。详细信息请访问[定制开发](https://editor.umodoc.com/cn/docs/customization)。
+
+## 开源生态
+
+以下是一些开源项目，他们在开源项目中使用了 Umo Editor：
+
+- [文章转知识卡片](https://www.wordtocard.com/)
+- [Umo Editor 分页](https://github.com/Cassielxd/umo-enhance)
+
+如果您正在使用 Umo Editor，也想出现在这里，请通过邮件[contact@umodoc.com](mailto:contact@umodoc.com)告知我们。
 
 ## 开源协议
 
