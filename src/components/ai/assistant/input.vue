@@ -203,7 +203,7 @@ const send = async () => {
     }
 
     console.error(
-      'onAIAssistant method returns data in an incorrect format, it can be a ReadableStream or plain text.',
+      '"ai.assistant.onMessage" method returns data in an incorrect format, it can be a ReadableStream or plain text.',
     )
   } catch (err) {
     console.error(err)
