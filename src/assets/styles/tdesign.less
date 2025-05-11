@@ -88,7 +88,7 @@ body {
       var(--td-shadow-inset-right), var(--td-shadow-inset-bottom),
       var(--td-shadow-inset-left);
     border: none;
-    border-radius: var(--umo-radius);
+    border-radius: var(--umo-radius-medium);
     color: var(--umo-text-color);
     &__mask {
       position: absolute !important;
@@ -252,6 +252,7 @@ body {
   }
   .umo-message,
   .t-message {
+    border-radius: var(--umo-radius);
     &__list {
       position: absolute;
     }
