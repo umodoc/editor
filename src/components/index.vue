@@ -481,11 +481,12 @@ const setPage = (params: {
       throw new Error('"params.size" must be a string.')
     }
     const size = options.value.dicts?.pageSizes.find(
-      (item: any) => item.label === params.size,
+      (item: any) =>
+        item.label === params.size || l(item.label) === params.size,
     )
     if (!size) {
       throw new Error(
-        `"params.size" must be one of ${options.value.dicts?.pageSizes.map((item: any) => item.label)}.`,
+        `"params.size" must be one of ${options.value.dicts?.pageSizes.map((item: any) => l(item.label))}.`,
       )
     }
     page.value.size = size
