@@ -140,4 +140,4 @@ If you are using Umo Editor and would like to be featured here, please let us kn
 
 Umo Editor is licensed under the [MIT License](./LICENSE). You are free to use, modify, and distribute this software, but this does **not** mean you are allowed to remove the copyright information at will. Please retain the Umo Editor copyright notice and the link displayed in the interface. Removal of these will be considered an infringement. We encourage you to support open-source projects.
 
-If you do not wish to retain the copyright information, please contact us or consider purchasing the commercial version: [Umo Editor Next](https://editor.umodoc.com/cn/docs/next).
+If you do not wish to retain the copyright information, please contact us or consider purchasing the commercial version: [Umo Editor Next](https://editor.umodoc.com/en/docs/next).
