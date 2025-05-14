@@ -106,7 +106,9 @@
   }
 
   &.is-empty
-    .is-editor-empty:not(.umo-node-view):not(.tableWrapper):not(.column-block) {
+    .is-editor-empty:not(.umo-node-view):not(.tableWrapper):not(
+      .column-block
+    ):not(ul):not(ol) {
     &::after {
       display: inline-block;
       vertical-align: text-top;
