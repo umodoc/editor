@@ -33,6 +33,7 @@
 import { Editor, EditorContent } from '@tiptap/vue-3'
 
 import { getDefaultExtensions, inputAndPasteRules } from '@/extensions'
+import { contentTransform } from '@/utils/content-transform'
 
 const destroyed = inject('destroyed')
 const page = inject('page')
@@ -55,10 +56,12 @@ const extensions: any[] = getDefaultExtensions({
   uploadFileMap,
 })
 
+console.log(contentTransform(options.value.document?.content))
+
 const editorInstance: Editor = new Editor({
   editable: !options.value.document?.readOnly,
   autofocus: options.value.document?.autofocus,
-  content: options.value.document?.content,
+  content: contentTransform(options.value.document?.content),
   enableInputRules: inputAndPasteRules(options),
   enablePasteRules: inputAndPasteRules(options),
   editorProps: {

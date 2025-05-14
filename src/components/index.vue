@@ -76,6 +76,7 @@ import type {
   SupportedLocale,
   WatermarkOption,
 } from '@/types'
+import { contentTransform } from '@/utils/content-transform'
 import { consoleCopyright } from '@/utils/copyright'
 import { getOpitons } from '@/utils/options'
 import { shortId } from '@/utils/short-id'
@@ -640,9 +641,10 @@ const setContent = (
   if (!editor.value) {
     throw new Error('editor is not ready!')
   }
+  const doc = contentTransform(content)
   editor.value
     .chain()
-    .setContent(content, options.emitUpdate)
+    .setContent(doc, options.emitUpdate)
     .focus(options.focusPosition as FocusPosition, options.focusOptions)
     .run()
 }
@@ -659,9 +661,10 @@ const insertContent = (
   if (!editor.value) {
     throw new Error('editor is not ready!')
   }
+  const doc = contentTransform(content)
   editor.value
     .chain()
-    .insertContent(content, { updateSelection: options.updateSelection })
+    .insertContent(doc, { updateSelection: options.updateSelection })
     .focus(options.focusPosition as FocusPosition, options.focusOptions)
     .run()
 }
