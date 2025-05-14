@@ -175,7 +175,7 @@ export const getDefaultExtensions = ({
     FileHandler.configure({
       allowedMimeTypes: file?.allowedMimeTypes,
       onPaste(editor: Editor, files: any) {
-        //记录 已有位置
+        // 记录 已有位置
         const pageContainer = document.querySelector(
           `${container} .umo-zoomable-container`,
         ) as HTMLElement

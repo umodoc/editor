@@ -96,7 +96,7 @@ export default Extension.create({
                 totalChars: calculateTotalChars(content?.content ?? []),
                 typedChars: 0,
               }
-              //插入内容
+              // 插入内容
               const typeWriterInsertContent = async (curContent: any) => {
                 await new Promise<void>((resolve) => {
                   setTimeout(() => {
@@ -118,7 +118,7 @@ export default Extension.create({
               // 处理内容
               const processNode = async (node: any, isTopLevel = false) => {
                 if (node.type === 'paragraph') {
-                  //当前为段落时 插入段落样式
+                  // 当前为段落时 插入段落样式
                   await typeWriterInsertContent([
                     { type: 'paragraph', attrs: node.attrs },
                   ])

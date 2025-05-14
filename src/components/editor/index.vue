@@ -38,7 +38,7 @@ const destroyed = inject('destroyed')
 const page = inject('page')
 const options = inject('options')
 const uploadFileMap = inject('uploadFileMap')
-//助手
+// 助手
 const assistant = inject('assistant')
 
 const $document = useState('document', options)
