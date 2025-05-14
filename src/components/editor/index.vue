@@ -56,8 +56,6 @@ const extensions: any[] = getDefaultExtensions({
   uploadFileMap,
 })
 
-console.log(contentTransform(options.value.document?.content))
-
 const editorInstance: Editor = new Editor({
   editable: !options.value.document?.readOnly,
   autofocus: options.value.document?.autofocus,
