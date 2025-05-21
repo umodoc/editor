@@ -32,6 +32,7 @@ const options = $ref({
     // defaultMode: 'classic',
     // menus: ['base'],
     importWord: {
+      enabled: true,
       async onCustomImportMethod() {
         return await Promise.resolve({
           value: '<p>测试导入word</p>',

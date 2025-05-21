@@ -37,6 +37,7 @@ const defaultOptions: UmoEditorOptions = {
     disableMenuItems: [],
     importWord: {
       enabled: true,
+      maxSize: 1024 * 1024 * 5, // 100M
       options: {},
       useCustomMethod: false,
       async onCustomImportMethod() {
