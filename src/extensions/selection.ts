@@ -27,9 +27,9 @@ export default Extension.create({
               return null
             }
 
-            if (editor.isFocused) {
-              return null
-            }
+            // if (editor.isFocused) {
+            //   return null
+            // }
 
             return DecorationSet.create(state.doc, [
               Decoration.inline(state.selection.from, state.selection.to, {
