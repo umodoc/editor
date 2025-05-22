@@ -116,6 +116,7 @@
     "file64": "^1.0.4",
     "highlight.js": "^11.11.1",
     "hotkeys-js": "^3.13.7",
+    "html-to-docx": "^1.8.0",
     "jsbarcode": "^3.11.6",
     "katex": "^0.16.11",
     "lowlight": "^3.3.0",
