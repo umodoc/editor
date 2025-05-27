@@ -93,7 +93,7 @@
         "title": "错误提示",
         "message": "正在加载转换的脚本，请稍后重试。"
       },
-      "limitSize": "文件大小不能超过 5MB。",
+      "limitSize": "文件大小不能超过 {limitSize}MB。",
       "converting": "正在转换Word文档，请稍后...",
       "convertError": "解析 Word 文档出错",
       "importError": "导入 Word 文档出错"

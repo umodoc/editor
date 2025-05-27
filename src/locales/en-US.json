@@ -93,7 +93,7 @@
         "title": "Error Message",
         "message": "Loading the transformed script, please try again later."
       },
-      "limitSize": "File size cannot exceed 5MB.",
+      "limitSize": "File size cannot exceed {limitSize}MB.",
       "converting": "Converting Word document, please wait...",
       "convertError": "Error parsing Word document",
       "importError": "Error importing Word document"

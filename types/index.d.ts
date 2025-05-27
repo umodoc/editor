@@ -67,6 +67,7 @@ export interface ToolbarOptions {
   disableMenuItems: string[]
   importWord: {
     enabled: boolean
+    maxSize: number
     options: unknown
     useCustomMethod?: boolean
     onCustomImportMethod?: (file: File) => Promise<{

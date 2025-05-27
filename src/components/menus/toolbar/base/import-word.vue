@@ -54,10 +54,13 @@ const importWord = () => {
     if (!file) {
       return
     }
-    if (file.size > 1024 * 1024 * 5) {
+    const { maxSize } = options.value.toolbar?.importWord ?? {}
+    if (file.size > maxSize) {
       useMessage('error', {
         attach: container,
-        content: t('base.importWord.limitSize'),
+        content: t('base.importWord.limitSize', {
+          limitSize: maxSize / (1024 * 1024),
+        }),
       })
       return
     }
