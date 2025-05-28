@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "noImplicitAny": false,
     "removeComments": true,
     "disableSizeLimit": true,
     "target": "ESNext",
