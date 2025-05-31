@@ -210,7 +210,6 @@ watch(
 // Lifecycle Hooks
 onMounted(() => {
   setTheme(options.value.theme)
-  setTimeout(consoleCopyright)
 })
 onBeforeUnmount(() => {
   clearAutoSaveInterval()
@@ -392,6 +391,7 @@ watch(
 const { t, locale, mergeLocaleMessage } = useI18n()
 const $locale = useStorage('umo-editor:locale', options.value.locale)
 locale.value = $locale.value
+consoleCopyright()
 const getLocaleMessage = (lang: SupportedLocale) => {
   const translations = options.value.translations?.[lang.replaceAll('-', '_')]
   if (isRecord(translations)) {
