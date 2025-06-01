@@ -101,6 +101,8 @@
             />
             <menus-toolbar-insert-emoji v-if="!disableItem('emoji')" />
             <menus-toolbar-insert-math v-if="!disableItem('math')" />
+          </div>
+          <div class="umo-virtual-group">
             <menus-toolbar-insert-tag v-if="!disableItem('tag')" />
             <menus-toolbar-insert-columns v-if="!disableItem('columns')" />
             <menus-toolbar-insert-callout v-if="!disableItem('callout')" />
