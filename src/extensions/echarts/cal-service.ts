@@ -84,7 +84,7 @@ export function calbaseConfigOptions(data: any, config: any, options: any) {
     resOption.series = []
 
     for (let i = 0; i < colNameList.length; i++) {
-      const seriesdata = []
+      const seriesdata: object[] = []
       // 从第二行开始
       for (let j = 1; j < data.length; j++) {
         let _value = data[j][colNameList[i]]

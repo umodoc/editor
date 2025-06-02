@@ -222,8 +222,8 @@ const send = async () => {
 }
 
 const insertCommand = ({ value, autoSend }: CommandItem) => {
-  command = l(value) ?? ''
-  result.command = l(value) ?? ''
+  command = l(value ?? '') ?? ''
+  result.command = l(value ?? '') ?? ''
   result.content = ''
   inputRef.value?.focus()
   if (autoSend !== false) {

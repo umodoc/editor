@@ -150,7 +150,7 @@ export const getDefaultExtensions = ({
     // 页面
     Toc,
     BreakMarks.configure({
-      visible: page.showBreakMarks,
+      visible: page?.showBreakMarks,
     }),
     PageBreak,
 

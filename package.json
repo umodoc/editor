@@ -42,6 +42,7 @@
   ],
   "exports": {
     ".": {
+      "types": "./types/index.d.ts",
       "import": "./dist/umo-editor.js"
     },
     "./style": {

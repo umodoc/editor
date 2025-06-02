@@ -9,13 +9,13 @@ export interface MarginOption {
   bottom: number
 }
 export interface WatermarkOption {
-  type: string
-  alpha: number
-  fontColor: string
-  fontSize: number
-  fontFamily: string
-  fontWeight: string
-  text: string
+  type?: string
+  alpha?: number
+  fontColor?: string
+  fontSize?: number
+  fontFamily?: string
+  fontWeight?: string
+  text?: string
 }
 export interface PageOption {
   defaultMargin?: MarginOption
@@ -62,13 +62,13 @@ export type ToolbarMenu =
   | 'custom'
 
 export interface ToolbarOptions {
-  defaultMode: 'classic' | 'ribbon'
-  menus: ToolbarMenu[]
-  disableMenuItems: string[]
-  importWord: {
-    enabled: boolean
-    maxSize: number
-    options: unknown
+  defaultMode?: 'classic' | 'ribbon'
+  menus?: ToolbarMenu[]
+  disableMenuItems?: string[]
+  importWord?: {
+    enabled?: boolean
+    maxSize?: number
+    options?: unknown
     useCustomMethod?: boolean
     onCustomImportMethod?: (file: File) => Promise<{
       id: string
@@ -80,20 +80,19 @@ export interface ToolbarOptions {
 }
 
 export interface AutoSaveOptions {
-  enabled: boolean
-  interval: number
+  enabled?: boolean
+  interval?: number
 }
 
 export interface DocumentOptions {
   id?: string
-  title: string
-  content: string
+  title?: string
+  content?: string
   placeholder?: Record<string, string>
   enableSpellcheck?: boolean
   enableMarkdown?: boolean
   enableBubbleMenu?: boolean
   enableBlockMenu?: boolean
-  // enableComment?: boolean
   readOnly?: boolean
   autofocus?: 'start' | 'end' | 'all' | number | boolean | null
   characterLimit?: number
@@ -139,20 +138,20 @@ export interface Template {
   title: string
   content: string
   description?: string
-  value: string
+  value?: string
   divider?: boolean
 }
 
 export interface AssistantOptions {
-  enabled: boolean
-  maxlength: number
-  commands: CommandItem[]
+  enabled?: boolean
+  maxlength?: number
+  commands?: CommandItem[]
   onMessage?: AsyncFunction
 }
 
 export interface EchartsOptions {
-  mode: number
-  renderImage: boolean
+  mode?: number
+  renderImage?: boolean
   onCustomSettings?: CallableFunction
 }
 
@@ -163,65 +162,65 @@ export interface UserItem {
 }
 
 export interface WebPageItem {
-  label: LocaleLabel
-  icon: string
-  validate(url: string): boolean
+  label?: LocaleLabel
+  icon?: string
+  validate?(url: string): boolean
   transformURL?(url: string): string
 }
 
 export interface CommandItem {
-  label: LocaleLabel
-  value: LocaleLabel
+  label?: LocaleLabel
+  value?: LocaleLabel
   autoSend?: boolean
 }
 
 export interface AssistantPayload {
-  lang: string
-  input: string
-  command: string
-  output: string
+  lang?: string
+  input?: string
+  command?: string
+  output?: string
 }
 
 export interface AssistantContent {
-  html: string
-  text: string
-  json: unknown
+  html?: string
+  text?: string
+  json?: unknown
 }
 export interface AssistantResult {
-  prompt: string
-  content: string
-  error: boolean
+  prompt?: string
+  content?: string
+  error?: boolean
   command?: string
 }
 
 export interface FileOptions {
-  allowedMimeTypes: string[]
-  maxSize: number
-  preview: {
+  allowedMimeTypes?: string[]
+  maxSize?: number
+  preview?: {
     extensions?: string[]
-    url: string
+    url?: string
   }[]
 }
 
 export interface UmoEditorOptions {
-  editorKey: string
-  locale: SupportedLocale
-  theme: 'light' | 'dark'
-  height: string
-  fullscreenZIndex: number
+  editorKey?: string
+  locale?: SupportedLocale
+  theme?: 'light' | 'dark'
+  height?: string
+  fullscreenZIndex?: number
   dicts?: {
-    pageSizes: PageSize[]
-    fonts: Font[]
-    colors: string[]
-    lineHeights: LineHeight[]
-    symbols: GraphicSymbol[]
-    emojis: Emoji[]
+    pageSizes?: PageSize[]
+    fonts?: Font[]
+    colors?: string[]
+    lineHeights?: LineHeight[]
+    symbols?: GraphicSymbol[]
+    emojis?: Emoji[]
   }
   toolbar?: ToolbarOptions
-  page: PageOption
+  page?: PageOption
   document?: DocumentOptions
   ai?: {
-    assistant: AssistantOptions
+    assistant?: AssistantOptions
   }
   echarts?: EchartsOptions
   webPages?: WebPageItem[]
@@ -238,3 +237,6 @@ export interface UmoEditorOptions {
   onFileUpload?: (file: File) => Promise<{ id: string; url: string }>
   onFileDelete?: CallableFunction
 }
+
+// 组件类型声明
+export * from '../dist/umo-editor'
