@@ -5,7 +5,7 @@ import type { UserItem } from '@/types'
 
 import Mentions from './mentions.vue'
 
-export default (users: UserItem[]) => {
+export default (users: UserItem[], container: string) => {
   return {
     items: ({ query }: { query: string }) =>
       users.filter((user: UserItem) => user.label.includes(query)).slice(0, 10),
@@ -39,9 +39,12 @@ export default (users: UserItem[]) => {
           if (!props.clientRect) {
             return
           }
+
           popup = tippy('body', {
             getReferenceClientRect: props.clientRect,
-            appendTo: () => document.body,
+            appendTo: document.querySelector(
+              `${container} .umo-zoomable-container`,
+            ) as HTMLElement,
             content: component.element,
             showOnCreate: true,
             interactive: true,

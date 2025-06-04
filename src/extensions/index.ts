@@ -156,7 +156,7 @@ export const getDefaultExtensions = ({
 
     // 其他
     Mention.configure({
-      suggestion: getUsersSuggestion(users ?? []),
+      suggestion: getUsersSuggestion(users ?? [], container),
     }),
     Selection,
     NodeRange,
