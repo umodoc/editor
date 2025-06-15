@@ -69,7 +69,7 @@ import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
 import { getSelectionNode, getSelectionText } from '@/extensions/selection'
 import { i18n } from '@/i18n'
 import { propsOptions } from '@/options'
-import type { PageOption, UmoEditorOptions } from '@/types'
+import type { PageOption, UmoEditorOptions, GetContentFunction } from '@/types'
 import type {
   AutoSaveOptions,
   DocumentOptions,
@@ -82,6 +82,7 @@ import { getOpitons } from '@/utils/options'
 import { shortId } from '@/utils/short-id'
 
 import ruConfig from '../locales/tdesign/ru-RU'
+import type { Editor } from '@tiptap/vue-3'
 
 const { toBlob, toJpeg, toPng } = domToImage
 
@@ -119,8 +120,8 @@ const emits = defineEmits([
 // state Setup
 const container = $ref(`#umo-editor-${shortId(4)}`)
 const defaultOptions = inject('defaultOptions', {})
-const options = ref(getOpitons(props, defaultOptions))
-const editor = ref(null)
+const options = ref<UmoEditorOptions>(getOpitons(props, defaultOptions))
+const editor = ref<Editor | null>(null)
 const savedAt = ref(null)
 const page = ref({})
 const blockMenu = ref(false)
@@ -279,30 +280,30 @@ watch(
     if (!editor.value) {
       return
     }
-    editor.value.on('create', ({ editor }: any) => {
+    editor.value.on('create', ({ editor }) => {
       destroyed.value = false
       emits('created', { editor })
     })
-    editor.value.on('update', ({ editor }: any) => {
+    editor.value.on('update', ({ editor }) => {
       emits('changed', { editor })
       contentUpdated = true
     })
-    editor.value.on('selectionUpdate', ({ editor }: any) => {
+    editor.value.on('selectionUpdate', ({ editor }) => {
       emits('changed:selection', { editor })
     })
-    editor.value.on('transaction', ({ editor, transaction }: any) => {
+    editor.value.on('transaction', ({ editor, transaction }) => {
       emits('changed:transaction', { editor, transaction })
     })
-    editor.value.on('focus', ({ editor, event }: any) => {
+    editor.value.on('focus', ({ editor, event }) => {
       emits('focus', { editor, event })
     })
     editor.value.on(
       'contentError',
-      ({ editor, error, disableCollaboration }: any) => {
+      ({ editor, error, disableCollaboration }) => {
         emits('contentError', { editor, error, disableCollaboration })
       },
     )
-    editor.value.on('blur', ({ editor, event }: any) => {
+    editor.value.on('blur', ({ editor, event }) => {
       emits('blur', { editor, event })
     })
     editor.value.on('destroy', () => {
@@ -576,7 +577,9 @@ const setWatermark = (params: Partial<WatermarkOption>) => {
 }
 
 const setDocument = (params: DocumentOptions) => {
-  if (!isRecord(params)) {
+  // The original "isRecord" function affects the following typeScript type derivation, so change the method to judge.
+  // 原来的“isRecord”函数影响了下面的typeScript类型推导，所以换一个方法判断。
+  if (Object.prototype.toString.call(params) !== '[object Object]') {
     throw new Error('params must be an object.')
   }
   if (!options.value.document) {
@@ -690,7 +693,7 @@ const getTypewriterState = () => {
   editor?.value?.commands.getTypewriterState()
 }
 
-const getContent = (format = 'html') => {
+const getContent: GetContentFunction = (format = 'html') => {
   if (!editor.value) {
     throw new Error('editor is not ready!')
   }
@@ -981,8 +984,8 @@ defineExpose({
   getJSON,
   saveContent,
   getContentExcerpt,
-  getEditor: () => editor,
-  useEditor: () => editor.value,
+  getEditor: () => editor as Ref<Editor> | null,
+  useEditor: () => editor.value as Editor | null,
   getTableOfContents: () => editor.value?.storage.tableOfContents.content,
   getSelectionText: () => (editor.value ? getSelectionText(editor.value) : ''),
   getSelectionNode: () =>

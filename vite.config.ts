@@ -4,9 +4,10 @@ import AutoImport from 'unplugin-auto-import/vite'
 import { TDesignResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import VueMacros from 'unplugin-vue-macros/vite'
-import { defineConfig } from 'vite'
+import { build, defineConfig } from 'vite'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import tsConfigPaths from 'vite-tsconfig-paths'
+import dts from 'vite-plugin-dts'
 
 import pkg from './package.json'
 import copyright from './src/utils/copyright'
@@ -83,6 +84,20 @@ export default defineConfig({
   base: '/umo-editor',
   plugins: [
     tsConfigPaths(),
+    dts({
+      outDir: 'types',
+      include: [
+        'src/components/{index,modal,tooltip}.{ts,vue}',
+        'src/components/menus/button.vue',
+      ],
+      bundledPackages: ['vue', '@tiptap/vue-3'],
+      exclude: ['src/extensions/**/*'],
+      logLevel: 'silent',
+      compilerOptions: {
+        skipDiagnostics: false,
+        logDiagnostics: true,
+      },
+    }),
     ReactivityTransform(),
     ...Object.values(vuePlugins),
   ],

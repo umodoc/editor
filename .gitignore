@@ -36,6 +36,7 @@ vitest.config.ts.timestamp*
 # Auto Imports
 types/imports.d.ts
 types/components.d.ts
+types/src/*
 
 # Lock files
 package-lock.json

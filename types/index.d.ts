@@ -1,4 +1,4 @@
-import type { Extension } from '@tiptap/core'
+import type { Extension, HTMLContent, JSONContent } from '@tiptap/core'
 import type { AsyncFunction } from '@tool-belt/type-predicates'
 
 export type SupportedLocale = 'en-US' | 'zh-CN' | 'ru-RU'
@@ -202,6 +202,20 @@ export interface FileOptions {
   }[]
 }
 
+export type GetContentFunction = <T extends 'html' | 'json' | 'text'>(
+  format: T,
+) => T extends 'html' ? HTMLContent : T extends 'json' ? JSONContent : string
+
+type OnSaveFunction = (
+  content: {
+    html: HTMLContent
+    json: JSONContent
+    text: string
+  },
+  page: PageOption,
+  document: DocumentOptions,
+) => Promise<unknown>
+
 export interface UmoEditorOptions {
   editorKey?: string
   locale?: SupportedLocale
@@ -233,10 +247,10 @@ export interface UmoEditorOptions {
   users?: UserItem[]
   extensions?: Extension[]
   translations?: Record<string, unknown>
-  onSave?: AsyncFunction
+  onSave?: OnSaveFunction
   onFileUpload?: (file: File) => Promise<{ id: string; url: string }>
   onFileDelete?: CallableFunction
 }
 
 // 组件类型声明
-export * from '../dist/umo-editor'
+export * from './src/components'
