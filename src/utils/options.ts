@@ -1,12 +1,16 @@
 import { isRecord } from '@tool-belt/type-predicates'
 
 import { defaultOptions, ojbectSchema } from '@/options'
+import type { UmoEditorOptions } from '@/types'
 
-export const getOpitons = (propsOptions: unknown, globalOptions?: unknown) => {
+export const getOpitons = <T extends MaybeRef<UmoEditorOptions>>(
+  propsOptions: T,
+  globalOptions?: unknown,
+) => {
   const propsOptionsValue =
     isRecord(propsOptions) && Object.keys(propsOptions).includes('value')
-      ? propsOptions.value
-      : propsOptions
+      ? (propsOptions.value as UmoEditorOptions)
+      : (propsOptions as UmoEditorOptions)
 
   const componentOptions = Object.keys(propsOptionsValue).reduce<
     Record<string, unknown>
