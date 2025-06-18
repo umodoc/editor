@@ -687,7 +687,7 @@ const stopTypewriter = () => {
 }
 
 const getTypewriterState = () => {
-  editor?.value?.commands.getTypewriterState()
+  return editor?.value?.commands.getTypewriterState()
 }
 
 const getContent = (format = 'html') => {
