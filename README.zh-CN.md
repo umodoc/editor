@@ -20,7 +20,7 @@ Umo Editor 最大的特点是代码完全开源且自主可控，支持私有部
 
 作为一个独立的 Vue3 插件，Umo Editor 可以轻松集成到各类 Vue3 项目中。对于非 Vue3 项目，您可以通过 Iframe 将 Umo Editor 嵌入到您的项目中。
 
-[开发文档](https://editor.umodoc.com/cn/docs) | [在线演示](https://demo.umodoc.com/editor?lang=zh-CN) | [GitHub](https://github.com/umodoc/editor) | [码云(国内镜像)](https://gitee.com/umodoc/editor) | [NPM](https://www.npmjs.com/package/@umoteam/editor)
+[官网](https://umodoc.com) | [开发文档](https://editor.umodoc.com/cn/docs) | [在线演示](https://demo.umodoc.com/editor?lang=zh-CN) | [GitHub](https://github.com/umodoc/editor) | [码云(国内镜像)](https://gitee.com/umodoc/editor) | [NPM](https://www.npmjs.com/package/@umoteam/editor)
 
 ## 在线体验
 

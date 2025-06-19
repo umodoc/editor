@@ -26,7 +26,7 @@ Umo Editor's largest feature is that its code is completely open source and cont
 
 As an independent Vue3 plugin, Umo Editor can be easily integrated into various Vue3 projects with zero configuration. For non-Vue3 projects, you can embed Umo Editor into your project via an iframe.
 
-[Documentation](https://editor.umodoc.com/en/docs) | [中文文档](https://editor.umodoc.com/cn/docs) | [Playground](https://demo.umodoc.com/editor?lang=en-US) | [GitHub](https://github.com/umodoc/editor) | [NPM](https://www.npmjs.com/package/@umoteam/editor)
+[Website](https://umodoc.com) | [Documentation](https://editor.umodoc.com/en/docs) | [中文文档](https://editor.umodoc.com/cn/docs) | [Playground](https://demo.umodoc.com/editor?lang=en-US) | [GitHub](https://github.com/umodoc/editor) | [NPM](https://www.npmjs.com/package/@umoteam/editor)
 
 ## Online Experience
 
