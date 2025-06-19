@@ -14,7 +14,7 @@ declare module '@tiptap/core' {
       /**
        * 获取当前打字机状态
        */
-      getTypewriterState: () => TypewriterState
+      getTypewriterState: () => any
     }
   }
 }
@@ -208,7 +208,7 @@ export default Extension.create({
         return true
       },
 
-      getTypewriterState: () => {
+      getTypewriterState: () => () => {
         return {
           isRunning: typewriterState.value.isRunning,
           currentParagraph: typewriterState.value.currentParagraph,
