@@ -6,6 +6,6 @@ const app = createApp(App)
 
 const options = {}
 
-app.use(useUmoEditor, options as unknown as UmoEditorOptions)
+app.use(useUmoEditor, options as UmoEditorOptions)
 
 app.mount('#app')

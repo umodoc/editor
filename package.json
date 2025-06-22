@@ -38,7 +38,8 @@
   },
   "files": [
     "dist",
-    "types/index.d.ts"
+    "types/index.d.ts",
+    "types/src/*"
   ],
   "exports": {
     ".": {
@@ -186,6 +187,7 @@
     "unplugin-vue-components": "^0.27.4",
     "unplugin-vue-macros": "^2.11.11",
     "vite": "^4.5.3",
+    "vite-plugin-dts": "^4.5.4",
     "vite-plugin-inspect": "^0.8.7",
     "vite-plugin-svg-icons": "^2.0.1",
     "vite-tsconfig-paths": "^5.0.1",
