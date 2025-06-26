@@ -99,18 +99,41 @@ const importWord = () => {
       return
     }
 
-    // 默认使用 Mammoth 导入
-    const arrayBuffer = file.arrayBuffer()
     // @ts-expect-error, global variable injected by script
     if (!mammoth) {
       return
     }
+    // 使用 Mammoth 导入
+    const arrayBuffer = file.arrayBuffer()
+    // 一些配置默认
+    const customOptions = {
+      transformConvertRun(run: any) {
+        const resultRun: any = {}
+        if (run.bgColor) {
+          resultRun['mark'] = {
+            style: `background-color:${run.bgColor}; color: inherit`,
+            'data-color': run.bgColor,
+          }
+        }
+        return resultRun
+      },
+      styleMap: [
+        "p[style-name='引用'] => blockquote.blockquote > p:fresh",
+        "p[style-name='blockquote'] => blockquote.blockquote > p:fresh",
+        "p[style-name='BlockQuote'] => blockquote.blockquote > p:fresh",
+        "p[style-name='代码块'] => pre.preCode > code:fresh",
+        "p[style-name='Code'] => pre.preCode > code:fresh",
+        "p[style-name='code'] => pre.preCode > code:fresh",
+      ],
+    }
     // @ts-expect-error, global variable injected by script
     const { messages, value } = await mammoth.convertToHtml(
       { arrayBuffer },
-      options.value.toolbar?.importWord.options,
+      {
+        ...customOptions,
+        ...options,
+      },
     )
-    message.close()
     if (messages.type === 'error') {
       useMessage(
         'error',
@@ -133,6 +156,7 @@ const importWord = () => {
       }
       const content = doc.body.innerHTML.toString()
       editor.value?.commands.setContent(content)
+      message.close()
     } catch {
       useMessage('error', {
         attach: container,
