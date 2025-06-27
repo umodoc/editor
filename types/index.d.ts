@@ -1,4 +1,6 @@
 import type { Extension, HTMLContent, JSONContent } from '@tiptap/core'
+import type { FocusPosition } from '@tiptap/core'
+import { Fragment, Node as ProseMirrorNode } from '@tiptap/pm/model'
 import type { AsyncFunction } from '@tool-belt/type-predicates'
 
 export type SupportedLocale = 'en-US' | 'zh-CN' | 'ru-RU'
@@ -202,9 +204,18 @@ export interface FileOptions {
   }[]
 }
 
-export type GetContentFunction = <T extends 'html' | 'json' | 'text'>(
-  format: T,
-) => T extends 'html' ? HTMLContent : T extends 'json' ? JSONContent : string
+export type InsterContentType = string | Fragment | ProseMirrorNode
+
+export interface SetContentOptions {
+  emitUpdate: boolean
+  focusPosition: FocusPosition
+  focusOptions: { scrollIntoView: boolean }
+}
+export type InsterContentOptions = Omit<SetContentOptions, 'emitUpdate'> & {
+  updateSelection: boolean
+}
+
+export type SetContentType = InsterContentType | JSONContent | JSONContent[]
 
 type OnSaveFunction = (
   content: {
