@@ -81,8 +81,6 @@ import { consoleCopyright } from '@/utils/copyright'
 import { getOpitons } from '@/utils/options'
 import { shortId } from '@/utils/short-id'
 
-import ruConfig from '../locales/tdesign/ru-RU'
-
 const { toBlob, toJpeg, toPng } = domToImage
 
 defineOptions({ name: 'UmoEditor' })
@@ -416,7 +414,6 @@ watch(
 const localeConfig = $ref<Record<string, GlobalConfigProvider>>({
   'zh-CN': cnConfig as unknown as GlobalConfigProvider,
   'en-US': enConfig as unknown as GlobalConfigProvider,
-  'ru-RU': ruConfig as unknown as GlobalConfigProvider,
 })
 
 // Options Setup
@@ -708,8 +705,8 @@ const getContent = (format = 'html') => {
 
 // Locale Methods
 const setLocale = (params: SupportedLocale) => {
-  if (!['zh-CN', 'en-US', 'ru-RU'].includes(params)) {
-    throw new Error('"params" must be one of "zh-CN", "en-US" or "ru-RU".')
+  if (!['zh-CN', 'en-US'].includes(params)) {
+    throw new Error('"params" must be one of "zh-CN" or "en-US".')
   }
   if (locale.value === params) {
     return

@@ -1,7 +1,7 @@
 import type { Extension } from '@tiptap/core'
 import type { AsyncFunction } from '@tool-belt/type-predicates'
 
-export type SupportedLocale = 'en-US' | 'zh-CN' | 'ru-RU'
+export type SupportedLocale = 'en-US' | 'zh-CN'
 export interface MarginOption {
   left: number
   right: number
@@ -102,9 +102,7 @@ export interface DocumentOptions {
   autoSave?: AutoSaveOptions
 }
 
-export type LocaleLabel =
-  | string
-  | { en_US: string; zh_CN: string; ru_RU: string }
+export type LocaleLabel = string | { en_US: string; zh_CN: string }
 
 export interface PageSize {
   label: LocaleLabel

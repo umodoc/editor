@@ -1,7 +1,6 @@
 const locales = {
   'zh-CN': 'zh',
   'en-US': 'en',
-  'ru-RU': 'ru',
 }
 
 // https://www.diagrams.com/doc/faq/embed-mode
