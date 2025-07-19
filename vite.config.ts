@@ -5,6 +5,7 @@ import { TDesignResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import VueMacros from 'unplugin-vue-macros/vite'
 import { defineConfig } from 'vite'
+import dts from 'vite-plugin-dts'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import tsConfigPaths from 'vite-tsconfig-paths'
 
@@ -83,6 +84,37 @@ export default defineConfig({
   base: '/umo-editor',
   plugins: [
     tsConfigPaths(),
+    dts({
+      outDir: 'types',
+      include: [
+        'src/components/{index,modal,tooltip}.{ts,vue}',
+        'src/components/menus/button.vue',
+      ],
+      bundledPackages: [
+        'vue',
+        '@vue/runtime-core',
+        '@vue/compiler-sfc',
+        '@tiptap/vue-3',
+        '@tiptap/core',
+      ],
+      exclude: ['src/extensions/**/*'],
+      logLevel: 'silent',
+      pathsToAliases: true,
+      compilerOptions: {
+        skipDiagnostics: false,
+        logDiagnostics: true,
+      },
+      beforeWriteFile: (filePath, content) => {
+        const correctedContent = content.replace(
+          /from ['"]\.\.\/types['"]/g,
+          "from '../../../types'",
+        )
+        return {
+          filePath,
+          content: correctedContent,
+        }
+      },
+    }),
     ReactivityTransform(),
     ...Object.values(vuePlugins),
   ],

@@ -58,7 +58,7 @@ const shortcuts = $ref<
       { label: t('shortcut.pasteAsText'), keys: ['Ctrl', 'Shift', 'V'] },
       { label: t('base.undo'), keys: ['Ctrl', 'Z'] },
       { label: t('base.redo'), keys: ['Ctrl', 'Y'] },
-      { label: t('base.redo'), keys: ['Ctrl', 'A'] },
+      { label: t('base.selectAll'), keys: ['Ctrl', 'A'] },
       { label: t('search.text'), keys: ['Ctrl', 'F'] },
       { label: t('shortcut.paragraph'), keys: ['Enter'] },
       { label: t('shortcut.hardBreak'), keys: ['Shift', 'Enter'] },

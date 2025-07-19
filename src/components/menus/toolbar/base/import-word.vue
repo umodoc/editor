@@ -1,6 +1,6 @@
 <template>
   <menus-button
-    v-if="options.toolbar?.importWord?.enabled"
+    v-if="$options.enabled"
     ico="word"
     :text="t('base.importWord.text')"
     huge
@@ -12,14 +12,12 @@
 const container = inject('container')
 const editor = inject('editor')
 const options = inject('options')
+const $options = options.value.toolbar.importWord
 
 // 动态导入 mammoth.js
 onMounted(() => {
   const mammothScriptElement = document.querySelector('#mammoth-script')
-  if (
-    mammothScriptElement === null &&
-    options.value.toolbar?.importWord.enabled
-  ) {
+  if (mammothScriptElement === null && $options.enabled) {
     const style = document.createElement('script')
     style.src = `${options.value.cdnUrl}/libs/mammoth/mammoth.browser.min.js`
     style.id = 'mammoth-script'
@@ -54,12 +52,11 @@ const importWord = () => {
     if (!file) {
       return
     }
-    const { maxSize } = options.value.toolbar?.importWord ?? {}
-    if (file.size > maxSize) {
+    if (file.size > $options.maxSize) {
       useMessage('error', {
         attach: container,
         content: t('base.importWord.limitSize', {
-          limitSize: maxSize / (1024 * 1024),
+          limitSize: $options.maxSize / (1024 * 1024),
         }),
       })
       return
@@ -70,9 +67,8 @@ const importWord = () => {
     })
 
     // 使用用户自定义导入方法
-    if (options.value.toolbar?.importWord?.useCustomMethod) {
-      const result =
-        await options.value.toolbar?.importWord.onCustomImportMethod?.(file)
+    if ($options?.useCustomMethod) {
+      const result = await $options.onCustomImportMethod?.(file)
       message.close()
       try {
         if (result?.messages?.type === 'error') {
@@ -99,18 +95,41 @@ const importWord = () => {
       return
     }
 
-    // 默认使用 Mammoth 导入
-    const arrayBuffer = file.arrayBuffer()
     // @ts-expect-error, global variable injected by script
     if (!mammoth) {
       return
     }
+    // 使用 Mammoth 导入
+    const arrayBuffer = file.arrayBuffer()
+    // 一些配置默认
+    const customOptions = {
+      transformConvertRun(run: any) {
+        const resultRun: any = {}
+        if (run.bgColor) {
+          resultRun['mark'] = {
+            style: `background-color:${run.bgColor}; color: inherit`,
+            'data-color': run.bgColor,
+          }
+        }
+        return resultRun
+      },
+      styleMap: [
+        "p[style-name='引用'] => blockquote.blockquote > p:fresh",
+        "p[style-name='blockquote'] => blockquote.blockquote > p:fresh",
+        "p[style-name='BlockQuote'] => blockquote.blockquote > p:fresh",
+        "p[style-name='代码块'] => pre.preCode > code:fresh",
+        "p[style-name='Code'] => pre.preCode > code:fresh",
+        "p[style-name='code'] => pre.preCode > code:fresh",
+      ],
+    }
     // @ts-expect-error, global variable injected by script
     const { messages, value } = await mammoth.convertToHtml(
       { arrayBuffer },
-      options.value.toolbar?.importWord.options,
+      {
+        ...customOptions,
+        ...$options.options,
+      },
     )
-    message.close()
     if (messages.type === 'error') {
       useMessage(
         'error',
@@ -133,6 +152,7 @@ const importWord = () => {
       }
       const content = doc.body.innerHTML.toString()
       editor.value?.commands.setContent(content)
+      message.close()
     } catch {
       useMessage('error', {
         attach: container,
