@@ -129,15 +129,6 @@ Umo Editor 的发展离不开社区的支持，以下是为 Umo Editor 贡献过
 
 如果您需要定制化开发，请联系我们，我们可以提供付费的定制化解决方案和商业支持。详细信息请访问[定制开发](https://editor.umodoc.com/cn/docs/customization)。
 
-## 开源生态
-
-以下是一些开源项目，他们在开源项目中使用了 Umo Editor：
-
-- [文章转知识卡片](https://www.wordtocard.com/)
-- [Umo Editor 分页](https://github.com/Cassielxd/umo-enhance)
-
-如果您正在使用 Umo Editor，也想出现在这里，请通过邮件[contact@umodoc.com](mailto:contact@umodoc.com)告知我们。
-
 ## 开源协议
 
 Umo Editor 采用 [MIT 许可证](./LICENSE)，您可以免费使用、修改和使用本软件，但这不代表您可以随意删除版权信息，请保留 Umo Editor 的版权信息和界面上的链接地址，否则视为侵权，请支持开源项目。
