@@ -91,12 +91,29 @@ export default defineConfig({
         'src/components/{index,modal,tooltip}.{ts,vue}',
         'src/components/menus/button.vue',
       ],
-      bundledPackages: ['vue', '@tiptap/vue-3'],
+      bundledPackages: [
+        'vue',
+        '@vue/runtime-core',
+        '@vue/compiler-sfc',
+        '@tiptap/vue-3',
+        '@tiptap/core',
+      ],
       exclude: ['src/extensions/**/*'],
       logLevel: 'silent',
+      pathsToAliases: true,
       compilerOptions: {
         skipDiagnostics: false,
         logDiagnostics: true,
+      },
+      beforeWriteFile: (filePath, content) => {
+        const correctedContent = content.replace(
+          /from ['"]\.\.\/types['"]/g,
+          "from '../../../types'",
+        )
+        return {
+          filePath,
+          content: correctedContent,
+        }
       },
     }),
     ReactivityTransform(),
