@@ -40,6 +40,7 @@ const vuePlugins = {
 
 // Build configuration
 const buildConfig = {
+  target: 'es2018',
   lib: {
     entry: `${process.cwd()}/src/components/index.ts`,
     name: pkg.name,
