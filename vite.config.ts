@@ -4,10 +4,10 @@ import AutoImport from 'unplugin-auto-import/vite'
 import { TDesignResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import VueMacros from 'unplugin-vue-macros/vite'
-import { build, defineConfig } from 'vite'
+import { defineConfig } from 'vite'
+import dts from 'vite-plugin-dts'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import tsConfigPaths from 'vite-tsconfig-paths'
-import dts from 'vite-plugin-dts'
 
 import pkg from './package.json'
 import copyright from './src/utils/copyright'
@@ -40,6 +40,7 @@ const vuePlugins = {
 
 // Build configuration
 const buildConfig = {
+  target: 'es2018',
   lib: {
     entry: `${process.cwd()}/src/components/index.ts`,
     name: pkg.name,
