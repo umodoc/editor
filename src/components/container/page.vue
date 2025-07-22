@@ -111,6 +111,9 @@ const setPageZoomHeight = () => {
   }
   pageZoomHeight = `${(el.clientHeight * (pageOptions.value.zoomLevel ?? 1)) / 100}px`
 }
+onMounted(() => {
+  setPageZoomHeight()
+})
 watch(
   () => [
     pageOptions.value.zoomLevel,
@@ -118,12 +121,9 @@ watch(
     pageOptions.value.orientation,
   ],
   async () => {
-    await nextTick()
-    setTimeout(() => {
-      setPageZoomHeight()
-    }, 100)
+    setPageZoomHeight()
   },
-  { immediate: true, deep: true },
+  { deep: true },
 )
 
 // FIXME:
@@ -204,6 +204,7 @@ watch(
     box-shadow:
       rgba(0, 0, 0, 0.06) 0px 0px 10px 0px,
       rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
+    overflow: hidden;
     .umo-page-content {
       transform-origin: 0 0;
       box-sizing: border-box;
