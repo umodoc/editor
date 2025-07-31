@@ -59,18 +59,18 @@ export default Extension.create({
           if (!node) {
             return false
           }
-          if (node.attrs.vnode) {
-            if (
-              editor.isActive('image') ||
-              editor.isActive('video') ||
-              editor.isActive('audio') ||
-              editor.isActive('file')
-            ) {
-              const { options } = editor.storage
-              const { id, src } = node.attrs
-              options.onFileDelete?.(id, src)
-            }
-          }
+          // if (node.attrs.vnode) {
+          //   if (
+          //     editor.isActive('image') ||
+          //     editor.isActive('video') ||
+          //     editor.isActive('audio') ||
+          //     editor.isActive('file')
+          //   ) {
+          //     const { options } = editor.storage
+          //     const { id, src } = node.attrs
+          //     options.onFileDelete?.(id, src)
+          //   }
+          // }
           if (commands.deleteSelection()) {
             return true
           }
