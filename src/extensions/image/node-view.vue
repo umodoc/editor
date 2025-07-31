@@ -34,12 +34,16 @@
       </div>
       <drager
         v-else
+        :style="{
+          cursor:
+            node.attrs.draggable && !options.document?.readOnly
+              ? 'inherit'
+              : 'default !important',
+        }"
         :selected="selected"
         :rotatable="true"
         :boundary="false"
-        :draggable="
-          Boolean(node.attrs.draggable) && !options.document?.readOnly
-        "
+        :draggable="Boolean(node.attrs.draggable)"
         :disabled="options.document?.readOnly"
         :angle="node.attrs.angle"
         :width="Number(node.attrs.width)"

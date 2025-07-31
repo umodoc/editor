@@ -1,6 +1,5 @@
 import { mergeAttributes, Node } from '@tiptap/core'
 import { type Editor, VueNodeViewRenderer } from '@tiptap/vue-3'
-import { ReplaceStep } from 'prosemirror-transform'
 
 import { shortId } from '@/utils/short-id'
 
@@ -209,19 +208,36 @@ export default Node.create({
     }
   },
   onTransaction({ editor, transaction }) {
-    transaction.steps.forEach((step: any) => {
-      if (step instanceof ReplaceStep && step.slice.size === 0) {
-        // 使用事务前的文档状态来获取被删除的节点
-        const deletedNodes = transaction.before.content.cut(step.from, step.to)
-        const { options } = editor.storage
-        deletedNodes.content.forEach((node: any) => {
-          // 如果是文件节点，调用删除方法删除文件
-          if (['image', 'video', 'audio', 'file'].includes(node.attrs.type)) {
-            const { id, src, url } = node.attrs
-            options.onFileDelete(id, src || url)
-          }
-        })
+    const { steps, before } = transaction
+    const { onFileDelete } = editor.storage.options || {}
+
+    steps.forEach((step: any) => {
+      // 只处理 ReplaceStep 和 ReplaceAroundStep，确保是替换/删除类操作
+      if (
+        ![
+          'ReplaceStep',
+          '_ReplaceStep',
+          'ReplaceAroundStep',
+          '_ReplaceAroundStep',
+        ].includes(step.constructor.name)
+      ) {
+        return
       }
+
+      // 获取被删除的节点内容片段
+      const deletedFragment = before.slice(step.from, step.to).content
+      deletedFragment.forEach((node: any) => {
+        if (!node?.type) return
+        const { name } = node.type
+        if (['image', 'video', 'audio', 'file'].includes(name)) {
+          const { id, src, url } = node.attrs
+          try {
+            onFileDelete(id, src || url)
+          } catch (e) {
+            console.warn(`[onFileDelete error]`, e)
+          }
+        }
+      })
     })
   },
 })
