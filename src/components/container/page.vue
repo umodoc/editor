@@ -1,10 +1,23 @@
 <template>
-  <div class="umo-page-container">
+  <div class="umo-main-container">
     <container-toc
       v-if="pageOptions.showToc"
       @close="pageOptions.showToc = false"
     />
-    <div class="umo-zoomable-container umo-scrollbar">
+    <div
+      :class="`umo-zoomable-container umo-${pageOptions.layout}-container umo-scrollbar`"
+      :style="{
+        '--umo-page-background': pageOptions.background,
+        '--umo-page-margin-top': (pageOptions.margin?.top ?? '0') + 'cm',
+        '--umo-page-margin-bottom': (pageOptions.margin?.bottom ?? '0') + 'cm',
+        '--umo-page-margin-left': (pageOptions.margin?.left ?? '0') + 'cm',
+        '--umo-page-margin-right': (pageOptions.margin?.right ?? '0') + 'cm',
+        '--umo-page-width':
+          pageOptions.layout === 'page' ? pageSize.width + 'cm' : 'auto',
+        '--umo-page-height':
+          pageOptions.layout === 'page' ? pageSize.height + 'cm' : '100%',
+      }"
+    >
       <div
         class="umo-zoomable-content"
         :style="{
@@ -14,22 +27,14 @@
       >
         <t-watermark
           class="umo-page-content"
+          :style="{
+            width:
+              pageOptions.layout === 'page' ? pageSize.width + 'cm' : '100%',
+            transform: `scale(${pageOptions.zoomLevel ? pageOptions.zoomLevel / 100 : 1})`,
+          }"
           :alpha="pageOptions.watermark.alpha"
           v-bind="watermarkOptions"
           :watermark-content="pageOptions.watermark"
-          :style="{
-            '--umo-page-background': pageOptions.background,
-            '--umo-page-margin-top': (pageOptions.margin?.top ?? '0') + 'cm',
-            '--umo-page-margin-bottom':
-              (pageOptions.margin?.bottom ?? '0') + 'cm',
-            '--umo-page-margin-left': (pageOptions.margin?.left ?? '0') + 'cm',
-            '--umo-page-margin-right':
-              (pageOptions.margin?.right ?? '0') + 'cm',
-            '--umo-page-width': pageSize.width + 'cm',
-            '--umo-page-height': pageSize.height + 'cm',
-            width: pageSize.width + 'cm',
-            transform: `scale(${pageOptions.zoomLevel ? pageOptions.zoomLevel / 100 : 1})`,
-          }"
         >
           <div class="umo-page-node-header" contenteditable="false">
             <div
@@ -98,12 +103,20 @@ const pageSize = $computed(() => {
 })
 // 页面缩放后的大小
 const pageZoomWidth = $computed(() => {
+  if (pageOptions.value.layout === 'web') {
+    return '100%'
+  }
   return `calc(${pageSize.width}cm * ${pageOptions.value.zoomLevel ? pageOptions.value.zoomLevel / 100 : 1})`
 })
 
 // 页面内容变化后更新页面高度
 let pageZoomHeight = $ref('')
-const setPageZoomHeight = () => {
+const setPageZoomHeight = async () => {
+  await nextTick()
+  if (pageOptions.value.layout === 'web') {
+    pageZoomHeight = 'auto'
+    return
+  }
   const el = document.querySelector(`${container} .umo-page-content`)
   if (!el) {
     console.warn('The element <.umo-page-content> does not exist.')
@@ -112,16 +125,17 @@ const setPageZoomHeight = () => {
   pageZoomHeight = `${(el.clientHeight * (pageOptions.value.zoomLevel ?? 1)) / 100}px`
 }
 onMounted(() => {
-  setPageZoomHeight()
+  void setPageZoomHeight()
 })
 watch(
   () => [
+    pageOptions.value.layout,
     pageOptions.value.zoomLevel,
     pageOptions.value.size,
     pageOptions.value.orientation,
   ],
   () => {
-    setPageZoomHeight()
+    void setPageZoomHeight()
   },
   { deep: true },
 )
@@ -131,7 +145,7 @@ const editorInstance = inject('editor')
 watch(
   () => editorInstance.value?.getHTML(),
   () => {
-    setPageZoomHeight()
+    void setPageZoomHeight()
   },
 )
 
@@ -189,7 +203,7 @@ watch(
 </script>
 
 <style lang="less" scoped>
-.umo-page-container {
+.umo-main-container {
   height: 100%;
   display: flex;
   position: relative;
@@ -197,29 +211,43 @@ watch(
 
 .umo-zoomable-container {
   flex: 1;
-  padding: 20px 50px;
   scroll-behavior: smooth;
-  .umo-zoomable-content {
-    margin: 0 auto;
-    box-shadow:
-      rgba(0, 0, 0, 0.06) 0px 0px 10px 0px,
-      rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
-    overflow: hidden;
-    .umo-page-content {
-      transform-origin: 0 0;
-      box-sizing: border-box;
-      display: flex;
-      position: relative;
-      box-sizing: border-box;
-      background-color: var(--umo-page-background);
-      width: var(--umo-page-width);
-      min-height: var(--umo-page-height);
-      overflow: visible !important;
-      display: flex;
-      flex-direction: column;
-      [contenteditable] {
-        outline: none;
+  &.umo-page-container {
+    padding: 20px 50px;
+    .umo-zoomable-content {
+      margin: 0 auto;
+      box-shadow:
+        rgba(0, 0, 0, 0.06) 0px 0px 10px 0px,
+        rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
+      overflow: hidden;
+    }
+  }
+  &.umo-web-container {
+    display: flex;
+    .umo-zoomable-content {
+      flex: 1;
+      .umo-page-content {
+        min-height: 100%;
+        .umo-page-node-content {
+          min-height: 100px;
+        }
       }
+    }
+  }
+  .umo-page-content {
+    transform-origin: 0 0;
+    box-sizing: border-box;
+    display: flex;
+    position: relative;
+    box-sizing: border-box;
+    background-color: var(--umo-page-background);
+    width: var(--umo-page-width);
+    min-height: var(--umo-page-height);
+    overflow: visible !important;
+    display: flex;
+    flex-direction: column;
+    [contenteditable] {
+      outline: none;
     }
   }
 }
@@ -244,46 +272,50 @@ watch(
   box-sizing: border-box;
   position: relative;
   z-index: 10;
+}
 
-  @media print {
-    opacity: 0;
-  }
+.umo-page-container {
+  .umo-page-corner {
+    @media print {
+      opacity: 0;
+    }
 
-  &::after {
-    position: absolute;
-    content: '';
-    display: block;
-    height: 1cm;
-    width: 1cm;
-    border: solid 1px rgba(0, 0, 0, 0.08);
-  }
+    &::after {
+      position: absolute;
+      content: '';
+      display: block;
+      height: 1cm;
+      width: 1cm;
+      border: solid 1px rgba(0, 0, 0, 0.08);
+    }
 
-  &.corner-tl::after {
-    border-top: none;
-    border-left: none;
-    bottom: 0;
-    right: 0;
-  }
+    &.corner-tl::after {
+      border-top: none;
+      border-left: none;
+      bottom: 0;
+      right: 0;
+    }
 
-  &.corner-tr::after {
-    border-top: none;
-    border-right: none;
-    bottom: 0;
-    left: 0;
-  }
+    &.corner-tr::after {
+      border-top: none;
+      border-right: none;
+      bottom: 0;
+      left: 0;
+    }
 
-  &.corner-bl::after {
-    border-bottom: none;
-    border-left: none;
-    top: 0;
-    right: 0;
-  }
+    &.corner-bl::after {
+      border-bottom: none;
+      border-left: none;
+      top: 0;
+      right: 0;
+    }
 
-  &.corner-br::after {
-    border-bottom: none;
-    border-right: none;
-    top: 0;
-    left: 0;
+    &.corner-br::after {
+      border-bottom: none;
+      border-right: none;
+      top: 0;
+      left: 0;
+    }
   }
 }
 

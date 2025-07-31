@@ -52,6 +52,7 @@ const defaultOptions: UmoEditorOptions = {
     },
   },
   page: {
+    layouts: ['page', 'web'],
     defaultMargin: {
       left: 3.18,
       right: 3.18,
@@ -401,6 +402,21 @@ const ojbectSchema = new ObjectSchema({
     validate: 'object',
     required: false,
     schema: {
+      layouts: {
+        merge: 'replace',
+        validate(value: 'page' | 'web') {
+          const defaultLayouts = defaultOptions?.page?.layouts
+          if (value && !Array.isArray(value)) {
+            throw new Error('Key "page": Key "layouts" must be a array.')
+          }
+          if (!value.every((item) => defaultLayouts?.includes(item))) {
+            throw new Error(
+              `Key "page": Key "layouts" the array items of toolbar.menus must contain only one or multiple of ${JSON.stringify(defaultLayouts)}.`,
+            )
+          }
+        },
+        required: false,
+      },
       defaultMargin: {
         required: false,
         merge: 'replace',

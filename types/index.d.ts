@@ -4,6 +4,7 @@ import { Fragment, Node as ProseMirrorNode } from '@tiptap/pm/model'
 import type { AsyncFunction } from '@tool-belt/type-predicates'
 
 export type SupportedLocale = 'en-US' | 'zh-CN'
+export type LayoutOption = 'web' | 'page'
 export interface MarginOption {
   left: number
   right: number
@@ -20,6 +21,7 @@ export interface WatermarkOption {
   text?: string
 }
 export interface PageOption {
+  layouts: LayoutOption[]
   defaultMargin?: MarginOption
   defaultOrientation?: string
   defaultBackground?: string

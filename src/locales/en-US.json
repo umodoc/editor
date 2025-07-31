@@ -637,6 +637,10 @@
     "documentation": "Documentation",
     "thanks": "Thanks to all contributors"
   },
+  "layout": {
+    "web": "Web View",
+    "page": "Page View"
+  },
   "wordCount": {
     "characters": "Characters",
     "title": "Document Statistics",

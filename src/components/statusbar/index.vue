@@ -50,6 +50,7 @@
           <icon name="clear-cache" />
         </t-button>
       </tooltip>
+      <!-- 请遵循开源协议，勿删除或隐藏版权信息！ -->
       <tooltip :content="t('about.title')">
         <t-button
           class="umo-status-bar-button"
@@ -108,6 +109,31 @@
           </div>
         </template>
       </t-popup>
+      <div class="umo-status-bar-split"></div>
+      <t-dropdown :attach="container" placement="top-left" trigger="click">
+        <t-button
+          class="umo-status-bar-button auto-width"
+          variant="text"
+          size="small"
+        >
+          <icon :name="`layout-${page.layout}`" />
+          {{ currentLayout.content }}
+        </t-button>
+        <t-dropdown-menu>
+          <t-dropdown-item
+            v-for="item in layouts"
+            :key="item.value"
+            :value="item.value"
+            :active="item.value === page.layout"
+            @click="page.layout = item.value"
+          >
+            <div class="umo-layout-dropdown-item">
+              <icon :name="`layout-${item.value}`" size="16" />
+              {{ item.content }}
+            </div>
+          </t-dropdown-item>
+        </t-dropdown-menu>
+      </t-dropdown>
     </div>
     <div class="umo-status-bar-right">
       <tooltip
@@ -138,7 +164,7 @@
         </t-button>
       </tooltip>
       <div class="umo-status-bar-split"></div>
-      <div class="umo-zoom-level-bar">
+      <div v-if="page.layout === 'page'" class="umo-zoom-level-bar">
         <tooltip :content="`${t('zoom.zoomOut')} (${getShortcut('Ctrl-')})`">
           <t-button
             class="umo-status-bar-button"
@@ -210,7 +236,6 @@
           class="umo-status-bar-button auto-width umo-lang-button"
           variant="text"
           size="small"
-          @click="zoomReset"
         >
           {{ lang }}
         </t-button>
@@ -325,8 +350,24 @@ const selectionCharacters = computed(() => {
   return 0
 })
 
-// 关于
+// 关于 Umo Editor
 const about = $ref(false)
+
+// 页面布局
+const layouts = computed(() => {
+  return options.value.page.layouts.map((item: string) => {
+    return { content: t(`layout.${item}`), value: item }
+  })
+})
+const currentLayout = computed(() => {
+  return layouts.value.find((item: any) => item.value === page.value.layout)
+})
+watch(
+  () => page.value.layout,
+  () => {
+    zoomReset()
+  },
+)
 
 // 页面全屏
 const fullscreen = inject('fullscreen')
@@ -606,6 +647,11 @@ watch(
       }
     }
   }
+}
+.umo-layout-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 .umo-preview-bar {
   position: absolute;

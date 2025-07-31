@@ -644,6 +644,10 @@
     "selection": "已选中字数",
     "limit": "字数限制"
   },
+  "layout": {
+    "web": "Web 视图",
+    "page": "页面视图"
+  },
   "preview": {
     "title": "演示模式",
     "disable": "关闭演示模式",

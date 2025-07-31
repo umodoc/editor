@@ -103,6 +103,7 @@ const emits = defineEmits([
   'changed:transaction',
   'changed:menu',
   'changed:toolbar',
+  'changed:pageLayout',
   'changed:pageSize',
   'changed:pageOrientation',
   'changed:pageMargin',
@@ -158,6 +159,7 @@ provide('destroyed', destroyed)
 watch(
   () => options.value.page,
   ({
+    layouts,
     defaultBackground,
     defaultMargin,
     defaultOrientation,
@@ -168,6 +170,7 @@ watch(
     showToc,
   }: PageOption) => {
     page.value = {
+      layout: layouts[0],
       size: options.value.dicts?.pageSizes.find(
         (item: { default: boolean }) => item.default,
       ),
@@ -326,8 +329,17 @@ watch(
 )
 
 watch(
+  () => page.value.layouts,
+  (pageLayout: any, oldPageLayout: any) => {
+    emits('changed:pageLayout', { pageLayout, oldPageLayout })
+  },
+  { deep: true },
+)
+
+watch(
   () => page.value.size,
   (pageSize: any, oldPageSize: any) => {
+    page.value.layout = 'page'
     emits('changed:pageSize', { pageSize, oldPageSize })
   },
   { deep: true },
@@ -351,6 +363,7 @@ watch(
 watch(
   () => page.value.orientation,
   (pageOrientation: string, oldPageOrientation: string) => {
+    page.value.layout = 'page'
     emits('changed:pageOrientation', { pageOrientation, oldPageOrientation })
   },
 )
@@ -478,6 +491,7 @@ const setPage = (params: {
   size: string
   orientation: string
   background: string
+  layout: string
 }) => {
   if (!isRecord(params)) {
     throw new Error('params must be an object.')
@@ -514,6 +528,18 @@ const setPage = (params: {
       throw new Error('"params.background" must be a string.')
     }
     page.value.background = params.background
+  }
+
+  if (params.layout) {
+    if (!isString(params.layout)) {
+      throw new Error('"params.layout" must be a string.')
+    }
+    if (!page.value.layouts.includes(params.layout)) {
+      throw new Error(
+        `"params.layout" must be one of ${JSON.stringify(options.value.page.layouts)}.`,
+      )
+    }
+    page.value.layout = params.layout
   }
 }
 

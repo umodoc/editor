@@ -116,7 +116,7 @@ const headingActive = (value: any) => {
 }
 
 const umoPageContainer = document.querySelector(
-  `${container} .umo-page-container`,
+  `${container} .umo-main-container`,
 ) as HTMLElement
 const baseTocWidth = 320
 const isResizing = ref(false)

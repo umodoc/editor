@@ -1,6 +1,5 @@
 <template>
   <t-dropdown
-    :attach="`${container} .umo-page-container`"
     placement="bottom-right"
     overlay-class-name="umo-block-menu-dropdown"
     :max-height="320"

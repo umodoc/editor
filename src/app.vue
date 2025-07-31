@@ -46,6 +46,7 @@ const options = $ref({
     characterLimit: 10000,
   },
   page: {
+    layouts: ['page', 'web'],
     showBookmark: true,
   },
   templates,
