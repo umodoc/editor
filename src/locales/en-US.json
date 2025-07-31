@@ -629,8 +629,14 @@
     "message": "This action will clear all editor settings and current content, and refresh the page. It's recommended to save your content before resetting. Are you sure you want to reset now?",
     "reset": "Reset"
   },
-  "feedback": "Issues / Feedback",
-  "poweredBy": "Powered by Umo Editor",
+  "about": {
+    "title": "About Umo Editor",
+    "poweredBy": "Powered by <a href=\"https://umodoc.com/en\" target=\"_blank\">Umodoc</a>",
+    "version": "Version",
+    "openSource": "open-source edition",
+    "documentation": "Documentation",
+    "thanks": "Thanks to all contributors"
+  },
   "wordCount": {
     "characters": "Characters",
     "title": "Document Statistics",

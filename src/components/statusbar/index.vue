@@ -50,27 +50,14 @@
           <icon name="clear-cache" />
         </t-button>
       </tooltip>
-      <div class="bar-split"></div>
-      <tooltip :content="t('poweredBy')">
+      <tooltip :content="t('about.title')">
         <t-button
           class="umo-status-bar-button"
           variant="text"
           size="small"
-          :href="`https://editor.umodoc.com/${locale === 'zh-CN' ? 'cn' : 'en'}/docs`"
-          target="_blank"
+          @click="about = !about"
         >
-          <icon name="home-page" />
-        </t-button>
-      </tooltip>
-      <tooltip :content="t('feedback')">
-        <t-button
-          class="umo-status-bar-button"
-          variant="text"
-          size="small"
-          href="https://github.com/umodoc/editor/issues"
-          target="_blank"
-        >
-          <icon name="message" />
+          <icon name="about" />
         </t-button>
       </tooltip>
       <div class="umo-status-bar-split"></div>
@@ -204,6 +191,7 @@
           <t-button
             class="umo-status-bar-button auto-width"
             variant="text"
+            style="width: 80px"
             size="small"
             @click="zoomReset"
           >
@@ -223,8 +211,8 @@
           variant="text"
           size="small"
           @click="zoomReset"
-          v-text="lang"
         >
+          {{ lang }}
         </t-button>
       </t-dropdown>
     </div>
@@ -283,6 +271,7 @@
       </div>
     </tooltip>
   </div>
+  <statusbar-about :visible="about" @close="about = false" />
   <t-drawer
     v-model:visible="showShortcut"
     :attach="container"
@@ -335,6 +324,9 @@ const selectionCharacters = computed(() => {
   }
   return 0
 })
+
+// 关于
+const about = $ref(false)
 
 // 页面全屏
 const fullscreen = inject('fullscreen')
@@ -546,9 +538,17 @@ watch(
       width: var(--td-comp-size-xs);
     }
     &.auto-width {
-      font-size: var(--umo-font-size-small);
-      padding-left: 6px;
-      padding-right: 6px;
+      --td-comp-paddingLR-s: 0;
+      width: auto;
+      :deep(.umo-button__text) {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        font-size: 12px;
+        .umo-icon {
+          font-size: 14px;
+        }
+      }
     }
     &.word-count {
       padding-left: 2px;
@@ -593,16 +593,6 @@ watch(
         }
         :deep(.umo-slider__track) {
           background: none;
-        }
-      }
-    }
-    .umo-lang-button {
-      :deep(.umo-button__text) {
-        display: flex;
-        align-items: center;
-        .umo-icon {
-          font-size: 16px;
-          margin-right: 3px;
         }
       }
     }

@@ -7,6 +7,7 @@ export const i18n = createI18n({
   legacy: false,
   locale: 'zh-CN',
   defaultLocale: 'zh-CN',
+  warnHtmlMessage: false,
   messages: {
     'en-US': en_US,
     'zh-CN': zh_CN,
