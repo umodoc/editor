@@ -102,10 +102,13 @@ The development of Umo Editor relies on community support. Below is a list of co
 - [Cassielxd](https://github.com/Cassielxd): 💪🏻 Implemented pagination and many important features
 - [china-wangxu](https://github.com/china-wangxu): 💪🏻 Added many important features
 - [Na'aman Hirschfeld](https://github.com/Goldziher): 💪🏻 Enhanced TypeScript support and added tests
+- [SevenDreamYang](https://github.com/SevenDreamYang)：🛠️ Enhanced TypeScript support
 - [ChenErik](https://github.com/ChenErik): 🛠️ Contributed code
 - [SerRashin](https://github.com/SerRashin): 🛠️ Added Russian language support
 - [Sunny Wisozk](https://github.com/SunnyWisozk): 🛠️ Contributed code
 - [Sherman Xu](https://github.com/xuzhenjun130): 🛠️ Contributed code
+- [vace](https://github.com/vace)：🛠️ Contributed code
+- [Mikasa33](https://github.com/Mikasa33)：🛠️ Contributed code
 
 We welcome all forms of contributions, including but not limited to submitting bug reports, feature requests, and code contributions.
 

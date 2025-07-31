@@ -98,10 +98,13 @@ Umo Editor 的发展离不开社区的支持，以下是为 Umo Editor 贡献过
 - [Cassielxd](https://github.com/Cassielxd)：💪🏻 实现了分页和许多重要功能
 - [china-wangxu](https://github.com/china-wangxu)：💪🏻 添加了许多重要功能
 - [Na'aman Hirschfeld](https://github.com/Goldziher)：💪🏻 增强了 TypeScript 支持并添加测试
+- [SevenDreamYang](https://github.com/SevenDreamYang)：🛠️ 增强 TypeScript 支持
 - [ChenErik](https://github.com/ChenErik)：🛠️ 贡献了部分代码
 - [SerRashin](https://github.com/SerRashin)：🛠️ 添加了俄语支持
 - [Sunny Wisozk](https://github.com/SunnyWisozk)：🛠️ 贡献了部分代码
 - [Sherman Xu](https://github.com/xuzhenjun130)：🛠️ 贡献了部分代码
+- [vace](https://github.com/vace)：🛠️ 贡献了部分代码
+- [Mikasa33](https://github.com/Mikasa33)：🛠️ 贡献了部分代码
 
 我们欢迎任何形式的贡献，包括但不限于提交 Bug 报告、功能请求、代码贡献等。
 
