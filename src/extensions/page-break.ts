@@ -16,15 +16,20 @@ export default Node.create({
       HTMLAttributes: {
         class: 'umo-page-break',
         'data-line-number': false,
-        'data-content': t('page.break'),
       },
+      getContentLabel: () => t('page.break'),
     }
   },
   parseHTML() {
     return [{ tag: 'div[class*="umo-page-break"]' }]
   },
   renderHTML({ HTMLAttributes }) {
-    return ['div', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
+    return [
+      'div',
+      mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
+        'data-content': this.options.getContentLabel(),
+      }),
+    ]
   },
   addCommands() {
     return {

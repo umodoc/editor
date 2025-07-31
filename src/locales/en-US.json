@@ -527,6 +527,7 @@
     },
     "tag": {
       "placeholder": "Tag Name",
+      "content": "Tag Name",
       "background": "Background Color",
       "color": "Text Color",
       "delete": "Delete Tag"

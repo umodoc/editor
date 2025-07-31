@@ -527,6 +527,7 @@
     },
     "tag": {
       "placeholder": "标签名称",
+      "content": "标签内容",
       "background": "背景颜色",
       "color": "文字颜色",
       "delete": "删除标签"
