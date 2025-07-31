@@ -120,7 +120,7 @@ watch(
     pageOptions.value.size,
     pageOptions.value.orientation,
   ],
-  async () => {
+  () => {
     setPageZoomHeight()
   },
   { deep: true },

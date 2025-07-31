@@ -990,11 +990,10 @@ defineExpose({
   getJSON,
   saveContent,
   getContentExcerpt,
-  getEditor: () => editor as Ref<Editor> | null,
+  getEditor: () => editor,
   useEditor: () => editor.value as Editor | null,
   getTableOfContents: () => editor.value?.storage.tableOfContents.content,
-  getSelectionText: () =>
-    (editor.value ? getSelectionText(editor.value) : '') as string,
+  getSelectionText: () => (editor.value ? getSelectionText(editor.value) : ''),
   getSelectionNode: () =>
     editor.value ? getSelectionNode(editor.value) : null,
   deleteSelectionNode: () =>
