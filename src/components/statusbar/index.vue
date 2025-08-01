@@ -62,6 +62,46 @@
         </t-button>
       </tooltip>
       <div class="umo-status-bar-split"></div>
+      <t-dropdown
+        :attach="container"
+        :popup-props="{
+          onVisibleChange(visible: boolean) {
+            showLayoutSelect = visible
+          },
+        }"
+        placement="top-left"
+        trigger="click"
+      >
+        <t-button
+          class="umo-status-bar-button auto-width"
+          variant="text"
+          size="small"
+        >
+          <icon :name="`layout-${page.layout}`" />
+          {{ currentLayout.content }}
+          <icon
+            name="arrow-down"
+            :style="{
+              transform: `rotate(${showLayoutSelect ? '180deg' : 0})`,
+            }"
+          />
+        </t-button>
+        <t-dropdown-menu>
+          <t-dropdown-item
+            v-for="item in layouts"
+            :key="item.value"
+            :value="item.value"
+            :active="item.value === page.layout"
+            @click="page.layout = item.value"
+          >
+            <div class="umo-layout-dropdown-item">
+              <icon :name="`layout-${item.value}`" size="16" />
+              {{ item.content }}
+            </div>
+          </t-dropdown-item>
+        </t-dropdown-menu>
+      </t-dropdown>
+      <div class="umo-status-bar-split"></div>
       <t-popup
         v-if="editor"
         v-model="showWordCount"
@@ -109,46 +149,6 @@
           </div>
         </template>
       </t-popup>
-      <div class="umo-status-bar-split"></div>
-      <t-dropdown
-        :attach="container"
-        :popup-props="{
-          onVisibleChange(visible: boolean) {
-            showLayoutSelect = visible
-          },
-        }"
-        placement="top-left"
-        trigger="click"
-      >
-        <t-button
-          class="umo-status-bar-button auto-width"
-          variant="text"
-          size="small"
-        >
-          <icon :name="`layout-${page.layout}`" />
-          {{ currentLayout.content }}
-          <icon
-            name="arrow-down"
-            :style="{
-              transform: `rotate(${showLayoutSelect ? '180deg' : 0})`,
-            }"
-          />
-        </t-button>
-        <t-dropdown-menu>
-          <t-dropdown-item
-            v-for="item in layouts"
-            :key="item.value"
-            :value="item.value"
-            :active="item.value === page.layout"
-            @click="page.layout = item.value"
-          >
-            <div class="umo-layout-dropdown-item">
-              <icon :name="`layout-${item.value}`" size="16" />
-              {{ item.content }}
-            </div>
-          </t-dropdown-item>
-        </t-dropdown-menu>
-      </t-dropdown>
     </div>
     <div class="umo-status-bar-right">
       <tooltip
