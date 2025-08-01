@@ -329,7 +329,7 @@ watch(
 )
 
 watch(
-  () => page.value.layouts,
+  () => page.value.layout,
   (pageLayout: any, oldPageLayout: any) => {
     emits('changed:pageLayout', { pageLayout, oldPageLayout })
   },
@@ -339,9 +339,6 @@ watch(
 watch(
   () => page.value.size,
   (pageSize: any, oldPageSize: any) => {
-    if (options.value.page.layouts.includes('page')) {
-      page.value.layout = 'page'
-    }
     emits('changed:pageSize', { pageSize, oldPageSize })
   },
   { deep: true },
@@ -365,9 +362,6 @@ watch(
 watch(
   () => page.value.orientation,
   (pageOrientation: string, oldPageOrientation: string) => {
-    if (options.value.page.layouts.includes('page')) {
-      page.value.layout = 'page'
-    }
     emits('changed:pageOrientation', { pageOrientation, oldPageOrientation })
   },
 )

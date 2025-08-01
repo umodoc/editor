@@ -214,10 +214,12 @@
               <menus-toolbar-page-margin />
               <div>
                 <div class="umo-virtual-group-row">
-                  <menus-toolbar-page-size />
+                  <menus-toolbar-page-size v-if="page.layout === 'page'" />
                 </div>
                 <div class="umo-virtual-group-row">
-                  <menus-toolbar-page-orientation />
+                  <menus-toolbar-page-orientation
+                    v-if="page.layout === 'page'"
+                  />
                 </div>
               </div>
             </div>
@@ -266,6 +268,7 @@ const props = defineProps<{
 const emits = defineEmits(['menu-change'])
 
 const options = inject('options')
+const page = inject('page')
 const disableMenu = (name: string) => {
   return options.value.disableExtensions.includes(name)
 }

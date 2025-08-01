@@ -110,7 +110,16 @@
         </template>
       </t-popup>
       <div class="umo-status-bar-split"></div>
-      <t-dropdown :attach="container" placement="top-left" trigger="click">
+      <t-dropdown
+        :attach="container"
+        :popup-props="{
+          onVisibleChange(visible: boolean) {
+            showLayoutSelect = visible
+          },
+        }"
+        placement="top-left"
+        trigger="click"
+      >
         <t-button
           class="umo-status-bar-button auto-width"
           variant="text"
@@ -118,6 +127,12 @@
         >
           <icon :name="`layout-${page.layout}`" />
           {{ currentLayout.content }}
+          <icon
+            name="arrow-down"
+            :style="{
+              transform: `rotate(${showLayoutSelect ? '180deg' : 0})`,
+            }"
+          />
         </t-button>
         <t-dropdown-menu>
           <t-dropdown-item
@@ -354,6 +369,7 @@ const selectionCharacters = computed(() => {
 const about = $ref(false)
 
 // 页面布局
+const showLayoutSelect = $ref(false)
 const layouts = computed(() => {
   return options.value.page.layouts.map((item: string) => {
     return { content: t(`layout.${item}`), value: item }
@@ -424,7 +440,9 @@ watch(
   (enabled: boolean) => {
     if (enabled) {
       void documentFullscreen.enter()
-      autoWidth(false, 10)
+      if (page.value.layout === 'page') {
+        autoWidth(false, 10)
+      }
     } else {
       void documentFullscreen.exit()
       zoomReset()
