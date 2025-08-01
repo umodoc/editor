@@ -339,7 +339,9 @@ watch(
 watch(
   () => page.value.size,
   (pageSize: any, oldPageSize: any) => {
-    page.value.layout = 'page'
+    if (options.value.page.layouts.includes('page')) {
+      page.value.layout = 'page'
+    }
     emits('changed:pageSize', { pageSize, oldPageSize })
   },
   { deep: true },
@@ -363,7 +365,9 @@ watch(
 watch(
   () => page.value.orientation,
   (pageOrientation: string, oldPageOrientation: string) => {
-    page.value.layout = 'page'
+    if (options.value.page.layouts.includes('page')) {
+      page.value.layout = 'page'
+    }
     emits('changed:pageOrientation', { pageOrientation, oldPageOrientation })
   },
 )
@@ -487,11 +491,20 @@ const setToolbar = (params: { mode: 'classic' | 'ribbon'; show: boolean }) => {
   }
 }
 
+const setLayout = (layout: 'web' | 'page') => {
+  if (!options.value.page.layouts.includes(layout)) {
+    throw new Error(
+      `"params.layout" must be one of ${JSON.stringify(options.value.page.layouts)}.`,
+    )
+  }
+  page.value.layout = layout
+}
+
 const setPage = (params: {
   size: string
   orientation: string
   background: string
-  layout: string
+  layout: 'web' | 'page'
 }) => {
   if (!isRecord(params)) {
     throw new Error('params must be an object.')
@@ -531,10 +544,7 @@ const setPage = (params: {
   }
 
   if (params.layout) {
-    if (!isString(params.layout)) {
-      throw new Error('"params.layout" must be a string.')
-    }
-    if (!page.value.layouts.includes(params.layout)) {
+    if (!options.value.page.layouts.includes(params.layout)) {
       throw new Error(
         `"params.layout" must be one of ${JSON.stringify(options.value.page.layouts)}.`,
       )
@@ -998,6 +1008,7 @@ defineExpose({
   getOptions: () => options.value as UmoEditorOptions,
   setOptions,
   setToolbar,
+  setLayout,
   setPage,
   setWatermark,
   setDocument,
