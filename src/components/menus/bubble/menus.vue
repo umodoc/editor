@@ -71,7 +71,7 @@
     <template v-if="editor?.isActive('iframe')">
       <menus-bubble-webpage-clickable />
       <menus-toolbar-insert-web-page
-        v-if="!disableItem('webPage')"
+        v-if="!disableMenu('web-page')"
         ico="edit"
         :page-type="editor?.getAttributes('iframe')?.type"
         :page-url="editor?.getAttributes('iframe')?.src"
@@ -132,7 +132,7 @@
     <menus-toolbar-base-font-size :select="false" />
     <div
       v-if="
-        !disableItem('font-size-increase') || !disableItem('font-size-decrease')
+        !disableMenu('font-size-increase') || !disableMenu('font-size-decrease')
       "
       class="umo-bubble-menu-divider"
     ></div>
@@ -142,12 +142,12 @@
     <menus-toolbar-base-strike />
     <div class="umo-bubble-menu-divider"></div>
     <menus-toolbar-base-align-dropdown />
-    <menus-toolbar-insert-link v-if="!disableItem('link')" />
+    <menus-toolbar-insert-link v-if="!disableMenu('link')" />
     <div class="umo-bubble-menu-divider"></div>
     <menus-toolbar-base-color />
     <template v-if="!editor?.isActive('textBox')">
       <menus-toolbar-base-background-color />
-      <menus-toolbar-base-highlight v-if="!disableItem('highlight')" />
+      <menus-toolbar-base-highlight v-if="!disableMenu('highlight')" />
     </template>
     <template v-else>
       <menus-bubble-text-box-border />
@@ -163,8 +163,8 @@
 <script setup lang="ts">
 const editor = inject('editor')
 const options = inject('options')
-const disableItem = (name: string) => {
-  return options.value.toolbar?.disableMenuItems.includes(name)
+const disableMenu = (name: string) => {
+  return options.value.disableExtensions.includes(name)
 }
 </script>
 

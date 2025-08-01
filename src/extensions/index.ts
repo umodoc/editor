@@ -38,7 +38,7 @@ import File from './file'
 import FileHandler from './file-handler'
 import FontSize from './font-size'
 import FormatPainter from './format-painter'
-import hr from './hr'
+import Hr from './hr'
 import Iframe from './iframe'
 import Image from './image'
 import Indent from './indent'
@@ -70,7 +70,61 @@ export const getDefaultExtensions = ({
   options: { value: UmoEditorOptions }
   uploadFileMap: { value: any }
 }) => {
-  const { dicts, page, document: doc, users, file } = options.value
+  const {
+    dicts,
+    page,
+    document: doc,
+    users,
+    file,
+    disableExtensions,
+  } = options.value
+
+  const EXTENSIONS = {
+    highlight: Highlight.configure({
+      multicolor: true,
+    }),
+    'ordered-list': OrderedList,
+    'bullet-list': BulletList,
+    'task-list': [
+      TaskItem.configure({ nested: true }),
+      TaskList.configure({
+        HTMLAttributes: {
+          class: 'umo-task-list',
+        },
+      }),
+    ],
+    'line-height': LineHeight.configure({
+      types: ['heading', 'paragraph'],
+      defaultLineHeight:
+        dicts?.lineHeights?.find((item: any) => item.default)?.value ??
+        undefined,
+    }),
+    margin: Margin,
+    link: Link,
+    image: Image,
+    video: Video,
+    audio: Audio,
+    'code-block': CodeBlock,
+    symbol: Symbol,
+    math: Mathematics,
+    tag: Tag,
+    columns: Columns,
+    callout: Callout,
+    mention: Mention.configure({
+      suggestion: getUsersSuggestion(users ?? [], container),
+    }),
+    'date-time': Datetime,
+    bookmark: Bookmark.configure({
+      class: 'umo-editor-bookmark',
+    }),
+    'hard-break': BreakMarks.configure({
+      visible: page?.showBreakMarks,
+    }),
+    hr: Hr,
+    toc: Toc,
+    'text-box': TextBox,
+    'web-page': Iframe,
+  }
 
   const extensions = [
     StarterKit.configure({
@@ -99,47 +153,15 @@ export const getDefaultExtensions = ({
     Superscript,
     Color,
     TextColor,
-    Highlight.configure({
-      multicolor: true,
-    }),
     Indent,
-    BulletList,
-    OrderedList,
     TextAlign,
     NodeAlign,
-    TaskItem.configure({ nested: true }),
-    TaskList.configure({
-      HTMLAttributes: {
-        class: 'umo-task-list',
-      },
-    }),
-    LineHeight.configure({
-      types: ['heading', 'paragraph'],
-      defaultLineHeight:
-        dicts?.lineHeights?.find((item: any) => item.default)?.value ??
-        undefined,
-    }),
-    Margin,
     SearchReplace.configure({
       searchResultClass: 'umo-search-result',
     }),
-    Link,
-    Image,
-    Video,
-    Audio,
+
+    // 插入
     File,
-    TextBox,
-    CodeBlock,
-    hr,
-    Iframe,
-    Mathematics,
-    Columns,
-    Tag,
-    Callout,
-    Datetime,
-    Bookmark.configure({
-      class: 'umo-editor-bookmark',
-    }),
 
     // 表格
     Table,
@@ -147,17 +169,13 @@ export const getDefaultExtensions = ({
     TableHeader,
     TableCell,
 
+    // 工具
+    Echarts,
+
     // 页面
-    Toc,
-    BreakMarks.configure({
-      visible: page?.showBreakMarks,
-    }),
     PageBreak,
 
     // 其他
-    Mention.configure({
-      suggestion: getUsersSuggestion(users ?? [], container),
-    }),
     Selection,
     NodeRange,
     TableOfContents.configure({
@@ -209,9 +227,19 @@ export const getDefaultExtensions = ({
     Dropcursor.configure({
       color: 'var(--umo-primary-color)',
     }),
-    Echarts,
     typeWriter,
   ]
+
+  // 合并扩展
+  Object.values(EXTENSIONS).forEach((item: any) => {
+    if (!disableExtensions?.includes(item.name)) {
+      if (Array.isArray(item)) {
+        extensions.push(...item)
+        return
+      }
+      extensions.push(item)
+    }
+  })
 
   return extensions
 }

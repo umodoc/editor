@@ -34,22 +34,6 @@ const defaultOptions: UmoEditorOptions = {
   toolbar: {
     defaultMode: 'ribbon',
     menus: ['base', 'insert', 'table', 'tools', 'page', 'export'],
-    disableMenuItems: [],
-    importWord: {
-      enabled: true,
-      maxSize: 1024 * 1024 * 5, // 100M
-      options: {},
-      useCustomMethod: false,
-      async onCustomImportMethod() {
-        return await new Promise((_, reject) => {
-          reject(
-            new Error(
-              'Key "toolbar": Key "importWord": Key "onCustomImportMethod": Please set the onCustomImportMethod method',
-            ),
-          )
-        })
-      },
-    },
   },
   page: {
     layouts: ['page', 'web'],
@@ -129,9 +113,25 @@ const defaultOptions: UmoEditorOptions = {
       },
     ],
   },
+  importWord: {
+    enabled: true,
+    maxSize: 1024 * 1024 * 5, // 100M
+    options: {},
+    useCustomMethod: false,
+    async onCustomImportMethod() {
+      return await new Promise((_, reject) => {
+        reject(
+          new Error(
+            'Key "importWord": Key "onCustomImportMethod": Please set the onCustomImportMethod method',
+          ),
+        )
+      })
+    },
+  },
   user: {},
   users: [],
   extensions: [],
+  disableExtensions: [],
   translations: {
     en_US: {},
     zh_CN: {},
@@ -377,22 +377,6 @@ const ojbectSchema = new ObjectSchema({
             )
           }
         },
-        required: false,
-      },
-      disableMenuItems: {
-        merge: 'replace',
-        validate(value: string[]) {
-          if (value && !Array.isArray(value)) {
-            throw new Error(
-              'Key "toolbar": Key "disableMenuItems" must be a array.',
-            )
-          }
-        },
-        required: false,
-      },
-      importWord: {
-        merge: 'replace',
-        validate: 'object',
         required: false,
       },
     },
@@ -864,6 +848,11 @@ const ojbectSchema = new ObjectSchema({
       },
     },
   },
+  importWord: {
+    merge: 'replace',
+    validate: 'object',
+    required: false,
+  },
   user: {
     merge: 'assign',
     validate: 'object',
@@ -893,6 +882,15 @@ const ojbectSchema = new ObjectSchema({
   extensions: {
     merge: 'replace',
     validate: 'array',
+    required: false,
+  },
+  disableExtensions: {
+    merge: 'replace',
+    validate(value: string[]) {
+      if (value && !Array.isArray(value)) {
+        throw new Error('Key "disableExtensions" must be a array.')
+      }
+    },
     required: false,
   },
   translations: {

@@ -12,7 +12,7 @@ export function useEchartsLoader(options: any) {
   return {
     // 调用此方法，实现初始化加载 js 脚本
     loadEchartScript: () => {
-      if (!options.toolbar?.disableMenuItems.includes('echarts')) {
+      if (!options.disableExtensions.includes('echarts')) {
         if (!echartsLoadPromise.value) {
           echartsLoadPromise.value = new Promise<void>((resolve, reject) => {
             const existingScript = document.querySelector('#echarts-script')

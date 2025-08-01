@@ -31,14 +31,6 @@ const options = $ref({
   toolbar: {
     // defaultMode: 'classic',
     // menus: ['base'],
-    importWord: {
-      enabled: true,
-      // async onCustomImportMethod() {
-      //   return await Promise.resolve({
-      //     value: '<p>测试导入word</p>',
-      //   })
-      // },
-    },
   },
   document: {
     title: '测试文档',
@@ -59,6 +51,14 @@ const options = $ref({
     //   'video/mp4',
     //   'audio/*',
     // ],
+  },
+  importWord: {
+    enabled: true,
+    // async onCustomImportMethod() {
+    //   return await Promise.resolve({
+    //     value: '<p>测试导入word</p>',
+    //   })
+    // },
   },
   ai: {
     assistant: {
@@ -83,6 +83,8 @@ const options = $ref({
     { id: 'Sherman Xu', label: 'xuzhenjun130' },
     { id: 'testuser', label: '测试用户' },
   ],
+  // https://editor.umodoc.com/cn/docs/options/extensions#disableextensions
+  disableExtensions: ['file'],
   async onSave(content: string, page: number, document: { content: string }) {
     localStorage.setItem('document.content', document.content)
     return new Promise((resolve, reject) => {

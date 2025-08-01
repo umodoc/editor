@@ -68,19 +68,19 @@ export type ToolbarMenu =
 export interface ToolbarOptions {
   defaultMode?: 'classic' | 'ribbon'
   menus?: ToolbarMenu[]
-  disableMenuItems?: string[]
-  importWord?: {
-    enabled?: boolean
-    maxSize?: number
-    options?: unknown
-    useCustomMethod?: boolean
-    onCustomImportMethod?: (file: File) => Promise<{
-      id: string
-      url: string
-      value: string
-      messages: { type: string; message: string }
-    }>
-  }
+}
+
+export interface ImportWordOptions {
+  enabled?: boolean
+  maxSize?: number
+  options?: unknown
+  useCustomMethod?: boolean
+  onCustomImportMethod?: (file: File) => Promise<{
+    id: string
+    url: string
+    value: string
+    messages: { type: string; message: string }
+  }>
 }
 
 export interface AutoSaveOptions {
@@ -253,10 +253,12 @@ export interface UmoEditorOptions {
   cdnUrl?: string
   shareUrl?: string
   diagrams?: Record<string, unknown>
+  importWord?: ImportWordOptions
   file?: FileOptions
   user?: Record<string, unknown>
   users?: UserItem[]
   extensions?: Extension[]
+  disableExtensions?: string[]
   translations?: Record<string, unknown>
   onSave?: OnSaveFunction
   onFileUpload?: (file: File) => Promise<{ id: string; url: string }>

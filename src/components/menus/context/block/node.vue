@@ -40,29 +40,29 @@
           @menu-click="editor?.chain().focus().insertTable().run()"
         />
       </t-dropdown-item>
-      <t-dropdown-item v-if="!disableItem('image')">
+      <t-dropdown-item v-if="!disableMenu('image')">
         <menus-toolbar-insert-image :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item v-if="!disableItem('video')">
+      <t-dropdown-item v-if="!disableMenu('video')">
         <menus-toolbar-insert-video :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item v-if="!disableItem('audio')">
+      <t-dropdown-item v-if="!disableMenu('audio')">
         <menus-toolbar-insert-audio :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item v-if="!disableItem('file')">
+      <t-dropdown-item v-if="!disableMenu('file')">
         <menus-toolbar-insert-file :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item v-if="!disableItem('code-block')">
+      <t-dropdown-item v-if="!disableMenu('code-block')">
         <menus-toolbar-insert-code-block
           :huge="false"
           shortcut-text="Ctrl+Alt+C"
           :tooltip="false"
         />
       </t-dropdown-item>
-      <t-dropdown-item v-if="!disableItem('callout')">
+      <t-dropdown-item v-if="!disableMenu('callout')">
         <menus-toolbar-insert-callout :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item v-if="!disableItem('hr')">
+      <t-dropdown-item v-if="!disableMenu('hr')">
         <menus-button
           ico="hr"
           :text="t('insert.hr.text')"
@@ -70,38 +70,38 @@
           @menu-click="editor?.chain().focus().setHr({ type: 'signle' }).run()"
         />
       </t-dropdown-item>
-      <t-dropdown-item v-if="!disableItem('toc')">
+      <t-dropdown-item v-if="!disableMenu('toc')">
         <menus-toolbar-insert-toc :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item v-if="!disableItem('textBox')">
+      <t-dropdown-item v-if="!disableMenu('text-box')">
         <menus-toolbar-insert-text-box :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item v-if="!disableItem('webPage')">
+      <t-dropdown-item v-if="!disableMenu('web-page')">
         <menus-toolbar-insert-web-page :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item v-if="!disableItem('qrcode')">
+      <t-dropdown-item v-if="!disableMenu('qrcode')">
         <menus-toolbar-tools-qrcode :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item v-if="!disableItem('barcode')">
+      <t-dropdown-item v-if="!disableMenu('barcode')">
         <menus-toolbar-tools-barcode :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item v-if="!disableItem('signature')">
+      <t-dropdown-item v-if="!disableMenu('signature')">
         <menus-toolbar-tools-signature :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item v-if="!disableItem('seal')">
+      <t-dropdown-item v-if="!disableMenu('seal')">
         <menus-toolbar-tools-seal :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item v-if="!disableItem('diagrams')">
+      <t-dropdown-item v-if="!disableMenu('diagrams')">
         <menus-toolbar-tools-diagrams :huge="false" :tooltip="false" />
       </t-dropdown-item>
-      <t-dropdown-item v-if="!disableItem('echarts')">
+      <t-dropdown-item v-if="!disableMenu('echarts')">
         <menus-toolbar-tools-echarts
           :huge="false"
           :tooltip="false"
           mode="add"
         />
       </t-dropdown-item>
-      <t-dropdown-item v-if="!disableItem('mermaid')">
+      <t-dropdown-item v-if="!disableMenu('mermaid')">
         <menus-toolbar-tools-mermaid :huge="false" :tooltip="false" />
       </t-dropdown-item>
       <t-dropdown-item v-if="options.templates.length > 0">
@@ -152,8 +152,8 @@ const popupProps = {
   },
 }
 
-const disableItem = (name: string) => {
-  return options.value.toolbar?.disableMenuItems.includes(name)
+const disableMenu = (name: string) => {
+  return options.value.disableExtensions.includes(name)
 }
 
 const openAssistant = () => {

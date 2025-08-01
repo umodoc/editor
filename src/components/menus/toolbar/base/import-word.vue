@@ -1,6 +1,5 @@
 <template>
   <menus-button
-    v-if="$options.enabled"
     ico="word"
     :text="t('base.importWord.text')"
     huge
@@ -12,7 +11,7 @@
 const container = inject('container')
 const editor = inject('editor')
 const options = inject('options')
-const $options = options.value.toolbar.importWord
+const $options = options.value.importWord
 
 // 动态导入 mammoth.js
 onMounted(() => {

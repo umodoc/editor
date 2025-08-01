@@ -801,11 +801,13 @@ const focus = (position = 'start', options = { scrollIntoView: true }) =>
 const blur = () => editor.value?.chain().blur().run()
 
 const print = () => {
-  const { toolbar, document } = options.value
-  if (toolbar?.disableMenuItems.includes('print') || editor.value?.isEmpty) {
+  if (
+    options.value.disableExtensions.includes('print') ||
+    editor.value?.isEmpty
+  ) {
     return
   }
-  if (!document?.readOnly) {
+  if (!options.value?.readOnly) {
     printing.value = true
   }
 }

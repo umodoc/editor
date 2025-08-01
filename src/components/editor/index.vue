@@ -25,7 +25,7 @@
       v-if="options.document?.enableBubbleMenu"
       v-show="!editor?.view?.painter?.enabled && !editor?.isEmpty"
     />
-    <menus-bubble-link v-if="editor?.storage.link.edit" />
+    <menus-bubble-link v-if="editor?.storage?.link?.edit" />
   </template>
 </template>
 
@@ -93,7 +93,7 @@ const loadTatexStyle = () => {
   const katexStyleElement = document.querySelector('#katex-style')
   if (
     katexStyleElement === null &&
-    !options.value.toolbar?.disableMenuItems.includes('math')
+    !options.value.disableExtensions.includes('math')
   ) {
     const style = document.createElement('link')
     style.href = `${options.value.cdnUrl}/libs/katex/katex.min.css`
