@@ -9,6 +9,7 @@
 <a href="https://www.npmjs.com/package/@umoteam/editor" target="_blank"><img src="https://img.shields.io/npm/unpacked-size/%40umoteam%2Feditor" /></a>
 <a href="https://github.com/umodoc/editor/commits" target="_blank"><img src="https://img.shields.io/github/commit-activity/m/umodoc/editor" /></a>
 </p>
+<p style="text-align: center;">English Introduction | <a href="./README.zh-CN.md" target="_blank">[中文介绍]</a></p>
 
 # 中文介绍
 
