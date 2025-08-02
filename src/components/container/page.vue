@@ -6,17 +6,6 @@
     />
     <div
       :class="`umo-zoomable-container umo-${pageOptions.layout}-container umo-scrollbar`"
-      :style="{
-        '--umo-page-background': pageOptions.background,
-        '--umo-page-margin-top': (pageOptions.margin?.top ?? '0') + 'cm',
-        '--umo-page-margin-bottom': (pageOptions.margin?.bottom ?? '0') + 'cm',
-        '--umo-page-margin-left': (pageOptions.margin?.left ?? '0') + 'cm',
-        '--umo-page-margin-right': (pageOptions.margin?.right ?? '0') + 'cm',
-        '--umo-page-width':
-          pageOptions.layout === 'page' ? pageSize.width + 'cm' : 'auto',
-        '--umo-page-height':
-          pageOptions.layout === 'page' ? pageSize.height + 'cm' : '100%',
-      }"
     >
       <div
         class="umo-zoomable-content"
@@ -28,6 +17,17 @@
         <t-watermark
           class="umo-page-content"
           :style="{
+            '--umo-page-background': pageOptions.background,
+            '--umo-page-margin-top': (pageOptions.margin?.top ?? '0') + 'cm',
+            '--umo-page-margin-bottom':
+              (pageOptions.margin?.bottom ?? '0') + 'cm',
+            '--umo-page-margin-left': (pageOptions.margin?.left ?? '0') + 'cm',
+            '--umo-page-margin-right':
+              (pageOptions.margin?.right ?? '0') + 'cm',
+            '--umo-page-width':
+              pageOptions.layout === 'page' ? pageSize.width + 'cm' : 'auto',
+            '--umo-page-height':
+              pageOptions.layout === 'page' ? pageSize.height + 'cm' : '100%',
             width:
               pageOptions.layout === 'page' ? pageSize.width + 'cm' : '100%',
             transform: `scale(${pageOptions.zoomLevel ? pageOptions.zoomLevel / 100 : 1})`,
