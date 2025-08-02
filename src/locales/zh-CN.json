@@ -631,7 +631,7 @@
   },
   "about": {
     "title": "关于 Umo Editor",
-    "poweredBy": "由 <a href=\"https://umodoc.com\" target=\"_blank\">Umodoc</a> 提供技术支持",
+    "poweredBy": "由 <a href=\"https://www.umodoc.com\" target=\"_blank\">Umodoc</a> 提供技术支持",
     "version": "当前版本",
     "openSource": "开源版",
     "documentation": "开发文档",

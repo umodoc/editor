@@ -1,5 +1,5 @@
 <p style="text-align: center; margin: 2rem 0;">
-<a href="https://umodoc.com" target="_blank"><img src="https://unpkg.com/@umoteam/editor-external@latest/static/logo.svg" alt="umodoc.com" width="280" /></a>
+<a href="https://www.umodoc.com" target="_blank"><img src="https://unpkg.com/@umoteam/editor-external@latest/static/logo.svg" alt="umodoc.com" width="280" /></a>
 </p>
 
 <p style="text-align: center;">
@@ -20,11 +20,11 @@ Umo Editor 最大的特点是代码完全开源且自主可控，支持私有部
 
 作为一个独立的 Vue3 插件，Umo Editor 可以轻松集成到各类 Vue3 项目中。对于非 Vue3 项目，您可以通过 Iframe 将 Umo Editor 嵌入到您的项目中。
 
-[官网](https://umodoc.com) | [开发文档](https://editor.umodoc.com/cn/docs) | [在线演示](https://umodoc.com/demo) | [GitHub](https://github.com/umodoc/editor) | [码云(国内镜像)](https://gitee.com/umodoc/editor) | [NPM](https://www.npmjs.com/package/@umoteam/editor)
+[官网](https://www.umodoc.com) | [开发文档](https://editor.umodoc.com/cn/docs) | [在线演示](https://www.umodoc.com/demo) | [GitHub](https://github.com/umodoc/editor) | [码云(国内镜像)](https://gitee.com/umodoc/editor) | [NPM](https://www.npmjs.com/package/@umoteam/editor)
 
 ## 在线体验
 
-访问[https://umodoc.com/demo](https://umodoc.com/demo)快速体验。
+访问[https://www.umodoc.com/demo](https://www.umodoc.com/demo)快速体验。
 
 ## 开发文档
 

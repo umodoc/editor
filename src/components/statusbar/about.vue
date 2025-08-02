@@ -16,7 +16,7 @@
         padding: 30px 0 0;
       "
     >
-      <a href="https://umodoc.com" target="_blank">
+      <a href="https://www.umodoc.com" target="_blank">
         <img src="@/assets/images/logo.svg" width="160" style="display: flex" />
       </a>
       <p>

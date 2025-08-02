@@ -1,5 +1,5 @@
 <p style="text-align: center; margin: 2rem 0;">
-<a href="https://umodoc.com" target="_blank"><img src="https://unpkg.com/@umoteam/editor-external@latest/static/logo.svg" alt="umodoc.com" width="280" /></a>
+<a href="https://www.umodoc.com" target="_blank"><img src="https://unpkg.com/@umoteam/editor-external@latest/static/logo.svg" alt="www.umodoc.com" width="280" /></a>
 </p>
 
 <p style="text-align: center;">
@@ -26,11 +26,11 @@ Umo Editor's largest feature is that its code is completely open source and cont
 
 As an independent Vue3 plugin, Umo Editor can be easily integrated into various Vue3 projects with zero configuration. For non-Vue3 projects, you can embed Umo Editor into your project via an iframe.
 
-[Website](https://umodoc.com/en) | [Documentation](https://editor.umodoc.com/en/docs) | [中文文档](https://editor.umodoc.com/cn/docs) | [Playground](https://umodoc.com/en/demo) | [GitHub](https://github.com/umodoc/editor) | [NPM](https://www.npmjs.com/package/@umoteam/editor)
+[Website](https://www.umodoc.com/en) | [Documentation](https://editor.umodoc.com/en/docs) | [中文文档](https://editor.umodoc.com/cn/docs) | [Playground](https://www.umodoc.com/en/demo) | [GitHub](https://github.com/umodoc/editor) | [NPM](https://www.npmjs.com/package/@umoteam/editor)
 
 ## Online Experience
 
-Visit [Playground](https://umodoc.com/en/demo) to try Umo Editor.
+Visit [Playground](https://www.umodoc.com/en/demo) to try Umo Editor.
 
 ## Documentation
 

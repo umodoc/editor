@@ -43,7 +43,7 @@ const options = $ref({
   },
   templates,
   cdnUrl: 'https://cdn.umodoc.com',
-  shareUrl: 'https://umodoc.com',
+  shareUrl: 'https://www.umodoc.com',
   file: {
     // allowedMimeTypes: [
     //   'application/pdf',

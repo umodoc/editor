@@ -24,10 +24,10 @@
   "author": {
     "name": "umodoc",
     "email": "contact@umodoc.com",
-    "url": "https://umodoc.com"
+    "url": "https://www.umodoc.com"
   },
   "license": "MIT",
-  "homepage": "https://umodoc.com",
+  "homepage": "https://www.umodoc.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/umodoc/editor.git"

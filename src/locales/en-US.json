@@ -631,7 +631,7 @@
   },
   "about": {
     "title": "About Umo Editor",
-    "poweredBy": "Powered by <a href=\"https://umodoc.com/en\" target=\"_blank\">Umodoc</a>",
+    "poweredBy": "Powered by <a href=\"https://www.umodoc.com/en\" target=\"_blank\">Umodoc</a>",
     "version": "Version",
     "openSource": "open-source edition",
     "documentation": "Documentation",
