@@ -17,6 +17,7 @@
         <t-watermark
           class="umo-page-content"
           :style="{
+            '--umo-page-orientation': pageOptions.orientation,
             '--umo-page-background': pageOptions.background,
             '--umo-page-margin-top': (pageOptions.margin?.top ?? '0') + 'cm',
             '--umo-page-margin-bottom':
@@ -202,7 +203,7 @@ watch(
 )
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .umo-main-container {
   height: 100%;
   display: flex;
@@ -274,48 +275,46 @@ watch(
   z-index: 10;
 }
 
-.umo-page-container {
-  .umo-page-corner {
-    @media print {
-      opacity: 0;
-    }
+.umo-page-corner {
+  @media print {
+    opacity: 0;
+  }
 
-    &::after {
-      position: absolute;
-      content: '';
-      display: block;
-      height: 1cm;
-      width: 1cm;
-      border: solid 1px rgba(0, 0, 0, 0.08);
-    }
+  &::after {
+    position: absolute;
+    content: '';
+    display: block;
+    height: 1cm;
+    width: 1cm;
+    border: solid 1px rgba(0, 0, 0, 0.08);
+  }
 
-    &.corner-tl::after {
-      border-top: none;
-      border-left: none;
-      bottom: 0;
-      right: 0;
-    }
+  &.corner-tl::after {
+    border-top: none;
+    border-left: none;
+    bottom: 0;
+    right: 0;
+  }
 
-    &.corner-tr::after {
-      border-top: none;
-      border-right: none;
-      bottom: 0;
-      left: 0;
-    }
+  &.corner-tr::after {
+    border-top: none;
+    border-right: none;
+    bottom: 0;
+    left: 0;
+  }
 
-    &.corner-bl::after {
-      border-bottom: none;
-      border-left: none;
-      top: 0;
-      right: 0;
-    }
+  &.corner-bl::after {
+    border-bottom: none;
+    border-left: none;
+    top: 0;
+    right: 0;
+  }
 
-    &.corner-br::after {
-      border-bottom: none;
-      border-right: none;
-      top: 0;
-      left: 0;
-    }
+  &.corner-br::after {
+    border-bottom: none;
+    border-right: none;
+    top: 0;
+    left: 0;
   }
 }
 
@@ -330,7 +329,7 @@ watch(
   flex-shrink: 1;
 }
 
-:deep(.umo-back-top) {
+.umo-back-top {
   position: absolute;
   &:hover {
     opacity: 0.9;
