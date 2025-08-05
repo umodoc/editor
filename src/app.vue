@@ -83,7 +83,7 @@ const options = $ref({
     { id: 'Sherman Xu', label: 'xuzhenjun130' },
     { id: 'testuser', label: '测试用户' },
   ],
-  // https://editor.umodoc.com/cn/docs/options/extensions#disableextensions
+  // https://dev.umodoc.com/cn/docs/options/extensions#disableextensions
   disableExtensions: ['file'],
   async onSave(content: string, page: number, document: { content: string }) {
     localStorage.setItem('document.content', document.content)
