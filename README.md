@@ -27,7 +27,7 @@ Umo Editor's largest feature is that its code is completely open source and cont
 
 As an independent Vue3 plugin, Umo Editor can be easily integrated into various Vue3 projects with zero configuration. For non-Vue3 projects, you can embed Umo Editor into your project via an iframe.
 
-[Website](https://www.umodoc.com/en) | [Documentation](https://editor.umodoc.com/en/docs) | [中文文档](https://editor.umodoc.com/cn/docs) | [Playground](https://www.umodoc.com/en/demo) | [GitHub](https://github.com/umodoc/editor) | [NPM](https://www.npmjs.com/package/@umoteam/editor)
+[Website](https://www.umodoc.com/en) | [Documentation](https://dev.umodoc.com/en/docs) | [中文文档](https://dev.umodoc.com/cn/docs) | [Playground](https://www.umodoc.com/en/demo) | [GitHub](https://github.com/umodoc/editor) | [NPM](https://www.npmjs.com/package/@umoteam/editor)
 
 ## Online Experience
 
@@ -35,7 +35,7 @@ Visit [Playground](https://www.umodoc.com/en/demo) to try Umo Editor.
 
 ## Documentation
 
-Please visit [Documentation](https://editor.umodoc.com/en/docs) for detailed instructions.
+Please visit [Documentation](https://dev.umodoc.com/en/docs) for detailed instructions.
 
 ## Design Philosophy
 
@@ -67,7 +67,7 @@ Umo Editor aims to simplify document editing in web applications by providing Mi
 - Multilingual settings
 - Dark mode
 
-For more details, see [Features](https://editor.umodoc.com/en/docs/features).
+For more details, see [Features](https://dev.umodoc.com/en/docs/features).
 
 ## Browser Support
 
@@ -136,4 +136,4 @@ If you find Umo Editor useful, please consider supporting us in the following wa
 
 Umo Editor is licensed under the [MIT License](./LICENSE). You are free to use, modify, and distribute this software, but this does **not** mean you are allowed to remove the copyright information at will. Please retain the Umo Editor copyright notice and the link displayed in the interface. Removal of these will be considered an infringement. We encourage you to support open-source projects.
 
-If you do not wish to retain the copyright information, please contact us or consider purchasing the commercial version: [Umo Editor Next](https://editor.umodoc.com/en/docs/next).
+If you do not wish to retain the copyright information, please contact us or consider purchasing the commercial version: [Umo Editor Next](https://dev.umodoc.com/en/docs/next).
