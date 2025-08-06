@@ -799,7 +799,7 @@ const getVanillaHtml = () => {
   ) as HTMLElement
   // 移除所有换行和回车标记
   const breakEl = pageEl.querySelectorAll(
-    '.Tiptap-invisible-character, .ProseMirror-separator, .ProseMirror-trailingBreak',
+    '.Tiptap-invisible-character, .ProseMirror-separator',
   )
   breakEl.forEach((el) => el.remove())
   return pageEl.outerHTML
