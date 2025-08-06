@@ -788,6 +788,22 @@ const getImage = async (format: 'blob' | 'jpeg' | 'png' = 'blob') => {
 const getText = () => getContent('text')
 const getHTML = () => getContent('html')
 const getJSON = () => getContent('json')
+const getVanillaHtml = () => {
+  if (!editor.value) {
+    throw new Error('editor is not ready!')
+  }
+  editor.value?.setEditable(true)
+  // 页面内容
+  const pageEl = document.querySelector(
+    `${container} .umo-page-content`,
+  ) as HTMLElement
+  // 移除所有换行和回车标记
+  const breakEl = pageEl.querySelectorAll(
+    '.Tiptap-invisible-character, .ProseMirror-separator, .ProseMirror-trailingBreak',
+  )
+  breakEl.forEach((el) => el.remove())
+  return pageEl.outerHTML
+}
 
 const focus = (position = 'start', options = { scrollIntoView: true }) =>
   editor.value?.commands.focus(position as FocusPosition, options)
@@ -1021,6 +1037,7 @@ defineExpose({
   getText,
   getHTML,
   getJSON,
+  getVanillaHtml,
   saveContent,
   getContentExcerpt,
   getEditor: () => editor,
