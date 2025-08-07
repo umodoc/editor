@@ -832,7 +832,6 @@ const getVanillaHtml = async () => {
   mediaNodes.forEach((el) => {
     const video = el.querySelector('video')
     if (video) el.querySelector('.plyr')?.replaceWith(video)
-    pageNode.setAttribute('data-has-media', 'true')
   })
 
   // 如果存在文件节点，替换文件节点图标
@@ -846,12 +845,6 @@ const getVanillaHtml = async () => {
     buttonEl.forEach((item) => item.remove())
   })
   replaceIcons(codeBlockNodes, '16px')
-
-  // echarts 图表处理
-  const chartNodes = pageNode.querySelectorAll('.umo-node-echarts')
-  chartNodes.forEach(() => {
-    pageNode.setAttribute('data-has-chart', 'true')
-  })
 
   // 如果水印为空，则移除水印
   if (page.value.watermark.text === '') {
