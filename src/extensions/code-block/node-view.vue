@@ -5,30 +5,38 @@
     >
       <div class="umo-node-code-block-toolbar">
         <div class="umo-node-code-block-toolbar-left">
-          <menus-button
-            :text="t('bubbleMenu.code.languages')"
-            menu-type="select"
-            style="width: 100px"
-            :select-options="languageOptions"
-            :select-value="node.attrs.language"
-            :popup-props="{
-              attach: container,
-              overlayClassName: 'umo-code-block-language',
-            }"
-            filterable
-            borderless
-            @menu-click="(value: string) => updateAttribute('language', value)"
-          />
-          <menus-button
-            :text="t('bubbleMenu.code.themes.text')"
-            menu-type="select"
-            style="width: 100px"
-            :select-options="themeOptions"
-            :select-value="node.attrs.theme"
-            force-enabled
-            borderless
-            @menu-click="(value: string) => updateAttribute('theme', value)"
-          />
+          <template v-if="editor?.isEditable && !options.document?.readOnly">
+            <menus-button
+              :text="t('bubbleMenu.code.languages')"
+              menu-type="select"
+              style="width: 100px"
+              :select-options="languageOptions"
+              :select-value="node.attrs.language"
+              :popup-props="{
+                attach: container,
+                overlayClassName: 'umo-code-block-language',
+              }"
+              filterable
+              borderless
+              @menu-click="
+                (value: string) => updateAttribute('language', value)
+              "
+            />
+            <menus-button
+              :text="t('bubbleMenu.code.themes.text')"
+              menu-type="select"
+              style="width: 100px"
+              :select-options="themeOptions"
+              :select-value="node.attrs.theme"
+              :disabled="options.document?.readOnly"
+              force-enabled
+              borderless
+              @menu-click="(value: string) => updateAttribute('theme', value)"
+            />
+          </template>
+          <span v-else class="umo-node-code-block-language">{{
+            node.attrs.language
+          }}</span>
         </div>
         <div class="umo-node-code-block-toolbar-right">
           <menus-button
@@ -47,7 +55,7 @@
             @menu-click="copyCode"
           />
           <menus-button
-            v-if="editor?.isEditable"
+            v-if="editor?.isEditable && !options.document?.readOnly"
             ico="node-delete"
             :text="t('bubbleMenu.delete')"
             hide-text
@@ -77,6 +85,7 @@ const { node, updateAttributes, deleteNode } = defineProps(nodeViewProps)
 const lowlight = createLowlight(common)
 
 const container = inject('container')
+const options = inject('options')
 const editor = inject('editor')
 const containerRef = ref(null)
 
@@ -126,6 +135,10 @@ const copyCode = () => {
         display: flex;
         align-items: center;
         display: none;
+        gap: 5px;
+        .umo-menu-button-wrap {
+          margin-right: 0;
+        }
       }
       .umo-button-content {
         color: var(--umo-text-color-light);
@@ -140,6 +153,11 @@ const copyCode = () => {
           display: flex;
         }
       }
+    }
+    &-language {
+      font-size: 12px;
+      color: var(--umo-text-color-light);
+      padding: 0 6px;
     }
     &-theme-dark {
       .umo-node-code-block-toolbar {

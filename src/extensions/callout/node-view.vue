@@ -61,7 +61,7 @@ const selectEmoji = (emoji: string) => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .umo-node-callout {
   padding: 6px 12px;
   border-radius: var(--umo-radius);

@@ -44,6 +44,7 @@
             v-if="supportPreview"
             class="umo-action-item"
             :title="t('file.preview')"
+            :data-preview-url="previewURL"
             @click.stop="togglePreview"
           >
             <icon name="view" />
@@ -101,6 +102,8 @@ const options = inject('options')
 const container = inject('container')
 const uploadFileMap = inject('uploadFileMap')
 const containerRef = ref(null)
+
+// FIXME: 保存刷新后预览失效
 
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = node.attrs

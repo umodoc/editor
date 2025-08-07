@@ -6,7 +6,10 @@
     :style="nodeStyle"
   >
     <div
-      class="umo-node-container umo-hover-shadow umo-select-outline umo-node-iframe"
+      class="umo-node-container umo-select-outline umo-node-iframe"
+      :class="{
+        'umo-hover-shadow': !options.document?.readOnly,
+      }"
     >
       <drager
         :selected="selected"
@@ -16,6 +19,7 @@
         :min-width="400"
         :min-height="200"
         :max-width="maxWidth"
+        :disabled="options.document?.readOnly"
         @resize="onResize"
         @focus="selected = true"
       >

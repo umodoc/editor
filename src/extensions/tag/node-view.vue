@@ -5,6 +5,10 @@
       :style="{
         color: node.attrs.color,
         backgroundColor: node.attrs.backgroundColor,
+        cursor:
+          !options.document?.readOnly || editor.isEditable
+            ? 'pointer'
+            : 'default',
       }"
       v-text="node.attrs.text"
     ></span>
@@ -15,9 +19,11 @@
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 
 const { node } = defineProps(nodeViewProps)
+const options = inject('options')
+const editor = inject('editor')
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .umo-node-tag {
   margin: 0 0.2em;
   background-color: transparent !important;
@@ -29,7 +35,6 @@ const { node } = defineProps(nodeViewProps)
     padding: 0.1em 0.4em;
     font-size: 0.9em;
     margin: 0 0.2em;
-    cursor: pointer;
     white-space: nowrap;
     border: 1px solid rgba(0, 0, 0, 0.05);
     box-sizing: border-box;

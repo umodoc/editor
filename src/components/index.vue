@@ -788,21 +788,88 @@ const getImage = async (format: 'blob' | 'jpeg' | 'png' = 'blob') => {
 const getText = () => getContent('text')
 const getHTML = () => getContent('html')
 const getJSON = () => getContent('json')
-const getVanillaHtml = () => {
+const getVanillaHtml = async () => {
   if (!editor.value) {
     throw new Error('editor is not ready!')
   }
+
+  // 克隆页面内容
+  options.value.document.readOnly = true
+  editor.value?.setEditable(false)
+  await nextTick()
+  const pageNode = document
+    .querySelector(`${container} .umo-page-content`)
+    ?.cloneNode(true) as HTMLElement
+  options.value.document.readOnly = false
   editor.value?.setEditable(true)
-  // 页面内容
-  const pageEl = document.querySelector(
-    `${container} .umo-page-content`,
-  ) as HTMLElement
+
+  const replaceIcons = (nodes: NodeListOf<Element>, size = '1em') => {
+    const iconsEl = document.querySelector('#umo-icons')
+    nodes.forEach((el) => {
+      const icons = el.querySelectorAll('.umo-icon')
+      icons.forEach((svg) => {
+        // @ts-ignore
+        const iconId = svg.childNodes[0].getAttribute('xlink:href')
+        svg.setAttribute('viewBox', '0 0 48 48')
+        svg.setAttribute('fill', 'none')
+        svg.setAttribute('width', size)
+        svg.setAttribute('height', size)
+        svg.innerHTML = iconsEl?.querySelector(iconId)?.innerHTML ?? ''
+      })
+    })
+  }
+
   // 移除所有换行和回车标记
-  const breakEl = pageEl.querySelectorAll(
+  const breakNodes = pageNode.querySelectorAll(
     '.Tiptap-invisible-character, .ProseMirror-separator',
   )
-  breakEl.forEach((el) => el.remove())
-  return pageEl.outerHTML
+  breakNodes.forEach((el) => el.remove())
+
+  // 如果存在视频或音频节点，则替换视频标签
+  const mediaNodes = pageNode.querySelectorAll(
+    '.umo-node-video, .umo-node-audio',
+  )
+  mediaNodes.forEach((el) => {
+    const video = el.querySelector('video')
+    if (video) el.querySelector('.plyr')?.replaceWith(video)
+    pageNode.setAttribute('data-has-media', 'true')
+  })
+
+  // 如果存在文件节点，替换文件节点图标
+  const fileNodes = pageNode.querySelectorAll('.umo-node-file')
+  replaceIcons(fileNodes)
+
+  // 代码块处理
+  const codeBlockNodes = pageNode.querySelectorAll('.umo-code-block')
+  codeBlockNodes.forEach((el) => {
+    const buttonEl = el.querySelectorAll('.umo-button-text')
+    buttonEl.forEach((item) => item.remove())
+  })
+  replaceIcons(codeBlockNodes, '16px')
+
+  // echarts 图表处理
+  const chartNodes = pageNode.querySelectorAll('.umo-node-echarts')
+  chartNodes.forEach(() => {
+    pageNode.setAttribute('data-has-chart', 'true')
+  })
+
+  // 如果水印为空，则移除水印
+  if (page.value.watermark.text === '') {
+    const watermarkEl = pageNode.lastElementChild
+    if (
+      watermarkEl &&
+      !watermarkEl?.classList?.contains('umo-page-node-footer')
+    ) {
+      watermarkEl.remove()
+    }
+  }
+
+  // 移除所有 html 注释
+  const htmlContent = pageNode.outerHTML.replace(/<!--[\s\S]*?-->/g, '')
+
+  // 返回处理后的 html 内容
+  console.log(htmlContent)
+  return htmlContent
 }
 
 const focus = (position = 'start', options = { scrollIntoView: true }) =>

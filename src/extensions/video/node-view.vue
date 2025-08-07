@@ -5,7 +5,12 @@
     class="umo-node-view"
     :style="nodeStyle"
   >
-    <div class="umo-node-container umo-hover-shadow umo-node-video">
+    <div
+      class="umo-node-container umo-node-video"
+      :class="{
+        'umo-hover-shadow': !options.document?.readOnly,
+      }"
+    >
       <drager
         :selected="selected"
         :rotatable="false"
@@ -17,6 +22,7 @@
         :max-width="maxWidth"
         :max-height="maxHeight"
         :equal-proportion="true"
+        :disabled="options.document?.readOnly"
         @resize="onResize"
         @focus="selected = true"
       >

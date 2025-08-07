@@ -86,7 +86,7 @@ const datetimeChange = (value: any) => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .umo-node-datetime {
   margin: 0 0.2em;
   background-color: transparent !important;

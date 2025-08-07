@@ -12,6 +12,11 @@
         'umo-hover-shadow': !options.document?.readOnly,
         'umo-select-outline': !node.attrs.draggable,
       }"
+      :data-options="
+        options.document?.readOnly
+          ? JSON.stringify(node.attrs.chartConfig)
+          : null
+      "
     >
       <drager
         :selected="selected"

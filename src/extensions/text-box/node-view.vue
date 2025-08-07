@@ -13,9 +13,13 @@
   >
     <div class="umo-node-container umo-node-text-box">
       <drager
+        :style="{
+          cursor: !options.document?.readOnly
+            ? 'inherit'
+            : 'default !important',
+        }"
         :selected="selected"
-        :disabled="disabled"
-        :draggable="!options?.document?.readOnly"
+        :disabled="disabled || options?.document?.readOnly"
         :rotatable="true"
         :boundary="false"
         :angle="node.attrs.angle"
@@ -26,6 +30,7 @@
         :min-width="14"
         :min-height="14"
         :title="t('node.textBox.tip')"
+        :draggable="true"
         @rotate="onRotate"
         @resize="onResize"
         @drag="onDrag"
