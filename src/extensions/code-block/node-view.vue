@@ -40,14 +40,16 @@
         </div>
         <div class="umo-node-code-block-toolbar-right">
           <menus-button
+            class="umo-word-wrap-button"
+            :menu-active="node.attrs.wordWrap"
             :text="t('bubbleMenu.code.wordWrap')"
             ico="code-word-wrap"
-            :menu-active="node.attrs.wordWrap"
             hide-text
             force-enabled
             @menu-click="updateAttribute('wordWrap', !node.attrs.wordWrap)"
           />
           <menus-button
+            class="umo-copy-button"
             ico="copy"
             :text="t('bubbleMenu.code.copy.text')"
             hide-text
@@ -55,6 +57,7 @@
             @menu-click="copyCode"
           />
           <menus-button
+            class="umo-copy-button"
             v-if="editor?.isEditable && !options.document?.readOnly"
             ico="node-delete"
             :text="t('bubbleMenu.delete')"
@@ -138,6 +141,9 @@ const copyCode = () => {
         gap: 5px;
         .umo-menu-button-wrap {
           margin-right: 0;
+          .active .umo-button-content {
+            color: var(--umo-primary-color);
+          }
         }
       }
       .umo-button-content {
@@ -201,9 +207,6 @@ const copyCode = () => {
     max-height: 200px;
   }
 }
-</style>
-
-<style lang="less">
 .umo-node-code-block-theme {
   &-light {
     pre {

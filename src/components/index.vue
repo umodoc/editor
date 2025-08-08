@@ -804,7 +804,7 @@ const getVanillaHtml = async () => {
   editor.value?.setEditable(true)
 
   const replaceIcons = (nodes: NodeListOf<Element>, size = '1em') => {
-    const iconsEl = document.querySelector('#umo-icons')
+    const iconsNode = document.querySelector('#umo-icons')
     nodes.forEach((el) => {
       const icons = el.querySelectorAll('.umo-icon')
       icons.forEach((svg) => {
@@ -814,7 +814,7 @@ const getVanillaHtml = async () => {
         svg.setAttribute('fill', 'none')
         svg.setAttribute('width', size)
         svg.setAttribute('height', size)
-        svg.innerHTML = iconsEl?.querySelector(iconId)?.innerHTML ?? ''
+        svg.innerHTML = iconsNode?.querySelector(iconId)?.innerHTML ?? ''
       })
     })
   }
@@ -830,8 +830,8 @@ const getVanillaHtml = async () => {
     '.umo-node-video, .umo-node-audio',
   )
   mediaNodes.forEach((el) => {
-    const video = el.querySelector('video')
-    if (video) el.querySelector('.plyr')?.replaceWith(video)
+    const videoNode = el.querySelector('video')
+    if (videoNode) el.querySelector('.plyr')?.replaceWith(videoNode)
   })
 
   // 如果存在文件节点，替换文件节点图标
@@ -841,19 +841,23 @@ const getVanillaHtml = async () => {
   // 代码块处理
   const codeBlockNodes = pageNode.querySelectorAll('.umo-code-block')
   codeBlockNodes.forEach((el) => {
-    const buttonEl = el.querySelectorAll('.umo-button-text')
-    buttonEl.forEach((item) => item.remove())
+    const wordWrapButton = el.querySelector('.umo-word-wrap-button')
+    if (wordWrapButton) {
+      wordWrapButton.remove()
+    }
+    const buttonNodes = el.querySelectorAll('.umo-button-text')
+    buttonNodes.forEach((item) => item.remove())
   })
   replaceIcons(codeBlockNodes, '16px')
 
   // 如果水印为空，则移除水印
   if (page.value.watermark.text === '') {
-    const watermarkEl = pageNode.lastElementChild
+    const watermarkNode = pageNode.lastElementChild
     if (
-      watermarkEl &&
-      !watermarkEl?.classList?.contains('umo-page-node-footer')
+      watermarkNode &&
+      !watermarkNode?.classList?.contains('umo-page-node-footer')
     ) {
-      watermarkEl.remove()
+      watermarkNode.remove()
     }
   }
 
@@ -861,7 +865,6 @@ const getVanillaHtml = async () => {
   const htmlContent = pageNode.outerHTML.replace(/<!--[\s\S]*?-->/g, '')
 
   // 返回处理后的 html 内容
-  console.log(htmlContent)
   return htmlContent
 }
 
