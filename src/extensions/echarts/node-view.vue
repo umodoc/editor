@@ -13,9 +13,7 @@
         'umo-select-outline': !node.attrs.draggable,
       }"
       :data-options="
-        options.document?.readOnly
-          ? JSON.stringify(node.attrs.chartConfig)
-          : null
+        options.document?.readOnly ? JSON.stringify(chartOption) : null
       "
     >
       <drager
@@ -61,7 +59,8 @@ const { loadEchartScript } = useEchartsLoader(options.value)
 const containerRef = ref(null)
 const maxWidth = $ref(0)
 let selected = $ref(false)
-let myChart: any = null
+let chart: any = null
+let chartOption = $ref(null)
 
 // 加载数据
 onMounted(async () => {
@@ -86,8 +85,8 @@ const onResize = ({ width, height }: { width: number; height: number }) => {
     width: Number(width.toFixed(2)),
     height: Number(height.toFixed(2)),
   })
-  if (myChart !== null) {
-    myChart.resize()
+  if (chart !== null) {
+    chart.resize()
   }
 }
 
@@ -106,9 +105,10 @@ const loadData = async () => {
   if (typeof echarts !== 'undefined') {
     const { chartOptions, chartConfig, id, mode } = node.attrs
     // 根据参数不同 实现效果不同
-    if (myChart !== null) {
-      myChart.dispose()
-      myChart = null
+    if (chart !== null) {
+      chart.dispose()
+      chart = null
+      chartOption = null
     }
     if (mode === 1) {
       if (chartConfig !== null) {
@@ -119,13 +119,15 @@ const loadData = async () => {
           options.value,
         )
         if (resOptions !== null) {
-          myChart = echarts.init(document.getElementById(`chart-${id}`))
-          myChart.setOption(resOptions)
+          chart = echarts.init(document.getElementById(`chart-${id}`))
+          chart.setOption(resOptions)
+          chartOption = resOptions
         }
       }
     } else if (chartOptions !== null) {
-      myChart = echarts.init(document.getElementById(`chart-${id}`))
-      myChart.setOption(chartOptions)
+      chart = echarts.init(document.getElementById(`chart-${id}`))
+      chart.setOption(chartOptions)
+      chartOption = chartOptions
     }
   }
 }

@@ -850,6 +850,34 @@ const getVanillaHtml = async () => {
   })
   replaceIcons(codeBlockNodes, '16px')
 
+  // 图表处理
+  const chartNodes = pageNode.querySelectorAll('.umo-node-echarts')
+  chartNodes.forEach((el) => {
+    const chartNode = el.querySelector('.umo-node-echarts-body')
+    if (chartNode) {
+      chartNode.removeAttribute('_echarts_instance_')
+      chartNode.innerHTML = ''
+    }
+  })
+
+  // 公式样式
+  const mathNodes = pageNode.querySelectorAll('.Tiptap-mathematics-render')
+  if (mathNodes.length > 0) {
+    const katexStyle = document.querySelector('#katex-style')
+    if (katexStyle) {
+      pageNode.setAttribute(
+        'data-katex-style',
+        katexStyle?.getAttribute('href') ?? '',
+      )
+    }
+  }
+  mathNodes.forEach((el) => {
+    const katexEl = el.querySelector('.katex')
+    if (katexEl) {
+      katexEl.innerHTML = katexEl.querySelector('.katex-html')?.innerHTML ?? ''
+    }
+  })
+
   // 如果水印为空，则移除水印
   if (page.value.watermark.text === '') {
     const watermarkNode = pageNode.lastElementChild

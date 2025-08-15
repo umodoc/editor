@@ -45,6 +45,8 @@
             class="umo-action-item"
             :title="t('file.preview')"
             :data-preview-url="previewURL"
+            :data-file-icon="fileIcon"
+            :data-file-name="node.attrs.name"
             @click.stop="togglePreview"
           >
             <icon name="view" />
