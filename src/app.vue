@@ -1,5 +1,6 @@
 <template>
   <div class="examples">
+    <button @click="editorRef.getVanillaHtml">getVanillaHtml</button>
     <div class="box">
       <umo-editor ref="editorRef" v-bind="options" />
     </div>

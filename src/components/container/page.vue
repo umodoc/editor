@@ -227,6 +227,9 @@ watch(
     display: flex;
     .umo-zoomable-content {
       flex: 1;
+      .umo-page-corner {
+        display: none;
+      }
       .umo-page-content {
         min-height: 100%;
         .umo-page-node-content {
