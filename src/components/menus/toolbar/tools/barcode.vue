@@ -7,12 +7,14 @@
   >
     <modal
       :visible="dialogVisible"
-      icon="barcode"
-      :header="t('tools.barcode.title')"
       width="720px"
       @confirm="setBarcode"
       @close="dialogVisible = false"
     >
+      <template #header>
+        <icon name="barcode" />
+        {{ t('tools.barcode.title') }}
+      </template>
       <div class="umo-barcode-container">
         <div class="umo-barcode-toolbar">
           <menus-button

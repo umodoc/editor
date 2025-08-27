@@ -1,15 +1,17 @@
 <template>
   <modal
-    :visible="searchReplace"
-    icon="search-replace"
-    :header="t('search.title')"
-    :footer="false"
     class="umo-search-replace-dialog"
+    :visible="searchReplace"
+    :footer="false"
     width="420px"
     mode="modeless"
     :z-index="200"
     @close="searchReplace = false"
   >
+    <template #header>
+      <icon name="search-replace" />
+      {{ t('search.title') }}
+    </template>
     <div class="umo-search-replace-container">
       <div class="umo-search-text">
         <t-input
@@ -224,7 +226,7 @@ watch(
 </style>
 <style lang="less">
 .umo-search-replace-dialog {
-  .umo-dialog {
+  .t-dialog {
     position: absolute;
     right: 25px;
     top: 131px;
@@ -233,7 +235,7 @@ watch(
 }
 .umo-editor-container.toolbar-classic {
   .umo-search-replace-dialog {
-    .umo-dialog {
+    .t-dialog {
       top: 65px;
     }
   }

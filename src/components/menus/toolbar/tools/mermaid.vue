@@ -8,11 +8,14 @@
     <modal
       :visible="dialogVisible"
       icon="mermaid"
-      :header="content ? t('tools.mermaid.edit') : t('tools.mermaid.text')"
       width="960px"
       @confirm="setMermaid"
       @close="dialogVisible = false"
     >
+      <template #header>
+        <icon name="mermaid" />
+        {{ content ? t('tools.mermaid.edit') : t('tools.mermaid.text') }}
+      </template>
       <div class="umo-mermaid-container">
         <t-textarea
           v-model="mermaidCode"

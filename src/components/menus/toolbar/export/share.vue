@@ -7,13 +7,15 @@
   />
   <modal
     :visible="dialogVisible"
-    icon="share"
-    :header="t('export.share.text')"
     width="420px"
     :confirm-btn="t('export.share.copy')"
     @confirm="copyLink"
     @close="dialogVisible = false"
   >
+    <template #header>
+      <icon name="share" />
+      {{ t('export.share.text') }}
+    </template>
     <div class="umo-share-container">
       <div class="umo-share-tip" v-text="t('export.share.tip')"></div>
       <t-textarea

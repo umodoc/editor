@@ -1,12 +1,14 @@
 <template>
   <modal
     :visible="visible"
-    icon="about"
-    :header="t('about.title')"
     width="300px"
     :footer="false"
     @close="emits('close')"
   >
+    <template #header>
+      <icon name="about" />
+      {{ t('about.title') }}
+    </template>
     <div
       style="
         display: flex;

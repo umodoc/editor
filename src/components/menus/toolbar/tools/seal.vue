@@ -8,13 +8,15 @@
   >
     <modal
       :visible="dialogVisible"
-      icon="seal"
-      :header="t('tools.seal.title')"
       width="480px"
       :confirm-btn="t('tools.seal.insert')"
       @confirm="setSeal"
       @close="dialogVisible = false"
     >
+      <template #header>
+        <icon name="seal" />
+        {{ t('tools.seal.title') }}
+      </template>
       <div class="umo-seal-container" @click="selectImage">
         <div class="umo-seal-tip" v-text="t('tools.seal.tip')"></div>
         <div class="umo-seal-uploader">

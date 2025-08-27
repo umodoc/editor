@@ -7,13 +7,15 @@
   >
     <modal
       :visible="dialogVisible"
-      icon="diagrams"
-      :header="content ? t('tools.diagrams.edit') : t('tools.diagrams.text')"
       :footer="false"
       class="umo-diagrams-dialog"
       mode="full-screen"
       @close="dialogVisible = false"
     >
+      <template #header>
+        <icon name="diagrams" />
+        {{ content ? t('tools.diagrams.edit') : t('tools.diagrams.text') }}
+      </template>
       <div v-if="loading" class="umo-diagrams-loading">
         <t-loading :text="t('tools.diagrams.loading')" size="small" />
       </div>
@@ -121,15 +123,15 @@ watch(
 
 <style lang="less">
 .umo-diagrams-dialog {
-  .umo-dialog {
+  .t-dialog {
     padding: 0 !important;
-  }
-  .umo-dialog__header {
-    background: var(--umo-color-white);
-    height: var(--td-comp-size-xxxl);
-  }
-  .umo-dialog__body {
-    padding: 0;
+    &__header {
+      background: var(--umo-color-white);
+      height: var(--td-comp-size-xxxl);
+    }
+    &__body {
+      padding: 0;
+    }
   }
 }
 .umo-diagrams-loading {

@@ -7,12 +7,14 @@
   >
     <modal
       :visible="dialogVisible"
-      icon="qrcode"
-      :header="content ? t('tools.qrcode.edit') : t('tools.qrcode.text')"
       width="695px"
       @confirm="setQrcode"
       @close="dialogVisible = false"
     >
+      <template #header>
+        <icon name="qrcode" />
+        {{ content ? t('tools.qrcode.edit') : t('tools.qrcode.text') }}
+      </template>
       <div class="umo-qrcode-container">
         <div class="umo-qrcode-toolbar">
           <menus-button

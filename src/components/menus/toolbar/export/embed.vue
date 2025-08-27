@@ -7,13 +7,15 @@
   />
   <modal
     :visible="dialogVisible"
-    icon="embed"
-    :header="t('export.embed.title')"
     width="460px"
     :confirm-btn="t('export.embed.copy')"
     @confirm="copyEmbed"
     @close="dialogVisible = false"
   >
+    <template #header>
+      <icon name="embed" />
+      {{ t('export.embed.title') }}
+    </template>
     <div class="umo-embed-container">
       <div class="umo-embed-tip" v-text="t('export.embed.tip')"></div>
       <t-textarea

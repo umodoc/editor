@@ -7,15 +7,17 @@
   />
   <modal
     :visible="dialogVisible"
-    icon="bookmark"
-    :header="t('insert.bookmark.set')"
     width="420px"
     draggable
     destroy-on-close
     :confirm-btn="t('insert.bookmark.ok')"
-    @confirm="insertbookmark"
+    @confirm="insertBookmark"
     @close="dialogVisible = false"
   >
+    <template #header>
+      <icon name="bookmark" />
+      {{ t('insert.bookmark.set') }}
+    </template>
     <div class="umo-bookmark-container">
       <t-form label-align="top" colon>
         <t-form-item
@@ -91,7 +93,7 @@ const bookmarkColumns = [
 ]
 
 // 书签插入
-const insertbookmark = () => {
+const insertBookmark = () => {
   // 书签名称不为空时不处理
   if (bookmarkText) {
     let existbmName = ''

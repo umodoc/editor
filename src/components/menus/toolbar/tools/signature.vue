@@ -7,12 +7,14 @@
   >
     <modal
       v-model:visible="dialogVisible"
-      icon="signature"
-      :header="t('tools.signature.title')"
       width="642px"
       @confirm="setSignature"
       @close="dialogVisible = false"
     >
+      <template #header>
+        <icon name="signature" />
+        {{ t('tools.signature.title') }}
+      </template>
       <div class="umo-signature-toolbar">
         <menus-button
           ico="undo"

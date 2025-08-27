@@ -1,27 +1,16 @@
 <template>
-  <t-dialog
-    :visible="visible"
+  <component
     :attach="container"
-    :prevent-scroll-through="false"
-    placement="center"
-    draggable
-    destroy-on-close
-    v-bind="$attrs"
-  >
-    <template #header>
-      <icon v-if="$attrs.icon" :name="$attrs.icon as string" />
-      <span>{{ $attrs.header }}</span>
-    </template>
-    <slot />
-  </t-dialog>
+    :is="h(Dialog, { ...$attrs, ref: changeRef }, $slots)"
+  />
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-  visible: {
-    type: Boolean,
-    default: false,
-  },
-})
+import { Dialog } from 'tdesign-vue-next'
+// @ts-ignore
+import { h } from 'vue'
+
 const container = inject('container', 'body')
+const vm = getCurrentInstance()
+const changeRef = (expose: any) => (vm.expose = expose)
 </script>

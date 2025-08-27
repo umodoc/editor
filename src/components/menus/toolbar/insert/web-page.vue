@@ -7,13 +7,15 @@
   >
     <modal
       :visible="dialogVisible"
-      icon="web-page"
-      :header="t('insert.web.title')"
       width="480px"
       :confirm-btn="t('insert.web.insert')"
       @confirm="insertWebPage"
       @close="dialogVisible = false"
     >
+      <template #header>
+        <icon name="web-page" />
+        {{ t('insert.web.title') }}
+      </template>
       <div class="umo-web-page-container">
         <div class="umo-web-page-tip" v-text="t('insert.web.tip')"></div>
         <t-form :data="formData" label-align="top">

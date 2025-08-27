@@ -50,6 +50,7 @@
 </template>
 
 <script setup lang="ts">
+import { ConfigProvider } from 'tdesign-vue-next'
 import type { FocusPosition, JSONContent } from '@tiptap/core'
 import type { Editor } from '@tiptap/vue-3'
 import {

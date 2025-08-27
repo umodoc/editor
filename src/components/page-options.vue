@@ -1,12 +1,14 @@
 <template>
   <modal
     :visible="visible"
-    icon="page-margin"
-    :header="t('pageOptions.title')"
     width="450px"
     @close="emits('close')"
     @confirm="onConfirm"
   >
+    <template #header>
+      <icon name="page-margin" />
+      {{ t('pageOptions.title') }}
+    </template>
     <div class="umo-page-options-container">
       <t-form label-align="left">
         <t-form-item

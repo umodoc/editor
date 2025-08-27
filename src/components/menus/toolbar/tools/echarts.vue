@@ -7,14 +7,14 @@
   >
     <modal
       :visible="dialogVisible"
-      icon="echarts"
-      :header="
-        dialogAddOrEdit ? t('tools.echarts.add') : t('tools.echarts.edit')
-      "
       width="960px"
       @confirm="setConfirm"
       @close="dialogVisible = false"
     >
+      <template #header>
+        <icon name="echarts" />
+        {{ isAdd ? t('tools.echarts.add') : t('tools.echarts.edit') }}
+      </template>
       <div class="umo-echarts-container">
         <div class="umo-echarts-header">
           <t-radio-group
@@ -241,7 +241,7 @@ const { loadEchartScript } = useEchartsLoader(options.value)
 // 弹窗口显示隐藏 true 显示 默认隐藏
 let dialogVisible = $ref(false)
 // 弹窗后标题是编辑还是新增，true: 新增 fasle: 编辑
-let dialogAddOrEdit = $ref(true)
+let isAdd = $ref(true)
 // 界面显示模式
 let modelMode = $ref(0)
 // 当前节点缓存信息
@@ -268,7 +268,7 @@ const menuClick = () => {
   baseModeSet = 0 // 默认打开都是设置界面
 
   const openAddMode = () => {
-    dialogAddOrEdit = true
+    isAdd = true
     modelMode = options.value.echarts?.mode
     sourceOptions = null
     initBaseConfig()
@@ -288,7 +288,7 @@ const menuClick = () => {
   }
 
   // 更新模式
-  dialogAddOrEdit = false
+  isAdd = false
   modelMode = curNode.attrs?.mode
   sourceOptions = null
   if (curNode.attrs?.chartOptions !== null) {
@@ -311,7 +311,7 @@ const setConfirm = () => {
     nodeAlign: 'center',
     margin: {},
   }
-  if (!dialogAddOrEdit) {
+  if (!isAdd) {
     resOptions = JSON.parse(JSON.stringify(curNode.attrs))
   } else {
     resOptions.id = shortId()
@@ -392,7 +392,7 @@ const setConfirm = () => {
     options.value.onFileUpload(fileBlob, resOptions.id, 'echarts')
   }
   //
-  if (!dialogAddOrEdit) {
+  if (!isAdd) {
     editor.value.commands.updateEcharts(resOptions)
   } else {
     editor.value.commands.setEcharts(resOptions)
@@ -683,7 +683,7 @@ const editableCellState = () => {
         overflow: auto;
         display: flex;
         justify-content: center;
-        :deep(.umo-table) {
+        :deep(.t-table) {
           &__content {
             border: none;
           }
@@ -691,7 +691,7 @@ const editableCellState = () => {
             cursor: text;
           }
         }
-        :deep(.t-input) {
+        :deep(.umo-input) {
           border: none;
           box-shadow: none;
           cursor: text;
