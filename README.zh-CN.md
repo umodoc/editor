@@ -136,7 +136,7 @@ Umo Editor 的发展离不开社区的支持，以下是为 Umo Editor 贡献过
 
 ## 定制开发
 
-如果您需要定制化开发，请联系我们，我们可以提供付费的定制化解决方案和商业支持。详细信息请访问[定制开发](./guide/customization)。
+如果您需要定制化开发，请联系我们，我们可以提供付费的定制化解决方案和商业支持。详细信息请访问[定制开发](https://dev.umodoc.com/cn/docs/editor/customization)。
 
 ## 开源协议
 
