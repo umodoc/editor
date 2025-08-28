@@ -303,7 +303,7 @@
       "sourceerror2": "echarts 结构不正确或未定义！",
       "dataGrid": "数据",
       "setting": "设置",
-      "settingerror": "请确认预览视图是否正确显示！",
+      "settingError": "请确认预览视图是否正确显示！",
       "set": {
         "bar": "柱状图",
         "line": "折线图",

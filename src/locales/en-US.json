@@ -303,7 +303,7 @@
       "sourceerror2": "Echarts structure incorrect or undefined!",
       "dataGrid": "Data Grid",
       "setting": "Settings",
-      "settingerror": "Please confirm if the preview view is displayed correctly!",
+      "settingError": "Please confirm if the preview view is displayed correctly!",
       "set": {
         "bar": "Bar",
         "line": "Line",

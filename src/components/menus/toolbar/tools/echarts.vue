@@ -327,7 +327,7 @@ const setConfirm = () => {
         attach: container,
         theme: 'warning',
         header: t('tools.echarts.text'),
-        body: t('tools.echarts.settingerror'), // 请确认预览视图是否正确显示！
+        body: t('tools.echarts.settingError'), // 请确认预览视图是否正确显示！
         onConfirm() {
           dialog.destroy()
         },

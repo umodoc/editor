@@ -303,7 +303,7 @@
       "sourceerror2": "Struttura echarts errata o non definita!",
       "dataGrid": "Griglia dati",
       "setting": "Impostazioni",
-      "settingerror": "Controlla se l'anteprima viene visualizzata correttamente!",
+      "settingError": "Controlla se l'anteprima viene visualizzata correttamente!",
       "set": {
         "bar": "Barre",
         "line": "Linea",
