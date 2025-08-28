@@ -288,7 +288,7 @@
     "mermaid": {
       "text": "Mermaid",
       "edit": "Edit Mermaid",
-      "placeholder": "Enter Mermaid code",
+      "placeholder": "Enter or paste Mermaid code",
       "preview": "Preview",
       "notEmpty": "Mermaid content cannot be empty"
     },
@@ -298,7 +298,7 @@
       "edit": "Change Chart",
       "source": "Advanced Mode",
       "visualization": "Basic Mode",
-      "placeholder": "Please enter data in echarts format",
+      "placeholder": "Please enter or paste data in echarts format",
       "sourceerror": "Echarts structure is incorrect, please confirm!",
       "sourceerror2": "Echarts structure incorrect or undefined!",
       "dataGrid": "Data Grid",
@@ -341,7 +341,7 @@
       "widthTip": "QR Code size in pixels",
       "color": "QR Code Color",
       "bgColor": "Color of background",
-      "placeholder": "Enter content to convert into QR Code",
+      "placeholder": "Enter or paste content to convert into QR Code",
       "preview": "Preview",
       "renderError": "QR Code generation failed",
       "notEmpty": "QR Code content cannot be empty"

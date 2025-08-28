@@ -288,7 +288,7 @@
     "mermaid": {
       "text": "Mermaid",
       "edit": "Modifica Mermaid",
-      "placeholder": "Inserisci codice Mermaid",
+      "placeholder": "Inserisci o incolla codice Mermaid",
       "preview": "Anteprima",
       "notEmpty": "Il contenuto Mermaid non può essere vuoto"
     },
@@ -298,7 +298,7 @@
       "edit": "Modifica grafico",
       "source": "Modalità avanzata",
       "visualization": "Modalità base",
-      "placeholder": "Inserisci dati in formato echarts",
+      "placeholder": "Inserisci o incolla dati in formato echarts",
       "sourceerror": "Struttura echarts errata, controlla per favore!",
       "sourceerror2": "Struttura echarts errata o non definita!",
       "dataGrid": "Griglia dati",
@@ -341,7 +341,7 @@
       "widthTip": "Dimensione QR Code in pixel",
       "color": "Colore QR Code",
       "bgColor": "Colore sfondo",
-      "placeholder": "Inserisci il contenuto da convertire in QR Code",
+      "placeholder": "Inserisci o incolla il contenuto da convertire in QR Code",
       "preview": "Anteprima",
       "renderError": "Generazione QR Code fallita",
       "notEmpty": "Il contenuto del QR Code non può essere vuoto"

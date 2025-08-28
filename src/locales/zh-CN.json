@@ -288,7 +288,7 @@
     "mermaid": {
       "text": "Mermaid",
       "edit": "编辑 Mermaid",
-      "placeholder": "请输入 Mermaid 代码",
+      "placeholder": "请输入或粘贴 Mermaid 代码",
       "preview": "预览",
       "notEmpty": "Mermaid 内容不能为空"
     },
@@ -298,7 +298,7 @@
       "edit": "更改图表",
       "source": "高级模式",
       "visualization": "基础模式",
-      "placeholder": "请输入 echarts 格式的数据",
+      "placeholder": "请输入或粘贴 echarts 格式的数据",
       "sourceerror": "echarts 结构不正确，请确认！",
       "sourceerror2": "echarts 结构不正确或未定义！",
       "dataGrid": "数据",
@@ -341,7 +341,7 @@
       "widthTip": "二维码的宽度和高度",
       "color": "二维码颜色",
       "bgColor": "二维码背景颜色",
-      "placeholder": "请输入要转化成二维码的内容",
+      "placeholder": "请输入或粘贴要转化成二维码的内容",
       "preview": "预览",
       "renderError": "二维码生成失败",
       "notEmpty": "二维码内容不能为空"
