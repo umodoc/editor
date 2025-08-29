@@ -112,7 +112,8 @@
     "subscript": "Subscript",
     "superscript": "Superscript",
     "underline": "Underline",
-    "undo": "Undo"
+    "undo": "Undo",
+    "viewer": "Viewer"
   },
   "insert": {
     "audio": "Audio",

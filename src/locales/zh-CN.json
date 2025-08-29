@@ -112,7 +112,8 @@
     "subscript": "下标",
     "superscript": "上标",
     "underline": "下划线",
-    "undo": "撤消"
+    "undo": "撤消",
+    "viewer": "文档预览"
   },
   "insert": {
     "audio": "音频",

@@ -85,10 +85,18 @@
     <container-search-replace />
     <container-print />
   </div>
+  <div v-if="viewerVisible" class="umo-viewer-container">
+    <umo-viewer
+      v-bind="viewerOptions"
+      @edit="viewer = false"
+      @close="viewer = false"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
 import type { WatermarkOption } from '@/types'
+import UmoViewer from '@umoteam/viewer'
 
 const container = inject('container')
 const imageViewer = inject('imageViewer')
@@ -141,7 +149,7 @@ watch(
   { deep: true },
 )
 
-// FIXME:
+// 编辑器内容发生变化后，自动调整页面高度
 const editorInstance = inject('editor')
 watch(
   () => editorInstance.value?.getHTML(),
@@ -192,8 +200,8 @@ watch(
       `${container} .umo-page-node-content img[src]:not(.umo-icon)`,
     )
     Array.from(images).forEach((image, index) => {
-      const src = image.getAttribute('src')
-      const nodeId = image.getAttribute('data-id')
+      const src = (image as HTMLImageElement).getAttribute('src')
+      const nodeId = (image as HTMLImageElement).getAttribute('data-id')
       previewImages.push(src)
       if (nodeId === imageViewer.value.current) {
         currentImageIndex = index
@@ -201,6 +209,27 @@ watch(
     })
   },
 )
+
+// 文档预览
+const options = inject('options')
+const viewer = inject('viewer')
+let viewerVisible = $ref(false)
+const { locale } = useI18n()
+const getVanillaHTML = inject('getVanillaHTML')
+const viewerOptions = $ref({
+  lang: locale.value,
+  theme: options.value.theme,
+  mode: ['html'],
+  title: options.value.document.title,
+  html: '',
+  editable: true,
+  closeable: true,
+  showAside: false,
+})
+watch(viewer, async (visible: boolean) => {
+  viewerOptions.html = visible ? await getVanillaHTML() : ''
+  viewerVisible = visible
+})
 </script>
 
 <style lang="less">
@@ -341,5 +370,11 @@ watch(
       color: var(--umo-primary-color);
     }
   }
+}
+.umo-viewer-container {
+  position: absolute;
+  inset: 0;
+  background-color: red;
+  z-index: 1000;
 }
 </style>

@@ -50,7 +50,6 @@
 </template>
 
 <script setup lang="ts">
-import { ConfigProvider } from 'tdesign-vue-next'
 import type { FocusPosition, JSONContent } from '@tiptap/core'
 import type { Editor } from '@tiptap/vue-3'
 import {
@@ -135,6 +134,7 @@ const blockMenu = ref(false)
 const assistant = ref(false)
 const imageViewer = ref({ visible: false, current: null })
 const searchReplace = ref(false)
+const viewer = ref(false)
 const printing = ref(false)
 const fullscreen = ref(false)
 const exportFile = ref({ pdf: false, image: false })
@@ -150,6 +150,7 @@ provide('blockMenu', blockMenu)
 provide('assistant', assistant)
 provide('imageViewer', imageViewer)
 provide('searchReplace', searchReplace)
+provide('viewer', viewer)
 provide('printing', printing)
 provide('fullscreen', fullscreen)
 provide('exportFile', exportFile)
@@ -795,14 +796,18 @@ const getVanillaHTML = async () => {
   }
 
   // 克隆页面内容
-  options.value.document.readOnly = true
-  editor.value?.setEditable(false)
+  const { readOnly } = options.value.document
+  const { isEditable } = editor.value
+  if (!readOnly) {
+    options.value.document.readOnly = true
+  }
   await nextTick()
   const pageNode = document
     .querySelector(`${container} .umo-page-content`)
     ?.cloneNode(true) as HTMLElement
-  options.value.document.readOnly = false
-  editor.value?.setEditable(true)
+  if (!readOnly) {
+    options.value.document.readOnly = false
+  }
 
   const replaceIcons = (nodes: NodeListOf<Element>, size = '1em') => {
     const iconsNode = document.querySelector('#umo-icons')
@@ -1106,6 +1111,7 @@ watch(
 provide('saveContent', saveContent)
 provide('setLocale', setLocale)
 provide('reset', reset)
+provide('getVanillaHTML', getVanillaHTML)
 
 // Exposing Methods
 defineExpose({

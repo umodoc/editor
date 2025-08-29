@@ -67,6 +67,7 @@
           <menus-toolbar-base-search-replace />
         </div>
         <div class="umo-virtual-group">
+          <menus-toolbar-base-viewer v-if="!disableMenu('viewer')" />
           <menus-toolbar-base-print v-if="!disableMenu('print')" />
         </div>
         <div class="virtual-group is-slot">

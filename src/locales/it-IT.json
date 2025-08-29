@@ -112,7 +112,8 @@
     "subscript": "Pedice",
     "superscript": "Apice",
     "underline": "Sottolineato",
-    "undo": "Annulla"
+    "undo": "Annulla",
+    "viewer": "Visualizzatore"
   },
   "insert": {
     "audio": "Audio",
