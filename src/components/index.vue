@@ -789,7 +789,7 @@ const getImage = async (format: 'blob' | 'jpeg' | 'png' = 'blob') => {
 const getText = () => getContent('text')
 const getHTML = () => getContent('html')
 const getJSON = () => getContent('json')
-const getVanillaHtml = async () => {
+const getVanillaHTML = async () => {
   if (!editor.value) {
     throw new Error('editor is not ready!')
   }
@@ -1129,7 +1129,7 @@ defineExpose({
   getText,
   getHTML,
   getJSON,
-  getVanillaHtml,
+  getVanillaHTML,
   saveContent,
   getContentExcerpt,
   getEditor: () => editor,
