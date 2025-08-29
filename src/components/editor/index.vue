@@ -34,6 +34,7 @@ import { Editor, EditorContent } from '@tiptap/vue-3'
 
 import { getDefaultExtensions, inputAndPasteRules } from '@/extensions'
 import { contentTransform } from '@/utils/content-transform'
+import { loadResource } from '@/utils/load-resource'
 
 const destroyed = inject('destroyed')
 const page = inject('page')
@@ -88,23 +89,12 @@ watch(
   { immediate: true, deep: true },
 )
 
-// 动态导入 katex 样式
-const loadTatexStyle = () => {
-  const katexStyleElement = document.querySelector('#katex-style')
-  if (
-    katexStyleElement === null &&
-    !options.value.disableExtensions.includes('math')
-  ) {
-    const style = document.createElement('link')
-    style.href = `${options.value.cdnUrl}/libs/katex/katex.min.css`
-    style.rel = 'stylesheet'
-    style.id = 'katex-style'
-    document.querySelector('head')?.append(style)
-  }
-}
-
-onMounted(() => {
-  loadTatexStyle()
+onMounted(async () => {
+  await loadResource(
+    `${options.value.cdnUrl}/libs/katex/katex.min.css`,
+    'css',
+    'katex-style',
+  )
 })
 
 // 销毁编辑器实例
