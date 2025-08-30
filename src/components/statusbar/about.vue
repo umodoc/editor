@@ -29,7 +29,7 @@
         <a href="https://github.com/umodoc/editor" target="_blank"> Github </a>
         |
         <a
-          :href="`https://docs.umodoc.com/${locale === 'zh-CN' ? 'cn' : 'en'}/docs`"
+          :href="`https://dev.umodoc.com/${locale === 'zh-CN' ? 'cn' : 'en'}/docs/editor`"
           target="_blank"
         >
           {{ t('about.documentation') }}
