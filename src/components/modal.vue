@@ -1,7 +1,6 @@
 <template>
   <component
-    :attach="container"
-    :is="h(Dialog, { ...$attrs, ref: changeRef }, $slots)"
+    :is="h(Dialog, { ...$attrs, attach: container, ref: changeRef }, $slots)"
   />
 </template>
 
