@@ -221,7 +221,7 @@ import {
   calbaseConfigData,
   calbaseConfigOptions,
 } from '@/extensions/echarts/cal-service'
-import { useEchartsLoader } from '@/extensions/echarts/init-service'
+import { loadResource } from '@/utils/load-resource'
 import { getSelectionNode } from '@/extensions/selection'
 import { shortId } from '@/utils/short-id'
 
@@ -235,8 +235,6 @@ const { mode } = defineProps({
 const container = inject('container')
 const editor = inject('editor')
 const options = inject('options')
-
-const { loadEchartScript } = useEchartsLoader(options.value)
 
 // 弹窗口显示隐藏 true 显示 默认隐藏
 let dialogVisible = $ref(false)
@@ -415,7 +413,7 @@ watch(
 // 界面数据加载
 const loadModeEchart = async () => {
   await nextTick()
-  await loadEchartScript()
+  await loadResource(`${options.value.cdnUrl}/libs/echarts/echarts.min.js`)
   // 接下来的使用就跟之前一样，初始化图表，设置配置项
   if (typeof echarts !== 'undefined') {
     //  根据参数不同 实现效果不同
@@ -615,10 +613,12 @@ const editableCellState = () => {
   .umo-echarts-header {
     display: flex;
     justify-content: space-between;
+
     :only-child {
       margin-left: auto;
     }
   }
+
   .umo-echarts-source-center {
     display: flex;
     height: calc(100% - 30px);
@@ -646,6 +646,7 @@ const editableCellState = () => {
       max-height: 420px;
       overflow: auto;
       .umo-scrollbar();
+
       :deep(.umo-form__controls) {
         &,
         &-content {
@@ -683,18 +684,22 @@ const editableCellState = () => {
         overflow: auto;
         display: flex;
         justify-content: center;
+
         :deep(.t-table) {
           &__content {
             border: none;
           }
+
           &__cell--editable {
             cursor: text;
           }
         }
+
         :deep(.umo-input) {
           border: none;
           box-shadow: none;
           cursor: text;
+
           input {
             text-align: center;
           }

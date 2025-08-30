@@ -51,11 +51,10 @@ import {
   calbaseConfigOptions,
 } from '@/extensions/echarts/cal-service'
 // 引入 echart 服务 用此方法初始化加载 cdn echart.js 脚本 否则
-import { useEchartsLoader } from '@/extensions/echarts/init-service'
+import { loadResource } from '@/utils/load-resource'
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const options = inject('options')
-const { loadEchartScript } = useEchartsLoader(options.value)
 const containerRef = ref(null)
 const maxWidth = $ref(0)
 let selected = $ref(false)
@@ -100,7 +99,7 @@ onClickOutside(containerRef, () => {
 const loadData = async () => {
   await nextTick()
   // 确保 loadData 在 echarts 加载完毕后调用
-  await loadEchartScript()
+  await loadResource(`${options.value.cdnUrl}/libs/echarts/echarts.min.js`)
   // 接下来的使用就跟之前一样，初始化图表，设置配置项
   if (typeof echarts !== 'undefined') {
     const { chartOptions, chartConfig, id, mode } = node.attrs
@@ -167,11 +166,13 @@ watch(
   .umo-node-echarts {
     max-width: 100%;
     position: relative;
+
     &:not(.is-draggable) .es-drager {
       max-width: 100%;
       max-height: 100%;
       transform: translateX(0px) translateY(0px) rotate(0deg) !important;
     }
+
     .umo-node-echarts-body {
       display: block;
       min-width: 400px;

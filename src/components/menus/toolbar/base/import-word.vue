@@ -8,20 +8,20 @@
 </template>
 
 <script setup lang="ts">
+import { loadResource } from '@/utils/load-resource'
+
 const container = inject('container')
 const editor = inject('editor')
 const options = inject('options')
 const $options = options.value.importWord
 
 // 动态导入 mammoth.js
-onMounted(() => {
-  const mammothScriptElement = document.querySelector('#mammoth-script')
-  if (mammothScriptElement === null && $options.enabled) {
-    const style = document.createElement('script')
-    style.src = `${options.value.cdnUrl}/libs/mammoth/mammoth.browser.min.js`
-    style.id = 'mammoth-script'
-    document.querySelector('head')?.append(style)
-  }
+onMounted(async () => {
+  await loadResource(
+    `${options.value.cdnUrl}/libs/mammoth/mammoth.browser.min.js`,
+    'script',
+    'mammoth-script',
+  )
 })
 
 const importWord = () => {
