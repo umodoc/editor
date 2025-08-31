@@ -27,9 +27,8 @@
         :angle="0"
         :width="Number(node.attrs.width)"
         :height="Number(node.attrs.height)"
-        :min-width="400"
-        :min-height="200"
         :max-width="maxWidth"
+        :min-height="200"
         :z-index="10"
         @resize="onResize"
         @focus="selected = true"
@@ -56,13 +55,18 @@ import { loadResource } from '@/utils/load-resource'
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const options = inject('options')
 const containerRef = ref(null)
-const maxWidth = $ref(0)
+let maxWidth = $ref(0)
 let selected = $ref(false)
 let chart: any = null
 let chartOption = $ref(null)
 
 // 加载数据
 onMounted(async () => {
+  await nextTick()
+  maxWidth = containerRef.value?.$el.offsetWidth
+  if (node.attrs.width === null) {
+    updateAttributes({ width: maxWidth })
+  }
   await loadData()
 })
 
@@ -175,13 +179,11 @@ watch(
 
     .umo-node-echarts-body {
       display: block;
-      min-width: 400px;
       min-height: 200px;
       width: 100%;
       height: 100%;
-      border: none;
-      /* pointer-events: none; */
       background-color: var(--umo-color-white);
+      outline: solid 1px var(--umo-content-node-border);
     }
   }
 }
