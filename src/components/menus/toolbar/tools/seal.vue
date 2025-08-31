@@ -117,7 +117,6 @@ const setSeal = async () => {
       size: file.size,
       src: sealImg,
       width: 150,
-      height: 'auto',
       draggable: true,
       rotatable: true,
       previewType: null,
