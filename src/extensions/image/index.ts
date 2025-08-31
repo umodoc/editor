@@ -39,7 +39,7 @@ export default Image.extend({
         default: null,
       },
       height: {
-        default: 'auto',
+        default: null,
       },
       left: {
         default: 0,

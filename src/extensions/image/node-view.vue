@@ -64,6 +64,7 @@
         <img
           ref="imageRef"
           :src="node.attrs.src"
+          :class="{ 'not-equal-proportion': !node.attrs.equalProportion }"
           :style="{
             transform:
               node.attrs.flipX || node.attrs.flipY
@@ -156,12 +157,12 @@ const onLoad = async () => {
     const ratio = clientWidth / clientHeight
     maxWidth = containerRef.value?.$el.clientWidth
     maxHeight = maxWidth / ratio
-    updateAttributes({ width: (200 * ratio).toFixed(2) })
+    updateAttributes({ width: maxWidth })
   }
   if ([null, 'auto', 0].includes(node.attrs.height)) {
     await nextTick()
     const { height } = imageRef?.getBoundingClientRect() ?? {}
-    updateAttributes({ height: height.toFixed(2) })
+    updateAttributes({ height: Number(height.toFixed(2)) })
   }
 }
 
@@ -263,9 +264,10 @@ watch(
     img {
       display: block;
       max-width: 100%;
-      max-height: 100%;
       width: 100%;
-      height: 100%;
+      &.not-equal-proportion {
+        height: 100%;
+      }
     }
 
     .loading {
@@ -284,7 +286,7 @@ watch(
     }
 
     .error {
-      width: 200px;
+      width: 100%;
       height: 200px;
       display: flex;
       align-items: center;
