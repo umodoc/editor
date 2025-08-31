@@ -248,9 +248,9 @@ let curNode = $ref(null)
 let sourceOptions = $ref(null)
 
 // 高级模式下 mychart 展示对象
-let sourceMyChart: any = null
+let sourceChart: any = null
 // 基础模式下 mychart 展示对象，避免响应式
-let settingMyChart: any = null
+let settingChart: any = null
 
 // 基础模型下默认设置界面，0: 图形界面 1: 数据界面
 let baseModeSet = $ref(0)
@@ -320,7 +320,7 @@ const setConfirm = () => {
     const newData = calbaseConfigData(baseConfig.data)
     resOptions.chartConfig = { data: newData, config: baseConfig.config } as any
 
-    if (settingMyChart === null) {
+    if (settingChart === null) {
       const dialog = useAlert({
         attach: container,
         theme: 'warning',
@@ -348,7 +348,7 @@ const setConfirm = () => {
       })
       return
     }
-    if (sourceMyChart === null) {
+    if (sourceChart === null) {
       const dialog = useAlert({
         attach: container,
         theme: 'warning',
@@ -365,7 +365,7 @@ const setConfirm = () => {
   if (options.value.echarts?.renderImage || resOptions.mode === 0) {
     // 源码模式或 havImage
     const dataURI = (
-      resOptions.mode === 1 ? settingMyChart : sourceMyChart
+      resOptions.mode === 1 ? settingChart : sourceChart
     ).getDataURL({
       type: 'png', // 可以是'png'或'jpeg'
       pixelRatio: 5, // 提高分辨率，默认是1
@@ -430,9 +430,9 @@ const loadModeEchart = async () => {
           options.value,
         )
 
-        settingMyChart = echarts.init(_curDomSetting)
+        settingChart = echarts.init(_curDomSetting)
         try {
-          settingMyChart.setOption(newOptions)
+          settingChart.setOption(newOptions)
         } catch (e) {
           disposeChart()
         }
@@ -442,13 +442,13 @@ const loadModeEchart = async () => {
       sourceOptions !== null &&
       _curDomSource !== null
     ) {
-      sourceMyChart = echarts.init(_curDomSource)
+      sourceChart = echarts.init(_curDomSource)
       try {
         const calOptions = normalizeJsonString(sourceOptions)
         if (calOptions !== sourceOptions) {
           sourceOptions = calOptions
         }
-        sourceMyChart.setOption(JSON.parse(sourceOptions))
+        sourceChart.setOption(JSON.parse(sourceOptions))
       } catch (e) {
         disposeChart()
       }
@@ -457,13 +457,13 @@ const loadModeEchart = async () => {
 }
 // 控件每次加载之前需要销毁下，防止出现重复加载不成功的问题
 const disposeChart = () => {
-  if (sourceMyChart !== null) {
-    sourceMyChart.dispose()
-    sourceMyChart = null
+  if (sourceChart !== null) {
+    sourceChart.dispose()
+    sourceChart = null
   }
-  if (settingMyChart !== null) {
-    settingMyChart.dispose()
-    settingMyChart = null
+  if (settingChart !== null) {
+    settingChart.dispose()
+    settingChart = null
   }
 }
 // 对输入json处理，属性和单引号需要转换成双引号
