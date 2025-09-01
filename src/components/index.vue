@@ -86,9 +86,9 @@ import type {
 } from '@/types'
 import { contentTransform } from '@/utils/content-transform'
 import { consoleCopyright } from '@/utils/copyright'
+import { addHistory } from '@/utils/history-record'
 import { getOpitons } from '@/utils/options'
 import { shortId } from '@/utils/short-id'
-
 const { toBlob, toJpeg, toPng } = domToImage
 
 defineOptions({ name: 'UmoEditor' })
@@ -122,8 +122,13 @@ const emits = defineEmits([
   'destroy',
   'menuChange',
 ])
+// 撤销重做的记录步骤
+const historyRecords = ref({
+  done: [], // 能撤销的记录数组
+  undone: [], // 能重做的记录数组
+  isUndoRedo: false, // 标记是否正在执行撤销/重做操作
+})
 
-// state Setup
 const container = $ref(`#umo-editor-${shortId(4)}`)
 const defaultOptions = inject('defaultOptions', {})
 const options = ref<UmoEditorOptions>(getOpitons(props, defaultOptions))
@@ -157,6 +162,7 @@ provide('exportFile', exportFile)
 provide('uploadFileMap', uploadFileMap)
 // provide('bookmark', bookmark)
 provide('destroyed', destroyed)
+provide('historyRecords', historyRecords)
 
 watch(
   () => options.value.page,
@@ -334,6 +340,11 @@ watch(
   () => page.value.layout,
   (pageLayout: any, oldPageLayout: any) => {
     emits('changed:pageLayout', { pageLayout, oldPageLayout })
+    addHistory(historyRecords, 'page', {
+      proType: 'layout',
+      newData: pageLayout,
+      oldData: oldPageLayout,
+    })
   },
   { deep: true },
 )
@@ -342,6 +353,11 @@ watch(
   () => page.value.size,
   (pageSize: any, oldPageSize: any) => {
     emits('changed:pageSize', { pageSize, oldPageSize })
+    addHistory(historyRecords, 'page', {
+      proType: 'size',
+      newData: pageSize,
+      oldData: oldPageSize,
+    })
   },
   { deep: true },
 )
@@ -350,6 +366,11 @@ watch(
   () => page.value.margin,
   (pageMargin: any, oldPageMargin: any) => {
     emits('changed:pageMargin', { pageMargin, oldPageMargin })
+    addHistory(historyRecords, 'page', {
+      proType: 'margin',
+      newData: pageMargin,
+      oldData: oldPageMargin,
+    })
   },
   { deep: true },
 )
@@ -358,6 +379,11 @@ watch(
   () => page.value.background,
   (pageBackground: string, oldPageBackground: string) => {
     emits('changed:pageBackground', { pageBackground, oldPageBackground })
+    addHistory(historyRecords, 'page', {
+      proType: 'background',
+      newData: pageBackground,
+      oldData: oldPageBackground,
+    })
   },
 )
 
@@ -365,6 +391,11 @@ watch(
   () => page.value.orientation,
   (pageOrientation: string, oldPageOrientation: string) => {
     emits('changed:pageOrientation', { pageOrientation, oldPageOrientation })
+    addHistory(historyRecords, 'page', {
+      proType: 'orientation',
+      newData: pageOrientation,
+      oldData: oldPageOrientation,
+    })
   },
 )
 
@@ -379,6 +410,11 @@ watch(
   () => page.value.zoomLevel,
   (zoomLevel: number, oldZoomLevel: number) => {
     emits('changed:pageZoom', { zoomLevel, oldZoomLevel })
+    addHistory(historyRecords, 'page', {
+      proType: 'zoomLevel',
+      newData: zoomLevel,
+      oldData: oldZoomLevel,
+    })
   },
 )
 
@@ -393,6 +429,8 @@ watch(
   () => page.value.watermark,
   (pageWatermark: any, oldPageWatermark: any) => {
     emits('changed:pageWatermark', { pageWatermark, oldPageWatermark })
+    // 水印监听的两个值相同
+    // addHistory(historyRecords,'page',{proType:'watermark',newData:pageWatermark,oldData:oldPageWatermark})
   },
   { deep: true },
 )

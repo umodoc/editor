@@ -34,12 +34,15 @@ import { Editor, EditorContent } from '@tiptap/vue-3'
 
 import { getDefaultExtensions, inputAndPasteRules } from '@/extensions'
 import { contentTransform } from '@/utils/content-transform'
+import { addHistory } from '@/utils/history-record'
 import { loadResource } from '@/utils/load-resource'
 
 const destroyed = inject('destroyed')
 const page = inject('page')
 const options = inject('options')
 const uploadFileMap = inject('uploadFileMap')
+
+const historyRecords = inject('historyRecords')
 // 助手
 const assistant = inject('assistant')
 
@@ -74,6 +77,7 @@ const editorInstance: Editor = new Editor({
   onUpdate({ editor }) {
     const throttleFn = useThrottleFn(() => {
       $document.value.content = editor.getHTML()
+      addHistory(historyRecords, 'editor', editor?.state?.history$)
     }, 1000)
     void throttleFn()
   },

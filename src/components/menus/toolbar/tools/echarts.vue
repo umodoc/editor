@@ -221,8 +221,8 @@ import {
   calbaseConfigData,
   calbaseConfigOptions,
 } from '@/extensions/echarts/cal-service'
-import { loadResource } from '@/utils/load-resource'
 import { getSelectionNode } from '@/extensions/selection'
+import { loadResource } from '@/utils/load-resource'
 import { shortId } from '@/utils/short-id'
 
 const { mode } = defineProps({
