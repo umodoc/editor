@@ -101,7 +101,10 @@ export const undoHistoryRecord = (records, method) => {
   records.value.isUndoRedo = true
   // 删除最后一条记录 并返回删除的几率
   const lastRecord = records.value.done.pop()
-  method(lastRecord)
+  try {
+    method(lastRecord)
+  } catch (e) {}
+
   records.value.undone.unshift(lastRecord)
   // 延迟重置 isUndoRedo，确保 watch 回调能捕获到 true 值
   setTimeout(() => {
@@ -116,7 +119,10 @@ export const redoHistoryRecord = (records, method) => {
   records.value.isUndoRedo = true
   // 删除最后一条记录 并返回删除的几率
   const firstRecord = records.value.undone.shift()
-  method(firstRecord)
+  try {
+    method(firstRecord)
+  } catch (e) {}
+
   records.value.done.push(firstRecord)
   // 延迟重置 isUndoRedo，确保 watch 回调能捕获到 true 值
   setTimeout(() => {

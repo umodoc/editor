@@ -15,8 +15,12 @@ const editor = inject('editor')
 const toggleClickable = () => {
   const webpage = editor.value ? getSelectionNode(editor.value) : null
   if (webpage) {
-    editor.value?.commands.updateAttributes(webpage.type, {
-      clickable: true,
+    // editor.value?.commands.updateAttributes(webpage.type, {
+    //   clickable: !webpage?.attrs?.clickable,
+    // })
+    editor.value?.commands.setIframe({
+      ...webpage?.attrs,
+      clickable: !webpage?.attrs?.clickable,
     })
   }
 }
