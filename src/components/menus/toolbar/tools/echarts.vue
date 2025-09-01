@@ -15,7 +15,7 @@
         <icon name="echarts" />
         {{ isAdd ? t('tools.echarts.add') : t('tools.echarts.edit') }}
       </template>
-      <div class="umo-echarts-container">
+      <div v-if="dialogVisible" class="umo-echarts-container">
         <div class="umo-echarts-header">
           <t-radio-group
             v-if="modelMode === 1"
