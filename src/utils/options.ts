@@ -23,7 +23,7 @@ export const getOpitons = <T extends MaybeRef<UmoEditorOptions>>(
 
   const options = ojbectSchema.merge(
     defaultOptions,
-    globalOptions || {},
+    globalOptions ?? {},
     componentOptions,
   )
 

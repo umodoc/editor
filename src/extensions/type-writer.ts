@@ -58,7 +58,7 @@ function calculateTotalChars(content: any[]): number {
       return node.content.reduce((paraTotal: number, textNode: any) => {
         return (
           paraTotal +
-          (textNode.type === 'text' ? textNode.text?.length || 0 : 0)
+          (textNode.type === 'text' ? (textNode.text?.length ?? 0) : 0)
         )
       }, total)
     }
@@ -134,8 +134,8 @@ export default Extension.create({
                   typewriterState.value.currentParagraph++
                 } else if (node.type === 'text') {
                   // 处理文本节点
-                  const text = node.text || ''
-                  const marks = node.marks || []
+                  const text = node.text ?? ''
+                  const marks = node.marks ?? []
                   const step = options?.step ?? 1
                   for (let i = 0; i < text.length; i += step) {
                     if (!typewriterState.value.isRunning) return // 检查是否被停止
