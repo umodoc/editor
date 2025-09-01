@@ -429,8 +429,12 @@ watch(
   () => page.value.watermark,
   (pageWatermark: any, oldPageWatermark: any) => {
     emits('changed:pageWatermark', { pageWatermark, oldPageWatermark })
-    // 水印监听的两个值相同
-    // addHistory(historyRecords,'page',{proType:'watermark',newData:pageWatermark,oldData:oldPageWatermark})
+    // 增加水印撤回
+    addHistory(historyRecords, 'page', {
+      proType: 'watermark',
+      newData: pageWatermark,
+      oldData: oldPageWatermark,
+    })
   },
   { deep: true },
 )
