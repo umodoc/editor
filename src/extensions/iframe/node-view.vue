@@ -36,6 +36,8 @@
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import Drager from 'es-drager'
 
+const options = inject('options')
+
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const containerRef = ref(null)
 let selected = $ref(false)
