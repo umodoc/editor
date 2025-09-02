@@ -77,7 +77,7 @@ export default Extension.create({
     ) => {
       const node = tr.doc.nodeAt(pos) ?? null
       if (node) {
-        const nextLevel = (node.attrs.indent || 0) + delta
+        const nextLevel = (node.attrs.indent ?? 0) + delta
         const { minLevel, maxLevel } = this.options
         let indent = nextLevel
         if (nextLevel < minLevel) {

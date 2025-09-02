@@ -35,6 +35,7 @@
 <script setup lang="ts">
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import Drager from 'es-drager'
+const options = inject('options')
 
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const containerRef = ref(null)
@@ -70,7 +71,7 @@ const onResize = ({ width, height }: { width: number; height: number }) => {
 }
 onClickOutside(containerRef, () => {
   selected = false
-  updateAttributes({ clickable: false })
+  // updateAttributes({ clickable: false })
 })
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <menus-button
-    ico="table-add-row-after"
+    ico="table-add-row-before"
     :text="t('table.addRowBefore')"
     :hide-text="$toolbar.mode === 'classic'"
     :disabled="!editor?.can().addRowBefore()"

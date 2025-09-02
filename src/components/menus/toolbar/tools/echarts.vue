@@ -15,7 +15,7 @@
         <icon name="echarts" />
         {{ isAdd ? t('tools.echarts.add') : t('tools.echarts.edit') }}
       </template>
-      <div class="umo-echarts-container">
+      <div v-if="dialogVisible" class="umo-echarts-container">
         <div class="umo-echarts-header">
           <t-radio-group
             v-if="modelMode === 1"
@@ -221,8 +221,8 @@ import {
   calbaseConfigData,
   calbaseConfigOptions,
 } from '@/extensions/echarts/cal-service'
-import { loadResource } from '@/utils/load-resource'
 import { getSelectionNode } from '@/extensions/selection'
+import { loadResource } from '@/utils/load-resource'
 import { shortId } from '@/utils/short-id'
 
 const { mode } = defineProps({

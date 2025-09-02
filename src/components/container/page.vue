@@ -95,8 +95,9 @@
 </template>
 
 <script setup lang="ts">
-import type { WatermarkOption } from '@/types'
 import UmoViewer from '@umoteam/viewer'
+
+import type { WatermarkOption } from '@/types'
 
 const container = inject('container')
 const imageViewer = inject('imageViewer')

@@ -57,8 +57,8 @@
             @menu-click="copyCode"
           />
           <menus-button
-            class="umo-copy-button"
             v-if="editor?.isEditable && !options.document?.readOnly"
+            class="umo-copy-button"
             ico="node-delete"
             :text="t('bubbleMenu.delete')"
             hide-text

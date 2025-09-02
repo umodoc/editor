@@ -18,9 +18,7 @@
             :select-value="page.watermark?.fontFamily"
             @menu-click="
               (value: string) => {
-                if (page.watermark) {
-                  page.watermark.fontFamily = value
-                }
+                updateWatermark({ fontFamily: value })
               }
             "
           ></menus-button>
@@ -30,7 +28,7 @@
           >
             <t-input-number
               v-if="page.watermark"
-              v-model="page.watermark.fontSize"
+              :value="page.watermark.fontSize"
               style="width: 60px"
               size="small"
               theme="column"
@@ -39,6 +37,9 @@
               :min="12"
               :allow-input-over-limit="false"
               placeholder=""
+              @change="
+                (newFontSize) => updateWatermark({ fontSize: newFontSize })
+              "
             >
             </t-input-number>
           </menus-button>
@@ -49,9 +50,7 @@
             modeless
             @change="
               (value: string) => {
-                if (page.watermark) {
-                  page.watermark.fontColor = value
-                }
+                updateWatermark({ fontColor: value })
               }
             "
           />
@@ -59,18 +58,20 @@
             v-if="page.watermark"
             :menu-active="page.watermark.fontWeight === 'bold'"
             @menu-click-through="
-              page.watermark.fontWeight === 'bold'
-                ? (page.watermark.fontWeight = 'normal')
-                : (page.watermark.fontWeight = 'bold')
+              updateWatermark({
+                fontWeight:
+                  page.watermark.fontWeight === 'bold' ? 'normal' : 'bold',
+              })
             "
           />
         </div>
         <t-input
           v-if="page.watermark"
-          v-model="page.watermark.text"
+          :value="page.watermark.text"
           maxlength="30"
           clearable
           :placeholder="t('page.watermark.content')"
+          @change="(newText) => updateWatermark({ text: newText })"
         />
         <div
           class="umo-watermark-type-title"
@@ -81,7 +82,7 @@
             v-if="page.watermark"
             class="item compact"
             :class="{ active: page.watermark.type === 'compact' }"
-            @click="page.watermark.type = 'compact'"
+            @click="updateWatermark({ type: compact })"
           >
             <div class="bg"></div>
             <span v-text="t('page.watermark.compact')"></span>
@@ -90,7 +91,7 @@
             v-if="page.watermark"
             class="item spacious"
             :class="{ active: page.watermark.type === 'spacious' }"
-            @click="page.watermark.type = 'spacious'"
+            @click="updateWatermark({ type: spacious })"
           >
             <div class="bg"></div>
             <span v-text="t('page.watermark.spacious')"></span>
@@ -121,11 +122,14 @@ const fonts = options.value.dicts?.fonts.map((item: any) => {
     value: item.value ?? '',
   }
 })
-
+// 公共方法：更新水印属性（生成新对象，改变引用）
+const updateWatermark = (props: any) => {
+  if (!page.value.watermark) return
+  // 生成新对象，确保引用改变
+  page.value.watermark = { ...page.value.watermark, ...props }
+}
 const clearWatermark = () => {
-  if (page.value.watermark) {
-    page.value.watermark.text = ''
-  }
+  updateWatermark({ text: '' })
   popupVisible.value = false
 }
 </script>

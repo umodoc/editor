@@ -40,10 +40,7 @@ export default Node.create({
     return [{ tag: 'iframe' }]
   },
   renderHTML({ HTMLAttributes }) {
-    return [
-      'iframe',
-      mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
-    ]
+    return ['iframe', mergeAttributes(HTMLAttributes)]
   },
   addNodeView() {
     return VueNodeViewRenderer(NodeView)
