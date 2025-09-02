@@ -86,7 +86,11 @@ import type {
 } from '@/types'
 import { contentTransform } from '@/utils/content-transform'
 import { consoleCopyright } from '@/utils/copyright'
-import { addHistory } from '@/utils/history-record'
+import {
+  addHistory,
+  redoHistoryRecord,
+  undoHistoryRecord,
+} from '@/utils/history-record'
 import { getOpitons } from '@/utils/options'
 import { shortId } from '@/utils/short-id'
 const { toBlob, toJpeg, toPng } = domToImage
@@ -1111,6 +1115,31 @@ const getContentExcerpt = (charLimit = 100, more = ' ...') => {
   }
   return text?.substring(0, charLimit) + more
 }
+/* 撤销 重做操作*/
+const undoHistory = () => {
+  undoHistoryRecord(historyRecords, function (record) {
+    if (record?.type === 'editor') {
+      editor?.value?.chain().focus().undo().run()
+    } else if (record?.type === 'page' && record?.proType) {
+      // 撤销
+      if (page?.value && record.oldData !== undefined) {
+        page.value[record.proType] = record.oldData
+      }
+    }
+  })
+}
+const redoHistory = () => {
+  redoHistoryRecord(historyRecords, function (record) {
+    if (record?.type === 'editor') {
+      editor?.value?.chain().focus().redo().run()
+    } else if (record?.type === 'page' && record?.proType) {
+      //  恢复
+      if (page?.value && record.newData !== undefined) {
+        page.value[record.proType] = record.newData
+      }
+    }
+  })
+}
 
 // Hotkeys Setup
 watch(
@@ -1125,6 +1154,14 @@ watch(
         if (fullscreen.value) {
           fullscreen.value = false
         }
+      })
+    }
+    const bindUndoRedoKey = () => {
+      useHotkeys('ctrl+z, command+z', () => {
+        undoHistory()
+      })
+      useHotkeys('ctrl+y, command+y', () => {
+        redoHistory()
       })
     }
     editor.value?.on('focus', () => {
@@ -1142,19 +1179,23 @@ watch(
       })
     })
     bindEscKey()
+    bindUndoRedoKey()
     editor.value?.on('blur', () => {
       removeAllHotkeys()
       bindEscKey()
+      bindUndoRedoKey()
     })
   },
 )
 
 // Methods Exposed to Descendants
 provide('saveContent', saveContent)
+
 provide('setLocale', setLocale)
 provide('reset', reset)
 provide('getVanillaHTML', getVanillaHTML)
-
+provide('undoHistory', undoHistory)
+provide('redoHistory', redoHistory)
 // Exposing Methods
 defineExpose({
   getOptions: () => options.value as UmoEditorOptions,

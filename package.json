@@ -103,6 +103,7 @@
     "@tiptap/extension-text-style": "2.11.5",
     "@tiptap/extension-typography": "2.11.5",
     "@tiptap/extension-underline": "2.11.5",
+    "@tiptap/extension-history": "2.11.5",
     "@tiptap/pm": "2.11.5",
     "@tiptap/starter-kit": "2.11.5",
     "@tiptap/suggestion": "2.11.5",

@@ -6,6 +6,7 @@ import Dropcursor from '@tiptap/extension-dropcursor'
 import Focus from '@tiptap/extension-focus'
 import FontFamily from '@tiptap/extension-font-family'
 import Highlight from '@tiptap/extension-highlight'
+import History from '@tiptap/extension-history'
 import Placeholder from '@tiptap/extension-placeholder'
 import Subscript from '@tiptap/extension-subscript'
 import Superscript from '@tiptap/extension-superscript'
@@ -134,9 +135,16 @@ export const getDefaultExtensions = ({
       codeBlock: false,
       horizontalRule: false,
       dropcursor: false,
+      history: false,
     }),
     Placeholder.configure({
       placeholder: () => String(l(doc?.placeholder ?? '')),
+    }),
+    History.extend({
+      addKeyboardShortcuts() {
+        // 返回空对象表示移除所有默认快捷键
+        return {}
+      },
     }),
     Focus.configure({
       className: 'umo-node-focused',
