@@ -84,7 +84,7 @@ Umo Editor 的诞生旨在解决 Web 应用中文档编辑的复杂性，为 Web
 
 - **Node.js** (>=v18.0.0)
 - **Vue** (>=v3.x)
-- **Vite** (>=v4.x)
+- **Vite** (>=v5.x)
 - **Tiptap** (>=v2.6)
 - **TypeScript** (>=v5.5)
 
