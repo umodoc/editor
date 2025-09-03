@@ -77,7 +77,7 @@ const editorInstance: Editor = new Editor({
   onUpdate({ editor }) {
     const throttleFn = useThrottleFn(() => {
       $document.value.content = editor.getHTML()
-      addHistory(historyRecords, 'editor', editor?.state?.history$)
+      addHistory(historyRecords, 'editor', (editor?.state as any)?.history$)
     }, 1000)
     void throttleFn()
   },
