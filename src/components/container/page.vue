@@ -245,12 +245,12 @@ watch(viewer, async (visible: boolean) => {
   scroll-behavior: smooth;
   &.umo-page-container {
     padding: 20px 50px;
+    box-sizing: border-box;
     .umo-zoomable-content {
       margin: 0 auto;
       box-shadow:
         rgba(0, 0, 0, 0.06) 0px 0px 10px 0px,
         rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
-      overflow: hidden;
     }
   }
   &.umo-web-container {
@@ -375,7 +375,6 @@ watch(viewer, async (visible: boolean) => {
 .umo-viewer-container {
   position: absolute;
   inset: 0;
-  background-color: red;
   z-index: 1000;
 }
 </style>
