@@ -143,7 +143,9 @@ const assistant = inject('assistant')
 const options = inject('options')
 
 let menuActive = $ref(false)
+console.log(container)
 const popupProps = {
+  attach: `${container} .umo-main-container`,
   onVisibleChange(visible: boolean) {
     editor.value.commands.focus()
     blockMenu.value = visible
