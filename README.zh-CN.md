@@ -124,7 +124,8 @@ Umo Editor 的发展离不开社区的支持，以下是为 Umo Editor 贡献过
 
 ## 技术交流
 
-- Umo Editor 技术交流1群：[994500039](https://qm.qq.com/cgi-bin/qm/qr?k=BH_TYEK3Om0BkN4VMT9TQLRvHzEhkUvp&jump_from=webapi&authKey=xIMvInBso7hjJHh8+44+8IMHhLjvpegQJC0wFtZRir76+vgrBFcw98FVoqCxV7XX)
+- Umo Editor 技术交流 1 群(即将满员)：[994500039](https://qm.qq.com/q/gFsQShETqE)
+- Umo Editor 技术交流 2 群：[455825557](https://qm.qq.com/q/rzgt2bUcAE)
 - Discord：[Umo Editor](https://discord.gg/yBwBmm8e)
 
 ## 支持我们
