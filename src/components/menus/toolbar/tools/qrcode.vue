@@ -112,7 +112,7 @@
 </template>
 
 <script setup lang="ts">
-import QRCode from 'qrcode-svg'
+import { qrcode } from 'pure-svg-code'
 import svg64 from 'svg64'
 
 import { shortId } from '@/utils/short-id'
@@ -141,17 +141,13 @@ const levels = [
   { label: t('tools.qrcode.levelH'), value: 'H' },
 ]
 const defaultConfig = {
-  ecl: 'M',
+  content: '',
   padding: 1,
   width: 256,
   height: 256,
   color: '#000000',
   background: '#ffffff',
-  content: '',
-  xmlDeclaration: false,
-  join: true,
-  pretty: false,
-  container: 'svg-viewbox',
+  ecl: 'M',
 }
 
 let config = $ref({ ...defaultConfig })
@@ -163,8 +159,7 @@ const renderQrcode = () => {
   try {
     svgCode = null
     config.height = config.width
-    const qrcode = new QRCode(config)
-    svgCode = qrcode.svg()
+    svgCode = qrcode(config)
     renderError = false
   } catch {
     svgCode = null
