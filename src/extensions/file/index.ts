@@ -208,36 +208,21 @@ export default Node.create({
     }
   },
   onTransaction({ editor, transaction }) {
-    const { steps, before } = transaction
-    const { onFileDelete } = editor.storage.options || {}
-
-    steps.forEach((step: any) => {
-      // 只处理 ReplaceStep 和 ReplaceAroundStep，确保是替换/删除类操作
+    transaction.steps.forEach((step: any) => {
       if (
-        ![
-          'ReplaceStep',
-          '_ReplaceStep',
-          'ReplaceAroundStep',
-          '_ReplaceAroundStep',
-        ].includes(step.constructor.name)
+        ['_ReplaceStep', '_ReplaceAroundStep'].includes(step.constructor.name)
       ) {
-        return
-      }
-
-      // 获取被删除的节点内容片段
-      const deletedFragment = before.slice(step.from, step.to).content
-      deletedFragment.forEach((node: any) => {
-        if (!node?.type) return
-        const { name } = node.type
-        if (['image', 'video', 'audio', 'file'].includes(name)) {
-          const { id, src, url } = node.attrs
-          try {
+        // 使用事务前的文档状态来获取被删除或替换的节点
+        const deletedNodes = transaction.before.content.cut(step.from, step.to)
+        deletedNodes.content.forEach((node: any) => {
+          // 如果是文件节点，调用删除方法删除文件
+          if (['image', 'video', 'audio', 'file'].includes(node.attrs.type)) {
+            const { id, src, url } = node.attrs
+            const { onFileDelete } = editor.storage.options || {}
             onFileDelete(id, src || url)
-          } catch (e) {
-            console.warn(`[onFileDelete error]`, e)
           }
-        }
-      })
+        })
+      }
     })
   },
 })
