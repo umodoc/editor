@@ -265,11 +265,9 @@ const selectPageSize = (value: number) => {
   pageOptions.size = options.value?.dicts?.pageSizes[value]
 }
 const inputPageSize = (value: number, field: 'width' | 'height') => {
-  if (!pageOptions.size) {
-    pageOptions.size = {
-      width: 0,
-      height: 0,
-    }
+  pageOptions.size ??= {
+    width: 0,
+    height: 0,
   }
   if (!value || value < 10) {
     Reflect.set(pageOptions.size, field, 10)
@@ -292,13 +290,11 @@ const inputPageMargin = (
   value: number,
   field: 'top' | 'bottom' | 'left' | 'right' | 'layout',
 ) => {
-  if (!pageOptions.margin) {
-    pageOptions.margin = {
-      right: 0,
-      left: 0,
-      bottom: 0,
-      top: 0,
-    }
+  pageOptions.margin ??= {
+    right: 0,
+    left: 0,
+    bottom: 0,
+    top: 0,
   }
   if (!value || value < 0) {
     Reflect.set(pageOptions.margin, field, 0)
