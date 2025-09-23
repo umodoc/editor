@@ -138,7 +138,7 @@ export default Node.create({
             })
             return false
           }
-          const position = pos || editor.state.selection.anchor
+          const position = pos ?? editor.state.selection.anchor
           let previewType = 'file'
           // 图片
           if (type.startsWith('image/') && mimeTypes.image.includes(type)) {
@@ -162,7 +162,7 @@ export default Node.create({
               [previewType === 'file' ? 'url' : 'src']:
                 URL.createObjectURL(file),
               name,
-              type: type || 'unknown', // Ensure type is never null
+              type: type ?? 'unknown', // Ensure type is never null
               size,
               previewType,
             },
@@ -218,8 +218,8 @@ export default Node.create({
           // 如果是文件节点，调用删除方法删除文件
           if (['image', 'video', 'audio', 'file'].includes(node.attrs.type)) {
             const { id, src, url } = node.attrs
-            const { onFileDelete } = editor.storage.options || {}
-            onFileDelete(id, src || url)
+            const { onFileDelete } = editor.storage.options ?? {}
+            onFileDelete(id, src ?? url)
           }
         })
       }

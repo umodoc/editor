@@ -99,7 +99,7 @@ let replaceText = $ref<string>('')
 const caseSensitive = $ref<boolean>(false)
 
 const resultLength = computed(
-  () => editor.value?.storage.searchAndReplace?.results.length || 0,
+  () => editor.value?.storage.searchAndReplace?.results.length ?? 0,
 )
 
 const clear = () => {

@@ -599,9 +599,8 @@ const setWatermark = (params: Partial<WatermarkOption>) => {
   if (!isRecord(params)) {
     throw new Error('params must be an object.')
   }
-  if (!page.value.watermark) {
-    page.value.watermark = {} as WatermarkOption
-  }
+  page.value.watermark ??= {} as WatermarkOption
+
   if (isDefined(params.alpha)) {
     if (!isNumber(params.alpha)) {
       throw new Error('"params.alpha" must be a number.')
@@ -664,9 +663,8 @@ const setDocument = (params: DocumentOptions) => {
   if (Object.prototype.toString.call(params) !== '[object Object]') {
     throw new Error('params must be an object.')
   }
-  if (!options.value.document) {
-    options.value.document = {} as DocumentOptions
-  }
+  options.value.document ??= {} as DocumentOptions
+
   if (params.title) {
     if (!isString(params.title)) {
       throw new Error('"params.title" must be a string.')
