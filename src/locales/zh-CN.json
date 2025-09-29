@@ -136,6 +136,20 @@
       "doubleBoldBottom": "细粗线",
       "wavy": "波浪线"
     },
+    "option": {
+      "text": "选项",
+      "radio": "单选",
+      "checkbox": "复选",
+      "tip": "选项类型",
+      "content": "选项内容",
+      "add": "添加选项",
+      "checkall": "显示全选",
+      "check": "全选",
+      "confirm": "确定",
+      "cancel": "取消",
+      "text1": "选项1",
+      "text2": "选项2"
+    },
     "image": "图片",
     "link": {
       "text": "链接",
