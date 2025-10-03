@@ -5,6 +5,7 @@
         <t-radio
           :key="index"
           :checked="box.checked"
+          :disabled="isDisabled"
           @change="handleRadioChange(index)"
         ></t-radio>
         <span>{{ box.label }}</span>
@@ -15,6 +16,7 @@
         <t-checkbox
           key="checkallInxex"
           :checked="boxChecked"
+          :disabled="isDisabled"
           @click="handleCheckboxAll"
         ></t-checkbox>
         <span>{{ t('insert.option.check') }}</span>
@@ -23,6 +25,7 @@
         <t-checkbox
           :key="index"
           :checked="box.checked"
+          :disabled="isDisabled"
           @click="handleCheckboxChange(index)"
         ></t-checkbox>
         <span>{{ box.label }}</span>
@@ -33,7 +36,9 @@
 
 <script setup lang="ts">
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
-
+const options = inject('options')
+const page = inject('page')
+const editor = inject('editor')
 const props = defineProps(nodeViewProps)
 const { updateAttributes } = props
 
@@ -44,11 +49,23 @@ const boxShowCheckAll = computed(
   () => props.node.attrs?.boxShowCheckAll ?? false,
 )
 const boxChecked = computed(() => props.node.attrs?.boxChecked ?? false)
+// 统一的禁用状态计算
+const isDisabled = computed(() => {
+  if (
+    page.value?.preview?.enabled ||
+    options.value?.document?.readOnly ||
+    !editor.value?.isEditable
+  ) {
+    return true
+  } else return false
+})
 // 防止重复调用的标志位
 let isProcessing = false
 
 // 处理复选框变化
 const handleCheckboxChange = (index) => {
+  // 如果是禁用状态，则忽略此次调用
+  if (isDisabled.value) return
   // 如果正在处理中，则忽略此次调用
   if (isProcessing) return
 
@@ -64,6 +81,8 @@ const handleCheckboxChange = (index) => {
 }
 
 const handleCheckboxAll = () => {
+  // 如果是禁用状态，则忽略此次调用
+  if (isDisabled.value) return
   // 如果正在处理中，则忽略此次调用
   if (isProcessing) return
 
@@ -90,6 +109,8 @@ const handleCheckboxAll = () => {
 
 // 处理单选框变化
 const handleRadioChange = (index) => {
+  // 如果是禁用状态，则忽略此次调用
+  if (isDisabled.value) return
   // 如果正在处理中，则忽略此次调用
   if (isProcessing) return
 
