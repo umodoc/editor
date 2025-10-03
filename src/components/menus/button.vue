@@ -115,14 +115,12 @@
             size="small"
             :options="selectOptions"
             :popup-props="{
-              overlayClassName: attrs['overlay-class-name'] as
-                | string
-                | undefined,
+              overlayClassName: attrs['overlay-class-name'],
               onVisibleChange: popupVisileChange,
               destroyOnClose: true,
               attach: container,
             }"
-            @click="attrs.onChangeas as any"
+            @click="attrs.onChange as any"
           >
             <t-button
               class="umo-menu-button has-arrow"
