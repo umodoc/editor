@@ -1,34 +1,31 @@
 <template>
   <node-view-wrapper as="span" class="umo-node-option-box">
-    <div
-      v-if="node.attrs?.boxType === 'radio'"
-      class="umo-option-box-radio-container"
-    >
-      <div v-for="(box, index) in node.attrs?.boxOptions" :key="box.key">
+    <div v-if="boxType === 'radio'" class="umo-option-box-radio-container">
+      <div v-for="(box, index) in boxOptions" :key="box.key">
         <t-radio
           :key="index"
           :checked="box.checked"
-          :label="box.label"
           @change="handleRadioChange(index)"
         ></t-radio>
+        <span>{{ box.label }}</span>
       </div>
     </div>
     <div v-else class="umo-option-box-checkbox-container">
-      <div v-if="node.attrs?.boxShowCheckAll === true">
+      <div v-if="boxShowCheckAll">
         <t-checkbox
           key="checkallInxex"
-          :checked="node.attrs.boxChecked"
-          :label="t('insert.option.check')"
+          :checked="boxChecked"
           @click="handleCheckboxAll"
         ></t-checkbox>
+        <span>{{ t('insert.option.check') }}</span>
       </div>
-      <div v-for="(box, index) in node.attrs?.boxOptions" :key="box.key">
+      <div v-for="(box, index) in boxOptions" :key="box.key">
         <t-checkbox
           :key="index"
           :checked="box.checked"
-          :label="box.label"
           @click="handleCheckboxChange(index)"
         ></t-checkbox>
+        <span>{{ box.label }}</span>
       </div>
     </div>
   </node-view-wrapper>
@@ -36,10 +33,18 @@
 
 <script setup lang="ts">
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
+import { computed } from 'vue'
 
 const props = defineProps(nodeViewProps)
-const { node, updateAttributes } = props
+const { updateAttributes } = props
 
+// 创建响应式的计算属性
+const boxType = computed(() => props.node.attrs?.boxType ?? 'checkbox')
+const boxOptions = computed(() => props.node.attrs?.boxOptions ?? [])
+const boxShowCheckAll = computed(
+  () => props.node.attrs?.boxShowCheckAll ?? false,
+)
+const boxChecked = computed(() => props.node.attrs?.boxChecked ?? false)
 // 防止重复调用的标志位
 let isProcessing = false
 
@@ -49,7 +54,7 @@ const handleCheckboxChange = (index) => {
   if (isProcessing) return
 
   isProcessing = true
-  const newOptions = [...(node.attrs?.boxOptions ?? [])]
+  const newOptions = [...boxOptions.value]
   newOptions[index].checked = !newOptions[index].checked
   updateAttributes({ boxOptions: newOptions })
 
@@ -64,18 +69,18 @@ const handleCheckboxAll = () => {
   if (isProcessing) return
 
   isProcessing = true
-  const newOptions = [...(node.attrs?.boxOptions ?? [])]
+  const newOptions = [...boxOptions.value]
 
-  node.attrs.boxChecked = !node.attrs?.boxChecked
+  const newChecked = !boxChecked.value
 
   // 更新所有选项的选中状态
   newOptions.forEach((option) => {
-    option.checked = node.attrs?.boxChecked
+    option.checked = newChecked
   })
   // 更新属性
   updateAttributes({
     boxOptions: newOptions,
-    boxChecked: node.attrs?.boxChecked,
+    boxChecked: newChecked,
   })
 
   // 使用 setTimeout 重置标志位
@@ -90,7 +95,7 @@ const handleRadioChange = (index) => {
   if (isProcessing) return
 
   isProcessing = true
-  const newOptions = [...(node.attrs?.boxOptions ?? [])]
+  const newOptions = [...boxOptions.value]
   // 清除其他选项的选中状态
   newOptions.forEach((option, i) => {
     option.checked = i === index

@@ -37,7 +37,7 @@
             </t-button>
             <t-checkbox
               v-if="boxType === 'checkbox'"
-              v-model="checkAll"
+              v-model="showCheckAll"
               class="umo-option-box-button-check-all"
               size="small"
               ><span style="font-size: 12px">{{
@@ -93,16 +93,23 @@ import { shortId } from '@/utils/short-id'
 const { popupVisible, togglePopup } = usePopup()
 const container = inject('container')
 const editor = inject('editor')
+import { getSelectionNode } from '@/extensions/selection'
+
+const props = defineProps({
+  toEdit: {
+    type: Boolean,
+    default: false,
+  },
+})
 
 let boxData = $ref([])
 let boxType = $ref('checkbox')
-let checkAll = $ref(false)
-
+let showCheckAll = $ref(false)
 // 初始化界面上的数据值
 const initData = () => {
   boxData = []
   boxType = 'checkbox'
-  checkAll = false
+  showCheckAll = false
 }
 
 // 初始化计算值
@@ -193,17 +200,26 @@ const confirmClick = () => {
   if (noEmptyData?.length === 0) {
     return
   }
-  editor.value
-    ?.chain()
-    .insertOptionBox({
-      dataType: 'optionBox',
-      boxType: boxType === 'checkbox' ? 'checkbox' : 'radio',
-      boxOptions: JSON.parse(JSON.stringify(noEmptyData)),
-      boxChecked: false,
-      boxShowCheckAll: checkAll === true ? true : false,
-    })
-    .focus()
-    .run()
+  let _checkAll = false
+
+  const optionConfig = editor.value ? getSelectionNode(editor.value) : null
+  if (optionConfig?.type?.name === 'option-box' && optionConfig?.attrs) {
+    _checkAll = optionConfig?.attrs?.boxChecked ?? false
+  }
+  const _optionData = {
+    dataType: 'optionBox',
+    boxType: boxType === 'checkbox' ? 'checkbox' : 'radio',
+    boxOptions: JSON.parse(JSON.stringify(noEmptyData)),
+    boxChecked: _checkAll,
+    boxShowCheckAll: showCheckAll === true ? true : false,
+  }
+
+  if (props.toEdit) {
+    editor.value?.commands?.updateOptionBox(_optionData)
+    editor.value?.commands?.focus()
+  } else {
+    editor.value?.chain().insertOptionBox(_optionData).focus().run()
+  }
   togglePopup(false)
 }
 
@@ -213,6 +229,19 @@ watch(
     if (visible) {
       // 打开时：计算并初始化数据
       initCalData()
+      if (props?.toEdit) {
+        const optionConfig = editor.value
+          ? getSelectionNode(editor.value)
+          : null
+        if (optionConfig?.type?.name === 'option-box' && optionConfig?.attrs) {
+          boxData = JSON.parse(
+            JSON.stringify(optionConfig?.attrs?.boxOptions ?? []),
+          )
+          boxType = optionConfig?.attrs?.boxType ?? 'checkbox'
+          showCheckAll = optionConfig?.attrs?.boxShowCheckAll ?? false
+          initCalData()
+        }
+      }
       if (boxData?.length === 0) {
         initDefaultBoxData()
       }

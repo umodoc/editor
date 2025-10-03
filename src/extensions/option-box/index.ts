@@ -8,6 +8,9 @@ declare module '@tiptap/core' {
     insertOptionBox: {
       insertOptionBox: (options: any) => ReturnType
     }
+    updateOptionBox: {
+      updateOptionBox: (options: any) => ReturnType
+    }
   }
 }
 
@@ -69,13 +72,19 @@ export default Node.create({
     return {
       insertOptionBox:
         (options) =>
-        ({ chain }) => {
+        ({ chain,editor }) => {
+          const { to } = editor?.state.selection ?? {}
           return chain()
-            .insertContent({
+            .insertContentAt(to-1,{
               type: this.name,
               attrs: options,
             })
             .run()
+        },
+      updateOptionBox:
+        (options) =>
+        ({ commands }) => {
+          return commands.updateAttributes(this.name, options)
         },
     }
   },
