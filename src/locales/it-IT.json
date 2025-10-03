@@ -136,6 +136,20 @@
       "doubleBoldBottom": "Linea sottile e spessa (sotto)",
       "wavy": "Linea ondulata"
     },
+    "option": {
+      "text": "Opzione",
+      "radio": "Pulsante di opzione",
+      "checkbox": "Casella di spunta",
+      "tip": "Tipo di opzione",
+      "content": "Contenuto dell'opzione",
+      "add": "Aggiungi opzione",
+      "checkall": "Mostra seleziona tutto",
+      "check": "Seleziona tutto",
+      "confirm": "Conferma",
+      "cancel": "Annulla",
+      "text1": "Opzione 1",
+      "text2": "Opzione 2"
+    },
     "image": "Immagine",
     "link": {
       "text": "Link",

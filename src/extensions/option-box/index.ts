@@ -72,10 +72,10 @@ export default Node.create({
     return {
       insertOptionBox:
         (options) =>
-        ({ chain,editor }) => {
+        ({ chain, editor }) => {
           const { to } = editor?.state.selection ?? {}
           return chain()
-            .insertContentAt(to-1,{
+            .insertContentAt(to - 1, {
               type: this.name,
               attrs: options,
             })
