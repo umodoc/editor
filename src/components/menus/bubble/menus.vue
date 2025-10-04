@@ -124,6 +124,18 @@
     <menus-toolbar-tools-echarts ico="setting" />
     <menus-bubble-node-delete />
   </template>
+  <template v-else-if="editor?.isActive('option-box')">
+    <menus-toolbar-base-font-size :select="false" />
+    <menus-toolbar-base-bold />
+    <menus-toolbar-base-italic />
+    <div class="umo-bubble-menu-divider"></div>
+    <menus-toolbar-base-color />
+    <menus-toolbar-base-background-color />
+    <div class="umo-bubble-menu-divider"></div>
+    <menus-toolbar-insert-option-box :to-edit="true" />
+    <div class="umo-bubble-menu-divider"></div>
+    <menus-bubble-node-delete />
+  </template>
   <template v-else>
     <template v-if="options.ai?.assistant?.enabled">
       <menus-bubble-assistant />

@@ -49,6 +49,7 @@ import Margin from './margin'
 import Mention from './mention'
 import getUsersSuggestion from './mention/suggestion'
 import NodeAlign from './node-align'
+import OptionBox from './option-box'
 import OrderedList from './ordered-list'
 import PageBreak from './page-break'
 import Selection from './selection'
@@ -115,6 +116,7 @@ export const getDefaultExtensions = ({
       suggestion: getUsersSuggestion(users ?? [], container),
     }),
     'date-time': Datetime,
+    'option-box': OptionBox,
     bookmark: Bookmark.configure({
       class: 'umo-editor-bookmark',
     }),

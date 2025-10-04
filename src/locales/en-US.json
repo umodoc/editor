@@ -136,6 +136,20 @@
       "doubleBoldBottom": "Thin & Thick Lines (Bottom)",
       "wavy": "Wavy Line"
     },
+    "option": {
+      "text": "Option",
+      "radio": "Radio Button",
+      "checkbox": "Checkbox",
+      "tip": "Option Type",
+      "content": "Option Content",
+      "add": "Add Option",
+      "checkall": "Show Select All",
+      "check": "Select All",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "text1": "Option 1",
+      "text2": "Option 2"
+    },
     "image": "Image",
     "link": {
       "text": "Link",

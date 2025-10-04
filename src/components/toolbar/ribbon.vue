@@ -111,6 +111,9 @@
             <menus-toolbar-insert-callout v-if="!disableMenu('callout')" />
             <menus-toolbar-insert-mention v-if="!disableMenu('mention')" />
             <menus-toolbar-insert-bookmark v-if="!disableMenu('bookmark')" />
+            <menus-toolbar-insert-option-box
+              v-if="!disableMenu('option-box')"
+            />
           </div>
           <div class="umo-virtual-group">
             <menus-toolbar-insert-hard-break
