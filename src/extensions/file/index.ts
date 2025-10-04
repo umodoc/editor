@@ -208,20 +208,53 @@ export default Node.create({
     }
   },
   onTransaction({ editor, transaction }) {
-    transaction.steps.forEach((step: any) => {
-      if (
-        ['_ReplaceStep', '_ReplaceAroundStep'].includes(step.constructor.name)
-      ) {
-        // 使用事务前的文档状态来获取被删除或替换的节点
-        const deletedNodes = transaction.before.content.cut(step.from, step.to)
-        deletedNodes.content.forEach((node: any) => {
-          // 如果是文件节点，调用删除方法删除文件
-          if (['image', 'video', 'audio', 'file'].includes(node.attrs.type)) {
-            const { id, src, url } = node.attrs
-            const { onFileDelete } = editor.storage.options ?? {}
-            onFileDelete(id, src ?? url)
-          }
-        })
+    // 只有在文档内容发生变化时才处理
+    if (!transaction.docChanged) return
+    // 收集事务前的文件节点
+    const beforeNodes: any[] = []
+    transaction.before.descendants((node: any, pos: number) => {
+      if (['image', 'video', 'audio', 'file'].includes(node?.type?.name)) {
+        beforeNodes.push({ node, pos })
+      }
+    })
+    // 无这一类的节点
+    if (beforeNodes?.length === 0) {
+      return
+    }
+
+    // 收集事务后的文件节点
+    const afterNodes: any[] = []
+    transaction.doc.descendants((node: any, pos: number) => {
+      if (['image', 'video', 'audio', 'file'].includes(node?.type?.name)) {
+        afterNodes.push({ node, pos })
+      }
+    })
+    // 前后节点标识相同
+    if (beforeNodes?.length === afterNodes?.length) {
+      return
+    }
+
+    // 找出被删除的节点（在事务前存在但在事务后不存在的节点）
+    const deletedNodes = beforeNodes.filter((beforeNode) => {
+      // 检查节点是否在事务后仍然存在
+      return !afterNodes.some((afterNode) => {
+        // 通过ID来匹配节点，因为位置可能已经改变
+        return (
+          beforeNode.node.attrs.id &&
+          afterNode.node.attrs.id &&
+          beforeNode.node.attrs.id === afterNode.node.attrs.id
+        )
+      })
+    })
+    if (deletedNodes?.length === 0) {
+      return
+    }
+    // 对每个被删除的节点调用删除回调
+    deletedNodes.forEach(({ node }) => {
+      const { id, src, url } = node.attrs
+      const { onFileDelete } = editor.storage.options ?? {}
+      if (onFileDelete && id) {
+        onFileDelete(id, src ?? url)
       }
     })
   },
