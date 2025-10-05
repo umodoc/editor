@@ -25,6 +25,7 @@ import { getHierarchicalIndexes } from '@tiptap-pro/extension-table-of-contents'
 import { TableOfContents } from '@tiptap-pro/extension-table-of-contents'
 
 import type { UmoEditorOptions } from '@/types'
+import { getImageDimensions } from '@/utils/file'
 import { shortId } from '@/utils/short-id'
 
 import Audio from './audio'
@@ -62,7 +63,6 @@ import TextBox from './text-box'
 import Toc from './toc'
 import typeWriter from './type-writer'
 import Video from './video'
-
 export const getDefaultExtensions = ({
   container,
   options,
@@ -202,17 +202,19 @@ export const getDefaultExtensions = ({
     }),
     FileHandler.configure({
       allowedMimeTypes: file?.allowedMimeTypes,
-      onPaste(editor: Editor, files: any) {
+      onPaste: async (editor: Editor, files: any) => {
         // 记录 已有位置
         const pageContainer = document.querySelector(
           `${container} .umo-zoomable-container`,
         ) as HTMLElement
         const scrollTop = pageContainer?.scrollTop || 0
         for (const file of files) {
+          const fileDim = await getImageDimensions(file)
           editor.commands.insertFile({
             file,
             uploadFileMap: uploadFileMap.value,
             autoType: true,
+            fileDim,
           })
         }
         // 恢复滚动位置
