@@ -87,3 +87,29 @@ export const getFileIcon = (filename: string) => {
   }
   return iconName
 }
+
+export const getImageDimensions = (file: any) => {
+  try {
+    return new Promise<{ width: number; height: number }>((resolve) => {
+      const { type } = file
+      if (type.startsWith('image/')) {
+        const img = new Image()
+        img.onload = () => {
+          const width = img.naturalWidth
+          const height = img.naturalHeight
+          URL.revokeObjectURL(img.src)
+          resolve({ width, height }) // 返回宽高对象
+        }
+        img.onerror = () => {
+          // 出错时返回默认尺寸或null，根据需求调整
+          resolve({ width: 0, height: 0 })
+        }
+        img.src = URL.createObjectURL(file)
+      } else {
+        resolve({ width: 0, height: 0 })
+      }
+    })
+  } catch (e) {
+    return null
+  }
+}

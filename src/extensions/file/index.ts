@@ -123,7 +123,7 @@ export default Node.create({
           })
         },
       insertFile:
-        ({ file, uploadFileMap, autoType, pos }) =>
+        ({ file, uploadFileMap, autoType, pos, fileDim }) =>
         ({ editor, commands }) => {
           const { type, name, size } = file
           const { options } = editor.storage
@@ -155,17 +155,35 @@ export default Node.create({
           // 插入节点
           const id = shortId(10)
           uploadFileMap.set(id, file)
+
+          let nodeData = {
+            id,
+            [previewType === 'file' ? 'url' : 'src']: URL.createObjectURL(file),
+            name,
+            type: type ?? 'unknown', // Ensure type is never null
+            size,
+            previewType,
+          }
+
+          // 图片处理
+          if (previewType === 'image') {
+            const { width, height } = fileDim ?? {}
+            if (width && width > 0) {
+              nodeData = {
+                ...nodeData,
+                width,
+              }
+            }
+            if (height && height > 0) {
+              nodeData = {
+                ...nodeData,
+                height,
+              }
+            }
+          }
           return commands.insertContentAt(position, {
             type: autoType ? previewType : 'file',
-            attrs: {
-              id,
-              [previewType === 'file' ? 'url' : 'src']:
-                URL.createObjectURL(file),
-              name,
-              type: type ?? 'unknown', // Ensure type is never null
-              size,
-              previewType,
-            },
+            attrs: nodeData,
           })
         },
       selectFiles:
