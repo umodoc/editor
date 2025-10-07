@@ -150,7 +150,13 @@
       "text1": "选项1",
       "text2": "选项2"
     },
-    "image": "图片",
+    "image": {
+      "text": "图片",
+      "block": "图片",
+      "blockdesc": "插入一个图片节点",
+      "inline": "行内图片",
+      "inlinedesc": "在段落内插入一个图片"
+    },
     "link": {
       "text": "链接",
       "insert": "插入",
