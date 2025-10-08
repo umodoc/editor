@@ -264,7 +264,7 @@ export const inputAndPasteRules = (options: any) => {
     !options.value.document?.enableMarkdown ||
     !$document.value?.enableMarkdown
   ) {
-    enableRules = [Mathematics, Typography, Image as Extension]
+    enableRules = [Mathematics, Typography, BlockImage as Extension]
   }
   return enableRules
 }

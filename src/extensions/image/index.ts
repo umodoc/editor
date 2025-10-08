@@ -148,6 +148,20 @@ export const InlineImage = baseImageExtend.extend({
 
   // 属于行内组
   group: 'inline',
+  addAttributes() {
+    return {
+      ...(this.parent?.() ?? {}),
+      inline: {
+        default: true,
+      },
+      equalProportion: {
+        default: false,
+      },
+      // height: {
+      //   default: 50,
+      // },
+    }
+  },
   renderHTML({ HTMLAttributes }) {
     return ['span', mergeAttributes(HTMLAttributes)]
   },

@@ -58,6 +58,39 @@
   </template>
   <template
     v-else-if="
+      editor?.isActive('inlineImage') &&
+      !editor?.getAttributes('inlineImage').error
+    "
+  >
+    <menus-toolbar-base-align-left />
+    <menus-toolbar-base-align-center />
+    <menus-toolbar-base-align-right />
+    <div class="umo-bubble-menu-divider"></div>
+    <menus-bubble-image-flip />
+    <menus-bubble-image-proportion />
+    <div class="umo-bubble-menu-divider"></div>
+    <menus-bubble-image-remove-background
+      v-if="
+        editor?.getAttributes('inlineImage')?.type.startsWith('image') ||
+        ['image/png', 'image/jpeg'].includes(
+          editor?.getAttributes('inlineImage')?.type,
+        )
+      "
+    />
+    <menus-bubble-image-preview
+      v-if="
+        editor?.getAttributes('inlineImage')?.type.startsWith('image') ||
+        ['image/png', 'image/jpeg'].includes(
+          editor?.getAttributes('inlineImage')?.type,
+        )
+      "
+    />
+    <menus-bubble-image-open />
+    <div class="umo-bubble-menu-divider"></div>
+    <menus-bubble-node-delete />
+  </template>
+  <template
+    v-else-if="
       editor?.isActive('video') ||
       editor?.isActive('audio') ||
       editor?.isActive('file') ||
