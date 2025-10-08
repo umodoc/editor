@@ -14,6 +14,14 @@ const mimeTypes: any = {
     'image/svg+xml',
     'image/apng',
   ],
+  inlineImage: [
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+    'image/webp',
+    'image/svg+xml',
+    'image/apng',
+  ],
   video: ['video/mp4', 'video/mpeg', 'video/webm', 'video/ogg'],
   audio: [
     'audio/mp3',
@@ -29,7 +37,7 @@ const getAccept = (type: string, accept: string[]) => {
   if (type === 'file' && accept.length === 0) {
     return ''
   }
-  if (!type || !['image', 'video', 'audio'].includes(type)) {
+  if (!type || !['image', 'video', 'audio', 'inlineImage'].includes(type)) {
     return accept.toString()
   }
   let acceptArray = [...accept]
@@ -167,7 +175,7 @@ export default Node.create({
 
           // 图片处理
           if (previewType === 'image') {
-            const { width, height } = fileDim ?? {}
+            const { width, height, inline } = fileDim ?? {}
             if (width && width > 0) {
               nodeData = {
                 ...nodeData,
@@ -178,6 +186,13 @@ export default Node.create({
               nodeData = {
                 ...nodeData,
                 height,
+              }
+            }
+            if (inline) {
+              previewType = 'inlineImage'
+              nodeData = {
+                ...nodeData,
+                inline: true,
               }
             }
           }
@@ -217,7 +232,12 @@ export default Node.create({
               bool = editor
                 .chain()
                 .focus()
-                .insertFile({ file, uploadFileMap, autoType })
+                .insertFile({
+                  file,
+                  uploadFileMap,
+                  autoType,
+                  fileDim: { inline: type === 'inlineImage' ? true : false },
+                })
                 .run()
             }
           })

@@ -42,7 +42,7 @@ import FontSize from './font-size'
 import FormatPainter from './format-painter'
 import Hr from './hr'
 import Iframe from './iframe'
-import Image from './image'
+import { BlockImage, InlineImage } from './image'
 import Indent from './indent'
 import LineHeight from './line-height'
 import Link from './link'
@@ -103,7 +103,8 @@ export const getDefaultExtensions = ({
     }),
     margin: Margin,
     link: Link,
-    image: Image,
+    image: BlockImage,
+    inlineImage: InlineImage,
     video: Video,
     audio: Audio,
     'code-block': CodeBlock,
@@ -263,7 +264,7 @@ export const inputAndPasteRules = (options: any) => {
     !options.value.document?.enableMarkdown ||
     !$document.value?.enableMarkdown
   ) {
-    enableRules = [Mathematics, Typography, Image as Extension]
+    enableRules = [Mathematics, Typography, BlockImage as Extension]
   }
   return enableRules
 }

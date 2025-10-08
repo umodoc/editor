@@ -2,7 +2,10 @@
   <node-view-wrapper
     ref="containerRef"
     class="umo-node-view"
-    :class="{ 'umo-floating-node': node.attrs.draggable }"
+    :class="{
+      'umo-floating-node': node.attrs.draggable,
+      'is-inline-image': node.attrs.inline,
+    }"
     :style="nodeStyle"
     @dblclick="openImageViewer"
   >
@@ -247,6 +250,17 @@ watch(
 
 <style lang="less">
 .umo-node-view {
+  &.is-inline-image {
+    display: inline-block !important;
+    padding: 0px 6px;
+    img {
+      /* 1. 图片宽度不超过父容器宽度（核心约束） */
+      max-width: 100% !important;
+      /* 2. 图片高度不超过父容器高度（避免纵向溢出） */
+      max-height: 100% !important;
+    }
+  }
+  /* 关键：控制图片本身的自适应规则 */
   .umo-node-image {
     max-width: 100%;
     width: auto;

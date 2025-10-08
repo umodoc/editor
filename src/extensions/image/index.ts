@@ -1,4 +1,4 @@
-import { nodeInputRule, nodePasteRule } from '@tiptap/core'
+import { mergeAttributes, nodeInputRule, nodePasteRule } from '@tiptap/core'
 import Image from '@tiptap/extension-image'
 import { type CommandProps, VueNodeViewRenderer } from '@tiptap/vue-3'
 
@@ -8,9 +8,12 @@ declare module '@tiptap/core' {
     setImage: {
       setImage: (options: any, replace?: any) => ReturnType
     }
+    setInlineImage: {
+      setInlineImage: (options: any, replace?: any) => ReturnType
+    }
   }
 }
-export default Image.extend({
+const baseImageExtend = Image.extend({
   atom: true,
   addAttributes() {
     return {
@@ -74,34 +77,13 @@ export default Image.extend({
       previewType: {
         default: 'image',
       },
+      inline: {
+        default: false,
+      },
     }
   },
   parseHTML() {
     return [{ tag: 'img' }]
-  },
-  addNodeView() {
-    return VueNodeViewRenderer(NodeView)
-  },
-  addCommands() {
-    return {
-      setImage:
-        (
-          options: { src: string; alt?: string; title?: string; id?: string },
-          replace?: boolean,
-        ) =>
-        ({ commands, editor }: CommandProps) => {
-          if (replace) {
-            return commands.insertContent({
-              type: this.name,
-              attrs: options,
-            })
-          }
-          return commands.insertContentAt(editor.state.selection.anchor, {
-            type: this.name,
-            attrs: options,
-          })
-        },
-    }
   },
   addPasteRules() {
     return [
@@ -128,5 +110,85 @@ export default Image.extend({
         },
       }),
     ]
+  },
+})
+// 节点块级别扩展
+export const BlockImage = baseImageExtend.extend({
+  ...baseImageExtend,
+  addNodeView() {
+    return VueNodeViewRenderer(NodeView)
+  },
+  addCommands() {
+    return {
+      setImage:
+        (
+          options: { src: string; alt?: string; title?: string; id?: string },
+          replace?: boolean,
+        ) =>
+        ({ commands, editor }: CommandProps) => {
+          if (replace) {
+            return commands.insertContent({
+              type: this.name,
+              attrs: { ...options, inline: false },
+            })
+          }
+          return commands.insertContentAt(editor.state.selection.anchor, {
+            type: this.name,
+            attrs: { ...options, inline: false },
+          })
+        },
+    }
+  },
+})
+// 行内扩展
+export const InlineImage = baseImageExtend.extend({
+  ...baseImageExtend,
+  name: 'inlineImage',
+  // 行内元素
+  inline: true,
+
+  // 属于行内组
+  group: 'inline',
+  addAttributes() {
+    return {
+      ...(this.parent?.() ?? {}),
+      inline: {
+        default: true,
+      },
+      equalProportion: {
+        default: false,
+      },
+      width: {
+        default: 150,
+      },
+      height: {
+        default: 80,
+      },
+    }
+  },
+  parseHTML() {
+    return [{ tag: 'inline-img' }]
+  },
+  renderHTML({ HTMLAttributes }) {
+    return ['inline-img', mergeAttributes(HTMLAttributes)]
+  },
+  addNodeView() {
+    return VueNodeViewRenderer(NodeView)
+  },
+  addCommands() {
+    return {
+      setInlineImage:
+        (options: { src: string; alt?: string; title?: string; id?: string }) =>
+        ({ commands, editor }: CommandProps) => {
+          // return commands.insertContent({
+          //   type: this.name,
+          //   attrs: { ...options, inline: true },
+          // })
+          return commands.insertContentAt(editor.state.selection.anchor, {
+            type: this.name,
+            attrs: { ...options, inline: true },
+          })
+        },
+    }
   },
 })

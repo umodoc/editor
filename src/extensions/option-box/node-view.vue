@@ -131,7 +131,6 @@ const handleRadioChange = (index) => {
 
 <style lang="less">
 .umo-node-option-box {
-  display: block;
   padding-left: 0.5em;
   display: inline-block;
   transform: translateY(-0.05em);
@@ -154,8 +153,6 @@ const handleRadioChange = (index) => {
 
   .umo-option-box-radio-container {
     display: flex;
-    /* flex-direction: column;  加上这个变成行了*/
-
     flex-wrap: wrap;
     gap: 0.5em;
   }
