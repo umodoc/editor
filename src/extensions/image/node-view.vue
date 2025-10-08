@@ -252,7 +252,7 @@ watch(
 .umo-node-view {
   &.is-inline-image {
     display: inline-block !important;
-    padding: 0px 6px;
+    padding: 2px 6px;
     img {
       /* 1. 图片宽度不超过父容器宽度（核心约束） */
       max-width: 100% !important;
