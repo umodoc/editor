@@ -157,9 +157,12 @@ export const InlineImage = baseImageExtend.extend({
       equalProportion: {
         default: false,
       },
-      // height: {
-      //   default: 50,
-      // },
+      width: {
+        default: 150,
+      },
+      height: {
+        default: 80,
+      },
     }
   },
   renderHTML({ HTMLAttributes }) {

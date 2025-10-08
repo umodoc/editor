@@ -153,9 +153,9 @@
     "image": {
       "text": "图片",
       "block": "图片",
-      "blockdesc": "插入一个图片节点",
+      "blockdesc": "在节点上插入图片",
       "inline": "行内图片",
-      "inlinedesc": "在段落内插入一个图片"
+      "inlinedesc": "在段落内插入图片"
     },
     "link": {
       "text": "链接",

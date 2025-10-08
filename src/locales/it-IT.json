@@ -150,7 +150,13 @@
       "text1": "Opzione 1",
       "text2": "Opzione 2"
     },
-    "image": "Immagine",
+    "image": {
+      "text": "Immagine",
+      "block": "Immagine",
+      "blockdesc": "Inserisci un'immagine nel nodo",
+      "inline": "Immagine Inline",
+      "inlinedesc": "Inserisci un'immagine nel paragrafo"
+    },
     "link": {
       "text": "Link",
       "insert": "Inserisci",
