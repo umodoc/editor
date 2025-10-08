@@ -165,8 +165,11 @@ export const InlineImage = baseImageExtend.extend({
       },
     }
   },
+  parseHTML() {
+    return [{ tag: 'inline-img' }]
+  },
   renderHTML({ HTMLAttributes }) {
-    return ['span', mergeAttributes(HTMLAttributes)]
+    return ['inline-img', mergeAttributes(HTMLAttributes)]
   },
   addNodeView() {
     return VueNodeViewRenderer(NodeView)

@@ -19,24 +19,21 @@ import { getSelectionNode } from '@/extensions/selection'
 
 const editor = inject('editor')
 
-const flipYActive= computed(() => {
+const flipYActive = computed(() => {
   const image = editor.value ? getSelectionNode(editor.value) : null
-  if(image?.type?.name){
-   return editor.value?.getAttributes(image?.type?.name)?.flipY
-  }
-  else return false
+  if (image?.type?.name) {
+    return editor.value?.getAttributes(image?.type?.name)?.flipY
+  } else return false
 })
 
-const flipXActive= computed(() => {
+const flipXActive = computed(() => {
   const image = editor.value ? getSelectionNode(editor.value) : null
-  if(image?.type?.name){
-   return editor.value?.getAttributes(image?.type?.name)?.flipX
-  }
-  else return false
+  if (image?.type?.name) {
+    return editor.value?.getAttributes(image?.type?.name)?.flipX
+  } else return false
 })
 
 const setFlip = (flip: 'flipX' | 'flipY') => {
-  debugger
   const image = editor.value ? getSelectionNode(editor.value) : null
   const { flipX, flipY } = image?.attrs ?? {}
   if (image && flip === 'flipX') {

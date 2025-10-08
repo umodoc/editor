@@ -154,7 +154,6 @@ const uploadImage = async () => {
   }
 }
 const onLoad = async () => {
-  debugger
   // updateAttributes({ error: false })
   if (node.attrs.width === null) {
     const { clientWidth = 1, clientHeight = 1 } = imageRef ?? {}
