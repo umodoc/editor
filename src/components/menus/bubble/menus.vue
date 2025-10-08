@@ -54,6 +54,7 @@
         editor?.getAttributes('image').type.startsWith('image')
       "
     />
+    <menus-bubble-image-convert />
     <menus-bubble-node-delete />
   </template>
   <template
@@ -87,6 +88,7 @@
     />
     <menus-bubble-image-open />
     <div class="umo-bubble-menu-divider"></div>
+    <menus-bubble-image-convert />
     <menus-bubble-node-delete />
   </template>
   <template

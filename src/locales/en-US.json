@@ -533,7 +533,9 @@
       "removingBg": "Removing Image Background...",
       "reset": "Reset Image Position",
       "rotateCC": "Rotate Counter-Clockwise 90°",
-      "rotateC": "Rotate Clockwise 90°"
+      "rotateC": "Rotate Clockwise 90°",
+      "convertToNode": "Convert to Block Image",
+      "convertToInline": "Convert to Inline Image"
     },
     "textBox": {
       "background": "Background Color",

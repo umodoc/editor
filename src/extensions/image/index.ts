@@ -112,6 +112,7 @@ const baseImageExtend = Image.extend({
     ]
   },
 })
+// 节点块级别扩展
 export const BlockImage = baseImageExtend.extend({
   ...baseImageExtend,
   addNodeView() {
@@ -139,7 +140,7 @@ export const BlockImage = baseImageExtend.extend({
     }
   },
 })
-
+// 行内扩展
 export const InlineImage = baseImageExtend.extend({
   ...baseImageExtend,
   name: 'inlineImage',
@@ -178,8 +179,12 @@ export const InlineImage = baseImageExtend.extend({
     return {
       setInlineImage:
         (options: { src: string; alt?: string; title?: string; id?: string }) =>
-        ({ commands }: CommandProps) => {
-          return commands.insertContent({
+        ({ commands, editor }: CommandProps) => {
+          // return commands.insertContent({
+          //   type: this.name,
+          //   attrs: { ...options, inline: true },
+          // })
+          return commands.insertContentAt(editor.state.selection.anchor, {
             type: this.name,
             attrs: { ...options, inline: true },
           })

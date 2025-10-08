@@ -533,7 +533,9 @@
       "removingBg": "Rimozione sfondo immagine...",
       "reset": "Reimposta posizione immagine",
       "rotateCC": "Ruota 90° antiorario",
-      "rotateC": "Ruota 90° orario"
+      "rotateC": "Ruota 90° orario",
+      "convertToNode": "Convertire in Immagine a Blocco",
+      "convertToInline": "Convertire in Immagine Inline"
     },
     "textBox": {
       "background": "Colore sfondo",
