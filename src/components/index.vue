@@ -975,12 +975,14 @@ const toggleFullscreen = (isFullscreen?: boolean) => {
 }
 
 const reset = (silent: boolean) => {
-  const resetFn = () => {
-    localStorage.clear()
+  const resetLocalStorage = () => {
+    const keys = Object.keys(localStorage)
+    const umoEditorKeys = keys.filter((key) => key.startsWith('umo-editor:'))
+    umoEditorKeys.forEach((key) => localStorage.removeItem(key))
     location.reload()
   }
   if (silent) {
-    resetFn()
+    resetLocalStorage()
     return
   }
   const dialog = useConfirm({
@@ -994,7 +996,7 @@ const reset = (silent: boolean) => {
     },
     onConfirm() {
       dialog.destroy()
-      resetFn()
+      resetLocalStorage()
     },
   })
 }
