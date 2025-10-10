@@ -121,6 +121,9 @@ export default defineConfig({
   ],
   css: cssConfig,
   build: buildConfig,
+  esbuild: {
+    drop: ['debugger'],
+  },
   resolve: {
     alias: {
       '@': `${process.cwd()}/src`,
