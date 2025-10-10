@@ -256,34 +256,29 @@ watch(
 
 <style lang="less" scoped>
 @import '@/assets/styles/_mixins.less';
+
 .umo-insert-option-box {
   user-select: none;
   & .umo-virtual-group {
     margin-top: 5px;
     margin-bottom: 10px;
-    border-top: solid 1px var(--umo-border-color-light);
     flex-shrink: 0;
   }
   & .umo-option-box-title {
-    padding-bottom: 5px;
+    margin: -5px 0 5px;
   }
 
   & .umo-option-box-container {
-    padding: 5px 0px 0px 12px;
-    /* color: var(--umo-text-color-light); */
+    padding: 6px 10px;
     width: 220px;
     height: 260px;
-    border: solid 1px var(--umo-border-color-light);
+    border: solid 1px var(--td-border-level-2-color);
     border-radius: 4px;
 
     & .umo-option-box-button-svg-icon {
       margin-top: 2px;
       margin-left: -10px;
       font-size: 16px;
-    }
-
-    & .umo-option-box-button-check-all {
-      margin-right: 19px;
     }
 
     & .umo-option-box-svg-icon {
@@ -306,12 +301,18 @@ watch(
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 4px 0;
+        margin: 6px 0;
+        :deep(.umo-radio) {
+          display: flex;
+          &__label {
+            margin-left: 3px;
+          }
+        }
       }
     }
 
     &-input {
-      width: 145px;
+      width: 160px;
     }
 
     &-delete {
@@ -320,7 +321,7 @@ watch(
     &-button {
       display: flex;
       gap: 8px;
-      margin-top: 5px;
+      margin-top: 10px;
       justify-content: flex-end;
     }
   }

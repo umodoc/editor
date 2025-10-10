@@ -131,23 +131,33 @@ const handleRadioChange = (index) => {
 
 <style lang="less">
 .umo-node-option-box {
-  padding-left: 0.5em;
+  margin-left: 0.25em;
+  margin-right: 0.25em;
   display: inline-block;
-  transform: translateY(-0.05em);
 
   .umo-option-box-checkbox-container {
     display: flex;
-    /* flex-direction: column;  加上这个变成行了*/
     flex-wrap: wrap;
     gap: 0.5em;
 
-    & .umo-checkbox__label {
-      font: inherit !important;
-    }
     & .umo-checkbox {
       font: inherit !important;
       color: inherit !important;
-      align-items: baseline;
+      transform: translateY(0.1em);
+      &__label {
+        font: inherit !important;
+      }
+      &__input {
+        width: 1em;
+        height: 1em;
+        border-radius: 0.15em;
+        &::after {
+          width: 0.3em;
+          height: 0.6em;
+          left: 0.2em;
+          top: 0.4em;
+        }
+      }
     }
   }
 
