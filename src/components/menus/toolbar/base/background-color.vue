@@ -15,7 +15,7 @@
       }"
     />
     <template #content>
-      <color-picker :default-color="defaultColor" @change="colorChange" />
+      <picker-color :default-color="defaultColor" @change="colorChange" />
     </template>
   </menus-button>
 </template>
