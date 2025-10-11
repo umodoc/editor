@@ -261,8 +261,8 @@ export default Node.create({
         // 如果是文件节点，调用删除方法删除文件
         if (['image', 'video', 'audio', 'file'].includes(node.type.name)) {
           const { id, src, url } = node.attrs
-          const { onFileDelete } = editor.storage.options || {}
-          onFileDelete(id, src || url)
+          const { onFileDelete } = editor.storage.options ?? {}
+          onFileDelete(id, src ?? url)
         }
       })
     })
