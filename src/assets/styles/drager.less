@@ -2,15 +2,6 @@
   position: relative;
   --es-drager-color: var(--umo-primary-color) !important;
   box-sizing: border-box;
-  &:not([draggable='true']) {
-    left: 0 !important;
-    top: 0 !important;
-  }
-  &[draggable='true'] {
-    position: absolute;
-    z-index: 90 !important;
-    cursor: move;
-  }
   &:after {
     content: '';
     position: absolute;
