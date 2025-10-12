@@ -8,7 +8,7 @@
     @toggle-popup="togglePopup"
   >
     <template #content>
-      <color-picker default-color="transparent" @change="colorChange" />
+      <picker-color default-color="transparent" @change="colorChange" />
     </template>
   </menus-button>
 </template>

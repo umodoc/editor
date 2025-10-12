@@ -19,7 +19,7 @@ const ndoeTofile = () => {
     type: 'file',
     attrs: {
       ...attrs,
-      url: attrs.url || attrs.src,
+      url: attrs.url ?? attrs.src,
     },
   })
   return true

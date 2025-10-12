@@ -25,6 +25,7 @@ import { getHierarchicalIndexes } from '@tiptap-pro/extension-table-of-contents'
 import { TableOfContents } from '@tiptap-pro/extension-table-of-contents'
 
 import type { UmoEditorOptions } from '@/types'
+import { getImageDimensions } from '@/utils/file'
 import { shortId } from '@/utils/short-id'
 
 import Audio from './audio'
@@ -41,7 +42,7 @@ import FontSize from './font-size'
 import FormatPainter from './format-painter'
 import Hr from './hr'
 import Iframe from './iframe'
-import Image from './image'
+import { BlockImage, InlineImage } from './image'
 import Indent from './indent'
 import LineHeight from './line-height'
 import Link from './link'
@@ -49,6 +50,7 @@ import Margin from './margin'
 import Mention from './mention'
 import getUsersSuggestion from './mention/suggestion'
 import NodeAlign from './node-align'
+import OptionBox from './option-box'
 import OrderedList from './ordered-list'
 import PageBreak from './page-break'
 import Selection from './selection'
@@ -61,7 +63,6 @@ import TextBox from './text-box'
 import Toc from './toc'
 import typeWriter from './type-writer'
 import Video from './video'
-
 export const getDefaultExtensions = ({
   container,
   options,
@@ -102,7 +103,8 @@ export const getDefaultExtensions = ({
     }),
     margin: Margin,
     link: Link,
-    image: Image,
+    image: BlockImage,
+    inlineImage: InlineImage,
     video: Video,
     audio: Audio,
     'code-block': CodeBlock,
@@ -115,6 +117,7 @@ export const getDefaultExtensions = ({
       suggestion: getUsersSuggestion(users ?? [], container),
     }),
     'date-time': Datetime,
+    'option-box': OptionBox,
     bookmark: Bookmark.configure({
       class: 'umo-editor-bookmark',
     }),
@@ -200,17 +203,19 @@ export const getDefaultExtensions = ({
     }),
     FileHandler.configure({
       allowedMimeTypes: file?.allowedMimeTypes,
-      onPaste(editor: Editor, files: any) {
+      onPaste: async (editor: Editor, files: any) => {
         // 记录 已有位置
         const pageContainer = document.querySelector(
           `${container} .umo-zoomable-container`,
         ) as HTMLElement
         const scrollTop = pageContainer?.scrollTop || 0
         for (const file of files) {
+          const fileDim = await getImageDimensions(file)
           editor.commands.insertFile({
             file,
             uploadFileMap: uploadFileMap.value,
             autoType: true,
+            fileDim,
           })
         }
         // 恢复滚动位置
@@ -259,7 +264,7 @@ export const inputAndPasteRules = (options: any) => {
     !options.value.document?.enableMarkdown ||
     !$document.value?.enableMarkdown
   ) {
-    enableRules = [Mathematics, Typography, Image as Extension]
+    enableRules = [Mathematics, Typography, BlockImage as Extension]
   }
   return enableRules
 }

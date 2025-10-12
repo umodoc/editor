@@ -14,6 +14,14 @@ const mimeTypes: any = {
     'image/svg+xml',
     'image/apng',
   ],
+  inlineImage: [
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+    'image/webp',
+    'image/svg+xml',
+    'image/apng',
+  ],
   video: ['video/mp4', 'video/mpeg', 'video/webm', 'video/ogg'],
   audio: [
     'audio/mp3',
@@ -29,7 +37,7 @@ const getAccept = (type: string, accept: string[]) => {
   if (type === 'file' && accept.length === 0) {
     return ''
   }
-  if (!type || !['image', 'video', 'audio'].includes(type)) {
+  if (!type || !['image', 'video', 'audio', 'inlineImage'].includes(type)) {
     return accept.toString()
   }
   let acceptArray = [...accept]
@@ -123,7 +131,7 @@ export default Node.create({
           })
         },
       insertFile:
-        ({ file, uploadFileMap, autoType, pos }) =>
+        ({ file, uploadFileMap, autoType, pos, fileDim }) =>
         ({ editor, commands }) => {
           const { type, name, size } = file
           const { options } = editor.storage
@@ -138,7 +146,7 @@ export default Node.create({
             })
             return false
           }
-          const position = pos || editor.state.selection.anchor
+          const position = pos ?? editor.state.selection.anchor
           let previewType = 'file'
           // 图片
           if (type.startsWith('image/') && mimeTypes.image.includes(type)) {
@@ -155,17 +163,42 @@ export default Node.create({
           // 插入节点
           const id = shortId(10)
           uploadFileMap.set(id, file)
+
+          let nodeData = {
+            id,
+            [previewType === 'file' ? 'url' : 'src']: URL.createObjectURL(file),
+            name,
+            type: type ?? 'unknown', // Ensure type is never null
+            size,
+            previewType,
+          }
+
+          // 图片处理
+          if (previewType === 'image') {
+            const { width, height, inline } = fileDim ?? {}
+            if (width && width > 0) {
+              nodeData = {
+                ...nodeData,
+                width,
+              }
+            }
+            if (height && height > 0) {
+              nodeData = {
+                ...nodeData,
+                height,
+              }
+            }
+            if (inline) {
+              previewType = 'inlineImage'
+              nodeData = {
+                ...nodeData,
+                inline: true,
+              }
+            }
+          }
           return commands.insertContentAt(position, {
             type: autoType ? previewType : 'file',
-            attrs: {
-              id,
-              [previewType === 'file' ? 'url' : 'src']:
-                URL.createObjectURL(file),
-              name,
-              type: type || 'unknown', // Ensure type is never null
-              size,
-              previewType,
-            },
+            attrs: nodeData,
           })
         },
       selectFiles:
@@ -199,7 +232,12 @@ export default Node.create({
               bool = editor
                 .chain()
                 .focus()
-                .insertFile({ file, uploadFileMap, autoType })
+                .insertFile({
+                  file,
+                  uploadFileMap,
+                  autoType,
+                  fileDim: { inline: type === 'inlineImage' ? true : false },
+                })
                 .run()
             }
           })
@@ -209,20 +247,24 @@ export default Node.create({
   },
   onTransaction({ editor, transaction }) {
     transaction.steps.forEach((step: any) => {
-      if (
-        ['_ReplaceStep', '_ReplaceAroundStep'].includes(step.constructor.name)
-      ) {
-        // 使用事务前的文档状态来获取被删除或替换的节点
-        const deletedNodes = transaction.before.content.cut(step.from, step.to)
-        deletedNodes.content.forEach((node: any) => {
-          // 如果是文件节点，调用删除方法删除文件
-          if (['image', 'video', 'audio', 'file'].includes(node.attrs.type)) {
-            const { id, src, url } = node.attrs
-            const { onFileDelete } = editor.storage.options || {}
-            onFileDelete(id, src || url)
-          }
-        })
+      const { name } = step.constructor
+      if (!['_ReplaceStep', '_ReplaceAroundStep'].includes(name)) {
+        return
       }
+      const { firstChild, lastChild } = step.slice.content
+      if (firstChild !== null || lastChild !== null) {
+        return
+      }
+      // 使用事务前的文档状态来获取被删除或替换的节点
+      const deletedNodes = transaction?.before?.content?.cut(step.from, step.to)
+      deletedNodes?.content?.forEach((node: any) => {
+        // 如果是文件节点，调用删除方法删除文件
+        if (['image', 'video', 'audio', 'file'].includes(node.type.name)) {
+          const { id, src, url } = node.attrs
+          const { onFileDelete } = editor.storage.options ?? {}
+          onFileDelete(id, src ?? url)
+        }
+      })
     })
   },
 })

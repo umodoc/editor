@@ -150,7 +150,7 @@ const startCountdown = async () => {
     clearInterval(countdownInterval)
   }
   const totalSeconds =
-    (hours || 0) * 3600 + (minutes || 0) * 60 + (seconds || 0)
+    (hours ?? 0) * 3600 + (minutes ?? 0) * 60 + (seconds ?? 0)
 
   if (totalSeconds <= 0) {
     messageBox = await useMessage('error', {

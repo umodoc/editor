@@ -136,7 +136,27 @@
       "doubleBoldBottom": "Linea sottile e spessa (sotto)",
       "wavy": "Linea ondulata"
     },
-    "image": "Immagine",
+    "option": {
+      "text": "Opzione",
+      "radio": "Pulsante di opzione",
+      "checkbox": "Casella di spunta",
+      "tip": "Tipo di opzione",
+      "content": "Contenuto dell'opzione",
+      "add": "Aggiungi opzione",
+      "checkall": "Mostra seleziona tutto",
+      "check": "Seleziona tutto",
+      "confirm": "Conferma",
+      "cancel": "Annulla",
+      "text1": "Opzione 1",
+      "text2": "Opzione 2"
+    },
+    "image": {
+      "text": "Immagine",
+      "block": "Immagine",
+      "blockdesc": "Inserisci un'immagine nel nodo",
+      "inline": "Immagine Inline",
+      "inlinedesc": "Inserisci un'immagine nel paragrafo"
+    },
     "link": {
       "text": "Link",
       "insert": "Inserisci",
@@ -513,7 +533,9 @@
       "removingBg": "Rimozione sfondo immagine...",
       "reset": "Reimposta posizione immagine",
       "rotateCC": "Ruota 90° antiorario",
-      "rotateC": "Ruota 90° orario"
+      "rotateC": "Ruota 90° orario",
+      "convertToNode": "Convertire in Immagine a Blocco",
+      "convertToInline": "Convertire in Immagine Inline"
     },
     "textBox": {
       "background": "Colore sfondo",

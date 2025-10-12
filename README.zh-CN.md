@@ -19,7 +19,7 @@ Umo Editor 是一个基于 Vue3 和 Tiptap 的本土化开源文档编辑器，�
 
 Umo Editor 最大的特点是代码完全开源且自主可控，支持私有部署，您可以内网环境中使用，而无需担心数据安全问题。同时 Umo Editor 基于 Vue3 和 Tiptap，两者都有丰富的生态系统和社区支持，在遇到问题时可以迅速得到解决。
 
-![Umo Editor](https://unpkg.com/@umoteam/editor-external@latest/static/umo-editor-cn@2x.pngg)
+![Umo Editor](https://unpkg.com/@umoteam/editor-external@latest/static/umo-editor-cn@2x.png)
 
 作为一个独立的 Vue3 插件，Umo Editor 可以轻松集成到各类 Vue3 项目中。对于非 Vue3 项目，您可以通过 Iframe 将 Umo Editor 嵌入到您的项目中。
 

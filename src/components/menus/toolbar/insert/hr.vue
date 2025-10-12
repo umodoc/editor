@@ -43,7 +43,7 @@
           </div>
           <template #content>
             <div class="umo-page-divider-color-picker">
-              <color-picker default-color="#000" @change="colorChange" />
+              <picker-color default-color="#000" @change="colorChange" />
             </div>
           </template>
         </t-popup>

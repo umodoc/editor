@@ -31,6 +31,7 @@ import { TextSelection } from '@tiptap/pm/state'
 
 const container = inject('container')
 const editor = inject('editor')
+const page = inject('page')
 
 defineEmits(['close'])
 
@@ -105,8 +106,11 @@ const headingActive = (value: any) => {
   if (!nodeElement || !pageContainer || !pageHeader) {
     return
   }
+  const { zoomLevel } = page.value
   pageContainer.scrollTo({
-    top: nodeElement.offsetTop + pageHeader.offsetHeight,
+    top: Math.round(
+      ((nodeElement.offsetTop + pageHeader.offsetHeight) * zoomLevel) / 100,
+    ),
   })
   const pos = editor.value.view.posAtDOM(nodeElement as Node, 0)
   const { tr } = editor.value.view.state

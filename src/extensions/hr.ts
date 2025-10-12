@@ -31,7 +31,7 @@ export default hr.extend({
         renderHTML: (attributes) => {
           return {
             'data-color': attributes.color,
-            style: `color: ${attributes.color || 'inherit'}`,
+            style: `color: ${attributes.color ?? 'inherit'}`,
           }
         },
       },

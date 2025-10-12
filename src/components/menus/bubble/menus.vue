@@ -54,6 +54,41 @@
         editor?.getAttributes('image').type.startsWith('image')
       "
     />
+    <menus-bubble-image-convert />
+    <menus-bubble-node-delete />
+  </template>
+  <template
+    v-else-if="
+      editor?.isActive('inlineImage') &&
+      !editor?.getAttributes('inlineImage').error
+    "
+  >
+    <menus-toolbar-base-align-left />
+    <menus-toolbar-base-align-center />
+    <menus-toolbar-base-align-right />
+    <div class="umo-bubble-menu-divider"></div>
+    <menus-bubble-image-flip />
+    <menus-bubble-image-proportion />
+    <div class="umo-bubble-menu-divider"></div>
+    <menus-bubble-image-remove-background
+      v-if="
+        editor?.getAttributes('inlineImage')?.type.startsWith('image') ||
+        ['image/png', 'image/jpeg'].includes(
+          editor?.getAttributes('inlineImage')?.type,
+        )
+      "
+    />
+    <menus-bubble-image-preview
+      v-if="
+        editor?.getAttributes('inlineImage')?.type.startsWith('image') ||
+        ['image/png', 'image/jpeg'].includes(
+          editor?.getAttributes('inlineImage')?.type,
+        )
+      "
+    />
+    <menus-bubble-image-open />
+    <div class="umo-bubble-menu-divider"></div>
+    <menus-bubble-image-convert />
     <menus-bubble-node-delete />
   </template>
   <template
@@ -122,6 +157,18 @@
     <menus-toolbar-base-align-right />
     <div class="umo-bubble-menu-divider"></div>
     <menus-toolbar-tools-echarts ico="setting" />
+    <menus-bubble-node-delete />
+  </template>
+  <template v-else-if="editor?.isActive('option-box')">
+    <menus-toolbar-base-font-size :select="false" />
+    <menus-toolbar-base-bold />
+    <menus-toolbar-base-italic />
+    <div class="umo-bubble-menu-divider"></div>
+    <menus-toolbar-base-color />
+    <menus-toolbar-base-background-color />
+    <div class="umo-bubble-menu-divider"></div>
+    <menus-toolbar-insert-option-box :to-edit="true" />
+    <div class="umo-bubble-menu-divider"></div>
     <menus-bubble-node-delete />
   </template>
   <template v-else>

@@ -2,7 +2,10 @@
   <node-view-wrapper
     ref="containerRef"
     class="umo-node-view"
-    :class="{ 'umo-floating-node': node.attrs.draggable }"
+    :class="{
+      'umo-floating-node': node.attrs.draggable,
+      'is-inline-image': node.attrs.inline,
+    }"
     :style="nodeStyle"
     @dblclick="openImageViewer"
   >
@@ -11,7 +14,6 @@
       :class="{
         'is-loading': node.attrs.src && isLoading,
         'is-error': node.attrs.src && error,
-        'is-draggable': node.attrs.draggable,
         'umo-hover-shadow': !options.document?.readOnly,
         'umo-select-outline': !node.attrs.draggable,
       }"
@@ -34,16 +36,17 @@
       </div>
       <drager
         v-else
+        ref="dragRef"
+        :class="{ 'is-draggable': node.attrs.draggable }"
         :style="{
           cursor:
             node.attrs.draggable && !options.document?.readOnly
-              ? 'inherit'
+              ? 'move'
               : 'default !important',
         }"
         :selected="selected"
         :rotatable="true"
         :boundary="false"
-        :draggable="Boolean(node.attrs.draggable)"
         :disabled="options.document?.readOnly"
         :angle="node.attrs.angle"
         :width="Number(node.attrs.width)"
@@ -58,7 +61,7 @@
         :equal-proportion="node.attrs.equalProportion"
         @rotate="onRotate"
         @resize="onResize"
-        @drag="onDrag"
+        @mousedown="onMousedown"
         @focus="selected = true"
       >
         <img
@@ -176,8 +179,38 @@ const onResize = ({ width, height }: { width: number; height: number }) => {
   })
 }
 
-const onDrag = ({ left, top }: { left: number; top: number }) => {
-  updateAttributes({ left, top })
+let dragRef = $ref<HTMLDivElement | null>(null)
+let isMousedown = $ref(false)
+const onMousedown = (e: MouseEvent) => {
+  if (!node.attrs.draggable) {
+    return
+  }
+  isMousedown = true
+
+  // 记录按下的位置
+  const downX = e.clientX
+  const downY = e.clientY
+
+  // 鼠标在盒子里的位置
+  const elRect = dragRef.$el!.getBoundingClientRect()
+  const mouseX = downX - elRect.left
+  const mouseY = downY - elRect.top
+
+  const onMousemove = (e: MouseEvent) => {
+    let left = e.clientX - mouseX
+    let top = e.clientY - mouseY
+    updateAttributes({ left, top })
+  }
+  const onMouseup = (_e: MouseEvent) => {
+    isMousedown = false
+    // 移除document事件
+    document.removeEventListener('mousemove', onMousemove)
+    document.removeEventListener('mouseup', onMouseup)
+  }
+  //  注册鼠标移动事件
+  document.addEventListener('mousemove', onMousemove)
+  // 鼠标抬起事件
+  document.addEventListener('mouseup', onMouseup)
 }
 
 onClickOutside(containerRef, () => {
@@ -193,6 +226,15 @@ const openImageViewer = async () => {
   imageViewer.value.visible = true
   imageViewer.value.current = node.attrs.id
 }
+
+watch(
+  () => node.attrs.draggable,
+  (draggable: boolean) => {
+    if (!draggable) {
+      updateAttributes({ left: null, top: null })
+    }
+  },
+)
 
 watch(
   () => node.attrs.equalProportion,
@@ -247,6 +289,17 @@ watch(
 
 <style lang="less">
 .umo-node-view {
+  &.is-inline-image {
+    display: inline-block !important;
+    padding: 2px 6px;
+    img {
+      /* 1. 图片宽度不超过父容器宽度（核心约束） */
+      max-width: 100% !important;
+      /* 2. 图片高度不超过父容器高度（避免纵向溢出） */
+      max-height: 100% !important;
+    }
+  }
+  /* 关键：控制图片本身的自适应规则 */
   .umo-node-image {
     max-width: 100%;
     width: auto;
@@ -257,9 +310,15 @@ watch(
       outline: none !important;
       box-shadow: none !important;
     }
-    &:not(.is-draggable) .es-drager {
-      max-width: 100%;
-      max-height: 100%;
+    .es-drager {
+      &.is-draggable {
+        position: absolute;
+      }
+      &:not(.is-draggable) {
+        position: relative;
+        max-width: 100%;
+        max-height: 100%;
+      }
     }
     img {
       display: block;

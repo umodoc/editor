@@ -77,6 +77,18 @@ const cssConfig = {
     less: {
       modifyVars: { '@prefix': 'umo' },
       javascriptEnabled: true,
+      // 添加 Less 插件来排除特定类名
+      plugins: [
+        {
+          install(less: any, pluginManager: any) {
+            pluginManager.addPostProcessor({
+              process(css: string) {
+                return css.replace(/\.flex-center(\s|\{|,)[^}]*\}/g, '')
+              },
+            })
+          },
+        },
+      ],
     },
   },
 }
@@ -121,6 +133,9 @@ export default defineConfig({
   ],
   css: cssConfig,
   build: buildConfig,
+  esbuild: {
+    drop: ['debugger'],
+  },
   resolve: {
     alias: {
       '@': `${process.cwd()}/src`,

@@ -136,7 +136,27 @@
       "doubleBoldBottom": "Thin & Thick Lines (Bottom)",
       "wavy": "Wavy Line"
     },
-    "image": "Image",
+    "option": {
+      "text": "Option",
+      "radio": "Radio Button",
+      "checkbox": "Checkbox",
+      "tip": "Option Type",
+      "content": "Option Content",
+      "add": "Add Option",
+      "checkall": "Show Select All",
+      "check": "Select All",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "text1": "Option 1",
+      "text2": "Option 2"
+    },
+    "image": {
+      "text": "Image",
+      "block": "Image",
+      "blockdesc": "Insert an image on the node",
+      "inline": "Inline Image",
+      "inlinedesc": "Insert an image within the paragraph"
+    },
     "link": {
       "text": "Link",
       "insert": "Insert",
@@ -513,7 +533,9 @@
       "removingBg": "Removing Image Background...",
       "reset": "Reset Image Position",
       "rotateCC": "Rotate Counter-Clockwise 90°",
-      "rotateC": "Rotate Clockwise 90°"
+      "rotateC": "Rotate Clockwise 90°",
+      "convertToNode": "Convert to Block Image",
+      "convertToInline": "Convert to Inline Image"
     },
     "textBox": {
       "background": "Background Color",

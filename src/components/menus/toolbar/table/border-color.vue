@@ -9,7 +9,7 @@
     @toggle-popup="togglePopup"
   >
     <template #content>
-      <color-picker default-color="" @change="colorBorderChange" />
+      <picker-color default-color="" @change="colorBorderChange" />
     </template>
   </menus-button>
 </template>
