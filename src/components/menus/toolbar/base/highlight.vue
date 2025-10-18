@@ -71,6 +71,10 @@ const options: HighlightOption[] = [
 
 let highlight = $ref<HighlightOption | undefined>()
 const highlightChange = (item: HighlightOption) => {
+  if (!item) {
+    highlightChange(options[0])
+    return
+  }
   if (item.bgcolor) {
     editor.value?.chain().focus().setHighlight({ color: item.bgcolor }).run()
   }
