@@ -117,7 +117,7 @@ export const getDefaultExtensions = ({
       suggestion: getUsersSuggestion(users ?? [], container),
     }),
     'date-time': Datetime,
-    'option-box': OptionBox,
+    optionBox: OptionBox,
     bookmark: Bookmark.configure({
       class: 'umo-editor-bookmark',
     }),

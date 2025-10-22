@@ -15,7 +15,7 @@ declare module '@tiptap/core' {
 }
 
 export default Node.create({
-  name: 'option-box',
+  name: 'optionBox',
   group: 'inline',
   inline: true,
   atom: true,
