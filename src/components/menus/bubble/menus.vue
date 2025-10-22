@@ -159,7 +159,7 @@
     <menus-toolbar-tools-echarts ico="setting" />
     <menus-bubble-node-delete />
   </template>
-  <template v-else-if="editor?.isActive('option-box')">
+  <template v-else-if="editor?.isActive('optionBox')">
     <menus-toolbar-base-font-size :select="false" />
     <menus-toolbar-base-bold />
     <menus-toolbar-base-italic />
