@@ -7,7 +7,7 @@
     style="width: 80px"
     :select-options="fontSizes"
     :select-value="
-      isTypeRunning
+      typeWriterIsRunning
         ? null
         : editor?.getAttributes('textStyle').fontSize || '14px'
     "
@@ -43,18 +43,12 @@ const props = defineProps({
 
 const editor = inject('editor')
 const options = inject('options')
+const typeWriterIsRunning = inject('typeWriterIsRunning')
 
 const disableMenu = (name: string) => {
   return options.value.disableExtensions.includes(name)
 }
-import { getTypewriterRunState } from '@/extensions/type-writer'
-let isTypeRunning = $ref(false)
-watch(
-  () => getTypewriterRunState(),
-  (newValue: boolean) => {
-    isTypeRunning = newValue
-  },
-)
+
 const fontSizes = [
   { label: t('base.fontSize.default'), value: '14px', order: 4 },
   { label: t('base.fontSize.42pt'), value: '42pt', order: 20 }, // 56

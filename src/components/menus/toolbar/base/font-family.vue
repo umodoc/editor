@@ -4,7 +4,7 @@
     menu-type="select"
     hide-text
     :select-value="
-      isTypeRunning
+      typeWriterIsRunning
         ? null
         : editor?.getAttributes('textStyle').fontFamily || null
     "
@@ -47,15 +47,8 @@ const editor = inject('editor')
 const options = inject('options')
 const $toolbar = useState('toolbar', options)
 const $recent = useState('recent', options)
+const typeWriterIsRunning = inject('typeWriterIsRunning')
 
-import { getTypewriterRunState } from '@/extensions/type-writer'
-let isTypeRunning = $ref(false)
-watch(
-  () => getTypewriterRunState(),
-  (newValue: boolean) => {
-    isTypeRunning = newValue
-  },
-)
 const usedFonts = $ref<string[]>([])
 // https://www.cnblogs.com/gaidalou/p/8479452.html
 const fontDetect = (font?: string) => {

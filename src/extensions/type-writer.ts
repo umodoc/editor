@@ -22,6 +22,7 @@ declare module '@tiptap/core' {
 interface TypewriterOptions {
   speed?: number
   step?: number
+  focus?: 'end' | null // 光标位置
   onProgress?: (progress: number) => void
   onComplete?: () => void
 }
@@ -96,6 +97,8 @@ export default Extension.create({
                 totalChars: calculateTotalChars(content?.content ?? []),
                 typedChars: 0,
               }
+              const focusState =
+                options?.focus === null ? null : (options?.focus ?? 'end')
               // 插入内容
               const typeWriterInsertContent = async (curContent: any) => {
                 await new Promise<void>((resolve) => {
@@ -104,9 +107,7 @@ export default Extension.create({
                       editor
                         .chain()
                         .insertContent(curContent)
-                        .focus('end', {
-                          scrollIntoView: true,
-                        })
+                        .focus(focusState)
                         .run()
                     } catch (e) {}
                     resolve()
