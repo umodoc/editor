@@ -1,7 +1,6 @@
 import type { Extension, HTMLContent, JSONContent } from '@tiptap/core'
 import type { FocusPosition } from '@tiptap/core'
 import { Fragment, Node as ProseMirrorNode } from '@tiptap/pm/model'
-import type { AsyncFunction } from '@tool-belt/type-predicates'
 
 export type SupportedLocale = 'en-US' | 'zh-CN'
 export type LayoutOption = 'web' | 'page'
@@ -148,7 +147,10 @@ export interface AssistantOptions {
   enabled?: boolean
   maxlength?: number
   commands?: CommandItem[]
-  onMessage?: AsyncFunction
+  onMessage?: (
+    payload: AssistantPayload,
+    content: AssistantContent,
+  ) => Promise<ReadableStream | string>
 }
 
 export interface EchartsOptions {
@@ -184,9 +186,9 @@ export interface AssistantPayload {
 }
 
 export interface AssistantContent {
-  html?: string
-  text?: string
-  json?: unknown
+  html: HTMLContent
+  json: JSONContent
+  text: string
 }
 export interface AssistantResult {
   prompt?: string
@@ -262,7 +264,7 @@ export interface UmoEditorOptions {
   translations?: Record<string, unknown>
   onSave?: OnSaveFunction
   onFileUpload?: (file: File) => Promise<{ id: string; url: string }>
-  onFileDelete?: CallableFunction
+  onFileDelete?: (id: string, url: string) => void
 }
 
 // 组件类型声明
