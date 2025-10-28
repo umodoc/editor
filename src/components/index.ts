@@ -8,8 +8,8 @@ import UmoDialog from './modal.vue'
 import UmoTooltip from './tooltip.vue'
 
 const useUmoEditor = {
-  install: (app: any, options: UmoEditorOptions) => {
-    app.provide('defaultOptions', options)
+  install: (app: any, options?: Partial<UmoEditorOptions>) => {
+    app.provide('defaultOptions', options ?? {})
     app.component(UmoEditor.name ?? 'UmoEditor', UmoEditor)
   },
 }
