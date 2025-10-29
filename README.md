@@ -140,10 +140,19 @@ If you find Umo Editor useful, please consider supporting us in the following wa
 - ⭐ Star the [Umo Editor repository](https://github.com/umodoc/editor) to show your support.
 - 🔗 If you use Umo Editor in your project, add a link to https://github.com/umodoc/editor.
 
+## Products from Umo Team
+
+- [Umo Editor](https://dev.umodoc.com/en/docs/editor): A localized open-source document editor based on Vue3 and Tiptap.
+- [Umo Viewer](https://dev.umodoc.com/en/docs/viewer): A PDF viewer built with Vue3 and PDF.js, enabling direct PDF preview in the browser and also supporting preview of Umo Editor documents.
+- [Umo Editor Next](https://dev.umodoc.com/en/docs/next): An enhanced version of Umo Editor that includes all features of the latest Umo Editor while adding or improving support for multi-user real-time collaborative editing, document annotations (comments), document version history, AI-assisted creation, document import/export, tables, and more. It also enhances customization of toolbars and sidebars.
+- [Umo Editor Server](https://dev.umodoc.com/en/docs/server): A companion server-side software developed to extend Umo Editor capabilities such as multi-user collaborative editing, document annotations, and document import/export.
+- [Umo Office Viewer](https://dev.umodoc.com/en/docs/office-viewer): An Office document viewer that supports previewing over 40 mainstream office document in web pages.
+- [Umo Office Convert](https://dev.umodoc.com/en/docs/office-convert): Converts over 40 office formats into web-viewable formats, ready to pair with Umo Office Viewer for seamless online document preview.
+
 ## Open Source License
 
 Umo Editor is licensed under the [MIT License](https://github.com/umodoc/editor/raw/main/LICENSE). You are free to use, modify, and distribute this software, but this does **not** mean you are allowed to remove the copyright information at will. Please retain the Umo Editor copyright notice and the link displayed in the interface. Removal of these will be considered an infringement. We encourage you to support open-source projects.
 
-If you do not wish to retain the copyright information, please contact us or consider purchasing the commercial version: [Umo Editor Next](https://dev.umodoc.com/en/docs/editor/next).
+If you do not wish to retain the copyright information, please contact us or consider purchasing the commercial version: [Umo Editor Next](https://dev.umodoc.com/en/docs/next).
 
 This documentation is published under the [CC BY-NC-SA 4.0 DEED License](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en).
