@@ -9,6 +9,8 @@ import {
 } from '@tool-belt/type-predicates'
 
 import type {
+  AssistantContent,
+  AssistantPayload,
   Emoji,
   GraphicSymbol,
   LineHeight,
@@ -704,7 +706,12 @@ const ojbectSchema = new ObjectSchema({
           },
           onMessage: {
             merge: 'replace',
-            validate(value: AsyncFunction) {
+            validate(
+              value: (
+                payload: AssistantPayload,
+                content: AssistantContent,
+              ) => Promise<ReadableStream | string>,
+            ) {
               if (!isAsyncFunction(value)) {
                 throw new Error('Key "onMessage" must be a async function.')
               }

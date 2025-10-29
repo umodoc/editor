@@ -179,7 +179,7 @@ const onResize = ({ width, height }: { width: number; height: number }) => {
   })
 }
 
-let dragRef = $ref<HTMLDivElement | null>(null)
+const dragRef = $ref<HTMLDivElement | null>(null)
 let isMousedown = $ref(false)
 const onMousedown = (e: MouseEvent) => {
   if (!node.attrs.draggable) {
@@ -197,8 +197,8 @@ const onMousedown = (e: MouseEvent) => {
   const mouseY = downY - elRect.top
 
   const onMousemove = (e: MouseEvent) => {
-    let left = e.clientX - mouseX
-    let top = e.clientY - mouseY
+    const left = e.clientX - mouseX
+    const top = e.clientY - mouseY
     updateAttributes({ left, top })
   }
   const onMouseup = (_e: MouseEvent) => {
