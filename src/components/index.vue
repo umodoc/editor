@@ -15,6 +15,7 @@
         'preview-mode': page.preview?.enabled,
         'laser-pointer': page.preview?.enabled && page.preview?.laserPointer,
         'umo-editor-is-fullscreen': fullscreen,
+        'umo-editor-is-typerwriterRuning': !typeWriterIsRunning,
       }"
       :style="{
         height: options.height,
@@ -68,6 +69,7 @@ import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
 
 import { getSelectionNode, getSelectionText } from '@/extensions/selection'
+import { getTypewriterRunState } from '@/extensions/type-writer'
 import { i18n } from '@/i18n'
 import { propsOptions } from '@/options'
 import type {
@@ -150,6 +152,7 @@ const exportFile = ref({ pdf: false, image: false })
 const uploadFileMap = ref(new Map())
 // const bookmark = ref(false)
 const destroyed = ref(false)
+const typeWriterIsRunning = ref(false)
 provide('container', container)
 provide('options', options)
 provide('editor', editor)
@@ -167,6 +170,7 @@ provide('uploadFileMap', uploadFileMap)
 // provide('bookmark', bookmark)
 provide('destroyed', destroyed)
 provide('historyRecords', historyRecords)
+provide('typeWriterIsRunning', typeWriterIsRunning)
 
 watch(
   () => options.value.page,
@@ -255,6 +259,14 @@ watch(
   () => options.value.document,
   (val: any) => {
     $document.value = val
+  },
+)
+
+watch(
+  () => getTypewriterRunState(),
+  (newValue: boolean) => {
+    typeWriterIsRunning.value = newValue
+    console.log('typeWriterIsRunning', typeWriterIsRunning)
   },
 )
 
@@ -1302,6 +1314,11 @@ defineExpose({
     left: 0;
     right: 0;
     bottom: 0;
+  }
+  &:not(.umo-editor-is-typerwriterRuning) {
+    pointer-events: none; /* 核心：禁用所有鼠标事件 */
+    /* 可选：添加半透明效果提示不可交互 */
+    opacity: 0.9;
   }
 }
 </style>
