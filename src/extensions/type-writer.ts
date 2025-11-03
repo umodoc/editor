@@ -14,7 +14,7 @@ declare module '@tiptap/core' {
       /**
        * 获取当前打字机状态
        */
-      getTypewriterState: () => any
+      getTypewriterState: () => TypewriterState
     }
   }
 }
@@ -22,7 +22,7 @@ declare module '@tiptap/core' {
 interface TypewriterOptions {
   speed?: number
   step?: number
-  focus?: 'end' | null // 光标位置
+  focus?: 'start' | 'end' | null
   onProgress?: (progress: number) => void
   onComplete?: () => void
 }
@@ -116,23 +116,70 @@ export default Extension.create({
               }
               // 取非负数
               const speed = Math.max(options?.speed ?? 1, 0)
+
+              const isEmptyParagraph = (node: any) => {
+                return (
+                  node?.type === 'paragraph' &&
+                  (!node.content ||
+                    node.content.length === 0 ||
+                    (node.content.length === 1 &&
+                      node.content[0].type === 'text' &&
+                      !node.content[0].text))
+                )
+              }
               // 处理内容
-              const processNode = async (node: any, isTopLevel = false) => {
+              const processNode = async (
+                node: any,
+                index: number,
+                nodes: any,
+                isTopLevel = false,
+              ) => {
+                let resultIndex = 0
                 if (node.type === 'paragraph') {
-                  // 当前为段落时 插入段落样式
-                  await typeWriterInsertContent([
-                    { type: 'paragraph', attrs: node.attrs },
-                  ])
-                  // 处理段落内容
-                  if (node.content && node.content.length > 0) {
-                    for (const [index, childNode] of node.content.entries()) {
-                      typewriterState.value.currentTextNode = index
-                      await processNode(childNode)
+                  if (isEmptyParagraph(node)) {
+                    const ParagraphNodes = [node]
+                    for (
+                      let paragraphIndex = index + 1;
+                      paragraphIndex < nodes.length;
+                      paragraphIndex++
+                    ) {
+                      if (isEmptyParagraph(nodes[paragraphIndex])) {
+                        ParagraphNodes.push(nodes[paragraphIndex])
+                        resultIndex++
+                        typewriterState.value.currentParagraph++
+                      } else {
+                        break
+                      }
                     }
+                    await typeWriterInsertContent(ParagraphNodes)
+                    typewriterState.value.currentParagraph++
                   } else {
-                    editor.commands.enter()
+                    // 当前为段落时 插入段落样式
+                    await typeWriterInsertContent([
+                      { type: 'paragraph', attrs: node.attrs },
+                    ])
+                    // 处理段落内容
+                    if (node.content && node.content.length > 0) {
+                      for (
+                        let childIndex = 0;
+                        childIndex < node.content.length;
+                        childIndex++
+                      ) {
+                        typewriterState.value.currentTextNode = childIndex
+                        const childNode = node.content[childIndex]
+                        const childResultIndex = await processNode(
+                          childNode,
+                          childIndex,
+                          node.content,
+                          false,
+                        )
+                        childIndex = childIndex + (childResultIndex ?? 0)
+                      }
+                    } else {
+                      editor.commands.enter()
+                    }
+                    typewriterState.value.currentParagraph++
                   }
-                  typewriterState.value.currentParagraph++
                 } else if (node.type === 'text') {
                   // 处理文本节点
                   const text = node.text ?? ''
@@ -173,7 +220,23 @@ export default Extension.create({
                     })
                   }
                 } else if (node.type === 'table') {
-                  await typeWriterInsertContent([node, { type: 'paragraph' }])
+                  const tableNodes = [node]
+                  for (
+                    let tableIndex = index + 1;
+                    tableIndex < nodes.length;
+                    tableIndex++
+                  ) {
+                    if (isEmptyParagraph(nodes[tableIndex])) {
+                      tableNodes.push(nodes[tableIndex])
+                      resultIndex++
+                    } else {
+                      break
+                    }
+                  }
+                  if (tableNodes.length === 1) {
+                    tableNodes.push({ type: 'paragraph' })
+                  }
+                  await typeWriterInsertContent(tableNodes)
                   editor.commands.enter()
                 } else {
                   if (isTopLevel) {
@@ -182,13 +245,21 @@ export default Extension.create({
                     await typeWriterInsertContent([node])
                   }
                 }
+                return resultIndex
               }
-              // 结束当前事务（确保之前的修改已应用）
-              editor.view.dispatch(editor.state.tr) // 应用一个空事务来确保状态更新
+              // // 结束当前事务（确保之前的修改已应用）
+              // editor.view.dispatch(editor.state.tr) // 应用一个空事务来确保状态更新
               // 处理所有顶级节点
-              for (const node of content?.content ?? []) {
+              const contentNodes = content?.content ?? []
+              for (let i = 0; i < contentNodes.length; i++) {
                 if (!typewriterState.value.isRunning) break
-                await processNode(node, true)
+                const resultIndex = await processNode(
+                  contentNodes[i],
+                  i,
+                  contentNodes,
+                  true,
+                )
+                i = i + (resultIndex ?? 0)
               }
               // 完成回调
               if (typewriterState.value.isRunning && options?.onComplete) {
@@ -209,7 +280,7 @@ export default Extension.create({
         return true
       },
 
-      getTypewriterState: () => () => {
+      getTypewriterState: () => {
         return {
           isRunning: typewriterState.value.isRunning,
           currentParagraph: typewriterState.value.currentParagraph,
