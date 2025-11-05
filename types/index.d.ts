@@ -102,6 +102,7 @@ export interface DocumentOptions {
   typographyRules?: Record<string, unknown>
   editorProps?: Record<string, unknown>
   parseOptions?: Record<string, unknown>
+  showSave?: boolean
   autoSave?: AutoSaveOptions
 }
 
