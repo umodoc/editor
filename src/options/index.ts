@@ -82,7 +82,7 @@ const defaultOptions: UmoEditorOptions = {
     parseOptions: {
       preserveWhitespace: 'full',
     },
-    showSave:true,
+    showSave: true,
     autoSave: {
       enabled: true,
       interval: 300000,
