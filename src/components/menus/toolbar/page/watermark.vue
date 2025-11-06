@@ -82,7 +82,7 @@
             v-if="page.watermark"
             class="item compact"
             :class="{ active: page.watermark.type === 'compact' }"
-            @click="updateWatermark({ type: compact })"
+            @click="updateWatermark({ type: 'compact' })"
           >
             <div class="bg"></div>
             <span v-text="t('page.watermark.compact')"></span>
@@ -91,7 +91,7 @@
             v-if="page.watermark"
             class="item spacious"
             :class="{ active: page.watermark.type === 'spacious' }"
-            @click="updateWatermark({ type: spacious })"
+            @click="updateWatermark({ type: 'spacious' })"
           >
             <div class="bg"></div>
             <span v-text="t('page.watermark.spacious')"></span>
