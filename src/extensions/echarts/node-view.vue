@@ -104,6 +104,29 @@ const loadData = async () => {
   await nextTick()
   // 确保 loadData 在 echarts 加载完毕后调用
   await loadResource(`${options.value.cdnUrl}/libs/echarts/echarts.min.js`)
+
+  // 等待 echarts 加载完成
+  const waitForECharts = () => {
+    return new Promise<void>((resolve, reject) => {
+      let attempts = 0
+      const maxAttempts = 40 // 最多等待2秒
+      const checkECharts = () => {
+        if (typeof echarts !== 'undefined') {
+          resolve()
+        } else if (attempts < maxAttempts) {
+          // 如果 echarts 还没有加载完成，等待一段时间后再次检查
+          attempts++
+          setTimeout(checkECharts, 50)
+        } else {
+          resolve()
+          // reject(new Error('ECharts loading timeout'))
+        }
+      }
+      checkECharts()
+    })
+  }
+  // 等待 echarts 加载完成
+  await waitForECharts()
   // 接下来的使用就跟之前一样，初始化图表，设置配置项
   if (typeof echarts !== 'undefined') {
     const { chartOptions, chartConfig, id, mode } = node.attrs
