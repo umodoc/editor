@@ -66,7 +66,7 @@ onMounted(async () => {
       if (containerRef.value) {
         updateAttributesWithoutHistory(
           editor.value,
-          { id, url, uploaded: true },
+          { id, src: url, uploaded: true },
           getPos(),
         )
       }

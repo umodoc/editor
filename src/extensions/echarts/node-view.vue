@@ -107,7 +107,7 @@ const loadData = async () => {
 
   // 等待 echarts 加载完成
   const waitForECharts = () => {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       let attempts = 0
       const maxAttempts = 40 // 最多等待2秒
       const checkECharts = () => {
