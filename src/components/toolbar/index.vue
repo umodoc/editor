@@ -30,7 +30,7 @@
     </toolbar-classic>
     <div class="umo-toolbar-actions" :class="$toolbar.mode">
       <t-popup
-        v-if="options.document.readOnly !== true"
+        v-if="options.document.showSave && options.document.readOnly !== true"
         v-model="statusPopup"
         :attach="container"
         trigger="click"

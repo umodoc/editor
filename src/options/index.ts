@@ -82,6 +82,7 @@ const defaultOptions: UmoEditorOptions = {
     parseOptions: {
       preserveWhitespace: 'full',
     },
+    showSave: true,
     autoSave: {
       enabled: true,
       interval: 300000,
@@ -629,6 +630,11 @@ const ojbectSchema = new ObjectSchema({
       parseOptions: {
         merge: 'replace',
         validate: 'object',
+        required: false,
+      },
+      showSave: {
+        merge: 'replace',
+        validate: 'boolean',
         required: false,
       },
       autoSave: {

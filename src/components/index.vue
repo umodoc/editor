@@ -1024,15 +1024,21 @@ const saveContent = async (showMessage = true) => {
   if (options.value.document?.readOnly) {
     return
   }
+  const saveBack = {
+    status: '', // 可选值：'success' | 'error'  // 状态描述文本（用于前端提示或日志）
+    message: '', // 例如：'保存失败：网络异常'
+    showMessage: true, // 是否展示message
+  }
   try {
     useMessage('loading', {
       attach: container,
       content: t('save.saving'),
       placement: 'bottom',
       closeBtn: true,
+      duration: 0, // 需要手工关闭，不会自动关闭了
       offset: [0, -20],
     })
-    const success = await options.value?.onSave?.(
+    const _saveBack = await options.value?.onSave?.(
       {
         html: editor.value?.getHTML(),
         json: editor.value?.getJSON(),
@@ -1041,23 +1047,41 @@ const saveContent = async (showMessage = true) => {
       page.value,
       $document.value,
     )
-    if (!success) {
-      MessagePlugin.closeAll()
-      useMessage('error', {
-        attach: container,
-        content: t('save.failed'),
-        placement: 'bottom',
-        offset: [0, -20],
-      })
+    // 兼容老的保存回调
+    if (typeof _saveBack === 'string') {
+      if (_saveBack) {
+        saveBack.status = 'success'
+        saveBack.message = _saveBack
+      } else {
+        saveBack.status = 'error'
+        saveBack.message = _saveBack
+      }
+    } else {
+      for (const key in _saveBack) {
+        saveBack[key] = _saveBack[key]
+      }
+      // 没有返回这个
+      if (_saveBack['showMessage'] === undefined) {
+        saveBack['showMessage'] = showMessage
+      }
+    }
+    MessagePlugin.closeAll()
+    if (saveBack.status === 'error') {
+      if (saveBack.showMessage) {
+        useMessage('error', {
+          attach: container,
+          content: saveBack.message ?? t('save.failed'),
+          placement: 'bottom',
+          offset: [0, -20],
+        })
+      }
       return
     }
     emits('saved')
-    if (showMessage) {
-      MessagePlugin.closeAll()
+    if (saveBack.showMessage) {
       useMessage('success', {
         attach: container,
-        content:
-          success === false || success === true ? t('save.success') : success,
+        content: saveBack.message ?? t('save.success'),
         placement: 'bottom',
         offset: [0, -20],
       })
@@ -1065,13 +1089,16 @@ const saveContent = async (showMessage = true) => {
     const time = useTimestamp({ offset: 0 })
     savedAt.value = time.value
   } catch (e: unknown) {
-    const error = e as Error
-    useMessage('error', {
-      attach: container,
-      content: error?.message ? error.message : t('save.error'),
-      placement: 'bottom',
-      offset: [0, -20],
-    })
+    MessagePlugin.closeAll()
+    if (saveBack.showMessage) {
+      const error = e as Error
+      useMessage('error', {
+        attach: container,
+        content: error?.message ? error.message : t('save.error'),
+        placement: 'bottom',
+        offset: [0, -20],
+      })
+    }
     console.error((e as Error).message)
   }
 }
@@ -1179,8 +1206,10 @@ watch(
     editor.value?.on('focus', () => {
       useHotkeys('esc', unsetFormatPainter)
       useHotkeys('ctrl+s,command+s', () => {
-        void saveContent()
-        unsetFormatPainter()
+        if (options?.value?.document?.showSave) {
+          void saveContent()
+          unsetFormatPainter()
+        }
       })
       useHotkeys('ctrl+p,command+p', () => {
         print()
