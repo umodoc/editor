@@ -113,8 +113,8 @@ const options = $ref({
       size: file.size,
     }
   },
-  onFileDelete(id: string, url: string) {
-    console.log(id, url)
+  onFileDelete(id: string, url: string, type: string) {
+    console.log(id, url, type)
   },
 })
 </script>
