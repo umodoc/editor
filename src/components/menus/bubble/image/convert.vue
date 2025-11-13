@@ -26,7 +26,7 @@ const convertPosition = () => {
     const imageData = image.attrs ?? {}
     if (!imageData.error && imageData.src) {
       // 1.删除原有节点
-      editor.value?.chain().focus().deleteSelectionNode().run()
+      editor.value?.chain().focus().deleteSelectionNode().setMeta('convert',true).run()
       // 2.插入新的节点
       if (typeName === 'inlineImage') {
         editor.value

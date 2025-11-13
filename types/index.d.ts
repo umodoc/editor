@@ -230,6 +230,8 @@ type OnSaveFunction = (
   document: DocumentOptions,
 ) => Promise<unknown>
 
+type DeleteFileType = 'image' | 'video' | 'audio' | 'file' | 'inlineImage'
+
 export interface UmoEditorOptions {
   editorKey?: string
   locale?: SupportedLocale
@@ -265,7 +267,7 @@ export interface UmoEditorOptions {
   translations?: Record<string, unknown>
   onSave?: OnSaveFunction
   onFileUpload?: (file: File) => Promise<{ id: string; url: string }>
-  onFileDelete?: (id: string, url: string) => void
+  onFileDelete?: (id: string, url: string, type?: DeleteFileType) => void
 }
 
 // 组件类型声明
