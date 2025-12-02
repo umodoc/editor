@@ -29,15 +29,12 @@
 import DragHandle from '@tiptap-pro/extension-drag-handle-vue-3'
 import type { Instance } from 'tippy.js'
 
-const container = inject('container')
 const editor = inject('editor')
 let selectedNode = $ref(null)
 let selectedNodePos = $ref(null)
 
 let tippyInstance = $ref<Instance | null>(null)
 const tippyOpitons = $ref<Partial<Instance>>({
-  appendTo: () =>
-    document.querySelector(`${container} .umo-zoomable-container`)!,
   zIndex: 20,
   popperOptions: {
     modifiers: [
