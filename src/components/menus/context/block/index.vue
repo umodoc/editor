@@ -29,12 +29,15 @@
 import DragHandle from '@tiptap-pro/extension-drag-handle-vue-3'
 import type { Instance } from 'tippy.js'
 
+const container = inject('container')
 const editor = inject('editor')
 let selectedNode = $ref(null)
 let selectedNodePos = $ref(null)
 
 let tippyInstance = $ref<Instance | null>(null)
 const tippyOpitons = $ref<Partial<Instance>>({
+  appendTo: () =>
+    document.querySelector(`${container} .umo-zoomable-container`)!,
   zIndex: 20,
   popperOptions: {
     modifiers: [
@@ -47,28 +50,6 @@ const tippyOpitons = $ref<Partial<Instance>>({
   onMount(instance: Instance) {
     tippyInstance = instance
   },
-})
-
-// 菜单位置更新
-const updateMenuPostion = useThrottleFn(() => {
-  if (!tippyInstance) {
-    return
-  }
-  try {
-    const { state, view } = editor.value
-    const topPos = state.selection.$from.before(1)
-    const topDOM = view.nodeDOM(topPos)
-    const rect = topDOM?.getBoundingClientRect()
-    if (rect) {
-      tippyInstance.setProps({
-        getReferenceClientRect: () => rect,
-      })
-    }
-  } catch {}
-}, 200)
-
-onMounted(() => {
-  editor.value.on('selectionUpdate', updateMenuPostion)
 })
 
 const nodeChange = ({ node, pos }: { node: Node | null; pos: number }) => {

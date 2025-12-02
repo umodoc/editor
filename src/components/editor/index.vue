@@ -24,7 +24,8 @@
     <menus-bubble
       v-if="options.document?.enableBubbleMenu"
       v-show="!editor?.view?.painter?.enabled && !editor?.isEmpty"
-      ><template #bubble_menu="props">
+    >
+      <template #bubble_menu="props">
         <slot name="bubble_menu" v-bind="props" />
       </template>
     </menus-bubble>
