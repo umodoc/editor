@@ -20,6 +20,7 @@
 import { BubbleMenu } from '@tiptap/vue-3'
 import type { Instance } from 'tippy.js'
 
+const container = inject('container')
 const editor = inject('editor')
 const assistant = inject('assistant')
 const options = inject('options')
@@ -27,7 +28,8 @@ const options = inject('options')
 // 气泡菜单
 let tippyInstance = $ref<Instance | null>(null)
 const tippyOpitons = $ref<Partial<Instance>>({
-  appendTo: 'parent',
+  appendTo: () =>
+    document.querySelector(`${container} .umo-zoomable-container`)!,
   maxWidth: 580,
   zIndex: 110,
   onShow(instance: Instance) {
