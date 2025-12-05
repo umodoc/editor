@@ -5,7 +5,9 @@
     :editor="editor!"
     :tippy-options="tippyOpitons"
   >
-    <menus-bubble-menus>
+    <menus-bubble-menus
+      v-if="options?.document?.enableBubbleMenu && !assistant"
+    >
       <template #bubble_menu="props">
         <slot name="bubble_menu" v-bind="props" />
       </template>
