@@ -114,6 +114,7 @@ The development of Umo Editor relies on community support. Below is a list of co
 - [SevenDreamYang](https://github.com/SevenDreamYang)：🛠️ Enhanced TypeScript support
 - [ChenErik](https://github.com/ChenErik): 🛠️ Contributed code
 - [SerRashin](https://github.com/SerRashin): 🛠️ Added Russian language support
+- [SevenDreamYang](https://github.com/SevenDreamYang)：🛠️ Fixed some issues
 - [Sunny Wisozk](https://github.com/SunnyWisozk): 🛠️ Contributed code
 - [Sherman Xu](https://github.com/xuzhenjun130): 🛠️ Contributed code
 - [vace](https://github.com/vace)：🛠️ Contributed code

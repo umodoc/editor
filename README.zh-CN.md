@@ -107,6 +107,7 @@ Umo Editor 的发展离不开社区的支持，以下是为 Umo Editor 贡献过
 - [SevenDreamYang](https://github.com/SevenDreamYang)：🛠️ 增强 TypeScript 支持
 - [ChenErik](https://github.com/ChenErik)：🛠️ 贡献了部分代码
 - [SerRashin](https://github.com/SerRashin)：🛠️ 添加了俄语支持
+- [SevenDreamYang](https://github.com/SevenDreamYang)：🛠️ 修复了部分问题
 - [Sunny Wisozk](https://github.com/SunnyWisozk)：🛠️ 贡献了部分代码
 - [Sherman Xu](https://github.com/xuzhenjun130)：🛠️ 贡献了部分代码
 - [vace](https://github.com/vace)：🛠️ 贡献了部分代码
