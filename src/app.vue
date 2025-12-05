@@ -1,11 +1,7 @@
 <template>
   <div class="examples">
     <div class="box">
-      <umo-editor ref="editorRef" v-bind="options">
-        <template #bubble_menu="props">
-          <span>slot {{ props }}</span>
-        </template>
-      </umo-editor>
+      <umo-editor ref="editorRef" v-bind="options"></umo-editor>
     </div>
     <!-- <div class="box">
       <umo-editor editor-key="testaaa" :toolbar="{ defaultMode: 'classic' }" />
