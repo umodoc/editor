@@ -8,6 +8,7 @@
     <modal
       :visible="dialogVisible"
       :footer="false"
+      destroy-on-close
       class="umo-diagrams-dialog"
       mode="full-screen"
       @close="dialogVisible = false"
