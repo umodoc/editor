@@ -65,6 +65,7 @@ export type ToolbarMenu =
   | 'custom'
 
 export interface ToolbarOptions {
+  showSaveLabel?: boolean
   defaultMode?: 'classic' | 'ribbon'
   menus?: ToolbarMenu[]
 }
@@ -102,7 +103,6 @@ export interface DocumentOptions {
   typographyRules?: Record<string, unknown>
   editorProps?: Record<string, unknown>
   parseOptions?: Record<string, unknown>
-  showSave?: boolean
   autoSave?: AutoSaveOptions
 }
 

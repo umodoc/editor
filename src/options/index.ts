@@ -34,6 +34,7 @@ const defaultOptions: UmoEditorOptions = {
   fullscreenZIndex: 10,
   dicts: defaultDicts,
   toolbar: {
+    showSaveLabel: true,
     defaultMode: 'ribbon',
     menus: ['base', 'insert', 'table', 'tools', 'page', 'export'],
   },
@@ -82,7 +83,6 @@ const defaultOptions: UmoEditorOptions = {
     parseOptions: {
       preserveWhitespace: 'full',
     },
-    showSave: true,
     autoSave: {
       enabled: true,
       interval: 300000,
@@ -351,6 +351,11 @@ const ojbectSchema = new ObjectSchema({
     merge: 'replace',
     validate: 'object',
     schema: {
+      showSaveLabel: {
+        merge: 'replace',
+        validate: 'boolean',
+        required: false,
+      },
       defaultMode: {
         merge: 'replace',
         validate(value: 'classic' | 'ribbon') {
@@ -630,11 +635,6 @@ const ojbectSchema = new ObjectSchema({
       parseOptions: {
         merge: 'replace',
         validate: 'object',
-        required: false,
-      },
-      showSave: {
-        merge: 'replace',
-        validate: 'boolean',
         required: false,
       },
       autoSave: {

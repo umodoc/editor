@@ -1206,7 +1206,7 @@ watch(
     editor.value?.on('focus', () => {
       useHotkeys('esc', unsetFormatPainter)
       useHotkeys('ctrl+s,command+s', () => {
-        if (options?.value?.document?.showSave) {
+        if (options?.value?.toolbar?.showSaveLabel) {
           void saveContent()
           unsetFormatPainter()
         }
