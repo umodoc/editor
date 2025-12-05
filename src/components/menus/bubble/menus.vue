@@ -202,8 +202,14 @@
       <div class="umo-bubble-menu-divider"></div>
       <menus-bubble-node-delete />
     </template>
+  </template>
+  <template v-if="editor?.state?.selection">
     <div class="umo-bubble-menu-divider"></div>
-    <slot name="bubble_menu" />
+    <slot
+      name="bubble_menu"
+      :node-type="getCurrentNode('name')"
+      :node-attrs="getCurrentNode('attrs')"
+    />
   </template>
 </template>
 
@@ -212,6 +218,18 @@ const editor = inject('editor')
 const options = inject('options')
 const disableMenu = (name: string) => {
   return options.value.disableExtensions.includes(name)
+}
+const getCurrentNode = (type: string) => {
+  const { state } = editor.value
+  const { selection } = state
+  const { $from } = selection
+  const currentNode = selection.node || $from.parent
+  if (type === 'name') {
+    return currentNode.type.name
+  }
+  if (type === 'attrs') {
+    return currentNode.type.attrs
+  }
 }
 </script>
 
