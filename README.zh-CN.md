@@ -5,15 +5,15 @@
 <p style="text-align: center;">
 <a href="https://github.com/umodoc/editor/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/npm/l/@umoteam/editor" /></a>
 <a href="https://www.npmjs.com/package/@umoteam/editor" target="_blank"><img src="https://img.shields.io/npm/v/@umoteam/editor" /></a>
-<a href="https://www.npmjs.com/package/@umoteam/editor" target="_blank"><img src="https://img.shields.io/npm/d18m/@umoteam/editor" /></a>
-<a href="https://www.npmjs.com/package/@umoteam/editor" target="_blank"><img src="https://img.shields.io/npm/unpacked-size/%40umoteam%2Feditor" /></a>
+<a href="https://www.npmjs.com/package/@umoteam/editor" target="_blank"><img src="https://img.shields.io/npm/dm/@umoteam/editor" /></a>
+<a href="https://www.npmjs.com/package/@umoteam/editor" target="_blank"><img src="https://img.shields.io/npm/unpacked-size/@umoteam/editor" /></a>
 <a href="https://github.com/umodoc/editor/commits" target="_blank"><img src="https://img.shields.io/github/commit-activity/m/umodoc/editor" /></a>
 </p>
 <p style="text-align: center;"><a href="https://dev.umodoc.com/en/docs/editor">[English Documentation]</a> | 中文文档</p>
 
 ## 基本介绍
 
-Umo Editor 是一个基于 Vue3 和 Tiptap 的本土化开源文档编辑器，专为国人用户设计。它提供了强大的文档编辑能力和 AI 创作功能，支持分页模式和普通 Web 模式、Markdown 语法、富文本编辑、多种格式的节点插入、页面样式设置、文档导出与打印等功能。
+Umo Editor 是一个基于 Vue3 和 Tiptap 的本土化开源文档编辑器，提供类似于 Microsoft Word 的在线编辑功能和浏览体验，专为国人用户设计。它提供了强大的文档编辑能力和 AI 创作功能，支持分页模式和普通 Web 模式、Markdown 语法、富文本编辑、多种格式的节点插入、页面样式设置、文档导出与打印等功能。
 
 此外，Umo Editor 还支持自定义扩展、多语言设置和暗色主题。同时我们提供了单独的文本预览组件[Umo Viewer](https://github.com/umodoc/viewer)，用户可以在项目中使用该组件来预览文档。
 
