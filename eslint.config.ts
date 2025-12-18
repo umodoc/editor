@@ -89,7 +89,7 @@ export default [
       parserOptions: {
         project: './tsconfig.json',
         parser: '@typescript-eslint/parser',
-        tsconfigRootDir: './',
+        tsconfigRootDir: __dirname,
         ecmaVersion: 2024,
         extraFileExtensions: ['.vue'],
         sourceType: 'module',
