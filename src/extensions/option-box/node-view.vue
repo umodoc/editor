@@ -1,7 +1,11 @@
 <template>
   <node-view-wrapper as="span" class="umo-node-option-box">
-    <div v-if="boxType === 'radio'" class="umo-option-box-radio-container">
-      <div v-for="(box, index) in boxOptions" :key="box.key">
+    <span v-if="boxType === 'radio'" class="umo-option-box-radio-container">
+      <span
+        v-for="(box, index) in boxOptions"
+        :key="box.key"
+        class="option-item"
+      >
         <t-radio
           :key="index"
           :checked="box.checked"
@@ -9,10 +13,11 @@
           @change="handleRadioChange(index)"
         ></t-radio>
         <span>{{ box.label }}</span>
-      </div>
-    </div>
-    <div v-else class="umo-option-box-checkbox-container">
-      <div v-if="boxShowCheckAll">
+      </span>
+    </span>
+
+    <span v-else class="umo-option-box-checkbox-container">
+      <span v-if="boxShowCheckAll" class="option-item">
         <t-checkbox
           key="checkallInxex"
           :checked="boxChecked"
@@ -20,8 +25,13 @@
           @click="handleCheckboxAll"
         ></t-checkbox>
         <span>{{ t('insert.option.check') }}</span>
-      </div>
-      <div v-for="(box, index) in boxOptions" :key="box.key">
+      </span>
+
+      <span
+        v-for="(box, index) in boxOptions"
+        :key="box.key"
+        class="option-item"
+      >
         <t-checkbox
           :key="index"
           :checked="box.checked"
@@ -29,8 +39,8 @@
           @click="handleCheckboxChange(index)"
         ></t-checkbox>
         <span>{{ box.label }}</span>
-      </div>
-    </div>
+      </span>
+    </span>
   </node-view-wrapper>
 </template>
 
