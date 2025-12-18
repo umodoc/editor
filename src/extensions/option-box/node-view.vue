@@ -150,7 +150,7 @@ const handleRadioChange = (index) => {
     flex-wrap: wrap;
     gap: 0.5em;
 
-    & .umo-checkbox {
+    .umo-checkbox {
       font: inherit !important;
       color: inherit !important;
       transform: translateY(0.1em);
@@ -175,6 +175,27 @@ const handleRadioChange = (index) => {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5em;
+
+    .umo-radio {
+      font: inherit !important;
+      color: inherit !important;
+      transform: translateY(-0.1em);
+      &__label {
+        font: inherit !important;
+      }
+      &__input {
+        width: 1em;
+        height: 1em;
+        border-radius: 50%;
+        &::after {
+          width: 1em;
+          height: 1em;
+          left: 0;
+          top: 0;
+          margin: 0 !important;
+        }
+      }
+    }
   }
 }
 </style>
