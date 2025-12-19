@@ -39,9 +39,8 @@
           )
         "
       />
-      <menus-bubble-image-open />
-      <div class="umo-bubble-menu-divider"></div>
       <menus-bubble-image-edit />
+      <menus-bubble-image-open />
       <menus-bubble-node-duplicate
         v-if="
           editor?.isActive('image') && editor?.getAttributes('image').draggable
@@ -54,6 +53,7 @@
         "
       />
       <menus-bubble-image-convert />
+      <div class="umo-bubble-menu-divider"></div>
       <menus-bubble-node-delete />
     </template>
     <template

@@ -1,7 +1,12 @@
 <template>
   <menus-button
-    ico="switch-button"
-    :text="conversionText"
+    ico="image-inline"
+    :text="
+      menuActive
+        ? t('bubbleMenu.image.convertToNode')
+        : t('bubbleMenu.image.convertToInline')
+    "
+    :menu-active="menuActive"
     @menu-click="convertPosition"
   />
 </template>
@@ -11,11 +16,9 @@ import { getSelectionNode } from '@/extensions/selection'
 
 const editor = inject('editor')
 
-const conversionText = computed(() => {
+const menuActive = computed(() => {
   const image = editor.value ? getSelectionNode(editor.value) : null
-  if (image?.type?.name === 'inlineImage') {
-    return t('bubbleMenu.image.convertToNode')
-  } else return t('bubbleMenu.image.convertToInline')
+  return image?.type?.name === 'inlineImage'
 })
 
 const convertPosition = () => {
