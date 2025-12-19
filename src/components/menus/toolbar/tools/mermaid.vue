@@ -65,6 +65,7 @@ const mermaidInit = () => {
     // fontFamily:'',
     fontSize: 12,
     theme: 'base',
+    securityLevel: 'loose',
   })
 }
 
