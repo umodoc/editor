@@ -559,6 +559,7 @@ const setPage = (params: {
   orientation: string
   background: string
   layout: 'web' | 'page'
+  margin: any
 }) => {
   if (!isRecord(params)) {
     throw new Error('params must be an object.')
@@ -604,6 +605,19 @@ const setPage = (params: {
       )
     }
     page.value.layout = params.layout
+  }
+  if (params.margin) {
+    const marginKeys = ['left', 'right', 'top', 'bottom']
+    const copyMargin = { ...page.value.margin }
+    for (const key of marginKeys) {
+      if (params.margin[key] !== undefined) {
+        if (!isNumber(params.margin[key])) {
+          throw new Error(`"params.margin.${key}" must be a number.`)
+        }
+        copyMargin[key] = params.margin[key]
+      }
+    }
+    page.value.margin = copyMargin
   }
 }
 
