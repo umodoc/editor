@@ -25,8 +25,7 @@ yarn-error.log*
 .eslintcache
 .stylelintcache
 .prettiercache
-vite.config.ts.timestamp*
-vitest.config.ts.timestamp*
+vite.config.js.timestamp*
 
 # Husky
 .husky/_
