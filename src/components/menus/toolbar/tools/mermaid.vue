@@ -114,9 +114,105 @@ const copyCode = () => {
   })
 }
 
-//  初始化 Mermaid
+// 判断是否包含中文
+const hasChinese = (text = '') => /[\u4e00-\u9fff]/.test(text)
+
+// 判断文本是否已经被双引号包裹
+const isQuoted = (text = '') => {
+  const value = String(text).trim()
+  return value.startsWith('"') && value.endsWith('"')
+}
+
+// 如果包含中文且未加引号，则补双引号
+const quoteIfChinese = (text = '') => {
+  const value = String(text).trim()
+  if (!value) return text
+  if (!hasChinese(value)) return text
+  if (isQuoted(value)) return text
+  return `"${value}"`
+}
+
+// Mermaid 通用中文兼容处理
+const fixMermaidChinese = (code = '') => {
+  if (!code) return code
+
+  let result = code
+
+  // 1. |文本| -> |"文本"|
+  result = result.replace(/\|([^|\n]+)\|/g, (match, text) => {
+    return `|${quoteIfChinese(text)}|`
+  })
+
+  // 2. [文本] / {文本} / (文本)
+  result = result.replace(
+    /(\[[^[\]\n]*\]|\{[^{}\n]*\}|\([^()\n]*\))/g,
+    (match) => {
+      const [left] = match
+      const right = match[match.length - 1]
+      const inner = match.slice(1, -1)
+
+      if (!hasChinese(inner) || isQuoted(inner.trim())) return match
+      return `${left}${quoteIfChinese(inner)}${right}`
+    },
+  )
+
+  // 3. 双圆括号 ((文本))
+  result = result.replace(/\(\(([^()\n]*)\)\)/g, (match, text) => {
+    if (!hasChinese(text) || isQuoted(text.trim())) return match
+    return `((${quoteIfChinese(text)}))`
+  })
+
+  // 4. 异形节点 A>文本]
+  result = result.replace(/>([^[\]\n<>]+)\]/g, (match, text) => {
+    if (!hasChinese(text) || isQuoted(text.trim())) return match
+    return `>${quoteIfChinese(text)}]`
+  })
+
+  // 5. subgraph 标题
+  result = result.replace(
+    /^(\s*subgraph\s+)(.+)$/gm,
+    (match, prefix, title) => {
+      const value = title.trim()
+      if (!hasChinese(value) || isQuoted(value)) return match
+      return `${prefix}${quoteIfChinese(value)}`
+    },
+  )
+
+  // 6. participant A as 中文
+  result = result.replace(
+    /^(\s*participant\s+[^\s]+\s+as\s+)(.+)$/gm,
+    (match, prefix, title) => {
+      const value = title.trim()
+      if (!hasChinese(value) || isQuoted(value)) return match
+      return `${prefix}${quoteIfChinese(value)}`
+    },
+  )
+
+  // 7. actor 中文 / actor A as 中文
+  result = result.replace(
+    /^(\s*actor\s+)(.+)$/gm,
+    (match, restPrefix, rest) => {
+      const value = rest.trim()
+
+      // actor A as 中文
+      const asMatch = value.match(/^([^\s]+\s+as\s+)(.+)$/)
+      if (asMatch) {
+        const [, prefix, title] = asMatch
+        return `${restPrefix}${prefix}${quoteIfChinese(title)}`
+      }
+
+      // actor 中文
+      if (!hasChinese(value) || isQuoted(value)) return match
+      return `${restPrefix}${quoteIfChinese(value)}`
+    },
+  )
+
+  return result
+}
+
+// 初始化 Mermaid
 const mermaidInit = () => {
-  mermaid.initialize({
+  mermaid.mermaidAPI.initialize({
     darkMode: false,
     startOnLoad: false,
     fontSize: 12,
@@ -126,35 +222,56 @@ const mermaidInit = () => {
 }
 
 // 渲染 Mermaid
-let mermaidCode = $ref(props.content)
+let mermaidCode = $ref(props.content || '')
 let svgCode = $ref('')
 const mermaidRef = $ref(null)
+
 const renderMermaid = async () => {
+  if (!mermaidCode || mermaidCode.trim() === '') {
+    svgCode = ''
+    return
+  }
+
+  const safeCode = fixMermaidChinese(mermaidCode)
+  const renderId = `mermaid-svg-${shortId(8)}`
+
   try {
-    svgCode = await mermaid.render('mermaid-svg', mermaidCode)
+    svgCode = await new Promise((resolve) => {
+      mermaid.mermaidAPI.render(renderId, safeCode, (svg) => {
+        resolve(svg)
+      })
+    })
   } catch {
     svgCode = ''
+    useMessage('error', {
+      attach: container,
+      content: t('tools.mermaid.renderError'),
+    })
   }
 }
+
 watch(
   () => dialogVisible,
   async (visible) => {
     if (visible) {
       localConfig = { ...props.config }
       mermaidCode = props.content || 'graph TB\na-->b'
+      await nextTick()
+      mermaidInit()
+      renderMermaid()
     }
   },
   { immediate: true },
 )
+
 watch(
-  () => [localConfig, mermaidCode],
+  () => [localConfig.theme, mermaidCode],
   async () => {
-    if (!mermaidCode || mermaidCode === '') return
+    if (!dialogVisible || !mermaidCode || mermaidCode === '') return
     await nextTick()
     mermaidInit()
     renderMermaid()
   },
-  { deep: true },
 )
 
 // 创建或更新 Mermaid
@@ -167,10 +284,26 @@ const setMermaid = () => {
     })
     return
   }
+
   if (!props.content || (props.content && props.content !== mermaidCode)) {
-    const svg = mermaidRef.querySelector('svg')
+    const svg = mermaidRef?.querySelector('svg')
+
+    if (!svg) {
+      return
+    }
+
+    const hasError = svg.querySelector('.error-icon')
+    if (hasError) {
+      useMessage('error', {
+        attach: container,
+        content: t('tools.mermaid.renderError'),
+      })
+      return
+    }
+
     const { width, height } = svg.getBoundingClientRect()
     const { attrs } = getSelectionNode(editor.value) || {}
+
     const imageOptions = {
       id: shortId(10),
       type: 'mermaid',
@@ -181,8 +314,10 @@ const setMermaid = () => {
       height: keepSize ? attrs?.height || height : height,
       equalProportion: false,
     }
+
     editor.value?.chain().focus().setImage(imageOptions, !!props.content).run()
   }
+
   dialogVisible = false
 }
 </script>

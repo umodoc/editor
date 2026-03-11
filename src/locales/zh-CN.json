@@ -340,7 +340,8 @@
       "placeholder": "请输入或粘贴 Mermaid 代码",
       "preview": "预览",
       "notEmpty": "Mermaid 内容不能为空",
-      "keepSize": "保持修改前的大小"
+      "keepSize": "保持修改前的大小",
+      "renderError": "Mermaid 渲染错误，请修改后重试"
     },
     "echarts": {
       "text": "图表",

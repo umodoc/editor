@@ -340,7 +340,8 @@
       "placeholder": "Enter or paste Mermaid code",
       "preview": "Preview",
       "notEmpty": "Mermaid content cannot be empty",
-      "keepSize": "Keep Original Size"
+      "keepSize": "Keep Original Size",
+      "renderError": "Syntax error in graph"
     },
     "echarts": {
       "text": "Chart",
