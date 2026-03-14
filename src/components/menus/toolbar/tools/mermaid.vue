@@ -52,7 +52,9 @@
             class="umo-mermaid-title"
             v-text="t('tools.mermaid.preview')"
           ></div>
+          <div class="umo-mermaid-error" v-if="errorTxt">{{ errorTxt }}</div>
           <div
+            v-else
             ref="mermaidRef"
             class="umo-mermaid-svg umo-scrollbar"
             v-html="svgCode"
@@ -114,105 +116,11 @@ const copyCode = () => {
   })
 }
 
-// 判断是否包含中文
-const hasChinese = (text = '') => /[\u4e00-\u9fff]/.test(text)
-
-// 判断文本是否已经被双引号包裹
-const isQuoted = (text = '') => {
-  const value = String(text).trim()
-  return value.startsWith('"') && value.endsWith('"')
-}
-
-// 如果包含中文且未加引号，则补双引号
-const quoteIfChinese = (text = '') => {
-  const value = String(text).trim()
-  if (!value) return text
-  if (!hasChinese(value)) return text
-  if (isQuoted(value)) return text
-  return `"${value}"`
-}
-
-// Mermaid 通用中文兼容处理
-const fixMermaidChinese = (code = '') => {
-  if (!code) return code
-
-  let result = code
-
-  // 1. |文本| -> |"文本"|
-  result = result.replace(/\|([^|\n]+)\|/g, (match, text) => {
-    return `|${quoteIfChinese(text)}|`
-  })
-
-  // 2. [文本] / {文本} / (文本)
-  result = result.replace(
-    /(\[[^[\]\n]*\]|\{[^{}\n]*\}|\([^()\n]*\))/g,
-    (match) => {
-      const [left] = match
-      const right = match[match.length - 1]
-      const inner = match.slice(1, -1)
-
-      if (!hasChinese(inner) || isQuoted(inner.trim())) return match
-      return `${left}${quoteIfChinese(inner)}${right}`
-    },
-  )
-
-  // 3. 双圆括号 ((文本))
-  result = result.replace(/\(\(([^()\n]*)\)\)/g, (match, text) => {
-    if (!hasChinese(text) || isQuoted(text.trim())) return match
-    return `((${quoteIfChinese(text)}))`
-  })
-
-  // 4. 异形节点 A>文本]
-  result = result.replace(/>([^[\]\n<>]+)\]/g, (match, text) => {
-    if (!hasChinese(text) || isQuoted(text.trim())) return match
-    return `>${quoteIfChinese(text)}]`
-  })
-
-  // 5. subgraph 标题
-  result = result.replace(
-    /^(\s*subgraph\s+)(.+)$/gm,
-    (match, prefix, title) => {
-      const value = title.trim()
-      if (!hasChinese(value) || isQuoted(value)) return match
-      return `${prefix}${quoteIfChinese(value)}`
-    },
-  )
-
-  // 6. participant A as 中文
-  result = result.replace(
-    /^(\s*participant\s+[^\s]+\s+as\s+)(.+)$/gm,
-    (match, prefix, title) => {
-      const value = title.trim()
-      if (!hasChinese(value) || isQuoted(value)) return match
-      return `${prefix}${quoteIfChinese(value)}`
-    },
-  )
-
-  // 7. actor 中文 / actor A as 中文
-  result = result.replace(
-    /^(\s*actor\s+)(.+)$/gm,
-    (match, restPrefix, rest) => {
-      const value = rest.trim()
-
-      // actor A as 中文
-      const asMatch = value.match(/^([^\s]+\s+as\s+)(.+)$/)
-      if (asMatch) {
-        const [, prefix, title] = asMatch
-        return `${restPrefix}${prefix}${quoteIfChinese(title)}`
-      }
-
-      // actor 中文
-      if (!hasChinese(value) || isQuoted(value)) return match
-      return `${restPrefix}${quoteIfChinese(value)}`
-    },
-  )
-
-  return result
-}
-
 // 初始化 Mermaid
 const mermaidInit = () => {
-  mermaid.mermaidAPI.initialize({
+  const { mermaid } = window
+  if (!mermaid) return
+  mermaid.initialize({
     darkMode: false,
     startOnLoad: false,
     fontSize: 12,
@@ -224,29 +132,33 @@ const mermaidInit = () => {
 // 渲染 Mermaid
 let mermaidCode = $ref(props.content || '')
 let svgCode = $ref('')
+let errorTxt = $ref('')
 const mermaidRef = $ref(null)
 
 const renderMermaid = async () => {
-  if (!mermaidCode || mermaidCode.trim() === '') {
+  const { mermaid } = window
+
+  if (!mermaid) {
     svgCode = ''
+    errorTxt = t('tools.mermaid.notLoaded')
     return
   }
 
-  const safeCode = fixMermaidChinese(mermaidCode)
+  if (!mermaidCode || mermaidCode.trim() === '') {
+    svgCode = ''
+    errorTxt = t('tools.mermaid.codeEmpty')
+    return
+  }
+
   const renderId = `mermaid-svg-${shortId(8)}`
 
   try {
-    svgCode = await new Promise((resolve) => {
-      mermaid.mermaidAPI.render(renderId, safeCode, (svg) => {
-        resolve(svg)
-      })
-    })
-  } catch {
+    const { svg } = await mermaid.render(renderId, mermaidCode)
+    svgCode = svg
+    errorTxt = ''
+  } catch (err) {
     svgCode = ''
-    useMessage('error', {
-      attach: container,
-      content: t('tools.mermaid.renderError'),
-    })
+    errorTxt = t('tools.mermaid.renderError')
   }
 }
 
@@ -292,8 +204,7 @@ const setMermaid = () => {
       return
     }
 
-    const hasError = svg.querySelector('.error-icon')
-    if (hasError) {
+    if (errorTxt) {
       useMessage('error', {
         attach: container,
         content: t('tools.mermaid.renderError'),
@@ -358,6 +269,14 @@ const setMermaid = () => {
       position: absolute;
       font-size: 12px;
       border-bottom-right-radius: var(--umo-radius);
+    }
+    .umo-mermaid-error {
+      height: 320px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--umo-text-color-light);
+      font-size: 12px;
     }
     .umo-mermaid-svg {
       box-sizing: border-box;
