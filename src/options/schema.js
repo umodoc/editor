@@ -258,7 +258,7 @@ export default new ObjectSchema({
           }
           if (!value.every((item) => defaultLayouts?.includes(item))) {
             throw new Error(
-              `Key "page": Key "layouts" the array items of toolbar.menus must contain only one or multiple of ${JSON.stringify(defaultLayouts)}.`,
+              `Key "page": Key "layouts" the array items of page.layouts must contain only one or multiple of ${JSON.stringify(defaultLayouts)}.`,
             )
           }
         },
