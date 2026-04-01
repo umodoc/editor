@@ -14,7 +14,7 @@ export default Node.create({
     return {
       type: { default: 'datetime' },
       date: { default: null },
-      text: { default: '[日期]' },
+      text: { default: `[${t('insert.date')}]` },
       format: { default: null },
       withTime: { default: false },
       capitalize: { default: false },
