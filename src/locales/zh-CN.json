@@ -784,5 +784,9 @@
   },
   "dialog": {
     "cancel": "取消"
+  },
+  "copy": {
+    "notSupported": "当前浏览器不支持复制功能",
+    "copyFailed": "复制失败"
   }
 }

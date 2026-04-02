@@ -782,5 +782,9 @@
   },
   "dialog": {
     "cancel": "Cancel"
+  },
+  "copy": {
+    "notSupported": "Browser does not support copy function",
+    "copyFailed": "Copy failed"
   }
 }

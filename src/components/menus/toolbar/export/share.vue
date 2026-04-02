@@ -34,12 +34,7 @@ const container = inject('container')
 let dialogVisible = $ref(false)
 
 const copyLink = () => {
-  const { copy } = useClipboard({ source: options.value.shareUrl })
-  copy()
-  useMessage('success', {
-    attach: container,
-    content: t('export.share.copied'),
-  })
+  useCopy(options.value.shareUrl, t('export.share.copied'), container)
   dialogVisible = false
 }
 </script>

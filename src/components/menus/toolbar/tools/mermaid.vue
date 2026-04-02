@@ -106,14 +106,7 @@ const themes = [
 let localConfig = $ref({})
 
 const copyCode = () => {
-  const { copy } = useClipboard({
-    source: mermaidCode,
-  })
-  copy()
-  useMessage('success', {
-    attach: container,
-    content: t('tools.mermaid.copied'),
-  })
+  useCopy(mermaidCode, t('tools.mermaid.copied'), container)
 }
 
 // 初始化 Mermaid

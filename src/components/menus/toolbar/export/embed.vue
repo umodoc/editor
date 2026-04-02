@@ -38,12 +38,7 @@ const embedValue = computed(() => {
 })
 
 const copyEmbed = () => {
-  const { copy } = useClipboard({ source: embedValue })
-  copy()
-  useMessage('success', {
-    attach: container,
-    content: t('export.embed.copied'),
-  })
+  useCopy(embedValue, t('export.embed.copied'), container)
   dialogVisible = false
 }
 </script>

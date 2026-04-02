@@ -106,14 +106,7 @@ const updateAttribute = (attr, value) => {
 }
 
 const copyCode = () => {
-  const { copy } = useClipboard({
-    source: props.node.textContent,
-  })
-  copy()
-  useMessage('success', {
-    attach: container,
-    content: t('bubbleMenu.code.copy.success'),
-  })
+  useCopy(props.node.textContent, t('bubbleMenu.code.copy.success'), container)
 }
 </script>
 
