@@ -23,6 +23,7 @@
           "
           :enable-time-picker="attrs.withTime"
           :mode="attrs.format === 'YYYY年M月' ? 'month' : 'date'"
+          need-confirm
           @change="datetimeChange"
         />
       </template>
