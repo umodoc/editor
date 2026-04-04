@@ -1023,7 +1023,7 @@ const reset = (silent) => {
 }
 
 const destroy = () => {
-  editor.value?.destroy()
+  editor.value?.unmount()
   removeAllHotkeys()
   destroyed.value = true
 }
