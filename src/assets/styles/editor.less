@@ -401,14 +401,18 @@
   .umo-task-list {
     list-style: none;
     padding: 0;
+    margin: 0;
 
     li {
       display: flex;
+      margin: 0;
+      padding: 0;
 
       &[data-checked='true'] {
         p {
           opacity: 0.5;
           text-decoration: line-through;
+          margin: 0;
 
           &:has([style]) {
             text-decoration: inherit;
@@ -444,6 +448,11 @@
 
       >div {
         flex: 1 1 auto;
+
+        p {
+          margin: 0;
+          padding: 0;
+        }
       }
     }
 
@@ -459,7 +468,7 @@
       background-color: white;
       position: relative;
       color: #fff;
-      margin: 2px 0;
+      margin: 0.3em 0 0 0;
 
       &:hover {
         border-color: var(--umo-primary-color);
