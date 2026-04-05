@@ -200,7 +200,7 @@ const togglePreview = () => {
     padding: 12px;
     outline: solid 1px var(--umo-content-node-border);
     overflow: hidden;
-    background-color: var(--umo-color-white);
+    background-color: #fff;
     border-radius: var(--umo-content-node-radius);
 
     .umo-file-info {
@@ -233,7 +233,7 @@ const togglePreview = () => {
 
     .umo-file-meta {
       font-size: 12px;
-      color: var(--umo-text-color-light);
+      color: #999;
       line-height: 1;
       margin-top: 6px;
     }
@@ -241,7 +241,7 @@ const togglePreview = () => {
     .umo-file-action {
       display: flex;
       align-items: center;
-      color: var(--umo-text-color-light);
+      color: #999;
       gap: 5px;
 
       .umo-action-item {
@@ -251,11 +251,11 @@ const togglePreview = () => {
         justify-content: center;
         height: 32px;
         width: 32px;
-        background-color: var(--umo-color-white);
+        background-color: #fff;
         box-sizing: border-box;
         cursor: pointer;
         border-radius: 50%;
-        color: var(--umo-text-color-light);
+        color: #999;
 
         &:hover {
           border: solid 1px var(--umo-primary-color);

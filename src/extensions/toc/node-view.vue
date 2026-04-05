@@ -128,6 +128,10 @@ const headingActive = (value) => {
     }
 
     &-body {
+      --td-bg-color-container-hover: rgba(0, 0, 0, 0.05);
+      --td-text-color-primary: #222;
+      --td-border-level-1-color: #ddd;
+      --td-brand-color-light: rgba(0, 0, 0, 0.05);
       .umo-tree__label {
         margin-left: 0 !important;
         padding: 5px;
@@ -141,7 +145,7 @@ const headingActive = (value) => {
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--umo-text-color-light);
+        color: #999;
         margin-bottom: 15px;
       }
     }

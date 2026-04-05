@@ -340,7 +340,7 @@ onBeforeUnmount(() => {
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--umo-text-color-light);
+      color: #999;
       font-size: 12px;
       gap: 10px;
 
@@ -358,7 +358,7 @@ onBeforeUnmount(() => {
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      color: var(--umo-text-color-light);
+      color: #999;
       font-size: 12px;
       min-height: 120px;
 

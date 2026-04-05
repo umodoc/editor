@@ -103,7 +103,7 @@ const datetimeChange = (value) => {
     white-space: nowrap;
   }
   &-icon {
-    color: var(--umo-text-color-light);
+    color: #ccc;
     margin-right: 0.3em;
   }
   &:hover {

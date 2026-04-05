@@ -208,7 +208,7 @@ watch(
       min-height: 200px;
       width: 100%;
       height: 100%;
-      background-color: var(--umo-color-white);
+      background-color: #fff;
       outline: solid 1px var(--umo-content-node-border);
     }
   }

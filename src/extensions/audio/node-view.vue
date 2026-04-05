@@ -101,7 +101,7 @@ onClickOutside(containerRef, () => {
     position: relative;
     display: flex;
     border-radius: var(--umo-radius);
-    outline: solid 1px var(--umo-border-color);
+    outline: solid 1px var(--umo-content-node-border);
     audio {
       width: 100%;
       outline: none;
