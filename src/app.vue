@@ -60,8 +60,25 @@ const options = $ref({
     avatar: 'https://tdesign.gtimg.com/site/avatar.jpg',
   },
   users: [
-    { id: 'umodoc', label: 'Umo Team' },
-    { id: 'Cassielxd', label: 'Cassielxd' },
+    {
+      id: 'umodoc',
+      label: 'Umo Team',
+      bio: '核心开发者',
+      avatar: 'https://s1.umodoc.com/images/favicon.png',
+      color: 'var(--umo-primary-color)',
+    },
+    {
+      id: 'china-wangxu',
+      label: 'china-wangxu',
+      bio: '重要贡献者',
+      color: 'var(--umo-primary-color)',
+    },
+    {
+      id: 'Cassielxd',
+      label: 'Cassielxd',
+      bio: '重要贡献者',
+      color: 'var(--umo-primary-color)',
+    },
     { id: 'Goldziher', label: "Na'aman Hirschfeld" },
     { id: 'SerRashin', label: 'SerRashin' },
     { id: 'ChenErik', label: 'ChenErik' },
