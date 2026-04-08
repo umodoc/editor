@@ -21,6 +21,7 @@
     <menus-bubble-image-flip />
     <menus-bubble-image-proportion />
     <menus-bubble-image-draggable />
+    <menus-bubble-image-rotate />
     <menus-bubble-image-reset />
     <div class="umo-bubble-menu-divider"></div>
     <menus-bubble-image-preview
