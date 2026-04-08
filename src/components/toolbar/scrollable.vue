@@ -7,7 +7,12 @@
     >
       <icon name="arrow-down" />
     </div>
-    <div ref="contentRef" class="umo-scrollable-content">
+    <div
+      ref="contentRef"
+      class="umo-scrollable-content"
+      @scroll.passive="checkScrollPosition"
+      @wheel.passive="wheelScroll"
+    >
       <slot />
     </div>
     <div
@@ -33,15 +38,11 @@ const checkScrollPosition = () => {
 }
 
 const scrollLeft = () => {
-  if (contentRef && (contentRef.scrollLeft || contentRef.scrollLeft === 0)) {
-    contentRef.scrollLeft -= contentRef.offsetWidth - 10 || 100
-  }
+  contentRef.scrollLeft -= contentRef.offsetWidth - 10 || 100
 }
 
 const scrollRight = () => {
-  if (contentRef && (contentRef.scrollLeft || contentRef.scrollLeft === 0)) {
-    contentRef.scrollLeft += contentRef.offsetWidth - 10 || 100
-  }
+  contentRef.scrollLeft += contentRef.offsetWidth - 10 || 100
 }
 
 // 监听父元素大小变化
@@ -51,20 +52,8 @@ useResizeObserver(wraperRef, () => {
 
 // 支持鼠标滚轮滚动
 const wheelScroll = (e) => {
-  e.preventDefault()
   e.deltaY < 0 ? scrollLeft() : scrollRight()
 }
-onMounted(() => {
-  if (contentRef) {
-    contentRef.addEventListener('scroll', checkScrollPosition)
-    contentRef.addEventListener('wheel', wheelScroll, { passive: false })
-  }
-})
-onUnmounted(() => {
-  if (contentRef) {
-    contentRef.removeEventListener('wheel', wheelScroll)
-  }
-})
 
 // 更新
 const update = () => {
