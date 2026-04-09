@@ -85,7 +85,6 @@ const selectEmoji = (emoji) => {
     &.umo-node-callout-empty {
       display: flex;
       align-items: center;
-      line-height: 1.5;
       &::after {
         content: attr(data-placeholder);
         opacity: 0.5;
