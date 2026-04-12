@@ -32,6 +32,16 @@ As an independent Vue3 plugin, Umo Editor can be easily integrated into various 
 
 [Website](https://www.umodoc.com/en) | [Documentation](https://dev.umodoc.com/en/docs/editor) | [Playground](https://www.umodoc.com/en/demo) | [GitHub](https://github.com/umodoc/editor) | [NPM](https://www.npmjs.com/package/@umoteam/editor)
 
+## Umo Editor Mobile
+
+Umo Editor Mobile is a mobile document editor built with Vue3 and Tiptap3. It supports the complete "preview + edit + save" workflow and can be integrated directly into business systems as a standalone editor. Rather than being a simple trimmed-down version of Umo Editor, it is an independent product redesigned for touch-first scenarios, with its own save state machine, auto-save, back-navigation guards, history, internationalization, theming, and extension capabilities. At the same time, it keeps its configuration, events, and method naming as aligned with Umo Editor as possible, helping teams achieve a more unified multi-platform integration at lower cost.
+
+If you plan to support both desktop and mobile, we recommend abstracting a unified editor adapter layer in your business application first, so you can reuse the document model, configuration semantics, and save flow while reducing long-term maintenance costs.
+
+- Website: [https://mobile.umodoc.com](https://mobile.umodoc.com)
+- Mobile Playground: Visit [https://em.umodoc.com](https://em.umodoc.com) in a mobile browser
+- Documentation: [https://dev.umodoc.com/en/docs/mobile](https://dev.umodoc.com/en/docs/mobile)
+
 ## Screenshots
 
 ![umo editor](https://s2.umodoc.com/images/umo-editor1-en@2x.png)
@@ -157,6 +167,7 @@ If you find Umo Editor useful, please consider supporting us in the following wa
 
 - [Umo Editor](https://dev.umodoc.com/en/docs/editor): A localized open-source document editor based on Vue3 and Tiptap3.
 - [Umo Viewer](https://dev.umodoc.com/en/docs/viewer): An open-source, lightweight document viewer for Umo Editor.
+- [Umo Editor Mobile](https://mobile.umodoc.com): A mobile document editor for enterprise business scenarios, designed for standalone integration as well as collaboration with Umo Editor and Umo Editor Next.
 - [Umo Editor Next](https://dev.umodoc.com/en/docs/next): An enhanced version of Umo Editor that includes all features of the latest Umo Editor while adding or improving support for multi-user real-time collaborative editing, document annotations (comments), document version history, AI-assisted creation, document import/export, tables, and more. It also enhances customization of toolbars and sidebars.
 - [Umo Editor Server](https://dev.umodoc.com/en/docs/server): A companion server-side software developed to extend Umo Editor capabilities such as multi-user collaborative editing, document annotations, and document import/export.
 - [Umo Office Viewer](https://dev.umodoc.com/en/docs/office-viewer): An Office document viewer that supports previewing over 40 mainstream office document in web pages.

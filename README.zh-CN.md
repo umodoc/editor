@@ -23,6 +23,16 @@ Umo Editor 最大的特点是代码完全开源且自主可控，支持私有部
 
 [官网](https://www.umodoc.com) | [开发文档](https://dev.umodoc.com/cn/docs/editor) | [在线演示](https://www.umodoc.com/demo) | [GitHub](https://github.com/umodoc/editor) | [码云(国内镜像)](https://gitee.com/umodoc/editor) | [NPM](https://www.npmjs.com/package/@umoteam/editor)
 
+## Umo Editor Mobile
+
+Umo Editor Mobile 是基于 Vue3 和 Tiptap3 构建的移动端文档编辑器，支持“预览 + 编辑 + 保存”完整链路，可直接作为业务系统中的独立编辑器落地。它不是对 Umo Editor 的简单裁剪，而是围绕触控场景重新设计的独立产品，具备保存状态机、自动保存、回退守卫、历史记录、国际化、主题与扩展能力，并在配置、事件、方法命名上尽可能与 Umo Editor 保持一致，帮助团队以更低成本实现多端统一。
+
+如果您计划同时接入桌面端与移动端，建议优先在业务层抽象一层统一的编辑器适配层，以便复用文档模型、配置语义和保存链路，降低后续维护成本。
+
+- 官网：[https://mobile.umodoc.com](https://mobile.umodoc.com)
+- 移动端示例：[https://em.umodoc.com](https://em.umodoc.com)
+- 开发文档：[https://dev.umodoc.com/cn/docs/mobile](https://dev.umodoc.com/cn/docs/mobile)
+
 ## 部分截图
 
 **Umo Editor**
