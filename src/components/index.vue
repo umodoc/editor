@@ -1060,6 +1060,9 @@ const saveContent = async (showMessage = true) => {
       page.value,
       $document.value,
     )
+    if (!_saveBack) {
+      throw new Error('`onSave` callback must return a value.')
+    }
     // 兼容老的保存回调
     if (typeof _saveBack === 'string') {
       if (_saveBack) {
