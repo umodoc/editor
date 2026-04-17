@@ -16,12 +16,6 @@ const fonts = [
     format: 'truetype',
   },
   {
-    label: { en_US: 'LXGW WenKai', zh_CN: '霞鹜文楷' },
-    value: 'LXGW WenKai',
-    url: 'https://raw.githubusercontent.com/lxgw/LxgwWenKai/master/fonts/TTF/LXGWWenKai-Regular.ttf',
-    format: 'truetype',
-  },
-  {
     label: { en_US: 'Songti', zh_CN: '宋体' },
     value: 'SimSun',
   },
