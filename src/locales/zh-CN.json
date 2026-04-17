@@ -38,7 +38,16 @@
       "all": "常用字体",
       "recent": "最近使用",
       "used": "已使用字体",
-      "unsupport": "可能无法正常显示该字体，可能是本机未安装该字体"
+      "unsupport": "可能无法正常显示该字体，可能是本机未安装该字体",
+      "download": "下载",
+      "downloading": "下载中",
+      "downloadActionTip": "下载并在当前浏览器启用该字体",
+      "downloadStart": "{font} 正在下载，下载后将自动启用",
+      "autoDownloadStart": "正在下载文档所需字体",
+      "autoDownloadDone": "文档所需字体已下载完成并启用",
+      "downloadSuccess": "{font} 已下载并启用",
+      "downloadFailed": "{font} 下载失败，请稍后重试",
+      "noDownloadUrl": "该字体未配置下载地址"
     },
     "fontSize": {
       "text": "字体大小",

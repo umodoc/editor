@@ -38,7 +38,16 @@
       "all": "Common Fonts",
       "recent": "Recently Used",
       "used": "Used Fonts",
-      "unsupport": "This font may not display properly, possibly due to it not being installed on this device"
+      "unsupport": "This font may not display properly, possibly due to it not being installed on this device",
+      "download": "Download",
+      "downloading": "Downloading",
+      "downloadActionTip": "Download and enable this font in current browser",
+      "downloadStart": "{font} is downloading and will be enabled automatically when finished",
+      "autoDownloadStart": "Downloading required fonts for this document",
+      "autoDownloadDone": "Required document fonts downloaded",
+      "downloadSuccess": "{font} downloaded and enabled",
+      "downloadFailed": "Failed to download {font}, please try again later",
+      "noDownloadUrl": "No download URL configured for this font"
     },
     "fontSize": {
       "text": "Font Size",

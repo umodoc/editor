@@ -4,6 +4,24 @@ const fonts = [
     value: null,
   },
   {
+    label: { en_US: 'Noto Sans SC', zh_CN: '思源黑体' },
+    value: 'Noto Sans SC',
+    url: 'https://fonts.gstatic.com/s/notosanssc/v40/k3kXo84MPvpLmixcA63oeALhLIiP-Q-87KaAaH7rzeAODp22mF0qmF4CSjmPC6A0Rg5g1igg1w.4.woff2',
+    format: 'woff2',
+  },
+  {
+    label: { en_US: 'Noto Serif SC', zh_CN: '思源宋体' },
+    value: 'Noto Serif SC',
+    url: 'https://fonts.gstatic.com/s/notoserifsc/v35/H4cyBXePl9DZ0Xe7gG9cyOj7uK2-n-D2rd4FY7SCqyWv.ttf',
+    format: 'truetype',
+  },
+  {
+    label: { en_US: 'LXGW WenKai', zh_CN: '霞鹜文楷' },
+    value: 'LXGW WenKai',
+    url: 'https://raw.githubusercontent.com/lxgw/LxgwWenKai/master/fonts/TTF/LXGWWenKai-Regular.ttf',
+    format: 'truetype',
+  },
+  {
     label: { en_US: 'Songti', zh_CN: '宋体' },
     value: 'SimSun',
   },
@@ -61,6 +79,34 @@ const fonts = [
       zh_CN: '微软雅黑',
     },
     value: 'Microsoft Yahei',
+  },
+  {
+    label: { en_US: 'PingFang SC', zh_CN: '苹方' },
+    value: 'PingFang SC',
+  },
+  {
+    label: { en_US: 'Hiragino Sans GB', zh_CN: '冬青黑体简体中文' },
+    value: 'Hiragino Sans GB',
+  },
+  {
+    label: { en_US: 'DengXian', zh_CN: '等线' },
+    value: 'DengXian',
+  },
+  {
+    label: { en_US: 'DengXian Light', zh_CN: '等线 Light' },
+    value: 'DengXian Light',
+  },
+  {
+    label: { en_US: 'YouYuan', zh_CN: '幼圆' },
+    value: 'YouYuan',
+  },
+  {
+    label: { en_US: 'LiSu', zh_CN: '隶书' },
+    value: 'LiSu',
+  },
+  {
+    label: { en_US: 'NSimSun', zh_CN: '新宋体' },
+    value: 'NSimSun',
   },
   { label: 'Arial', value: 'Arial' },
   { label: 'Times New Roman', value: 'Times New Roman' },

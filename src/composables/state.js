@@ -8,6 +8,7 @@ export function useState(key, editorOptions) {
     return useStorage(storageKey, {
       fonts: [],
       colors: [],
+      downloadedFonts: [],
     })
   }
   if (key === 'toolbar') {
