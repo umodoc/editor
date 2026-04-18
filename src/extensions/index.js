@@ -112,8 +112,6 @@ const nodeTypes = [
 
 export const getDefaultExtensions = ({ container, options, uploadFileMap }) => {
   const { page, document: doc, users, file, disableExtensions } = options.value
-  const isTitleBodyStructure =
-    String(doc?.structure || '').trim() === 'heading block*'
 
   const extensions = {
     'ordered-list': OrderedList,
@@ -196,7 +194,7 @@ export const getDefaultExtensions = ({ container, options, uploadFileMap }) => {
     Placeholder.configure({
       showOnlyCurrent: false,
       placeholder: ({ node, pos }) => {
-        if (isTitleBodyStructure && node.type.name === 'heading') {
+        if (node.type.name === 'heading') {
           return pos === 0 ? t('document.headingPlaceholder') : ''
         }
         return String(l(doc?.placeholder || ''))
