@@ -626,7 +626,8 @@
     }
   },
   "document": {
-    "untitled": "Untitled Document"
+    "untitled": "Untitled Document",
+    "headingPlaceholder": "Enter Title"
   },
   "search": {
     "text": "Search",

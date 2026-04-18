@@ -20,6 +20,7 @@ import {
   CharacterCount,
   Dropcursor,
   Focus,
+  TrailingNode,
   Placeholder,
   UndoRedo,
 } from '@tiptap/extensions'
@@ -111,6 +112,8 @@ const nodeTypes = [
 
 export const getDefaultExtensions = ({ container, options, uploadFileMap }) => {
   const { page, document: doc, users, file, disableExtensions } = options.value
+  const isTitleBodyStructure =
+    String(doc?.structure || '').trim() === 'heading block*'
 
   const extensions = {
     'ordered-list': OrderedList,
@@ -166,7 +169,7 @@ export const getDefaultExtensions = ({ container, options, uploadFileMap }) => {
       selection: false,
       bulletList: false,
       orderedList: false,
-      trailingNode: true,
+      trailingNode: false,
       listKeymap: true,
     }),
     Document.extend({
@@ -187,8 +190,17 @@ export const getDefaultExtensions = ({ container, options, uploadFileMap }) => {
       className: 'umo-node-focused',
       mode: 'all',
     }),
+    TrailingNode.configure({
+      node: 'paragraph',
+    }),
     Placeholder.configure({
-      placeholder: () => String(l(doc?.placeholder || '')),
+      showOnlyCurrent: false,
+      placeholder: ({ node, pos }) => {
+        if (isTitleBodyStructure && node.type.name === 'heading') {
+          return pos === 0 ? t('document.headingPlaceholder') : ''
+        }
+        return String(l(doc?.placeholder || ''))
+      },
     }),
     FormatPainter,
     WordWrap,

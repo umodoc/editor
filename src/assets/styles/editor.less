@@ -52,6 +52,20 @@
     font-size: var(--umo-font-size);
     font-display: swap;
 
+    >h1[data-placeholder],
+    >h1+p[data-placeholder] {
+
+      >* {
+        display: none;
+      }
+
+      &::after {
+        color: var(--umo-content-placeholder-color);
+        content: attr(data-placeholder);
+        pointer-events: none;
+      }
+    }
+
     >* {
       position: relative;
       z-index: 1;

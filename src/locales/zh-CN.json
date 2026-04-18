@@ -625,7 +625,8 @@
     }
   },
   "document": {
-    "untitled": "未命名文档"
+    "untitled": "未命名文档",
+    "headingPlaceholder": "请输入标题"
   },
   "search": {
     "text": "查找替换",
