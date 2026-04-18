@@ -3,7 +3,7 @@
     <toolbar-ribbon
       v-if="$toolbar.mode === 'ribbon'"
       :menus="toolbarMenus"
-      :current-menu="currentMenu"
+      :current-menu="toolbarActive"
       @menu-change="menuChange"
     >
       <template
@@ -17,7 +17,7 @@
     <toolbar-classic
       v-if="$toolbar.mode === 'classic'"
       :menus="toolbarMenus"
-      :current-menu="currentMenu"
+      :current-menu="toolbarActive"
       @menu-change="menuChange"
     >
       <template
@@ -140,6 +140,7 @@ import { timeAgo } from '@/utils/time-ago'
 const emits = defineEmits(['menu-change'])
 
 const container = inject('container')
+const toolbarActive = inject('toolbarActive')
 const editor = inject('editor')
 const savedAt = inject('savedAt')
 const options = inject('options')
@@ -163,9 +164,11 @@ if (options.value.toolbar?.menus) {
     (item) => defaultToolbarMenus.filter((menu) => menu.value === item)[0],
   )
 }
-let currentMenu = $ref(toolbarMenus[0].value)
+if (!toolbarActive.value) {
+  toolbarActive.value = toolbarMenus[0].value
+}
 const menuChange = (menu) => {
-  currentMenu = menu
+  toolbarActive.value = menu
   emits('menu-change', menu)
 }
 // 监听如果当前编辑元素为table则切换到table菜单
@@ -173,9 +176,9 @@ watch(
   () => editor.value?.isActive('table'),
   (val, oldVal) => {
     if (val) {
-      currentMenu = 'table'
+      toolbarActive.value = 'table'
     } else if (!val && oldVal) {
-      currentMenu = 'base'
+      toolbarActive.value = 'base'
     }
   },
 )

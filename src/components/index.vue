@@ -202,9 +202,12 @@ watch(
 )
 
 let toolbarKey = $ref(shortId())
+let toolbarActive = ref(null)
+provide('toolbarActive', toolbarActive)
 watch(
   () => [options.value.document?.readOnly, editor.value?.isEditable],
-  () => {
+  async () => {
+    await nextTick()
     toolbarKey = shortId()
   },
 )
