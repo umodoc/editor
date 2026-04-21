@@ -200,7 +200,7 @@
               v-if="!disableMenu('chinese-case')"
             />
           </div>
-          <div class="umo-virtual-group">
+          <div class="umo-virtual-group is-slot">
             <slot name="toolbar_tools" toolbar-mode="ribbon" />
           </div>
         </template>

@@ -109,7 +109,7 @@
           <menus-toolbar-insert-web-page v-if="!disableMenu('web-page')" />
         </div>
         <div class="virtual-group is-slot">
-          <slot name="toolbar_insert" toolbar-mode="ribbon" />
+          <slot name="toolbar_insert" toolbar-mode="classic" />
         </div>
       </template>
       <template v-if="currentMenu === 'table'">
