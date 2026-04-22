@@ -798,5 +798,12 @@
   "copy": {
     "notSupported": "当前浏览器不支持复制功能",
     "copyFailed": "复制失败"
+  },
+  "officePaste": {
+    "imagePlaceholder": "[图片]",
+    "dialog": {
+      "title": "提示信息",
+      "body": "剪贴板内容已粘贴，但包含的图片未被正确处理，请手动复制替换文档中未处理的图片。"
+    }
   }
 }

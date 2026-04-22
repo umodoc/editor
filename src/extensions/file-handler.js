@@ -1,5 +1,6 @@
 import { Extension } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
+import { isOfficeLikeClipboardData } from './office-paste/utils'
 
 const FileHandlePlugin = (option) => {
   const { key, editor, onPaste, onDrop, allowedMimeTypes } = option
@@ -35,8 +36,14 @@ const FileHandlePlugin = (option) => {
         }
         return false
       },
-      handlePaste(view, event) {
+      handlePaste(_view, event) {
         const { clipboardData } = event
+        if (event.skipFileHandler) {
+          return false
+        }
+        if (isOfficeLikeClipboardData(clipboardData)) {
+          return false
+        }
         if (!onPaste) {
           return false
         }

@@ -796,5 +796,12 @@
   "copy": {
     "notSupported": "Browser does not support copy function",
     "copyFailed": "Copy failed"
+  },
+  "officePaste": {
+    "imagePlaceholder": "[Image]",
+    "dialog": {
+      "title": "Notice",
+      "body": "The clipboard content has been pasted, but included images were not processed correctly. Please manually copy and replace the unprocessed images in the document."
+    }
   }
 }

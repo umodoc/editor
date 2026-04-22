@@ -63,3 +63,58 @@ export function parseStyleAttribute(el) {
     styleRaw.split(`;`).map((line) => line.split(`:`).map((v) => v.trim())),
   )
 }
+
+export function isOfficeHtml(html) {
+  if (!html) {
+    return false
+  }
+  const normalized = html.toLowerCase()
+  const hasMsOfficeSignature =
+    (normalized.includes('microsoft-com') && normalized.includes('office')) ||
+    normalized.includes('urn:schemas-microsoft-com:office') ||
+    normalized.includes('class=mso') ||
+    normalized.includes('class="mso') ||
+    normalized.includes('mso-') ||
+    normalized.includes('w:worddocument')
+
+  const hasWpsSignature =
+    normalized.includes('wps office') ||
+    normalized.includes('kingsoft') ||
+    normalized.includes('xmlns:wps') ||
+    normalized.includes('name="generator" content="wps')
+
+  return hasMsOfficeSignature || hasWpsSignature
+}
+
+export function hasImageInPastePayload(files, html) {
+  const hasImageFile = files.some((item) => item.type?.startsWith('image/'))
+  const hasImageTag = /<(img\b|v:imagedata\b)/i.test(html || '')
+  return hasImageFile || hasImageTag
+}
+
+export function replaceImageWithPlaceholder(html, placeholder = '[图片]') {
+  if (!html) {
+    return html
+  }
+
+  let nextHtml = html
+  nextHtml = nextHtml.replace(
+    /<v:shape\b[^>]*>[\s\S]*?<v:imagedata[\s\S]*?<\/v:shape>/gi,
+    placeholder,
+  )
+  nextHtml = nextHtml.replace(/<v:imagedata\b[^>]*\/?>/gi, placeholder)
+  nextHtml = nextHtml.replace(/<img\b[^>]*>/gi, placeholder)
+  return nextHtml
+}
+
+export function isOfficeLikeClipboardData(clipboardData) {
+  if (!clipboardData) {
+    return false
+  }
+  const html = clipboardData.getData('text/html') || ''
+  if (isOfficeHtml(html)) {
+    return true
+  }
+  const types = Array.from(clipboardData.types || [])
+  return types.includes('text/rtf') || types.includes('application/rtf')
+}
