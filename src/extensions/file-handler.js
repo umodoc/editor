@@ -9,10 +9,10 @@ const FileHandlePlugin = (option) => {
       handleDrop(view, event) {
         const { dataTransfer } = event
         if (!onDrop) {
-          return
+          return false
         }
         if (!dataTransfer?.files.length) {
-          return
+          return false
         }
         const pos = view.posAtCoords({
           left: event.clientX,
@@ -29,17 +29,19 @@ const FileHandlePlugin = (option) => {
         }
         if (files.length !== 0) {
           onDrop(editor, files, pos === null ? undefined : pos.pos)
+          event.preventDefault()
+          event.stopPropagation()
+          return true
         }
-        event.preventDefault()
-        event.stopPropagation()
+        return false
       },
       handlePaste(view, event) {
         const { clipboardData } = event
         if (!onPaste) {
-          return
+          return false
         }
         if (!clipboardData?.files.length) {
-          return
+          return false
         }
         let files = Array.from(clipboardData.files)
         const html = clipboardData.getData('text/html')
@@ -53,9 +55,11 @@ const FileHandlePlugin = (option) => {
         }
         if (files.length !== 0) {
           onPaste(editor, files, html)
+          event.preventDefault()
+          event.stopPropagation()
+          return true
         }
-        event.preventDefault()
-        event.stopPropagation()
+        return false
       },
     },
   })
