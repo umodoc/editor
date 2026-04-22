@@ -530,7 +530,7 @@ const autoWidth = (auto = true, padding = 50) => {
     const editorEl = document.querySelector(
       `${container} .umo-zoomable-container`,
     )
-    const pageEl = editorEl?.querySelector('.umo-page-content')
+    const pageEl = editorEl?.querySelector('.umo-zoomable-content')
     const editorWidth = editorEl?.clientWidth || 0
     const pageWidth = pageEl?.clientWidth || 0
     page.value.zoomLevel = Math.floor(
