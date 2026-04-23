@@ -8,6 +8,7 @@ export default Extension.create({
       types: ['heading', 'listItem', 'taskItem', 'paragraph'],
       minLevel: 0,
       maxLevel: 20,
+      indentSize: 2,
     }
   },
   addGlobalAttributes() {
