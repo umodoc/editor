@@ -218,8 +218,10 @@ onMounted(() => {
   const skin = useStorage('umo-editor:skin', options.value.skin)
   setTheme(theme.value)
   setSkin(skin.value)
+  window.addEventListener('beforeunload', handleBeforeUnload)
 })
 onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', handleBeforeUnload)
   clearAutoSaveInterval()
   destroy()
 })
@@ -257,6 +259,15 @@ watch(
 let contentUpdated = $ref(false)
 let isFirstUpdate = $ref(true)
 let autoSaveInterval = $ref(null)
+let isSaving = $ref(false)
+const shouldBlockUnload = () => isSaving || contentUpdated
+const handleBeforeUnload = (event) => {
+  if (!shouldBlockUnload()) {
+    return
+  }
+  event.preventDefault()
+  event.returnValue = ''
+}
 const clearAutoSaveInterval = () => {
   if (autoSaveInterval !== null) {
     clearInterval(autoSaveInterval)
@@ -1036,12 +1047,17 @@ const saveContent = async (showMessage = true) => {
   if (options.value.document?.readOnly) {
     return
   }
+  if (editor.value) {
+    // 保存前先同步一份最新内容，避免 onSave 第三个参数读取到旧值
+    $document.value.content = editor.value.getHTML()
+  }
   const saveBack = {
     status: '', // 可选值：'success' | 'error'  // 状态描述文本（用于前端提示或日志）
     message: '', // 例如：'保存失败：网络异常'
     showMessage: true, // 是否展示message
   }
   try {
+    isSaving = true
     useMessage(
       'loading',
       {
@@ -1097,6 +1113,7 @@ const saveContent = async (showMessage = true) => {
       return
     }
     emits('saved')
+    contentUpdated = false
     if (saveBack.showMessage) {
       useMessage('success', {
         attach: container,
@@ -1118,6 +1135,8 @@ const saveContent = async (showMessage = true) => {
       })
     }
     console.error(error?.message)
+  } finally {
+    isSaving = false
   }
 }
 const getAllBookmarks = () => {
