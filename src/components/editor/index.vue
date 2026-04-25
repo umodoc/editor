@@ -62,9 +62,29 @@ const extensions = getDefaultExtensions({
   uploadFileMap,
 })
 
-const updateDebounce = useDebounceFn((editor) => {
-  $document.value.content = editor.getHTML()
-}, 3000)
+let syncContentTimer = null
+const syncDocumentContent = (targetEditor = editorInstance) => {
+  if (!$document.value || !targetEditor) {
+    return
+  }
+  $document.value.content = targetEditor.getHTML()
+}
+const scheduleSyncDocumentContent = () => {
+  if (syncContentTimer !== null) {
+    clearTimeout(syncContentTimer)
+  }
+  syncContentTimer = setTimeout(() => {
+    syncContentTimer = null
+    syncDocumentContent(editorInstance)
+  }, 800)
+}
+const flushSyncDocumentContent = () => {
+  if (syncContentTimer !== null) {
+    clearTimeout(syncContentTimer)
+    syncContentTimer = null
+  }
+  syncDocumentContent(editorInstance)
+}
 
 const editorInstance = new Editor({
   editable: !options.value.document?.readOnly,
@@ -88,7 +108,10 @@ const editorInstance = new Editor({
   },
   onUpdate({ editor }) {
     addHistory(historyRecords, 'editor', editor?.state?.history$)
-    updateDebounce(editor)
+    scheduleSyncDocumentContent()
+  },
+  onBlur() {
+    flushSyncDocumentContent()
   },
 })
 const editor = inject('editor')
@@ -112,10 +135,17 @@ onMounted(() => {
   if (has('mermaid')) {
     loadResource(`${libUrl}/mermaid/mermaid.min.js`, 'script', 'mermaid-script')
   }
+  window.addEventListener('beforeunload', flushSyncDocumentContent)
+  window.addEventListener('pagehide', flushSyncDocumentContent)
+  document.addEventListener('visibilitychange', flushSyncDocumentContent)
 })
 
 // 销毁编辑器实例
 onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', flushSyncDocumentContent)
+  window.removeEventListener('pagehide', flushSyncDocumentContent)
+  document.removeEventListener('visibilitychange', flushSyncDocumentContent)
+  flushSyncDocumentContent()
   editorInstance.unmount()
 })
 </script>
