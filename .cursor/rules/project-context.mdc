@@ -1,0 +1,23 @@
+---
+description: Umo Editor fork project context — entry point to documentation
+alwaysApply: true
+---
+
+# Umo Editor Fork — Project Context
+
+This is a fork of [Umo Editor](https://github.com/umodoc/editor) — a WYSIWYG document editor built on Vue 3 + Tiptap 3, customized for 7eminar.
+
+## Documentation
+
+Project Wiki lives in `documentation/`. Read `documentation/index.md` first — it contains a map of all documentation files and guidance on which to read for your current task.
+
+Key files:
+- `documentation/architecture.md` — high-level architecture, tech stack, component tree, exposed API
+- `documentation/extensions.md` — Tiptap extensions system + custom extensions
+- `documentation/components.md` — Vue component structure (toolbar, menus, statusbar)
+- `documentation/composables-and-state.md` — composables, state management, provide/inject
+- `documentation/options-and-config.md` — configuration system, options schema
+- `documentation/build-and-dev.md` — Vite build, auto-import, linting
+- `documentation/localization.md` — i18n, locales, adding translations
+
+Load documentation on-demand — only read files relevant to your current task.

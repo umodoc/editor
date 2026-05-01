@@ -1,0 +1,13 @@
+---
+description: Context for working with composables and state
+globs: src/composables/**
+alwaysApply: false
+---
+
+# Composables Context
+
+When working with files in `src/composables/`, read `documentation/composables-and-state.md` for:
+- All composables: useState, useI18n/t/l, useHotkeys, useAlert/useConfirm/useMessage, usePopup, useCopy, useSelect
+- State management pattern: provide/inject from root UmoEditor component, localStorage via useStorage
+- All composables are auto-imported — no explicit import needed
+- Vue and VueUse exports are also auto-imported

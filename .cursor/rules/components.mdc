@@ -1,0 +1,16 @@
+---
+description: Context for working with Vue components
+globs: src/components/**
+alwaysApply: false
+---
+
+# Components Context
+
+When working with files in `src/components/`, read `documentation/components.md` for:
+- Component tree hierarchy (UmoEditor → Toolbar + ContainerPage + Statusbar)
+- Toolbar menu structure (base, insert, table, tools, page, view, export)
+- Bubble menus — which node types have context menus
+- Block menu — drag handle
+- How to add a new toolbar button or bubble menu
+- All components are auto-imported via unplugin-vue-components with directoryAsNamespace
+- Data flows via provide/inject, not props — see `documentation/composables-and-state.md`

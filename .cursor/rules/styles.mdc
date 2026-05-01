@@ -1,0 +1,14 @@
+---
+description: Context for working with styles
+globs: src/assets/styles/**
+alwaysApply: false
+---
+
+# Styles Context
+
+When working with styles, refer to `documentation/architecture.md` for:
+- LESS is used for styling with CSS custom properties (--umo-* prefix)
+- TDesign class prefix is overridden to `umo-` via modifyVars and TConfigProvider
+- Main style entry: `src/assets/styles/index.less`
+- Editor content styles: `src/assets/styles/editor.less`
+- SVG icons use vite-plugin-svg-icons with `umo-icon-{name}` pattern

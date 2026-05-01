@@ -1,0 +1,14 @@
+---
+description: Context for working with Tiptap extensions
+globs: src/extensions/**
+alwaysApply: false
+---
+
+# Extensions Context
+
+When working with files in `src/extensions/`, read `documentation/extensions.md` for:
+- How the Tiptap extension system works (Node / Mark / Extension)
+- List of all custom extensions with descriptions
+- The pattern for creating a new extension (index.js + node-view.vue)
+- How extensions are aggregated in `src/extensions/index.js`
+- How to register a new extension and connect it to toolbar/bubble menus
