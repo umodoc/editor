@@ -53,7 +53,7 @@
     "format": "oxfmt --write .",
     "lint": "oxlint --fix src",
     "analyzer": "vite-bundle-visualizer",
-    "prepare": "husky",
+    "prepare": "npm run build",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
