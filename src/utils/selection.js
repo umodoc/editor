@@ -22,9 +22,7 @@ export const getSelectionText = (editor) => {
 
 export const setSelectionText = (editor, prevDocLength, from, to) => {
   const state = editor?.state
-  // 计算新的文档长度
   const newDocLength = state.doc.content.size
-  // 计算插入内容后的实际结束位置
   const newTo = to + (newDocLength - prevDocLength)
   if (newTo <= from) {
     return false

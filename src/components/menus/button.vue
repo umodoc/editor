@@ -328,27 +328,22 @@ import { getShortcut } from '@/utils/shortcut'
 const { selectVisible } = useSelect()
 
 const props = defineProps({
-  // 菜单类型
   menuType: {
     type: String,
     default: 'button',
   },
-  // 是否为大按钮
   huge: {
     type: Boolean,
     default: false,
   },
-  // 是否强制为大按钮，用于测试，不建议使用
   forceHuge: {
     type: Boolean,
     default: false,
   },
-  // 按钮图标
   ico: {
     type: String,
     default: undefined,
   },
-  // 按钮文字
   text: {
     type: String,
     default: '',
@@ -357,12 +352,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  // 文字提示
   tooltip: {
     type: [String, Boolean],
     default: undefined,
   },
-  // 快捷键
   shortcut: {
     type: String,
     default: undefined,
@@ -371,7 +364,6 @@ const props = defineProps({
     type: String,
     default: undefined,
   },
-  // Dropdown,Select 相关
   selectOptions: {
     type: Array,
     default: undefined,
@@ -380,7 +372,6 @@ const props = defineProps({
     type: [String, Number],
     default: '',
   },
-  // Popup 相关
   popupVisible: {
     type: Boolean,
     default: false,
@@ -389,7 +380,6 @@ const props = defineProps({
     type: String,
     default: undefined,
   },
-  // 菜单激活状态
   menuActive: {
     type: Boolean,
     default: false,
@@ -421,7 +411,6 @@ const menuClick = (...args) => {
 const tooltipVisible = $ref(false)
 let tooltipForceHide = $ref(false)
 const popupVisileChange = (visible) => {
-  // 隐藏 Tooltip，适用于 select、dropdown、popup 等子组件展开时，隐藏 Tooltip
   tooltipForceHide = visible
 }
 const getTooltipContent = () => {

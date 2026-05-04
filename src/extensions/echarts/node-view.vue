@@ -36,16 +36,13 @@
 </template>
 
 <script setup>
-// tiptap 组件
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
-// 拖拽组件
 import Drager from 'es-drager'
 
 import {
   calbaseConfigData,
   calbaseConfigOptions,
 } from '@/extensions/echarts/cal-service'
-// 引入 echart 服务 用此方法初始化加载 cdn echart.js 脚本 否则
 import { loadResource } from '@/utils/load-resource'
 
 const props = defineProps(nodeViewProps)
@@ -59,7 +56,6 @@ let selected = $ref(false)
 let chart = null
 let chartOption = $ref(null)
 
-// 加载数据
 onMounted(async () => {
   await nextTick()
   maxWidth = containerRef.value?.$el.offsetWidth
@@ -69,7 +65,6 @@ onMounted(async () => {
   await loadData()
 })
 
-// 初始化样式，需要在 margin 和 nodeAlign 里面增加 name 才可以
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = attrs
   const marginTop =
@@ -98,22 +93,18 @@ const onResize = ({ width, height }) => {
 onClickOutside(containerRef, () => {
   selected = false
 })
-// 数据加载
 const loadData = async () => {
   await nextTick()
-  // 确保 loadData 在 echarts 加载完毕后调用
   await loadResource(`${options.value.cdnUrl}/libs/echarts/echarts.min.js`)
 
-  // 等待 echarts 加载完成
   const waitForECharts = () => {
     return new Promise((resolve, reject) => {
       let attempts = 0
-      const maxAttempts = 40 // 最多等待2秒
+      const maxAttempts = 40
       const checkECharts = () => {
         if (typeof echarts !== 'undefined') {
           resolve()
         } else if (attempts < maxAttempts) {
-          // 如果 echarts 还没有加载完成，等待一段时间后再次检查
           attempts++
           setTimeout(checkECharts, 50)
         } else {
@@ -124,12 +115,9 @@ const loadData = async () => {
       checkECharts()
     })
   }
-  // 等待 echarts 加载完成
   await waitForECharts()
-  // 接下来的使用就跟之前一样，初始化图表，设置配置项
   if (typeof echarts !== 'undefined') {
     const { chartOptions, chartConfig, id, mode } = attrs
-    // 根据参数不同 实现效果不同
     if (chart !== null) {
       chart.dispose()
       chart = null
@@ -157,17 +145,14 @@ const loadData = async () => {
   }
 }
 
-// 监听 attrs 变化并在变化时重新加载数据
 watch(
   () => attrs,
   async (newAttrs, oldAttrs) => {
-    // 避免初次挂载时重复调用 loadData
     if (
       newAttrs !== undefined &&
       oldAttrs !== undefined &&
       newAttrs !== oldAttrs
     ) {
-      // 如果只有高度和宽度变化，则不走重新加载逻辑
       let isLoad = false
       onResize({
         width: attrs.width,
@@ -183,7 +168,7 @@ watch(
         }
       }
       if (isLoad) {
-        await loadData() // 第二次及之后的调用 loadData，在属性变化时
+        await loadData()
       }
     }
   },

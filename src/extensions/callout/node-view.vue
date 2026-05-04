@@ -71,7 +71,6 @@ const focusCalloutContent = (event) => {
   if (!(target instanceof HTMLElement)) {
     return
   }
-  // 点击文本区域时保留原生定位行为；仅为空白区域提供兜底聚焦。
   if (target.closest('.umo-node-callout-content')) {
     return
   }

@@ -3,14 +3,12 @@ import { Mark, mergeAttributes } from '@tiptap/core'
 export default Mark.create({
   name: 'letterSpacing',
 
-  // 默认配置
   addOptions() {
     return {
       types: ['textStyle'],
     }
   },
 
-  // 定义属性如何映射到 HTML 样式
   addAttributes() {
     return {
       spacing: {

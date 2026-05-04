@@ -40,9 +40,8 @@ const editor = inject('editor')
 
 defineEmits(['close'])
 
-// 最终可视化数据
 let tocTreeData = $ref([])
-let watchTreeData = [] // 可视化监听数据
+let watchTreeData = []
 const buildTocTree = (tocArray) => {
   const root = []
   const stack = []
@@ -73,7 +72,6 @@ const buildTocTree = (tocArray) => {
 watch(
   () => editor.value?.storage.tableOfContents.content,
   (toc) => {
-    // 每次都监听 但不是每次发生变化，重复赋值导致toc数据双击生效
     const curTocTreeData = buildTocTree(toc)
     if (JSON.stringify(watchTreeData) !== JSON.stringify(curTocTreeData)) {
       watchTreeData = curTocTreeData

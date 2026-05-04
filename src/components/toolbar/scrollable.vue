@@ -45,17 +45,14 @@ const scrollRight = () => {
   contentRef.scrollLeft += contentRef.offsetWidth - 10 || 100
 }
 
-// 监听父元素大小变化
 useResizeObserver(wraperRef, () => {
   checkScrollPosition()
 })
 
-// 支持鼠标滚轮滚动
 const wheelScroll = (e) => {
   e.deltaY < 0 ? scrollLeft() : scrollRight()
 }
 
-// 更新
 const update = () => {
   if (contentRef) {
     contentRef.scrollLeft = 0

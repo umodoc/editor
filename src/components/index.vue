@@ -61,7 +61,6 @@ import {
 } from '@tool-belt/type-predicates'
 import domToImage from 'dom-to-image-more'
 import enConfig from 'tdesign-vue-next/esm/locale/en_US'
-import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
 
 import { getTypewriterRunState } from '@/extensions/type-writer'
 import { i18n } from '@/i18n'
@@ -112,11 +111,10 @@ const emits = defineEmits([
   'saved',
   'destroy',
 ])
-// 撤销重做的记录步骤
 const historyRecords = ref({
-  done: [], // 能撤销的记录数组
-  undone: [], // 能重做的记录数组
-  isUndoRedo: false, // 标记是否正在执行撤销/重做操作
+  done: [],
+  undone: [],
+  isUndoRedo: false,
   editorCount: 0,
 })
 
@@ -255,7 +253,6 @@ watch(
   },
 )
 
-// 定时保存
 let contentUpdated = $ref(false)
 let isFirstUpdate = $ref(true)
 let autoSaveInterval = $ref(null)
@@ -481,7 +478,6 @@ watch(
   () => page.value.watermark,
   (pageWatermark, oldPageWatermark) => {
     emits('changed:pageWatermark', { pageWatermark, oldPageWatermark })
-    // 增加水印撤回
     addHistory(historyRecords, 'page', {
       proType: 'watermark',
       newData: pageWatermark,
@@ -524,9 +520,7 @@ watch(
   },
 )
 
-// Global Locale Config
 const localeConfig = $ref({
-  'zh-CN': cnConfig,
   'en-US': enConfig,
 })
 
@@ -878,7 +872,6 @@ const getVanillaHTML = async () => {
     throw new Error('editor is not ready!')
   }
 
-  // 克隆页面内容
   const { readOnly } = options.value.document
   const { isEditable } = editor.value
   if (!readOnly) {
@@ -907,13 +900,11 @@ const getVanillaHTML = async () => {
     })
   }
 
-  // 移除所有换行和回车标记
   const breakNodes = pageNode.querySelectorAll(
     '.tiptap-invisible-character, .ProseMirror-separator',
   )
   breakNodes.forEach((el) => el.remove())
 
-  // 如果存在视频或音频节点，则替换视频标签
   const mediaNodes = pageNode.querySelectorAll(
     '.umo-node-video, .umo-node-audio',
   )
@@ -922,11 +913,9 @@ const getVanillaHTML = async () => {
     if (mediaNode) el.querySelector('.plyr')?.replaceWith(mediaNode)
   })
 
-  // 如果存在文件节点，替换文件节点图标
   const fileNodes = pageNode.querySelectorAll('.umo-node-file')
   replaceIcons(fileNodes)
 
-  // 代码块处理
   const codeBlockNodes = pageNode.querySelectorAll('.umo-code-block')
   codeBlockNodes.forEach((el) => {
     const wordWrapButton = el.querySelector('.umo-word-wrap-button')
@@ -938,7 +927,6 @@ const getVanillaHTML = async () => {
   })
   replaceIcons(codeBlockNodes, '16px')
 
-  // 图表处理
   const chartNodes = pageNode.querySelectorAll('.umo-node-echarts')
   chartNodes.forEach((el) => {
     const chartNode = el.querySelector('.umo-node-echarts-body')
@@ -948,7 +936,6 @@ const getVanillaHTML = async () => {
     }
   })
 
-  // 公式样式
   const mathNodes = pageNode.querySelectorAll('.tiptap-mathematics-render')
   mathNodes.forEach((el) => {
     const katexEl = el.querySelector('.katex')
@@ -957,7 +944,6 @@ const getVanillaHTML = async () => {
     }
   })
 
-  // 如果水印为空，则移除水印
   if (page.value.watermark.text === '') {
     const watermarkNode = pageNode.lastElementChild
     if (
@@ -968,16 +954,12 @@ const getVanillaHTML = async () => {
     }
   }
 
-  // 移除菜单
   const menuNodes = pageNode.querySelector('.umo-block-menu-drag-handle')
   if (menuNodes) {
     menuNodes.remove()
   }
 
-  // 移除所有 html 注释
   const htmlContent = pageNode.outerHTML.replace(/<!--[\s\S]*?-->/g, '')
-
-  // 返回处理后的 html 内容
   return htmlContent
 }
 
@@ -1048,13 +1030,12 @@ const saveContent = async (showMessage = true) => {
     return
   }
   if (editor.value) {
-    // 保存前先同步一份最新内容，避免 onSave 第三个参数读取到旧值
     $document.value.content = editor.value.getHTML()
   }
   const saveBack = {
-    status: '', // 可选值：'success' | 'error'  // 状态描述文本（用于前端提示或日志）
-    message: '', // 例如：'保存失败：网络异常'
-    showMessage: true, // 是否展示message
+    status: '',
+    message: '',
+    showMessage: true,
   }
   try {
     isSaving = true
@@ -1065,7 +1046,7 @@ const saveContent = async (showMessage = true) => {
         content: t('save.saving'),
         placement: 'bottom',
         closeBtn: true,
-        duration: 0, // 需要手工关闭，不会自动关闭了
+        duration: 0,
         offset: [0, -20],
       },
       getCurrentInstance(),
@@ -1082,7 +1063,6 @@ const saveContent = async (showMessage = true) => {
     if (!_saveBack) {
       throw new Error('`onSave` callback must return a value.')
     }
-    // 兼容老的保存回调
     if (typeof _saveBack === 'string') {
       if (_saveBack) {
         saveBack.status = 'success'
@@ -1095,7 +1075,6 @@ const saveContent = async (showMessage = true) => {
       for (const key in _saveBack) {
         saveBack[key] = _saveBack[key]
       }
-      // 没有返回这个
       if (_saveBack['showMessage'] === undefined) {
         saveBack['showMessage'] = showMessage
       }
@@ -1191,13 +1170,11 @@ const getContentExcerpt = (charLimit = 100, more = ' ...') => {
   }
   return text?.substring(0, charLimit) + more
 }
-/* 撤销 重做操作*/
 const undoHistory = () => {
   undoHistoryRecord(historyRecords, function (record) {
     if (record?.type === 'editor') {
       editor?.value?.chain().focus().undo().run()
     } else if (record?.type === 'page' && record?.proType) {
-      // 撤销
       if (page?.value && record.oldData !== undefined) {
         page.value[record.proType] = record.oldData
       }
@@ -1209,7 +1186,6 @@ const redoHistory = () => {
     if (record?.type === 'editor') {
       editor?.value?.chain().focus().redo().run()
     } else if (record?.type === 'page' && record?.proType) {
-      //  恢复
       if (page?.value && record.newData !== undefined) {
         page.value[record.proType] = record.newData
       }

@@ -1,107 +1,35 @@
 const fonts = [
+  { label: 'Default Font', value: null },
   {
-    label: { en_US: 'Default Font', zh_CN: '默认字体' },
-    value: null,
-  },
-  {
-    label: { en_US: 'Noto Sans SC', zh_CN: '思源黑体' },
+    label: 'Noto Sans SC',
     value: 'Noto Sans SC',
     url: 'https://fonts.gstatic.com/s/notosanssc/v40/k3kXo84MPvpLmixcA63oeALhLIiP-Q-87KaAaH7rzeAODp22mF0qmF4CSjmPC6A0Rg5g1igg1w.4.woff2',
     format: 'woff2',
   },
   {
-    label: { en_US: 'Noto Serif SC', zh_CN: '思源宋体' },
+    label: 'Noto Serif SC',
     value: 'Noto Serif SC',
     url: 'https://fonts.gstatic.com/s/notoserifsc/v35/H4cyBXePl9DZ0Xe7gG9cyOj7uK2-n-D2rd4FY7SCqyWv.ttf',
     format: 'truetype',
   },
-  {
-    label: { en_US: 'Songti', zh_CN: '宋体' },
-    value: 'SimSun',
-  },
-  {
-    label: { en_US: 'Heiti', zh_CN: '黑体' },
-    value: 'SimHei',
-  },
-  {
-    label: { en_US: 'Kaiti', zh_CN: '楷体' },
-    value: 'KaiTi',
-  },
-  {
-    label: {
-      en_US: 'Kaiti GB2312',
-      zh_CN: '楷体_GB2312',
-    },
-    value: 'KaiTi_GB2312',
-  },
-  {
-    label: { en_US: 'Fangsong', zh_CN: '仿宋' },
-    value: 'FangSong',
-  },
-  {
-    label: {
-      en_US: 'Fangsong GB2312',
-      zh_CN: '仿宋_GB2312',
-    },
-    value: 'FangSong_GB2312',
-  },
-  {
-    label: { en_US: 'STSong', zh_CN: '华文宋体' },
-    value: 'STSong',
-  },
-  {
-    label: { en_US: 'STFangsong', zh_CN: '华文仿宋' },
-    value: 'STFangsong',
-  },
-  {
-    label: {
-      en_US: 'FZ Fangsong Simplified',
-      zh_CN: '方正仿宋简体',
-    },
-    value: 'FZFangSong-Z02S',
-  },
-  {
-    label: {
-      en_US: 'FZ Xiaobiao Song',
-      zh_CN: '方正小标宋',
-    },
-    value: 'FZXiaoBiaoSong-B05S',
-  },
-  {
-    label: {
-      en_US: 'Microsoft Yahei',
-      zh_CN: '微软雅黑',
-    },
-    value: 'Microsoft Yahei',
-  },
-  {
-    label: { en_US: 'PingFang SC', zh_CN: '苹方' },
-    value: 'PingFang SC',
-  },
-  {
-    label: { en_US: 'Hiragino Sans GB', zh_CN: '冬青黑体简体中文' },
-    value: 'Hiragino Sans GB',
-  },
-  {
-    label: { en_US: 'DengXian', zh_CN: '等线' },
-    value: 'DengXian',
-  },
-  {
-    label: { en_US: 'DengXian Light', zh_CN: '等线 Light' },
-    value: 'DengXian Light',
-  },
-  {
-    label: { en_US: 'YouYuan', zh_CN: '幼圆' },
-    value: 'YouYuan',
-  },
-  {
-    label: { en_US: 'LiSu', zh_CN: '隶书' },
-    value: 'LiSu',
-  },
-  {
-    label: { en_US: 'NSimSun', zh_CN: '新宋体' },
-    value: 'NSimSun',
-  },
+  { label: 'Songti', value: 'SimSun' },
+  { label: 'Heiti', value: 'SimHei' },
+  { label: 'Kaiti', value: 'KaiTi' },
+  { label: 'Kaiti GB2312', value: 'KaiTi_GB2312' },
+  { label: 'Fangsong', value: 'FangSong' },
+  { label: 'Fangsong GB2312', value: 'FangSong_GB2312' },
+  { label: 'STSong', value: 'STSong' },
+  { label: 'STFangsong', value: 'STFangsong' },
+  { label: 'FZ Fangsong Simplified', value: 'FZFangSong-Z02S' },
+  { label: 'FZ Xiaobiao Song', value: 'FZXiaoBiaoSong-B05S' },
+  { label: 'Microsoft Yahei', value: 'Microsoft Yahei' },
+  { label: 'PingFang SC', value: 'PingFang SC' },
+  { label: 'Hiragino Sans GB', value: 'Hiragino Sans GB' },
+  { label: 'DengXian', value: 'DengXian' },
+  { label: 'DengXian Light', value: 'DengXian Light' },
+  { label: 'YouYuan', value: 'YouYuan' },
+  { label: 'LiSu', value: 'LiSu' },
+  { label: 'NSimSun', value: 'NSimSun' },
   { label: 'Arial', value: 'Arial' },
   { label: 'Times New Roman', value: 'Times New Roman' },
   { label: 'Verdana', value: 'Verdana' },
@@ -178,73 +106,30 @@ const colors = [
 ]
 
 const lineHeights = [
-  {
-    label: { en_US: 'Single', zh_CN: '单倍行距' },
-    value: 1,
-  },
-  {
-    label: {
-      en_US: '1.5 Line Spacing',
-      zh_CN: '1.5 倍行距',
-    },
-    value: 1.5,
-  },
-  {
-    label: {
-      en_US: '1.75 Line Spacing',
-      zh_CN: '1.75 倍行距',
-    },
-    value: 1.75,
-    default: true,
-  },
-  {
-    label: { en_US: 'Double', zh_CN: '2 倍行距' },
-    value: 2,
-  },
-  {
-    label: {
-      en_US: '2.5 Line Spacing',
-      zh_CN: '2.5 倍行距',
-    },
-    value: 2.5,
-  },
-  {
-    label: { en_US: 'Triple', zh_CN: '3 倍行距' },
-    value: 3,
-  },
+  { label: 'Single', value: 1 },
+  { label: '1.5 Line Spacing', value: 1.5 },
+  { label: '1.75 Line Spacing', value: 1.75, default: true },
+  { label: 'Double', value: 2 },
+  { label: '2.5 Line Spacing', value: 2.5 },
+  { label: 'Triple', value: 3 },
 ]
 
 const symbols = [
   {
-    label: {
-      en_US: 'Plain Text',
-      zh_CN: '普通文本',
-    },
+    label: 'Plain Text',
     items: '‹›«»‘’“”‚„¡¿‥…‡‰‱‼⁈⁉⁇©®™§¶⁋',
   },
   {
-    label: {
-      en_US: 'Currency Symbols',
-      zh_CN: '货币符号',
-    },
+    label: 'Currency Symbols',
     items: '$€¥£¢₠₡₢₣₤¤₿₥₦₧₨₩₪₫₭₮₯₰₱₲₳₴₵₶₷₸₹₺₻₼₽',
   },
   {
-    label: {
-      en_US: 'Mathematical Symbols',
-      zh_CN: '数学符号',
-    },
+    label: 'Mathematical Symbols',
     items: '<>≤≥–—¯‾°−±÷⁄×ƒ∫∑∞√∼≅≈≠≡∈∉∋∏∧∨¬∩∪∂∀∃∅∇∗∝∠¼½¾',
   },
+  { label: 'Arrows', items: '←→↑↓⇐⇒⇑⇓⇠⇢⇡⇣⇤⇥⤒⤓↨' },
   {
-    label: { en_US: 'Arrows', zh_CN: '箭头' },
-    items: '←→↑↓⇐⇒⇑⇓⇠⇢⇡⇣⇤⇥⤒⤓↨',
-  },
-  {
-    label: {
-      en_US: 'Latin Script',
-      zh_CN: '拉丁语',
-    },
+    label: 'Latin Script',
     items:
       'ĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİıĲĳĴĵĶķĸĹĺĻļĽľĿŀŁłŃńŅņŇňŉŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŦŧŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽžſ',
   },
@@ -252,56 +137,41 @@ const symbols = [
 
 const emojis = [
   {
-    label: {
-      en_US: 'Emotions & People',
-      zh_CN: '表情与角色',
-    },
+    label: 'Emotions & People',
     items:
       '😀 😃 😄 😁 😆 😅 🤣 😂 🙂 🙃 😉 😊 😇 🥰 😍 🤩 😘 😗 😚 😙 😋 😛 😜 🤪 😝 🤑 🤗 🤭 🤫 🤔 🤐 🤨 😐 😑 😶 😶‍ 😏 😒 🙄 😬 😮‍ 🤥 😌 😔 😪 🤤 😴 😷 🤒 🤕 🤢 🤮 🤧 🥵 🥶 🥴 😵 😵‍💫 🤯 🤠 🥳 😎 🤓 🧐 😕 😟 🙁 ☹️ 😮 😯 😲 😳 🥺 😦 😧 😨 😰 😥 😢 😭 😱 😖 😣 😞 😓 😩 😫 🥱 😤 😡 😠 🤬 😈 👿 💀 ☠️ 💩 🤡 👹 👺 👻 👽 👾 🤖 👋 🤚 🖐️ ✋ 🖖 👌 🤏 ✌️ 🤞 🤟 🤘 🤙 👈 👉 👆 🖕 👇 ☝️ 👍 👎 ✊ 👊 🤛 🤜 👏 🙌 👐 🤲 🤝 🙏 ✍️ 💅 🤳 💪 🦾 🦿 🦵 🦶 👂 🦻',
   },
   {
-    label: {
-      en_US: 'Animals & Nature',
-      zh_CN: '动物与自然',
-    },
+    label: 'Animals & Nature',
     items:
       '🐵 🐒 🦍 🦧 🐶 🐕 🦮 🐕‍🦺 🐩 🐺 🦊 🦝 🐱 🐈 🐈‍⬛ 🦁 🐯 🐅 🐆 🐴 🐎 🦄 🦓 🦌 🐮 🐂 🐃 🐄 🐷 🐖 🐗 🐽 🐏 🐑 🐐 🐪 🐫 🦙 🦒 🐘 🦏 🦛 🐭 🐁 🐀 🐹 🐰 🐇 🐿️ 🦔 🦇 🐻 🐻‍❄️ 🐨 🐼 🦥 🦦 🦨 🦘 🦡 🐾 🦃 🐔 🐓 🐣 🐤 🐥 🐦 🐧 🕊️ 🦅 🦆 🦢 🦉 🦩 🦚 🦜 🐸 🐊 🐢 🦎 🐍 🐲 🐉 🦕 🦖 🐳 🐋 🐬 🦭 🐟 🐠 🐡 🦈 🐙 🐚 🐌 🦋 🐛 🐜 🐝 🐞 🦗 🕷️ 🕸️ 🦂 🦟 🦠 💐 🌸 💮 🏵️ 🌹 🥀 🌺 🌻 🌼 🌷 🌱 🌲 🌳 🌴 🌵 🌾 🌿 ☘️ 🍀 🍁 🍂 🍃 🌒 🌓 🌔 🌕 🌖 🌗 🌘 🌙 🌚 🌛 🌜 ☀️ 🌝 🌞 🪐 🌟 🌠 🌌 ☁️ ⛅ ⛈️ 🌤️ 🌥️ 🌦️ 🌧️ 🌨️ 🌩️ 🌪️ 🌫️ 🌬️ 🌀 🌈 🌂 ☂️ ☔ ⛱️ ⚡ ❄️ ☃️ ⛄ ☄️ 🔥 💧 🌊',
   },
   {
-    label: {
-      en_US: 'Food & Drink',
-      zh_CN: '食物与食品',
-    },
+    label: 'Food & Drink',
     items:
       '🍇 🍉 🍊 🍋 🍌 🍍 🥭 🍎 🍏 🍐 🍑 🍒 🍓 🥝 🍅 🥥 🥑 🍆 🥔 🥕 🌽 🌶️ 🥬 🥦 🧄 🧅 🍄 🥜 🌰 🍞 🥐 🥖 🥨 🥯 🥞 🧇 🧀 🍖 🍗 🥩 🥓 🍔 🍟 🍕 🌭 🥪 🌮 🌯 🥙 🧆 🥚 🍳 🥘 🍲 🥣 🥗 🍿 🧈 🧂 🥫 🍱 🍘 🍙 🍚 🍛 🍜 🍝 🍠 🍢 🍣 🍤 🍥 🥮 🍡 🥟 🥠 🥡 🦀 🦞 🦐 🦑 🦪 🍦 🍧 🍨 🍩 🍪 🎂 🍰 🧁 🥧 🍫 🍬 🍭 🍮 🍯 🍼 🥛 ☕ 🍵 🍶 🍾 🍷 🍸 🍹 🍺 🍻 🥂 🥃 🥤 🧃 🧉 🧊 🥢 🍽️ 🍴 🥄 🔪 🏺',
   },
   {
-    label: { en_US: 'Activities', zh_CN: '活动' },
+    label: 'Activities',
     items:
       '🧧 🎁 🎄 🧨 ✨ 🎈 🎉 🏮 🎗️ 🎟️ 🎫 🎖️ 🏆 🏅 🥇 🥈 🥉 ⚽ ⚾ 🥎 🏀 🏐 🏈 🏉 🎾 🥏 🎳 🏏 🏑 🏒 🥍 🏓 🏸 🥊 🥋 🥅 ⛳ ⛸️ 🎣 🤿 🎽 🎿 🛷 🥌 🎯 🪀 🪁 🎱 🔮 🧿 🎮 🕹️ 🎰 🎲 🧩 🧸 ♟️ 🃏 🀄 🎴 🎭 🖼️ 🎨 🧵 🧶',
   },
   {
-    label: {
-      en_US: 'Travel & Places',
-      zh_CN: '旅行与景点',
-    },
+    label: 'Travel & Places',
     items:
       '🚈 🚉 🚊 🚝 🚞 🚋 🚌 🚍 🚎 🚐 🚑 🚒 🚓 🚔 🚕 🚖 🚗 🚘 🚙 🚚 🚛 🚜 🏎️ 🏍️ 🛵 🦽 🦼 🛺 🚲 🛴 🛹 🚏 🛣️ 🛤️ 🛢️ ⛽ 🚨 🚥 🚦 🛑 🚧 ⚓ ⛵ 🛶 🚤 🛳️ ⛴️ 🛥️ 🚢 ✈️ 🛩️ 🛫 🛬 🪂 💺 🚁 🚟 🚠 🚡 🛰️ 🚀 🛸 🛎️ 🧳 🧭 ⌚ ⏰ ⏱️ ⏲️ 🕰️ 🕛 🕧 🕐 🕜 🕑 🕝 🕒 🕞 🕓 🕟 🕔 🕠 🕕 🕡 🕖 🕢 🕗 🕣 🕘 🕤 🕙 🕥 🕚 🕦',
   },
   {
-    label: { en_US: 'Objects', zh_CN: '物品' },
+    label: 'Objects',
     items:
       '📔 📕 📖 📗 📘 📙 📚 📒 📃 📜 📄 📰 🗞️ 📑 🔖 🏷️ 💰 🔍 🔎 💴 💵 💶 💷 💸 💳 🧾 💹 ✉️ 📧 📨 📩 📤 📥 📦 📫 📪 📬 📭 📮 🗳️ ✏️ ✒️ 🖋️ 🖊️ 🖌️ 🖍️ 📝 💼 📁 📂 🗂️ 📅 📆 🗒️ 🗓️ 📇 📈 📉 📊 📋 📌 📍 📎 🖇️ 📏 📐 ✂️ 🗃️ 🗄️ 🗑️ 🔒 🔓 🔏 🔐 🔑 🗝️ 🔨 🪓 ⛏️ ⚒️ 🛠️ 🗡️ ⚔️ 🔫 🏹 🛡️ 🔧 🔩 ⚙️ 🗜️ ⚖️ 🦯 🔗 ⛓️ 🧰 🧲 ⚗️ 🧪 🧫 🧬 🔬 🔭 📡 💉 🩸 💊 🩹 🩺 🚪 🛏️ 🛋️ 🪑 🚽 🚿 🛁 🪒 🧴 🧷 🧹 🧺 🧻 🧼 🧽 🧯 🛒 🚬 ⚰️ ⚱️ 💎 🔇 🔈 🔉 🔊 🔔 🔕 🔋 🔌 💻 🖥️ 🖨️ ⌨️ 🖱️ 🖲️ 📷 🧱',
   },
   {
-    label: { en_US: 'Symbols', zh_CN: '符号' },
+    label: 'Symbols',
     items:
       '💡 ✅ ☑️ ✔️ ❌ ❎ ❓ ❗ ❔ ❕ ⌛ ⏳ 💰 🆒 🆕 🆖 🅾️ 🆗 🆘 🈲 🉑 🈸 ⛔ 🚫 📵 ✳️ ✴️ ❇️ 🔟 🔠 🔡 🔢 🔣 🔤 🅰️ 🆎 🅱️ 🆑 🆒 🆓 ℹ️ 🆔 🆕 🆖 🅾️ 🆗 🅿️ 🆘 🆙 🆚 🈁 🈂️ 🔴 🟠 🟡 🟢 🔵 🟣 🟤 ⚫ ⚪ 🟥 🟧 🟨 🟩 🟦 🟪 🟫 🔶 🔷 🔸 🔹 🔺 🔻 💠 🔘 🔳 🔲 💌 💘 💝 💖 💗 💓 💞 💕 💟 ❣️ 💔 🤍 💯 💢 💥 💬 💤 ➰ ➿ 🔅 📴 ➡️ 🔃 🔄 🔙 🔚 🔛 🔝 🔀 🔁 🔂',
   },
-  {
-    label: { en_US: 'Flags', zh_CN: '旗帜' },
-    items: '🏁 🚩 🏴 🏳️ 🏳️‍🌈‍',
-  },
+  { label: 'Flags', items: '🏁 🚩 🏴 🏳️ 🏳️‍🌈‍' },
 ]
 
 const pageSizes = [
@@ -309,54 +179,12 @@ const pageSizes = [
   { label: 'A3', width: 29.7, height: 42.0 },
   { label: 'A5', width: 14.8, height: 21.0 },
   { label: 'B5', width: 17.6, height: 25.0 },
-  {
-    label: {
-      en_US: 'No. 5 Envelope',
-      zh_CN: '5号信封',
-    },
-    width: 10.9,
-    height: 12.9,
-  },
-  {
-    label: {
-      en_US: 'No. 6 Envelope',
-      zh_CN: '6号信封',
-    },
-    width: 11.9,
-    height: 22.9,
-  },
-  {
-    label: {
-      en_US: 'No. 7 Envelope',
-      zh_CN: '7号信封',
-    },
-    width: 16.1,
-    height: 22.8,
-  },
-  {
-    label: {
-      en_US: 'No. 9 Envelope',
-      zh_CN: '9号信封',
-    },
-    width: 22.8,
-    height: 32.3,
-  },
-  {
-    label: {
-      en_US: 'Legal Paper',
-      zh_CN: '法律用纸',
-    },
-    width: 21.5,
-    height: 33.5,
-  },
-  {
-    label: {
-      en_US: 'Letter Paper',
-      zh_CN: '信纸',
-    },
-    width: 21.5,
-    height: 27.9,
-  },
+  { label: 'No. 5 Envelope', width: 10.9, height: 12.9 },
+  { label: 'No. 6 Envelope', width: 11.9, height: 22.9 },
+  { label: 'No. 7 Envelope', width: 16.1, height: 22.8 },
+  { label: 'No. 9 Envelope', width: 22.8, height: 32.3 },
+  { label: 'Legal Paper', width: 21.5, height: 33.5 },
+  { label: 'Letter Paper', width: 21.5, height: 27.9 },
 ]
 
 export default {

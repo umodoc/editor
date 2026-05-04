@@ -53,7 +53,6 @@ const createOfficePastePlugin = () =>
               },
             })
           }
-          // 标记给 file-handler：当前粘贴交由 office-paste/默认流程处理
           event.skipFileHandler = true
         }
         return transformExcel(view, event)

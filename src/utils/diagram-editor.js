@@ -1,10 +1,3 @@
-import { useI18n } from '@/composables/i18n'
-
-const locales = {
-  'zh-CN': 'zh',
-  'en-US': 'en',
-}
-
 // https://www.diagrams.com/doc/faq/embed-mode
 class DiagramEditor {
   constructor({ domain, params, container }) {
@@ -45,7 +38,6 @@ class DiagramEditor {
     }
   }
 
-  // 编辑元素
   edit(src) {
     let fmt = this.format
     if (src.substring(0, 15) === 'data:image/png;') {
@@ -57,20 +49,16 @@ class DiagramEditor {
     return this
   }
 
-  // 创建 iframe
   createFrame() {
     const params = Object.keys(this.params)
       .map((key) => `${key}=${this.params[key]}`)
       .join('&')
-    const { locale } = useI18n()
-    const lang = locales[locale.value]
     const frame = document.createElement('iframe')
     frame.setAttribute('class', 'umo-diagrams-iframe')
-    frame.setAttribute('src', `${this.domain}?${params}&lang=${lang}`)
+    frame.setAttribute('src', `${this.domain}?${params}&lang=en`)
     return frame
   }
 
-  // diagrams页面和当前页面通信
   postMessage(msg) {
     if (this.frame) {
       this.frame.contentWindow?.postMessage(JSON.stringify(msg), '*')
@@ -110,7 +98,6 @@ class DiagramEditor {
     }
   }
 
-  // 开始编辑
   startEditing(data, format) {
     if (!this.frame) {
       window.addEventListener('message', this.handleMessageEvent)
@@ -122,13 +109,11 @@ class DiagramEditor {
     }
   }
 
-  // 停止编辑
   stopEditing() {
     window.removeEventListener('message', this.handleMessageEvent)
     this.frame = undefined
   }
 
-  // 安装编辑器
   initializeEditor() {
     this.postMessage({
       action: 'load',
@@ -139,12 +124,10 @@ class DiagramEditor {
     })
   }
 
-  // 设置编辑器
   configureEditor() {
     this.postMessage({ action: 'configure', config: this.params.configure })
   }
 
-  // 导出数据
   exportData(data) {
     return data
   }

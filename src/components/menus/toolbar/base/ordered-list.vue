@@ -81,7 +81,6 @@ const options = [
   },
 ]
 
-// 列表类型
 let listStyleType = $ref('left')
 watch(
   () => popupVisible.value,
@@ -110,7 +109,6 @@ const toggleOrderedList = (listType) => {
   popupVisible.value = false
 }
 
-// 起始编号
 let startAt = $ref(1)
 const changeOrderedListStart = () => {
   if (editor.value) {

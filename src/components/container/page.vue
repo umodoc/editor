@@ -94,7 +94,6 @@ const container = inject('container')
 const imageViewer = inject('imageViewer')
 const pageOptions = inject('page')
 
-// 页面大小
 const pageSize = $computed(() => {
   const { width, height } = pageOptions.value.size || { width: 0, height: 0 }
   return {
@@ -102,7 +101,6 @@ const pageSize = $computed(() => {
     height: pageOptions.value.orientation === 'portrait' ? height : width,
   }
 })
-// 页面缩放后的大小
 const pageZoomWidth = $computed(() => {
   if (pageOptions.value.layout === 'web') {
     return '100%'
@@ -110,7 +108,6 @@ const pageZoomWidth = $computed(() => {
   return `calc(${pageSize.width}cm * ${pageOptions.value.zoomLevel ? pageOptions.value.zoomLevel / 100 : 1})`
 })
 
-// 页面内容变化后更新页面高度
 let pageZoomHeight = $ref('')
 let pageContentEl = $ref(null)
 let pageHeightRaf = 0
@@ -161,7 +158,6 @@ onUnmounted(() => {
   }
 })
 
-// 页面变化后，更新页面高度
 watch(
   () => [
     pageOptions.value.layout,
@@ -175,7 +171,6 @@ watch(
   { deep: true },
 )
 
-// 水印
 const watermarkOptions = $ref({
   x: 0,
   y: 0,
@@ -198,7 +193,6 @@ watch(
   { deep: true, immediate: true },
 )
 
-// 图片预览
 let previewImages = $ref([])
 let currentImageIndex = $ref(0)
 

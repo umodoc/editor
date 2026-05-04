@@ -3,7 +3,6 @@ import { TableCell } from '@tiptap/extension-table/cell'
 import { TableHeader } from '@tiptap/extension-table/header'
 import { TableRow } from '@tiptap/extension-table/row'
 
-// 扩展表格能力
 const CustomTable = Table.extend({
   addOptions() {
     return {
@@ -17,7 +16,6 @@ const CustomTable = Table.extend({
   },
 })
 
-// 扩展单元格
 const TableCellOptions = {
   addAttributes() {
     return {

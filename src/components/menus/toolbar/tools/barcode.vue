@@ -232,7 +232,6 @@ const container = inject('container')
 const editor = inject('editor')
 const options = inject('options')
 
-// 工具栏
 const formats = [
   { label: 'CODE128', value: 'CODE128' },
   { label: 'CODE128 A', value: 'CODE128A' },
@@ -290,7 +289,6 @@ const changeFontOptions = (val) => {
   config.fontOptions = fontOptions.join(' ').trim()
 }
 
-// 生成条形码
 let renderError = $ref(false)
 const barcodeSvgRef = $ref(null)
 const renderBarcode = async () => {
@@ -325,7 +323,6 @@ watch(
   { immediate: true, deep: true },
 )
 
-// 创建或更新条形码
 const setBarcode = () => {
   if (renderError) {
     useMessage('error', {

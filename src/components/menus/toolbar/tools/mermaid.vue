@@ -95,7 +95,6 @@ const container = inject('container')
 
 let dialogVisible = $ref(false)
 
-// 工具栏
 const themes = [
   { label: t('tools.mermaid.themes.default'), value: 'default' },
   { label: t('tools.mermaid.themes.base'), value: 'base' },
@@ -109,7 +108,6 @@ const copyCode = () => {
   useCopy(mermaidCode, t('tools.mermaid.copied'), container)
 }
 
-// 初始化 Mermaid
 const mermaidInit = () => {
   const { mermaid } = window
   if (!mermaid) return
@@ -122,7 +120,6 @@ const mermaidInit = () => {
   })
 }
 
-// 渲染 Mermaid
 let mermaidCode = $ref(props.content || '')
 let svgCode = $ref('')
 let errorTxt = $ref('')
@@ -179,7 +176,6 @@ watch(
   },
 )
 
-// 创建或更新 Mermaid
 const keepSize = $ref(false)
 const setMermaid = () => {
   if (mermaidCode === '') {

@@ -14,7 +14,6 @@ let typewriterProgress = {
   typedChars: 0,
 }
 
-// 计算总字符数用于进度跟踪
 const calculateTotalChars = (content) => {
   return content.reduce((total, node) => {
     if (node.type === 'paragraph' && node.content) {
@@ -35,17 +34,13 @@ export default Extension.create({
       startTypewriter:
         (content, options) =>
         ({ editor, commands }) => {
-          // 立即返回 true 表示命令开始执行
-
           ;(async () => {
             try {
-              // 清除现有计时器
               if (typewriterTimer) {
                 clearTimeout(typewriterTimer)
                 typewriterTimer = null
               }
 
-              // 重置状态
               typewriterState.value = {
                 isRunning: true,
                 currentParagraph: 0,
@@ -53,14 +48,12 @@ export default Extension.create({
                 currentChar: 0,
               }
 
-              // 计算总字符数
               typewriterProgress = {
                 totalChars: calculateTotalChars(content?.content),
                 typedChars: 0,
               }
               const focusState =
                 options?.focus === null ? null : options?.focus || 'end'
-              // 插入内容
               const typeWriterInsertContent = async (curContent) => {
                 await new Promise((resolve) => {
                   setTimeout(() => {
@@ -75,7 +68,6 @@ export default Extension.create({
                   }, 0)
                 })
               }
-              // 取非负数
               const speed = Math.max(options?.speed || 1, 0)
 
               const isEmptyParagraph = (node) => {
@@ -88,7 +80,6 @@ export default Extension.create({
                       !node.content[0].text))
                 )
               }
-              // 处理内容
               const processNode = async (
                 node,
                 index,
@@ -115,11 +106,9 @@ export default Extension.create({
                     await typeWriterInsertContent(ParagraphNodes)
                     typewriterState.value.currentParagraph++
                   } else {
-                    // 当前为段落时 插入段落样式
                     await typeWriterInsertContent([
                       { type: 'paragraph', attrs: node.attrs },
                     ])
-                    // 处理段落内容
                     if (node.content && node.content.length > 0) {
                       for (
                         let childIndex = 0;
@@ -142,17 +131,15 @@ export default Extension.create({
                     typewriterState.value.currentParagraph++
                   }
                 } else if (node.type === 'text') {
-                  // 处理文本节点
                   const text = node.text || ''
                   const marks = node.marks || []
                   const step = options?.step || 1
                   for (let i = 0; i < text.length; i += step) {
-                    if (!typewriterState.value.isRunning) return // 检查是否被停止
+                    if (!typewriterState.value.isRunning) return
                     const endIndex = Math.min(i + step, text.length)
                     const currentText = text.slice(i, endIndex)
                     await new Promise((resolve) => {
                       typewriterTimer = setTimeout(async () => {
-                        // 插入当前字符
                         await typeWriterInsertContent([
                           {
                             type: 'text',
@@ -165,7 +152,6 @@ export default Extension.create({
                           i + currentText.length - 1
                         typewriterProgress.typedChars += currentText.length
 
-                        // 更新进度回调
                         if (
                           options?.onProgress &&
                           typewriterProgress.totalChars > 0
@@ -208,9 +194,6 @@ export default Extension.create({
                 }
                 return resultIndex
               }
-              // // 结束当前事务（确保之前的修改已应用）
-              // editor.view.dispatch(editor.state.tr) // 应用一个空事务来确保状态更新
-              // 处理所有顶级节点
               const contentNodes = content?.content
               for (let i = 0; i < contentNodes.length; i++) {
                 if (!typewriterState.value.isRunning) break
@@ -222,7 +205,6 @@ export default Extension.create({
                 )
                 i = i + resultIndex
               }
-              // 完成回调
               if (typewriterState.value.isRunning && options?.onComplete) {
                 options.onComplete()
               }

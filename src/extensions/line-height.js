@@ -9,9 +9,6 @@ export default Extension.create({
       defaultLineHeight: 1.75,
     }
   },
-  // 查找离光标最近的可设置节点
-  // 仅在 selection 内没有可更新节点时作为兜底
-  // （与 node-align、margin 实现保持一致）
   findClosestTargetNode(state, typeNames) {
     const { selection } = state
     if (selection instanceof NodeSelection) {

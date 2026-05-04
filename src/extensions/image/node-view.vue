@@ -187,11 +187,9 @@ const onMousedown = (e) => {
   }
   isMousedown = true
 
-  // 记录按下的位置
   const downX = e.clientX
   const downY = e.clientY
 
-  // 鼠标在盒子里的位置
   const elRect = dragRef.$el.getBoundingClientRect()
   const mouseX = downX - elRect.left
   const mouseY = downY - elRect.top
@@ -203,13 +201,10 @@ const onMousedown = (e) => {
   }
   const onMouseup = (_e) => {
     isMousedown = false
-    // 移除document事件
     document.removeEventListener('mousemove', onMousemove)
     document.removeEventListener('mouseup', onMouseup)
   }
-  //  注册鼠标移动事件
   document.addEventListener('mousemove', onMousemove)
-  // 鼠标抬起事件
   document.addEventListener('mouseup', onMouseup)
 }
 const onDragEnd = () => {

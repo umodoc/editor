@@ -92,7 +92,7 @@ export function hasImageInPastePayload(files, html) {
   return hasImageFile || hasImageTag
 }
 
-export function replaceImageWithPlaceholder(html, placeholder = '[图片]') {
+export function replaceImageWithPlaceholder(html, placeholder = '[Image]') {
   if (!html) {
     return html
   }

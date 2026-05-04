@@ -122,10 +122,8 @@ const fonts = options.value.dicts?.fonts.map((item) => {
     value: item.value || '',
   }
 })
-// 公共方法：更新水印属性（生成新对象，改变引用）
 const updateWatermark = (props) => {
   if (!page.value.watermark) return
-  // 生成新对象，确保引用改变
   page.value.watermark = { ...page.value.watermark, ...props }
 }
 const clearWatermark = () => {

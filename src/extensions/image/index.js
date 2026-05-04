@@ -107,7 +107,6 @@ const customImage = Image.extend({
     ]
   },
 })
-// 节点块级别扩展
 export const BlockImage = customImage.extend({
   ...customImage,
   addNodeView() {
@@ -132,14 +131,10 @@ export const BlockImage = customImage.extend({
     }
   },
 })
-// 行内扩展
 export const InlineImage = customImage.extend({
   ...customImage,
   name: 'inlineImage',
-  // 行内元素
   inline: true,
-
-  // 属于行内组
   group: 'inline',
   addAttributes() {
     return {

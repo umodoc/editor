@@ -31,7 +31,7 @@ const options = ojbectSchema.merge(defaultOptions, globalOptions, componentOptio
 | Опція | Тип | Default | Опис |
 |-------|-----|---------|------|
 | `editorKey` | `string` | `'default'` | Унікальний ключ instance (для localStorage ізоляції) |
-| `locale` | `string` | `'zh-CN'` | Мова інтерфейсу: `'zh-CN'` або `'en-US'` |
+| `locale` | `string` | `'en-US'` | Мова інтерфейсу: `'en-US'` |
 | `theme` | `string` | `'light'` | Тема: `'light'`, `'dark'`, `'auto'` |
 | `skin` | `string` | `'default'` | Скін: `'default'` або `'modern'` |
 | `height` | `string` | `'100%'` | CSS висота контейнера |
@@ -41,7 +41,7 @@ const options = ojbectSchema.merge(defaultOptions, globalOptions, componentOptio
 | `templates` | `array` | `[]` | Шаблони документів `[{ title, description?, content }]` |
 | `extensions` | `array` | `[]` | Додаткові Tiptap extensions |
 | `disableExtensions` | `array` | `[]` | Масив назв extensions для вимкнення |
-| `translations` | `object` | `{ en_US: {}, zh_CN: {} }` | Custom переклади (мержаться з вбудованими) |
+| `translations` | `object` | `{ en_US: {} }` | Custom переклади (мержаться з вбудованими) |
 | `user` | `object` | `{}` | Поточний користувач `{ id, label, avatar }` |
 | `users` | `array` | `[]` | Список користувачів для @mentions `[{ id, label, bio?, avatar?, color? }]` |
 
@@ -81,7 +81,7 @@ const options = ojbectSchema.merge(defaultOptions, globalOptions, componentOptio
 |-------|-----|---------|------|
 | `document.title` | `string` | `''` | Назва документа |
 | `document.content` | `string/object` | `''` | HTML або JSON контент |
-| `document.placeholder` | `string/object` | `{ en_US: '...', zh_CN: '...' }` | Placeholder тексту |
+| `document.placeholder` | `string` | `'Please enter the document content...'` | Placeholder тексту |
 | `document.structure` | `string` | `'block+'` | ProseMirror document content expression |
 | `document.enableSpellcheck` | `boolean` | `true` | Перевірка правопису |
 | `document.enableMarkdown` | `boolean` | `true` | Markdown input rules |
@@ -117,7 +117,7 @@ const options = ojbectSchema.merge(defaultOptions, globalOptions, componentOptio
 Масив конфігурацій для вбудованих web-сторінок (iframe):
 ```js
 {
-  label: { en_US: 'Figma', zh_CN: 'Figma' },
+  label: 'Figma',
   icon: '<svg>...</svg>',
   validate(url) { return /pattern/.test(url) },
   transformURL(url) { return embedUrl },
@@ -139,7 +139,7 @@ Default: Bilibili, Youku, Figma, MockingBot, Tencent Video.
 
 | Dict | Опис |
 |------|------|
-| `fonts` | Список шрифтів `[{ label: { en_US, zh_CN }, value, url?, format? }]` |
+| `fonts` | Список шрифтів `[{ label: string, value, url?, format? }]` |
 | `colors` | Масив HEX кольорів для color picker |
 | `lineHeights` | Варіанти міжрядкового інтервалу `[{ label, value, default? }]` |
 | `symbols` | Групи спецсимволів `[{ label, items: string }]` |

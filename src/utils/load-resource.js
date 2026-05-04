@@ -1,9 +1,9 @@
 /**
- * 资源加载方法（支持 JS 和 CSS）
- * @param {string} url - 资源地址
- * @param {'script'|'css'} [type='script'] - 资源类型，'script' | 'css'（默认 'script'）
- * @param {string} [id=''] - 资源 ID
- * @returns {Promise<void>} 加载成功 resolve，失败 reject
+ * Load external resources (JS and CSS).
+ * @param {string} url - Resource URL
+ * @param {'script'|'css'} [type='script'] - Resource type
+ * @param {string} [id=''] - Resource element ID
+ * @returns {Promise<void>}
  */
 export const loadResource = (url, type = 'script', id = '') => {
   const filename = url.split('/').pop()
@@ -17,7 +17,6 @@ export const loadResource = (url, type = 'script', id = '') => {
     let element
 
     if (type === 'script') {
-      // 加载 JS 脚本
       element = document.createElement('script')
       element.src = url
       element.id = resourceId
@@ -25,18 +24,17 @@ export const loadResource = (url, type = 'script', id = '') => {
       // element.async = true
 
       element.onload = () => resolve()
-      element.onerror = () => reject(new Error(`JS 脚本加载失败: ${url}`))
+      element.onerror = () => reject(new Error(`Failed to load script: ${url}`))
     } else if (type === 'css') {
-      // 加载 CSS 样式
       element = document.createElement('link')
       element.rel = 'stylesheet'
       element.href = url
       element.id = resourceId
 
       element.onload = () => resolve()
-      element.onerror = () => reject(new Error(`CSS 样式加载失败: ${url}`))
+      element.onerror = () => reject(new Error(`Failed to load stylesheet: ${url}`))
     } else {
-      reject(new Error(`不支持的类型: ${type}`))
+      reject(new Error(`Unsupported resource type: ${type}`))
       return
     }
 

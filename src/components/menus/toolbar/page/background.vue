@@ -63,7 +63,6 @@ const backgrounds = [
   { label: t('page.bg.color5'), value: 'rgb(145, 145, 145)' },
 ]
 
-// 更多颜色
 const moreColorPicker = $ref(false)
 const backgroundChange = (color) => {
   page.value.background = color

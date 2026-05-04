@@ -1,6 +1,5 @@
 import { DOMParser as ProseMirrorDOMParser } from '@tiptap/pm/model'
 
-// 解析剪切板中 excel 的 CSS 规则（将 CSS 字符串转换为对象）
 const parseCSS = (cssRules) => {
   const results = {}
   const rules = cssRules
@@ -16,7 +15,6 @@ const parseCSS = (cssRules) => {
   return results
 }
 
-// 提取样式规则的方法
 const extractStyles = (styleText) => {
   const regex = /\.(\w+)\s*\{([^}]+)\}/g
   let match
@@ -58,10 +56,8 @@ export const transformExcel = (view, event) => {
     .map((style) => style.textContent)
     .join('\n')
 
-  // 提取所有样式规则
   const styles = extractStyles(styleText)
 
-  // 添加单元格的样式
   table.querySelectorAll('td, th').forEach((cell) => {
     const style = styles[cell.getAttribute('class')]
     if (style?.background) {
@@ -75,7 +71,6 @@ export const transformExcel = (view, event) => {
     }
   })
 
-  // 使用 ProseMirror 的 DOMParser 将表格转换为 ProseMirror 节点
   const { schema } = view.state
   const fragment = ProseMirrorDOMParser.fromSchema(schema).parse(table)
   const transaction = view.state.tr.replaceSelectionWith(fragment)

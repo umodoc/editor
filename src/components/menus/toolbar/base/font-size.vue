@@ -86,12 +86,10 @@ const fontSizes = [
   { label: '96', value: '96px', order: 22 },
 ]
 
-// 设置字体大小
 const setFontSize = (fontSize) => {
   editor.value?.chain().focus().setFontSize(fontSize).run()
 }
 
-// 增大字号
 const increaseFontSize = () => {
   const { fontSize } = editor.value?.getAttributes('textStyle') || {}
   if (fontSize) {
@@ -108,7 +106,6 @@ const increaseFontSize = () => {
   }
 }
 
-// 减小字号
 const decreaseFontSize = () => {
   const { fontSize } = editor.value?.getAttributes('textStyle') || {}
   if (fontSize) {

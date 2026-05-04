@@ -69,32 +69,26 @@ const container = inject('container')
 const editor = inject('editor')
 const page = inject('page')
 
-// 弹窗口显示隐藏 true显示 默认隐藏
 let dialogVisible = $ref(false)
-// 书签名称
 let bookmarkText = $ref('')
-// 书签数据
 let bookmarkData = []
-// 书签表格显示列
 const bookmarkColumns = [
   {
     colKey: 'bookmarkRowName',
-    title: t('insert.bookmark.textName'), // '书签名称',
+    title: t('insert.bookmark.textName'),
     ellipsis: false,
     align: 'left',
   },
   {
     colKey: 'operation',
-    title: t('insert.bookmark.actions'), // '操作',
+    title: t('insert.bookmark.actions'),
     width: 70,
     fixed: 'right',
     align: 'center',
   },
 ]
 
-// 书签插入
 const insertBookmark = () => {
-  // 书签名称不为空时不处理
   if (bookmarkText) {
     let existbmName = ''
     if (bookmarkData.length > 0) {
@@ -105,7 +99,6 @@ const insertBookmark = () => {
         }
       }
     }
-    // 存在-1
     if (!existbmName) {
       if (editor.value?.commands.setBookmark({ bookmarkName: bookmarkText })) {
         dialogVisible = false
@@ -128,10 +121,8 @@ const insertBookmark = () => {
   }
 }
 const onActiveChange = (highlightRowKeys, ctx) => {
-  // 重置文档
   bookmarkText = ctx.currentRowData?.bookmarkRowName
 }
-// 这个方法本来也想封装到addCommands 中，但经过多次验证，每次都会有一个额外的事务异常
 const rowDelete = (row) => {
   const element = editor.value?.view.dom.querySelector(
     `bookmark[bookmarkName="${row.bookmarkRowName}"]`,

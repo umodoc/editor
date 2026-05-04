@@ -11,7 +11,7 @@ export default Node.create({
   addAttributes() {
     return {
       target: {
-        default: 'checkbox', // 'checkbox' 或 'radio'
+        default: 'checkbox',
       },
       items: {
         default: [],
@@ -22,7 +22,6 @@ export default Node.create({
           return _data ? JSON.parse(_data) : null
         },
         renderHTML: (attributes) => ({
-          // 在渲染 HTML 时，确保 items 被序列化为字符串
           items: attributes.items ? JSON.stringify(attributes.items) : null,
         }),
       },

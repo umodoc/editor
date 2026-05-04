@@ -60,7 +60,6 @@ const props = defineProps(nodeViewProps)
 const { updateAttributes, getPos } = props
 const attrs = $computed(() => props.node.attrs)
 
-// 统一的禁用状态计算
 const isDisabled = $computed(() => {
   return (
     page.value?.preview?.enabled ||
@@ -69,58 +68,47 @@ const isDisabled = $computed(() => {
   )
 })
 
-// 处理复选框变化
 const checkboxChange = (index) => {
-  // 如果是禁用状态，则忽略此次调用
   if (isDisabled) return
 
   const newOptions = [...attrs.items]
   newOptions[index].checked = !newOptions[index].checked
   updateAttributes({ items: newOptions, updated: true })
 
-  // 使用 setTimeout 重置标志位
   setTimeout(() => {
     updateAttributes({ updated: false })
   }, 0)
 }
 
 const checkboxAll = (check) => {
-  // 如果是禁用状态，则忽略此次调用
   if (isDisabled) return
 
-  // 更新所有选项的选中状态
   const checked = check
   const newOptions = attrs.items.map((option) => ({
     ...option,
     checked,
   }))
 
-  // 更新属性
   updateAttributes({
     items: newOptions,
     checked,
     updated: true,
   })
 
-  // 使用 setTimeout 重置标志位
   setTimeout(() => {
     updateAttributes({ updated: false })
   }, 0)
 }
 
-// 处理单选框变化
 const radioChange = (index) => {
-  // 如果是禁用状态，则忽略此次调用
   if (isDisabled) return
 
-  // 清除其他选项的选中状态
   const newOptions = attrs.items.map((option, i) => ({
     ...option,
     checked: i === index,
   }))
   updateAttributes({ items: newOptions, updated: true })
 
-  // 使用 setTimeout 重置标志位
   setTimeout(() => {
     updateAttributes({ updated: false })
   }, 0)

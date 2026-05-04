@@ -115,7 +115,7 @@ const normalizeFontFamily = (font) => {
 const measureCanvas = document.createElement('canvas')
 const measureContext = measureCanvas.getContext('2d')
 const baseFamilies = ['monospace', 'serif', 'sans-serif']
-const detectTexts = ['WwMmIi123', '汉字測試', 'AaBbCcXxYyZz']
+const detectTexts = ['WwMmIi123', 'AaBbCcXxYyZz']
 const signatureCache = {}
 
 const toFixedMetric = (value) => {
@@ -330,7 +330,6 @@ const allFonts = computed(() => {
       children: options.value.dicts?.fonts,
     },
   ]
-  // 通过字体值获取字体列表
   const getFontsByValues = (values) => {
     return values
       .map((item) =>
@@ -377,7 +376,6 @@ const getUsedFontValues = () => {
   return [...fontSet]
 }
 
-// 获取当前文档中所有已使用的字体
 const getUsedFonts = () => {
   const values = getUsedFontValues()
   for (const font of values) {

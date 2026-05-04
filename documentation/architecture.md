@@ -5,7 +5,7 @@
 Umo Editor — це Vue 3 plugin, що надає WYSIWYG document editor з підтримкою:
 - Rich text editing (форматування, списки, таблиці, зображення, відео, аудіо, файли)
 - Pagination mode (сторінковий макет як у Word) та web layout
-- Markdown syntax, dark theme, multi-language (zh-CN, en-US)
+- Markdown syntax, dark theme, multi-language (en-US)
 - Export (PDF, HTML, image), print, preview mode
 - Custom extensions, collaborative editing (Yjs)
 
@@ -146,8 +146,7 @@ src/
   │   └── history-record.js     # Undo/redo history management
   │
   ├── locales/                  # Translation JSON files
-  │   ├── zh-CN.json            # Chinese (default)
-  │   ├── en-US.json            # English
+  │   ├── en-US.json            # English (default)
   │   ├── ru-RU.json            # Russian
   │   ├── it-IT.json            # Italian
   │   └── bo.json               # Tibetan

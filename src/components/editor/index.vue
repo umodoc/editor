@@ -140,7 +140,6 @@ onMounted(() => {
   document.addEventListener('visibilitychange', flushSyncDocumentContent)
 })
 
-// 销毁编辑器实例
 onBeforeUnmount(() => {
   window.removeEventListener('beforeunload', flushSyncDocumentContent)
   window.removeEventListener('pagehide', flushSyncDocumentContent)

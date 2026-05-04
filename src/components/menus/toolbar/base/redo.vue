@@ -10,7 +10,6 @@
 </template>
 
 <script setup>
-/* 重做*/
 const historyRecords = inject('historyRecords')
 
 const menuClick = inject('redoHistory')

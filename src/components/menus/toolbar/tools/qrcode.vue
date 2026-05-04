@@ -189,7 +189,6 @@ watch(
   { immediate: true, deep: true },
 )
 
-// 创建或更新条形码
 const setQrcode = () => {
   if (renderError || !svgCode) {
     useMessage('error', {

@@ -148,7 +148,6 @@ const $toolbar = useState('toolbar', options)
 let statusPopup = $ref(false)
 const online = useOnline()
 
-// 工具栏菜单
 const defaultToolbarMenus = [
   { label: t('toolbar.base'), value: 'base' },
   { label: t('toolbar.insert'), value: 'insert' },
@@ -171,7 +170,6 @@ const menuChange = (menu) => {
   toolbarActive.value = menu
   emits('menu-change', menu)
 }
-// 监听如果当前编辑元素为table则切换到table菜单
 watch(
   () => editor.value?.isActive('table'),
   (val, oldVal) => {
@@ -183,7 +181,6 @@ watch(
   },
 )
 
-// 切换编辑器模式
 const editorModeOptions = [
   {
     label: t('toolbar.ribbon'),
@@ -211,14 +208,12 @@ const toggleToolbarMode = ({ value }) => {
   }
 }
 
-// 保存文档
 const saveContentMethod = inject('saveContent')
 const saveContent = () => {
   saveContentMethod()
   statusPopup = false
 }
 
-// 从缓存中恢复文档
 const setContentFromCache = () => {
   const document = useState('document', options)
   const { content } = document.value

@@ -180,7 +180,6 @@ export const getDefaultExtensions = ({ container, options, uploadFileMap }) => {
     }),
     UndoRedo.extend({
       addKeyboardShortcuts() {
-        // 返回空对象表示移除所有默认快捷键
         return {}
       },
     }),
@@ -215,7 +214,6 @@ export const getDefaultExtensions = ({ container, options, uploadFileMap }) => {
     LineHeight,
     SearchReplace,
 
-    // 插入
     File,
     Details.configure({
       HTMLAttributes: {
@@ -233,19 +231,13 @@ export const getDefaultExtensions = ({ container, options, uploadFileMap }) => {
       },
     }),
 
-    // 表格
     Table,
     TableRow,
     TableCell,
     TableHeader,
 
-    // 工具
     Echarts,
-
-    // 页面
     PageBreak,
-
-    // 其他
     Selection,
     NodeRange,
     NodeSelect,
@@ -262,7 +254,6 @@ export const getDefaultExtensions = ({ container, options, uploadFileMap }) => {
     FileHandler.configure({
       allowedMimeTypes: file?.allowedMimeTypes,
       async onPaste(editor, files) {
-        // 记录 已有位置
         const pageContainer = document.querySelector(
           `${container} .umo-zoomable-container`,
         )
@@ -276,9 +267,7 @@ export const getDefaultExtensions = ({ container, options, uploadFileMap }) => {
             dimensions,
           })
         }
-        // 恢复滚动位置
         if (pageContainer) {
-          // 使用 setTimeout 确保 DOM 更新完成后再恢复滚动位置
           setTimeout(() => {
             pageContainer.scrollTop = scrollTop
           }, 0)
@@ -304,7 +293,6 @@ export const getDefaultExtensions = ({ container, options, uploadFileMap }) => {
     OfficePaste,
   ]
 
-  // 合并扩展
   Object.values(extensions).forEach((item) => {
     if (!disableExtensions?.includes(item.name)) {
       if (Array.isArray(item)) {

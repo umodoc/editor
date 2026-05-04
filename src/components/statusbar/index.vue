@@ -137,7 +137,6 @@
         </template>
       </t-popup>
       <div class="umo-status-bar-split"></div>
-      <!-- 请遵循开源协议，勿删除或隐藏版权信息！ -->
       <t-button
         class="umo-status-bar-button auto-width"
         variant="text"
@@ -347,12 +346,10 @@ const page = inject('page')
 const options = inject('options')
 const $document = useState('document', options)
 
-// 快捷键抽屉
 const showShortcut = $ref(false)
 
 const reset = inject('reset')
 
-// 字数统计
 const showWordCount = $ref(false)
 let totalCharacters = $ref(0)
 let selectionCharacters = $ref(0)
@@ -405,10 +402,8 @@ watch(
   { immediate: true },
 )
 
-// 关于 Umo Editor
 const about = $ref(false)
 
-// 页面布局
 const showLayoutSelect = $ref(false)
 const layouts = computed(() => {
   return options.value.page.layouts.map((item) => {
@@ -425,7 +420,6 @@ watch(
   },
 )
 
-// 页面全屏
 const fullscreen = inject('fullscreen')
 const toggleFullscreen = () => {
   fullscreen.value = !fullscreen.value
@@ -436,7 +430,6 @@ onMounted(() => {
   documentFullscreen = useFullscreen(document.querySelector(container))
 })
 
-// 演示模式
 const togglePreview = () => {
   page.value.showToc = false
   page.value.preview = page.value.preview || {}
@@ -468,7 +461,6 @@ watch(
   },
 )
 
-// 演示模式倒计时
 const countdownSetting = $ref(false)
 let countdownValue = $ref('')
 const countdownChange = (value) => {
@@ -502,7 +494,6 @@ watch(
   },
 )
 
-// 页面缩放
 const zoomIn = () => {
   if (page.value?.zoomLevel && page.value.zoomLevel < 500) {
     page.value.zoomLevel += 10
@@ -520,7 +511,6 @@ const zoomReset = () => {
   page.value.autoWidth = false
 }
 
-// 最佳宽度
 const autoWidth = (auto = true, padding = 50) => {
   if (auto && page.value.autoWidth) {
     zoomReset()
@@ -557,11 +547,7 @@ watch(
   },
 )
 
-// 多语言
-const langs = [
-  { content: '🇨🇳 简体中文', value: 'zh-CN' },
-  { content: '🇱🇷 English', value: 'en-US' },
-]
+const langs = [{ content: '🇱🇷 English', value: 'en-US' }]
 const setLocale = inject('setLocale')
 
 const lang = computed(
@@ -581,7 +567,6 @@ const toggleSpellcheck = () => {
   }
 }
 
-// 快捷键
 watch(
   () => editor.value,
   () => {

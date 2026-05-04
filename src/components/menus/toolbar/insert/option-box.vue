@@ -109,14 +109,12 @@ let items = $ref([])
 let target = $ref('checkbox')
 let showCheckAll = $ref(false)
 
-// 初始化界面上的数据值
 const initData = () => {
   items = []
   target = 'checkbox'
   showCheckAll = false
 }
 
-// 初始化计算值
 const initCalData = () => {
   for (let i = items.length - 1; i >= 0; i--) {
     if (!items[i].label && items[i].label === '') {
@@ -167,7 +165,6 @@ const addOption = async () => {
     checked: false,
   }
   items.push(newOption)
-  // 添加时，自动定位到末尾
   await nextTick()
   const el = document.querySelector(
     `${container} .umo-option-box-container-bottom`,
@@ -219,7 +216,6 @@ watch(
   () => popupVisible.value,
   (visible) => {
     if (visible) {
-      // 打开时：计算并初始化数据
       initCalData()
       if (props?.edit) {
         const node = editor.value ? getSelectionNode(editor.value) : null
@@ -236,7 +232,6 @@ watch(
         initDefaultItems()
       }
     } else {
-      // 关闭时：重置组件状态
       initData()
     }
   },

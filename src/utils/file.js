@@ -98,10 +98,9 @@ export const getImageDimensions = (file) => {
           const width = img.naturalWidth
           const height = img.naturalHeight
           URL.revokeObjectURL(img.src)
-          resolve({ width, height }) // 返回宽高对象
+          resolve({ width, height })
         }
         img.onerror = () => {
-          // 出错时返回默认尺寸或null，根据需求调整
           resolve({ width: 0, height: 0 })
         }
         img.src = URL.createObjectURL(file)
@@ -127,7 +126,6 @@ export const dataURLToFile = (dataURL, name) => {
   }
   const [, mime] = mimeMatch
 
-  // mime → 后缀映射
   const extensionMap = {
     'image/png': 'png',
     'image/jpeg': 'jpg',
@@ -154,7 +152,6 @@ export const dataURLToFile = (dataURL, name) => {
 
     content = buffer
   } else {
-    // 非 base64（如 svg+xml;utf8）
     content = decodeURIComponent(data)
   }
 
@@ -169,7 +166,7 @@ export const svgToDataURL = (svg) => {
     svgString = new XMLSerializer().serializeToString(svg)
   }
   svgString = svgString
-    .replace(/>\s+</g, '><') // 去空格
+    .replace(/>\s+</g, '><')
     .replace(/\n/g, '')
     .trim()
   const encoded = btoa(unescape(encodeURIComponent(svgString)))

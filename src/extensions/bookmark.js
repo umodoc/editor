@@ -3,7 +3,6 @@ import { TextSelection } from '@tiptap/pm/state'
 
 import { shortId } from '@/utils/short-id'
 
-// 书签格式 创建一个书签
 export default Mark.create({
   name: 'bookmark',
   priority: 1000,
@@ -40,7 +39,6 @@ export default Mark.create({
 
   addCommands() {
     return {
-      // 设置书签 若书签有选中区域数据 否则默认值为书签名称
       setBookmark:
         (attributes) =>
         ({ chain, editor }) => {
@@ -86,7 +84,6 @@ export default Mark.create({
             const alltext = editor.getHTML()
             const parser = new DOMParser()
             const doc = parser.parseFromString(alltext, 'text/html')
-            // 获取所有的 <bookmark> 元素
             const bookmarks = doc.body.querySelectorAll(this.name)
             const keyNode = []
             Array.from(bookmarks).forEach((node) => {

@@ -35,7 +35,6 @@ const page = inject('page')
 
 defineEmits(['close'])
 
-// 最终可视化数据
 let tocData = $ref([])
 const buildTocTree = (tocArray) => {
   const root = []

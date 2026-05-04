@@ -85,9 +85,6 @@
           <menus-toolbar-insert-details v-if="!disableMenu('details')" />
           <menus-toolbar-insert-code-block v-if="!disableMenu('code-block')" />
           <menus-toolbar-insert-symbol v-if="!disableMenu('symbol')" />
-          <menus-toolbar-insert-chinese-date
-            v-if="!disableMenu('chinese-date')"
-          />
           <menus-toolbar-insert-emoji v-if="!disableMenu('emoji')" />
         </div>
         <div class="umo-virtual-group">
@@ -164,11 +161,6 @@
           <menus-toolbar-tools-echarts v-if="!disableMenu('echarts')" />
           <!-- <menus-toolbar-tools-mind-map v-if="!disableMenu('mind-map')" /> -->
           <menus-toolbar-tools-mermaid v-if="!disableMenu('mermaid')" />
-        </div>
-        <div class="umo-virtual-group">
-          <menus-toolbar-tools-chinese-case
-            v-if="!disableMenu('chinese-case')"
-          />
         </div>
         <div class="virtual-group is-slot">
           <slot name="toolbar_tools" toolbar-mode="classic" />

@@ -17,7 +17,6 @@ export default Node.create({
       text: { default: `[${t('insert.date')}]` },
       format: { default: null },
       withTime: { default: false },
-      capitalize: { default: false },
     }
   },
 

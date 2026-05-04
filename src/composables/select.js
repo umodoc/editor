@@ -1,5 +1,3 @@
-// 为解决 tdesign-vue-next select 组件的自身 Bug，采用延时渲染来避免
-
 import { onMounted, ref } from 'vue'
 
 export const useSelect = () => {

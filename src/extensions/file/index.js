@@ -135,19 +135,15 @@ export default Node.create({
           }
           const position = pos || editor.state.selection.anchor
           let previewType = 'file'
-          // 图片
           if (type.startsWith('image/') && mimeTypes.image.includes(type)) {
             previewType = 'image'
           }
-          // 视频
           if (type.startsWith('video/') && mimeTypes.video.includes(type)) {
             previewType = 'video'
           }
-          // 音频
           if (type.startsWith('audio/') && mimeTypes.audio.includes(type)) {
             previewType = 'audio'
           }
-          // 插入节点
           const id = shortId(10)
           uploadFileMap.set(id, file)
 
@@ -160,7 +156,6 @@ export default Node.create({
             previewType,
           }
 
-          // 图片处理
           if (previewType === 'image') {
             const { width, height, inline } = dimensions
             if (width && width > 0) {
@@ -209,10 +204,8 @@ export default Node.create({
             accept,
             reset: true,
           })
-          // 打开文件对话框
           open()
           let bool = false
-          // 插入文件
           onChange((fileList) => {
             const files = Array.from(fileList)
             for (const file of files) {
