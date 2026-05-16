@@ -53,19 +53,28 @@
     font-display: swap;
 
     >h1[data-placeholder],
-    >h1+p[data-placeholder] {
+    h2[data-placeholder],
+    h3[data-placeholder],
+    h4[data-placeholder],
+    h5[data-placeholder],
+    h6[data-placeholder],
+    >h1+p[data-placeholder],
+    h2+p[data-placeholder],
+    h3+p[data-placeholder],
+    h4+p[data-placeholder],
+    h5+p[data-placeholder],
+    h6+p[data-placeholder] {
 
-      >* {
-        display: none;
+      .tiptap-invisible-character,
+      .ProseMirror-separator,
+      .ProseMirror-trailingBreak {
+        display: none !important;
       }
 
       &::after {
         color: var(--umo-content-placeholder-color);
         content: attr(data-placeholder);
         pointer-events: none;
-        display: inline-block;
-        position: absolute;
-        transform: translateY(-0.2em);
       }
     }
 
