@@ -14,7 +14,7 @@ export default {
     menus: ['base', 'insert', 'table', 'tools'], // 'page', 'view', 'export'
   },
   page: {
-    layouts: ['page', 'web'],
+    layouts: ['web'],
     defaultMargin: {
       left: 3.18,
       right: 3.18,

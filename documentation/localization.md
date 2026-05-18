@@ -79,7 +79,7 @@ Top-level секції JSON файлу:
 | `changeLocale` | Locale change dialog | `changeLocale.title`, `changeLocale.message` |
 | `resetAll` | Reset dialog | `resetAll.title`, `resetAll.message` |
 | `about` | About dialog | `about.version` |
-| `layout` | Layout names | `layout.page`, `layout.web` |
+| `layout` | Єдиний web-layout (підпис у статус-барі) | `layout.web` |
 | `wordCount` | Word count | `wordCount.characters`, `wordCount.selection` |
 | `preview` | Preview mode | `preview.title`, `preview.disable` |
 | `fullscreen` | Fullscreen | `fullscreen.title`, `fullscreen.disable` |

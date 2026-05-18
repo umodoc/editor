@@ -51,45 +51,12 @@
         </t-button>
       </tooltip>
       <div class="umo-status-bar-split"></div>
-      <t-dropdown
-        :attach="container"
-        :popup-props="{
-          onVisibleChange(visible) {
-            showLayoutSelect = visible
-          },
-        }"
-        placement="top-left"
-        trigger="click"
-      >
-        <t-button
-          class="umo-status-bar-button auto-width"
-          variant="text"
-          size="small"
-        >
-          <icon :name="`layout-${page.layout}`" />
-          {{ currentLayout.content }}
-          <icon
-            name="arrow-down"
-            :style="{
-              transform: `rotate(${showLayoutSelect ? '180deg' : 0})`,
-            }"
-          />
-        </t-button>
-        <t-dropdown-menu>
-          <t-dropdown-item
-            v-for="item in layouts"
-            :key="item.value"
-            :value="item.value"
-            :active="item.value === page.layout"
-            @click="page.layout = item.value"
-          >
-            <div class="umo-layout-dropdown-item">
-              <icon :name="`layout-${item.value}`" size="16" />
-              {{ item.content }}
-            </div>
-          </t-dropdown-item>
-        </t-dropdown-menu>
-      </t-dropdown>
+      <tooltip :content="t('layout.web')">
+        <span class="umo-status-bar-layout-indicator">
+          <icon name="layout-web" />
+          {{ t('layout.web') }}
+        </span>
+      </tooltip>
       <div class="umo-status-bar-split"></div>
       <t-popup
         v-if="editor"
@@ -175,7 +142,7 @@
         </t-button>
       </tooltip>
       <div class="umo-status-bar-split"></div>
-      <div v-if="page.layout === 'page'" class="umo-zoom-level-bar">
+      <div class="umo-zoom-level-bar">
         <tooltip :content="`${t('zoom.zoomOut')} (${getShortcut('Ctrl-')})`">
           <t-button
             class="umo-status-bar-button"
@@ -283,7 +250,6 @@
       </div>
     </tooltip>
     <tooltip
-      v-if="page.layout === 'page'"
       :content="`${t('zoom.zoomOut')} (${getShortcut('Ctrl-')})`"
     >
       <div class="item" @click="zoomOut">
@@ -291,7 +257,6 @@
       </div>
     </tooltip>
     <tooltip
-      v-if="page.layout === 'page'"
       :content="`${t('zoom.autoWidth')} (${getShortcut('Ctrl0')})`"
     >
       <div
@@ -303,7 +268,6 @@
       </div>
     </tooltip>
     <tooltip
-      v-if="page.layout === 'page'"
       :content="`${t('zoom.zoomIn')} (${getShortcut('Ctrl+')})`"
     >
       <div class="item" @click="zoomIn">
@@ -404,22 +368,6 @@ watch(
 
 const about = $ref(false)
 
-const showLayoutSelect = $ref(false)
-const layouts = computed(() => {
-  return options.value.page.layouts.map((item) => {
-    return { content: t(`layout.${item}`), value: item }
-  })
-})
-const currentLayout = computed(() => {
-  return layouts.value.find((item) => item.value === page.value.layout)
-})
-watch(
-  () => page.value.layout,
-  () => {
-    zoomReset()
-  },
-)
-
 const fullscreen = inject('fullscreen')
 const toggleFullscreen = () => {
   fullscreen.value = !fullscreen.value
@@ -474,9 +422,7 @@ watch(
       try {
         await documentFullscreen?.enter?.()
       } catch {}
-      if (page.value.layout === 'page') {
-        autoWidth(false, 10)
-      }
+      autoWidth(false, 10)
     } else {
       try {
         await documentFullscreen?.exit?.()
@@ -602,6 +548,16 @@ watch(
     background-color: var(--umo-border-color);
     margin: 0 10px;
   }
+  .umo-status-bar-layout-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 8px;
+    font-size: 12px;
+    color: var(--umo-text-color);
+    user-select: none;
+    opacity: 0.85;
+  }
   .umo-status-bar-button {
     --td-comp-size-xs: 18px;
     --td-comp-paddingLR-l: 8px;
@@ -668,11 +624,6 @@ watch(
       }
     }
   }
-}
-.umo-layout-dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
 }
 .umo-preview-bar {
   position: absolute;

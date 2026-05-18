@@ -180,7 +180,7 @@ src/
 
 - **Options**: `getOptions()`, `setOptions()`
 - **Content**: `getContent(format)`, `setContent()`, `insertContent()`, `getText()`, `getHTML()`, `getJSON()`, `getVanillaHTML()`
-- **Page**: `setPage()`, `setLayout()`, `setWatermark()`, `getPage()`
+- **Page**: `setPage()`, `setWatermark()`, `getPage()`
 - **Toolbar**: `setToolbar()`
 - **Document**: `setDocument()`, `setReadOnly()`
 - **Editor**: `getEditor()`, `useEditor()`, `focus()`, `blur()`
@@ -197,7 +197,7 @@ src/
 
 ```
 beforeCreate, created, changed, changed:selection, changed:transaction,
-changed:menu, changed:toolbar, changed:pageLayout, changed:pageSize,
+changed:menu, changed:toolbar, changed:pageSize,
 changed:pageOrientation, changed:pageMargin, changed:pageBackground,
 changed:pageShowToc, changed:pagePreview, changed:pageZoom,
 changed:pageWatermark, changed:locale, changed:theme, changed:skin,

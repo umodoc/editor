@@ -5,7 +5,6 @@
     huge
     shortcut="Ctrl+1"
     :menu-active="page.zoomLevel === 100"
-    :disabled="page.layout === 'web'"
     @menu-click="page.zoomLevel = 100"
   />
 </template>

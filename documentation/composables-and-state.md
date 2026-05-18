@@ -26,7 +26,6 @@ Persisted state через `useStorage()` з VueUse (localStorage). Key format: 
 | `'toolbar'` | `{ mode: 'classic'/'ribbon', show: true }` | Режим та видимість toolbar |
 | `'theme'` | `'light'` | Тема (light/dark) |
 | `'skin'` | `'default'` | Скін (default/modern) |
-| `'layout'` | `'page'` | Layout (page/web) |
 
 `editorKey` дозволяє мати кілька незалежних екземплярів редактора на одній сторінці.
 
@@ -105,7 +104,7 @@ UmoEditor (index.vue)
   provide('container', container)     // CSS selector: '#umo-editor-{id}'
   provide('options', options)         // Reactive merged options
   provide('editor', editor)          // Tiptap Editor instance ref
-  provide('page', page)              // Page state (layout, size, zoom, watermark, preview)
+  provide('page', page)              // Page state (розмір/орієнтація для друку, zoom, watermark, preview; layout завжди web)
   provide('savedAt', savedAt)        // Timestamp останнього збереження
   provide('blockMenu', blockMenu)    // Block menu visibility
   provide('imageViewer', imageViewer) // Image viewer state

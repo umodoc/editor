@@ -90,7 +90,6 @@ const emits = defineEmits([
   'changed:transaction',
   'changed:menu',
   'changed:toolbar',
-  'changed:pageLayout',
   'changed:pageSize',
   'changed:pageOrientation',
   'changed:pageMargin',
@@ -136,7 +135,6 @@ const typeWriterIsRunning = ref(false)
 
 const $toolbar = useState('toolbar', options)
 const $document = useState('document', options)
-const $layout = useState('layout', options)
 
 provide('container', container)
 provide('options', options)
@@ -158,7 +156,6 @@ provide('typeWriterIsRunning', typeWriterIsRunning)
 watch(
   () => options.value.page,
   ({
-    layouts,
     defaultBackground,
     defaultMargin,
     defaultOrientation,
@@ -169,7 +166,7 @@ watch(
     showToc,
   }) => {
     page.value = {
-      layout: $layout.value || layouts[0],
+      layout: 'web',
       size: options.value.dicts?.pageSizes.find((item) => item.default),
       margin: defaultMargin,
       background: defaultBackground,
@@ -368,25 +365,6 @@ watch(
     emits('changed:toolbar', { toolbar, oldToolbar })
   },
   { deep: true },
-)
-
-watch(
-  () => page.value.layout,
-  (pageLayout, oldPageLayout) => {
-    if (pageLayout === oldPageLayout) {
-      return
-    }
-    emits('changed:pageLayout', { pageLayout, oldPageLayout })
-    addHistory(historyRecords, 'page', {
-      proType: 'layout',
-      newData: pageLayout,
-      oldData: oldPageLayout,
-    })
-    if (pageLayout === 'web') {
-      setSkin('default')
-    }
-    $layout.value = pageLayout
-  },
 )
 
 watch(
@@ -589,15 +567,6 @@ const setToolbar = (params) => {
   }
 }
 
-const setLayout = (layout) => {
-  if (!options.value.page.layouts.includes(layout)) {
-    throw new Error(
-      `"params.layout" must be one of ${JSON.stringify(options.value.page.layouts)}.`,
-    )
-  }
-  page.value.layout = layout
-}
-
 const setPage = (params) => {
   if (!isRecord(params)) {
     throw new Error('params must be an object.')
@@ -633,15 +602,6 @@ const setPage = (params) => {
       throw new Error('"params.background" must be a string.')
     }
     page.value.background = params.background
-  }
-
-  if (params.layout) {
-    if (!options.value.page.layouts.includes(params.layout)) {
-      throw new Error(
-        `"params.layout" must be one of ${JSON.stringify(options.value.page.layouts)}.`,
-      )
-    }
-    page.value.layout = params.layout
   }
 
   if (params.margin) {
@@ -1256,7 +1216,6 @@ defineExpose({
   getOptions: () => options.value,
   setOptions,
   setToolbar,
-  setLayout,
   setPage,
   setWatermark,
   setDocument,
@@ -1361,7 +1320,7 @@ defineExpose({
     .umo-toolbar {
       display: none;
     }
-    .umo-page-container {
+    .umo-web-container {
       padding: 45px 0;
     }
   }

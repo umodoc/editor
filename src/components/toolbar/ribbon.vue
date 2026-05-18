@@ -200,16 +200,8 @@
           <div class="umo-virtual-group">
             <div class="umo-virtual-group-row">
               <menus-toolbar-page-margin />
-              <div>
-                <div class="umo-virtual-group-row">
-                  <menus-toolbar-page-size v-if="page.layout === 'page'" />
-                </div>
-                <div class="umo-virtual-group-row">
-                  <menus-toolbar-page-orientation
-                    v-if="page.layout === 'page'"
-                  />
-                </div>
-              </div>
+              <menus-toolbar-page-size />
+              <menus-toolbar-page-orientation />
             </div>
           </div>
           <div class="umo-virtual-group">
@@ -228,10 +220,6 @@
             <menus-toolbar-view-toc v-if="!disableMenu('toc')" />
             <menus-toolbar-view-fullscreen v-if="!disableMenu('fullscreen')" />
             <menus-toolbar-view-preview v-if="!disableMenu('preview')" />
-          </div>
-          <div class="umo-virtual-group">
-            <menus-toolbar-view-page v-if="!disableMenu('layout-page')" />
-            <menus-toolbar-view-web v-if="!disableMenu('layout-web')" />
           </div>
           <div class="umo-virtual-group">
             <menus-toolbar-view-zoom v-if="!disableMenu('zoom')" />
@@ -285,7 +273,6 @@ const props = defineProps({
 const emits = defineEmits(['menu-change'])
 
 const options = inject('options')
-const page = inject('page')
 const disableMenu = (name) => {
   return options.value.disableExtensions.includes(name)
 }

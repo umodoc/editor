@@ -5,14 +5,12 @@
     menu-type="dropdown"
     huge
     :select-options="skins"
-    :disabled="page.layout === 'web'"
     @click="changeSkin"
   />
 </template>
 
 <script setup>
 const options = inject('options')
-const page = inject('page')
 const setSkin = inject('setSkin')
 
 const skins = computed(() => {

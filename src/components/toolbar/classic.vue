@@ -169,8 +169,8 @@
       <template v-if="currentMenu === 'page'">
         <div class="umo-virtual-group">
           <menus-toolbar-page-margin />
-          <menus-toolbar-page-size v-if="page.layout === 'page'" />
-          <menus-toolbar-page-orientation v-if="page.layout === 'page'" />
+          <menus-toolbar-page-size />
+          <menus-toolbar-page-orientation />
         </div>
         <div class="umo-virtual-group">
           <menus-toolbar-page-break />
@@ -188,10 +188,6 @@
           <menus-toolbar-view-toc v-if="!disableMenu('toc')" />
           <menus-toolbar-view-fullscreen v-if="!disableMenu('fullscreen')" />
           <menus-toolbar-view-preview v-if="!disableMenu('preview')" />
-        </div>
-        <div class="umo-virtual-group">
-          <menus-toolbar-view-page v-if="!disableMenu('layout-page')" />
-          <menus-toolbar-view-web v-if="!disableMenu('layout-web')" />
         </div>
         <div class="umo-virtual-group">
           <menus-toolbar-view-zoom v-if="!disableMenu('zoom')" />
@@ -248,7 +244,6 @@ const emits = defineEmits(['menu-change'])
 
 const container = inject('container')
 const options = inject('options')
-const page = inject('page')
 const disableMenu = (name) => {
   return options.value.disableExtensions.includes(name)
 }

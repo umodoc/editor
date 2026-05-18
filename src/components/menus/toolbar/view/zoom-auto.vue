@@ -4,7 +4,6 @@
     :text="t('view.zoomAuto')"
     huge
     shortcut="Ctrl+0"
-    :disabled="page.layout === 'web'"
     @menu-click="autoWidth"
   />
 </template>

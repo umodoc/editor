@@ -4,7 +4,6 @@
     ico="zoom"
     menu-type="dropdown"
     huge
-    :disabled="page.layout === 'web'"
     :select-options="zooms"
     @click="setZoomLevel"
   />

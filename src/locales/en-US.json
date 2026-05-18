@@ -686,8 +686,7 @@
     "next": "Learn more about the more powerful <a href=\"https://www.umodoc.com/business\" target=\"_blank\">Umo Editor Next</a>"
   },
   "layout": {
-    "web": "Web View",
-    "page": "Page View"
+    "web": "Web View"
   },
   "wordCount": {
     "characters": "Characters",

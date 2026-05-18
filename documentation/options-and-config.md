@@ -65,7 +65,7 @@ const options = objectSchema.merge(defaultOptions, globalOptions, componentOptio
 
 | Опція | Тип | Default | Опис |
 |-------|-----|---------|------|
-| `page.layouts` | `array` | `['page', 'web']` | Доступні layouts |
+| `page.layouts` | `array` | `['web']` | Доступний layout завжди **web** (`page.layout === 'web'`). Режим «аркушів» (`page`) і перемикання layout прибрані; значення лише `'web'` (див. секцію **Breaking changes** нижче) |
 | `page.defaultMargin` | `object` | `{ left: 3.18, right: 3.18, top: 2.54, bottom: 2.54 }` | Margins (cm) |
 | `page.defaultOrientation` | `string` | `'portrait'` | `'portrait'` або `'landscape'` |
 | `page.defaultBackground` | `string` | `'#fff'` | Background color |
@@ -155,6 +155,16 @@ Default: Bilibili, Youku, Figma, MockingBot, Tencent Video.
 - `required` — чи обов'язкова (всі `false` для опцій)
 
 При невалідних значеннях кидає `Error` з описом проблеми.
+
+## Breaking changes (web-only layout)
+
+Цей форк використовує **лише web-layout** редактора.
+
+- Перемикання «Page» / «Web» у статус-барі та тулбарі View **видалено**; статус-бар показує індикатор `layout.web`.
+- **`setLayout()` прибрано** з публічного `defineExpose`; подія **`changed:pageLayout`** більше **не emit**-иться.
+- **`setPage(..., { layout })`** / передача `layout` для зміни режиму **не підтримується** (поле `layout` можна лише інтерпретувати як константу `'web'` у `page` state для сумісності).
+- **`useState('layout')` видалено** — режим відображення більше не зберігається в `localStorage`.
+- Ключ **`disableExtensions`**: `layout-page` та `layout-web` для тулбара більше не мають ефекту (кнопок немає).
 
 ## Як додати нову опцію
 

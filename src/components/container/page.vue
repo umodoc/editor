@@ -4,16 +4,8 @@
       v-if="pageOptions.showToc"
       @close="pageOptions.showToc = false"
     />
-    <div
-      :class="`umo-zoomable-container umo-${pageOptions.layout}-container umo-scrollbar`"
-    >
-      <div
-        class="umo-zoomable-content"
-        :style="{
-          width: pageZoomWidth,
-          height: pageZoomHeight,
-        }"
-      >
+    <div class="umo-zoomable-container umo-web-container umo-scrollbar">
+      <div class="umo-zoomable-content">
         <t-watermark
           class="umo-page-content"
           :style="{
@@ -23,12 +15,9 @@
             '--umo-page-margin-bottom': pageOptions.margin?.bottom + 'cm',
             '--umo-page-margin-left': pageOptions.margin?.left + 'cm',
             '--umo-page-margin-right': pageOptions.margin?.right + 'cm',
-            '--umo-page-width':
-              pageOptions.layout === 'page' ? pageSize.width + 'cm' : 'auto',
-            '--umo-page-height':
-              pageOptions.layout === 'page' ? pageSize.height + 'cm' : '100%',
-            width:
-              pageOptions.layout === 'page' ? pageSize.width + 'cm' : '100%',
+            '--umo-page-width': 'auto',
+            '--umo-page-height': '100%',
+            width: '100%',
             transform: `scale(${pageOptions.zoomLevel ? pageOptions.zoomLevel / 100 : 1})`,
           }"
           :alpha="pageOptions.watermark.alpha"
@@ -94,83 +83,6 @@ const container = inject('container')
 const imageViewer = inject('imageViewer')
 const pageOptions = inject('page')
 
-const pageSize = $computed(() => {
-  const { width, height } = pageOptions.value.size || { width: 0, height: 0 }
-  return {
-    width: pageOptions.value.orientation === 'portrait' ? width : height,
-    height: pageOptions.value.orientation === 'portrait' ? height : width,
-  }
-})
-const pageZoomWidth = $computed(() => {
-  if (pageOptions.value.layout === 'web') {
-    return '100%'
-  }
-  return `calc(${pageSize.width}cm * ${pageOptions.value.zoomLevel ? pageOptions.value.zoomLevel / 100 : 1})`
-})
-
-let pageZoomHeight = $ref('')
-let pageContentEl = $ref(null)
-let pageHeightRaf = 0
-let pageHeightObserver = $ref(null)
-const updatePageZoomHeight = () => {
-  if (pageOptions.value.layout === 'web') {
-    pageZoomHeight = 'auto'
-    return
-  }
-  if (!pageContentEl) {
-    console.warn('The element <.umo-page-content> does not exist.')
-    return
-  }
-  const height = `${(pageContentEl.clientHeight * (pageOptions.value.zoomLevel || 1)) / 100}px`
-  if (pageZoomHeight !== height) {
-    pageZoomHeight = height
-  }
-}
-const schedulePageZoomHeight = () => {
-  if (pageHeightRaf) {
-    cancelAnimationFrame(pageHeightRaf)
-  }
-  pageHeightRaf = requestAnimationFrame(() => {
-    pageHeightRaf = 0
-    updatePageZoomHeight()
-  })
-}
-onMounted(async () => {
-  await nextTick()
-  pageContentEl = document.querySelector(`${container} .umo-page-content`)
-  if (pageContentEl) {
-    pageHeightObserver = new ResizeObserver(() => {
-      schedulePageZoomHeight()
-    })
-    pageHeightObserver.observe(pageContentEl)
-  } else {
-    console.warn('The element <.umo-page-content> does not exist.')
-  }
-  schedulePageZoomHeight()
-})
-onUnmounted(() => {
-  if (pageHeightObserver) {
-    pageHeightObserver.disconnect()
-    pageHeightObserver = null
-  }
-  if (pageHeightRaf) {
-    cancelAnimationFrame(pageHeightRaf)
-  }
-})
-
-watch(
-  () => [
-    pageOptions.value.layout,
-    pageOptions.value.zoomLevel,
-    pageOptions.value.size,
-    pageOptions.value.orientation,
-  ],
-  () => {
-    schedulePageZoomHeight()
-  },
-  { deep: true },
-)
-
 const watermarkOptions = $ref({
   x: 0,
   y: 0,
@@ -230,20 +142,12 @@ watch(
 .umo-zoomable-container {
   flex: 1;
   scroll-behavior: smooth;
-  &.umo-page-container {
-    padding: 20px 50px;
-    box-sizing: border-box;
-    .umo-zoomable-content {
-      margin: 0 auto;
-      box-shadow:
-        rgba(0, 0, 0, 0.06) 0px 0px 10px 0px,
-        rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
-    }
-  }
   &.umo-web-container {
     display: flex;
     .umo-zoomable-content {
       flex: 1;
+      width: 100%;
+      height: auto;
       .umo-page-corner {
         display: none;
       }

@@ -12,7 +12,6 @@
     <div class="umo-page-options-container">
       <t-form label-align="left">
         <t-form-item
-          v-if="page.layout === 'page'"
           :label="t('page.orientation.text')"
         >
           <t-radio-group
@@ -29,7 +28,7 @@
             </t-radio-button>
           </t-radio-group>
         </t-form-item>
-        <t-form-item v-if="page.layout === 'page'" :label="t('page.size.text')">
+        <t-form-item :label="t('page.size.text')">
           <t-select
             :popup-props="{
               overlayClassName: 'umo-page-size-select',
@@ -56,7 +55,6 @@
           </t-select>
         </t-form-item>
         <t-form-item
-          v-if="page.layout === 'page'"
           :label="t('pageOptions.size.text')"
         >
           <div class="umo-page-setting">

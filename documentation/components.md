@@ -46,7 +46,7 @@
 | `classic.vue` | Classic mode — всі меню в одному рядку |
 | `scrollable.vue` | Scrollable wrapper для меню, що не вміщуються |
 
-Toolbar рендерить menu groups динамічно на основі `options.toolbar.menus` (default: `['base', 'insert', 'table', 'tools', 'page', 'view', 'export']`).
+Toolbar рендерить menu groups динамічно на основі `options.toolbar.menus` (базові значення в upstream: `['base', 'insert', 'table', 'tools', 'page', 'view', 'export']`; у форку див. `src/options/config/index.js`).
 
 Кожна група меню — це набір button-компонентів з `src/components/menus/toolbar/{group}/`.
 
@@ -184,7 +184,7 @@ Toolbar рендерить menu groups динамічно на основі `opt
 
 | Файл | Опис |
 |------|------|
-| `page.vue` | Page container — зум, watermark, header/footer, image viewer |
+| `page.vue` | Canvas редактора: web-layout (розтягування по ширині контейнера), зум, watermark, TOC, viewer |
 | `toc.vue` | Table of Contents sidebar panel |
 | `print.vue` | Print overlay (підготовка до друку) |
 | `search-replace.vue` | Пошук та заміна UI |
@@ -193,7 +193,7 @@ Toolbar рендерить menu groups динамічно на основі `opt
 
 | Файл | Опис |
 |------|------|
-| `index.vue` | Footer bar: TOC toggle, spellcheck, shortcuts drawer, reset, layout selector, word count, copyright, fullscreen, preview, zoom slider, language |
+| `index.vue` | Footer bar: TOC, spellcheck, shortcuts, reset, індикатор web-layout, лічильник слів, copyright, fullscreen, preview, zoom, мова |
 | `shortcuts.vue` | Панель з гарячими клавішами |
 | `countdown.vue` | Таймер зворотного відліку (для презентацій) |
 | `about.vue` | About Umo Editor dialog |
