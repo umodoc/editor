@@ -1,6 +1,6 @@
 import defaultOptions from './config'
-import ojbectSchema from './schema'
+import objectSchema from './schema'
 
 const propsOptions = Object.keys(defaultOptions)
 
-export { defaultOptions, ojbectSchema, propsOptions }
+export { defaultOptions, objectSchema, propsOptions }

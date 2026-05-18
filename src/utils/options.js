@@ -1,8 +1,8 @@
 import { isRecord } from '@tool-belt/type-predicates'
 
-import { defaultOptions, ojbectSchema } from '@/options'
+import { defaultOptions, objectSchema } from '@/options'
 
-export const getOpitons = (propsOptions, globalOptions) => {
+export const getOptions = (propsOptions, globalOptions) => {
   const propsOptionsValue =
     isRecord(propsOptions) && Object.keys(propsOptions).includes('value')
       ? propsOptions.value
@@ -15,7 +15,7 @@ export const getOpitons = (propsOptions, globalOptions) => {
     return acc
   }, {})
 
-  const options = ojbectSchema.merge(
+  const options = objectSchema.merge(
     defaultOptions,
     globalOptions,
     componentOptions,

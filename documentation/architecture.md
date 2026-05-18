@@ -125,14 +125,14 @@ src/
   │   └── select.js             # useSelect() — TDesign bug workaround
   │
   ├── options/                  # Configuration system
-  │   ├── index.js              # Exports: defaultOptions, ojbectSchema, propsOptions
+  │   ├── index.js              # Exports: defaultOptions, objectSchema, propsOptions
   │   ├── schema.js             # ObjectSchema validation rules
   │   └── config/
   │       ├── index.js          # Default option values
   │       └── dicts.js          # Dictionaries: fonts, colors, line heights, page sizes, etc.
   │
   ├── utils/                    # Utility functions
-  │   ├── options.js            # getOpitons() — merge props + defaults + globals
+  │   ├── options.js            # getOptions() — merge props + defaults + globals
   │   ├── file.js               # File handling utilities
   │   ├── content-transform.js  # Content format conversion
   │   ├── shortcut.js           # Keyboard shortcut display helpers

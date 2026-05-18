@@ -10,9 +10,9 @@ Default options (src/options/config/index.js)
       └── Component props (<umo-editor v-bind="propsOptions" />)
 ```
 
-Мерж відбувається у `src/utils/options.js` → `getOpitons()`:
+Мерж відбувається у `src/utils/options.js` → `getOptions()`:
 ```js
-const options = ojbectSchema.merge(defaultOptions, globalOptions, componentOptions)
+const options = objectSchema.merge(defaultOptions, globalOptions, componentOptions)
 ```
 
 ## Файли
@@ -22,7 +22,7 @@ const options = ojbectSchema.merge(defaultOptions, globalOptions, componentOptio
 | `src/options/config/index.js` | Дефолтні значення всіх опцій |
 | `src/options/config/dicts.js` | Словники: fonts, colors, lineHeights, symbols, emojis, pageSizes |
 | `src/options/schema.js` | ObjectSchema — валідація типів та значень |
-| `src/options/index.js` | Barrel export: `defaultOptions`, `ojbectSchema`, `propsOptions` |
+| `src/options/index.js` | Barrel export: `defaultOptions`, `objectSchema`, `propsOptions` |
 
 ## Опції
 
