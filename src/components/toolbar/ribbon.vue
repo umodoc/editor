@@ -181,16 +181,10 @@
         </template>
         <template v-if="currentMenu === 'tools'">
           <div class="umo-virtual-group">
-            <menus-toolbar-tools-qrcode v-if="!disableMenu('qrcode')" />
-            <menus-toolbar-tools-barcode v-if="!disableMenu('barcode')" />
-            <menus-toolbar-tools-signature v-if="!disableMenu('signature')" />
-          </div>
-          <div class="umo-virtual-group">
             <menus-toolbar-tools-math v-if="!disableMenu('math')" />
             <menus-toolbar-tools-diagrams v-if="!disableMenu('diagrams')" />
             <menus-toolbar-tools-echarts v-if="!disableMenu('echarts')" />
             <!-- <menus-toolbar-tools-mind-map v-if="!disableMenu('mind-map')" /> -->
-            <menus-toolbar-tools-mermaid v-if="!disableMenu('mermaid')" />
           </div>
           <div class="umo-virtual-group is-slot">
             <slot name="toolbar_tools" toolbar-mode="ribbon" />
