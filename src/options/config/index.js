@@ -11,18 +11,10 @@ export default {
   toolbar: {
     showSaveLabel: true,
     defaultMode: 'ribbon',
-    menus: ['base', 'insert', 'table', 'tools'], // 'page', 'view', 'export'
+    menus: ['base', 'insert', 'table', 'tools', 'page', 'view', 'export'], // , 'page', 'view', 'export'
   },
   page: {
     layouts: ['web'],
-    defaultMargin: {
-      left: 3.18,
-      right: 3.18,
-      top: 2.54,
-      bottom: 2.54,
-    },
-    defaultOrientation: 'portrait',
-    defaultBackground: '#fff',
     showBreakMarks: true,
     showLineNumber: false,
     showBookmark: false,

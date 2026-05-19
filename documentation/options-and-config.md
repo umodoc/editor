@@ -20,7 +20,7 @@ const options = objectSchema.merge(defaultOptions, globalOptions, componentOptio
 | Файл | Призначення |
 |------|-------------|
 | `src/options/config/index.js` | Дефолтні значення всіх опцій |
-| `src/options/config/dicts.js` | Словники: fonts, colors, lineHeights, symbols, emojis, pageSizes |
+| `src/options/config/dicts.js` | Словники: fonts, colors, lineHeights, symbols, emojis |
 | `src/options/schema.js` | ObjectSchema — валідація типів та значень |
 | `src/options/index.js` | Barrel export: `defaultOptions`, `objectSchema`, `propsOptions` |
 
@@ -66,9 +66,6 @@ const options = objectSchema.merge(defaultOptions, globalOptions, componentOptio
 | Опція | Тип | Default | Опис |
 |-------|-----|---------|------|
 | `page.layouts` | `array` | `['web']` | Доступний layout завжди **web** (`page.layout === 'web'`). Режим «аркушів» (`page`) і перемикання layout прибрані; значення лише `'web'` (див. секцію **Breaking changes** нижче) |
-| `page.defaultMargin` | `object` | `{ left: 3.18, right: 3.18, top: 2.54, bottom: 2.54 }` | Margins (cm) |
-| `page.defaultOrientation` | `string` | `'portrait'` | `'portrait'` або `'landscape'` |
-| `page.defaultBackground` | `string` | `'#fff'` | Background color |
 | `page.showBreakMarks` | `boolean` | `true` | Показувати invisible characters |
 | `page.showLineNumber` | `boolean` | `false` | Нумерація рядків |
 | `page.showBookmark` | `boolean` | `false` | Показувати закладки |
@@ -144,7 +141,6 @@ Default: Bilibili, Youku, Figma, MockingBot, Tencent Video.
 | `lineHeights` | Варіанти міжрядкового інтервалу `[{ label, value, default? }]` |
 | `symbols` | Групи спецсимволів `[{ label, items: string }]` |
 | `emojis` | Групи emoji `[{ label, items: string }]` |
-| `pageSizes` | Розміри сторінок `[{ label, width, height, default? }]` |
 
 ## Валідація (schema.js)
 
@@ -165,6 +161,16 @@ Default: Bilibili, Youku, Figma, MockingBot, Tencent Video.
 - **`setPage(..., { layout })`** / передача `layout` для зміни режиму **не підтримується** (поле `layout` можна лише інтерпретувати як константу `'web'` у `page` state для сумісності).
 - **`useState('layout')` видалено** — режим відображення більше не зберігається в `localStorage`.
 - Ключ **`disableExtensions`**: `layout-page` та `layout-web` для тулбара більше не мають ефекту (кнопок немає).
+
+### Page margin, size, orientation, background
+
+- UI (toolbar Page tab) та **`page-options`** модалка для margin/size **видалені**.
+- З **`getPage()`** / **`onSave(..., page)`** прибрані поля: `margin`, `size`, `orientation`, `background`.
+- **`setPage({ margin | size | orientation | background })`** більше не змінює стан (метод лишається для сумісності виклику).
+- Події **`changed:pageMargin`**, **`changed:pageSize`**, **`changed:pageOrientation`**, **`changed:pageBackground`** **не emit**-яться.
+- Опції **`page.defaultMargin`**, **`page.defaultOrientation`**, **`page.defaultBackground`** та **`dicts.pageSizes`** **видалені** з config/schema.
+- **Web:** контент має фіксований padding `1rem` (`--umo-editor-content-padding`).
+- **Print/PDF:** layout A4 portrait, колишні cm margins і білий фон — константи в `src/constants/print-page-layout.js` (не з `page` state).
 
 ## Як додати нову опцію
 

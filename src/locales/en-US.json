@@ -421,31 +421,10 @@
     }
   },
   "page": {
-    "bg": {
-      "text": "Background",
-      "custom": "Custom Page Background",
-      "default": "Default",
-      "color1": "Eye-friendly\nGreen",
-      "color2": "Elegant\nYellow",
-      "color3": "Cloudy\nBlue",
-      "color4": "Sky Blue",
-      "color5": "Dark Night\nBlack"
-    },
     "breakMarks": "Line Breaks",
     "break": "Page Break",
     "lineNumber": "Line Numbers",
-    "margin": "Margins",
-    "orientation": {
-      "text": "Orientation",
-      "landscape": "Landscape",
-      "portrait": "Portrait"
-    },
     "preview": "Presentation",
-    "size": {
-      "text": "Size",
-      "cm": "CM",
-      "custom": "Custom Settings"
-    },
     "watermark": {
       "text": "Watermark",
       "fontFamily": "Watermark Font",
@@ -604,26 +583,6 @@
     },
     "toFile": "Convert to File",
     "delete": "Delete"
-  },
-  "pageOptions": {
-    "title": "Page Settings",
-    "size": {
-      "text": "Page Size",
-      "width": "Width:",
-      "height": "Height:",
-      "custom": "Custom"
-    },
-    "margin": {
-      "text": "Page Margins",
-      "default": "Default",
-      "narrow": "Narrow",
-      "moderate": "Moderate",
-      "wide": "Wide",
-      "top": "Top:",
-      "right": "Right:",
-      "bottom": "Bottom:",
-      "left": "Left:"
-    }
   },
   "document": {
     "untitled": "Untitled Document",

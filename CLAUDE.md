@@ -36,6 +36,9 @@ Pre-commit hooks (Husky + lint-staged) run `oxfmt` then `oxlint` on staged `*.{j
 - **i18n**: English only (Chinese support was removed); locale files live in `src/locales/`
 - **Layout**: Single web layout only (page layout mode was removed)
 - **Reactivity sugar**: `$ref`, `$computed`, `$watch` macros are enabled via `unplugin-vue-macros`
+- **Constants directory**: `src/constants/` holds fixed values that are no longer user-configurable (e.g. `PRINT_PAGE_LAYOUT`). Use it for hardcoded defaults extracted from options.
+- **Removing a config option touches 4 places**: `src/options/schema.js` (validation), `src/options/config/index.js` (default), `src/options/config/dicts.js` (dict lists if applicable), and `src/locales/en-US.json` (labels)
+- **Toolbar tab visibility**: `toolbar.menus` array in config controls which tabs render — omit a name (e.g. `'page'`) to hide its tab entirely; order in the array determines display order
 
 ## Component & Extension Patterns
 

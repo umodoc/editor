@@ -198,8 +198,7 @@ src/
 
 ```
 beforeCreate, created, changed, changed:selection, changed:transaction,
-changed:menu, changed:toolbar, changed:pageSize,
-changed:pageOrientation, changed:pageMargin, changed:pageBackground,
+changed:menu, changed:toolbar,
 changed:pageShowToc, changed:pagePreview, changed:pageZoom,
 changed:pageWatermark, changed:locale, changed:theme, changed:skin,
 print, focus, blur, paste, drop, delete, saved, destroy

@@ -38,7 +38,7 @@
     counter-reset: title;
     color: var(--umo-content-text-color);
     width: 100%;
-    padding: 0 var(--umo-page-margin-right) 0 var(--umo-page-margin-left);
+    padding: var(--umo-editor-content-padding);
     box-sizing: border-box;
     overflow-wrap: anywhere;
     word-wrap: break-word;
@@ -46,7 +46,7 @@
     -webkit-font-variant-ligatures: none;
     font-variant-ligatures: none;
     font-feature-settings: 'liga' 0;
-    min-height: calc(var(--umo-page-height) - var(--umo-page-margin-top) - var(--umo-page-margin-bottom));
+    min-height: 100px;
     float: left;
     font-family: var(--umo-font-family);
     font-size: var(--umo-font-size);
@@ -756,7 +756,7 @@
         width: 14px;
         height: 14px;
         background-color: var(--umo-primary-color);
-        border: 2px solid var(--umo-page-background);
+        border: 2px solid var(--umo-color-white);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -779,7 +779,7 @@
         &::after {
           content: '';
           position: absolute;
-          background-color: var(--umo-page-background);
+          background-color: var(--umo-color-white);
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
