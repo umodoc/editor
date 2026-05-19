@@ -39,6 +39,9 @@ Pre-commit hooks (Husky + lint-staged) run `oxfmt` then `oxlint` on staged `*.{j
 - **Constants directory**: `src/constants/` holds fixed values that are no longer user-configurable (e.g. `PRINT_PAGE_LAYOUT`). Use it for hardcoded defaults extracted from options.
 - **Removing a config option touches 4 places**: `src/options/schema.js` (validation), `src/options/config/index.js` (default), `src/options/config/dicts.js` (dict lists if applicable), and `src/locales/en-US.json` (labels)
 - **Toolbar tab visibility**: `toolbar.menus` array in config controls which tabs render — omit a name (e.g. `'page'`) to hide its tab entirely; order in the array determines display order
+- **Removing a toolbar button (within a tab)** touches: the `.vue` component file, `src/components/toolbar/classic.vue`, `src/components/toolbar/ribbon.vue`, `src/locales/en-US.json`, and `.oxlintrc.json` globals (auto-imported component names are listed there)
+- **`.oxlintrc.json` globals**: auto-imported component names are registered as `readonly` globals — add/remove entries here whenever components are added or deleted
+- **Status bar**: only word count + shortcuts remain; other items (about, countdown, theme, fullscreen) were removed
 
 ## Component & Extension Patterns
 
@@ -46,6 +49,10 @@ Pre-commit hooks (Husky + lint-staged) run `oxfmt` then `oxlint` on staged `*.{j
 - Tiptap extensions live in `src/extensions/` — each extension folder contains an `index.js`
 - Editor state and shared logic is in `src/composables/` — prefer composables over provide/inject
 - Configuration schemas and defaults are in `src/options/`
+
+## Ongoing Refactoring Plan
+
+`high-level-plan.md` (root) tracks the active customization work for this fork — check it before starting new tasks to avoid duplicating completed work.
 
 ## Documentation
 
