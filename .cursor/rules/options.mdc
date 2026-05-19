@@ -10,5 +10,5 @@ When working with files in `src/options/`, read `documentation/options-and-confi
 - Three-layer config merge: defaults → global options → component props
 - ObjectSchema validation in schema.js
 - All available options with types and defaults
-- Dicts system (fonts, colors, lineHeights, pageSizes, symbols, emojis)
+- Dicts system (fonts, colors, lineHeights, symbols, emojis)
 - How to add a new option (config + schema + component usage)

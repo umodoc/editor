@@ -163,42 +163,6 @@ export default new ObjectSchema({
         },
         required: false,
       },
-      pageSizes: {
-        merge: 'replace',
-        validate(value) {
-          if (value && !Array.isArray(value)) {
-            throw new Error('Key "dicts": Key "pageSizes": must be a array.')
-          }
-          if (!value.find((item) => item.default)) {
-            throw new Error(
-              'Key "dicts": Key "pageSizes": please set a default value.',
-            )
-          }
-          value.forEach((item, index) => {
-            if (!item.label || item.label === '') {
-              throw new Error(
-                `Key "dicts": Key "pageSizes[${index}]" Key: "label" cannot be empty.`,
-              )
-            }
-            if (!isLocale(item.label)) {
-              throw new Error(
-                `Key "dicts": Key "pageSizes[${index}]": Key "label" must be string, or a object with "en_US" and "zh_CN" properties.`,
-              )
-            }
-            if (!isNumber(item.width)) {
-              throw new Error(
-                `Key "dicts": Key "pageSizes[${index}]" Key: "width" must be a number.`,
-              )
-            }
-            if (!isNumber(item.height)) {
-              throw new Error(
-                `Key "dicts": Key "pageSizes[${index}]" Key: "height" must be a number.`,
-              )
-            }
-          })
-        },
-        required: false,
-      },
     },
   },
   toolbar: {
@@ -262,49 +226,6 @@ export default new ObjectSchema({
             )
           }
         },
-        required: false,
-      },
-      defaultMargin: {
-        required: false,
-        merge: 'replace',
-        validate: 'object',
-        schema: {
-          left: {
-            merge: 'replace',
-            validate: 'number',
-            required: false,
-          },
-          right: {
-            merge: 'replace',
-            validate: 'number',
-            required: false,
-          },
-          top: {
-            merge: 'replace',
-            validate: 'number',
-            required: false,
-          },
-          bottom: {
-            merge: 'replace',
-            validate: 'number',
-            required: false,
-          },
-        },
-      },
-      defaultOrientation: {
-        merge: 'replace',
-        validate(value) {
-          if (value && !['portrait', 'landscape'].includes(value)) {
-            throw new Error(
-              'Key "page": Key "defaultOrientation" must be one of "portrait" or "landscape".',
-            )
-          }
-        },
-        required: false,
-      },
-      defaultBackground: {
-        merge: 'replace',
-        validate: 'string',
         required: false,
       },
       showBreakMarks: {

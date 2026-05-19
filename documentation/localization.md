@@ -63,14 +63,13 @@ Top-level секції JSON файлу:
 | `insert` | Toolbar Insert tab items | `insert.image.title` → "Image" |
 | `table` | Toolbar Table tab items | `table.insert` → "Insert Table" |
 | `tools` | Toolbar Tools tab items | `tools.math.title` → "Math" |
-| `page` | Toolbar Page tab items | `page.size.title` → "Page Size" |
+| `page` | Toolbar Page tab items | `page.break` → "Page Break" |
 | `view` | Toolbar View tab items | `view.theme` → "Theme" |
 | `export` | Toolbar Export tab items | `export.pdf` → "Export as PDF" |
 | `list` | List types | `list.ordered`, `list.bullet` |
 | `colorPicker` | Color picker UI | `colorPicker.recent` → "Recent" |
 | `blockMenu` | Block menu items | `blockMenu.delete` → "Delete" |
 | `bubbleMenu` | Bubble menu items | `bubbleMenu.image.edit` → "Edit" |
-| `pageOptions` | Page option labels | `pageOptions.margin` → "Margin" |
 | `document` | Document-level texts | `document.headingPlaceholder` |
 | `search` | Search & replace | `search.find`, `search.replace` |
 | `toc` | Table of contents | `toc.show`, `toc.hide` |

@@ -174,24 +174,10 @@ const emojis = [
   { label: 'Flags', items: '🏁 🚩 🏴 🏳️ 🏳️‍🌈‍' },
 ]
 
-const pageSizes = [
-  { label: 'A4', width: 21.0, height: 29.7, default: true },
-  { label: 'A3', width: 29.7, height: 42.0 },
-  { label: 'A5', width: 14.8, height: 21.0 },
-  { label: 'B5', width: 17.6, height: 25.0 },
-  { label: 'No. 5 Envelope', width: 10.9, height: 12.9 },
-  { label: 'No. 6 Envelope', width: 11.9, height: 22.9 },
-  { label: 'No. 7 Envelope', width: 16.1, height: 22.8 },
-  { label: 'No. 9 Envelope', width: 22.8, height: 32.3 },
-  { label: 'Legal Paper', width: 21.5, height: 33.5 },
-  { label: 'Letter Paper', width: 21.5, height: 27.9 },
-]
-
 export default {
   fonts,
   colors,
   lineHeights,
   symbols,
   emojis,
-  pageSizes,
 }

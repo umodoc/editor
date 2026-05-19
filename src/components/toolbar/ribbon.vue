@@ -198,18 +198,10 @@
         </template>
         <template v-if="currentMenu === 'page'">
           <div class="umo-virtual-group">
-            <div class="umo-virtual-group-row">
-              <menus-toolbar-page-margin />
-              <menus-toolbar-page-size />
-              <menus-toolbar-page-orientation />
-            </div>
-          </div>
-          <div class="umo-virtual-group">
             <menus-toolbar-page-break />
             <menus-toolbar-page-break-marks />
             <menus-toolbar-page-line-number />
             <menus-toolbar-page-watermark v-if="!disableMenu('watermark')" />
-            <menus-toolbar-page-background v-if="!disableMenu('background')" />
           </div>
           <div class="virtual-group is-slot">
             <slot name="toolbar_page" toolbar-mode="ribbon" />

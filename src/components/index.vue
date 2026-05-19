@@ -90,10 +90,6 @@ const emits = defineEmits([
   'changed:transaction',
   'changed:menu',
   'changed:toolbar',
-  'changed:pageSize',
-  'changed:pageOrientation',
-  'changed:pageMargin',
-  'changed:pageBackground',
   'changed:pageShowToc',
   'changed:pagePreview',
   'changed:pageZoom',
@@ -155,22 +151,9 @@ provide('typeWriterIsRunning', typeWriterIsRunning)
 
 watch(
   () => options.value.page,
-  ({
-    defaultBackground,
-    defaultMargin,
-    defaultOrientation,
-    watermark,
-    showBreakMarks,
-    showBookmark,
-    showLineNumber,
-    showToc,
-  }) => {
+  ({ watermark, showBreakMarks, showBookmark, showLineNumber, showToc }) => {
     page.value = {
       layout: 'web',
-      size: options.value.dicts?.pageSizes.find((item) => item.default),
-      margin: defaultMargin,
-      background: defaultBackground,
-      orientation: defaultOrientation,
       watermark,
       showBreakMarks,
       showBookmark,
@@ -368,56 +351,6 @@ watch(
 )
 
 watch(
-  () => page.value.size,
-  (pageSize, oldPageSize) => {
-    emits('changed:pageSize', { pageSize, oldPageSize })
-    addHistory(historyRecords, 'page', {
-      proType: 'size',
-      newData: pageSize,
-      oldData: oldPageSize,
-    })
-  },
-  { deep: true },
-)
-
-watch(
-  () => page.value.margin,
-  (pageMargin, oldPageMargin) => {
-    emits('changed:pageMargin', { pageMargin, oldPageMargin })
-    addHistory(historyRecords, 'page', {
-      proType: 'margin',
-      newData: pageMargin,
-      oldData: oldPageMargin,
-    })
-  },
-  { deep: true },
-)
-
-watch(
-  () => page.value.background,
-  (pageBackground, oldPageBackground) => {
-    emits('changed:pageBackground', { pageBackground, oldPageBackground })
-    addHistory(historyRecords, 'page', {
-      proType: 'background',
-      newData: pageBackground,
-      oldData: oldPageBackground,
-    })
-  },
-)
-
-watch(
-  () => page.value.orientation,
-  (pageOrientation, oldPageOrientation) => {
-    emits('changed:pageOrientation', { pageOrientation, oldPageOrientation })
-    addHistory(historyRecords, 'page', {
-      proType: 'orientation',
-      newData: pageOrientation,
-      oldData: oldPageOrientation,
-    })
-  },
-)
-
-watch(
   () => page.value.showToc,
   (showToc) => {
     emits('changed:pageShowToc', showToc)
@@ -570,52 +503,6 @@ const setToolbar = (params) => {
 const setPage = (params) => {
   if (!isRecord(params)) {
     throw new Error('params must be an object.')
-  }
-  if (params.size) {
-    if (!isString(params.size)) {
-      throw new Error('"params.size" must be a string.')
-    }
-    const size = options.value.dicts?.pageSizes.find(
-      (item) => item.label === params.size || l(item.label) === params.size,
-    )
-    if (!size) {
-      throw new Error(
-        `"params.size" must be one of ${options.value.dicts?.pageSizes.map((item) => l(item.label))}.`,
-      )
-    }
-    page.value.size = size
-  }
-  if (params.orientation) {
-    if (!isString(params.orientation)) {
-      throw new Error('"params.orientation" must be a string.')
-    }
-    if (!['portrait', 'landscape'].includes(params.orientation)) {
-      throw new Error(
-        '"params.orientation" must be one of "portrait" or "landscape".',
-      )
-    }
-    page.value.orientation = params.orientation
-  }
-
-  if (params.background) {
-    if (!isString(params.background)) {
-      throw new Error('"params.background" must be a string.')
-    }
-    page.value.background = params.background
-  }
-
-  if (params.margin) {
-    const marginKeys = ['left', 'right', 'top', 'bottom']
-    const copyMargin = { ...page.value.margin }
-    for (const key of marginKeys) {
-      if (params.margin[key] !== undefined) {
-        if (!isNumber(params.margin[key])) {
-          throw new Error(`"params.margin.${key}" must be a number.`)
-        }
-        copyMargin[key] = params.margin[key]
-      }
-    }
-    page.value.margin = copyMargin
   }
 }
 

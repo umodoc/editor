@@ -3,11 +3,12 @@
 </template>
 
 <script setup>
+import { PRINT_PAGE_LAYOUT } from '@/constants/print-page-layout'
+
 const container = inject('container')
 const editor = inject('editor')
 const printing = inject('printing')
 const exportFile = inject('exportFile')
-const page = inject('page')
 const options = inject('options')
 
 const iframeRef = $ref(null)
@@ -58,7 +59,7 @@ const defaultLineHeight = $computed(
 )
 
 const getIframeCode = () => {
-  const { orientation, size, margin, background } = page.value
+  const { orientation, size, margin, background } = PRINT_PAGE_LAYOUT
   /* eslint-disable */
   return `
     <!DOCTYPE html>
