@@ -150,7 +150,7 @@ const stopResize = () => {
 }
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-toc-container {
   width: 320px;
   box-sizing: border-box;

@@ -239,8 +239,8 @@ watch(
 )
 </script>
 
-<style lang="less" scoped>
-@import '@/assets/styles/_mixins.less';
+<style lang="scss" scoped>
+@use '@/assets/styles/mixins' as *;
 
 .umo-insert-option-box {
   user-select: none;
@@ -278,7 +278,7 @@ watch(
     }
 
     &-bottom {
-      .umo-scrollbar();
+      @include umo-scrollbar;
       height: 230px;
       overflow: auto;
 
@@ -289,9 +289,9 @@ watch(
         margin: 6px 0;
         :deep(.umo-radio) {
           display: flex;
-          &__label {
-            margin-left: 3px;
-          }
+        }
+        :deep(.umo-radio__label) {
+          margin-left: 3px;
         }
       }
     }

@@ -222,7 +222,7 @@ const setMermaid = () => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-mermaid-container {
   display: flex;
   .umo-mermaid-editor {

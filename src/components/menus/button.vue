@@ -449,7 +449,7 @@ onClickOutside(
 )
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-menu-button {
   --td-comp-paddingLR-s: 5px;
   --td-radius-default: var(--umo-radius);

@@ -485,7 +485,7 @@ onMounted(async () => {
 })
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-font-family-item {
   > span {
     display: flex;

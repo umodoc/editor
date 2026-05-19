@@ -131,14 +131,12 @@ watch(
 )
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-web-page {
   &-container {
     padding: 2px;
-    :deep(.umo-form) {
-      &__item {
-        margin-bottom: 10px;
-      }
+    :deep(.umo-form__item) {
+      margin-bottom: 10px;
     }
   }
   &-tip {

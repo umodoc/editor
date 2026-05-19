@@ -21,7 +21,7 @@ const props = defineProps({
 })
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-icon {
   display: flex;
 }

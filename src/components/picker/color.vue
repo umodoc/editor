@@ -126,7 +126,7 @@ const selectColor = (color) => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-color-picker {
   &-container {
     width: 236px;

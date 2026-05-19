@@ -46,7 +46,7 @@ const onInput = (value) => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-bubble-tag-input {
   margin-right: 8px;
   width: 120px;

@@ -66,7 +66,7 @@ defineExpose({
 })
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-scrollable-container {
   width: 100%;
   overflow: hidden;
@@ -149,7 +149,7 @@ defineExpose({
 }
 </style>
 
-<style lang="less">
+<style lang="scss">
 .umo-skin-modern {
   &.toolbar-ribbon {
     .umo-scrollable-container {

@@ -1,4 +1,4 @@
-@import '@/assets/styles/_mixins.less';
+@use '@/assets/styles/mixins' as *;
 
 .umo-editor-content {
   accent-color: var(--umo-primary-color);
@@ -408,7 +408,7 @@
   .tableWrapper {
     max-width: 100%;
     overflow-x: auto;
-    .umo-scrollbar();
+    @include umo-scrollbar;
   }
 
   .resize-cursor {
@@ -502,7 +502,7 @@
   }
 
   .umo-page-divider {
-    .umo-page-divider();
+    @include umo-page-divider;
   }
 
   .umo-page-break {

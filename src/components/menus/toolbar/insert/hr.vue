@@ -89,8 +89,8 @@ const setHorizontalRule = ({ value }) => {
 }
 </script>
 
-<style lang="less" scoped>
-@import '@/assets/styles/_mixins.less';
+<style lang="scss" scoped>
+@use '@/assets/styles/mixins' as *;
 
 .umo-page-divider-dropdown {
   width: 200px;
@@ -125,7 +125,7 @@ const setHorizontalRule = ({ value }) => {
     }
   }
   .umo-page-divider {
-    .umo-page-divider();
+    @include umo-page-divider;
     margin: 3px;
     width: auto;
   }

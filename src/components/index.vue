@@ -1274,8 +1274,8 @@ defineExpose({
 })
 </script>
 
-<style lang="less">
-@import '@/assets/styles/index.less';
+<style lang="scss">
+@import '@/assets/styles/index.scss';
 
 .umo-editor-container {
   --td-brand-color: var(--umo-primary-color);

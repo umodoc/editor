@@ -110,8 +110,8 @@ const copyCode = () => {
 }
 </script>
 
-<style lang="less">
-@import '@/assets/styles/_mixins.less';
+<style lang="scss">
+@use '@/assets/styles/mixins' as *;
 
 .umo-code-block {
   display: block !important;
@@ -199,7 +199,7 @@ const copyCode = () => {
       border-radius: 0;
       border-bottom-left-radius: 2px;
       border-bottom-right-radius: 2px;
-      .umo-scrollbar();
+      @include umo-scrollbar;
 
       code {
         display: block;

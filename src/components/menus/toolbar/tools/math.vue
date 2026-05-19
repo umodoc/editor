@@ -267,7 +267,7 @@ const updateMath = () => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-math {
   &-container {
     width: 680px;

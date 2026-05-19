@@ -60,7 +60,7 @@ const colorChange = (color) => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-current-color {
   width: 12px;
   height: 2px;

@@ -38,7 +38,7 @@ const selectSymbol = (char) => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-symbols-container {
   width: 336px;
   max-height: var(--umo-popup-max-height);

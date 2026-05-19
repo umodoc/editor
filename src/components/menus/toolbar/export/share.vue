@@ -39,7 +39,7 @@ const copyLink = () => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-share-container {
   padding: 2px;
   .umo-share-tip {

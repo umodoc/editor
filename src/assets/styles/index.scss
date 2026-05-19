@@ -1,0 +1,16 @@
+@use './variables';
+@use './mixins';
+@use './tdesign-overrides';
+
+.umo-editor-container {
+  p,
+  ul,
+  ol {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.umo-scrollbar {
+  @include mixins.umo-scrollbar;
+}

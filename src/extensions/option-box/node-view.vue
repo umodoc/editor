@@ -115,7 +115,7 @@ const radioChange = (index) => {
 }
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-node-option-box {
   margin-left: 0.25em;
   margin-right: 0.25em;

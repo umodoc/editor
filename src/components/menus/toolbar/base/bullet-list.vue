@@ -78,7 +78,7 @@ const toggleBulletList = (listType) => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-bullet-list-group {
   display: flex;
   align-items: center;

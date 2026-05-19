@@ -104,7 +104,7 @@ defineExpose({
 })
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-node-mention {
   box-decoration-break: clone;
   color: var(--umo-primary-color);

@@ -94,7 +94,7 @@ const emits = defineEmits(['close'])
 const { locale } = useI18n()
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 img {
   margin-bottom: 30px;
 }

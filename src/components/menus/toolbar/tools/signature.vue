@@ -167,7 +167,7 @@ watch(
 )
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-signature-toolbar {
   margin-bottom: 10px;
   display: flex;

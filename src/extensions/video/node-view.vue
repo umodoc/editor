@@ -140,7 +140,7 @@ onClickOutside(containerRef, () => {
 })
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-node-view {
   .umo-node-video {
     max-width: 100%;

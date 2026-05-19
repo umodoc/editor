@@ -206,7 +206,7 @@ const getCurrentNode = (type) => {
 }
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-bubble-menu-divider {
   width: 1px;
   border-right: solid 1px var(--umo-border-color-light);

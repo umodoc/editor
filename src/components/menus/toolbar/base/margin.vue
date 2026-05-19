@@ -99,7 +99,7 @@ const resetMargin = () => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-node-margin-input {
   display: flex;
   flex-direction: column;

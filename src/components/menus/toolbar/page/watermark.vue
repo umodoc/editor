@@ -132,7 +132,7 @@ const clearWatermark = () => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-watermark-container {
   width: 320px;
   .umo-watermark-toolbar {

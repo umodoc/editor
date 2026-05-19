@@ -45,7 +45,7 @@ const textAlign = computed(() => {
 })
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-text-align-group {
   padding-top: 2px;
   margin: -5px 0;

@@ -167,7 +167,7 @@ watch(
 )
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-print-iframe {
   position: absolute;
   width: 0;

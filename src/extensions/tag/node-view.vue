@@ -28,7 +28,7 @@ const options = inject('options')
 const editor = inject('editor')
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-node-tag {
   margin: 0 0.2em;
   background-color: transparent !important;

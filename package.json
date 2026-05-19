@@ -115,12 +115,12 @@
     "@vue-macros/reactivity-transform": "^3.1.2",
     "husky": "^9.1.7",
     "less": "^4.5.1",
-    "less-loader": "^12.3.1",
     "lint-staged": "^16.2.7",
     "oxfmt": "^0.35.0",
     "oxlint": "^1.50.0",
     "postcss": "^8.5.6",
     "postcss-html": "^1.8.1",
+    "sass": "^1.99.0",
     "tdesign-vue-next": "1.18.2",
     "unplugin-auto-import": "^21.0.0",
     "unplugin-vue": "^7.1.1",
@@ -135,7 +135,7 @@
     "rolldown": "1.0.0-rc.5"
   },
   "lint-staged": {
-    "*.{js,vue,less}": [
+    "*.{js,vue,scss}": [
       "oxfmt --write src",
       "oxlint --fix src"
     ]

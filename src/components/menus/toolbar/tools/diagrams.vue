@@ -101,7 +101,7 @@ watch(
 )
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-diagrams-dialog {
   .t-dialog {
     padding: 0 !important;

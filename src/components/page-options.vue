@@ -278,7 +278,7 @@ const onConfirm = () => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-page-options-container {
   width: 400px;
   margin-top: 15px;
@@ -365,7 +365,7 @@ const onConfirm = () => {
 }
 </style>
 
-<style lang="less">
+<style lang="scss">
 .umo-page-size-select {
   .umo-select-option {
     padding: 0 8px;

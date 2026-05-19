@@ -132,7 +132,7 @@ watch(
 )
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-main-container {
   height: 100%;
   display: flex;

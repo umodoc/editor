@@ -220,7 +220,7 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-preview-countdown {
   padding: 25px;
   width: 320px;
@@ -235,26 +235,24 @@ onBeforeUnmount(() => {
       margin: -2px 6px 0 0;
     }
   }
-  :deep(.umo-form) {
-    &__item {
-      &:not(:last-child) {
-        margin-bottom: 15px;
-      }
-      .umo-radio-group {
-        margin-top: 5px;
-      }
-      .umo-button__text {
-        display: flex;
-        align-items: center;
-        .umo-icon {
-          font-size: 16px;
-          margin-right: 5px;
-        }
+  :deep(.umo-form__item) {
+    &:not(:last-child) {
+      margin-bottom: 15px;
+    }
+    .umo-radio-group {
+      margin-top: 5px;
+    }
+    .umo-button__text {
+      display: flex;
+      align-items: center;
+      .umo-icon {
+        font-size: 16px;
+        margin-right: 5px;
       }
     }
-    &__controls {
-      margin-top: 10px;
-    }
+  }
+  :deep(.umo-form__controls) {
+    margin-top: 10px;
   }
   &-input {
     display: grid;

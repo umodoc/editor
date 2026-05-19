@@ -187,7 +187,7 @@ watch(
 )
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-search-text {
   margin-top: 5px;
   display: flex;
@@ -225,7 +225,7 @@ watch(
   }
 }
 </style>
-<style lang="less">
+<style lang="scss">
 .umo-search-replace-dialog {
   .t-dialog {
     position: absolute;

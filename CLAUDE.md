@@ -16,14 +16,14 @@ npm run format    # Oxfmt with auto-fix: oxfmt --write .
 npm run analyzer  # Bundle visualizer
 ```
 
-Pre-commit hooks (Husky + lint-staged) run `oxfmt` then `oxlint` on staged `*.{js,vue,less}` files automatically.
+Pre-commit hooks (Husky + lint-staged) run `oxfmt` then `oxlint` on staged `*.{js,vue,scss}` files automatically.
 
 ## Code Style
 
 - **Formatter**: Oxfmt — no semicolons, single quotes, 2-space indent, 80-char line width
 - **Linter**: Oxlint (Rust-based, not ESLint)
 - **Types**: JSDoc annotations — this project does NOT use TypeScript. No `.ts` files.
-- **Styles**: LESS — not SCSS, not plain CSS
+- **Styles**: SCSS using `@use` module system (not `@import`) — includes are namespaced, e.g. `@include mixins.umo-scrollbar`. TDesign vendor styles compile via a LESS bridge in `tdesign-vendor.less`; TDesign component overrides live in `tdesign-overrides.scss`
 
 ## Key Gotchas
 
@@ -39,7 +39,7 @@ Pre-commit hooks (Husky + lint-staged) run `oxfmt` then `oxlint` on staged `*.{j
 
 ## Component & Extension Patterns
 
-- Vue SFCs use `<template>`, `<script setup>`, `<style lang="less">` block order
+- Vue SFCs use `<template>`, `<script setup>`, `<style lang="scss">` block order
 - Tiptap extensions live in `src/extensions/` — each extension folder contains an `index.js`
 - Editor state and shared logic is in `src/composables/` — prefer composables over provide/inject
 - Configuration schemas and defaults are in `src/options/`

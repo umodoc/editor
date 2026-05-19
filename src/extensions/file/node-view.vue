@@ -192,7 +192,7 @@ const togglePreview = () => {
 }
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-node-view {
   .umo-node-file {
     display: inline-flex;

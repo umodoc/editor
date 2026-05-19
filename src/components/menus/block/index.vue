@@ -44,7 +44,7 @@ const dropdownVisible = (visible) => {
 }
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-block-menu {
   .umo-menu-button {
     color: var(--umo-text-color-light) !important;

@@ -37,21 +37,26 @@
 - TDesign Vue Next компоненти
 - Generated types: `types/imports.d.ts`, `types/components.d.ts`
 
-### CSS (LESS)
+### CSS (SCSS + TDesign LESS bridge)
+
+Проєктні стилі — **SCSS** (`lang="scss"` у Vue SFC, файли в `src/assets/styles/*.scss`).
+
+TDesign постачає стилі як LESS. Міст `src/assets/styles/tdesign-vendor.less` імпортується з [`src/components/index.js`](src/components/index.js); overrides — у `tdesign-overrides.scss`.
 
 ```js
 css: {
   preprocessorOptions: {
+    scss: {},
     less: {
       modifyVars: { '@prefix': 'umo' },
       javascriptEnabled: true,
-      // Post-processor видаляє .flex-center класи
+      // Post-processor видаляє .flex-center класи з TDesign LESS
     },
   },
 }
 ```
 
-TDesign class prefix переписаний на `umo-` (через `modifyVars` та `TConfigProvider`).
+TDesign class prefix — `umo-` (через `modifyVars`, `TConfigProvider` і `classPrefix: 'umo'`).
 
 ### Resolve
 
@@ -151,7 +156,7 @@ Plugin `vite-plugin-svg-icons` створює SVG sprite з:
 | **oxlint** | `oxlint --fix src` | Швидкий лінтер (Rust-based) |
 | **oxfmt** | `oxfmt --write .` | Formatter (Rust-based) |
 | **husky** | `.husky/` | Git hooks |
-| **lint-staged** | `package.json` `lint-staged` field | Pre-commit: `oxfmt --write src` + `oxlint --fix src` для `*.{js,vue,less}` |
+| **lint-staged** | `package.json` `lint-staged` field | Pre-commit: `oxfmt --write src` + `oxlint --fix src` для `*.{js,vue,scss}` |
 
 ## Node.js version
 

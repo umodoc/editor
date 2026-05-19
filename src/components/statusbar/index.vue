@@ -528,7 +528,7 @@ watch(
 )
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-status-bar {
   padding: 6px;
   display: flex;
@@ -683,7 +683,7 @@ watch(
 }
 </style>
 
-<style lang="less">
+<style lang="scss">
 .umo-shortcuts-drawer-header {
   display: flex;
   align-items: center;

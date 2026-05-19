@@ -85,7 +85,7 @@ const resetLetterSpacing = () => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-letter-spacing {
   &-tile {
     font-size: 12px;

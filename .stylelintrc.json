@@ -1,17 +1,12 @@
 {
-  "plugins": ["stylelint-less"],
+  "extends": ["stylelint-config-standard-scss", "stylelint-config-recommended-vue"],
   "rules": {
     "color-no-invalid-hex": true,
-    "less/color-no-invalid-hex": true,
     "no-descending-specificity": null,
     "selector-pseudo-class-no-unknown": [
       true,
       { "ignorePseudoClasses": ["deep"] }
     ]
   },
-  "extends": [
-    "stylelint-config-recommended-vue",
-    "stylelint-config-recommended-less"
-  ],
   "customSyntax": "postcss-html"
 }

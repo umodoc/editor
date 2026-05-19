@@ -65,7 +65,7 @@ const selectStyle = (item) => {
 }
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-bubble-callout-builtin {
   display: flex;
   align-items: center;

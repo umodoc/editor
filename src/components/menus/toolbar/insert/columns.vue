@@ -56,7 +56,7 @@ watch(
 )
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-columns {
   &-title {
     font-size: 14px;

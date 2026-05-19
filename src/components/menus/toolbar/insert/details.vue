@@ -10,7 +10,7 @@
 const editor = inject('editor')
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .bookmark-list {
   border: solid 1px var(--umo-border-color-dark);
   border-radius: var(--umo-radius);

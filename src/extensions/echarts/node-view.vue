@@ -176,7 +176,7 @@ watch(
 )
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-node-view {
   .umo-node-echarts {
     max-width: 100%;

@@ -362,7 +362,7 @@ const setBarcode = () => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-barcode-container {
   padding: 2px;
   .umo-barcode-toolbar {
@@ -416,7 +416,7 @@ const setBarcode = () => {
 }
 </style>
 
-<style lang="less">
+<style lang="scss">
 .barcode-toolbar-more {
   padding: 10px 20px 10px 15px;
   width: 300px;

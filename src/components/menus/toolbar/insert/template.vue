@@ -44,7 +44,7 @@ const setTemplate = ({ content }) => {
 }
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-templates-dropdown {
   .umo-dropdown__item-text {
     padding: 5px 5px;

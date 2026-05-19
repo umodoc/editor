@@ -138,7 +138,7 @@ onClickOutside(
 )
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-toolbar-headding {
   width: 318px;
   height: 56px;
@@ -251,7 +251,7 @@ onClickOutside(
 }
 </style>
 
-<style lang="less">
+<style lang="scss">
 .umo-heading-container-popup {
   .umo-popup__content {
     box-shadow: none;

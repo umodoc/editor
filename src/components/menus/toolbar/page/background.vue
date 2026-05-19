@@ -69,7 +69,7 @@ const backgroundChange = (color) => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-background-container {
   display: flex;
   flex-wrap: wrap;

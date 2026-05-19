@@ -103,7 +103,7 @@ const headingActive = (value) => {
 }
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-node-view {
   .umo-node-toc {
     padding: 44px 24px 24px 10px;

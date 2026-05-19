@@ -208,7 +208,7 @@ if ($document.value.enableMarkdown) {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .keyboard-shortcuts-title {
   margin: 0 0 10px 0;
   font-size: 12px;

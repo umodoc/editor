@@ -292,7 +292,7 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-node-view {
   &.is-inline-image {
     display: inline-block !important;

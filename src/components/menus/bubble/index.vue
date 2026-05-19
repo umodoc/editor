@@ -15,7 +15,7 @@ const editor = inject('editor')
 const options = inject('options')
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-editor-bubble-menu {
   max-width: 580px;
   z-index: 110;

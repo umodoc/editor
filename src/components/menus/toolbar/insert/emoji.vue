@@ -45,7 +45,7 @@ const selectEmoji = (emoji) => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-emojis-container {
   width: 404px;
   max-height: var(--umo-popup-max-height);

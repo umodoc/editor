@@ -547,8 +547,8 @@ const editableCellState = () => {
 }
 </script>
 
-<style lang="less" scoped>
-@import '@/assets/styles/_mixins.less';
+<style lang="scss" scoped>
+@use '@/assets/styles/mixins' as *;
 
 .umo-echarts-container {
   min-height: 300px;
@@ -588,13 +588,11 @@ const editableCellState = () => {
       border-radius: var(--umo-radius);
       max-height: 420px;
       overflow: auto;
-      .umo-scrollbar();
+      @include umo-scrollbar;
 
-      :deep(.umo-form__controls) {
-        &,
-        &-content {
-          min-height: auto;
-        }
+      :deep(.umo-form__controls),
+      :deep(.umo-form__controls-content) {
+        min-height: auto;
       }
     }
 
@@ -628,14 +626,12 @@ const editableCellState = () => {
         display: flex;
         justify-content: center;
 
-        :deep(.t-table) {
-          &__content {
-            border: none;
-          }
+        :deep(.t-table__content) {
+          border: none;
+        }
 
-          &__cell--editable {
-            cursor: text;
-          }
+        :deep(.t-table__cell--editable) {
+          cursor: text;
         }
 
         :deep(.umo-input) {

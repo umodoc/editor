@@ -1,4 +1,4 @@
-.umo-scrollbar() {
+@mixin umo-scrollbar {
   overflow: auto;
 
   @-moz-document url-prefix() {
@@ -30,7 +30,8 @@
   }
 }
 
-.umo-page-divider() {
+
+@mixin umo-page-divider {
   display: block;
   white-space: nowrap;
   letter-spacing: 100vw;

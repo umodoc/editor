@@ -63,7 +63,7 @@ const selectStyle = (item) => {
 }
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-bubble-tag-builtin {
   margin-right: 5px;
   display: flex;

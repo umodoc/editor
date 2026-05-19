@@ -91,7 +91,7 @@ const editTextBox = () => {
 }
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-node-view {
   .umo-node-text-box {
     position: absolute;

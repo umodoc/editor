@@ -227,7 +227,7 @@ const setQrcode = () => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-qrcode-container {
   padding: 2px;
   .umo-qrcode-toolbar {

@@ -93,7 +93,7 @@ onClickOutside(containerRef, () => {
 })
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-node-view {
   .umo-node-audio {
     max-width: 100%;

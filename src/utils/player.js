@@ -1,4 +1,4 @@
-import '@/assets/styles/plyr.less'
+import '@/assets/styles/plyr.scss'
 
 import { loadResource } from '@/utils/load-resource'
 

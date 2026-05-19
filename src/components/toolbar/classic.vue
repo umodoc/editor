@@ -267,7 +267,7 @@ const toggoleMenu = async (menu) => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-scrollable-container {
   padding: 10px;
 }

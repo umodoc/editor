@@ -287,7 +287,7 @@ const changeMenu = async (menu) => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-ribbon-menu {
   width: 100%;
 }
@@ -370,7 +370,7 @@ const changeMenu = async (menu) => {
 }
 </style>
 
-<style lang="less">
+<style lang="scss">
 .umo-skin-modern .umo-ribbon-tabs {
   padding: 14px 15px 0 !important;
 }

@@ -129,7 +129,7 @@ watch(
 )
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-ordered-list-group {
   display: flex;
   align-items: center;

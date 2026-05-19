@@ -95,7 +95,7 @@ const insertTable = () => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-table-grid {
   .row {
     display: flex;

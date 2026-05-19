@@ -16,7 +16,7 @@ Umo Editor — це Vue 3 plugin, що надає WYSIWYG document editor з п�
 | Framework | **Vue 3** (Composition API, `<script setup>`) |
 | Editor engine | **Tiptap 3** → **ProseMirror** (`@tiptap/pm`) |
 | Build tool | **Vite 7** (`@vitejs/plugin-vue`) |
-| Styling | **LESS** з CSS variables (`--umo-*` prefix) |
+| Styling | **SCSS** з CSS variables (`--umo-*` prefix); TDesign vendor — `tdesign-vendor.less` |
 | UI library (dev) | **TDesign Vue Next** (buttons, dropdowns, dialogs, sliders) |
 | Icons | SVG sprite через `vite-plugin-svg-icons` |
 | State persistence | `useStorage` з `@vueuse/core` (localStorage) |
@@ -152,10 +152,11 @@ src/
   │   └── bo.json               # Tibetan
   │
   └── assets/
-      ├── styles/               # LESS stylesheets
-      │   ├── index.less        # Main styles entry
-      │   ├── editor.less       # Editor content styles
-      │   └── drager.less       # Drag-related styles
+      ├── styles/               # SCSS stylesheets
+      │   ├── index.scss        # Main styles entry
+      │   ├── editor.scss       # Editor content styles
+      │   ├── drager.scss       # Drag-related styles
+      │   └── tdesign-vendor.less  # TDesign LESS bridge (imported from index.js)
       ├── icons/                # SVG icons (~100+)
       └── images/               # Static images
 ```

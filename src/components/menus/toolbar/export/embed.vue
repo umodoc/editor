@@ -43,7 +43,7 @@ const copyEmbed = () => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-embed-container {
   padding: 2px;
   .umo-embed-tip {

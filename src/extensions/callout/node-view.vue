@@ -86,7 +86,7 @@ const focusCalloutContent = (event) => {
 }
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-node-callout {
   padding: 8px 12px;
   border-radius: var(--umo-radius);

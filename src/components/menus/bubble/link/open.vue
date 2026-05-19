@@ -13,7 +13,7 @@
 const editor = inject('editor')
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-link {
   display: flex;
   align-items: center;

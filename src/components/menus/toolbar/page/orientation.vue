@@ -36,7 +36,7 @@ const orientations = [
 ]
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-page-orientation-dropdown {
   .umo-dropdown__item {
     max-width: unset !important;

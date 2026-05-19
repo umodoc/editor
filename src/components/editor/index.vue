@@ -149,7 +149,7 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style lang="less">
-@import '@/assets/styles/editor.less';
-@import '@/assets/styles/drager.less';
+<style lang="scss">
+@import '@/assets/styles/editor.scss';
+@import '@/assets/styles/drager.scss';
 </style>

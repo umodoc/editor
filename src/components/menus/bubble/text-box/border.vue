@@ -133,7 +133,7 @@ const noBorder = () => {
 }
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-textbox-border {
   &-dropdown {
     &-item {

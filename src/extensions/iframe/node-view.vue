@@ -79,7 +79,7 @@ onClickOutside(containerRef, () => {
 })
 </script>
 
-<style lang="less">
+<style lang="scss">
 .umo-node-view {
   .umo-node-iframe {
     max-width: 100%;

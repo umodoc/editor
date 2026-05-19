@@ -101,7 +101,7 @@ watch(
 )
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-link-container {
   padding: 0 2px 2px;
   margin-top: -6px;

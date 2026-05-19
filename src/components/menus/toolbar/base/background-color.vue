@@ -60,7 +60,7 @@ const colorChange = (color) => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-icon-background-color {
   border-radius: 2px;
 }

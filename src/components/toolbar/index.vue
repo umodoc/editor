@@ -234,7 +234,7 @@ const setContentFromCache = () => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-toolbar-container {
   display: flex;
   justify-content: space-between;
@@ -330,7 +330,7 @@ const setContentFromCache = () => {
 }
 </style>
 
-<style lang="less">
+<style lang="scss">
 .umo-skin-modern {
   &.toolbar-classic {
     .umo-toolbar-actions {

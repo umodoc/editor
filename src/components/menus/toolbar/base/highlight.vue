@@ -83,13 +83,13 @@ const clearFormat = () => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .umo-icon-highlight {
   border-radius: 2px;
 }
 </style>
 
-<style lang="less">
+<style lang="scss">
 .umo-text-highlight-dropdown {
   .umo-popup__content {
     .umo-divider {

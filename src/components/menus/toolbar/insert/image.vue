@@ -55,7 +55,7 @@ const insertImage = (type) => {
     .run()
 }
 </script>
-<style lang="less">
+<style lang="scss">
 .umo-image-dropdown {
   .umo-dropdown__item-text {
     padding: 5px 5px;

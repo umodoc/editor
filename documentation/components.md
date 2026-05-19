@@ -6,7 +6,7 @@
 - Naming convention для auto-import: `<menus-toolbar-base-bold />` → `src/components/menus/toolbar/base/bold.vue`
 - Компоненти використовують **provide/inject** замість props для доступу до `editor`, `options`, `page`, `container` тощо
 - UI елементи (buttons, dropdowns, sliders, dialogs) з **TDesign Vue Next** з prefix `umo-` (через `classPrefix: 'umo'`)
-- Стилі: **LESS** з CSS custom properties (`--umo-*`)
+- Стилі: **SCSS** з CSS custom properties (`--umo-*`)
 
 ## Component tree
 
