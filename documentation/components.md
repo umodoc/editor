@@ -105,11 +105,10 @@ Toolbar рендерить menu groups динамічно на основі `opt
 |-----------|------|
 | `math.vue` | Математичні формули |
 | `echarts.vue` | Графіки ECharts |
-| `mermaid.vue` | Mermaid діаграми |
 | `diagrams.vue` | Diagrams.net |
-| `qrcode.vue` / `barcode.vue` | QR-код та штрих-код |
-| `signature.vue` | Електронний підпис |
 | `chinese-case.vue` | Зміна регістру (китайський) |
+
+**Видалено у форку (Level B):** QR Code, Barcode, E-Signature, Mermaid — UI, npm-залежності (`jsbarcode`, `pure-svg-code`, `smooth-signature`), CDN mermaid. Існуючі `image` з `type: qrcode|barcode|signature|mermaid` лишаються видимими по `src`.
 
 ### `page/` — Page tab
 

@@ -132,9 +132,6 @@ onMounted(() => {
   if (has('math')) {
     loadResource(`${libUrl}/katex/katex.min.css`, 'css', 'katex-style')
   }
-  if (has('mermaid')) {
-    loadResource(`${libUrl}/mermaid/mermaid.min.js`, 'script', 'mermaid-script')
-  }
   window.addEventListener('beforeunload', flushSyncDocumentContent)
   window.addEventListener('pagehide', flushSyncDocumentContent)
   document.addEventListener('visibilitychange', flushSyncDocumentContent)

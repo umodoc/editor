@@ -283,33 +283,6 @@
     "toggleHeaderColumn": "Header Column"
   },
   "tools": {
-    "barcode": {
-      "text": "Barcode",
-      "edit": "Edit Barcode",
-      "title": "Barcode",
-      "format": "Format",
-      "font": "Font Style",
-      "lineColor": "Barcode & Text Color",
-      "bgColor": "Barcode Background Color",
-      "more": "More",
-      "width": "Width:",
-      "height": "Height:",
-      "margin": "Margin:",
-      "displayValue": "Display Text",
-      "displayValueText": "Show Text",
-      "textContent": "Text Content:",
-      "textContentTip": "Overrides barcode content text",
-      "textPosition": "Text Position:",
-      "top": "Top",
-      "bottom": "Bottom",
-      "textMargin": "Vertical Distance:",
-      "fontSize": "Font Size:",
-      "placeholder": "Enter content to convert into barcode",
-      "error": "Your input may not comply with the current barcode standard constraints, please check.",
-      "preview": "Preview",
-      "renderError": "No preview available",
-      "notEmpty": "Barcode content cannot be empty"
-    },
     "chineseCase": {
       "text": "Chinese Case",
       "tip": "Chinese Case Conversion"
@@ -331,28 +304,6 @@
       "text": "Diagram",
       "edit": "Edit Diagram",
       "loading": "Loading..."
-    },
-    "mermaid": {
-      "text": "Mermaid",
-      "edit": "Edit Mermaid",
-      "theme": "Select Theme",
-      "themes": {
-        "default": "Default Theme",
-        "base": "Simple Theme",
-        "dark": "Dark Theme",
-        "forest": "Forest Theme",
-        "neutral": "Neutral Theme"
-      },
-      "copy": "Copy Code",
-      "clear": "Clear Code",
-      "copied": "Code Copied to Clipboard",
-      "placeholder": "Enter or paste Mermaid code",
-      "preview": "Preview",
-      "notEmpty": "Mermaid content cannot be empty",
-      "codeEmpty": "Mermaid code cannot be empty",
-      "notLoaded": "Mermaid is still loading",
-      "keepSize": "Keep Original Size",
-      "renderError": "Syntax error in graph"
     },
     "echarts": {
       "text": "Chart",
@@ -388,37 +339,7 @@
         "titleleft": "Title Position"
       }
     },
-    "mindMap": "Mind Map",
-    "qrcode": {
-      "text": "QR Code",
-      "edit": "Edit QR Code",
-      "level": "QR Code Error Correction Level",
-      "levelL": "Low",
-      "levelM": "Medium",
-      "levelQ": "Quartile",
-      "levelH": "High",
-      "padding": "padding:",
-      "paddingTip": "white space padding",
-      "width": "Size:",
-      "widthTip": "QR Code size in pixels",
-      "color": "QR Code Color",
-      "bgColor": "Color of background",
-      "placeholder": "Enter or paste content to convert into QR Code",
-      "preview": "Preview",
-      "renderError": "QR Code generation failed",
-      "notEmpty": "QR Code content cannot be empty"
-    },
-    "signature": {
-      "text": "E-Signature",
-      "title": "Insert Electronic Signature",
-      "clear": "Clear",
-      "lineWidth": "Pen Thickness",
-      "lineColor": "Pen Color",
-      "smooth": "Show Brush Strokes",
-      "reset": "Reset Options",
-      "tip": "Please sign in the this area",
-      "notEmpty": "No signature detected"
-    }
+    "mindMap": "Mind Map"
   },
   "page": {
     "breakMarks": "Line Breaks",
