@@ -32,9 +32,7 @@
 │
 └── <footer class="umo-footer">
     └── <Statusbar>  (statusbar/index.vue)
-        ├── <StatusbarShortcuts>
-        ├── <StatusbarCountdown>
-        └── <StatusbarAbout>
+        └── <StatusbarShortcuts>  (drawer; кнопка в statusbar)
 ```
 
 ## Toolbar (`src/components/toolbar/`)
@@ -46,7 +44,7 @@
 | `classic.vue` | Classic mode — всі меню в одному рядку |
 | `scrollable.vue` | Scrollable wrapper для меню, що не вміщуються |
 
-Toolbar рендерить menu groups динамічно на основі `options.toolbar.menus` (базові значення в upstream: `['base', 'insert', 'table', 'tools', 'page', 'view', 'export']`; у форку див. `src/options/config/index.js`).
+Toolbar рендерить menu groups динамічно на основі `options.toolbar.menus` (у форку за замовчуванням: `['base', 'insert', 'table', 'tools', 'export']`; вкладки `page` та `view` прибрані — див. `src/options/config/index.js`).
 
 Кожна група меню — це набір button-компонентів з `src/components/menus/toolbar/{group}/`.
 
@@ -117,17 +115,13 @@ Toolbar рендерить menu groups динамічно на основі `opt
 
 Налаштування сторінки: size, orientation, margin, background, watermark, header/footer, break marks, bookmark toggle, line number, page break.
 
-### `view/` — View tab
+### `view/` — View tab (видалено у форку, Фаза A)
 
-| Компонент | Опис |
-|-----------|------|
-| `theme.vue` | Тема (light/dark/auto) |
-| `page.vue` / `web.vue` | Режим відображення |
-| `zoom-in.vue` / `zoom-out.vue` / `zoom-original.vue` / `zoom-auto.vue` | Масштаб |
-| `fullscreen.vue` | Повноекранний режим |
-| `preview.vue` | Режим перегляду/презентації |
-| `reset.vue` | Скидання налаштувань |
-| `search-replace.vue` | Пошук та заміна |
+Вкладка View і каталог `menus/toolbar/view/` прибрані. Відповідний UI також видалено з statusbar (zoom, preview, TOC sidebar toggle, locale, reset тощо).
+
+**Statusbar (форк):** лише лічильник символів і довідник shortcuts (drawer).
+
+Програмний стан (`page.zoomLevel`, `preview`, `setTheme` тощо) лишається до Фази B — див. `documentation/options-and-config.md`.
 
 ### `export/` — Export tab
 

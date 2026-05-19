@@ -82,14 +82,7 @@ const shortcuts = $ref([
   },
   {
     title: t('shortcut.page'),
-    items: [
-      { label: t('page.break'), keys: ['Ctrl', 'Enter'] },
-      { label: t('shortcut.pageZoomIn'), keys: ['Ctrl', '+'] },
-      { label: t('shortcut.pageZoomOut'), keys: ['Ctrl', '-'] },
-      { label: t('shortcut.pageZoomReset'), keys: ['Ctrl', '1'] },
-      { label: t('shortcut.pageAutoWidth'), keys: ['Ctrl', '0'] },
-      { label: t('fullscreen.title'), keys: ['Ctrl', 'F11'] },
-    ],
+    items: [{ label: t('page.break'), keys: ['Ctrl', 'Enter'] }],
   },
 ])
 

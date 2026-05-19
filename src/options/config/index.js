@@ -11,7 +11,7 @@ export default {
   toolbar: {
     showSaveLabel: true,
     defaultMode: 'ribbon',
-    menus: ['base', 'insert', 'table', 'tools', 'view', 'export'], // , 'page', 'view', 'export'
+    menus: ['base', 'insert', 'table', 'tools', 'export'], // , 'page', 'view', 'export'
   },
   page: {
     layouts: ['web'],
