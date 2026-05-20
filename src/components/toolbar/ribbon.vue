@@ -91,15 +91,13 @@
             <menus-toolbar-insert-file v-if="!disableMenu('file')" />
           </div>
           <div class="umo-virtual-group">
+            <menus-toolbar-insert-emoji v-if="!disableMenu('emoji')" />
             <menus-toolbar-insert-text-box v-if="!disableMenu('text-box')" />
             <menus-toolbar-insert-details v-if="!disableMenu('details')" />
             <menus-toolbar-insert-code-block
               v-if="!disableMenu('code-block')"
             />
             <menus-toolbar-insert-symbol v-if="!disableMenu('symbol')" />
-            <menus-toolbar-insert-emoji v-if="!disableMenu('emoji')" />
-          </div>
-          <div class="umo-virtual-group">
             <menus-toolbar-insert-tag v-if="!disableMenu('tag')" />
             <menus-toolbar-insert-columns v-if="!disableMenu('columns')" />
             <menus-toolbar-insert-callout v-if="!disableMenu('callout')" />
@@ -107,8 +105,6 @@
             <menus-toolbar-insert-option-box
               v-if="!disableMenu('option-box')"
             />
-          </div>
-          <div class="umo-virtual-group">
             <menus-toolbar-insert-hard-break
               v-if="!disableMenu('hard-break')"
             />
@@ -116,6 +112,7 @@
             <menus-toolbar-insert-bookmark v-if="!disableMenu('bookmark')" />
             <menus-toolbar-insert-footnote v-if="!disableMenu('footnote')" />
             <menus-toolbar-insert-toc v-if="!disableMenu('toc')" />
+            <menus-toolbar-tools-math v-if="!disableMenu('math')" />
           </div>
           <div class="umo-virtual-group">
             <menus-toolbar-insert-template v-if="!disableMenu('template')" />
@@ -181,9 +178,8 @@
         </template>
         <template v-if="currentMenu === 'tools'">
           <div class="umo-virtual-group">
-            <menus-toolbar-tools-math v-if="!disableMenu('math')" />
-            <menus-toolbar-tools-diagrams v-if="!disableMenu('diagrams')" />
-            <menus-toolbar-tools-echarts v-if="!disableMenu('echarts')" />
+            <!-- <menus-toolbar-tools-diagrams v-if="!disableMenu('diagrams')" /> -->
+            <!-- <menus-toolbar-tools-echarts v-if="!disableMenu('echarts')" /> -->
             <!-- <menus-toolbar-tools-mind-map v-if="!disableMenu('mind-map')" /> -->
           </div>
           <div class="umo-virtual-group is-slot">

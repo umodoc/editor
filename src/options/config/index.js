@@ -11,7 +11,7 @@ export default {
   toolbar: {
     showSaveLabel: true,
     defaultMode: 'ribbon',
-    menus: ['base', 'insert', 'table', 'tools'], // , 'page', 'view', 'export'
+    menus: ['base', 'insert', 'table'], // , 'tools', 'page', 'view', 'export'
   },
   page: {
     layouts: ['web'],
@@ -149,7 +149,8 @@ export default {
   user: {},
   users: [],
   extensions: [],
-  disableExtensions: [],
+  // Fork defaults; host app can add more via app.use() or <umo-editor> props
+  disableExtensions: ['web-page', 'toc', 'bookmark', 'hard-break', 'option-box', 'mention', 'columns', 'tag', 'code-block', 'symbol', 'video', 'audio', 'file', 'text-box'],
   translations: {
     en_US: {},
   },
