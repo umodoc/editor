@@ -15,6 +15,18 @@ Default options (src/options/config/index.js)
 const options = objectSchema.merge(defaultOptions, globalOptions, componentOptions)
 ```
 
+**`disableExtensions`** — виняток: кожен шар **додає** ключі до спільного списку (без дублікатів), а не перезаписує попередній масив. Порожній `[]` у props нічого не знімає з дефолтів форку.
+
+Приклад для хост-проєкту (Nuxt):
+```js
+// plugins/umo-editor.client.js — додаткові вимкнення для всього застосунку
+app.use(useUmoEditor, { disableExtensions: ['math', 'echarts'] })
+
+// Сторінка — ще один інстанс
+<umo-editor :disable-extensions="['export-pdf']" />
+// Результат: fork defaults + math + echarts + export-pdf
+```
+
 ## Файли
 
 | Файл | Призначення |
@@ -40,7 +52,7 @@ const options = objectSchema.merge(defaultOptions, globalOptions, componentOptio
 | `shareUrl` | `string` | `location.href` | URL для кнопки "Поділитися" |
 | `templates` | `array` | `[]` | Шаблони документів `[{ title, description?, content }]` |
 | `extensions` | `array` | `[]` | Додаткові Tiptap extensions |
-| `disableExtensions` | `array` | `[]` | Масив назв extensions для вимкнення |
+| `disableExtensions` | `array` | `[]` | Масив назв extensions для вимкнення. **Мержиться union** (config → `app.use` → props), а не замінюється цілком |
 | `translations` | `object` | `{ en_US: {} }` | Custom переклади (мержаться з вбудованими) |
 | `user` | `object` | `{}` | Поточний користувач `{ id, label, avatar }` |
 | `users` | `array` | `[]` | Список користувачів для @mentions `[{ id, label, bio?, avatar?, color? }]` |

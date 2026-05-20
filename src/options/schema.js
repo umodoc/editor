@@ -605,7 +605,12 @@ export default new ObjectSchema({
     required: false,
   },
   disableExtensions: {
-    merge: 'replace',
+    merge(first = [], second) {
+      if (second === undefined) {
+        return first
+      }
+      return [...new Set([...first, ...second])]
+    },
     validate(value) {
       if (value && !Array.isArray(value)) {
         throw new Error('Key "disableExtensions" must be a array.')

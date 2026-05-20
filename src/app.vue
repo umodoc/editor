@@ -86,9 +86,9 @@ const options = $ref({
     { id: 'Sherman Xu', label: 'xuzhenjun130' },
     { id: 'testuser', label: 'Test User' },
   ],
-  // https://dev.umodoc.com/cn/docs/options/extensions#disableextensions
-  disableExtensions: [],
-    async onSave(content, page, document) {
+  // Demo-only extras (merged with fork defaults in config/index.js)
+  // disableExtensions: ['math'],
+  async onSave(content, page, document) {
     localStorage.setItem('document.content', content.html)
     return new Promise((resolve) => {
       setTimeout(() => {
