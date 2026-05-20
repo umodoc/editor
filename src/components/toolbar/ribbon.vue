@@ -20,12 +20,12 @@
               <menus-toolbar-base-redo />
             </div>
             <div class="umo-virtual-group-row">
-              <menus-toolbar-base-format-painter />
+              <menus-toolbar-base-format-painter v-if="!disableMenu('format-painter')" />
               <menus-toolbar-base-clear-format />
             </div>
           </div>
           <div class="umo-virtual-group">
-            <div class="umo-virtual-group-row">
+            <div v-if="!disableMenu('font-menu')" class="umo-virtual-group-row">
               <menus-toolbar-base-font-family />
               <menus-toolbar-base-font-size />
               <menus-toolbar-base-word-wrap />
@@ -35,12 +35,14 @@
               <menus-toolbar-base-italic />
               <menus-toolbar-base-underline />
               <menus-toolbar-base-strike />
+            </div>
+            <div class="umo-virtual-group-row">
               <menus-toolbar-base-subscript />
               <menus-toolbar-base-superscript />
               <menus-toolbar-base-color />
               <menus-toolbar-base-background-color />
               <menus-toolbar-base-highlight v-if="!disableMenu('highlight')" />
-              <menus-toolbar-base-letter-spacing />
+              <menus-toolbar-base-letter-spacing v-if="!disableMenu('letter-spacing')" />
             </div>
           </div>
           <div class="umo-virtual-group">
@@ -48,24 +50,24 @@
               <menus-toolbar-base-ordered-list />
               <menus-toolbar-base-bullet-list />
               <menus-toolbar-base-task-list v-if="!disableMenu('task-list')" />
-              <menus-toolbar-base-indent />
-              <menus-toolbar-base-outdent />
+              <menus-toolbar-base-indent v-if="!disableMenu('indents')" />
+              <menus-toolbar-base-outdent v-if="!disableMenu('indents')" />
               <menus-toolbar-base-line-height
                 v-if="!disableMenu('line-height')"
               />
               <menus-toolbar-base-margin v-if="!disableMenu('margin')" />
+              <menus-toolbar-base-code v-if="!disableMenu('code')" />
+              <menus-toolbar-base-quote v-if="!disableMenu('quote')" />
+              <menus-toolbar-base-select-all
+                v-if="!disableMenu('select-all')"
+              />
             </div>
             <div class="umo-virtual-group-row">
               <menus-toolbar-base-align-left />
               <menus-toolbar-base-align-center />
               <menus-toolbar-base-align-right />
               <menus-toolbar-base-align-justify />
-              <menus-toolbar-base-align-distributed />
-              <menus-toolbar-base-code v-if="!disableMenu('code')" />
-              <menus-toolbar-base-quote v-if="!disableMenu('quote')" />
-              <menus-toolbar-base-select-all
-                v-if="!disableMenu('select-all')"
-              />
+              <menus-toolbar-base-align-distributed v-if="!disableMenu('align-distributed')" />
             </div>
           </div>
           <div class="umo-virtual-group">

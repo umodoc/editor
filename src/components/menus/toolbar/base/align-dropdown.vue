@@ -14,7 +14,7 @@
         <menus-toolbar-base-align-center />
         <menus-toolbar-base-align-right />
         <menus-toolbar-base-align-justify />
-        <menus-toolbar-base-align-distributed />
+        <!-- <menus-toolbar-base-align-distributed /> -->
       </div>
     </template>
   </menus-button>

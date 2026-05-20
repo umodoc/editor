@@ -29,14 +29,14 @@
         <div class="umo-virtual-group">
           <menus-toolbar-base-undo />
           <menus-toolbar-base-redo />
-          <menus-toolbar-base-format-painter />
+          <menus-toolbar-base-format-painter v-if="!disableMenu('format-painter')" />
           <menus-toolbar-base-clear-format />
         </div>
         <div class="umo-virtual-group">
           <menus-toolbar-base-heading />
-          <menus-toolbar-base-font-family borderless />
-          <menus-toolbar-base-font-size borderless />
-          <menus-toolbar-base-word-wrap />
+          <menus-toolbar-base-font-family v-if="!disableMenu('font-menu')" borderless />
+          <menus-toolbar-base-font-size v-if="!disableMenu('font-menu')" borderless />
+          <menus-toolbar-base-word-wrap v-if="!disableMenu('font-menu')" />
           <menus-toolbar-base-bold />
           <menus-toolbar-base-italic />
           <menus-toolbar-base-underline />
@@ -46,14 +46,14 @@
           <menus-toolbar-base-color />
           <menus-toolbar-base-background-color />
           <menus-toolbar-base-highlight v-if="!disableMenu('highlight')" />
-          <menus-toolbar-base-letter-spacing />
+          <menus-toolbar-base-letter-spacing v-if="!disableMenu('letter-spacing')" />
         </div>
         <div class="umo-virtual-group">
           <menus-toolbar-base-ordered-list />
           <menus-toolbar-base-bullet-list />
           <menus-toolbar-base-task-list v-if="!disableMenu('task-list')" />
-          <menus-toolbar-base-indent />
-          <menus-toolbar-base-outdent />
+          <menus-toolbar-base-indent v-if="!disableMenu('indents')" />
+          <menus-toolbar-base-outdent v-if="!disableMenu('indents')" />
           <menus-toolbar-base-line-height v-if="!disableMenu('line-height')" />
           <menus-toolbar-base-margin v-if="!disableMenu('margin')" />
           <menus-toolbar-base-align-dropdown />

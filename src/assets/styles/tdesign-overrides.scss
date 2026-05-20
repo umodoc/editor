@@ -113,6 +113,7 @@ body {
     &__ctx {
       --td-mask-active: var(--umo-mask-color);
 
+      height: 100vh;
       .umo-dialog__wrap,
       .t-dialog__wrap {
         position: absolute;
@@ -128,6 +129,7 @@ body {
       }
 
       &--fixed {
+        position: fixed !important;
 
         .umo-dialog,
         .t-dialog {
