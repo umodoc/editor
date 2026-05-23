@@ -62,6 +62,7 @@ const extensions = getDefaultExtensions({
   uploadFileMap,
 })
 
+// 同步文档内容
 let syncContentTimer = null
 const syncDocumentContent = (targetEditor = editorInstance) => {
   if (!$document.value || !targetEditor) {
@@ -86,6 +87,38 @@ const flushSyncDocumentContent = () => {
   syncDocumentContent(editorInstance)
 }
 
+// 处理列表项的键盘事件
+const getActiveListItemType = (selection) => {
+  const { $from } = selection
+  const { depth: maxDepth } = $from
+  for (let depth = maxDepth; depth > 0; depth -= 1) {
+    const currentNode = $from.node(depth)
+    const nodeName = currentNode?.type?.name
+    if (nodeName === 'listItem' || nodeName === 'taskItem') {
+      return nodeName
+    }
+  }
+  return null
+}
+const handleEditorKeyDown = (view, event) => {
+  const customHandleKeyDown = options.value.document?.editorProps?.handleKeyDown
+  if (
+    event.key === 'Enter' &&
+    !event.shiftKey &&
+    !event.altKey &&
+    !event.ctrlKey &&
+    !event.metaKey &&
+    !event.isComposing
+  ) {
+    const itemType = getActiveListItemType(view.state.selection)
+    if (itemType && editorInstance.commands.splitListItem(itemType)) {
+      event.preventDefault()
+      return true
+    }
+  }
+  return customHandleKeyDown?.(view, event) || false
+}
+
 const editorInstance = new Editor({
   editable: !options.value.document?.readOnly,
   autofocus: options.value.document?.autofocus,
@@ -97,6 +130,7 @@ const editorInstance = new Editor({
       class: 'umo-editor',
     },
     ...options.value.document?.editorProps,
+    handleKeyDown: handleEditorKeyDown,
   },
   // enableContentCheck: true,
   parseOptions: options.value.document?.parseOptions,
