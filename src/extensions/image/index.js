@@ -4,6 +4,28 @@ import { VueNodeViewRenderer } from '@tiptap/vue-3'
 
 import NodeView from './node-view.vue'
 
+const parseDimension = (element, name) => {
+  const styleValue = element.style?.[name]
+  const attrValue = element.getAttribute(name)
+  const rawValue = styleValue || attrValue
+
+  if (!rawValue) {
+    return null
+  }
+
+  const normalizedValue = String(rawValue).trim()
+
+  if (/^\d+(\.\d+)?px$/i.test(normalizedValue)) {
+    return Number.parseFloat(normalizedValue)
+  }
+
+  if (/^\d+(\.\d+)?$/.test(normalizedValue)) {
+    return Number.parseFloat(normalizedValue)
+  }
+
+  return null
+}
+
 const customImage = Image.extend({
   atom: true,
   selectable: true,
@@ -35,9 +57,11 @@ const customImage = Image.extend({
       },
       width: {
         default: null,
+        parseHTML: (element) => parseDimension(element, 'width'),
       },
       height: {
         default: null,
+        parseHTML: (element) => parseDimension(element, 'height'),
       },
       left: {
         default: 0,
