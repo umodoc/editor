@@ -1,6 +1,56 @@
 import { Extension } from '@tiptap/core'
 import { AllSelection, TextSelection } from '@tiptap/pm/state'
 
+const DEFAULT_INDENT_UNIT = 'em'
+
+const parseIndentConfig = (indentSize, fallbackUnit = DEFAULT_INDENT_UNIT) => {
+  if (typeof indentSize === 'number') {
+    return Number.isFinite(indentSize)
+      ? { value: indentSize, unit: fallbackUnit }
+      : null
+  }
+
+  if (typeof indentSize !== 'string') {
+    return null
+  }
+
+  const match = indentSize.trim().match(/^(-?[\d.]+)\s*([a-z%]*)$/i)
+  if (!match) {
+    return null
+  }
+
+  const value = Number.parseFloat(match[1])
+  if (!Number.isFinite(value)) {
+    return null
+  }
+
+  return {
+    value,
+    unit: match[2] || fallbackUnit,
+  }
+}
+
+const parseTextIndent = (textIndent, fallbackUnit = DEFAULT_INDENT_UNIT) => {
+  if (typeof textIndent !== 'string') {
+    return null
+  }
+
+  const match = textIndent.trim().match(/^(-?[\d.]+)\s*([a-z%]*)$/i)
+  if (!match) {
+    return null
+  }
+
+  const value = Number.parseFloat(match[1])
+  if (!Number.isFinite(value)) {
+    return null
+  }
+
+  return {
+    value,
+    unit: match[2] || fallbackUnit,
+  }
+}
+
 export default Extension.create({
   name: 'indent',
   addOptions() {
@@ -9,9 +59,20 @@ export default Extension.create({
       minLevel: 0,
       maxLevel: 20,
       indentSize: 2,
+      defaultUnit: DEFAULT_INDENT_UNIT,
     }
   },
   addGlobalAttributes() {
+    const getIndentConfig = () =>
+      parseIndentConfig(this.options.indentSize, this.options.defaultUnit)
+    const parseElementIndent = (element) => {
+      const config = getIndentConfig()
+      if (!config) {
+        return null
+      }
+      return parseTextIndent(element.style.textIndent, config.unit)
+    }
+
     return [
       {
         types: this.options.types,
@@ -19,35 +80,40 @@ export default Extension.create({
           indent: {
             default: null,
             renderHTML: (attributes) => {
-              const { indent } = attributes
+              const { indent, indentUnit } = attributes
               const { minLevel } = this.options
               if (!indent || indent <= minLevel) {
                 return {}
               }
+              const config = getIndentConfig()
+              if (!config) {
+                return {}
+              }
               return {
-                style: `text-indent: ${indent * 2}em;`,
+                style: `text-indent: ${indent * config.value}${indentUnit || config.unit};`,
               }
             },
             parseHTML: (element) => {
-              const { textIndent } = element.style
-
-              if (!textIndent) {
+              const parsedIndent = parseElementIndent(element)
+              const config = getIndentConfig()
+              if (!parsedIndent || !config?.value) {
                 return null
               }
-              const match = textIndent.match(/([\d.]+)/)
-              if (!match) {
-                return null
-              }
-              const value = Number.parseFloat(match[1])
-              if (Number.isNaN(value)) {
-                return null
-              }
-              const base = Number.parseFloat(this.options.indentSize)
-              if (!base) {
-                return null
-              }
-              const level = Math.round(value / base)
+              const level = Math.round(parsedIndent.value / config.value)
               return level > this.options.minLevel ? level : null
+            },
+          },
+          indentUnit: {
+            default: null,
+            renderHTML: () => ({}),
+            parseHTML: (element) => {
+              const parsedIndent = parseElementIndent(element)
+              const config = getIndentConfig()
+              if (!parsedIndent || !config?.value) {
+                return null
+              }
+              const level = Math.round(parsedIndent.value / config.value)
+              return level > this.options.minLevel ? parsedIndent.unit : null
             },
           },
         },
@@ -55,6 +121,16 @@ export default Extension.create({
     ]
   },
   addCommands() {
+    const getIndentConfig = () =>
+      parseIndentConfig(this.options.indentSize, this.options.defaultUnit)
+    const shouldClampMaxLevel = (indentUnit) => {
+      const config = getIndentConfig()
+      if (!config) {
+        return true
+      }
+      return !indentUnit || indentUnit === config.unit
+    }
+
     const setNodeIndentMarkup = (tr, pos, delta) => {
       const node = tr.doc.nodeAt(pos)
       if (!node) return tr
@@ -62,11 +138,23 @@ export default Extension.create({
       const { minLevel, maxLevel } = this.options
       let indent = nextLevel
       if (nextLevel < minLevel) indent = minLevel
-      if (nextLevel > maxLevel) indent = maxLevel
+      if (nextLevel > maxLevel && shouldClampMaxLevel(node.attrs.indentUnit)) {
+        indent = maxLevel
+      }
       if (indent !== node.attrs.indent) {
         const attrs = { ...node.attrs }
         delete attrs.indent
-        const nextAttrs = indent > minLevel ? { ...attrs, indent } : attrs
+        delete attrs.indentUnit
+        const config = getIndentConfig()
+        const nextAttrs =
+          indent > minLevel
+            ? {
+                ...attrs,
+                indent,
+                indentUnit:
+                  node.attrs.indentUnit || config?.unit || DEFAULT_INDENT_UNIT,
+              }
+            : attrs
         return tr.setNodeMarkup(pos, node.type, nextAttrs, node.marks)
       }
       return tr
