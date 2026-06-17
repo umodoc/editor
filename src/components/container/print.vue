@@ -171,6 +171,16 @@ watch(
     printPage()
   },
 )
+
+window.printPage = ()=>{
+  editor.value?.commands.blur()
+  iframeCode = getIframeCode()
+  setTimeout(() => {
+    if (iframeRef && iframeRef.contentWindow) {
+      iframeRef.contentWindow.print()
+    }
+  }, 300)
+}
 </script>
 
 <style lang="less" scoped>

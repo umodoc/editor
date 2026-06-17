@@ -77,6 +77,7 @@
           </div>
           <div class="umo-virtual-group">
             <menus-toolbar-base-print v-if="!disableMenu('print')" />
+            <menus-toolbar-base-import />
           </div>
           <div class="virtual-group is-slot">
             <slot name="toolbar_base" toolbar-mode="ribbon" />
@@ -262,6 +263,8 @@
         </template>
         <template v-if="currentMenu === 'export'">
           <div class="umo-virtual-group">
+            <menus-toolbar-export-json v-if="!disableMenu('export-json')" />
+            <menus-toolbar-export-html v-if="!disableMenu('export-html')" />
             <menus-toolbar-export-image v-if="!disableMenu('export-image')" />
             <menus-toolbar-export-pdf v-if="!disableMenu('export-pdf')" />
             <menus-toolbar-export-text v-if="!disableMenu('export-text')" />
