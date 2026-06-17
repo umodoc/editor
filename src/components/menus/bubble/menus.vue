@@ -75,7 +75,7 @@
   <template v-else-if="is('table')">
     <menus-toolbar-table-cells-align />
     <menus-toolbar-table-cells-background />
-    <!-- <menus-toolbar-table-border-color  /> -->
+    <menus-toolbar-table-border-color  />
     <div class="umo-bubble-menu-divider"></div>
     <menus-toolbar-table-add-row-before />
     <menus-toolbar-table-add-row-after />

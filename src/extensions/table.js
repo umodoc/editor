@@ -50,6 +50,17 @@ const TableCellOptions = {
           return color ? { style: `color: ${color}` } : {}
         },
       },
+      borderColor: {
+        default: null,
+        parseHTML: (element) => {
+          const style = element.getAttribute('style') || ''
+          const match = style.match(/border(?:-color)?:\s*([^;]+)/i)
+          return match ? match[1].trim() : null
+        },
+        renderHTML: ({borderColor }) => {
+          return borderColor ? { style: `border-color: ${borderColor}` } : {}
+        },
+      },
     }
   },
 }
