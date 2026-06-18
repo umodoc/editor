@@ -106,4 +106,13 @@ export default defineConfig({
       '@': `${process.cwd()}/src`,
     },
   },
+  server:{
+    proxy: {
+      // 将所有以 /html2pdf 开头的请求转发到后端服务
+      '/html2pdf': {
+        target: 'http://localhost:9001',
+        changeOrigin: true,
+      }
+    }
+  }
 })

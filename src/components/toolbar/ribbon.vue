@@ -78,6 +78,7 @@
           <div class="umo-virtual-group">
             <menus-toolbar-base-print v-if="!disableMenu('print')" />
             <menus-toolbar-base-import />
+            <menus-toolbar-base-pdf />
           </div>
           <div class="virtual-group is-slot">
             <slot name="toolbar_base" toolbar-mode="ribbon" />

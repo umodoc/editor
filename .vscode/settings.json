@@ -20,7 +20,7 @@
     "editor.formatOnSave": true
   },
   "[vue]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
   "[json]": {
