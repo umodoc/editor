@@ -15,6 +15,7 @@ export default {
     menus: ['base', 'insert', 'table', 'tools', 'page', 'view', 'export'],
   },
   page: {
+    layout: 'page',
     layouts: ['page', 'web'],
     defaultMargin: {
       left: 3.18,
@@ -24,6 +25,7 @@ export default {
     },
     defaultOrientation: 'portrait',
     defaultBackground: '#fff',
+    background: "'#fff'",
     showBreakMarks: true,
     showLineNumber: false,
     showBookmark: false,

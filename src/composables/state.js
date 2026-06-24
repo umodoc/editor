@@ -26,5 +26,22 @@ export function useState(key, editorOptions) {
   if (key === 'layout') {
     return useStorage(storageKey, 'page')
   }
+  if (key === 'page') {
+    const { dicts, page } = editorOptions.value
+    return useStorage(storageKey, {
+      ...page,
+      size: dicts?.pageSizes.find((item) => item.default),
+      margin: page.defaultMargin,
+      background: page.defaultBackground,
+      orientation: page.defaultOrientation,
+      zoomLevel: 100,
+      autoWidth: false,
+      preview: {
+        enabled: false,
+        scale: 1,
+        zoom: 100,
+      },
+    })
+  }
   throw new Error('[useStorage]', { cause: 'Key is not valid' })
 }

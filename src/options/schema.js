@@ -23,7 +23,33 @@ const isLocale = (value) => {
   }
   return false
 }
-
+const marginSchema = {
+  layout: {
+    merge: 'replace',
+    validate: 'string',
+    required: false,
+  },
+  left: {
+    merge: 'replace',
+    validate: 'number',
+    required: false,
+  },
+  right: {
+    merge: 'replace',
+    validate: 'number',
+    required: false,
+  },
+  top: {
+    merge: 'replace',
+    validate: 'number',
+    required: false,
+  },
+  bottom: {
+    merge: 'replace',
+    validate: 'number',
+    required: false,
+  },
+}
 export default new ObjectSchema({
   editorKey: {
     merge: 'replace',
@@ -249,6 +275,11 @@ export default new ObjectSchema({
     validate: 'object',
     required: false,
     schema: {
+      layout: {
+        merge: 'replace',
+        validate: 'string',
+        required: false,
+      },
       layouts: {
         merge: 'replace',
         validate(value) {
@@ -268,28 +299,24 @@ export default new ObjectSchema({
         required: false,
         merge: 'replace',
         validate: 'object',
-        schema: {
-          left: {
-            merge: 'replace',
-            validate: 'number',
-            required: false,
-          },
-          right: {
-            merge: 'replace',
-            validate: 'number',
-            required: false,
-          },
-          top: {
-            merge: 'replace',
-            validate: 'number',
-            required: false,
-          },
-          bottom: {
-            merge: 'replace',
-            validate: 'number',
-            required: false,
-          },
+        schema: marginSchema,
+      },
+      margin: {
+        required: false,
+        merge: 'replace',
+        validate: 'object',
+        schema: marginSchema,
+      },
+      orientation: {
+        merge: 'replace',
+        validate(value) {
+          if (value && !['portrait', 'landscape'].includes(value)) {
+            throw new Error(
+              'Key "page": Key "defaultOrientation" must be one of "portrait" or "landscape".',
+            )
+          }
         },
+        required: false,
       },
       defaultOrientation: {
         merge: 'replace',
@@ -303,6 +330,11 @@ export default new ObjectSchema({
         required: false,
       },
       defaultBackground: {
+        merge: 'replace',
+        validate: 'string',
+        required: false,
+      },
+      background: {
         merge: 'replace',
         validate: 'string',
         required: false,
@@ -386,6 +418,11 @@ export default new ObjectSchema({
         merge: 'replace',
         validate: 'object',
         schema: {
+          default: {
+            merge: 'replace',
+            validate: 'boolean',
+            required: false,
+          },
           width: {
             merge: 'replace',
             validate: 'number',
@@ -402,6 +439,38 @@ export default new ObjectSchema({
             required: false,
           },
         },
+      },
+      preview: {
+        required: false,
+        merge: 'replace',
+        validate: 'object',
+        schema: {
+          enabled: {
+            merge: 'replace',
+            validate: 'boolean',
+            required: false,
+          },
+          scale: {
+            merge: 'replace',
+            validate: 'number',
+            required: false,
+          },
+          zoom: {
+            merge: 'replace',
+            validate: 'number',
+            required: false,
+          },
+        },
+      },
+      autoWidth: {
+        merge: 'replace',
+        validate: 'boolean',
+        required: false,
+      },
+      zoomLevel: {
+        merge: 'replace',
+        validate: 'number',
+        required: false,
       },
     },
   },
