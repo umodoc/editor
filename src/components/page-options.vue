@@ -36,11 +36,9 @@
               destroyOnClose: true,
               attach: container,
             }"
+            :value="pageOptions.size?.label"
             @change="selectPageSize"
           >
-            <template #valueDisplay>
-              {{ l(pageOptions.size?.label) }}
-            </template>
             <t-option
               v-for="(item, index) in options.dicts?.pageSizes"
               :key="index"

@@ -603,7 +603,6 @@ watch(
   display: flex;
   justify-content: space-between;
   font-size: var(--umo-font-size-small);
-  border-top: solid 1px var(--umo-border-color);
 
   @media screen and (max-width: 640px) {
     overflow-x: auto;

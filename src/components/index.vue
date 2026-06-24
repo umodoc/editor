@@ -125,7 +125,6 @@ const defaultOptions = inject('defaultOptions', {})
 const options = ref(getOpitons(props, defaultOptions))
 const editor = ref(null)
 const savedAt = ref(null)
-const page = ref({})
 const blockMenu = ref(false)
 const imageViewer = ref({ visible: false, current: null })
 const searchReplace = ref(false)
@@ -140,7 +139,8 @@ const typeWriterIsRunning = ref(false)
 const $toolbar = useState('toolbar', options)
 const $document = useState('document', options)
 const $layout = useState('layout', options)
-
+const $page = useState('page', options)
+const page = ref($page.value)
 provide('container', container)
 provide('options', options)
 provide('editor', editor)
@@ -160,40 +160,16 @@ provide('typeWriterIsRunning', typeWriterIsRunning)
 
 watch(
   () => options.value.page,
-  ({
-    layouts,
-    defaultBackground,
-    defaultMargin,
-    defaultOrientation,
-    watermark,
-    showBreakMarks,
-    showBookmark,
-    showLineNumber,
-    showToc,
-  }) => {
-    page.value = {
-      layout: $layout.value || layouts[0],
-      size: options.value.dicts?.pageSizes.find((item) => item.default),
-      margin: defaultMargin,
-      background: defaultBackground,
-      orientation: defaultOrientation,
-      watermark,
-      showBreakMarks,
-      showBookmark,
-      showLineNumber,
-      showToc,
-      zoomLevel: 100,
-      autoWidth: false,
-      preview: {
-        enabled: false,
-        scale: 1,
-        zoom: 100,
-      },
-    }
+  ({ showBreakMarks }) => {
     editor.value?.commands.showInvisibleCharacters(showBreakMarks)
   },
   { immediate: true, deep: true },
 )
+
+watch(page, (val) => {
+  $page.value = val
+})
+
 watch(
   () => options.value.document?.readOnly,
   (val) => {
@@ -1357,13 +1333,11 @@ defineExpose({
   color: var(--umo-text-color);
   font-family: var(--umo-font-family);
   position: relative !important;
-  background-color: var(--umo-container-background);
   .umo-footer {
     background-color: var(--umo-color-white);
   }
   &.umo-skin-default {
     .umo-toolbar {
-      border-bottom: solid 1px var(--umo-border-color);
       background-color: var(--umo-color-white);
     }
   }
@@ -1376,6 +1350,7 @@ defineExpose({
     flex: 1;
     background-color: var(--umo-container-background);
     overflow: hidden;
+    border-radius: 10px;
   }
   &.preview-mode {
     &.laser-pointer {
