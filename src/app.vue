@@ -11,8 +11,10 @@
 
 <script setup>
 import { shortId } from '@/utils/short-id'
+import { nextTick, onMounted, ref, toValue } from 'vue'
+import { tableJSON } from './example/table-json'
 
-const editorRef = $ref(null)
+const editorRef = ref(null)
 const templates = [
   {
     title: '工作任务',
@@ -27,6 +29,7 @@ const templates = [
       '<h1>工作周报</h1><h2>本周工作总结</h2><hr /><h3>已完成工作：</h3><ul><li>[任务1名称]：[简要描述任务内容及完成情况]</li><li>[任务2名称]：[简要描述任务内容及完成情况]</li><li>...</li></ul><h3>进行中工作：</h3><ul><li>[任务1名称]：[简要描述任务当前进度和下一步计划]</li><li>[任务2名称]：[简要描述任务当前进度和下一步计划]</li><li>...</li></ul><h3>问题与挑战：</h3><ul><li>[问题1]：[描述遇到的问题及当前解决方案或需要的支持]</li><li>[问题2]：[描述遇到的问题及当前解决方案或需要的支持]</li><li>...</li></ul><hr /><h2>下周工作计划</h2><h3>计划开展工作：</h3><ul><li>[任务1名称]：[简要描述下周计划开始的任务内容]</li><li>[任务2名称]：[简要描述下周计划开始的任务内容]</li><li>...</li></ul><h3>需要支持与资源：</h3><ul><li>[资源1]：[描述需要的资源或支持]</li><li>[资源2]：[描述需要的资源或支持]</li><li>...</li></ul>',
   },
 ]
+const content = localStorage.getItem('document.content') || ''
 const options = $ref({
   // theme: 'auto',
   // skin: 'modern',
@@ -36,7 +39,7 @@ const options = $ref({
   },
   document: {
     title: '测试文档',
-    content: localStorage.getItem('document.content') || '<p>测试文档</p>',
+    content: content,
     // structure: 'heading block*',
   },
   page: {
@@ -117,6 +120,12 @@ const options = $ref({
     console.log(id, url, type)
   },
 })
+
+onMounted(() => {
+  nextTick(() => {
+    if (!content || content === '<p></p>') editorRef.value.setContent(tableJSON)
+  })
+})
 </script>
 
 <style>
@@ -131,7 +140,6 @@ body {
   height: calc(100vh - 40px);
 }
 .box {
-  border: solid 1px #ddd;
   box-sizing: border-box;
   position: relative;
   width: 100%;

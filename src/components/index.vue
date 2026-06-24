@@ -1333,13 +1333,11 @@ defineExpose({
   color: var(--umo-text-color);
   font-family: var(--umo-font-family);
   position: relative !important;
-  background-color: var(--umo-container-background);
   .umo-footer {
     background-color: var(--umo-color-white);
   }
   &.umo-skin-default {
     .umo-toolbar {
-      border-bottom: solid 1px var(--umo-border-color);
       background-color: var(--umo-color-white);
     }
   }
@@ -1352,6 +1350,7 @@ defineExpose({
     flex: 1;
     background-color: var(--umo-container-background);
     overflow: hidden;
+    border-radius: 10px;
   }
   &.preview-mode {
     &.laser-pointer {

@@ -265,10 +265,14 @@
             <menus-toolbar-export-image v-if="!disableMenu('export-image')" />
             <menus-toolbar-export-pdf v-if="!disableMenu('export-pdf')" />
             <menus-toolbar-export-text v-if="!disableMenu('export-text')" />
+            <menus-toolbar-export-json v-if="!disableMenu('export-json')" />
           </div>
           <div class="umo-virtual-group">
             <menus-toolbar-export-share v-if="!disableMenu('share')" />
             <menus-toolbar-export-embed v-if="!disableMenu('embed')" />
+          </div>
+          <div class="umo-virtual-group">
+            <menus-toolbar-export-import v-if="!disableMenu('import-json')" />
           </div>
           <div class="virtual-group is-slot">
             <slot name="toolbar_export" toolbar-mode="ribbon" />

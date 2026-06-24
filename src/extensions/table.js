@@ -22,6 +22,14 @@ const TableCellOptions = {
   addAttributes() {
     return {
       ...this.parent?.(),
+      style: {
+        default: '',
+        parseHTML: (element) => element.getAttribute('style') || '',
+        renderHTML: (attributes) => {
+          if (!attributes.style) return {}
+          return { style: attributes.style }
+        },
+      },
       align: {
         default: null,
         parseHTML: (element) => element.getAttribute('align') || null,
