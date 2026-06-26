@@ -40,7 +40,7 @@ const options = $ref({
     // structure: 'heading block*',
   },
   page: {
-    layouts: ['page', 'web'],
+    layouts: ['web'],
     showBookmark: true,
   },
   templates,
