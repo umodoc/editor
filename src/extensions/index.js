@@ -111,7 +111,14 @@ const nodeTypes = [
 ]
 
 export const getDefaultExtensions = ({ container, options, uploadFileMap }) => {
-  const { page, document: doc, users, file, disableExtensions } = options.value
+  const {
+    page,
+    document: doc,
+    users,
+    file,
+    disableExtensions,
+    onMentionSearch,
+  } = options.value
 
   const extensions = {
     'ordered-list': OrderedList,
@@ -139,7 +146,11 @@ export const getDefaultExtensions = ({ container, options, uploadFileMap }) => {
     columns: Columns,
     callout: Callout,
     mention: Mention.configure({
-      suggestion: getUsersSuggestion(users, container),
+      suggestion: getUsersSuggestion({
+        users,
+        onSearch: onMentionSearch,
+        container,
+      }),
     }),
     'date-time': Datetime,
     'option-box': OptionBox,

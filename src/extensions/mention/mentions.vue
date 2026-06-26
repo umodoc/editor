@@ -1,11 +1,15 @@
 <template>
   <div
-    v-if="items.length > 0"
+    v-if="isLoading || items.length > 0"
     ref="popupRef"
     class="umo-popup umo-mention-popup"
   >
     <div class="umo-popup__content umo-dropdown">
       <div class="umo-dropdown__menu" style="padding: 5px; max-height: 320px">
+        <div v-if="isLoading" class="umo-mention-popup-empty">
+          <icon name="loading" class="umo-mention-popup-loading-icon" />
+          <span>正在查询</span>
+        </div>
         <div>
           <li
             v-for="(item, index) in items"
@@ -46,6 +50,10 @@ const props = defineProps({
     type: Function,
     required: true,
   },
+  isLoading: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 let selectedIndex = $ref(0)
@@ -80,10 +88,16 @@ const onKeyDown = ({ event }) => {
 }
 
 const upHandler = () => {
+  if (props.items.length === 0) {
+    return
+  }
   selectedIndex = (selectedIndex + props.items.length - 1) % props.items.length
 }
 
 const downHandler = () => {
+  if (props.items.length === 0) {
+    return
+  }
   selectedIndex = (selectedIndex + 1) % props.items.length
 }
 
@@ -172,6 +186,22 @@ defineExpose({
     padding: 3px 5px;
     min-width: 100px;
     color: var(--umo-text-color-light);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  &-loading-icon {
+    animation: rotating 1s linear infinite;
+    font-size: 14px;
+  }
+}
+
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 </style>

@@ -13,6 +13,32 @@
 import { shortId } from '@/utils/short-id'
 
 const editorRef = $ref(null)
+const remoteMentionUsers = [
+  {
+    id: 'remote-alice',
+    label: 'Alice Chen',
+    bio: '远程目录用户',
+    color: 'var(--umo-primary-color)',
+  },
+  {
+    id: 'remote-bob',
+    label: 'Bob Li',
+    bio: '远程目录用户',
+    color: 'var(--umo-primary-color)',
+  },
+  {
+    id: 'remote-charlie',
+    label: 'Charlie Wang',
+    bio: '远程目录用户',
+    color: 'var(--umo-primary-color)',
+  },
+  {
+    id: 'remote-dora',
+    label: 'Dora Xu',
+    bio: '远程目录用户',
+    color: 'var(--umo-primary-color)',
+  },
+]
 const templates = [
   {
     title: '工作任务',
@@ -86,6 +112,12 @@ const options = $ref({
     { id: 'Sherman Xu', label: 'xuzhenjun130' },
     { id: 'testuser', label: '测试用户' },
   ],
+  async onMentionSearch(query) {
+    await new Promise((resolve) => setTimeout(resolve, 800))
+    return remoteMentionUsers.filter((user) =>
+      user.label.toLowerCase().includes(query.toLowerCase()),
+    )
+  },
   // https://dev.umodoc.com/cn/docs/options/extensions#disableextensions
   disableExtensions: [],
   async onSave(content, page, document) {

@@ -3,6 +3,21 @@ import { posToDOMRect, VueRenderer } from '@tiptap/vue-3'
 
 import Mentions from './mentions.vue'
 
+const MAX_RESULTS = 50
+
+const normalizeUsers = (users) => (Array.isArray(users) ? users : [])
+
+const normalizeQuery = (query = '') => query.trim().toLowerCase()
+
+const filterUsers = (users, query = '') =>
+  normalizeUsers(users)
+    .filter((user) =>
+      String(user?.label || '')
+        .toLowerCase()
+        .includes(normalizeQuery(query)),
+    )
+    .slice(0, MAX_RESULTS)
+
 const updatePosition = (editor, element) => {
   const virtualElement = {
     getBoundingClientRect: () =>
@@ -25,10 +40,86 @@ const updatePosition = (editor, element) => {
   })
 }
 
-export default (users, container) => {
+export default ({ users = [], onSearch } = {}) => {
+  const localUsers = normalizeUsers(users)
+  const state = {
+    items: filterUsers(localUsers),
+    isLoading: false,
+    query: '',
+  }
+  let requestId = 0
+  let component = null
+  let currentProps = null
+
+  const syncComponent = () => {
+    if (!component || !currentProps) {
+      return
+    }
+
+    component.updateProps({
+      ...currentProps,
+      items: state.items,
+      isLoading: state.isLoading,
+    })
+  }
+
+  const loadRemoteUsers = async (query, localItems) => {
+    // When no remote search is configured, mention suggestions are fully local.
+    if (!query || typeof onSearch !== 'function') {
+      state.items = localItems
+      state.isLoading = false
+      syncComponent()
+      return
+    }
+
+    const currentRequestId = ++requestId
+
+    state.items = []
+    state.isLoading = true
+    syncComponent()
+
+    try {
+      const remoteUsers = await onSearch(query)
+
+      if (currentRequestId !== requestId || query !== state.query) {
+        return
+      }
+
+      state.items = normalizeUsers(remoteUsers).slice(0, MAX_RESULTS)
+    } catch (error) {
+      if (currentRequestId !== requestId || query !== state.query) {
+        return
+      }
+
+      state.items = []
+      console.error('[mention] failed to load remote users:', error)
+    }
+
+    if (currentRequestId !== requestId || query !== state.query) {
+      return
+    }
+
+    state.isLoading = false
+    syncComponent()
+  }
+
   return {
-    items: ({ query }) =>
-      users.filter((user) => user.label.includes(query)).slice(0, 10),
+    items: ({ query }) => {
+      const localItems = filterUsers(localUsers, query)
+      // Once a remote search handler is provided, suggestions are driven only by
+      // remote results for non-empty queries. Otherwise they stay fully local.
+      const shouldUseRemoteSearch = Boolean(
+        query && typeof onSearch === 'function',
+      )
+
+      state.query = query
+      state.items = shouldUseRemoteSearch ? [] : localItems
+      state.isLoading = shouldUseRemoteSearch
+
+      void loadRemoteUsers(query, localItems)
+
+      return shouldUseRemoteSearch ? [] : localItems
+    },
 
     command: ({ editor, range, props }) => {
       editor
@@ -46,12 +137,15 @@ export default (users, container) => {
     },
 
     render: () => {
-      let component
-
       return {
         onStart: (props) => {
+          currentProps = props
           component = new VueRenderer(Mentions, {
-            props,
+            props: {
+              ...props,
+              items: state.items,
+              isLoading: state.isLoading,
+            },
             editor: props.editor,
           })
 
@@ -66,7 +160,8 @@ export default (users, container) => {
           updatePosition(props.editor, component.element)
         },
         onUpdate(props) {
-          component.updateProps(props)
+          currentProps = props
+          syncComponent()
           if (!props.clientRect) {
             return
           }
@@ -83,6 +178,9 @@ export default (users, container) => {
         onExit() {
           component.element.remove()
           component.destroy()
+          component = null
+          currentProps = null
+          state.isLoading = false
         },
       }
     },

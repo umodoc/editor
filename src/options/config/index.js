@@ -175,6 +175,8 @@ export default {
   },
   user: {},
   users: [],
+  // When left as null, mention suggestions only match the local users list.
+  onMentionSearch: null,
   extensions: [],
   disableExtensions: [],
   translations: {
