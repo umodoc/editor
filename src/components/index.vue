@@ -73,7 +73,7 @@ import {
   redoHistoryRecord,
   undoHistoryRecord,
 } from '@/utils/history-record'
-import { getOpitons } from '@/utils/options'
+import { getOptions } from '@/utils/options'
 import { getSelectionNode, getSelectionText } from '@/utils/selection'
 import { shortId } from '@/utils/short-id'
 import { getCurrentInstance } from 'vue'
@@ -122,7 +122,7 @@ const historyRecords = ref({
 
 const container = $ref(`#umo-editor-${shortId(4)}`)
 const defaultOptions = inject('defaultOptions', {})
-const options = ref(getOpitons(props, defaultOptions))
+const options = ref(getOptions(props, defaultOptions))
 const editor = ref(null)
 const savedAt = ref(null)
 const page = ref({})
@@ -533,7 +533,7 @@ const localeConfig = $ref({
 // Options Setup
 const setOptions = (value) => {
   try {
-    options.value = getOpitons(value)
+    options.value = getOptions(value)
     const $locale = useStorage('umo-editor:locale', options.value.locale)
     if (!$locale.value) {
       $locale.value = options.value.locale

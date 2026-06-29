@@ -2,7 +2,7 @@ import { isRecord } from '@tool-belt/type-predicates'
 
 import { defaultOptions, ojbectSchema } from '@/options'
 
-export const getOpitons = (propsOptions, globalOptions) => {
+export const getOptions = (propsOptions, globalOptions) => {
   const propsOptionsValue =
     isRecord(propsOptions) && Object.keys(propsOptions).includes('value')
       ? propsOptions.value
