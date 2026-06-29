@@ -37,6 +37,7 @@
     />
     <menus-bubble-node-tofile
       v-if="
+        attrs('image').type.startsWith('image') &&
         attrs('image').previewType !== null &&
         attrs('inlineImage').previewType !== null
       "
