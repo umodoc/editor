@@ -122,11 +122,12 @@ defineExpose({
 .umo-node-mention {
   box-decoration-break: clone;
   color: var(--umo-primary-color);
-  padding: 0.1em 0.2em;
-  margin: 0 0.1em;
+  padding: 0.1em 0.3em;
+  margin: 0;
   border-radius: 0.2em;
   white-space: nowrap;
   cursor: default;
+  display: inline-block;
 }
 .umo-mention-popup {
   .umo-dropdown {
