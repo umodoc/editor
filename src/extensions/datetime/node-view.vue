@@ -90,12 +90,15 @@ const datetimeChange = (value) => {
 
 <style lang="less">
 .umo-node-datetime {
-  margin: 0 0.2em;
+  margin: 0;
+  padding: 0 0.2em;
+  box-sizing: border-box;
   background-color: transparent !important;
   vertical-align: middle;
+  display: inline-flex;
   &-text {
     box-decoration-break: clone;
-    margin: 0 0.2em;
+    margin: 0;
     border-radius: 0.2em;
     cursor: default;
     display: inline-flex;

@@ -129,9 +129,10 @@ const radioChange = (index) => {
 
 <style lang="less">
 .umo-node-option-box {
-  margin-left: 0.25em;
-  margin-right: 0.25em;
-  display: inline-block;
+  margin: 0;
+  padding: 0 0.25em;
+  box-sizing: border-box;
+  display: inline-flex;
 
   .umo-option-box-checkbox-container {
     display: flex;

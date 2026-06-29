@@ -23,6 +23,7 @@
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 
 const props = defineProps(nodeViewProps)
+const { getPos } = props
 const attrs = $computed(() => props.node.attrs)
 const options = inject('options')
 const editor = inject('editor')
@@ -30,16 +31,19 @@ const editor = inject('editor')
 
 <style lang="less">
 .umo-node-tag {
-  margin: 0 0.2em;
+  margin: 0;
+  padding: 0 0.2em;
+  box-sizing: border-box;
   background-color: transparent !important;
   vertical-align: middle;
-  display: inline-block;
+  display: inline-flex;
   transform: translateY(-0.05em);
   &-text {
     border-radius: 0.2em;
     padding: 0.1em 0.4em;
     font-size: 0.9em;
-    margin: 0 0.2em;
+    margin: 0;
+    display: inline-block;
     white-space: nowrap;
     border: 1px solid rgba(0, 0, 0, 0.05);
     box-sizing: border-box;
