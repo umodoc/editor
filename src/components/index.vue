@@ -533,7 +533,7 @@ const localeConfig = $ref({
 // Options Setup
 const setOptions = (value) => {
   try {
-    options.value = getOptions(value)
+    options.value = getOptions(value, defaultOptions)
     const $locale = useStorage('umo-editor:locale', options.value.locale)
     if (!$locale.value) {
       $locale.value = options.value.locale
