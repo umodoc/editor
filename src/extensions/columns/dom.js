@@ -41,6 +41,13 @@ export const handleMouseLeave = (view) => {
 export const handleMouseDown = (view, event, columnMinWidth) => {
   const pluginState = gridResizingPluginKey.getState(view.state)
   if (!pluginState) return false
+  const { target } = event
+  if (
+    target instanceof Element &&
+    target.closest('.grid-resize-handle-circle-btn')
+  ) {
+    return false
+  }
   if (pluginState.activeHandle === -1) return false
   if (pluginState.dragging) return false
 
@@ -114,14 +121,11 @@ export const handleGridDecorations = (state, boundaryPos) => {
 }
 
 export const handleMouseUp = (view, event) => {
-  const div = event.target
-  if (!div) return false
-  if (
-    div.className !== 'grid-resize-handle-circle-btn' &&
-    div.className !== 'grid-resize-handle-icon'
-  )
-    return false
-  const column = div.closest('.umo-node-column')
+  const { target } = event
+  if (!(target instanceof Element)) return false
+  const button = target.closest('.grid-resize-handle-circle-btn')
+  if (!button) return false
+  const column = button.closest('.umo-node-column')
   if (!column) return false
   const boundryPos = view.posAtDOM(column, 0)
   if (!boundryPos) return false
@@ -138,5 +142,6 @@ export const handleMouseUp = (view, event) => {
       ),
     ),
   )
+  event.preventDefault()
   return true
 }
