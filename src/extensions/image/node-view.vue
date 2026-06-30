@@ -16,7 +16,7 @@
         'is-loading': attrs.src && isLoading,
         'is-error': attrs.src && error,
         'umo-hover-shadow': !options.document?.readOnly,
-        'umo-select-outline': !attrs.draggable,
+        'umo-select-outline': !attrs.draggable && attrs.src && !error,
       }"
     >
       <div
@@ -312,9 +312,11 @@ onBeforeUnmount(() => {
     width: auto;
     position: relative;
     z-index: 20;
-    &.is-loading,
-    &.is-error {
+    &.is-loading {
       outline: none !important;
+      box-shadow: none !important;
+    }
+    &.is-error {
       box-shadow: none !important;
     }
     .es-drager {
