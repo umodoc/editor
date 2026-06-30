@@ -128,10 +128,13 @@
       is('pageBreak') ||
       is('horizontalRule') ||
       is('codeBlock') ||
-      attrs('image').error
+      attrs('image').error ||
+      attrs('inlineImage').error
     "
   >
-    <!-- <menus-bubble-node-delete /> -->
+    <menus-bubble-node-delete
+      v-if="attrs('image').error || attrs('inlineImage').error"
+    />
   </template>
   <template v-else>
     <menus-toolbar-base-font-size :select="false" />
