@@ -708,9 +708,9 @@
 
   .umo-node-column {
     position: relative;
-    border-radius: 5px;
+    border-radius: var(--umo-radius);
     min-width: 50px;
-    padding: 12px;
+    padding: 5px 8px;
     background-color: transparent;
     transition: background-color 0.2s ease;
     flex-grow: 1;
@@ -728,10 +728,12 @@
       flex-direction: row;
       width: 100%;
       gap: 12px;
-      max-width: 100%;
       box-sizing: border-box;
       position: relative;
       z-index: 10;
+      margin-left: -8px;
+      margin-right: -8px;
+      width: calc(100% + 16px) !important;
 
       &:hover {
         .umo-node-column {
