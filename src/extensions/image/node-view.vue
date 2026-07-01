@@ -48,7 +48,7 @@
         :selected="selected"
         :rotatable="true"
         :boundary="false"
-        :disabled="options.document?.readOnly"
+        :disabled="!editor?.isEditable"
         :angle="attrs.angle"
         :width="Number(attrs.width)"
         :height="Number(attrs.height)"

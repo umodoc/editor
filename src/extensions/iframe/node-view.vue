@@ -20,7 +20,7 @@
         :min-width="400"
         :min-height="200"
         :max-width="maxWidth"
-        :disabled="options.document?.readOnly"
+        :disabled="!editor?.isEditable"
         @resize="onResize"
         @focus="selected = true"
       >

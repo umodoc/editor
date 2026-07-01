@@ -20,7 +20,7 @@
             : 'default !important',
         }"
         :selected="selected"
-        :disabled="disabled || options?.document?.readOnly"
+        :disabled="disabled || !editor?.isEditable"
         :rotatable="true"
         :boundary="false"
         :angle="attrs.angle"
@@ -57,6 +57,7 @@ const attrs = $computed(() => props.node.attrs)
 const { updateAttributes } = props
 
 const options = inject('options')
+const editor = inject('editor')
 
 const containerRef = ref(null)
 const contentRef = $ref(null)

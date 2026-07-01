@@ -23,7 +23,7 @@
         :max-width="maxWidth"
         :max-height="maxHeight"
         :equal-proportion="true"
-        :disabled="options.document?.readOnly"
+        :disabled="!editor?.isEditable"
         @resize="onResize"
         @focus="selected = true"
       >
