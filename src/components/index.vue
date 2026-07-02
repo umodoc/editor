@@ -1351,7 +1351,7 @@ defineExpose({
   --td-text-color-disabled: var(--umo-text-color-disabled);
   width: 100%;
   height: 100%;
-  min-height: 120px;
+  min-height: 200px;
   display: flex;
   flex-direction: column;
   color: var(--umo-text-color);
