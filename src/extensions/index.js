@@ -48,6 +48,7 @@ import HorizontalRule from './horizontal-rule'
 import Iframe from './iframe'
 import { BlockImage, InlineImage } from './image'
 import Indent from './indent'
+import InsertNewline from './insert-newline'
 import LetterSpacing from './letter-spacing'
 import LineHeight from './line-height'
 import Margin from './margin'
@@ -258,6 +259,7 @@ export const getDefaultExtensions = ({ container, options, uploadFileMap }) => {
 
     // 其他
     Selection,
+    InsertNewline,
     NodeRange,
     NodeSelect,
     TableOfContents.configure({

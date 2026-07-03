@@ -147,6 +147,70 @@
         }
       }
     }
+
+    .umo-insert-newline-anchor {
+      display: block;
+      height: 0;
+      position: relative;
+      z-index: 100;
+      pointer-events: none;
+
+      @media print {
+        display: none;
+      }
+    }
+
+    .umo-insert-newline-widget {
+      position: absolute;
+      top: calc(var(--umo-content-node-bottom) / -2);
+      left: 0;
+      right: 0;
+      transform: translateY(-50%);
+      width: 100%;
+      height: 18px;
+      border: none;
+      background: transparent;
+      box-shadow: none;
+      cursor: default;
+      pointer-events: auto;
+      padding: 0;
+      margin: 0;
+      display: block;
+      cursor: vertical-text;
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: -12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-top: 4.5px solid transparent;
+        border-bottom: 4.5px solid transparent;
+        border-left: 9px solid var(--umo-primary-color);
+        opacity: 0.9;
+        cursor: pointer;
+      }
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 2px;
+        background: var(--umo-primary-color);
+        opacity: 0.9;
+      }
+
+      &:hover {
+        &::after {
+          opacity: 1;
+        }
+      }
+    }
   }
 
   &.is-empty .is-editor-empty:not(.umo-node-view,
