@@ -644,9 +644,6 @@ watch(
 )
 
 onBeforeUnmount(() => {
-  if (editor.value?.storage?.versionCompare?.isPreviewing) {
-    return
-  }
   scheduleFileDelete({
     editor,
     options,

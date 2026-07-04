@@ -350,11 +350,6 @@ export const scheduleFileDelete = ({
   searchRange = fileSearchRange,
   deleteTypePrefix = 'image',
 }) => {
-  const editorInstance = editor?.value
-  if (editorInstance?.storage?.versionCompare?.isPreviewing) {
-    return
-  }
-
   const deletedFileNode = {
     ...fileNode,
     position: Number.isFinite(fileNode?.position) ? fileNode.position : null,
