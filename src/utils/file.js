@@ -233,6 +233,20 @@ const getFileSource = (fileNode, sourceAttrs = fileSourceAttrs) => {
   return null
 }
 
+const getNodeAtSafe = (doc, position) => {
+  if (!doc || !Number.isFinite(position)) {
+    return null
+  }
+  if (position < 0 || position > doc.content.size) {
+    return null
+  }
+  try {
+    return doc.nodeAt(position)
+  } catch {
+    return null
+  }
+}
+
 export class FileNodeChecker {
   static hasSameNodeInDocument(
     editorState,
@@ -268,21 +282,21 @@ export class FileNodeChecker {
     if (position !== null) {
       if (
         isSameFileNode(
-          doc.nodeAt(position),
+          getNodeAtSafe(doc, position),
           targetId,
           targetSourceEntries,
           nodeTypeSet,
           nodeTypeList,
         ) ||
         isSameFileNode(
-          doc.nodeAt(Math.max(0, position - 1)),
+          getNodeAtSafe(doc, Math.max(0, position - 1)),
           targetId,
           targetSourceEntries,
           nodeTypeSet,
           nodeTypeList,
         ) ||
         isSameFileNode(
-          doc.nodeAt(position + 1),
+          getNodeAtSafe(doc, position + 1),
           targetId,
           targetSourceEntries,
           nodeTypeSet,
