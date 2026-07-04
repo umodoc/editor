@@ -27,6 +27,7 @@
       <drager
         v-else
         ref="dragRef"
+        class="umo-select-outline"
         :class="dragerClass"
         :style="dragerStyle"
         :selected="selected"
