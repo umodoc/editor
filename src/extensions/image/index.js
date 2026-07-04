@@ -1,185 +1,160 @@
-import { mergeAttributes, nodeInputRule, nodePasteRule } from '@tiptap/core'
+import { mergeAttributes } from '@tiptap/core'
 import Image from '@tiptap/extension-image'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 
 import NodeView from './node-view.vue'
 
-const parseDimension = (element, name) => {
-  const styleValue = element.style?.[name]
-  const attrValue = element.getAttribute(name)
-  const rawValue = styleValue || attrValue
+const getImageSourceElement = (element) => {
+  if (!(element instanceof HTMLElement)) {
+    return null
+  }
+  return element.tagName.toLowerCase() === 'img'
+    ? element
+    : element.querySelector('img')
+}
 
+const getImageAttribute = (element, name) =>
+  getImageSourceElement(element)?.getAttribute(name)
+
+const parseDimension = (element, name) => {
+  const sourceElement = getImageSourceElement(element) || element
+  const rawValue =
+    sourceElement.style?.[name] || sourceElement.getAttribute(name)
   if (!rawValue) {
     return null
   }
-
   const normalizedValue = String(rawValue).trim()
-
   if (/^\d+(\.\d+)?px$/i.test(normalizedValue)) {
     return Number.parseFloat(normalizedValue)
   }
-
   if (/^\d+(\.\d+)?$/.test(normalizedValue)) {
     return Number.parseFloat(normalizedValue)
   }
-
   return null
 }
 
-const customImage = Image.extend({
+const createImageAttributes = () => ({
+  vnode: { default: true },
+  type: { default: 'image' },
+  name: { default: null },
+  size: { default: null },
+  id: { default: null },
+  src: {
+    default: null,
+    parseHTML: (element) => getImageAttribute(element, 'src'),
+  },
+  config: { default: null },
+  content: { default: null },
+  alt: {
+    default: null,
+    parseHTML: (element) => getImageAttribute(element, 'alt'),
+  },
+  title: {
+    default: null,
+    parseHTML: (element) => getImageAttribute(element, 'title'),
+  },
+  width: {
+    default: null,
+    parseHTML: (element) => parseDimension(element, 'width'),
+  },
+  height: {
+    default: null,
+    parseHTML: (element) => parseDimension(element, 'height'),
+  },
+  left: { default: 0 },
+  top: { default: 0 },
+  angle: { default: null },
+  draggable: { default: false },
+  rotatable: { default: false },
+  equalProportion: { default: true },
+  flipX: { default: false },
+  flipY: { default: false },
+  uploaded: { default: false },
+  error: { default: false },
+  previewType: { default: 'image' },
+  inline: { default: false },
+  showTitle: { default: true },
+})
+
+const createInsertImageCommand =
+  (typeName, inline) =>
+  (options, replace = false) =>
+  ({ commands, editor }) => {
+    const content = {
+      type: typeName,
+      attrs: { ...options, inline },
+    }
+    if (replace) {
+      return commands.insertContent(content)
+    }
+    return commands.insertContentAt(editor.state.selection.anchor, content)
+  }
+
+const BaseImage = Image.extend({
   atom: true,
   selectable: true,
   addAttributes() {
-    return {
-      vnode: {
-        default: true,
-      },
-      type: {
-        default: 'image',
-      },
-      name: {
-        default: null,
-      },
-      size: {
-        default: null,
-      },
-      id: {
-        default: null,
-      },
-      src: {
-        default: null,
-      },
-      config: {
-        default: null,
-      },
-      content: {
-        default: null,
-      },
-      width: {
-        default: null,
-        parseHTML: (element) => parseDimension(element, 'width'),
-      },
-      height: {
-        default: null,
-        parseHTML: (element) => parseDimension(element, 'height'),
-      },
-      left: {
-        default: 0,
-      },
-      top: {
-        default: 0,
-      },
-      angle: {
-        default: null,
-      },
-      draggable: {
-        default: false,
-      },
-      rotatable: {
-        default: false,
-      },
-      equalProportion: {
-        default: true,
-      },
-      flipX: {
-        default: false,
-      },
-      flipY: {
-        default: false,
-      },
-      uploaded: {
-        default: false,
-      },
-      error: {
-        default: false,
-      },
-      previewType: {
-        default: 'image',
-      },
-      inline: {
-        default: false,
-      },
-    }
+    return createImageAttributes()
   },
   parseHTML() {
     return [{ tag: 'img' }]
   },
-  addPasteRules() {
-    return [
-      ...(this.parent?.() || []),
-      nodePasteRule({
-        find: /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]+)"?)?\)/g,
-        type: this.type,
-        getAttributes: (match) => {
-          const [, alt, src, title] = match
-          return { src, alt, title }
-        },
-      }),
-    ]
-  },
-  addInputRules() {
-    return [
-      ...(this.parent?.() || []),
-      nodeInputRule({
-        find: /!\[([\S]+)\]\(([^)\s]+)(?:\s+"([\S]+)"?)?\)/g,
-        type: this.type,
-        getAttributes: (match) => {
-          const [, alt, src, title] = match
-          return { src, alt, title }
-        },
-      }),
-    ]
-  },
 })
-// 节点块级别扩展
-export const BlockImage = customImage.extend({
-  ...customImage,
+
+export const BlockImage = BaseImage.extend({
+  atom: false,
+  content: 'inline*',
+  defining: true,
+  isolating: true,
+  parseHTML() {
+    return [
+      {
+        tag: 'figure[data-type="image"]',
+        contentElement: 'figcaption',
+      },
+      { tag: 'img' },
+    ]
+  },
+  renderHTML({ HTMLAttributes }) {
+    const { src, alt, title, width, height, ...figureAttributes } =
+      HTMLAttributes
+    return [
+      'figure',
+      mergeAttributes(figureAttributes, { 'data-type': 'image' }),
+      [
+        'img',
+        mergeAttributes(this.options.HTMLAttributes, {
+          src,
+          alt,
+          title,
+          width,
+          height,
+        }),
+      ],
+      ['figcaption', 0],
+    ]
+  },
   addNodeView() {
     return VueNodeViewRenderer(NodeView)
   },
   addCommands() {
     return {
-      setImage:
-        (options, replace) =>
-        ({ commands, editor }) => {
-          if (replace) {
-            return commands.insertContent({
-              type: this.name,
-              attrs: { ...options, inline: false },
-            })
-          }
-          return commands.insertContentAt(editor.state.selection.anchor, {
-            type: this.name,
-            attrs: { ...options, inline: false },
-          })
-        },
+      setImage: createInsertImageCommand(this.name, false),
     }
   },
 })
-// 行内扩展
-export const InlineImage = customImage.extend({
-  ...customImage,
-  name: 'inlineImage',
-  // 行内元素
-  inline: true,
 
-  // 属于行内组
+export const InlineImage = BaseImage.extend({
+  name: 'inlineImage',
+  inline: true,
   group: 'inline',
   addAttributes() {
     return {
       ...this.parent?.(),
-      inline: {
-        default: true,
-      },
-      equalProportion: {
-        default: false,
-      },
-      width: {
-        default: 150,
-      },
-      height: {
-        default: 80,
-      },
+      inline: { default: true },
+      equalProportion: { default: false },
+      width: { default: 150 },
+      height: { default: 80 },
     }
   },
   parseHTML() {
@@ -193,18 +168,7 @@ export const InlineImage = customImage.extend({
   },
   addCommands() {
     return {
-      setInlineImage:
-        (options) =>
-        ({ commands, editor }) => {
-          // return commands.insertContent({
-          //   type: this.name,
-          //   attrs: { ...options, inline: true },
-          // })
-          return commands.insertContentAt(editor.state.selection.anchor, {
-            type: this.name,
-            attrs: { ...options, inline: true },
-          })
-        },
+      setInlineImage: createInsertImageCommand(this.name, true),
     }
   },
 })

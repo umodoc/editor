@@ -570,6 +570,7 @@
       "flipY": "Flip Vertically",
       "preview": "Preview Image",
       "proportion": "Lock Image Aspect Ratio",
+      "title": "Show Image Description",
       "reset": "Reset Image Position",
       "rotateCC": "Rotate Counter-Clockwise 90°",
       "rotateC": "Rotate Clockwise 90°",
@@ -742,7 +743,8 @@
     },
     "image": {
       "loading": "Loading image...",
-      "error": "Image load failed"
+      "error": "Image load failed",
+      "altPlaceholder": "Enter image description"
     },
     "textBox": {
       "tip": "Double-click to edit"
