@@ -594,28 +594,36 @@ watch(
   { immediate: true },
 )
 
+const syncUploadStateFromSrc = async (src) => {
+  if (!nodeViewReady || attrs.uploaded !== false || error.value) {
+    return
+  }
+  if (src?.startsWith('data:image')) {
+    const id = attrs.id || shortId(10)
+    if (uploadFileMap.value.has(id) || uploadingImageIds.has(id)) {
+      return
+    }
+    const name = `${attrs.type}-${id}`
+    const { file, filename } = dataURLToFile(src, name)
+    uploadFileMap.value.set(id, file)
+    updateAttributes({
+      id,
+      size: file.size,
+      name: filename,
+      uploaded: false,
+    })
+  }
+  await nextTick()
+  uploadImage()
+}
+
 watch(
   () => attrs.src,
   async (src) => {
-    if (attrs.uploaded === false && !error.value) {
-      if (src?.startsWith('data:image')) {
-        const id = attrs.id || shortId(10)
-        if (uploadFileMap.value.has(id) || uploadingImageIds.has(id)) {
-          return
-        }
-        const name = `${attrs.type}-${id}`
-        const { file, filename } = dataURLToFile(src, name)
-        uploadFileMap.value.set(id, file)
-        updateAttributes({
-          id,
-          size: file.size,
-          name: filename,
-          uploaded: false,
-        })
-      }
-      await nextTick()
-      uploadImage()
+    if (!nodeViewReady) {
+      return
     }
+    await syncUploadStateFromSrc(src)
   },
   { immediate: true },
 )
