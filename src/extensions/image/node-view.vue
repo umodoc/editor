@@ -74,7 +74,7 @@
         </div>
       </drager>
       <div
-        v-if="showAlt"
+        v-show="showAlt"
         class="umo-node-image-alt"
         :class="altContainerClass"
         @mousedown="focusAltContent"
