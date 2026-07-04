@@ -652,6 +652,7 @@ onBeforeUnmount(() => {
 onMounted(async () => {
   await nextTick()
   nodeViewReady = true
+  await syncUploadStateFromSrc(attrs.src)
   await scheduleHydrateDefaultAltContent()
   clampImageToContainer()
   await syncRenderedImageHeight()
