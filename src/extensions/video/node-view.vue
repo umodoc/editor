@@ -49,6 +49,7 @@
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import Drager from 'es-drager'
 
+import { scheduleFileDelete, srcAttrs, videoNodeTypes } from '@/utils/file'
 import { player } from '@/utils/player'
 
 import { updateAttributesWithoutHistory } from '../file'
@@ -109,6 +110,7 @@ onMounted(async () => {
 })
 const onLoad = () => {
   if (attrs.width === null) {
+    if (!videoRef.value) return
     const { clientWidth = 0, clientHeight = 0 } = videoRef
     maxWidth = containerRef.value?.$el.clientWidth
     const ratio = clientWidth / clientHeight
@@ -129,10 +131,18 @@ const onResize = ({ width, height }) => {
 
 onBeforeUnmount(() => {
   playerInstance?.destroy?.()
-  setTimeout(() => {
-    if (editor.value.isDestroyed) return
-    options.value.onFileDelete(attrs.id, attrs.src, `image:${attrs.type}`)
-  }, 500)
+  scheduleFileDelete({
+    editor,
+    options,
+    fileNode: {
+      id: attrs.id,
+      src: attrs.src,
+      type: attrs.type,
+      position: getPos?.(),
+    },
+    nodeTypes: videoNodeTypes,
+    matchSourceAttrs: srcAttrs,
+  })
 })
 
 onClickOutside(containerRef, () => {

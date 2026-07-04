@@ -87,7 +87,13 @@ import { isAsyncFunction, isFunction } from '@tool-belt/type-predicates'
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import prettyBytes from 'pretty-bytes'
 
-import { getFileExtname, getFileIcon } from '@/utils/file'
+import {
+  fileNodeTypes,
+  getFileExtname,
+  getFileIcon,
+  scheduleFileDelete,
+  urlAttrs,
+} from '@/utils/file'
 
 import { updateAttributesWithoutHistory } from './'
 
@@ -159,10 +165,19 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
-  setTimeout(() => {
-    if (editor.value.isDestroyed) return
-    options.value.onFileDelete(attrs.id, attrs.src, `image:${attrs.type}`)
-  }, 500)
+  scheduleFileDelete({
+    editor,
+    options,
+    fileNode: {
+      id: attrs.id,
+      src: attrs.src,
+      url: attrs.url,
+      type: attrs.type,
+      position: getPos?.(),
+    },
+    nodeTypes: fileNodeTypes,
+    matchSourceAttrs: urlAttrs,
+  })
 })
 
 const supportPreview = $computed(() => {

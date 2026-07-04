@@ -102,7 +102,13 @@ import Drager from 'es-drager'
 
 import { loadResource } from '@/utils/load-resource'
 import { shortId } from '@/utils/short-id'
-import { dataURLToFile, svgToDataURL } from '@/utils/file'
+import {
+  dataURLToFile,
+  imageNodeTypes,
+  scheduleFileDelete,
+  srcAttrs,
+  svgToDataURL,
+} from '@/utils/file'
 
 import { updateAttributesWithoutHistory } from '../file'
 
@@ -641,12 +647,18 @@ onBeforeUnmount(() => {
   if (editor.value?.storage?.versionCompare?.isPreviewing) {
     return
   }
-  setTimeout(() => {
-    if (editor.value.isDestroyed) {
-      return
-    }
-    options.value.onFileDelete(attrs.id, attrs.src, `image:${attrs.type}`)
-  }, 500)
+  scheduleFileDelete({
+    editor,
+    options,
+    fileNode: {
+      id: attrs.id,
+      src: attrs.src,
+      type: attrs.type,
+      position: getNodePos(),
+    },
+    nodeTypes: imageNodeTypes,
+    matchSourceAttrs: srcAttrs,
+  })
 })
 
 onMounted(async () => {

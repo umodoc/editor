@@ -25,6 +25,7 @@
 <script setup>
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 
+import { audioNodeTypes, scheduleFileDelete, srcAttrs } from '@/utils/file'
 import { player } from '@/utils/player'
 
 import { updateAttributesWithoutHistory } from '../file'
@@ -82,10 +83,18 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   playerInstance?.destroy?.()
-  setTimeout(() => {
-    if (editor.value.isDestroyed) return
-    options.value.onFileDelete(attrs.id, attrs.src, `image:${attrs.type}`)
-  }, 500)
+  scheduleFileDelete({
+    editor,
+    options,
+    fileNode: {
+      id: attrs.id,
+      src: attrs.src,
+      type: attrs.type,
+      position: getPos?.(),
+    },
+    nodeTypes: audioNodeTypes,
+    matchSourceAttrs: srcAttrs,
+  })
 })
 
 onClickOutside(containerRef, () => {
