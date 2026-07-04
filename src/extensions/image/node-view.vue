@@ -107,6 +107,7 @@ import { dataURLToFile, svgToDataURL } from '@/utils/file'
 import { updateAttributesWithoutHistory } from '../file'
 
 const DIAGRAM_TYPES = new Set(['mermaid'])
+const uploadingImageIds = new Set()
 
 const container = inject('container')
 const page = inject('page')
@@ -269,9 +270,6 @@ const clampImageToContainer = () => {
   })
 }
 
-const isDiagramPlaceholderSrc = (src) =>
-  typeof src === 'string' && src.startsWith('data:image/svg+xml;charset=utf-8,')
-
 const parseSvgNumber = (value) => {
   if (value === undefined || value === null) return undefined
   const raw = String(value).trim()
@@ -359,7 +357,7 @@ const renderDiagramToImageSrc = async () => {
   if (
     !DIAGRAM_TYPES.has(type) ||
     !attrs.content ||
-    !(!attrs.src || isDiagramPlaceholderSrc(attrs.src)) ||
+    !!attrs.src ||
     !options?.value?.cdnUrl
   ) {
     return
@@ -407,19 +405,26 @@ const uploadImage = async () => {
     updateNodeAttrsWithoutHistory({ uploaded: true })
     return
   }
+  const currentUploadId = attrs.id
+  if (uploadingImageIds.has(currentUploadId)) {
+    return
+  }
+  uploadingImageIds.add(currentUploadId)
   try {
-    const file = uploadFileMap.value.get(attrs.id)
+    const file = uploadFileMap.value.get(currentUploadId)
     const result = await options.value?.onFileUpload?.(file)
     const { id, url } = result
     if (containerRef.value) {
       updateNodeAttrsWithoutHistory({ id, src: url, uploaded: true })
     }
-    uploadFileMap.value.delete(attrs.id)
+    uploadFileMap.value.delete(currentUploadId)
   } catch (uploadError) {
     useMessage('error', {
       attach: container,
       content: uploadError.message,
     })
+  } finally {
+    uploadingImageIds.delete(currentUploadId)
   }
 }
 
@@ -595,14 +600,18 @@ watch(
     if (attrs.uploaded === false && !error.value) {
       if (src?.startsWith('data:image')) {
         const id = attrs.id || shortId(10)
+        if (uploadFileMap.value.has(id) || uploadingImageIds.has(id)) {
+          return
+        }
         const name = `${attrs.type}-${id}`
         const { file, filename } = dataURLToFile(src, name)
+        uploadFileMap.value.set(id, file)
         updateAttributes({
+          id,
           size: file.size,
           name: filename,
           uploaded: false,
         })
-        uploadFileMap.value.set(id, file)
       }
       await nextTick()
       uploadImage()
