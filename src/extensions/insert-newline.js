@@ -6,9 +6,13 @@ const insertNewlinePluginKey = new PluginKey('insert-newline')
 const edgeThreshold = 8
 const horizontalPadding = 12
 const excludedNodeTypes = ['footnotes']
+const allowedTextblockTypes = ['image']
 
 const isWidgetBlock = (node) => {
-  return node.isBlock && !node.isTextblock
+  return (
+    node.isBlock &&
+    (!node.isTextblock || allowedTextblockTypes.includes(node.type.name))
+  )
 }
 
 const canInsertParagraphAt = (state, pos) => {
