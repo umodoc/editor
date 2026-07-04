@@ -73,7 +73,7 @@ const createImageAttributes = () => ({
   error: { default: false },
   previewType: { default: 'image' },
   inline: { default: false },
-  showTitle: { default: true },
+  showTitle: { default: false },
 })
 
 const createInsertImageCommand =
