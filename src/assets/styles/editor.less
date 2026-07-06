@@ -880,6 +880,10 @@
     position: relative;
     z-index: 0;
 
+    &.is-empty {
+      display: none;
+    }
+
     li {
       &::before {
         content: counter(list-item) + '.';
