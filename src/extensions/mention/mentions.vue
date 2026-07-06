@@ -31,7 +31,7 @@
               <span class="umo-mention-popup-item-name">{{ item.label }}</span>
             </div>
             <span v-if="item.bio" class="umo-mention-popup-item-bio">
-              {{ item.bio }}
+              ({{ item.bio }})
             </span>
           </li>
         </div>
@@ -130,10 +130,24 @@ defineExpose({
   display: inline-block;
 }
 .umo-mention-popup {
+  width: max-content;
+  max-width: 720px;
+
+  .umo-popup__content {
+    width: 100%;
+    max-width: inherit;
+  }
+
   .umo-dropdown {
     &__menu {
+      width: 100%;
+      max-width: inherit;
+      box-sizing: border-box;
       padding: 8px !important;
       border-radius: var(--umo-radius);
+    }
+    &__item {
+      max-width: unset !important;
     }
     &__item--active {
       font-weight: 600;
@@ -142,16 +156,12 @@ defineExpose({
   &-item {
     width: 100%;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+    gap: 5px;
     padding: 3px 6px !important;
     &:not(:last-child) {
       margin-bottom: 2px;
     }
     &-content {
-      flex: 1;
-      min-width: 0;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -168,14 +178,17 @@ defineExpose({
       background-color: rgba(0, 0, 0, 0.05);
     }
     &-name {
+      flex: 1 1 auto;
+      min-width: 0;
       font-size: 14px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
     &-bio {
-      flex-shrink: 0;
-      max-width: 160px;
+      flex: 0 1 220px;
+      min-width: 0;
+      max-width: 220px;
       font-size: 12px;
       color: var(--umo-text-color-light);
       overflow: hidden;

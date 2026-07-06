@@ -895,6 +895,7 @@
     }
   }
 
+  .umo-node-mention,
   .umo-node-footnote-ref {
     position: relative;
 
@@ -914,6 +915,7 @@
       box-shadow: var(--umo-shadow);
       border-radius: 3px;
       display: none;
+      line-height: 1.4;
     }
 
     &[caption='']::before {
@@ -927,6 +929,12 @@
         display: block;
       }
     }
+  }
+
+  .umo-node-mention:before {
+    content: attr(data-tooltip);
+    top: unset;
+    bottom: 2.5em;
   }
 
   h1 {

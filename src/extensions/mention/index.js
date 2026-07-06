@@ -1,3 +1,4 @@
+import { mergeAttributes } from '@tiptap/core'
 import Mention from '@tiptap/extension-mention'
 
 export default Mention.extend({
@@ -6,6 +7,7 @@ export default Mention.extend({
       ...this.parent?.(),
       HTMLAttributes: {
         class: 'umo-node-mention',
+        contenteditable: 'false',
       },
     }
   },
@@ -17,7 +19,23 @@ export default Mention.extend({
       label: {
         default: null,
       },
+      bio: {
+        default: null,
+      },
     }
+  },
+  renderHTML({ node, HTMLAttributes }) {
+    const label = node.attrs.label || node.attrs.id || ''
+    const bio = node.attrs.bio || ''
+    const tooltip = bio ? `${label} (${bio})` : label
+
+    return [
+      'span',
+      mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
+        'data-tooltip': tooltip,
+      }),
+      `${this.options?.suggestion?.char || '@'}${label}`,
+    ]
   },
   addCommands() {
     return {
