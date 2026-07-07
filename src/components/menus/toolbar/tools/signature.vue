@@ -132,6 +132,7 @@ const setSignature = async () => {
         id: shortId(10),
         type: 'signature',
         src: image,
+        alt: t('tools.signature.text'),
         width: 120,
         height: 40,
         draggable: true,
