@@ -10,41 +10,82 @@ import { transformRemoveLineNumberWrapper } from './transform/line-number'
 import { transformLists } from './transform/list'
 import { transformMsoStyles } from './transform/style'
 import {
-  hasImageInPastePayload,
   isOfficeHtml,
   isOfficeLikeClipboardData,
-  replaceImageWithPlaceholder,
+  replaceImageWithPlaceholderResult,
 } from './utils'
 
 // form https://www.npmjs.com/package/@intevation/tiptap-extension-office-paste
+
+let cachedOfficePasteHtml = null
+let cachedOfficePastePlaceholder = null
+let cachedOfficePasteResult = null
+
+const getOfficePasteResult = (html, imagePlaceholder) => {
+  if (!isOfficeHtml(html)) {
+    return {
+      html,
+      hasImage: false,
+    }
+  }
+
+  if (
+    cachedOfficePasteHtml === html &&
+    cachedOfficePastePlaceholder === imagePlaceholder &&
+    cachedOfficePasteResult
+  ) {
+    return cachedOfficePasteResult
+  }
+
+  let nextHtml = transformLists(html)
+  nextHtml = transformRemoveBookmarks(nextHtml)
+  nextHtml = transformMsoStyles(nextHtml)
+  nextHtml = transformMsoHtmlClasses(nextHtml)
+  nextHtml = transformRemoveLineNumberWrapper(nextHtml)
+  const { html: transformedHtml, replaced } = replaceImageWithPlaceholderResult(
+    nextHtml,
+    imagePlaceholder,
+  )
+
+  cachedOfficePasteHtml = html
+  cachedOfficePastePlaceholder = imagePlaceholder
+  cachedOfficePasteResult = {
+    html: transformedHtml,
+    hasImage: replaced,
+  }
+
+  return cachedOfficePasteResult
+}
 
 const createOfficePastePlugin = () =>
   new Plugin({
     key: new PluginKey('office-paste'),
     props: {
       transformPastedHTML(html) {
-        if (isOfficeHtml(html)) {
-          const imagePlaceholder = `<span style="color: var(--umo-error-color, #e34d59);">${t('officePaste.imagePlaceholder')}</span>`
-          html = transformLists(html)
-          html = transformRemoveBookmarks(html)
-          html = transformMsoStyles(html)
-          html = transformMsoHtmlClasses(html)
-          html = transformRemoveLineNumberWrapper(html)
-          html = replaceImageWithPlaceholder(html, imagePlaceholder)
+        if (!isOfficeHtml(html)) {
+          return html
         }
-        return html
+        const imagePlaceholder = `<span style="color: var(--umo-error-color, #e34d59);">${t('officePaste.imagePlaceholder')}</span>`
+        return getOfficePasteResult(html, imagePlaceholder).html
       },
       handlePaste(view, event) {
         const clipboardData = event?.clipboardData
         const html = clipboardData?.getData('text/html') || ''
-        const files = Array.from(clipboardData?.files || [])
         const officeLike = isOfficeLikeClipboardData(clipboardData)
-        const hasImage = hasImageInPastePayload(files, html)
+        const excelHandled = transformExcel(view, event)
+
+        if (excelHandled) {
+          if (event) {
+            event.skipFileHandler = true
+          }
+          return true
+        }
 
         if (event && officeLike) {
+          const imagePlaceholder = `<span style="color: var(--umo-error-color, #e34d59);">${t('officePaste.imagePlaceholder')}</span>`
+          const { hasImage } = getOfficePasteResult(html, imagePlaceholder)
           if (hasImage) {
             const dialog = useConfirm({
-              width: 400,
               theme: 'warning',
               header: t('officePaste.dialog.title'),
               body: t('officePaste.dialog.body'),
@@ -56,7 +97,7 @@ const createOfficePastePlugin = () =>
           // 标记给 file-handler：当前粘贴交由 office-paste/默认流程处理
           event.skipFileHandler = true
         }
-        return transformExcel(view, event)
+        return false
       },
     },
   })
