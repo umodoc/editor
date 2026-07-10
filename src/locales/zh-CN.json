@@ -765,7 +765,8 @@
     "placeholder": "请输入内容"
   },
   "mention": {
-    "noResult": "无结果"
+    "loading": "正在查询",
+    "noResult": "没有找到匹配结果"
   },
   "save": {
     "text": "保存文档",

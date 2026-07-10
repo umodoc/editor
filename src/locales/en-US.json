@@ -763,6 +763,7 @@
     "placeholder": "Please enter content"
   },
   "mention": {
+    "loading": "Searching",
     "noResult": "No result"
   },
   "save": {

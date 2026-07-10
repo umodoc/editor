@@ -4,10 +4,10 @@
       <div class="umo-dropdown__menu" style="padding: 5px; max-height: 320px">
         <div v-if="isLoading" class="umo-mention-popup-empty">
           <icon name="loading" class="umo-mention-popup-loading-icon" />
-          <span>正在查询</span>
+          <span>{{ t('mention.loading') }}</span>
         </div>
         <div v-else-if="items.length === 0" class="umo-mention-popup-empty">
-          <span>暂无匹配用户</span>
+          <span>{{ t('mention.noResult') }}</span>
         </div>
         <div v-else>
           <li
