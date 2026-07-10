@@ -87,6 +87,7 @@ watch(
       window.removeEventListener('message', messageListener)
       diagramEditor.stopEditing()
       if (image?.type) {
+        image.alt = t('tools.diagrams.text')
         editor.value?.chain().focus().setImage(image, !!props.content).run()
       }
       return

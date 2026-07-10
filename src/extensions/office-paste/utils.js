@@ -86,25 +86,42 @@ export function isOfficeHtml(html) {
   return hasMsOfficeSignature || hasWpsSignature
 }
 
-export function hasImageInPastePayload(files, html) {
-  const hasImageFile = files.some((item) => item.type?.startsWith('image/'))
-  const hasImageTag = /<(img\b|v:imagedata\b)/i.test(html || '')
-  return hasImageFile || hasImageTag
-}
-
-export function replaceImageWithPlaceholder(html, placeholder = '[图片]') {
+export function replaceImageWithPlaceholderResult(
+  html,
+  placeholder = '[图片]',
+) {
   if (!html) {
-    return html
+    return {
+      html,
+      replaced: false,
+    }
+  }
+
+  let replaced = false
+  const replaceWithPlaceholder = () => {
+    replaced = true
+    return placeholder
   }
 
   let nextHtml = html
   nextHtml = nextHtml.replace(
     /<v:shape\b[^>]*>[\s\S]*?<v:imagedata[\s\S]*?<\/v:shape>/gi,
-    placeholder,
+    replaceWithPlaceholder,
   )
-  nextHtml = nextHtml.replace(/<v:imagedata\b[^>]*\/?>/gi, placeholder)
-  nextHtml = nextHtml.replace(/<img\b[^>]*>/gi, placeholder)
-  return nextHtml
+  nextHtml = nextHtml.replace(
+    /<v:imagedata\b[^>]*\/?>/gi,
+    replaceWithPlaceholder,
+  )
+  nextHtml = nextHtml.replace(/<img\b[^>]*>/gi, replaceWithPlaceholder)
+
+  return {
+    html: nextHtml,
+    replaced,
+  }
+}
+
+export function replaceImageWithPlaceholder(html, placeholder = '[图片]') {
+  return replaceImageWithPlaceholderResult(html, placeholder).html
 }
 
 export function isOfficeLikeClipboardData(clipboardData) {

@@ -6,9 +6,13 @@ const insertNewlinePluginKey = new PluginKey('insert-newline')
 const edgeThreshold = 8
 const horizontalPadding = 12
 const excludedNodeTypes = ['footnotes']
+const allowedTextblockTypes = ['image']
 
 const isWidgetBlock = (node) => {
-  return node.isBlock && !node.isTextblock
+  return (
+    node.isBlock &&
+    (!node.isTextblock || allowedTextblockTypes.includes(node.type.name))
+  )
 }
 
 const canInsertParagraphAt = (state, pos) => {
@@ -48,29 +52,10 @@ const getBlockCandidates = (view) => {
 
     const $pos = doc.resolve(pos)
     const index = $pos.index()
-    if (index >= $pos.parent.childCount - 1) {
-      return
-    }
-
-    const nextSibling = $pos.parent.child(index + 1)
-    if (
-      !isWidgetBlock(nextSibling) ||
-      excludedNodeTypes.includes(nextSibling.type.name)
-    ) {
-      return
-    }
-
-    const nextSiblingPos = end
-    const nextSiblingDom =
-      nextSiblingPos === null ? null : view.nodeDOM(nextSiblingPos)
-    if (!(nextSiblingDom instanceof Element)) {
-      return
-    }
-
-    const nextSiblingRect = nextSiblingDom.getBoundingClientRect()
-    if (nextSiblingRect.width === 0 && nextSiblingRect.height === 0) {
-      return
-    }
+    const hasNextSibling = index < $pos.parent.childCount - 1
+    const nextSiblingRect = hasNextSibling
+      ? (view.nodeDOM(end)?.getBoundingClientRect?.() ?? null)
+      : null
 
     blocks.push({
       depth: $pos.depth + 1,
@@ -79,7 +64,11 @@ const getBlockCandidates = (view) => {
       zoneLeft: rect.left - horizontalPadding,
       zoneRight: rect.right + horizontalPadding,
       zoneTop: rect.bottom - edgeThreshold,
-      zoneBottom: nextSiblingRect?.top ?? rect.bottom + edgeThreshold,
+      zoneBottom:
+        nextSiblingRect &&
+        (nextSiblingRect.width !== 0 || nextSiblingRect.height !== 0)
+          ? nextSiblingRect.top
+          : rect.bottom + edgeThreshold,
     })
   })
 

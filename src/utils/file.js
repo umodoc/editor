@@ -175,3 +175,225 @@ export const svgToDataURL = (svg) => {
   const encoded = btoa(unescape(encodeURIComponent(svgString)))
   return `data:image/svg+xml;base64,${encoded}`
 }
+
+export const imageNodeTypes = new Set(['image', 'inlineImage'])
+export const videoNodeTypes = new Set(['video'])
+export const audioNodeTypes = new Set(['audio'])
+export const fileNodeTypes = new Set(['file'])
+export const allFileNodeTypes = new Set([
+  ...imageNodeTypes,
+  ...videoNodeTypes,
+  ...audioNodeTypes,
+  ...fileNodeTypes,
+])
+
+export const srcAttrs = ['src']
+export const urlAttrs = ['url']
+export const fileSourceAttrs = [...srcAttrs, ...urlAttrs]
+export const fileDeleteDelay = 500
+export const fileSearchRange = 80
+
+const isSameNodeType = (nodeTypeSet, nodeTypeList, nodeTypeName) => {
+  if (nodeTypeSet) {
+    return nodeTypeSet.has(nodeTypeName)
+  }
+  return !!nodeTypeList?.includes(nodeTypeName)
+}
+
+const isSameFileNode = (
+  node,
+  targetId,
+  targetSourceEntries,
+  nodeTypeSet,
+  nodeTypeList,
+) => {
+  if (!node || !isSameNodeType(nodeTypeSet, nodeTypeList, node.type.name)) {
+    return false
+  }
+
+  const { attrs = {} } = node
+  for (let i = 0; i < targetSourceEntries.length; i += 1) {
+    const [attrName, sourceValue] = targetSourceEntries[i]
+    if (attrs[attrName] === sourceValue) {
+      return true
+    }
+  }
+
+  return !!targetId && attrs.id === targetId
+}
+
+const getFileSource = (fileNode, sourceAttrs = fileSourceAttrs) => {
+  const sourceAttrList = Array.isArray(sourceAttrs) ? sourceAttrs : []
+  for (let i = 0; i < sourceAttrList.length; i += 1) {
+    const sourceValue = fileNode?.[sourceAttrList[i]]
+    if (sourceValue) {
+      return sourceValue
+    }
+  }
+  return null
+}
+
+const getNodeAtSafe = (doc, position) => {
+  if (!doc || !Number.isFinite(position)) {
+    return null
+  }
+  if (position < 0 || position > doc.content.size) {
+    return null
+  }
+  try {
+    return doc.nodeAt(position)
+  } catch {
+    return null
+  }
+}
+
+export class FileNodeChecker {
+  static hasSameNodeInDocument(
+    editorState,
+    fileNode,
+    nodeTypes = allFileNodeTypes,
+    sourceAttrs = fileSourceAttrs,
+    options = {},
+  ) {
+    const doc = editorState?.doc
+    const targetId = fileNode?.id
+    const nodeTypeSet = nodeTypes instanceof Set ? nodeTypes : null
+    const nodeTypeList = nodeTypeSet ? null : nodeTypes
+    const sourceAttrList = Array.isArray(sourceAttrs) ? sourceAttrs : []
+    const position = Number.isFinite(options?.position)
+      ? options.position
+      : null
+    const searchRange = Math.max(0, Number(options?.searchRange) || 120)
+    const allowGlobalScan = !!options?.allowGlobalScan
+    const targetSourceEntries = []
+
+    for (let i = 0; i < sourceAttrList.length; i += 1) {
+      const attrName = sourceAttrList[i]
+      const sourceValue = fileNode?.[attrName]
+      if (sourceValue) {
+        targetSourceEntries.push([attrName, sourceValue])
+      }
+    }
+
+    if (!doc || (!targetId && targetSourceEntries.length === 0)) {
+      return false
+    }
+
+    if (position !== null) {
+      if (
+        isSameFileNode(
+          getNodeAtSafe(doc, position),
+          targetId,
+          targetSourceEntries,
+          nodeTypeSet,
+          nodeTypeList,
+        ) ||
+        isSameFileNode(
+          getNodeAtSafe(doc, Math.max(0, position - 1)),
+          targetId,
+          targetSourceEntries,
+          nodeTypeSet,
+          nodeTypeList,
+        ) ||
+        isSameFileNode(
+          getNodeAtSafe(doc, position + 1),
+          targetId,
+          targetSourceEntries,
+          nodeTypeSet,
+          nodeTypeList,
+        )
+      ) {
+        return true
+      }
+
+      if (searchRange > 0) {
+        const from = Math.max(0, position - searchRange)
+        const to = Math.min(doc.content.size, position + searchRange)
+        let foundNearPosition = false
+        doc.nodesBetween(from, to, (node) => {
+          if (
+            isSameFileNode(
+              node,
+              targetId,
+              targetSourceEntries,
+              nodeTypeSet,
+              nodeTypeList,
+            )
+          ) {
+            foundNearPosition = true
+            return false
+          }
+        })
+        if (foundNearPosition) {
+          return true
+        }
+      }
+    }
+
+    if (!allowGlobalScan) {
+      return false
+    }
+
+    let found = false
+    doc.descendants((node) => {
+      if (
+        isSameFileNode(
+          node,
+          targetId,
+          targetSourceEntries,
+          nodeTypeSet,
+          nodeTypeList,
+        )
+      ) {
+        found = true
+        return false
+      }
+    })
+    return found
+  }
+}
+
+export const scheduleFileDelete = ({
+  editor,
+  options,
+  fileNode,
+  nodeTypes = allFileNodeTypes,
+  matchSourceAttrs = fileSourceAttrs,
+  deleteSourceAttrs = matchSourceAttrs,
+  delay = fileDeleteDelay,
+  searchRange = fileSearchRange,
+  deleteTypePrefix = 'image',
+}) => {
+  const deletedFileNode = {
+    ...fileNode,
+    position: Number.isFinite(fileNode?.position) ? fileNode.position : null,
+  }
+
+  setTimeout(() => {
+    const currentEditor = editor?.value
+    if (currentEditor?.isDestroyed) {
+      return
+    }
+
+    if (
+      FileNodeChecker.hasSameNodeInDocument(
+        currentEditor?.state,
+        deletedFileNode,
+        nodeTypes,
+        matchSourceAttrs,
+        {
+          position: deletedFileNode.position,
+          searchRange,
+        },
+      )
+    ) {
+      return
+    }
+
+    options?.value?.onFileDelete(
+      deletedFileNode.id,
+      getFileSource(deletedFileNode, deleteSourceAttrs),
+      `${deleteTypePrefix}:${deletedFileNode.type}`,
+    )
+  }, delay)
+}

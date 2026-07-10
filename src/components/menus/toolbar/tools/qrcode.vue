@@ -217,6 +217,7 @@ const setQrcode = () => {
           type: 'qrcode',
           src,
           content: JSON.stringify(config),
+          alt: t('tools.qrcode.text'),
           width,
           height,
         },

@@ -131,6 +131,7 @@ export default ({ users = [], onSearch } = {}) => {
           attrs: {
             id: props.id,
             label: props.label,
+            bio: props.bio || null,
           },
         })
         .run()

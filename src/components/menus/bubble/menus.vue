@@ -10,8 +10,9 @@
   </template>
   <template
     v-else-if="
-      (is('image') && !attrs('image').error) ||
-      (is('inlineImage') && !attrs('inlineImage').error)
+      ((is('image') && !attrs('image').error) ||
+        (is('inlineImage') && !attrs('inlineImage').error)) &&
+      isNodeSelection()
     "
   >
     <menus-toolbar-base-align-left />
@@ -21,6 +22,7 @@
     <menus-bubble-image-flip />
     <menus-bubble-image-proportion />
     <menus-bubble-image-draggable />
+    <menus-bubble-image-title v-if="is('image')" />
     <menus-bubble-image-rotate />
     <menus-bubble-image-reset />
     <div class="umo-bubble-menu-divider"></div>
@@ -173,6 +175,7 @@
 </template>
 
 <script setup>
+import { NodeSelection, TextSelection } from '@tiptap/pm/state'
 import { CellSelection } from '@tiptap/pm/tables'
 
 const editor = inject('editor')
@@ -192,6 +195,8 @@ const is = (type) => {
 
   return editorIns.isActive(type)
 }
+const isNodeSelection = () =>
+  editor.value?.state.selection instanceof NodeSelection
 const attrs = (type) => {
   return editor.value.getAttributes(type)
 }

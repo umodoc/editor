@@ -169,12 +169,12 @@ export default Node.create({
                 width,
               }
             }
-            // if (height && height > 0) {
-            //   nodeData = {
-            //     ...nodeData,
-            //     height,
-            //   }
-            // }
+            if (height && height > 0) {
+              nodeData = {
+                ...nodeData,
+                height,
+              }
+            }
             if (inline) {
               previewType = 'inlineImage'
               nodeData = {

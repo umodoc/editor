@@ -214,6 +214,7 @@ const setMermaid = () => {
       src: svgToDataURL(svgCode),
       config: JSON.stringify(localConfig),
       content: mermaidCode,
+      alt: t('tools.mermaid.text'),
       width: keepSize ? attrs?.width || width : width,
       height: keepSize ? attrs?.height || height : height,
       equalProportion: false,

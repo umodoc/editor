@@ -21,7 +21,6 @@ import {
   Dropcursor,
   Focus,
   TrailingNode,
-  Placeholder,
   UndoRedo,
 } from '@tiptap/extensions'
 import StarterKit from '@tiptap/starter-kit'
@@ -60,6 +59,7 @@ import OfficePaste from './office-paste'
 import OptionBox from './option-box'
 import OrderedList from './ordered-list'
 import PageBreak from './page-break'
+import Placeholder from './placeholder'
 import SearchReplace from './search-replace'
 import Selection from './selection'
 import { Table, TableCell, TableHeader, TableRow } from './table'
@@ -205,12 +205,10 @@ export const getDefaultExtensions = ({ container, options, uploadFileMap }) => {
     }),
     Placeholder.configure({
       showOnlyCurrent: false,
-      placeholder: ({ node, pos }) => {
-        if (node.type.name === 'heading') {
-          return pos === 0 ? t('document.headingPlaceholder') : ''
-        }
-        return String(l(doc?.placeholder || ''))
-      },
+      structure: doc.structure,
+      headingPlaceholder: ({ pos }) =>
+        pos === 0 ? t('document.headingPlaceholder') : '',
+      bodyPlaceholder: () => String(l(doc?.placeholder || '')),
     }),
     FormatPainter,
     WordWrap,

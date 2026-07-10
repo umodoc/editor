@@ -224,6 +224,10 @@
       line-height: 1;
     }
 
+    &:is(h1, h2, h3, h4, h5, h6)::after {
+      line-height: inherit;
+    }
+
     &:first-child {
       >*:not(table) {
         display: none;
@@ -880,6 +884,10 @@
     position: relative;
     z-index: 0;
 
+    &.is-empty {
+      display: none;
+    }
+
     li {
       &::before {
         content: counter(list-item) + '.';
@@ -895,6 +903,7 @@
     }
   }
 
+  .umo-node-mention,
   .umo-node-footnote-ref {
     position: relative;
 
@@ -914,6 +923,7 @@
       box-shadow: var(--umo-shadow);
       border-radius: 3px;
       display: none;
+      line-height: 1.4;
     }
 
     &[caption='']::before {
@@ -927,6 +937,12 @@
         display: block;
       }
     }
+  }
+
+  .umo-node-mention:before {
+    content: attr(data-tooltip);
+    top: unset;
+    bottom: 2.5em;
   }
 
   h1 {
@@ -951,6 +967,16 @@
 
   h6 {
     font-size: 0.85em;
+  }
+
+  h1[data-placeholder],
+  h2[data-placeholder],
+  h3[data-placeholder],
+  h4[data-placeholder],
+  h5[data-placeholder],
+  h6[data-placeholder] {
+    min-height: 1em;
+    min-height: 1lh;
   }
 }
 

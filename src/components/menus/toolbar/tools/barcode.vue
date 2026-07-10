@@ -354,6 +354,7 @@ const setBarcode = () => {
           type: 'barcode',
           src: svgToDataURL(barcodeSvgRef.outerHTML),
           content: JSON.stringify(config),
+          alt: t('tools.barcode.text'),
           width,
           height,
         },
