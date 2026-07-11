@@ -1,5 +1,5 @@
 <template>
-  <div class="umo-toc-container">
+  <div ref="tocContainerRef" class="umo-toc-container">
     <div class="umo-toc-title">
       <icon class="icon-toc" name="toc" /> {{ t('toc.title') }}
       <div class="umo-dialog__close" @click="$emit('close')">
@@ -109,46 +109,87 @@ const headingActive = (value) => {
   editor.value.view.focus()
 }
 
-const umoPageContainer = document.querySelector(
-  `${container} .umo-main-container`,
-)
 const baseTocWidth = 320
+const minTocWidth = baseTocWidth / 1.5
+const maxTocWidth = baseTocWidth * 2
+const tocContainerRef = ref(null)
+const umoPageContainer = ref(null)
 const isResizing = ref(false)
 const startX = ref(0)
 const initialWidth = ref(baseTocWidth)
-const startResize = (e) => {
-  if (!umoPageContainer) {
+let resizeFrame = 0
+let pendingWidth = null
+
+const applyWidth = (width) => {
+  if (tocContainerRef.value) {
+    tocContainerRef.value.style.width = `${width}px`
+  }
+}
+
+const flushWidth = () => {
+  resizeFrame = 0
+  if (pendingWidth === null) {
     return
   }
+  applyWidth(pendingWidth)
+}
+
+const startResize = (e) => {
+  if (!umoPageContainer.value || !tocContainerRef.value) {
+    return
+  }
+  e.preventDefault()
   isResizing.value = true
   startX.value = e.clientX
   initialWidth.value = parseInt(
-    getComputedStyle(umoPageContainer?.querySelector('.umo-toc-container'))
-      .width,
+    getComputedStyle(tocContainerRef.value).width,
     10,
   )
-  umoPageContainer.addEventListener('mousemove', resize)
-  umoPageContainer.addEventListener('mouseup', stopResize)
+  document.body.style.userSelect = 'none'
+  document.addEventListener('mousemove', resize)
+  document.addEventListener('mouseup', stopResize)
 }
 
 const resize = (e) => {
-  if (isResizing.value) {
-    const offsetX = e.clientX - startX.value
-    const newWidth = initialWidth.value + offsetX
-    const minWidth = baseTocWidth / 1.5
-    const maxWidth = baseTocWidth * 2
-    if (newWidth >= minWidth && newWidth <= maxWidth) {
-      const tocContainer = umoPageContainer.querySelector('.umo-toc-container')
-      tocContainer.style.width = `${newWidth}px`
-    }
+  if (!isResizing.value) {
+    return
+  }
+
+  const offsetX = e.clientX - startX.value
+  pendingWidth = Math.min(
+    maxTocWidth,
+    Math.max(minTocWidth, initialWidth.value + offsetX),
+  )
+
+  if (!resizeFrame) {
+    resizeFrame = requestAnimationFrame(flushWidth)
   }
 }
 
 const stopResize = () => {
+  if (!isResizing.value) {
+    return
+  }
   isResizing.value = false
-  umoPageContainer.removeEventListener('mousemove', resize)
-  umoPageContainer.removeEventListener('mouseup', stopResize)
+  document.body.style.userSelect = ''
+  document.removeEventListener('mousemove', resize)
+  document.removeEventListener('mouseup', stopResize)
+  if (resizeFrame) {
+    cancelAnimationFrame(resizeFrame)
+    flushWidth()
+  }
+  pendingWidth = null
 }
+
+onMounted(() => {
+  umoPageContainer.value = document.querySelector(
+    `${container} .umo-main-container`,
+  )
+})
+
+onBeforeUnmount(() => {
+  stopResize()
+})
 </script>
 
 <style lang="less">
@@ -161,14 +202,26 @@ const stopResize = () => {
   .umo-toc-resize-handle {
     position: absolute;
     top: 0;
-    right: -2px;
-    width: 3px;
+    right: -5px;
+    width: 10px;
     height: 100%;
-    opacity: 0.5;
     background-color: transparent;
+    cursor: col-resize;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 4px;
+      width: 2px;
+      height: 100%;
+      opacity: 0.5;
+      background-color: transparent;
+      transition: background-color 0.2s ease;
+    }
     &:hover {
-      background-color: var(--umo-primary-color);
-      cursor: col-resize;
+      &::before {
+        background-color: var(--umo-primary-color);
+      }
     }
   }
   &:hover {
@@ -200,6 +253,7 @@ const stopResize = () => {
     padding: 10px 10px 10px 15px;
     flex-direction: column;
     .umo-toc-tree {
+      --td-comp-margin-xxl: 12px;
       user-select: none;
       --td-brand-color-light: rgba(0, 0, 0, 0.03);
       .umo-tree {
