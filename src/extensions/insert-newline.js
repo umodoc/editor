@@ -170,7 +170,7 @@ export default Extension.create({
             }
             return DecorationSet.create(state.doc, [
               Decoration.widget(activePos, () => createWidget(activePos), {
-                side: -1,
+                side: 1,
                 ignoreSelection: true,
               }),
             ])
