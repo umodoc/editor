@@ -1,6 +1,6 @@
 import { parseStyleAttribute } from '../utils'
 
-const normalizeLineHeight = (value) => {
+export const normalizeLineHeight = (value) => {
   const lineHeight = String(value ?? '').trim()
   if (!lineHeight) {
     return ''
@@ -14,9 +14,7 @@ const normalizeLineHeight = (value) => {
   return lineHeight
 }
 
-export const transformMsoStyles = (html) => {
-  html = html.replace(/<o:p>(.*?)<\/o:p>/g, ``)
-
+export const normalizeOfficeHtmlLineHeights = (html) => {
   const parser = new DOMParser()
   const doc = parser.parseFromString(html, `text/html`)
   doc.querySelectorAll(`[style*="mso-"]`).forEach((node) => {
@@ -28,7 +26,8 @@ export const transformMsoStyles = (html) => {
 
     for (const prop of Object.keys(styles)) {
       if (prop && !prop.startsWith(`mso-`)) {
-        const value = prop === `line-height` ? normalizedLineHeight : styles[prop]
+        const value =
+          prop === `line-height` ? normalizedLineHeight : styles[prop]
         newStyles.push(`${prop}: ${value}`)
       }
     }
@@ -55,4 +54,9 @@ export const transformMsoStyles = (html) => {
   })
 
   return doc.documentElement.outerHTML
+}
+
+export const transformMsoStyles = (html) => {
+  html = html.replace(/<o:p>(.*?)<\/o:p>/g, ``)
+  return normalizeOfficeHtmlLineHeights(html)
 }
