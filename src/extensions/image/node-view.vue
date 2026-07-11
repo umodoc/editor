@@ -77,9 +77,7 @@
         v-show="showAlt"
         class="umo-node-image-alt"
         :class="altContainerClass"
-        @mousedown="altMousedown"
-        @click.stop="altClick"
-        @dblclick.stop="enterAltEditing"
+        @click="enterAltEditing"
       >
         <node-view-content
           v-if="useRichAltContent"
@@ -141,6 +139,7 @@ let nodeViewReady = $ref(false)
 let isEditingAlt = $ref(false)
 let isAltEmpty = $ref(true)
 let diagramRenderSeq = 0
+let altContentObserver = null
 
 const defaultAltText = $computed(() => {
   const sources = [attrs.alt, attrs.title, attrs.name]
@@ -218,6 +217,28 @@ const syncAltEmptyState = async () => {
     String(textContent || '')
       .replaceAll('\u200b', '')
       .trim() === ''
+}
+
+const stopAltContentObserver = () => {
+  altContentObserver?.disconnect?.()
+  altContentObserver = null
+}
+
+const observeAltContent = async () => {
+  await nextTick()
+  stopAltContentObserver()
+  const el = getAltContentElement()
+  if (!el) {
+    return
+  }
+  altContentObserver = new MutationObserver(() => {
+    void syncAltEmptyState()
+  })
+  altContentObserver.observe(el, {
+    childList: true,
+    subtree: true,
+    characterData: true,
+  })
 }
 
 const getContainerMaxWidth = () => {
@@ -481,29 +502,11 @@ const altFocusIn = () => {
   void syncAltEmptyState()
 }
 
-const altMousedown = (event) => {
-  if (isEditingAlt || event.button !== 0) {
-    return
-  }
-  event.preventDefault()
-  selected = true
-  setImageNodeSelection()
-}
-
-const altClick = () => {
-  selected = true
-  if (isEditingAlt) {
-    return
-  }
-  setImageNodeSelection()
-}
-
 const enterAltEditing = async () => {
   if (!canEditAlt) {
     return
   }
   isEditingAlt = true
-  selected = true
   const pos = getNodePos()
   if (typeof pos !== 'number') {
     return
@@ -615,6 +618,13 @@ watch(
 )
 
 watch(
+  () => [useRichAltContent, showAlt],
+  () => {
+    void observeAltContent()
+  },
+)
+
+watch(
   () => attrs.draggable,
   (draggable) => {
     if (!draggable) {
@@ -687,6 +697,7 @@ watch(
 )
 
 onBeforeUnmount(() => {
+  stopAltContentObserver()
   scheduleFileDelete({
     editor,
     options,
@@ -704,6 +715,7 @@ onBeforeUnmount(() => {
 onMounted(async () => {
   await nextTick()
   nodeViewReady = true
+  await observeAltContent()
   await syncAltEmptyState()
   await syncUploadStateFromSrc(attrs.src)
   await scheduleHydrateDefaultAltContent()
