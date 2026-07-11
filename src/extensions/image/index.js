@@ -90,6 +90,20 @@ const createInsertImageCommand =
     return commands.insertContentAt(editor.state.selection.anchor, content)
   }
 
+const getSelectedAncestorNode = ($pos, typeName) => {
+  const { depth: maxDepth } = $pos
+  for (let depth = maxDepth; depth > 0; depth -= 1) {
+    const node = $pos.node(depth)
+    if (node?.type?.name === typeName) {
+      return {
+        node,
+        pos: $pos.before(depth),
+      }
+    }
+  }
+  return null
+}
+
 const BaseImage = Image.extend({
   atom: true,
   selectable: true,
@@ -102,10 +116,34 @@ const BaseImage = Image.extend({
 })
 
 export const BlockImage = BaseImage.extend({
-  atom: false,
+  atom: true,
   content: 'inline*',
   defining: true,
   isolating: true,
+  addKeyboardShortcuts() {
+    return {
+      Backspace: ({ editor }) => {
+        const { selection } = editor.state
+        if (!selection.empty) {
+          return false
+        }
+        const currentImage = getSelectedAncestorNode(selection.$from, this.name)
+        if (!currentImage || currentImage.node.content.size > 0) {
+          return false
+        }
+        if (selection.from !== currentImage.pos + 1) {
+          return false
+        }
+        return editor
+          .chain()
+          .deleteRange({
+            from: currentImage.pos,
+            to: currentImage.pos + currentImage.node.nodeSize,
+          })
+          .run()
+      },
+    }
+  },
   parseHTML() {
     return [
       {

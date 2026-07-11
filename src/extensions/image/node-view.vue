@@ -5,7 +5,7 @@
     :class="wrapperClass"
     :style="nodeStyle"
     @dblclick="openImageViewer"
-    @click.capture="handleWrapperClick"
+    @click.capture="wrapperClick"
   >
     <div class="umo-node-container umo-node-image" :class="imageClass">
       <div
@@ -77,16 +77,17 @@
         v-show="showAlt"
         class="umo-node-image-alt"
         :class="altContainerClass"
-        @mousedown="focusAltContent"
-        @click.stop
-        @dblclick.stop
+        @mousedown="altMousedown"
+        @click.stop="altClick"
+        @dblclick.stop="enterAltEditing"
       >
         <node-view-content
           v-if="useRichAltContent"
           class="umo-node-image-alt-content"
-          :class="{ 'is-empty': !hasRichAltContent }"
+          :class="{ 'is-empty': isAltEmpty }"
           :data-placeholder="t('node.image.altPlaceholder')"
-          @focusin="selected = true"
+          @focusin="altFocusIn"
+          @input="syncAltEmptyState"
         />
         <div v-else class="umo-node-image-alt-fallback">
           {{ defaultAltText }}
@@ -137,6 +138,8 @@ let selected = $ref(false)
 let maxWidth = $ref(0)
 let maxHeight = $ref(0)
 let nodeViewReady = $ref(false)
+let isEditingAlt = $ref(false)
+let isAltEmpty = $ref(true)
 let diagramRenderSeq = 0
 
 const defaultAltText = $computed(() => {
@@ -201,9 +204,20 @@ const getDragElement = () => dragRef?.$el
 const getNodePos = () => getPos?.()
 const getEditorState = () => editor.value?.state
 const getEditorView = () => editor.value?.view
+const getAltContentElement = () =>
+  getHostElement()?.querySelector('.umo-node-image-alt-content')
 
 const updateNodeAttrsWithoutHistory = (nextAttrs) => {
   updateAttributesWithoutHistory(editor.value, nextAttrs, getNodePos())
+}
+
+const syncAltEmptyState = async () => {
+  await nextTick()
+  const textContent = getAltContentElement()?.textContent
+  isAltEmpty =
+    String(textContent || '')
+      .replaceAll('\u200b', '')
+      .trim() === ''
 }
 
 const getContainerMaxWidth = () => {
@@ -445,32 +459,60 @@ const onLoad = async () => {
 const isAltTarget = (target) =>
   target instanceof HTMLElement && !!target.closest('.umo-node-image-alt')
 
-const handleWrapperClick = (event) => {
-  if (isAltTarget(event.target)) {
-    return
-  }
-  editor.value?.commands.setNodeSelection(getNodePos())
-}
-
-const focusAltContent = (event) => {
-  if (!canEditAlt || event.button !== 0) {
-    return
-  }
-  const { target } = event
-  if (!(target instanceof HTMLElement)) {
-    return
-  }
-  if (target.closest('.umo-node-image-alt-content')) {
-    return
-  }
+const setImageNodeSelection = () => {
   const pos = getNodePos()
   if (typeof pos !== 'number') {
     return
   }
+  editor.value?.commands.setNodeSelection(pos)
+}
+
+const wrapperClick = (event) => {
+  if (isAltTarget(event.target)) {
+    return
+  }
+  isEditingAlt = false
+  setImageNodeSelection()
+}
+
+const altFocusIn = () => {
+  selected = true
+  isEditingAlt = true
+  void syncAltEmptyState()
+}
+
+const altMousedown = (event) => {
+  if (isEditingAlt || event.button !== 0) {
+    return
+  }
+  event.preventDefault()
+  selected = true
+  setImageNodeSelection()
+}
+
+const altClick = () => {
+  selected = true
+  if (isEditingAlt) {
+    return
+  }
+  setImageNodeSelection()
+}
+
+const enterAltEditing = async () => {
+  if (!canEditAlt) {
+    return
+  }
+  isEditingAlt = true
+  selected = true
+  const pos = getNodePos()
+  if (typeof pos !== 'number') {
+    return
+  }
+  await nextTick()
   props.editor
     .chain()
     .focus()
-    .setTextSelection(pos + 1)
+    .setTextSelection(pos + 1 + props.node.content.size)
     .run()
 }
 
@@ -543,6 +585,7 @@ const onDragEnd = () => {
 
 onClickOutside(containerRef, () => {
   selected = false
+  isEditingAlt = false
 })
 
 const openImageViewer = async (event) => {
@@ -558,16 +601,16 @@ const openImageViewer = async (event) => {
 }
 
 watch(
-  () => [
-    attrs.alt,
-    attrs.title,
-    attrs.name,
-    attrs.showTitle,
-    props.node.content.size,
-    canEditAlt,
-  ],
+  () => [attrs.alt, attrs.title, attrs.name, attrs.showTitle, canEditAlt],
   () => {
     void scheduleHydrateDefaultAltContent()
+  },
+)
+
+watch(
+  () => props.node.content.size,
+  () => {
+    void syncAltEmptyState()
   },
 )
 
@@ -661,6 +704,7 @@ onBeforeUnmount(() => {
 onMounted(async () => {
   await nextTick()
   nodeViewReady = true
+  await syncAltEmptyState()
   await syncUploadStateFromSrc(attrs.src)
   await scheduleHydrateDefaultAltContent()
   clampImageToContainer()

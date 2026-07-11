@@ -747,7 +747,7 @@
     "image": {
       "loading": "Loading image...",
       "error": "Image load failed",
-      "altPlaceholder": "Enter image description"
+      "altPlaceholder": "Double-click to enter image description"
     },
     "textBox": {
       "tip": "Double-click to edit"

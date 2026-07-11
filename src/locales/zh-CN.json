@@ -746,7 +746,7 @@
     "image": {
       "loading": "正在加载图片...",
       "error": "图片加载错误",
-      "altPlaceholder": "请输入图片描述"
+      "altPlaceholder": "双击输入图片描述"
     },
     "textBox": {
       "tip": "双击进行编辑"
