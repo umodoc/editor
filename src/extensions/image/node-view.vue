@@ -699,6 +699,7 @@ onMounted(async () => {
     display: flex;
     flex-direction: column;
     align-items: center;
+    caret-color: transparent;
     &.is-loading {
       outline: none !important;
       box-shadow: none !important;
@@ -812,6 +813,7 @@ onMounted(async () => {
       color: var(--umo-text-color);
       white-space: pre-wrap;
       word-break: break-word;
+      caret-color: var(--umo-text-color);
     }
 
     &-content {
