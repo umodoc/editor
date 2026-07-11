@@ -1,10 +1,12 @@
 import { Extension } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
+import { t } from '@/composables/i18n'
 
 const insertNewlinePluginKey = new PluginKey('insert-newline')
 const edgeThreshold = 8
 const horizontalPadding = 12
+const activeRowPadding = 12
 const excludedNodeTypes = ['footnotes']
 const allowedTextblockTypes = ['image']
 
@@ -122,7 +124,46 @@ const getInsertPosition = (view, event) => {
   return blocks[0].end
 }
 
+const isWithinActiveRow = (view, event, activePos) => {
+  if (!Number.isInteger(activePos)) {
+    return false
+  }
+
+  const button = view.dom.querySelector(
+    `.umo-insert-newline-anchor[data-pos="${activePos}"] .umo-insert-newline-widget`,
+  )
+  if (!(button instanceof HTMLElement)) {
+    return false
+  }
+
+  const editorRect = view.dom.getBoundingClientRect()
+  const buttonRect = button.getBoundingClientRect()
+
+  return (
+    event.clientX >= editorRect.left - horizontalPadding &&
+    event.clientX <= editorRect.right + horizontalPadding &&
+    event.clientY >= buttonRect.top - activeRowPadding &&
+    event.clientY <= buttonRect.bottom + activeRowPadding
+  )
+}
+
+const syncActiveState = (view, previousState = null) => {
+  const previousActivePos = previousState
+    ? (insertNewlinePluginKey.getState(previousState)?.activePos ?? null)
+    : null
+  const currentActivePos =
+    insertNewlinePluginKey.getState(view.state)?.activePos ?? null
+  const isActive = currentActivePos !== null
+
+  view.dom.classList.toggle('umo-insert-newline-active', isActive)
+
+  if (isActive && previousActivePos === null && view.hasFocus()) {
+    view.dom.blur()
+  }
+}
+
 const createWidget = (pos) => {
+  const label = t('insert.newline')
   const anchor = document.createElement('div')
   anchor.className = 'umo-insert-newline-anchor'
   anchor.contentEditable = 'false'
@@ -132,7 +173,8 @@ const createWidget = (pos) => {
   button.type = 'button'
   button.className = 'umo-insert-newline-widget'
   button.tabIndex = -1
-  button.setAttribute('aria-label', 'Insert newline')
+  button.setAttribute('aria-label', label)
+  button.textContent = label
 
   anchor.append(button)
   return anchor
@@ -146,6 +188,18 @@ export default Extension.create({
     return [
       new Plugin({
         key: insertNewlinePluginKey,
+        view(view) {
+          syncActiveState(view)
+
+          return {
+            update(updatedView, previousState) {
+              syncActiveState(updatedView, previousState)
+            },
+            destroy() {
+              view.dom.classList.remove('umo-insert-newline-active')
+            },
+          }
+        },
         state: {
           init() {
             return { activePos: null }
@@ -170,16 +224,25 @@ export default Extension.create({
             }
             return DecorationSet.create(state.doc, [
               Decoration.widget(activePos, () => createWidget(activePos), {
-                side: 1,
+                side: -1,
                 ignoreSelection: true,
               }),
             ])
           },
           handleDOMEvents: {
             mousemove(view, event) {
-              const activePos = getInsertPosition(view, event)
               const pluginState = insertNewlinePluginKey.getState(view.state)
-              if (pluginState?.activePos === activePos) {
+              const { activePos: currentActivePos = null } = pluginState ?? {}
+              let activePos = getInsertPosition(view, event)
+
+              if (
+                activePos === null &&
+                isWithinActiveRow(view, event, currentActivePos)
+              ) {
+                activePos = currentActivePos
+              }
+
+              if (currentActivePos === activePos) {
                 return false
               }
               view.dispatch(

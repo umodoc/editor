@@ -152,8 +152,8 @@
       display: block;
       height: 0;
       position: relative;
-      z-index: 100;
-      pointer-events: none;
+      isolation: isolate;
+      z-index: 200;
 
       @media print {
         display: none;
@@ -162,52 +162,82 @@
 
     .umo-insert-newline-widget {
       position: absolute;
+      z-index: 1001;
       top: calc(var(--umo-content-node-bottom) / -2);
       left: 0;
-      right: 0;
-      transform: translateY(-50%);
-      width: 100%;
-      height: 18px;
-      border: none;
-      background: transparent;
-      box-shadow: none;
-      cursor: default;
+      height: 24px;
+      border: 1px solid var(--umo-border-color);
+      border-radius: var(--umo-radius);
+      background: #fff;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 8%);
       pointer-events: auto;
-      padding: 0;
+      padding: 0 10px 0 24px;
       margin: 0;
-      display: block;
-      cursor: vertical-text;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      cursor: pointer;
+      color: var(--umo-text-color-light);
+      font-size: 12px;
+      line-height: 1;
+      white-space: nowrap;
+      transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
 
       &::after {
         content: '';
         position: absolute;
-        left: -12px;
+        left: 14px;
         top: 50%;
-        transform: translateY(-50%);
-        width: 0;
-        height: 0;
-        border-top: 4.5px solid transparent;
-        border-bottom: 4.5px solid transparent;
-        border-left: 9px solid var(--umo-primary-color);
-        opacity: 0.9;
-        cursor: pointer;
+        transform: translate(-50%, -50%);
+        width: 10px;
+        height: 2px;
+        background: var(--umo-primary-color);
       }
 
       &::before {
         content: '';
         position: absolute;
-        left: 0;
-        right: 0;
+        left: 14px;
         top: 50%;
-        transform: translateY(-50%);
-        height: 2px;
+        transform: translate(-50%, -50%);
+        width: 2px;
+        height: 10px;
+        border-radius: 999px;
         background: var(--umo-primary-color);
-        opacity: 0.9;
       }
 
       &:hover {
-        &::after {
-          opacity: 1;
+        border-color: var(--umo-primary-color);
+        box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
+        color: var(--umo-primary-color);
+      }
+    }
+
+    &.umo-insert-newline-active {
+
+      >*.umo-node-focused,
+      >*.ProseMirror-selectednoderange {
+
+        &:not(.is-editor-empty,
+          hr,
+          table,
+          .tableWrapper,
+          .umo-page-break,
+          .umo-code-block,
+          .umo-node-footnotes,
+          .umo-node-details,
+          .umo-node-column-container,
+          .umo-node-column,
+          .umo-floating-node)::before {
+          display: none;
+        }
+
+        .umo-select-outline {
+          outline: none;
         }
       }
     }
