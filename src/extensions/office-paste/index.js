@@ -8,6 +8,7 @@ import { transformExcel } from './transform/excel'
 import { transformMsoHtmlClasses } from './transform/html-classes'
 import { transformRemoveLineNumberWrapper } from './transform/line-number'
 import { transformLists } from './transform/list'
+import { transformToc } from './transform/toc'
 import { transformMsoStyles } from './transform/style'
 import {
   isOfficeHtml,
@@ -42,6 +43,7 @@ const getOfficePasteResult = (html, imagePlaceholder) => {
   nextHtml = transformMsoStyles(nextHtml)
   nextHtml = transformMsoHtmlClasses(nextHtml)
   nextHtml = transformRemoveLineNumberWrapper(nextHtml)
+  nextHtml = transformToc(nextHtml)
   const { html: transformedHtml, replaced } = replaceImageWithPlaceholderResult(
     nextHtml,
     imagePlaceholder,
