@@ -209,6 +209,8 @@
       "insert": "Insert",
       "title": "Insert Web Page",
       "tip": "Some web pages may not support embedding.",
+      "invalidUrl": "Please enter a valid web address or confirm the link format for the selected platform.",
+      "insertError": "Failed to insert the web page. Please check the link and try again.",
       "type": "Link Type:",
       "url": "Page URL:",
       "placeholder": "Enter a web address, starting with http:// or https://"

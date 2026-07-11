@@ -9,6 +9,7 @@
       :visible="dialogVisible"
       width="480px"
       :confirm-btn="t('insert.web.insert')"
+      :confirm-loading="submitting"
       @confirm="insertWebPage"
       @close="dialogVisible = false"
     >
@@ -71,6 +72,7 @@ const editor = inject('editor')
 const options = inject('options')
 
 let dialogVisible = $ref(false)
+let submitting = $ref(false)
 
 const webPages = $ref([
   {
@@ -80,7 +82,7 @@ const webPages = $ref([
   },
 ])
 const formData = $ref({
-  type: '',
+  type: 0,
   url: '',
   error: false,
 })
@@ -95,37 +97,69 @@ onMounted(() => {
 })
 
 const insertWebPage = () => {
-  const { validate, transformURL } = webPages[formData.type]
-  if (!editor.value) {
+  if (!editor.value || submitting) {
     return
   }
-  if (validate && !validate(formData.url)) {
+
+  const currentType = Number(formData.type) || 0
+  const currentWebPage = webPages[currentType]
+  if (!currentWebPage) {
+    useMessage('error', t('insert.web.insertError'))
+    return
+  }
+
+  const { validate, transformURL } = currentWebPage
+  const url = formData.url.trim()
+
+  if (!url || (validate && !validate(url))) {
     formData.error = true
+    useMessage('error', t('insert.web.invalidUrl'))
     return
   }
-  editor.value
-    .chain()
-    .focus()
-    .setParagraph()
-    .setIframe({
-      type: formData.type,
-      src: transformURL ? transformURL(formData.url) : formData.url,
-    })
-    .run()
-  formData.error = false
-  dialogVisible = false
+
+  const src = transformURL ? transformURL(url) : url
+  if (typeof src !== 'string' || src.trim() === '') {
+    formData.error = true
+    useMessage('error', t('insert.web.invalidUrl'))
+    return
+  }
+
+  submitting = true
+  try {
+    const inserted = editor.value
+      .chain()
+      .focus()
+      .setIframe({
+        type: currentType,
+        src: src.trim(),
+      })
+      .run()
+
+    if (!inserted) {
+      throw new Error('insert iframe failed')
+    }
+
+    formData.error = false
+    dialogVisible = false
+  } catch (error) {
+    formData.error = true
+    useMessage('error', t('insert.web.insertError'))
+  } finally {
+    submitting = false
+  }
 }
 watch(
   () => dialogVisible,
   (visible) => {
     if (visible) {
-      formData.type = props.pageType
+      formData.type = Number(props.pageType) || 0
       formData.url = props.pageUrl
       formData.error = false
     } else {
-      formData.type = ''
+      formData.type = 0
       formData.url = ''
       formData.error = false
+      submitting = false
     }
   },
 )
