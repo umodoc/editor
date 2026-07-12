@@ -132,6 +132,9 @@ export function isOfficeLikeClipboardData(clipboardData) {
   if (isOfficeHtml(html)) {
     return true
   }
+  if (html.trim() !== '') {
+    return false
+  }
   const types = Array.from(clipboardData.types || [])
   return types.includes('text/rtf') || types.includes('application/rtf')
 }

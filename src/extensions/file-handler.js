@@ -52,6 +52,8 @@ const FileHandlePlugin = (option) => {
         }
         let files = Array.from(clipboardData.files)
         const html = clipboardData.getData('text/html')
+        const hasHtmlContent = String(html || '').trim() !== ''
+        const hasHtmlImages = /<img\b/i.test(String(html || ''))
         if (allowedMimeTypes.length > 0) {
           files = files.filter((item) => {
             if (allowedMimeTypes.includes(item.type)) {
@@ -61,6 +63,14 @@ const FileHandlePlugin = (option) => {
           })
         }
         if (files.length !== 0) {
+          if (hasHtmlContent) {
+            if (!hasHtmlImages) {
+              setTimeout(() => {
+                onPaste(editor, files, html)
+              }, 0)
+            }
+            return false
+          }
           onPaste(editor, files, html)
           event.preventDefault()
           event.stopPropagation()
