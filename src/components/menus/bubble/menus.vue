@@ -220,7 +220,7 @@ const getCurrentNode = (type) => {
   width: 1px;
   border-right: solid 1px var(--umo-border-color-light);
   height: 16px;
-  margin: 0 10px 0 5px;
+  margin: 0 5px 0 0;
   &:last-child:is(.umo-bubble-menu-divider) {
     display: none;
   }
