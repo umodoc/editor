@@ -567,6 +567,9 @@
       "download": "Download File"
     },
     "image": {
+      "crop": "Crop Image",
+      "applyCrop": "Apply Crop",
+      "cropFailed": "Failed to crop image",
       "open": "Open in a new window",
       "draggable": "Image Floating",
       "flipX": "Flip Horizontally",
@@ -575,6 +578,7 @@
       "proportion": "Lock Image Aspect Ratio",
       "title": "Show Image Description",
       "reset": "Reset Image Position",
+      "resetAll": "Reset All Settings",
       "rotateCC": "Rotate Counter-Clockwise 90°",
       "rotateC": "Rotate Clockwise 90°",
       "convertToNode": "Convert to Block Image",

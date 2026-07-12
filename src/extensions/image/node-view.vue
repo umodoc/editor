@@ -1,23 +1,17 @@
 <template>
   <node-view-wrapper
     ref="containerRef"
+    as="figure"
     class="umo-node-view"
     :class="wrapperClass"
     :style="nodeStyle"
+    data-type="image"
     @dblclick="openImageViewer"
     @click.capture="wrapperClick"
   >
     <div class="umo-node-container umo-node-image" :class="imageClass">
       <div
-        v-if="attrs.src && isLoading"
-        class="umo-node-image-loading"
-        :style="{ height: `${attrs.height}px` }"
-      >
-        <icon name="loading" class="loading-icon" />
-        {{ t('node.image.loading') }}
-      </div>
-      <div
-        v-else-if="attrs.src && error"
+        v-if="attrs.src && error"
         class="umo-node-image-error"
         :style="{ width: `${attrs.width}px`, height: `${attrs.height}px` }"
       >
@@ -31,9 +25,9 @@
         :class="dragerClass"
         :style="dragerStyle"
         :selected="selected"
-        :rotatable="true"
+        :rotatable="!isCropping"
         :boundary="false"
-        :disabled="!editor?.isEditable || isLockedNode"
+        :disabled="isCropping || !editor?.isEditable || isLockedNode"
         :angle="attrs.angle"
         :width="Number(attrs.width)"
         :height="Number(attrs.height)"
@@ -51,7 +45,28 @@
         @mousedown="onMousedown"
         @focus="selected = true"
       >
+        <div v-if="isImageLoading" class="umo-node-image-loading">
+          <icon name="loading" class="loading-icon" />
+          {{ t('node.image.loading') }}
+        </div>
+        <template v-if="isCropping">
+          <div
+            ref="cropperHostRef"
+            class="umo-node-image-cropper"
+            :style="cropperStyle"
+            @dblclick.stop="handleCropperDblclick"
+          >
+            <img
+              ref="cropperImageRef"
+              class="umo-node-image-cropper-source"
+              :src="attrs.src"
+              :alt="attrs.alt || attrs.title || attrs.name || 'image'"
+              crossorigin="anonymous"
+            />
+          </div>
+        </template>
         <img
+          v-else
           ref="imageRef"
           :src="attrs.src"
           :class="{ 'not-equal-proportion': !attrs.equalProportion }"
@@ -63,8 +78,10 @@
           }"
           :data-id="attrs.id"
           :data-preview="attrs.previewType"
+          crossorigin="anonymous"
           loading="lazy"
           @load="onLoad"
+          @error="onError"
         />
         <div
           v-if="!attrs.uploaded && attrs.file !== null"
@@ -73,29 +90,22 @@
           <span></span>
         </div>
       </drager>
-      <div
+      <node-view-content
         v-show="showAlt"
-        class="umo-node-image-alt"
-        :class="altContainerClass"
-        @click="enterAltEditing"
-      >
-        <node-view-content
-          v-if="useRichAltContent"
-          class="umo-node-image-alt-content"
-          :class="{ 'is-empty': isAltEmpty }"
-          :data-placeholder="t('node.image.altPlaceholder')"
-          @focusin="altFocusIn"
-          @input="syncAltEmptyState"
-        />
-        <div v-else class="umo-node-image-alt-fallback">
-          {{ defaultAltText }}
-        </div>
-      </div>
+        as="figcaption"
+        class="umo-node-image-alt umo-node-image-alt-content"
+        :class="[altContainerClass, { 'is-empty': isAltEmpty }]"
+        :data-placeholder="altPlaceholder"
+        :data-empty="isAltEmpty ? '' : null"
+        @focusin="altFocusIn"
+        @focusout="altFocusOut"
+      />
     </div>
   </node-view-wrapper>
 </template>
 
 <script setup>
+import Cropper from 'cropperjs'
 import { NodeViewContent, nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import Drager from 'es-drager'
 
@@ -112,6 +122,25 @@ import {
 import { updateAttributesWithoutHistory } from '../file'
 
 const DIAGRAM_TYPES = new Set(['mermaid'])
+const CROPPER_TEMPLATE = `
+  <cropper-canvas>
+    <cropper-image></cropper-image>
+    <cropper-shade hidden></cropper-shade>
+    <cropper-handle action="select" plain></cropper-handle>
+    <cropper-selection initial-coverage="1" movable resizable outlined>
+      <cropper-handle action="move" theme-color="rgba(255, 255, 255, 0.35)"></cropper-handle>
+      <cropper-handle action="n-resize"></cropper-handle>
+      <cropper-handle action="e-resize"></cropper-handle>
+      <cropper-handle action="s-resize"></cropper-handle>
+      <cropper-handle action="w-resize"></cropper-handle>
+      <cropper-handle action="ne-resize"></cropper-handle>
+      <cropper-handle action="nw-resize"></cropper-handle>
+      <cropper-handle action="se-resize"></cropper-handle>
+      <cropper-handle action="sw-resize"></cropper-handle>
+    </cropper-selection>
+  </cropper-canvas>
+`
+
 const uploadingImageIds = new Set()
 
 const container = inject('container')
@@ -126,38 +155,63 @@ const { updateAttributes, getPos } = props
 
 const attrs = $computed(() => props.node.attrs)
 const isLockedNode = $computed(() => !!attrs.lockedNode)
-const { isLoading, error } = useImage({ src: attrs.src })
 
 const containerRef = ref(null)
+const cropperHostRef = ref(null)
 const imageRef = $ref(null)
+const cropperImageRef = $ref(null)
 const dragRef = $ref(null)
 
 let selected = $ref(false)
 let maxWidth = $ref(0)
 let maxHeight = $ref(0)
 let nodeViewReady = $ref(false)
-let isEditingAlt = $ref(false)
-let isAltEmpty = $ref(true)
+let isCropping = $ref(false)
+let isLoading = $ref(false)
+let error = $ref(false)
 let diagramRenderSeq = 0
-let altContentObserver = null
+let cropper = null
+let cropInitialSelection = null
+let stopClickOutside = null
+let isCropTransactionListening = false
 
-const defaultAltText = $computed(() => {
-  const sources = [attrs.alt, attrs.title, attrs.name]
-  const fallback = sources.find((item) => String(item ?? '').trim() !== '')
-  return String(fallback ?? '').trim()
-})
+const isDataImageSrc = (src) => String(src || '').startsWith('data:image')
+const isNodeSelected = $computed(() => !!props.selected)
+
 const hasRichAltContent = $computed(() => props.node.content.size > 0)
 const isPreviewMode = $computed(() => !!page.value.preview?.enabled)
 const isReadonlyAlt = $computed(
   () => !!options.value.document?.readOnly || isPreviewMode,
 )
 const canEditAlt = $computed(() => !isReadonlyAlt && !isLockedNode)
-const useRichAltContent = $computed(() => !isReadonlyAlt || hasRichAltContent)
+const isAltEmpty = $computed(
+  () =>
+    String(props.node.textContent || '')
+      .replaceAll('\u200b', '')
+      .trim() === '',
+)
+const canCropImage = $computed(
+  () =>
+    !attrs.inline &&
+    attrs.type?.startsWith?.('image') &&
+    !!attrs.src &&
+    !isLockedNode &&
+    editor.value?.isEditable !== false &&
+    !error,
+)
+const altPlaceholder = $computed(() => t('node.image.altPlaceholder'))
 const showAlt = $computed(
   () =>
     !attrs.inline &&
     attrs.showTitle !== false &&
-    (!isReadonlyAlt || hasRichAltContent || defaultAltText !== ''),
+    (!isReadonlyAlt || hasRichAltContent),
+)
+const isImageLoading = $computed(() => !!attrs.src && isLoading)
+const shouldHandleOutside = $computed(
+  () => isNodeSelected || selected || isCropping,
+)
+const shouldListenCropTransactions = $computed(
+  () => isNodeSelected || isCropping,
 )
 
 const wrapperClass = $computed(() => ({
@@ -165,24 +219,30 @@ const wrapperClass = $computed(() => ({
   'is-inline-image': attrs.inline,
 }))
 const imageClass = $computed(() => ({
-  'is-loading': attrs.src && isLoading,
+  'is-loading': isImageLoading,
   'is-error': attrs.src && error,
+  'is-cropping': isCropping,
 }))
 const dragerClass = $computed(() => ({
   'is-draggable': attrs.draggable,
+  'is-cropping': isCropping,
   'umo-hover-shadow': !options.value.document?.readOnly,
   'umo-select-outline': !attrs.draggable && attrs.src && !error,
   'is-alt-selected': selected && !attrs.draggable && attrs.src && !error,
 }))
 const dragerStyle = $computed(() => ({
-  cursor:
-    attrs.draggable && !options.value.document?.readOnly && !isLockedNode
+  cursor: isCropping
+    ? 'default !important'
+    : attrs.draggable && !options.value.document?.readOnly && !isLockedNode
       ? 'move'
       : 'default !important',
 }))
+const cropperStyle = $computed(() => ({
+  width: `${Math.max(Number(attrs.width) || 0, 14)}px`,
+  height: `${Math.max(Number(attrs.height) || 0, 14)}px`,
+}))
 const altContainerClass = $computed(() => ({
   'is-readonly': !canEditAlt,
-  'has-fallback': !useRichAltContent,
 }))
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = attrs
@@ -201,44 +261,238 @@ const nodeStyle = $computed(() => {
 const getHostElement = () => containerRef.value?.$el
 const getDragElement = () => dragRef?.$el
 const getNodePos = () => getPos?.()
-const getEditorState = () => editor.value?.state
-const getEditorView = () => editor.value?.view
 const getAltContentElement = () =>
   getHostElement()?.querySelector('.umo-node-image-alt-content')
+const isAltContentFocused = () => {
+  const altContentElement = getAltContentElement()
+  const { activeElement } = document
+  return !!(
+    altContentElement &&
+    activeElement &&
+    (activeElement === altContentElement ||
+      altContentElement.contains(activeElement))
+  )
+}
 
 const updateNodeAttrsWithoutHistory = (nextAttrs) => {
   updateAttributesWithoutHistory(editor.value, nextAttrs, getNodePos())
 }
 
-const syncAltEmptyState = async () => {
-  await nextTick()
-  const textContent = getAltContentElement()?.textContent
-  isAltEmpty =
-    String(textContent || '')
-      .replaceAll('\u200b', '')
-      .trim() === ''
-}
-
-const stopAltContentObserver = () => {
-  altContentObserver?.disconnect?.()
-  altContentObserver = null
-}
-
-const observeAltContent = async () => {
-  await nextTick()
-  stopAltContentObserver()
-  const el = getAltContentElement()
-  if (!el) {
+const ensureInitialImageAttrs = () => {
+  if (attrs.initialAttrs) {
     return
   }
-  altContentObserver = new MutationObserver(() => {
-    void syncAltEmptyState()
+  const snapshot = { ...attrs }
+  delete snapshot.initialAttrs
+  updateNodeAttrsWithoutHistory({
+    initialAttrs: JSON.stringify(snapshot),
   })
-  altContentObserver.observe(el, {
-    childList: true,
-    subtree: true,
-    characterData: true,
+}
+
+const ensureInitialImageAttrsOnInteraction = () => {
+  if (!attrs.initialAttrs) {
+    ensureInitialImageAttrs()
+  }
+}
+
+const setNodeErrorState = (nextError) => {
+  const normalizedError = !!nextError
+  error = normalizedError
+  if (!!attrs.error !== normalizedError) {
+    updateNodeAttrsWithoutHistory({ error: normalizedError })
+  }
+}
+
+const syncImageStateFromSrc = (src) => {
+  setNodeErrorState(false)
+  isLoading = !!src && !isDataImageSrc(src)
+}
+
+const stopOutsideHandler = () => {
+  stopClickOutside?.()
+  stopClickOutside = null
+}
+
+const ensureOutsideHandler = () => {
+  if (stopClickOutside) {
+    return
+  }
+  stopClickOutside = onClickOutside(containerRef, async (event) => {
+    if (event.target?.closest?.('.umo-editor-bubble-menu')) {
+      return
+    }
+    if (isCropping) {
+      await applyCrop()
+    }
+    selected = false
   })
+}
+
+const setCropTransactionListening = (enabled) => {
+  if (enabled === isCropTransactionListening) {
+    return
+  }
+  editor.value?.[enabled ? 'on' : 'off']?.(
+    'transaction',
+    handleImageCropTransaction,
+  )
+  isCropTransactionListening = enabled
+}
+
+const getCropperSelection = () => cropper?.getCropperSelection?.() || null
+
+const getCropExportSize = (selection) => {
+  const renderedWidth =
+    cropperImageRef?.getBoundingClientRect?.().width ||
+    cropperImageRef?.clientWidth ||
+    Number(attrs.width) ||
+    0
+  const renderedHeight =
+    cropperImageRef?.getBoundingClientRect?.().height ||
+    cropperImageRef?.clientHeight ||
+    Number(attrs.height) ||
+    0
+  const naturalWidth = Number(
+    cropperImageRef?.naturalWidth || imageRef?.naturalWidth || renderedWidth,
+  )
+  const naturalHeight = Number(
+    cropperImageRef?.naturalHeight || imageRef?.naturalHeight || renderedHeight,
+  )
+  const scaleX =
+    renderedWidth > 0 && naturalWidth > 0 ? naturalWidth / renderedWidth : 1
+  const scaleY =
+    renderedHeight > 0 && naturalHeight > 0 ? naturalHeight / renderedHeight : 1
+
+  return {
+    width: Math.max(1, Math.round(Number(selection.width || 0) * scaleX)),
+    height: Math.max(1, Math.round(Number(selection.height || 0) * scaleY)),
+  }
+}
+
+const getCropSelectionSnapshot = (selection) => {
+  if (!selection) {
+    return null
+  }
+  return {
+    x: Number(selection.x || 0),
+    y: Number(selection.y || 0),
+    width: Number(selection.width || 0),
+    height: Number(selection.height || 0),
+  }
+}
+
+const syncCropperState = (activePos = null) => {
+  if (!editor.value?.storage?.image?.cropper) {
+    return
+  }
+  editor.value.storage.image.cropper.activePos = activePos
+  editor.value.commands.setMeta('imageCropState', { activePos })
+}
+
+const isCropSelectionChanged = (selection) => {
+  const current = getCropSelectionSnapshot(selection)
+  if (!current || !cropInitialSelection) {
+    return false
+  }
+  return (
+    Math.abs(current.x - cropInitialSelection.x) > 0.5 ||
+    Math.abs(current.y - cropInitialSelection.y) > 0.5 ||
+    Math.abs(current.width - cropInitialSelection.width) > 0.5 ||
+    Math.abs(current.height - cropInitialSelection.height) > 0.5
+  )
+}
+
+const destroyCropper = () => {
+  cropper?.destroy?.()
+  cropper = null
+  cropInitialSelection = null
+}
+
+const exitCropping = () => {
+  destroyCropper()
+  isCropping = false
+  syncCropperState(null)
+}
+
+const startCropping = async () => {
+  if (isCropping || !canCropImage) {
+    return
+  }
+  selected = true
+  isCropping = true
+  await nextTick()
+  if (!cropperImageRef || !cropperHostRef.value) {
+    exitCropping()
+    return
+  }
+  cropper = new Cropper(cropperImageRef, {
+    container: cropperHostRef.value,
+    template: CROPPER_TEMPLATE,
+  })
+  await nextTick()
+  cropInitialSelection = getCropSelectionSnapshot(getCropperSelection())
+  syncCropperState(getNodePos())
+}
+
+const applyCrop = async () => {
+  if (!isCropping) {
+    return
+  }
+  const selection = getCropperSelection()
+  if (!selection || !isCropSelectionChanged(selection)) {
+    exitCropping()
+    return
+  }
+  try {
+    const { width, height } = getCropExportSize(selection)
+    const canvas = await selection.$toCanvas({ width, height })
+    const dataUrl = canvas.toDataURL('image/png')
+    updateAttributes({
+      id: shortId(10),
+      src: dataUrl,
+      width: Number(selection.width.toFixed(2)),
+      height: Number(selection.height.toFixed(2)),
+      uploaded: false,
+    })
+  } catch (cropError) {
+    useMessage('error', {
+      attach: container,
+      content: cropError?.message || t('bubbleMenu.image.cropFailed'),
+    })
+  } finally {
+    exitCropping()
+  }
+}
+
+const handleCropperDblclick = async () => {
+  await applyCrop()
+}
+
+const isCurrentImageNodeSelected = () => {
+  const pos = getNodePos()
+  const selection = editor.value?.state?.selection
+  return !!(
+    typeof pos === 'number' &&
+    selection?.node?.type?.name === 'image' &&
+    selection.from === pos
+  )
+}
+
+const handleImageCropTransaction = async ({ transaction }) => {
+  const cropAction = transaction.getMeta('imageCrop')
+  if (cropAction?.pos === getNodePos()) {
+    if (cropAction.action === 'toggle') {
+      if (isCropping) {
+        await applyCrop()
+      } else {
+        await startCropping()
+      }
+    }
+    return
+  }
+  if (isCropping && transaction.selectionSet && !isCurrentImageNodeSelected()) {
+    await applyCrop()
+  }
 }
 
 const getContainerMaxWidth = () => {
@@ -275,10 +529,13 @@ const syncContainerBounds = () => {
   return { nextMaxWidth, ratio }
 }
 
-const syncRenderedImageHeight = async () => {
-  await nextTick()
+const syncRenderedImageHeight = () => {
   const renderedHeight = Number(
-    imageRef?.getBoundingClientRect?.().height?.toFixed?.(2),
+    (
+      imageRef?.clientHeight ||
+      imageRef?.getBoundingClientRect?.().height ||
+      0
+    )?.toFixed?.(2),
   )
   if (!Number.isFinite(renderedHeight) || renderedHeight <= 0) {
     return
@@ -297,7 +554,7 @@ const clampImageToContainer = () => {
   }
   const currentWidth = Number(attrs.width)
   if (currentWidth > 0 && currentWidth <= nextMaxWidth) {
-    return
+    return false
   }
   const nextWidth =
     currentWidth > 0 ? Math.min(currentWidth, nextMaxWidth) : nextMaxWidth
@@ -309,6 +566,7 @@ const clampImageToContainer = () => {
       ? { height: nextHeight }
       : {}),
   })
+  return true
 }
 
 const parseSvgNumber = (value) => {
@@ -411,36 +669,6 @@ const renderDiagramToImageSrc = async () => {
   } catch {}
 }
 
-const hydrateDefaultAltContent = () => {
-  if (
-    !nodeViewReady ||
-    !canEditAlt ||
-    hasRichAltContent ||
-    defaultAltText === ''
-  ) {
-    return
-  }
-  const pos = getNodePos()
-  if (typeof pos !== 'number') {
-    return
-  }
-  const view = getEditorView()
-  const state = getEditorState()
-  if (!view || !state) {
-    return
-  }
-  const tr = state.tr.insert(pos + 1, state.schema.text(defaultAltText))
-  view.dispatch(tr)
-}
-
-const scheduleHydrateDefaultAltContent = async () => {
-  if (!nodeViewReady) {
-    return
-  }
-  await nextTick()
-  hydrateDefaultAltContent()
-}
-
 const uploadImage = async () => {
   if (attrs.uploaded || !attrs.id || !uploadFileMap.value.has(attrs.id)) {
     updateNodeAttrsWithoutHistory({ uploaded: true })
@@ -473,8 +701,25 @@ const onLoad = async () => {
   if (!imageRef) {
     return
   }
-  clampImageToContainer()
-  await syncRenderedImageHeight()
+  isLoading = false
+  setNodeErrorState(false)
+  await nextTick()
+  const didClamp = clampImageToContainer()
+  if (!didClamp) {
+    syncRenderedImageHeight()
+  }
+}
+
+const onError = () => {
+  isLoading = false
+  setNodeErrorState(true)
+}
+
+const syncLoadedImageLayout = async () => {
+  if (!imageRef?.complete || Number(imageRef.naturalWidth || 0) <= 0) {
+    return
+  }
+  await onLoad()
 }
 
 const isAltTarget = (target) =>
@@ -489,45 +734,36 @@ const setImageNodeSelection = () => {
 }
 
 const wrapperClick = (event) => {
+  if (isCropping) {
+    return
+  }
   if (isAltTarget(event.target)) {
     return
   }
-  isEditingAlt = false
+  ensureInitialImageAttrsOnInteraction()
   setImageNodeSelection()
 }
 
 const altFocusIn = () => {
   selected = true
-  isEditingAlt = true
-  void syncAltEmptyState()
+  ensureInitialImageAttrsOnInteraction()
 }
 
-const enterAltEditing = async () => {
-  if (!canEditAlt) {
-    return
+const altFocusOut = () => {
+  if (!isCropping && !isNodeSelected) {
+    selected = false
   }
-  isEditingAlt = true
-  const pos = getNodePos()
-  if (typeof pos !== 'number') {
-    return
-  }
-  await nextTick()
-  props.editor
-    .chain()
-    .focus()
-    .setTextSelection(pos + 1 + props.node.content.size)
-    .run()
 }
 
 const onRotate = ({ angle }) => {
-  if (isLockedNode) {
+  if (isLockedNode || isCropping) {
     return
   }
   updateAttributes({ angle })
 }
 
 const onResize = ({ width, height }) => {
-  if (isLockedNode) {
+  if (isLockedNode || isCropping) {
     return
   }
   const { nextMaxWidth } = syncContainerBounds()
@@ -547,7 +783,7 @@ const onResize = ({ width, height }) => {
 
 const onMousedown = (event) => {
   getHostElement()?.click()
-  if (!attrs.draggable || isLockedNode) {
+  if (isCropping || !attrs.draggable || isLockedNode) {
     return
   }
   const dragEl = getDragElement()
@@ -586,13 +822,8 @@ const onDragEnd = () => {
   }
 }
 
-onClickOutside(containerRef, () => {
-  selected = false
-  isEditingAlt = false
-})
-
 const openImageViewer = async (event) => {
-  if (isAltTarget(event?.target) || attrs.previewType === null) {
+  if (isCropping || isAltTarget(event?.target) || attrs.previewType === null) {
     return
   }
   if (attrs.id === null) {
@@ -604,23 +835,49 @@ const openImageViewer = async (event) => {
 }
 
 watch(
-  () => [attrs.alt, attrs.title, attrs.name, attrs.showTitle, canEditAlt],
-  () => {
-    void scheduleHydrateDefaultAltContent()
+  () => isNodeSelected,
+  (nodeSelected) => {
+    if (nodeSelected) {
+      selected = true
+      ensureInitialImageAttrsOnInteraction()
+      return
+    }
+    if (!selected && !isCropping) {
+      return
+    }
+    if (!isAltContentFocused() && !isCropping) {
+      selected = false
+    }
   },
+  { immediate: true },
 )
 
 watch(
-  () => props.node.content.size,
-  () => {
-    void syncAltEmptyState()
+  () => shouldHandleOutside,
+  (enabled) => {
+    if (enabled) {
+      ensureOutsideHandler()
+      return
+    }
+    stopOutsideHandler()
   },
+  { immediate: true },
 )
 
 watch(
-  () => [useRichAltContent, showAlt],
-  () => {
-    void observeAltContent()
+  () => shouldListenCropTransactions,
+  (enabled) => {
+    setCropTransactionListening(enabled)
+  },
+  { immediate: true },
+)
+
+watch(
+  () => canCropImage,
+  async (enabled) => {
+    if (!enabled && isCropping) {
+      await applyCrop()
+    }
   },
 )
 
@@ -636,11 +893,19 @@ watch(
 watch(
   () => attrs.equalProportion,
   async (equalProportion) => {
+    if (!imageRef) {
+      return
+    }
     await nextTick()
     syncContainerBounds()
     const width = imageRef?.offsetWidth
     const height = imageRef?.offsetHeight
-    updateAttributes({ width, height })
+    if (
+      Math.abs((Number(attrs.width) || 0) - Number(width || 0)) > 0.5 ||
+      Math.abs((Number(attrs.height) || 0) - Number(height || 0)) > 0.5
+    ) {
+      updateAttributes({ width, height })
+    }
     maxHeight = equalProportion ? maxWidth / (width / height) : 0
   },
 )
@@ -654,7 +919,7 @@ watch(
 )
 
 const syncUploadStateFromSrc = async (src) => {
-  if (!nodeViewReady || attrs.uploaded !== false || error.value) {
+  if (!nodeViewReady || attrs.uploaded !== false || error) {
     return
   }
   if (src?.startsWith('data:image')) {
@@ -682,22 +947,21 @@ watch(
     if (!nodeViewReady) {
       return
     }
+    syncImageStateFromSrc(src)
+    if (isCropping) {
+      exitCropping()
+    }
     await syncUploadStateFromSrc(src)
+    await nextTick()
+    await syncLoadedImageLayout()
   },
   { immediate: true },
 )
 
-watch(
-  () => error.value,
-  (err) => {
-    updateNodeAttrsWithoutHistory({
-      error: err?.type ? err.type === 'error' : false,
-    })
-  },
-)
-
 onBeforeUnmount(() => {
-  stopAltContentObserver()
+  setCropTransactionListening(false)
+  stopOutsideHandler()
+  exitCropping()
   scheduleFileDelete({
     editor,
     options,
@@ -715,17 +979,16 @@ onBeforeUnmount(() => {
 onMounted(async () => {
   await nextTick()
   nodeViewReady = true
-  await observeAltContent()
-  await syncAltEmptyState()
+  syncImageStateFromSrc(attrs.src)
   await syncUploadStateFromSrc(attrs.src)
-  await scheduleHydrateDefaultAltContent()
-  clampImageToContainer()
-  await syncRenderedImageHeight()
+  await syncLoadedImageLayout()
 })
 </script>
 
 <style lang="less">
 .umo-node-view {
+  margin: 0;
+
   &.is-inline-image {
     display: inline-block !important;
     padding: 2px 6px;
@@ -767,6 +1030,9 @@ onMounted(async () => {
     .es-drager {
       display: block;
       line-height: 0;
+      &.is-cropping {
+        outline: solid 1px var(--umo-primary-color);
+      }
       &.is-alt-selected {
         outline: solid 1px var(--umo-primary-color);
       }
@@ -789,13 +1055,218 @@ onMounted(async () => {
       }
     }
 
+    .umo-node-image-cropper {
+      @crop-mask-color: rgba(0, 0, 0, 0.5);
+      @crop-handle-color: var(--umo-color-black);
+      @crop-edge-thickness: 2px;
+      @crop-edge-offset: 2px;
+      @crop-corner-size: 18px;
+      @crop-corner-line-length: 12px;
+      @crop-corner-line-offset: 6px;
+      @crop-corner-offset: 2px;
+
+      display: block;
+      position: relative;
+      max-width: 100%;
+      max-height: 100%;
+      background: transparent;
+      overflow: hidden;
+
+      cropper-canvas {
+        width: 100%;
+        height: 100%;
+        min-width: 0;
+        min-height: 0;
+        background: transparent;
+        background-image: none !important;
+      }
+
+      cropper-shade {
+        display: none;
+      }
+
+      cropper-grid,
+      cropper-crosshair,
+      cropper-handle[action='select'] {
+        display: none;
+      }
+
+      cropper-selection {
+        box-sizing: border-box;
+        background: transparent;
+        box-shadow: 0 0 0 999px @crop-mask-color;
+        cursor: move;
+      }
+
+      cropper-handle[action='move'] {
+        inset: 0;
+        border: 0;
+        background: transparent;
+        z-index: 1;
+      }
+
+      cropper-handle[action='n-resize'],
+      cropper-handle[action='s-resize'] {
+        width: 18px;
+        height: 12px;
+        z-index: 2;
+
+        &::after {
+          width: 100%;
+          height: @crop-edge-thickness;
+          background: @crop-handle-color;
+        }
+      }
+
+      cropper-handle[action='n-resize'] {
+        margin-top: @crop-edge-offset + 1px;
+      }
+
+      cropper-handle[action='s-resize'] {
+        margin-bottom: @crop-edge-offset + 1px;
+      }
+
+      cropper-handle[action='e-resize'],
+      cropper-handle[action='w-resize'] {
+        width: 12px;
+        height: 18px;
+        z-index: 2;
+
+        &::after {
+          height: 100%;
+          width: @crop-edge-thickness;
+          background: @crop-handle-color;
+        }
+      }
+
+      cropper-handle[action='e-resize'] {
+        margin-right: @crop-edge-offset + 1px;
+      }
+
+      cropper-handle[action='w-resize'] {
+        margin-left: @crop-edge-offset + 1px;
+      }
+
+      cropper-handle[action='ne-resize'],
+      cropper-handle[action='nw-resize'],
+      cropper-handle[action='se-resize'],
+      cropper-handle[action='sw-resize'] {
+        width: @crop-corner-size;
+        height: @crop-corner-size;
+        z-index: 2;
+
+        &::before,
+        &::after {
+          position: absolute;
+          display: block;
+          content: '';
+          background: @crop-handle-color;
+          transform: unset;
+        }
+      }
+
+      cropper-handle[action='ne-resize']::before,
+      cropper-handle[action='nw-resize']::before,
+      cropper-handle[action='se-resize']::before,
+      cropper-handle[action='sw-resize']::before {
+        width: @crop-corner-line-length;
+        height: @crop-edge-thickness;
+      }
+
+      cropper-handle[action='ne-resize']::after,
+      cropper-handle[action='nw-resize']::after,
+      cropper-handle[action='se-resize']::after,
+      cropper-handle[action='sw-resize']::after {
+        width: @crop-edge-thickness;
+        height: @crop-corner-line-length;
+      }
+
+      cropper-handle[action='ne-resize'] {
+        margin-top: @crop-corner-offset;
+        margin-right: @crop-corner-offset;
+
+        &::before {
+          top: @crop-corner-line-offset;
+          right: @crop-corner-line-offset;
+        }
+
+        &::after {
+          top: @crop-corner-line-offset;
+          right: @crop-corner-line-offset;
+          left: unset;
+        }
+      }
+
+      cropper-handle[action='nw-resize'] {
+        margin-top: @crop-corner-offset;
+        margin-left: @crop-corner-offset;
+
+        &::before {
+          top: @crop-corner-line-offset;
+          left: @crop-corner-line-offset;
+        }
+
+        &::after {
+          top: @crop-corner-line-offset;
+          left: @crop-corner-line-offset;
+        }
+      }
+
+      cropper-handle[action='se-resize'] {
+        margin-bottom: @crop-corner-offset;
+        margin-right: @crop-corner-offset;
+
+        &::before {
+          right: @crop-corner-line-offset;
+          bottom: @crop-corner-line-offset;
+        }
+
+        &::after {
+          right: @crop-corner-line-offset;
+          bottom: @crop-corner-line-offset;
+          top: unset;
+          left: unset;
+        }
+      }
+
+      cropper-handle[action='sw-resize'] {
+        margin-bottom: @crop-corner-offset;
+        margin-left: @crop-corner-offset;
+
+        &::before {
+          bottom: @crop-corner-line-offset;
+          left: @crop-corner-line-offset;
+        }
+
+        &::after {
+          bottom: @crop-corner-line-offset;
+          left: @crop-corner-line-offset;
+          top: unset;
+        }
+      }
+
+      &-source {
+        display: block;
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+        object-fit: fill;
+      }
+    }
+
     .umo-node-image-loading {
       display: flex;
       align-items: center;
       justify-content: center;
+      position: absolute;
+      inset: 0;
+      z-index: 3;
       color: #999;
       font-size: 12px;
       gap: 10px;
+      background: rgba(255, 255, 255, 0.78);
+      pointer-events: none;
 
       .loading-icon {
         color: var(--umo-primary-color);
@@ -852,28 +1323,28 @@ onMounted(async () => {
   }
 
   .umo-node-image-alt {
+    @alt-font-size: 13px;
+    @alt-line-height: 1.6;
+    @alt-min-height: 22px;
+
     width: 100%;
     max-width: 100%;
     margin-top: 8px;
     text-align: center;
 
-    &-content,
-    &-fallback {
+    &-content {
       width: 100%;
       max-width: 100%;
+      min-height: @alt-min-height;
       padding: 0;
       background: transparent;
-      font-size: 13px;
-      line-height: 1.6;
+      font-size: @alt-font-size;
+      line-height: @alt-line-height;
       text-align: center;
       color: var(--umo-text-color);
       white-space: pre-wrap;
       word-break: break-word;
       caret-color: var(--umo-text-color);
-    }
-
-    &-content {
-      min-height: 22px;
       outline: none;
       cursor: text;
 
@@ -881,12 +1352,12 @@ onMounted(async () => {
         display: flex;
         align-items: center;
         justify-content: center;
-      }
 
-      &.is-empty::after {
-        content: attr(data-placeholder);
-        color: var(--umo-text-color-light);
-        pointer-events: none;
+        &::after {
+          content: attr(data-placeholder);
+          color: var(--umo-text-color-light);
+          pointer-events: none;
+        }
       }
 
       .tiptap-invisible-character {
@@ -894,11 +1365,7 @@ onMounted(async () => {
       }
     }
 
-    &-fallback {
-      color: var(--umo-text-color-light);
-    }
-
-    &.is-readonly &-content {
+    &.is-readonly {
       cursor: default;
       pointer-events: none;
     }

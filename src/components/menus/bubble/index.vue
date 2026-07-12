@@ -17,7 +17,7 @@ const options = inject('options')
 
 <style lang="less">
 .umo-editor-bubble-menu {
-  max-width: 580px;
+  max-width: 620px;
   z-index: 110;
   border-radius: var(--umo-radius);
   display: flex;

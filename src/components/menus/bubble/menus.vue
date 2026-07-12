@@ -19,12 +19,15 @@
     <menus-toolbar-base-align-center />
     <menus-toolbar-base-align-right />
     <div class="umo-bubble-menu-divider"></div>
-    <menus-bubble-image-flip />
     <menus-bubble-image-proportion />
     <menus-bubble-image-draggable />
     <menus-bubble-image-title v-if="is('image')" />
+    <menus-bubble-image-crop v-if="is('image')" />
+    <div class="umo-bubble-menu-divider"></div>
+    <menus-bubble-image-flip />
     <menus-bubble-image-rotate />
     <menus-bubble-image-reset />
+    <menus-bubble-image-reset-all />
     <div class="umo-bubble-menu-divider"></div>
     <menus-bubble-image-preview
       v-if="

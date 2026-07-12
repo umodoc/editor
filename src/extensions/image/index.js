@@ -1,36 +1,122 @@
-import { mergeAttributes } from '@tiptap/core'
+import { mergeAttributes, nodeInputRule, nodePasteRule } from '@tiptap/core'
 import Image from '@tiptap/extension-image'
+import { NodeSelection, Plugin, PluginKey } from '@tiptap/pm/state'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 
 import NodeView from './node-view.vue'
 
-const getImageSourceElement = (element) => {
-  if (!(element instanceof HTMLElement)) {
-    return null
+const IMAGE_NODE_NAMES = ['image', 'inlineImage']
+
+const PIXEL_DIMENSION_REGEX = /^\d+(\.\d+)?px$/i
+const NUMBER_DIMENSION_REGEX = /^\d+(\.\d+)?$/
+const IMAGE_PARSE_CACHE = new WeakMap()
+
+const createInitialImageAttrs = (attrs = {}) => {
+  if (attrs.initialAttrs) {
+    return attrs
   }
-  return element.tagName.toLowerCase() === 'img'
-    ? element
-    : element.querySelector('img')
+  const snapshot = { ...attrs }
+  delete snapshot.initialAttrs
+  return {
+    ...attrs,
+    initialAttrs: JSON.stringify(snapshot),
+  }
 }
 
-const getImageAttribute = (element, name) =>
-  getImageSourceElement(element)?.getAttribute(name)
+const parseInitialImageAttrs = (value) => {
+  if (!value) {
+    return null
+  }
+  try {
+    const parsed = JSON.parse(value)
+    return parsed && typeof parsed === 'object' ? parsed : null
+  } catch {
+    return null
+  }
+}
 
-const parseDimension = (element, name) => {
-  const sourceElement = getImageSourceElement(element) || element
-  const rawValue =
-    sourceElement.style?.[name] || sourceElement.getAttribute(name)
+const parseDimensionValue = (rawValue) => {
   if (!rawValue) {
     return null
   }
   const normalizedValue = String(rawValue).trim()
-  if (/^\d+(\.\d+)?px$/i.test(normalizedValue)) {
+  if (PIXEL_DIMENSION_REGEX.test(normalizedValue)) {
     return Number.parseFloat(normalizedValue)
   }
-  if (/^\d+(\.\d+)?$/.test(normalizedValue)) {
+  if (NUMBER_DIMENSION_REGEX.test(normalizedValue)) {
     return Number.parseFloat(normalizedValue)
   }
   return null
+}
+
+const getParsedImageElement = (element) => {
+  if (!(element instanceof HTMLElement)) {
+    return {
+      sourceElement: null,
+      attrs: {},
+      dimensions: {},
+    }
+  }
+  const cached = IMAGE_PARSE_CACHE.get(element)
+  if (cached) {
+    return cached
+  }
+  const sourceElement =
+    element.tagName.toLowerCase() === 'img'
+      ? element
+      : element.querySelector('img')
+  const parsed = {
+    sourceElement,
+    attrs: {
+      src: sourceElement?.getAttribute('src') ?? null,
+      alt: sourceElement?.getAttribute('alt') ?? null,
+      title: sourceElement?.getAttribute('title') ?? null,
+    },
+    dimensions: {
+      width: parseDimensionValue(
+        sourceElement?.style?.width || sourceElement?.getAttribute('width'),
+      ),
+      height: parseDimensionValue(
+        sourceElement?.style?.height || sourceElement?.getAttribute('height'),
+      ),
+    },
+  }
+  IMAGE_PARSE_CACHE.set(element, parsed)
+  if (sourceElement && sourceElement !== element) {
+    IMAGE_PARSE_CACHE.set(sourceElement, parsed)
+  }
+  return parsed
+}
+
+const getImageAttribute = (element, name) =>
+  getParsedImageElement(element).attrs[name] ?? null
+
+const parseDimension = (element, name) =>
+  getParsedImageElement(element).dimensions[name] ?? null
+
+const wrapImageElementAsFigure = (element) => {
+  const doc = element?.ownerDocument
+  if (!doc || !(element instanceof HTMLElement)) {
+    return
+  }
+  if (element.closest('figure[data-type="image"], inline-img')) {
+    return
+  }
+  const figure = doc.createElement('figure')
+  figure.setAttribute('data-type', 'image')
+  figure.appendChild(element.cloneNode(true))
+  figure.appendChild(doc.createElement('figcaption'))
+  element.replaceWith(figure)
+}
+
+const normalizePastedHtmlImages = (html) => {
+  if (!html || typeof DOMParser === 'undefined') {
+    return html
+  }
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(html, 'text/html')
+  doc.querySelectorAll('img').forEach(wrapImageElementAsFigure)
+  return doc.body?.innerHTML || html
 }
 
 const createImageAttributes = () => ({
@@ -72,8 +158,12 @@ const createImageAttributes = () => ({
   uploaded: { default: false },
   error: { default: false },
   previewType: { default: 'image' },
-  inline: { default: false },
   showTitle: { default: false },
+  inline: { default: false },
+  initialAttrs: {
+    default: null,
+    renderHTML: () => ({}),
+  },
 })
 
 const createInsertImageCommand =
@@ -82,7 +172,7 @@ const createInsertImageCommand =
   ({ commands, editor }) => {
     const content = {
       type: typeName,
-      attrs: { ...options, inline },
+      attrs: createInitialImageAttrs({ ...options, inline }),
     }
     if (replace) {
       return commands.insertContent(content)
@@ -90,11 +180,27 @@ const createInsertImageCommand =
     return commands.insertContentAt(editor.state.selection.anchor, content)
   }
 
+const isMatchedImageType = (currentType, typeName) =>
+  Array.isArray(typeName)
+    ? typeName.includes(currentType)
+    : currentType === typeName
+
+const getSelectedImagePosition = (selection, typeName) => {
+  if (isMatchedImageType(selection?.node?.type?.name, typeName)) {
+    return selection.from
+  }
+  const currentNode = getSelectedAncestorNode(selection?.$from, typeName)
+  return currentNode?.pos ?? null
+}
+
 const getSelectedAncestorNode = ($pos, typeName) => {
+  if (!$pos) {
+    return null
+  }
   const { depth: maxDepth } = $pos
   for (let depth = maxDepth; depth > 0; depth -= 1) {
     const node = $pos.node(depth)
-    if (node?.type?.name === typeName) {
+    if (isMatchedImageType(node?.type?.name, typeName)) {
       return {
         node,
         pos: $pos.before(depth),
@@ -104,19 +210,78 @@ const getSelectedAncestorNode = ($pos, typeName) => {
   return null
 }
 
+const getSelectedImageNode = (selection) => {
+  if (isMatchedImageType(selection?.node?.type?.name, IMAGE_NODE_NAMES)) {
+    return {
+      node: selection.node,
+      pos: selection.from,
+    }
+  }
+  return getSelectedAncestorNode(selection?.$from, IMAGE_NODE_NAMES)
+}
+
+const getResetImageAttrs = (node) => {
+  const initialAttrs = parseInitialImageAttrs(node?.attrs?.initialAttrs)
+  if (!initialAttrs) {
+    return null
+  }
+  return {
+    ...initialAttrs,
+    initialAttrs: node.attrs.initialAttrs,
+  }
+}
+
 const BaseImage = Image.extend({
   atom: true,
   selectable: true,
+  addStorage() {
+    return {
+      cropper: {
+        activePos: null,
+      },
+    }
+  },
   addAttributes() {
     return createImageAttributes()
   },
   parseHTML() {
     return [{ tag: 'img' }]
   },
+  addCommands() {
+    return {
+      resetImageToInitial:
+        () =>
+        ({ state, dispatch }) => {
+          const currentImage = getSelectedImageNode(state.selection)
+          if (!currentImage) {
+            return false
+          }
+          const nextAttrs = getResetImageAttrs(currentImage.node)
+          if (!nextAttrs) {
+            return false
+          }
+          if (dispatch) {
+            const nextNode = currentImage.node.type.create(
+              nextAttrs,
+              currentImage.node.content,
+              currentImage.node.marks,
+            )
+            const tr = state.tr.replaceWith(
+              currentImage.pos,
+              currentImage.pos + currentImage.node.nodeSize,
+              nextNode,
+            )
+            tr.setSelection(NodeSelection.create(tr.doc, currentImage.pos))
+            dispatch(tr)
+          }
+          return true
+        },
+    }
+  },
 })
 
 export const BlockImage = BaseImage.extend({
-  atom: true,
+  atom: false,
   content: 'inline*',
   defining: true,
   isolating: true,
@@ -148,7 +313,9 @@ export const BlockImage = BaseImage.extend({
     return [
       {
         tag: 'figure[data-type="image"]',
-        contentElement: 'figcaption',
+        contentElement: (element) =>
+          element.querySelector('figcaption, .umo-node-image-alt-content') ||
+          element.ownerDocument.createElement('figcaption'),
       },
       { tag: 'img' },
     ]
@@ -175,9 +342,37 @@ export const BlockImage = BaseImage.extend({
   addNodeView() {
     return VueNodeViewRenderer(NodeView)
   },
+  addProseMirrorPlugins() {
+    return [
+      new Plugin({
+        key: new PluginKey('image-paste-normalize'),
+        props: {
+          transformPastedHTML: (html) => normalizePastedHtmlImages(html),
+        },
+      }),
+    ]
+  },
   addCommands() {
     return {
+      ...this.parent?.(),
       setImage: createInsertImageCommand(this.name, false),
+      toggleImageCrop:
+        () =>
+        ({ state, tr, dispatch }) => {
+          const pos = getSelectedImagePosition(state.selection, this.name)
+          if (typeof pos !== 'number') {
+            return false
+          }
+          if (dispatch) {
+            dispatch(
+              tr.setMeta('imageCrop', {
+                action: 'toggle',
+                pos,
+              }),
+            )
+          }
+          return true
+        },
     }
   },
 })
@@ -206,6 +401,7 @@ export const InlineImage = BaseImage.extend({
   },
   addCommands() {
     return {
+      ...this.parent?.(),
       setInlineImage: createInsertImageCommand(this.name, true),
     }
   },
