@@ -6,7 +6,7 @@ import { t } from '@/composables/i18n'
 const insertNewlinePluginKey = new PluginKey('insert-newline')
 const edgeThreshold = 8
 const horizontalPadding = 12
-const activeRowPadding = 12
+const activeRowPadding = 0
 const excludedNodeTypes = ['footnotes']
 const allowedTextblockTypes = ['image']
 
@@ -147,19 +147,12 @@ const isWithinActiveRow = (view, event, activePos) => {
   )
 }
 
-const syncActiveState = (view, previousState = null) => {
-  const previousActivePos = previousState
-    ? (insertNewlinePluginKey.getState(previousState)?.activePos ?? null)
-    : null
+const syncActiveState = (view) => {
   const currentActivePos =
     insertNewlinePluginKey.getState(view.state)?.activePos ?? null
   const isActive = currentActivePos !== null
 
   view.dom.classList.toggle('umo-insert-newline-active', isActive)
-
-  if (isActive && previousActivePos === null && view.hasFocus()) {
-    view.dom.blur()
-  }
 }
 
 const createWidget = (pos) => {
@@ -174,7 +167,7 @@ const createWidget = (pos) => {
   button.className = 'umo-insert-newline-widget'
   button.tabIndex = -1
   button.setAttribute('aria-label', label)
-  button.textContent = label
+  // button.textContent = label
 
   anchor.append(button)
   return anchor
@@ -192,8 +185,8 @@ export default Extension.create({
           syncActiveState(view)
 
           return {
-            update(updatedView, previousState) {
-              syncActiveState(updatedView, previousState)
+            update(updatedView) {
+              syncActiveState(updatedView)
             },
             destroy() {
               view.dom.classList.remove('umo-insert-newline-active')
