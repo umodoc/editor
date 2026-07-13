@@ -72,7 +72,7 @@ export default Mention.extend({
         this.options.HTMLAttributes,
         HTMLAttributes,
         {
-          'data-tooltip': tooltip,
+          title: tooltip,
         },
       ),
       `${mentionChar}${label}`,
