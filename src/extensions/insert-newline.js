@@ -129,21 +129,22 @@ const isWithinActiveRow = (view, event, activePos) => {
     return false
   }
 
-  const button = view.dom.querySelector(
-    `.umo-insert-newline-anchor[data-pos="${activePos}"] .umo-insert-newline-widget`,
+  const anchor = view.dom.querySelector(
+    `.umo-insert-newline-anchor[data-pos="${activePos}"]`,
   )
-  if (!(button instanceof HTMLElement)) {
+  if (!(anchor instanceof HTMLElement)) {
     return false
   }
 
   const editorRect = view.dom.getBoundingClientRect()
-  const buttonRect = button.getBoundingClientRect()
+  const anchorRect = anchor.getBoundingClientRect()
+  const lineY = anchorRect.top
 
   return (
     event.clientX >= editorRect.left - horizontalPadding &&
     event.clientX <= editorRect.right + horizontalPadding &&
-    event.clientY >= buttonRect.top - activeRowPadding &&
-    event.clientY <= buttonRect.bottom + activeRowPadding
+    event.clientY >= lineY - edgeThreshold - activeRowPadding &&
+    event.clientY <= lineY + edgeThreshold + activeRowPadding
   )
 }
 
@@ -167,7 +168,7 @@ const createWidget = (pos) => {
   button.className = 'umo-insert-newline-widget'
   button.tabIndex = -1
   button.setAttribute('aria-label', label)
-  // button.textContent = label
+  button.setAttribute('title', label)
 
   anchor.append(button)
   return anchor

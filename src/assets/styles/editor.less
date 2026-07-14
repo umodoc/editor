@@ -152,8 +152,11 @@
       display: block;
       height: 0;
       position: absolute;
+      left: 0;
+      right: calc(var(--umo-page-margin-right) - 36px);
       isolation: isolate;
       z-index: 200;
+      pointer-events: none;
 
       @media print {
         display: none;
@@ -162,22 +165,23 @@
 
     .umo-insert-newline-widget {
       position: absolute;
-      top: -34px;
-      left: -38px;
-      width: 24px;
-      height: 24px;
+      top: 0;
+      right: 0;
+      transform: translateY(-20px);
+      width: 26px;
+      height: 26px;
       border: 1px solid var(--umo-border-color);
-      border-radius: 3px;
+      border-radius: var(--umo-radius);
       background: #fff;
       pointer-events: auto;
       padding: 0;
       margin: 0;
       display: flex;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: center;
       cursor: pointer;
       color: var(--umo-text-color-light);
-      font-size: 12px;
+      font-size: 0;
       line-height: 1;
       white-space: nowrap;
       transition:
@@ -188,32 +192,16 @@
       user-select: none;
 
       &::after {
-        content: '';
-        position: absolute;
-        left: 11px;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        width: 10px;
-        height: 2px;
-        background: var(--umo-primary-color);
-      }
-
-      &::before {
-        content: '';
-        position: absolute;
-        left: 11px;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        width: 2px;
-        height: 10px;
-        border-radius: 999px;
-        background: var(--umo-primary-color);
+        content: '↵';
+        font-size: 12px;
+        line-height: 1;
+        transform: translateY(1px);
       }
 
       &:hover {
-        border-color: var(--umo-primary-color);
-        box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
         color: var(--umo-primary-color);
+        border-color: var(--umo-border-color);
+        box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
       }
     }
 
