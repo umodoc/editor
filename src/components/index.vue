@@ -752,14 +752,12 @@ const setContent = (
     throw new Error('editor is not ready!')
   }
   const doc = contentTransform(content)
-  const runSetContent = () =>
+  try {
     editor.value.value
       .chain()
       .setContent(doc, { emitUpdate: options.emitUpdate })
       .focus(options.focusPosition, options.focusOptions)
       .run()
-  try {
-    runSetContent()
   } catch (error) {
     const isSelectionPositionError =
       error instanceof RangeError &&
@@ -768,13 +766,6 @@ const setContent = (
     if (!isSelectionPositionError) {
       throw error
     }
-    const { state, view } = editor.value
-    view.dispatch(
-      state.tr
-        .setSelection(new AllSelection(state.doc))
-        .setMeta('addToHistory', false),
-    )
-    runSetContent()
   }
 }
 
