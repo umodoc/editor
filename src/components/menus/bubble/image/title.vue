@@ -46,13 +46,22 @@ const getSelectedImagePos = () => {
   return null
 }
 
-const focusImageTitle = async (imagePos) => {
+const getImageTitleFocusPos = (imagePos, imageNode) => {
   if (typeof imagePos !== 'number') {
+    return null
+  }
+  const contentSize = imageNode?.content?.size ?? 0
+  return imagePos + 1 + contentSize
+}
+
+const focusImageTitle = async (imagePos, imageNode) => {
+  const focusPos = getImageTitleFocusPos(imagePos, imageNode)
+  if (typeof focusPos !== 'number') {
     return
   }
   await nextTick()
   requestAnimationFrame(() => {
-    editor.value?.commands.focus(imagePos + 1)
+    editor.value?.commands.focus(focusPos)
   })
 }
 
@@ -67,7 +76,7 @@ const toggleTitle = async () => {
     showTitle,
   })
   if (showTitle) {
-    await focusImageTitle(imagePos)
+    await focusImageTitle(imagePos, image.value)
   }
 }
 </script>
