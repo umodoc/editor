@@ -6,7 +6,7 @@ import {
 } from '@tiptap/extension-details'
 import Document from '@tiptap/extension-document'
 import Link from '@tiptap/extension-link'
-import { TaskItem, TaskList } from '@tiptap/extension-list'
+import { TaskList } from '@tiptap/extension-list'
 import Mathematics from '@tiptap/extension-mathematics'
 import NodeRange from '@tiptap/extension-node-range'
 import Subscript from '@tiptap/extension-subscript'
@@ -50,6 +50,10 @@ import Indent from './indent'
 import InsertNewline from './insert-newline'
 import LetterSpacing from './letter-spacing'
 import LineHeight from './line-height'
+import {
+  ListItemExtension as ListItem,
+  TaskItemExtension as TaskItem,
+} from './list-item'
 import Margin from './margin'
 import Mention from './mention'
 import getUsersSuggestion from './mention/suggestion'
@@ -179,6 +183,7 @@ export const getDefaultExtensions = ({ container, options, uploadFileMap }) => {
       selection: false,
       bulletList: false,
       orderedList: false,
+      listItem: false,
       trailingNode: false,
       listKeymap: true,
     }),
@@ -221,6 +226,7 @@ export const getDefaultExtensions = ({ container, options, uploadFileMap }) => {
     TextAlign,
     NodeAlign,
     LetterSpacing,
+    ListItem,
     TaskItem.configure({ nested: true }),
     LineHeight,
     SearchReplace,
