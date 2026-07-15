@@ -166,13 +166,29 @@ const createImageAttributes = () => ({
   },
 })
 
+const createInitialImageContent = (attrs, inline) => {
+  if (inline) {
+    return undefined
+  }
+  const text = [attrs.alt, attrs.title, attrs.name].find((value) =>
+    String(value || '').trim(),
+  )
+  if (!text) {
+    return undefined
+  }
+  return [{ type: 'text', text }]
+}
+
 const createInsertImageCommand =
   (typeName, inline) =>
   (options, replace = false) =>
   ({ commands, editor }) => {
+    const attrs = createInitialImageAttrs({ ...options, inline })
+    const initialContent = createInitialImageContent(attrs, inline)
     const content = {
       type: typeName,
-      attrs: createInitialImageAttrs({ ...options, inline }),
+      attrs,
+      ...(initialContent ? { content: initialContent } : {}),
     }
     if (replace) {
       return commands.insertContent(content)
