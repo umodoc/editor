@@ -59,6 +59,7 @@ import {
   isRecord,
   isString,
 } from '@tool-belt/type-predicates'
+import { AllSelection } from '@tiptap/pm/state'
 import domToImage from 'dom-to-image-more'
 import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
@@ -751,11 +752,30 @@ const setContent = (
     throw new Error('editor is not ready!')
   }
   const doc = contentTransform(content)
-  editor.value
-    .chain()
-    .setContent(doc, { emitUpdate: options.emitUpdate })
-    .focus(options.focusPosition, options.focusOptions)
-    .run()
+  const runSetContent = () =>
+    editor.value.value
+      .chain()
+      .setContent(doc, { emitUpdate: options.emitUpdate })
+      .focus(options.focusPosition, options.focusOptions)
+      .run()
+  try {
+    runSetContent()
+  } catch (error) {
+    const isSelectionPositionError =
+      error instanceof RangeError &&
+      /outside of fragment|out of range/i.test(String(error.message || ''))
+
+    if (!isSelectionPositionError) {
+      throw error
+    }
+    const { state, view } = editor.value
+    view.dispatch(
+      state.tr
+        .setSelection(new AllSelection(state.doc))
+        .setMeta('addToHistory', false),
+    )
+    runSetContent()
+  }
 }
 
 // Content Methods
