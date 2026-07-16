@@ -753,7 +753,7 @@ const setContent = (
   }
   const doc = contentTransform(content)
   try {
-    editor.value.value
+    editor.value
       .chain()
       .setContent(doc, { emitUpdate: options.emitUpdate })
       .focus(options.focusPosition, options.focusOptions)
