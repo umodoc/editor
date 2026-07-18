@@ -141,6 +141,7 @@ The development of Umo Editor relies on community support. Below is a list of co
 - [Sherman Xu](https://github.com/xuzhenjun130): 🛠️ Contributed code
 - [vace](https://github.com/vace)：🛠️ Contributed code
 - [Mikasa33](https://github.com/Mikasa33)：🛠️ Contributed code
+- [ohmua](https://github.com/ohmua)：🛠️ Contributed code
 
 We welcome all forms of contributions, including but not limited to submitting bug reports, feature requests, and code contributions.
 

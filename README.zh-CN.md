@@ -146,6 +146,7 @@ Umo Editor 的发展离不开社区的支持，以下是为 Umo Editor 贡献过
 - [Sherman Xu](https://github.com/xuzhenjun130)：🛠️ 贡献了部分代码
 - [vace](https://github.com/vace)：🛠️ 贡献了部分代码
 - [Mikasa33](https://github.com/Mikasa33)：🛠️ 贡献了部分代码
+- [ohmua](https://github.com/ohmua)：🛠️ 贡献了部分代码
 
 我们欢迎任何形式的贡献，包括但不限于提交 Bug 报告、功能请求、代码贡献等。
 
