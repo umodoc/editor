@@ -364,6 +364,15 @@ export const scheduleFileDelete = ({
   searchRange = fileSearchRange,
   deleteTypePrefix = 'image',
 }) => {
+  const editorInstance = editor?.value
+  if (
+    editorInstance?.isEditable === false ||
+    editorInstance?.storage?.versionCompare?.isPreviewing ||
+    options?.value?.document?.readOnly
+  ) {
+    return
+  }
+
   const deletedFileNode = {
     ...fileNode,
     position: Number.isFinite(fileNode?.position) ? fileNode.position : null,
@@ -371,7 +380,14 @@ export const scheduleFileDelete = ({
 
   setTimeout(() => {
     const currentEditor = editor?.value
-    if (currentEditor?.isDestroyed) {
+    if (!currentEditor) {
+      return
+    }
+    if (
+      currentEditor?.isDestroyed ||
+      options?.value?.document?.readOnly ||
+      currentEditor?.isEditable === false
+    ) {
       return
     }
 
