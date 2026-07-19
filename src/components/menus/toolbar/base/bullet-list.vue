@@ -1,36 +1,36 @@
 <template>
   <menus-button
-    ico="ordered-list"
-    :text="t('list.ordered.text')"
-    shortcut="Ctrl+Shift+7"
+    ico="bullet-list"
+    :text="t('list.bullet.text')"
+    shortcut="Ctrl+Shift+8"
     menu-type="popup"
     popup-handle="arrow"
     hide-text
+    :menu-active="editor?.isActive('bulletList')"
     :popup-visible="popupVisible"
-    :menu-active="editor?.isActive('orderedList')"
     :disabled="
       !editor?.can().chain().focus().toggleBulletList().run() &&
       !editor?.can().chain().focus().toggleOrderedList().run() &&
       !editor?.can().chain().focus().toggleTaskList().run()
     "
     @toggle-popup="togglePopup"
-    @menu-click="toggleOrderedList(options[0].value)"
+    @menu-click="toggleBulletList(options[0].value)"
   >
     <template #content>
-      <div class="umo-ordered-list-group">
+      <div class="umo-bullet-list-group">
         <tooltip
           v-for="item in options"
           :key="item.value"
           :content="item.label"
         >
           <div
-            class="umo-ordered-list-item"
+            class="umo-bullet-list-item"
             :class="{ active: listStyleType === item.value }"
-            @click="toggleOrderedList(item.value)"
+            @click="toggleBulletList(item.value)"
           >
             <icon
-              class="umo-icon-ordered-list"
-              :name="`ordered-list-${item.value}`"
+              class="umo-icon-bullet-list"
+              :name="`bullet-list-${item.value}`"
             />
           </div>
         </tooltip>
@@ -44,49 +44,34 @@ const { popupVisible, togglePopup } = usePopup()
 const editor = inject('editor')
 
 const options = [
-  { label: t('list.ordered.decimal'), value: 'decimal' },
-  {
-    label: t('list.ordered.decimalLeadingZero'),
-    value: 'decimal-leading-zero',
-  },
-  { label: t('list.ordered.lowerRoman'), value: 'lower-roman' },
-  { label: t('list.ordered.upperRoman'), value: 'upper-roman' },
-  { label: t('list.ordered.lowerLatin'), value: 'lower-latin' },
-  { label: t('list.ordered.upperLatin'), value: 'upper-latin' },
-  {
-    label: t('list.ordered.tradChineseInformal'),
-    value: 'trad-chinese-informal',
-  },
-  {
-    label: t('list.ordered.simpChineseFormal'),
-    value: 'simp-chinese-formal',
-  },
+  { label: t('list.bullet.disc'), value: 'disc' },
+  { label: t('list.bullet.circle'), value: 'circle' },
+  { label: t('list.bullet.square'), value: 'square' },
 ]
 
-// 列表类型
-let listStyleType = $ref('left')
+let listStyleType = $ref('')
 watch(
   () => popupVisible.value,
   (val) => {
     if (val && editor.value) {
-      const { listType } = editor.value.getAttributes('orderedList')
+      const { listType } = editor.value.getAttributes('bulletList')
       listStyleType = listType
     }
   },
 )
-const toggleOrderedList = (listType) => {
+const toggleBulletList = (listType) => {
   const chain = editor.value?.chain().focus()
-  if (editor.value?.isActive('orderedList')) {
-    if (editor.value.getAttributes('orderedList').listType === listType) {
-      chain?.toggleOrderedList().run()
+  if (editor.value?.isActive('bulletList')) {
+    if (editor.value.getAttributes('bulletList').listType === listType) {
+      chain?.toggleBulletList().run()
     } else {
-      chain?.updateAttributes('orderedList', { listType }).run()
+      chain?.updateAttributes('bulletList', { listType }).run()
     }
   } else {
     chain
-      ?.toggleOrderedList()
-      .updateAttributes('orderedList', { listType })
-      .run()
+      ?.toggleBulletList()
+      ?.updateAttributes('bulletList', { listType })
+      ?.run()
   }
   listStyleType = listType
   popupVisible.value = false
@@ -94,19 +79,16 @@ const toggleOrderedList = (listType) => {
 </script>
 
 <style lang="less" scoped>
-.umo-ordered-list-group {
+.umo-bullet-list-group {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
   gap: 8px;
-  width: 248px;
-  .umo-ordered-list-item {
+  .umo-bullet-list-item {
     cursor: pointer;
     padding: 5px;
     border: solid 1px var(--umo-border-color);
     box-sizing: border-box;
-    &:nth-child(4n) {
+    &:last-child {
       margin-right: 0;
     }
     &:hover {
@@ -116,7 +98,7 @@ const toggleOrderedList = (listType) => {
       border-color: var(--umo-primary-color);
     }
   }
-  .umo-icon-ordered-list {
+  .umo-icon-bullet-list {
     font-size: 44px;
   }
 }

@@ -35,24 +35,6 @@
           </div>
         </tooltip>
       </div>
-      <div class="umo-ordered-list-divider"></div>
-      <div
-        class="umo-ordered-list-title"
-        v-text="t('list.ordered.property')"
-      ></div>
-      <div class="umo-ordered-list-properties">
-        <t-input-number
-          v-model="startAt"
-          :min="1"
-          align="left"
-          theme="column"
-          @change="changeOrderedListStart"
-        >
-          <template #label
-            ><span v-text="t('list.ordered.startAt')"></span
-          ></template>
-        </t-input-number>
-      </div>
     </template>
   </menus-button>
 </template>
@@ -109,26 +91,6 @@ const toggleOrderedList = (listType) => {
   listStyleType = listType
   popupVisible.value = false
 }
-
-// 起始编号
-let startAt = $ref(1)
-const changeOrderedListStart = () => {
-  if (editor.value) {
-    editor.value
-      .chain()
-      .focus()
-      .updateAttributes('orderedList', { start: startAt })
-      .run()
-  }
-}
-watch(
-  () => popupVisible.value,
-  (visible) => {
-    if (visible && editor.value) {
-      startAt = editor.value.getAttributes('orderedList').start || 1
-    }
-  },
-)
 </script>
 
 <style lang="less" scoped>
@@ -139,7 +101,6 @@ watch(
   flex-wrap: wrap;
   gap: 8px;
   width: 248px;
-  margin-bottom: 10px;
   .umo-ordered-list-item {
     cursor: pointer;
     padding: 5px;
@@ -157,23 +118,6 @@ watch(
   }
   .umo-icon-ordered-list {
     font-size: 44px;
-  }
-}
-.umo-ordered-list-title {
-  color: var(--umo-text-color-light);
-  font-size: 12px;
-  margin: 7px 0 4px;
-}
-.umo-ordered-list-divider {
-  height: 1px;
-  background-color: var(--umo-border-color-light);
-  margin: 5px 0 0;
-}
-.umo-ordered-list-properties {
-  display: flex;
-  flex-direction: column;
-  :deep(.umo-input-number) {
-    width: 248px;
   }
 }
 </style>
