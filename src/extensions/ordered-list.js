@@ -15,11 +15,32 @@ const focusListItem = (tr, listItemPos) => {
   return tr.setSelection(TextSelection.near(tr.doc.resolve(nextPos)))
 }
 
+const syncNestedOrderedListType = (tr, from, to, listType) => {
+  tr.doc.nodesBetween(from, to, (node, pos) => {
+    if (node.type.name !== 'orderedList' || node.attrs.listType === listType) {
+      return
+    }
+
+    tr.setNodeMarkup(pos, undefined, {
+      ...node.attrs,
+      listType,
+    })
+  })
+
+  return tr
+}
+
 const updateOrderedListStart = (tr, context, start) => {
   tr.setNodeMarkup(context.orderedListPos, undefined, {
     ...context.orderedListNode.attrs,
     start: normalizeOrderedListStart(start),
   })
+  syncNestedOrderedListType(
+    tr,
+    context.orderedListPos,
+    context.orderedListPos + context.orderedListNode.nodeSize,
+    context.orderedListNode.attrs.listType || 'decimal',
+  )
   return focusListItem(tr, context.listItemPos)
 }
 
@@ -56,7 +77,19 @@ const splitOrderedListAtItem = (tr, context, start) => {
     new Slice(Fragment.fromArray([firstList, secondList]), 0, 0),
   )
 
+  syncNestedOrderedListType(
+    tr,
+    context.orderedListPos,
+    context.orderedListPos + firstList.nodeSize,
+    context.orderedListNode.attrs.listType || 'decimal',
+  )
   const secondListPos = context.orderedListPos + firstList.nodeSize
+  syncNestedOrderedListType(
+    tr,
+    secondListPos,
+    secondListPos + secondList.nodeSize,
+    context.orderedListNode.attrs.listType || 'decimal',
+  )
   return focusListItem(tr, secondListPos + 1)
 }
 
