@@ -518,6 +518,7 @@
       "continuePrevious": "Continue Previous Numbering",
       "startNew": "Start New List",
       "changeStart": "Set Numbering Value",
+      "numberType": "Number Type",
       "startValue": "Numbering Value",
       "apply": "Apply",
       "cancel": "Cancel",

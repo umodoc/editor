@@ -1,6 +1,7 @@
 import { OrderedList } from '@tiptap/extension-list'
 import { Fragment, Slice } from '@tiptap/pm/model'
 import { TextSelection } from '@tiptap/pm/state'
+import { ReplaceAroundStep } from '@tiptap/pm/transform'
 
 import {
   getContinueOrderedListStart,
@@ -109,6 +110,69 @@ const createOrderedListStartCommand =
         : undefined,
     })
 
+const sinkOrderedListItemWithType =
+  () =>
+  ({ state, dispatch }) => {
+    const { orderedList, listItem } = state.schema.nodes
+    if (!orderedList || !listItem) {
+      return false
+    }
+
+    const { $from, $to } = state.selection
+    const range = $from.blockRange(
+      $to,
+      (node) => node.childCount > 0 && node.firstChild?.type === listItem,
+    )
+    if (!range || range.startIndex === 0 || range.parent.type !== orderedList) {
+      return false
+    }
+
+    const nodeBefore = range.parent.child(range.startIndex - 1)
+    if (nodeBefore.type !== listItem) {
+      return false
+    }
+
+    if (dispatch) {
+      const nestedList =
+        nodeBefore.lastChild?.type === orderedList ? nodeBefore.lastChild : null
+      const nestedBefore = !!nestedList
+      const inner = Fragment.from(nestedBefore ? listItem.create() : null)
+      const nestedListAttrs = nestedList
+        ? nestedList.attrs
+        : { ...range.parent.attrs, start: 1 }
+      const slice = new Slice(
+        Fragment.from(
+          listItem.create(
+            null,
+            Fragment.from(orderedList.create(nestedListAttrs, inner)),
+          ),
+        ),
+        nestedBefore ? 3 : 1,
+        0,
+      )
+      const before = range.start
+      const after = range.end
+
+      dispatch(
+        state.tr
+          .step(
+            new ReplaceAroundStep(
+              before - (nestedBefore ? 3 : 1),
+              after,
+              before,
+              after,
+              slice,
+              1,
+              true,
+            ),
+          )
+          .scrollIntoView(),
+      )
+    }
+
+    return true
+  }
+
 export default OrderedList.extend({
   content: 'listItem*',
   addAttributes() {
@@ -153,6 +217,7 @@ export default OrderedList.extend({
         getStart: () => 1,
         shouldSkip: isStartNewOrderedListUnchanged,
       }),
+      sinkOrderedListItemWithType,
       setOrderedListStartAtItem: createOrderedListStartCommand({
         getStart: (_context, start) => start,
         shouldSkip: isOrderedListStartUnchanged,

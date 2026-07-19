@@ -301,10 +301,7 @@ export const hasListStructureChange = (tr) => {
 }
 
 const getListItemMetricResizeObserver = () => {
-  if (
-    typeof window === 'undefined' ||
-    typeof ResizeObserver === 'undefined'
-  ) {
+  if (typeof window === 'undefined' || typeof ResizeObserver === 'undefined') {
     return null
   }
 

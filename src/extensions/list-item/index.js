@@ -80,6 +80,19 @@ export const ListItemExtension = ListItem.extend({
       }),
     ]
   },
+  addKeyboardShortcuts() {
+    const shortcuts = this.parent?.() || {}
+
+    return {
+      ...shortcuts,
+      Tab: () => {
+        if (this.editor.isActive('orderedList')) {
+          return this.editor.commands.sinkOrderedListItemWithType()
+        }
+        return shortcuts.Tab?.() ?? this.editor.commands.sinkListItem(this.name)
+      },
+    }
+  },
 })
 
 export const TaskItemExtension = TaskItem.extend({

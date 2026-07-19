@@ -517,6 +517,7 @@
       "continuePrevious": "继续编号",
       "startNew": "重新编号",
       "changeStart": "修改编号值",
+      "numberType": "编号类型",
       "startValue": "编号值",
       "apply": "应用",
       "cancel": "取消",

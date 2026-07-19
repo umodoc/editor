@@ -31,44 +31,87 @@
             :disabled="menuState.continuePreviousDisabled"
             @click="continueNumbering"
           >
-            <div class="umo-dropdown__item-text">
-              <icon name="continued-outlined" />
-              <span>{{ t('list.ordered.continuePrevious') }}</span>
-            </div>
+            <icon name="continued-outlined" />
+            <span>{{ t('list.ordered.continuePrevious') }}</span>
           </t-dropdown-item>
           <t-dropdown-item
             class="umo-list-item-menu-item"
             :disabled="menuState.startNewDisabled"
             @click="startNewList"
           >
-            <div class="umo-dropdown__item-text">
-              <icon name="new-outlined" />
-              <span>{{ t('list.ordered.startNew') }}</span>
-            </div>
+            <icon name="new-outlined" />
+            <span>{{ t('list.ordered.startNew') }}</span>
           </t-dropdown-item>
           <t-dropdown-item
+            divider
             class="umo-list-item-menu-item"
             :disabled="menuState.changeStartDisabled"
             @click="openStartDialog"
           >
-            <div class="umo-dropdown__item-text">
-              <icon name="reset-outlined" />
-              <span>{{ t('list.ordered.changeStart') }}</span>
-            </div>
+            <icon name="reset-outlined" />
+            <span>{{ t('list.ordered.changeStart') }}</span>
+          </t-dropdown-item>
+          <t-dropdown-item class="umo-list-item-menu-item">
+            <t-dropdown
+              class="umo-list-item-menu-item"
+              trigger="click"
+              placement="right-top"
+              :popup-props="submenuPopupProps"
+            >
+              <div class="umo-list-item-submenu-trigger" @click.stop>
+                <icon name="ordered-list" />
+                <span>{{ t('list.ordered.numberType') }}</span>
+              </div>
+              <template #dropdown>
+                <t-dropdown-menu>
+                  <t-dropdown-item
+                    v-for="item in orderedListTypeOptions"
+                    :key="item.value"
+                    class="umo-list-item-menu-item"
+                    :class="{ 'is-active': orderedListType === item.value }"
+                    @click="changeOrderedListType(item.value)"
+                  >
+                    {{ item.label }}
+                  </t-dropdown-item>
+                </t-dropdown-menu>
+              </template>
+            </t-dropdown>
           </t-dropdown-item>
         </t-dropdown-menu>
       </template>
     </t-dropdown>
-    <span
+    <t-dropdown
       v-else-if="isBulletList"
-      class="umo-list-item-marker"
-      contenteditable="false"
-      data-list-marker=""
-      @mousedown.prevent
-      @click.stop="focusListItem"
+      trigger="click"
+      overlay-class-name="umo-list-item-popup"
+      :visible="editor?.isEditable && markerMenuVisible"
+      size="small"
+      :popup-props="popupProps"
     >
-      <span class="umo-list-item-marker-text">{{ markerText }}</span>
-    </span>
+      <span
+        class="umo-list-item-marker is-bullet-list-marker"
+        contenteditable="false"
+        data-list-marker=""
+        @mousedown.prevent
+        @click.stop="focusListItem"
+      >
+        <span class="umo-list-item-marker-text">{{ markerText }}</span>
+      </span>
+      <template #dropdown>
+        <t-dropdown-menu>
+          <t-dropdown-item
+            v-for="item in bulletListTypeOptions"
+            :key="item.value"
+            class="umo-list-item-menu-item"
+            :class="{ 'is-active': bulletListType === item.value }"
+            @click="changeBulletListType(item.value)"
+          >
+            <span class="umo-list-item-submenu-marker">{{ item.marker }}</span>
+            <span>{{ item.label }}</span>
+          </t-dropdown-item>
+        </t-dropdown-menu>
+      </template>
+    </t-dropdown>
     <label
       v-else-if="isTaskItem"
       class="umo-list-item-task-marker"
@@ -125,6 +168,12 @@ import {
   unobserveListItemMetricResize,
 } from './utils'
 
+const BULLET_MARKERS = {
+  disc: '•',
+  circle: '◦',
+  square: '▪',
+}
+
 const props = defineProps(nodeViewProps)
 
 const container = inject('container')
@@ -167,7 +216,7 @@ const getMarkerSourceElement = (contentElement) => {
   return contentElement.firstElementChild || contentElement
 }
 
-const getFirstTextRect = (element) => {
+const getMarkerFontSize = (element) => {
   if (!element) {
     return null
   }
@@ -179,23 +228,23 @@ const getFirstTextRect = (element) => {
         : NodeFilter.FILTER_SKIP
     },
   })
-  const firstTextNode = walker.nextNode()
-  if (!firstTextNode) {
-    return null
+  let maxFontSize = 0
+  let currentTextNode = walker.nextNode()
+
+  while (currentTextNode) {
+    const { fontSize } = window.getComputedStyle(
+      currentTextNode.parentElement || element,
+    )
+    const parsedFontSize = Number.parseFloat(fontSize)
+
+    if (Number.isFinite(parsedFontSize) && parsedFontSize > maxFontSize) {
+      maxFontSize = parsedFontSize
+    }
+
+    currentTextNode = walker.nextNode()
   }
 
-  const text = firstTextNode.textContent || ''
-  const start = Math.max(text.search(/\S/), 0)
-  const end = Math.min(start + 1, text.length)
-  if (end <= start) {
-    return null
-  }
-
-  const range = document.createRange()
-  range.setStart(firstTextNode, start)
-  range.setEnd(firstTextNode, end)
-
-  return range.getClientRects()[0] || range.getBoundingClientRect()
+  return maxFontSize > 0 ? maxFontSize : null
 }
 
 const syncMarkerMetrics = () => {
@@ -214,27 +263,24 @@ const syncMarkerMetrics = () => {
 
   const styles = window.getComputedStyle(sourceElement)
   const { fontSize } = styles
-  const firstTextRect = getFirstTextRect(sourceElement)
-  const markerBaseHeight = firstTextRect?.height
-  const parsedFontSize = Number.isFinite(markerBaseHeight)
-    ? markerBaseHeight
-    : Number.parseFloat(fontSize)
+  const parsedFontSize =
+    getMarkerFontSize(sourceElement) || Number.parseFloat(fontSize)
+  const sourceRect = sourceElement.getBoundingClientRect()
   wrapperElement.style.setProperty(
     '--umo-list-marker-font-size',
-    Number.isFinite(markerBaseHeight) ? `${markerBaseHeight}px` : fontSize,
+    Number.isFinite(parsedFontSize) && parsedFontSize > 0
+      ? `${parsedFontSize}px`
+      : fontSize,
   )
-  const sourceRect = sourceElement.getBoundingClientRect()
-  const markerOffsetY = firstTextRect
-    ? Math.max(
-        firstTextRect.top -
-          sourceRect.top +
-          (firstTextRect.height - parsedFontSize) / 2,
-        0,
-      )
-    : 0
   wrapperElement.style.setProperty(
     '--umo-list-marker-offset-y',
-    `${markerOffsetY}px`,
+    `${
+      Number.isFinite(sourceRect.height) &&
+      Number.isFinite(parsedFontSize) &&
+      sourceRect.height > parsedFontSize
+        ? (sourceRect.height - parsedFontSize) / 2
+        : 0
+    }px`,
   )
 }
 
@@ -279,6 +325,38 @@ const listItemContext = $computed(() => {
 const orderedContext = $computed(() =>
   listItemContext?.listTypeName === 'orderedList' ? listItemContext : null,
 )
+const orderedListTypeOptions = $computed(() => [
+  { label: `1. ${t('list.ordered.decimal')}`, value: 'decimal' },
+  {
+    label: `01. ${t('list.ordered.decimalLeadingZero')}`,
+    value: 'decimal-leading-zero',
+  },
+  { label: `i. ${t('list.ordered.lowerRoman')}`, value: 'lower-roman' },
+  { label: `I. ${t('list.ordered.upperRoman')}`, value: 'upper-roman' },
+  { label: `a. ${t('list.ordered.lowerLatin')}`, value: 'lower-latin' },
+  { label: `A. ${t('list.ordered.upperLatin')}`, value: 'upper-latin' },
+  {
+    label: `一.${t('list.ordered.tradChineseInformal')}`,
+    value: 'trad-chinese-informal',
+  },
+  {
+    label: `壹.${t('list.ordered.simpChineseFormal')}`,
+    value: 'simp-chinese-formal',
+  },
+])
+const bulletListTypeOptions = $computed(() => [
+  { label: t('list.bullet.disc'), marker: BULLET_MARKERS.disc, value: 'disc' },
+  {
+    label: t('list.bullet.circle'),
+    marker: BULLET_MARKERS.circle,
+    value: 'circle',
+  },
+  {
+    label: t('list.bullet.square'),
+    marker: BULLET_MARKERS.square,
+    value: 'square',
+  },
+])
 
 const listTypeName = $computed(() => listItemContext?.listTypeName || '')
 const itemTypeName = $computed(() => listItemContext?.itemTypeName || '')
@@ -288,6 +366,10 @@ const isTaskItem = $computed(() => itemTypeName === 'taskItem')
 const isTaskChecked = $computed(() => listItemContext?.checked === true)
 const markerText = $computed(() => listItemContext?.markerText || '')
 const currentNumber = $computed(() => orderedContext?.currentNumber || 1)
+const orderedListType = $computed(
+  () => orderedContext?.orderedListNode?.attrs?.listType || 'decimal',
+)
+const bulletListType = $computed(() => listItemContext?.listType || 'disc')
 const activeListItemPos = $computed(
   () => listItemState?.activeListItemPos ?? null,
 )
@@ -334,6 +416,7 @@ const focusListItem = () => {
 
 const popupProps = $computed(() => ({
   attach: `${container} .umo-zoomable-container`,
+  overlayClassName: 'umo-list-item-overlay',
   destroyOnClose: false,
   onVisibleChange: handleMarkerMenuVisibleChange,
 }))
@@ -422,6 +505,44 @@ const startNewList = () => {
   runOrderedListCommand('startNewOrderedListAtItem')
 }
 
+const changeOrderedListType = (listType) => {
+  if (orderedListType === listType) {
+    closeMarkerMenu()
+    return
+  }
+
+  const pos = focusListItem()
+  if (typeof pos !== 'number') {
+    return
+  }
+
+  props.editor
+    ?.chain()
+    .focus()
+    .updateAttributes('orderedList', { listType })
+    .run()
+  closeMarkerMenu()
+}
+
+const changeBulletListType = (listType) => {
+  if (bulletListType === listType) {
+    closeMarkerMenu()
+    return
+  }
+
+  const pos = focusListItem()
+  if (typeof pos !== 'number') {
+    return
+  }
+
+  props.editor
+    ?.chain()
+    .focus()
+    .updateAttributes('bulletList', { listType })
+    .run()
+  closeMarkerMenu()
+}
+
 const toggleTaskItemChecked = (event) => {
   const { target } = event
   if (!editor?.isEditable) {
@@ -500,12 +621,24 @@ ol {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 2px;
   }
 
   .umo-icon {
     font-size: 16px;
   }
+
+  &.is-active {
+    .umo-dropdown__item-text {
+      color: var(--umo-primary-color);
+    }
+  }
+}
+
+.umo-list-item-submenu-marker {
+  display: inline-flex;
+  align-items: center;
+  font-size: 18px;
+  line-height: 1;
 }
 
 .umo-list-item {
@@ -527,14 +660,24 @@ ol {
     align-items: center;
     justify-content: center;
     padding: 0;
-    font-size: calc(var(--font-size) * 0.75);
+    font-size: var(--font-size);
     line-height: 1;
     color: var(--umo-text-color);
     border-radius: 0.125em;
     white-space: nowrap;
     user-select: none;
-    transform: translateY(calc(var(--offset-y) + var(--font-size) * 0.125));
+    transform: translateY(var(--offset-y));
     &.is-ordered-list-marker {
+      padding: 0 0.25em;
+      margin-left: -0.1em;
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--umo-content-table-selected-background);
+      }
+    }
+
+    &.is-bullet-list-marker {
       padding: 0 0.25em;
       margin-left: -0.1em;
       cursor: pointer;
@@ -567,7 +710,7 @@ ol {
     position: relative;
     margin: 0;
     opacity: 0.8;
-    border-radius: calc(var(--font-size) * 0.15);
+    border-radius: calc(var(--font-size) * 0.125);
 
     &:hover {
       border-color: var(--umo-primary-color);
@@ -620,6 +763,21 @@ ol {
         text-decoration: line-through;
       }
     }
+  }
+  &-overlay {
+    .umo-popup__content {
+      min-width: unset;
+      .umo-dropdown__item-text {
+        padding-right: 30px;
+      }
+    }
+  }
+  &-submenu-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    flex: 1;
   }
 }
 
