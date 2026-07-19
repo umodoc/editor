@@ -158,7 +158,6 @@
 
 <script setup>
 import { NodeViewContent, nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
-import { nextTick, watch } from 'vue'
 
 import {
   getListItemContext,
@@ -177,7 +176,7 @@ const BULLET_MARKERS = {
 const props = defineProps(nodeViewProps)
 
 const container = inject('container')
-const editor = $computed(() => props.editor)
+const editor = inject('editor')
 const listItemState = $computed(() => editor?.storage?.listItem?.state)
 
 let wrapperRef = $ref(null)
@@ -216,35 +215,85 @@ const getMarkerSourceElement = (contentElement) => {
   return contentElement.firstElementChild || contentElement
 }
 
-const getMarkerFontSize = (element) => {
-  if (!element) {
-    return null
-  }
-
-  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
+const getTextNodesWalker = (element) =>
+  document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
     acceptNode: (node) => {
       return node.textContent?.trim()
         ? NodeFilter.FILTER_ACCEPT
         : NodeFilter.FILTER_SKIP
     },
   })
-  let maxFontSize = 0
+
+const getMarkerTextMetrics = (element) => {
+  if (!element) {
+    return null
+  }
+
+  const walker = getTextNodesWalker(element)
   let currentTextNode = walker.nextNode()
+  const lineGroups = []
+  const styleCache = new WeakMap()
+  let maxFontSize = 0
 
   while (currentTextNode) {
-    const { fontSize } = window.getComputedStyle(
-      currentTextNode.parentElement || element,
-    )
+    const styleTarget = currentTextNode.parentElement || element
+    let fontSize = styleCache.get(styleTarget)
+    if (!fontSize) {
+      ;({ fontSize } = window.getComputedStyle(styleTarget))
+      styleCache.set(styleTarget, fontSize)
+    }
     const parsedFontSize = Number.parseFloat(fontSize)
-
     if (Number.isFinite(parsedFontSize) && parsedFontSize > maxFontSize) {
       maxFontSize = parsedFontSize
     }
 
+    const range = document.createRange()
+    range.selectNodeContents(currentTextNode)
+    const textRects = Array.from(range.getClientRects()).filter(
+      (rect) => rect.height > 0,
+    )
+    range.detach?.()
+
+    textRects.forEach((rect) => {
+      const lineGroup = lineGroups.find(
+        (group) => Math.abs(group.top - rect.top) < 1,
+      )
+      if (lineGroup) {
+        lineGroup.top = Math.min(lineGroup.top, rect.top)
+        lineGroup.bottom = Math.max(lineGroup.bottom, rect.bottom)
+        lineGroup.height = Math.max(lineGroup.height, rect.height)
+        return
+      }
+
+      lineGroups.push({
+        top: rect.top,
+        bottom: rect.bottom,
+        height: rect.height,
+      })
+    })
+
     currentTextNode = walker.nextNode()
   }
 
-  return maxFontSize > 0 ? maxFontSize : null
+  if (!lineGroups.length) {
+    return {
+      fontSize: maxFontSize > 0 ? maxFontSize : null,
+      firstLineTop: null,
+      firstLineHeight: null,
+    }
+  }
+
+  lineGroups.sort((a, b) => a.top - b.top)
+  const [firstLine] = lineGroups
+
+  return {
+    fontSize: maxFontSize > 0 ? maxFontSize : null,
+    firstLineTop: firstLine.top,
+    firstLineHeight: Math.max(
+      firstLine.height,
+      firstLine.bottom - firstLine.top,
+    ),
+  }
 }
 
 const syncMarkerMetrics = () => {
@@ -262,10 +311,30 @@ const syncMarkerMetrics = () => {
   }
 
   const styles = window.getComputedStyle(sourceElement)
-  const { fontSize } = styles
-  const parsedFontSize =
-    getMarkerFontSize(sourceElement) || Number.parseFloat(fontSize)
+  const { fontSize, lineHeight } = styles
+  const textMetrics = getMarkerTextMetrics(sourceElement)
+  const parsedFontSize = textMetrics?.fontSize || Number.parseFloat(fontSize)
   const sourceRect = sourceElement.getBoundingClientRect()
+  const firstLineTop = textMetrics?.firstLineTop
+  const firstLineHeight = textMetrics?.firstLineHeight
+  const parsedLineHeight = Number.parseFloat(lineHeight)
+  const markerLineHeight =
+    Number.isFinite(firstLineHeight) && firstLineHeight > 0
+      ? firstLineHeight
+      : parsedLineHeight
+  const markerLineTop =
+    Number.isFinite(firstLineTop) &&
+    Number.isFinite(sourceRect.top) &&
+    firstLineTop >= sourceRect.top
+      ? firstLineTop - sourceRect.top
+      : 0
+  const markerOffsetY =
+    markerLineTop +
+    (Number.isFinite(markerLineHeight) &&
+    Number.isFinite(parsedFontSize) &&
+    markerLineHeight > parsedFontSize
+      ? (markerLineHeight - parsedFontSize) / 2
+      : 0)
   wrapperElement.style.setProperty(
     '--umo-list-marker-font-size',
     Number.isFinite(parsedFontSize) && parsedFontSize > 0
@@ -274,13 +343,7 @@ const syncMarkerMetrics = () => {
   )
   wrapperElement.style.setProperty(
     '--umo-list-marker-offset-y',
-    `${
-      Number.isFinite(sourceRect.height) &&
-      Number.isFinite(parsedFontSize) &&
-      sourceRect.height > parsedFontSize
-        ? (sourceRect.height - parsedFontSize) / 2
-        : 0
-    }px`,
+    `${markerOffsetY}px`,
   )
 }
 
@@ -318,7 +381,7 @@ const syncMetricObservation = () => {
 const listItemContext = $computed(() => {
   listItemState?.structureVersion
   const { getPos } = props
-  const state = props.editor?.state
+  const state = editor.value?.state
   const listItemPos = typeof getPos === 'function' ? getPos() : null
   return getListItemContext(state, listItemPos)
 })
@@ -406,7 +469,7 @@ const focusListItem = () => {
   if (typeof pos !== 'number') {
     return null
   }
-  props.editor
+  editor.value
     ?.chain()
     .focus()
     .setTextSelection(pos + 2)
@@ -446,7 +509,7 @@ const closeMarkerMenu = () => {
 
 const handleMarkerMenuVisibleChange = (visible) => {
   if (visible) {
-    if (!props.editor?.isEditable) {
+    if (!editor.value?.isEditable) {
       markerMenuVisible = false
       return
     }
@@ -483,7 +546,7 @@ const runOrderedListCommand = (command, options = {}) => {
   if (typeof pos !== 'number') {
     return
   }
-  props.editor
+  editor.value
     ?.chain()
     .focus()
     [command]({ ...options, listItemPos: pos })
@@ -516,7 +579,7 @@ const changeOrderedListType = (listType) => {
     return
   }
 
-  props.editor
+  editor.value
     ?.chain()
     .focus()
     .updateAttributes('orderedList', { listType })
@@ -535,7 +598,7 @@ const changeBulletListType = (listType) => {
     return
   }
 
-  props.editor
+  editor.value
     ?.chain()
     .focus()
     .updateAttributes('bulletList', { listType })
@@ -644,10 +707,10 @@ ol {
 .umo-list-item {
   --offset-y: var(--umo-list-marker-offset-y, 0);
   --font-size: var(--umo-list-marker-font-size, inherit);
-  display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  align-items: start;
-  column-gap: 0.5em;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.5em;
   min-width: 0;
   word-break: break-all;
   list-style-type: none;
@@ -691,6 +754,7 @@ ol {
   .umo-list-item-marker-text {
     display: inline-block;
     line-height: 1;
+    white-space: nowrap;
   }
 
   .umo-list-item-task-marker {
