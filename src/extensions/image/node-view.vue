@@ -54,6 +54,7 @@
             ref="cropperHostRef"
             class="umo-node-image-cropper"
             :style="cropperStyle"
+            @mousedown.capture="handleCropperMousedown"
             @dblclick.stop="handleCropperDblclick"
           >
             <img
@@ -174,6 +175,7 @@ let cropper = null
 let cropInitialSelection = null
 let stopClickOutside = null
 let isCropTransactionListening = false
+let isCropPointerActive = false
 
 const isDataImageSrc = (src) => String(src || '').startsWith('data:image')
 const isNodeSelected = $computed(() => !!props.selected)
@@ -322,7 +324,10 @@ const ensureOutsideHandler = () => {
       return
     }
     if (isCropping) {
-      await applyCrop()
+      if (isCropPointerActive) {
+        return
+      }
+      exitCropping()
     }
     selected = false
   })
@@ -409,6 +414,7 @@ const destroyCropper = () => {
 }
 
 const exitCropping = () => {
+  isCropPointerActive = false
   destroyCropper()
   isCropping = false
   syncCropperState(null)
@@ -464,6 +470,22 @@ const applyCrop = async () => {
   }
 }
 
+const stopCropPointerTracking = () => {
+  isCropPointerActive = false
+  document.removeEventListener('mouseup', stopCropPointerTracking, true)
+}
+
+const handleCropperMousedown = () => {
+  if (!isCropping) {
+    return
+  }
+  selected = true
+  isCropPointerActive = true
+  setImageNodeSelection()
+  document.removeEventListener('mouseup', stopCropPointerTracking, true)
+  document.addEventListener('mouseup', stopCropPointerTracking, true)
+}
+
 const handleCropperDblclick = async () => {
   await applyCrop()
 }
@@ -483,7 +505,7 @@ const handleImageCropTransaction = async ({ transaction }) => {
   if (cropAction?.pos === getNodePos()) {
     if (cropAction.action === 'toggle') {
       if (isCropping) {
-        await applyCrop()
+        exitCropping()
       } else {
         await startCropping()
       }
@@ -491,7 +513,10 @@ const handleImageCropTransaction = async ({ transaction }) => {
     return
   }
   if (isCropping && transaction.selectionSet && !isCurrentImageNodeSelected()) {
-    await applyCrop()
+    if (isCropPointerActive) {
+      return
+    }
+    exitCropping()
   }
 }
 
@@ -876,7 +901,7 @@ watch(
   () => canCropImage,
   async (enabled) => {
     if (!enabled && isCropping) {
-      await applyCrop()
+      exitCropping()
     }
   },
 )
@@ -930,7 +955,7 @@ const syncUploadStateFromSrc = async (src) => {
     const name = `${attrs.type}-${id}`
     const { file, filename } = dataURLToFile(src, name)
     uploadFileMap.value.set(id, file)
-    updateAttributes({
+    updateNodeAttrsWithoutHistory({
       id,
       size: file.size,
       name: filename,
@@ -961,6 +986,7 @@ watch(
 onBeforeUnmount(() => {
   setCropTransactionListening(false)
   stopOutsideHandler()
+  stopCropPointerTracking()
   exitCropping()
   scheduleFileDelete({
     editor,
