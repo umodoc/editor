@@ -190,37 +190,36 @@ export default Extension.create({
         }
         return false
       }
+    const handleListIndent =
+      (direction) =>
+      () =>
+      ({ editor, commands }) => {
+        if (editor.isActive('orderedList')) {
+          return direction > 0
+            ? commands.sinkOrderedListItemWithType()
+            : commands.liftListItem('listItem')
+        }
+        if (editor.isActive('bulletList')) {
+          return direction > 0
+            ? commands.sinkListItem('listItem')
+            : commands.liftListItem('listItem')
+        }
+        if (editor.isActive('taskList')) {
+          return direction > 0
+            ? commands.sinkListItem('taskItem')
+            : commands.liftListItem('taskItem')
+        }
+        return applyIndent(direction)()({ tr, state, dispatch })
+      }
     return {
-      setIndent: applyIndent(1),
-      setOutdent: applyIndent(-1),
+      setIndent: handleListIndent(1),
+      setOutdent: handleListIndent(-1),
     }
   },
   addKeyboardShortcuts() {
     return {
-      Tab: () => {
-        if (
-          this.editor.isActive('bulletList') ||
-          this.editor.isActive('orderedList')
-        ) {
-          return this.editor.commands.sinkListItem('listItem')
-        }
-        if (this.editor.isActive('taskList')) {
-          return this.editor.commands.sinkListItem('taskItem')
-        }
-        return this.editor.commands.setIndent()
-      },
-      'Shift-Tab': () => {
-        if (
-          this.editor.isActive('bulletList') ||
-          this.editor.isActive('orderedList')
-        ) {
-          return this.editor.commands.liftListItem('listItem')
-        }
-        if (this.editor.isActive('taskList')) {
-          return this.editor.commands.liftListItem('taskItem')
-        }
-        return this.editor.commands.setOutdent()
-      },
+      Tab: () => this.editor.commands.setIndent(),
+      'Shift-Tab': () => this.editor.commands.setOutdent(),
     }
   },
 })
