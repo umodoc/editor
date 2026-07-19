@@ -193,7 +193,7 @@ export default Extension.create({
     const handleListIndent =
       (direction) =>
       () =>
-      ({ editor, commands }) => {
+      ({ editor, commands, tr, state, dispatch }) => {
         if (editor.isActive('orderedList')) {
           return direction > 0
             ? commands.sinkOrderedListItemWithType()
