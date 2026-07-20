@@ -2,7 +2,7 @@ import {
   chainCommands,
   createParagraphNear,
   newlineInCode,
-  splitBlock,
+  splitBlockKeepMarks,
 } from '@tiptap/pm/commands'
 import { keymap } from '@tiptap/pm/keymap'
 import { TextSelection } from '@tiptap/pm/state'
@@ -97,7 +97,7 @@ export const columnsKeymap = keymap({
     newlineInCode,
     createParagraphNear,
     liftEmptyBlock,
-    splitBlock,
+    splitBlockKeepMarks,
   ),
   'Mod-a': (state, dispatch) => {
     const { selection } = state
