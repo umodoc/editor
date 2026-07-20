@@ -56,7 +56,6 @@
               class="umo-list-item-menu-item"
               trigger="click"
               placement="right-top"
-              :popup-props="submenuPopupProps"
             >
               <div class="umo-list-item-submenu-trigger" @click.stop>
                 <icon name="ordered-list" />
