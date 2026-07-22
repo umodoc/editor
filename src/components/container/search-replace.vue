@@ -7,7 +7,9 @@
     width="360px"
     mode="modeless"
     draggable
+    @opened="autofocus = true"
     @close="searchReplace = false"
+    @closed="autofocus = false"
   >
     <template #header>
       <icon name="search-replace" />
@@ -18,8 +20,8 @@
         <t-input
           v-model="searchText"
           :placeholder="t('search.searchText')"
+          :autofocus="autofocus"
           clearable
-          autofocus
           @enter="next"
         >
           <template #suffix>
@@ -95,6 +97,7 @@ import { getSelectionText } from '@/utils/selection'
 const editor = inject('editor')
 const searchReplace = inject('searchReplace')
 
+let autofocus = $ref(false)
 let searchText = $ref('')
 let replaceText = $ref('')
 const caseSensitive = $ref(false)
