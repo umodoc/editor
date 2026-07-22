@@ -231,16 +231,18 @@ watch(
 <style lang="less">
 .umo-search-replace-dialog {
   .t-dialog {
-    position: absolute;
+    position: absolute !important;
     right: 15px;
-    top: 131px;
+    top: 131px !important;
+    left: unset;
+    bottom: unset;
     user-select: none;
   }
 }
 .umo-editor-container.toolbar-classic {
   .umo-search-replace-dialog {
     .t-dialog {
-      top: 65px;
+      top: 65px !important;
     }
   }
 }
