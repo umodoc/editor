@@ -20,7 +20,7 @@ const resetPosition = () => {
       left: 0,
       angle: 0,
       flipX: false,
-      flipy: false,
+      flipY: false,
     })
   }
 }
