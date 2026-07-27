@@ -8,8 +8,14 @@
     data-type="image"
     @dblclick="openImageViewer"
     @click.capture="wrapperClick"
+    @dragstart.prevent="onNativeDragstart"
   >
-    <div class="umo-node-container umo-node-image" :class="imageClass">
+    <div
+      ref="imageContainerRef"
+      class="umo-node-container umo-node-image"
+      :class="imageClass"
+      :style="imageContainerStyle"
+    >
       <div
         v-if="attrs.src && error"
         class="umo-node-image-error"
@@ -18,79 +24,86 @@
         <icon name="image-failed" class="error-icon" />
         {{ t('node.image.error') }}
       </div>
-      <drager
+      <div
         v-else
-        ref="dragRef"
-        class="umo-select-outline"
-        :class="dragerClass"
-        :style="dragerStyle"
-        :selected="selected"
-        :rotatable="!isCropping"
-        :boundary="false"
-        :disabled="isCropping || !editor?.isEditable || isLockedNode"
-        :angle="attrs.angle"
-        :width="Number(attrs.width)"
-        :height="Number(attrs.height)"
-        :left="Number(attrs.left)"
-        :top="Number(attrs.top)"
-        :min-width="14"
-        :min-height="14"
-        :max-width="maxWidth"
-        :max-height="maxHeight"
-        :z-index="10"
-        :equal-proportion="attrs.equalProportion"
-        @rotate="onRotate"
-        @resize="onResize"
-        @drag-end="onDragEnd"
-        @mousedown="onMousedown"
-        @focus="selected = true"
+        class="umo-node-image-frame"
+        :style="imageFrameStyle"
+        @mousedown.capture="onDragPointerDown"
       >
-        <div v-if="isImageLoading" class="umo-node-image-loading">
-          <icon name="loading" class="loading-icon" />
-          {{ t('node.image.loading') }}
-        </div>
-        <template v-if="isCropping">
-          <div
-            ref="cropperHostRef"
-            class="umo-node-image-cropper"
-            :style="cropperStyle"
-            @mousedown.capture="handleCropperMousedown"
-            @dblclick.stop="handleCropperDblclick"
-          >
-            <img
-              ref="cropperImageRef"
-              class="umo-node-image-cropper-source"
-              :src="attrs.src"
-              :alt="attrs.alt || attrs.title || attrs.name || 'image'"
-              crossorigin="anonymous"
-            />
-          </div>
-        </template>
-        <img
-          v-else
-          ref="imageRef"
-          :src="attrs.src"
-          :class="{ 'not-equal-proportion': !attrs.equalProportion }"
-          :style="{
-            transform:
-              attrs.flipX || attrs.flipY
-                ? `rotateX(${attrs.flipX ? '180' : '0'}deg) rotateY(${attrs.flipY ? '180' : '0'}deg)`
-                : 'none',
-          }"
-          :data-id="attrs.id"
-          :data-preview="attrs.previewType"
-          crossorigin="anonymous"
-          loading="lazy"
-          @load="onLoad"
-          @error="onError"
-        />
-        <div
-          v-if="!attrs.uploaded && attrs.file !== null"
-          class="umo-node-image-uploading"
+        <drager
+          class="umo-select-outline"
+          :class="dragerClass"
+          :style="dragerStyle"
+          :selected="selected"
+          :rotatable="!isCropping"
+          :boundary="false"
+          :disabled="
+            isCropping || isReadonlyNode || !editor?.isEditable || isLockedNode
+          "
+          :angle="attrs.angle"
+          :width="Number(attrs.width)"
+          :height="Number(attrs.height)"
+          :left="0"
+          :top="0"
+          :min-width="14"
+          :min-height="14"
+          :max-width="maxWidth"
+          :max-height="maxHeight"
+          :z-index="10"
+          :equal-proportion="attrs.equalProportion"
+          @rotate="onRotate"
+          @resize="onResize"
+          @focus="selected = true"
         >
-          <span></span>
-        </div>
-      </drager>
+          <div v-if="isImageLoading" class="umo-node-image-loading">
+            <icon name="loading" class="loading-icon" />
+            {{ t('node.image.loading') }}
+          </div>
+          <template v-if="isCropping">
+            <div
+              ref="cropperHostRef"
+              class="umo-node-image-cropper umo-cropper-surface"
+              :style="cropperStyle"
+              @mousedown.capture="handleCropperMousedown"
+              @dblclick.stop="handleCropperDblclick"
+            >
+              <img
+                ref="cropperImageRef"
+                class="umo-node-image-cropper-source"
+                :src="attrs.src"
+                :alt="attrs.alt || attrs.title || attrs.name || 'image'"
+                draggable="false"
+                crossorigin="anonymous"
+              />
+            </div>
+          </template>
+          <img
+            v-else
+            ref="imageRef"
+            :src="attrs.src"
+            draggable="false"
+            :class="{ 'not-equal-proportion': !attrs.equalProportion }"
+            :style="{
+              transform:
+                attrs.flipX || attrs.flipY
+                  ? `rotateX(${attrs.flipX ? '180' : '0'}deg) rotateY(${attrs.flipY ? '180' : '0'}deg)`
+                  : 'none',
+            }"
+            :data-id="attrs.id"
+            :data-preview="attrs.previewType"
+            crossorigin="anonymous"
+            loading="lazy"
+            @load="onLoad"
+            @error="onError"
+          />
+          <div
+            v-if="!attrs.uploaded && attrs.file !== null"
+            class="umo-node-image-uploading"
+          >
+            <span></span>
+          </div>
+        </drager>
+      </div>
       <node-view-content
         v-show="showAlt"
         as="figcaption"
@@ -106,10 +119,10 @@
 </template>
 
 <script setup>
-import Cropper from 'cropperjs'
 import { NodeViewContent, nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import Drager from 'es-drager'
 
+import { ImageCropper } from '@/utils/image-cropper'
 import { loadResource } from '@/utils/load-resource'
 import { shortId } from '@/utils/short-id'
 import {
@@ -122,25 +135,7 @@ import {
 
 import { updateAttributesWithoutHistory } from '../file'
 
-const DIAGRAM_TYPES = new Set(['mermaid'])
-const CROPPER_TEMPLATE = `
-  <cropper-canvas>
-    <cropper-image></cropper-image>
-    <cropper-shade hidden></cropper-shade>
-    <cropper-handle action="select" plain></cropper-handle>
-    <cropper-selection initial-coverage="1" movable resizable outlined>
-      <cropper-handle action="move" theme-color="rgba(255, 255, 255, 0.35)"></cropper-handle>
-      <cropper-handle action="n-resize"></cropper-handle>
-      <cropper-handle action="e-resize"></cropper-handle>
-      <cropper-handle action="s-resize"></cropper-handle>
-      <cropper-handle action="w-resize"></cropper-handle>
-      <cropper-handle action="ne-resize"></cropper-handle>
-      <cropper-handle action="nw-resize"></cropper-handle>
-      <cropper-handle action="se-resize"></cropper-handle>
-      <cropper-handle action="sw-resize"></cropper-handle>
-    </cropper-selection>
-  </cropper-canvas>
-`
+const DIAGRAM_TYPES = new Set(['mermaid', 'plantuml', 'flowchart'])
 
 const uploadingImageIds = new Set()
 
@@ -158,10 +153,10 @@ const attrs = $computed(() => props.node.attrs)
 const isLockedNode = $computed(() => !!attrs.lockedNode)
 
 const containerRef = ref(null)
+const imageContainerRef = ref(null)
 const cropperHostRef = ref(null)
 const imageRef = $ref(null)
 const cropperImageRef = $ref(null)
-const dragRef = $ref(null)
 
 let selected = $ref(false)
 let maxWidth = $ref(0)
@@ -171,20 +166,27 @@ let isCropping = $ref(false)
 let isLoading = $ref(false)
 let error = $ref(false)
 let diagramRenderSeq = 0
-let cropper = null
+const cropper = new ImageCropper()
 let cropInitialSelection = null
 let stopClickOutside = null
 let isCropTransactionListening = false
 let isCropPointerActive = false
+let imageLayoutFrameId = 0
+let imageLayoutCommitFrameId = 0
+let dragPreviewFrameId = 0
 
 const isDataImageSrc = (src) => String(src || '').startsWith('data:image')
 const isNodeSelected = $computed(() => !!props.selected)
 
 const hasRichAltContent = $computed(() => props.node.content.size > 0)
 const isPreviewMode = $computed(() => !!page.value.preview?.enabled)
-const isReadonlyAlt = $computed(
-  () => !!options.value.document?.readOnly || isPreviewMode,
+const isReadonlyNode = $computed(
+  () =>
+    !!options.value.document?.readOnly ||
+    isPreviewMode ||
+    editor.value?.isEditable !== true,
 )
+const isReadonlyAlt = $computed(() => isReadonlyNode)
 const canEditAlt = $computed(() => !isReadonlyAlt && !isLockedNode)
 const isAltEmpty = $computed(
   () =>
@@ -198,9 +200,33 @@ const canCropImage = $computed(
     attrs.type?.startsWith?.('image') &&
     !!attrs.src &&
     !isLockedNode &&
-    editor.value?.isEditable !== false &&
+    !isReadonlyNode &&
     !error,
 )
+const canMoveImageNode = $computed(
+  () => attrs.draggable && !isCropping && !isLockedNode && !isReadonlyNode,
+)
+const imageWrapperMargins = $computed(() => {
+  if (attrs.inline || attrs.draggable) {
+    return {}
+  }
+  if (attrs.nodeAlign === 'flex-end') {
+    return {
+      marginLeft: 'auto',
+      marginRight: 0,
+    }
+  }
+  if (attrs.nodeAlign === 'center') {
+    return {
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    }
+  }
+  return {
+    marginLeft: 0,
+    marginRight: 'auto',
+  }
+})
 const altPlaceholder = $computed(() => t('node.image.altPlaceholder'))
 const showAlt = $computed(
   () =>
@@ -221,6 +247,7 @@ const wrapperClass = $computed(() => ({
   'is-inline-image': attrs.inline,
 }))
 const imageClass = $computed(() => ({
+  'is-draggable': attrs.draggable,
   'is-loading': isImageLoading,
   'is-error': attrs.src && error,
   'is-cropping': isCropping,
@@ -228,16 +255,19 @@ const imageClass = $computed(() => ({
 const dragerClass = $computed(() => ({
   'is-draggable': attrs.draggable,
   'is-cropping': isCropping,
-  'umo-hover-shadow': !options.value.document?.readOnly,
+  'umo-hover-shadow': !isReadonlyNode,
   'umo-select-outline': !attrs.draggable && attrs.src && !error,
   'is-alt-selected': selected && !attrs.draggable && attrs.src && !error,
 }))
 const dragerStyle = $computed(() => ({
   cursor: isCropping
     ? 'default !important'
-    : attrs.draggable && !options.value.document?.readOnly && !isLockedNode
-      ? 'move'
+    : canMoveImageNode
+      ? 'inherit'
       : 'default !important',
+}))
+const imageFrameStyle = $computed(() => ({
+  cursor: canMoveImageNode ? 'move' : 'default',
 }))
 const cropperStyle = $computed(() => ({
   width: `${Math.max(Number(attrs.width) || 0, 14)}px`,
@@ -254,14 +284,26 @@ const nodeStyle = $computed(() => {
     margin?.bottom && margin?.bottom !== '' ? `${margin.bottom}px` : undefined
   return {
     justifyContent: nodeAlign,
+    position: attrs.draggable ? 'relative' : undefined,
+    zIndex: attrs.draggable ? (selected ? 100 : 95) : undefined,
+    ...imageWrapperMargins,
     marginTop,
     marginBottom,
-    zIndex: selected ? 100 : attrs.draggable ? 95 : 0,
   }
 })
+const imageContainerStyle = $computed(() => ({
+  width:
+    attrs.draggable && !attrs.inline
+      ? `${Math.max(Number(attrs.width) || 0, 14)}px`
+      : undefined,
+  maxWidth: '100%',
+  position: attrs.draggable ? 'absolute' : 'relative',
+  left: attrs.draggable ? `${Number(attrs.left) || 0}px` : undefined,
+  top: attrs.draggable ? `${Number(attrs.top) || 0}px` : undefined,
+}))
 
 const getHostElement = () => containerRef.value?.$el
-const getDragElement = () => dragRef?.$el
+const getImageContainerElement = () => imageContainerRef.value
 const getNodePos = () => getPos?.()
 const getAltContentElement = () =>
   getHostElement()?.querySelector('.umo-node-image-alt-content')
@@ -344,47 +386,18 @@ const setCropTransactionListening = (enabled) => {
   isCropTransactionListening = enabled
 }
 
-const getCropperSelection = () => cropper?.getCropperSelection?.() || null
+const getCropperSelection = () => cropper.getSelection()
 
 const getCropExportSize = (selection) => {
-  const renderedWidth =
-    cropperImageRef?.getBoundingClientRect?.().width ||
-    cropperImageRef?.clientWidth ||
-    Number(attrs.width) ||
-    0
-  const renderedHeight =
-    cropperImageRef?.getBoundingClientRect?.().height ||
-    cropperImageRef?.clientHeight ||
-    Number(attrs.height) ||
-    0
-  const naturalWidth = Number(
-    cropperImageRef?.naturalWidth || imageRef?.naturalWidth || renderedWidth,
-  )
-  const naturalHeight = Number(
-    cropperImageRef?.naturalHeight || imageRef?.naturalHeight || renderedHeight,
-  )
-  const scaleX =
-    renderedWidth > 0 && naturalWidth > 0 ? naturalWidth / renderedWidth : 1
-  const scaleY =
-    renderedHeight > 0 && naturalHeight > 0 ? naturalHeight / renderedHeight : 1
-
-  return {
-    width: Math.max(1, Math.round(Number(selection.width || 0) * scaleX)),
-    height: Math.max(1, Math.round(Number(selection.height || 0) * scaleY)),
-  }
+  return cropper.getExportSize(selection, {
+    fallbackWidth: Number(attrs.width) || 0,
+    fallbackHeight: Number(attrs.height) || 0,
+    fallbackImage: imageRef,
+  })
 }
 
-const getCropSelectionSnapshot = (selection) => {
-  if (!selection) {
-    return null
-  }
-  return {
-    x: Number(selection.x || 0),
-    y: Number(selection.y || 0),
-    width: Number(selection.width || 0),
-    height: Number(selection.height || 0),
-  }
-}
+const getCropSelectionSnapshot = (selection) =>
+  cropper.getSelectionSnapshot(selection)
 
 const syncCropperState = (activePos = null) => {
   if (!editor.value?.storage?.image?.cropper) {
@@ -395,21 +408,11 @@ const syncCropperState = (activePos = null) => {
 }
 
 const isCropSelectionChanged = (selection) => {
-  const current = getCropSelectionSnapshot(selection)
-  if (!current || !cropInitialSelection) {
-    return false
-  }
-  return (
-    Math.abs(current.x - cropInitialSelection.x) > 0.5 ||
-    Math.abs(current.y - cropInitialSelection.y) > 0.5 ||
-    Math.abs(current.width - cropInitialSelection.width) > 0.5 ||
-    Math.abs(current.height - cropInitialSelection.height) > 0.5
-  )
+  return cropper.isSelectionChanged(cropInitialSelection, selection)
 }
 
 const destroyCropper = () => {
-  cropper?.destroy?.()
-  cropper = null
+  cropper.destroy()
   cropInitialSelection = null
 }
 
@@ -431,9 +434,9 @@ const startCropping = async () => {
     exitCropping()
     return
   }
-  cropper = new Cropper(cropperImageRef, {
+  cropper.start({
+    image: cropperImageRef,
     container: cropperHostRef.value,
-    template: CROPPER_TEMPLATE,
   })
   await nextTick()
   cropInitialSelection = getCropSelectionSnapshot(getCropperSelection())
@@ -451,7 +454,7 @@ const applyCrop = async () => {
   }
   try {
     const { width, height } = getCropExportSize(selection)
-    const canvas = await selection.$toCanvas({ width, height })
+    const canvas = await cropper.exportSelection(selection, { width, height })
     const dataUrl = canvas.toDataURL('image/png')
     updateAttributes({
       id: shortId(10),
@@ -574,8 +577,9 @@ const syncRenderedImageHeight = () => {
 
 const clampImageToContainer = () => {
   const { nextMaxWidth, ratio } = syncContainerBounds()
-  if (nextMaxWidth <= 0) {
-    return
+  if (nextMaxWidth <= 14) {
+    scheduleImageLayoutSync()
+    return false
   }
   const currentWidth = Number(attrs.width)
   if (currentWidth > 0 && currentWidth <= nextMaxWidth) {
@@ -592,6 +596,31 @@ const clampImageToContainer = () => {
       : {}),
   })
   return true
+}
+
+const stopScheduledImageLayoutSync = () => {
+  if (imageLayoutFrameId) {
+    window.cancelAnimationFrame(imageLayoutFrameId)
+    imageLayoutFrameId = 0
+  }
+  if (imageLayoutCommitFrameId) {
+    window.cancelAnimationFrame(imageLayoutCommitFrameId)
+    imageLayoutCommitFrameId = 0
+  }
+}
+
+const scheduleImageLayoutSync = () => {
+  if (typeof window === 'undefined') {
+    return
+  }
+  stopScheduledImageLayoutSync()
+  imageLayoutFrameId = window.requestAnimationFrame(() => {
+    imageLayoutFrameId = 0
+    imageLayoutCommitFrameId = window.requestAnimationFrame(() => {
+      imageLayoutCommitFrameId = 0
+      void syncLoadedImageLayout()
+    })
+  })
 }
 
 const parseSvgNumber = (value) => {
@@ -676,6 +705,117 @@ const renderMermaidToImageSrc = async (seq) => {
   applyRenderedDiagram(typeof result === 'string' ? result : result?.svg, seq)
 }
 
+const renderPlantumlToImageSrc = async (seq) => {
+  const serverURL = options.value?.plantUml?.serverURL
+  if (!serverURL) {
+    return
+  }
+  await loadResource(
+    `${options.value.cdnUrl}/libs/plantuml/plantuml-encoder.min.js`,
+    'script',
+    'plantuml-encoder-script',
+  )
+  const encoder = window.plantumlEncoder
+  if (!encoder?.encode) {
+    return
+  }
+  const encoded = encoder.encode(String(attrs.content))
+  const response = await fetch(`${serverURL}/svg/${encoded}`)
+  if (!response.ok) {
+    return
+  }
+  applyRenderedDiagram(await response.text(), seq)
+}
+
+const getFlowchartNodeConfig = (value, fallback) => {
+  try {
+    return {
+      ...fallback,
+      ...JSON.parse(value ?? {}),
+    }
+  } catch {
+    return fallback
+  }
+}
+
+const renderFlowchartToImageSrc = async (seq) => {
+  await loadResource(
+    `${options.value.cdnUrl}/libs/flowchart/raphael.min.js`,
+    'script',
+    'flowchart-raphael-script',
+  )
+  await loadResource(
+    `${options.value.cdnUrl}/libs/flowchart/flowchart.js`,
+    'script',
+    'flowchart-script',
+  )
+  const { flowchart } = window
+  if (!flowchart?.parse) {
+    return
+  }
+  const { data, config } = normalizeFlowchartContent(attrs.content)
+  const flowchartConfig = initFlowchartBaseConfig(config)
+  const startNode = getFlowchartNodeConfig(flowchartConfig.startNode, {
+    'font-color': '#000000',
+    fill: '#ADD8E6',
+    stroke: '#ADD8E6',
+  })
+  const endNode = getFlowchartNodeConfig(
+    flowchartConfig.endNode ?? flowchartConfig.end,
+    {
+      'font-color': '#000000',
+      fill: '#ADD8E6',
+      stroke: '#ADD8E6',
+    },
+  )
+
+  const el = document.createElement('div')
+  el.style.position = 'fixed'
+  el.style.left = '-100000px'
+  el.style.top = '0'
+  el.style.width = '10000px'
+  el.style.height = '10000px'
+  el.style.overflow = 'hidden'
+  el.style.pointerEvents = 'none'
+  el.style.visibility = 'hidden'
+  document.body.appendChild(el)
+
+  try {
+    const instance = flowchart.parse(String(data || ''))
+    instance.drawSVG(el, {
+      x: 10,
+      y: 10,
+      'line-width': flowchartConfig.lineWidth || 1,
+      'line-length': flowchartConfig.lineLength || 60,
+      'line-radius': 5,
+      'text-margin': 10,
+      'font-size': flowchartConfig.fontSize || 14,
+      'font-color': flowchartConfig.fontColor || '#333333',
+      font: 'Arial',
+      'yes-text': flowchartConfig.yesText || 'Yes',
+      'no-text': flowchartConfig.noText || 'No',
+      'arrow-end': 'block',
+      scale: 1,
+      symbols: {
+        start: startNode,
+        end: endNode,
+      },
+      flowstate: {
+        past: { fill: '#CCCCCC', 'font-color': '#666666' },
+        current: { fill: '#FFFF99', 'font-color': '#000000' },
+        future: { fill: '#ADD8E6' },
+      },
+    })
+    const svgEl = el.querySelector('svg')
+    applyRenderedDiagram(
+      svgEl ? new XMLSerializer().serializeToString(svgEl) : null,
+      seq,
+    )
+  } finally {
+    document.body.removeChild(el)
+  }
+}
+
 const renderDiagramToImageSrc = async () => {
   const type = attrs.type ? String(attrs.type) : ''
   if (
@@ -690,6 +830,14 @@ const renderDiagramToImageSrc = async () => {
   try {
     if (type === 'mermaid') {
       await renderMermaidToImageSrc(seq)
+      return
+    }
+    if (type === 'plantuml') {
+      await renderPlantumlToImageSrc(seq)
+      return
+    }
+    if (type === 'flowchart') {
+      await renderFlowchartToImageSrc(seq)
     }
   } catch {}
 }
@@ -755,6 +903,7 @@ const setImageNodeSelection = () => {
   if (typeof pos !== 'number') {
     return
   }
+  editor.value?.commands.focus(undefined, { scrollIntoView: false })
   editor.value?.commands.setNodeSelection(pos)
 }
 
@@ -781,14 +930,14 @@ const altFocusOut = () => {
 }
 
 const onRotate = ({ angle }) => {
-  if (isLockedNode || isCropping) {
+  if (isLockedNode || isCropping || isReadonlyNode) {
     return
   }
   updateAttributes({ angle })
 }
 
 const onResize = ({ width, height }) => {
-  if (isLockedNode || isCropping) {
+  if (isLockedNode || isCropping || isReadonlyNode) {
     return
   }
   const { nextMaxWidth } = syncContainerBounds()
@@ -806,45 +955,80 @@ const onResize = ({ width, height }) => {
   })
 }
 
-const onMousedown = (event) => {
-  getHostElement()?.click()
-  if (isCropping || !attrs.draggable || isLockedNode) {
+const onNativeDragstart = (event) => {
+  if (isCropping) {
     return
   }
-  const dragEl = getDragElement()
-  const elRect = dragEl?.getBoundingClientRect()
-  if (!elRect) {
+  event.preventDefault()
+}
+
+const isDragerHandleTarget = (target) =>
+  target instanceof HTMLElement &&
+  !!target.closest('.es-drager-dot, .es-drager-rotate')
+
+const onDragPointerDown = (event) => {
+  if (isDragerHandleTarget(event.target)) {
+    return
+  }
+  ensureInitialImageAttrsOnInteraction()
+  setImageNodeSelection()
+  selected = true
+  event.stopPropagation()
+  if (!canMoveImageNode) {
     return
   }
   const downX = event.clientX
   const downY = event.clientY
-  const mouseX = downX - elRect.left
-  const mouseY = downY - elRect.top
+  const startLeft = Number(attrs.left) || 0
+  const startTop = Number(attrs.top) || 0
+  let lastPosition = null
+  let pendingPosition = null
+  let dragging = false
 
   const onMousemove = (moveEvent) => {
-    const left = moveEvent.clientX - mouseX
-    const top = moveEvent.clientY - mouseY
-    updateAttributes({ left, top })
+    const deltaX = moveEvent.clientX - downX
+    const deltaY = moveEvent.clientY - downY
+    if (!dragging) {
+      if (Math.abs(deltaX) < 3 && Math.abs(deltaY) < 3) {
+        return
+      }
+      dragging = true
+    }
+    moveEvent.preventDefault()
+    const left = startLeft + deltaX
+    const top = startTop + deltaY
+    lastPosition = {
+      left: Number(left.toFixed(2)),
+      top: Number(top.toFixed(2)),
+    }
+    pendingPosition = lastPosition
+    if (dragPreviewFrameId) {
+      return
+    }
+    dragPreviewFrameId = requestAnimationFrame(() => {
+      dragPreviewFrameId = 0
+      const imageContainerElement = getImageContainerElement()
+      if (!imageContainerElement || !pendingPosition) {
+        return
+      }
+      imageContainerElement.style.left = `${pendingPosition.left}px`
+      imageContainerElement.style.top = `${pendingPosition.top}px`
+    })
   }
   const onMouseup = () => {
     document.removeEventListener('mousemove', onMousemove)
     document.removeEventListener('mouseup', onMouseup)
+    if (dragPreviewFrameId) {
+      cancelAnimationFrame(dragPreviewFrameId)
+      dragPreviewFrameId = 0
+    }
+    if (!dragging || !lastPosition) {
+      return
+    }
+    updateAttributes(lastPosition)
   }
   document.addEventListener('mousemove', onMousemove)
   document.addEventListener('mouseup', onMouseup)
-}
-
-const onDragEnd = () => {
-  if (!attrs.draggable) {
-    setTimeout(() => {
-      const dragEl = getDragElement()
-      if (!dragEl) {
-        return
-      }
-      dragEl.style.left = 0
-      dragEl.style.top = 0
-    }, 100)
-  }
 }
 
 const openImageViewer = async (event) => {
@@ -984,9 +1168,14 @@ watch(
 )
 
 onBeforeUnmount(() => {
+  if (dragPreviewFrameId) {
+    cancelAnimationFrame(dragPreviewFrameId)
+    dragPreviewFrameId = 0
+  }
   setCropTransactionListening(false)
   stopOutsideHandler()
   stopCropPointerTracking()
+  stopScheduledImageLayoutSync()
   exitCropping()
   scheduleFileDelete({
     editor,
@@ -1008,6 +1197,7 @@ onMounted(async () => {
   syncImageStateFromSrc(attrs.src)
   await syncUploadStateFromSrc(attrs.src)
   await syncLoadedImageLayout()
+  scheduleImageLayoutSync()
 })
 </script>
 
@@ -1040,7 +1230,6 @@ onMounted(async () => {
     max-width: 100%;
     width: auto;
     position: relative;
-    z-index: 20;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1062,14 +1251,9 @@ onMounted(async () => {
       &.is-alt-selected {
         outline: solid 1px var(--umo-primary-color);
       }
-      &.is-draggable {
-        position: absolute;
-      }
-      &:not(.is-draggable) {
-        position: relative;
-        max-width: 100%;
-        max-height: 100%;
-      }
+      position: relative;
+      max-width: 100%;
+      max-height: 100%;
     }
     img {
       display: block;
@@ -1082,194 +1266,12 @@ onMounted(async () => {
     }
 
     .umo-node-image-cropper {
-      @crop-mask-color: rgba(0, 0, 0, 0.5);
-      @crop-handle-color: var(--umo-color-black);
-      @crop-edge-thickness: 2px;
-      @crop-edge-offset: 2px;
-      @crop-corner-size: 18px;
-      @crop-corner-line-length: 12px;
-      @crop-corner-line-offset: 6px;
-      @crop-corner-offset: 2px;
-
       display: block;
       position: relative;
       max-width: 100%;
       max-height: 100%;
       background: transparent;
       overflow: hidden;
-
-      cropper-canvas {
-        width: 100%;
-        height: 100%;
-        min-width: 0;
-        min-height: 0;
-        background: transparent;
-        background-image: none !important;
-      }
-
-      cropper-shade {
-        display: none;
-      }
-
-      cropper-grid,
-      cropper-crosshair,
-      cropper-handle[action='select'] {
-        display: none;
-      }
-
-      cropper-selection {
-        box-sizing: border-box;
-        background: transparent;
-        box-shadow: 0 0 0 999px @crop-mask-color;
-        cursor: move;
-      }
-
-      cropper-handle[action='move'] {
-        inset: 0;
-        border: 0;
-        background: transparent;
-        z-index: 1;
-      }
-
-      cropper-handle[action='n-resize'],
-      cropper-handle[action='s-resize'] {
-        width: 18px;
-        height: 12px;
-        z-index: 2;
-
-        &::after {
-          width: 100%;
-          height: @crop-edge-thickness;
-          background: @crop-handle-color;
-        }
-      }
-
-      cropper-handle[action='n-resize'] {
-        margin-top: @crop-edge-offset + 1px;
-      }
-
-      cropper-handle[action='s-resize'] {
-        margin-bottom: @crop-edge-offset + 1px;
-      }
-
-      cropper-handle[action='e-resize'],
-      cropper-handle[action='w-resize'] {
-        width: 12px;
-        height: 18px;
-        z-index: 2;
-
-        &::after {
-          height: 100%;
-          width: @crop-edge-thickness;
-          background: @crop-handle-color;
-        }
-      }
-
-      cropper-handle[action='e-resize'] {
-        margin-right: @crop-edge-offset + 1px;
-      }
-
-      cropper-handle[action='w-resize'] {
-        margin-left: @crop-edge-offset + 1px;
-      }
-
-      cropper-handle[action='ne-resize'],
-      cropper-handle[action='nw-resize'],
-      cropper-handle[action='se-resize'],
-      cropper-handle[action='sw-resize'] {
-        width: @crop-corner-size;
-        height: @crop-corner-size;
-        z-index: 2;
-
-        &::before,
-        &::after {
-          position: absolute;
-          display: block;
-          content: '';
-          background: @crop-handle-color;
-          transform: unset;
-        }
-      }
-
-      cropper-handle[action='ne-resize']::before,
-      cropper-handle[action='nw-resize']::before,
-      cropper-handle[action='se-resize']::before,
-      cropper-handle[action='sw-resize']::before {
-        width: @crop-corner-line-length;
-        height: @crop-edge-thickness;
-      }
-
-      cropper-handle[action='ne-resize']::after,
-      cropper-handle[action='nw-resize']::after,
-      cropper-handle[action='se-resize']::after,
-      cropper-handle[action='sw-resize']::after {
-        width: @crop-edge-thickness;
-        height: @crop-corner-line-length;
-      }
-
-      cropper-handle[action='ne-resize'] {
-        margin-top: @crop-corner-offset;
-        margin-right: @crop-corner-offset;
-
-        &::before {
-          top: @crop-corner-line-offset;
-          right: @crop-corner-line-offset;
-        }
-
-        &::after {
-          top: @crop-corner-line-offset;
-          right: @crop-corner-line-offset;
-          left: unset;
-        }
-      }
-
-      cropper-handle[action='nw-resize'] {
-        margin-top: @crop-corner-offset;
-        margin-left: @crop-corner-offset;
-
-        &::before {
-          top: @crop-corner-line-offset;
-          left: @crop-corner-line-offset;
-        }
-
-        &::after {
-          top: @crop-corner-line-offset;
-          left: @crop-corner-line-offset;
-        }
-      }
-
-      cropper-handle[action='se-resize'] {
-        margin-bottom: @crop-corner-offset;
-        margin-right: @crop-corner-offset;
-
-        &::before {
-          right: @crop-corner-line-offset;
-          bottom: @crop-corner-line-offset;
-        }
-
-        &::after {
-          right: @crop-corner-line-offset;
-          bottom: @crop-corner-line-offset;
-          top: unset;
-          left: unset;
-        }
-      }
-
-      cropper-handle[action='sw-resize'] {
-        margin-bottom: @crop-corner-offset;
-        margin-left: @crop-corner-offset;
-
-        &::before {
-          bottom: @crop-corner-line-offset;
-          left: @crop-corner-line-offset;
-        }
-
-        &::after {
-          bottom: @crop-corner-line-offset;
-          left: @crop-corner-line-offset;
-          top: unset;
-        }
-      }
 
       &-source {
         display: block;

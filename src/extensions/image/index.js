@@ -1,4 +1,4 @@
-import { mergeAttributes, nodeInputRule, nodePasteRule } from '@tiptap/core'
+import { mergeAttributes } from '@tiptap/core'
 import Image from '@tiptap/extension-image'
 import { NodeSelection, Plugin, PluginKey } from '@tiptap/pm/state'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
@@ -6,7 +6,6 @@ import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import NodeView from './node-view.vue'
 
 const IMAGE_NODE_NAMES = ['image', 'inlineImage']
-
 const PIXEL_DIMENSION_REGEX = /^\d+(\.\d+)?px$/i
 const NUMBER_DIMENSION_REGEX = /^\d+(\.\d+)?$/
 const IMAGE_PARSE_CACHE = new WeakMap()
@@ -94,9 +93,26 @@ const getImageAttribute = (element, name) =>
 const parseDimension = (element, name) =>
   getParsedImageElement(element).dimensions[name] ?? null
 
+const hasImageSource = (element) =>
+  String(getImageAttribute(element, 'src') || '').trim() !== ''
+
+const isProseMirrorClipboardArtifact = (element) =>
+  element instanceof HTMLElement &&
+  (element.classList.contains('ProseMirror-separator') ||
+    element.classList.contains('ProseMirror-trailingBreak'))
+
+const shouldParseImageElement = (element) =>
+  !isProseMirrorClipboardArtifact(element) && hasImageSource(element)
+
+const shouldParseImageFigure = (element) =>
+  element instanceof HTMLElement && shouldParseImageElement(element)
+
 const wrapImageElementAsFigure = (element) => {
   const doc = element?.ownerDocument
   if (!doc || !(element instanceof HTMLElement)) {
+    return
+  }
+  if (!shouldParseImageElement(element)) {
     return
   }
   if (element.closest('figure[data-type="image"], inline-img')) {
@@ -115,6 +131,9 @@ const normalizePastedHtmlImages = (html) => {
   }
   const parser = new DOMParser()
   const doc = parser.parseFromString(html, 'text/html')
+  doc
+    .querySelectorAll('.ProseMirror-separator, br.ProseMirror-trailingBreak')
+    .forEach((element) => element.remove())
   doc.querySelectorAll('img').forEach(wrapImageElementAsFigure)
   return doc.body?.innerHTML || html
 }
@@ -261,7 +280,13 @@ const BaseImage = Image.extend({
     return createImageAttributes()
   },
   parseHTML() {
-    return [{ tag: 'img' }]
+    return [
+      {
+        tag: 'img',
+        getAttrs: (element) =>
+          shouldParseImageElement(element) ? null : false,
+      },
+    ]
   },
   addCommands() {
     return {
@@ -329,11 +354,17 @@ export const BlockImage = BaseImage.extend({
     return [
       {
         tag: 'figure[data-type="image"]',
+        getAttrs: (element) =>
+          shouldParseImageFigure(element.querySelector('img')) ? null : false,
         contentElement: (element) =>
           element.querySelector('figcaption, .umo-node-image-alt-content') ||
           element.ownerDocument.createElement('figcaption'),
       },
-      { tag: 'img' },
+      {
+        tag: 'img',
+        getAttrs: (element) =>
+          shouldParseImageElement(element) ? null : false,
+      },
     ]
   },
   renderHTML({ HTMLAttributes }) {
