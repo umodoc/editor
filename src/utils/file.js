@@ -114,6 +114,70 @@ export const getImageDimensions = (file) => {
   }
 }
 
+export const getImageDimensionsFromUrl = (src, timeoutMs = 6000) =>
+  new Promise((resolve) => {
+    if (!src) {
+      resolve(null)
+      return
+    }
+    const img = new Image()
+    let done = false
+    const finish = (value) => {
+      if (done) return
+      done = true
+      resolve(value)
+    }
+    const timer = setTimeout(() => finish(null), timeoutMs)
+    img.onload = () => {
+      clearTimeout(timer)
+      const width = Number(img.naturalWidth || img.width || 0)
+      const height = Number(img.naturalHeight || img.height || 0)
+      finish(width > 0 && height > 0 ? { width, height } : null)
+    }
+    img.onerror = () => {
+      clearTimeout(timer)
+      finish(null)
+    }
+    img.src = src
+  })
+
+export const resolveFileAssetUrl = (url, serverOptions = {}) => {
+  if (!url) {
+    return ''
+  }
+  if (
+    /^https?:\/\//.test(url) ||
+    url.startsWith('blob:') ||
+    url.startsWith('data:')
+  ) {
+    return url
+  }
+  const { host, ssl } = serverOptions
+  if (!host) {
+    return url
+  }
+  const protocol = ssl ? 'https' : 'http'
+  const prefix = url.startsWith('/') ? url : `/${url}`
+  return `${protocol}://${host}${prefix}`
+}
+
+export const formatImageDimensionText = (width, height, unknownText = '') => {
+  const nextWidth = Number(width)
+  const nextHeight = Number(height)
+  if (nextWidth > 0 && nextHeight > 0) {
+    return `${Math.round(nextWidth)} × ${Math.round(nextHeight)}`
+  }
+  return unknownText
+}
+
+export const buildCroppedImageFileName = (name, fallbackName = 'image') => {
+  const baseName =
+    String(name || fallbackName)
+      .trim()
+      .replace(/\.[^.]+$/, '') || fallbackName
+  return `${baseName}-cropped.png`
+}
+
 export const dataURLToFile = (dataURL, name) => {
   if (!dataURL || !dataURL.startsWith('data:')) {
     throw new Error('Invalid dataURL')
