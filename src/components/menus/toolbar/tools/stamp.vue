@@ -1,14 +1,14 @@
 <template>
   <menus-button
-    ico="vars-signature"
-    :text="t('tools.signature.text')"
+    ico="stamp"
+    :text="t('tools.stamp.text')"
     huge
     @menu-click="dialogVisible = true"
   />
-  <dialog-signature
+  <dialog-stamp
     v-model:visible="dialogVisible"
     :value="value"
-    @confirm="setSignature"
+    @confirm="setStamp"
   />
 </template>
 
@@ -32,7 +32,7 @@ const { t } = useI18n()
 
 let dialogVisible = $ref(false)
 
-const setSignature = (imageValue) => {
+const setStamp = (imageValue) => {
   if (!imageValue?.url && !(imageValue?.file instanceof File)) {
     return
   }
@@ -51,16 +51,16 @@ const setSignature = (imageValue) => {
     .setImage(
       {
         id,
-        type: 'signature',
+        type: 'stamp',
         src,
-        alt: t('tools.signature.text'),
+        alt: t('tools.stamp.text'),
         name:
-          imageValue?.file?.name ||
-          imageValue?.name ||
-          t('tools.signature.text'),
+          imageValue?.file?.name || imageValue?.name || t('tools.stamp.text'),
         size: imageValue?.file?.size || imageValue?.size || null,
-        width: 120,
+        width: imageValue.width || props.value?.width,
+        height: imageValue.height || props.value?.height,
         draggable: true,
+        equalProportion: false,
         nodeAlign: 'left',
         previewType: null,
         uploaded: !(imageValue?.file instanceof File),

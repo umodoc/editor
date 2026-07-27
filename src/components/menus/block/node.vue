@@ -67,14 +67,17 @@
       <t-dropdown-item v-if="!disableMenu('web-page')">
         <menus-toolbar-insert-web-page :huge="false" :tooltip="false" />
       </t-dropdown-item>
+      <t-dropdown-item v-if="!disableMenu('signature')">
+        <menus-toolbar-tools-signature :huge="false" :tooltip="false" />
+      </t-dropdown-item>
+      <t-dropdown-item v-if="!disableMenu('stamp')">
+        <menus-toolbar-tools-stamp :huge="false" :tooltip="false" />
+      </t-dropdown-item>
       <t-dropdown-item v-if="!disableMenu('qrcode')">
         <menus-toolbar-tools-qrcode :huge="false" :tooltip="false" />
       </t-dropdown-item>
       <t-dropdown-item v-if="!disableMenu('barcode')">
         <menus-toolbar-tools-barcode :huge="false" :tooltip="false" />
-      </t-dropdown-item>
-      <t-dropdown-item v-if="!disableMenu('signature')">
-        <menus-toolbar-tools-signature :huge="false" :tooltip="false" />
       </t-dropdown-item>
       <t-dropdown-item v-if="!disableMenu('diagrams')">
         <menus-toolbar-tools-diagrams :huge="false" :tooltip="false" />

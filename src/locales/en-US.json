@@ -414,13 +414,49 @@
     "signature": {
       "text": "E-Signature",
       "title": "Insert Electronic Signature",
+      "tabs": {
+        "online": "Sign Online",
+        "select": "Choose Signature"
+      },
       "clear": "Clear",
       "lineWidth": "Pen Thickness",
       "lineColor": "Pen Color",
       "smooth": "Show Brush Strokes",
       "reset": "Reset Options",
       "tip": "Please sign in the this area",
-      "notEmpty": "No signature detected"
+      "notEmpty": "No signature detected",
+      "selectLocal": "Upload Signature Image",
+      "reselect": "Choose Another",
+      "selectEmpty": "Please choose a signature image first",
+      "cropTitle": "Crop Signature",
+      "cropTip": "Drag the crop box and crop area box to adjust the visible area.",
+      "fileSize": "File Size",
+      "imageSize": "Image Dimensions",
+      "unknownDimensions": "Unknown dimensions",
+      "cropFailed": "Failed to crop the signature image"
+    },
+    "stamp": {
+      "text": "E-Stamp",
+      "title": "Insert Stamp",
+      "presetTitle": "Stamp Size Presets",
+      "presets": {
+        "company": "Company Seal",
+        "contract": "Contract Seal",
+        "finance": "Financial Seal",
+        "invoice": "Invoice Seal",
+        "legal": "Legal Representative Seal",
+        "customs": "Customs Declaration Seal",
+        "other": "Other"
+      },
+      "previewTitle": "Preview Stamp",
+      "previewTip": "Drag the crop box and crop area box to adjust the visible area.",
+      "selectLocal": "Upload Stamp Image",
+      "reselect": "Choose Another",
+      "selectEmpty": "Please choose a stamp image first",
+      "fileSize": "File Size",
+      "imageSize": "Image Dimensions",
+      "unknownDimensions": "Unknown dimensions",
+      "notEmpty": "Please upload a stamp image first"
     }
   },
   "page": {

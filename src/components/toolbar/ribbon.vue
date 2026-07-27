@@ -184,9 +184,10 @@
         </template>
         <template v-if="currentMenu === 'tools'">
           <div class="umo-virtual-group">
+            <menus-toolbar-tools-signature v-if="!disableMenu('signature')" />
+            <menus-toolbar-tools-stamp v-if="!disableMenu('stamp')" />
             <menus-toolbar-tools-qrcode v-if="!disableMenu('qrcode')" />
             <menus-toolbar-tools-barcode v-if="!disableMenu('barcode')" />
-            <menus-toolbar-tools-signature v-if="!disableMenu('signature')" />
           </div>
           <div class="umo-virtual-group">
             <menus-toolbar-tools-math v-if="!disableMenu('math')" />

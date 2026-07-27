@@ -412,15 +412,51 @@
       "notEmpty": "二维码内容不能为空"
     },
     "signature": {
-      "text": "电子签名",
-      "title": "插入电子签名",
+      "text": "签名",
+      "title": "插入签名",
+      "tabs": {
+        "online": "在线签名",
+        "select": "选择签名"
+      },
       "clear": "清空画布",
       "lineWidth": "画笔粗细",
       "lineColor": "画笔颜色",
       "smooth": "显示笔锋",
       "reset": "重置设置",
       "tip": "请在当前区域签名",
-      "notEmpty": "没有检测到您的签名"
+      "notEmpty": "没有检测到您的签名",
+      "selectLocal": "上传签名图片",
+      "reselect": "重新选择",
+      "selectEmpty": "请选择签名图片",
+      "cropTitle": "裁剪签名",
+      "cropTip": "拖拽边框和裁剪区域调整范围",
+      "fileSize": "文件大小",
+      "imageSize": "图片尺寸",
+      "unknownDimensions": "尺寸未知",
+      "cropFailed": "签名图片裁剪失败"
+    },
+    "stamp": {
+      "text": "印章",
+      "title": "插入印章",
+      "presetTitle": "公章尺寸预设",
+      "presets": {
+        "company": "企业公章",
+        "contract": "合同专用章",
+        "finance": "财务专用章",
+        "invoice": "发票专用章",
+        "legal": "法人章",
+        "customs": "报关专用章",
+        "other": "其他"
+      },
+      "previewTitle": "预览印章",
+      "previewTip": "拖拽边框和裁剪区域调整范围",
+      "selectLocal": "上传印章图片",
+      "reselect": "重新选择",
+      "selectEmpty": "请选择印章图片",
+      "fileSize": "文件大小",
+      "imageSize": "图片尺寸",
+      "unknownDimensions": "尺寸未知",
+      "notEmpty": "请先上传印章图片"
     }
   },
   "page": {

@@ -5,7 +5,7 @@ import { shortId } from '@/utils/short-id'
 
 import NodeView from './node-view.vue'
 
-const mimeTypes = {
+export const fileMimeTypes = {
   image: [
     'image/jpeg',
     'image/png',
@@ -33,7 +33,7 @@ const mimeTypes = {
   ],
 }
 
-const getAccept = (type, accept) => {
+export const resolveFileAccept = (type, accept = []) => {
   if (type === 'file' && accept.length === 0) {
     return ''
   }
@@ -42,9 +42,9 @@ const getAccept = (type, accept) => {
   }
   let acceptArray = [...accept]
   if (acceptArray.includes(`${type}/*`) || accept.length === 0) {
-    acceptArray = mimeTypes[type]
+    acceptArray = fileMimeTypes[type]
   } else if (acceptArray.filter((item) => item.startsWith(type)).length > 0) {
-    acceptArray = accept.filter((item) => mimeTypes[type].includes(item))
+    acceptArray = accept.filter((item) => fileMimeTypes[type].includes(item))
   } else {
     acceptArray = ['notAllow']
   }
@@ -55,6 +55,13 @@ export default Node.create({
   name: 'file',
   group: 'block',
   atom: true,
+  renderMarkdown: (node) => {
+    const url = node?.attrs?.url
+    const name = node?.attrs?.name
+    if (!url) return name ? String(name) : ''
+    const label = name ? `file: ${name}` : 'file'
+    return `[${label}](${url})`
+  },
   addAttributes() {
     return {
       vnode: {
@@ -126,7 +133,7 @@ export default Node.create({
           if (maxSize !== 0 && size > maxSize) {
             useMessage('error', {
               attach: editor.storage.container,
-              content: t('file.limit', {
+              content: t('file.limitSize', {
                 filename: file.name,
                 size: maxSize / 1024 / 1024,
               }),
@@ -136,15 +143,15 @@ export default Node.create({
           const position = pos || editor.state.selection.anchor
           let previewType = 'file'
           // 图片
-          if (type.startsWith('image/') && mimeTypes.image.includes(type)) {
+          if (type.startsWith('image/') && fileMimeTypes.image.includes(type)) {
             previewType = 'image'
           }
           // 视频
-          if (type.startsWith('video/') && mimeTypes.video.includes(type)) {
+          if (type.startsWith('video/') && fileMimeTypes.video.includes(type)) {
             previewType = 'video'
           }
           // 音频
-          if (type.startsWith('audio/') && mimeTypes.audio.includes(type)) {
+          if (type.startsWith('audio/') && fileMimeTypes.audio.includes(type)) {
             previewType = 'audio'
           }
           // 插入节点
@@ -192,7 +199,7 @@ export default Node.create({
         (type, container = 'body', uploadFileMap, autoType = true) =>
         ({ editor }) => {
           const { options } = editor.storage
-          const accept = getAccept(type, options.file.allowedMimeTypes)
+          const accept = resolveFileAccept(type, options.file.allowedMimeTypes)
           if ((!accept && accept !== '') || accept === 'notAllow') {
             const dialog = useAlert({
               attach: container,
