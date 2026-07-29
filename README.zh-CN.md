@@ -175,7 +175,7 @@ Umo Editor 的发展离不开社区的支持，以下是为 Umo Editor 贡献过
 
 - [Umo Editor](https://dev.umodoc.com/cn/docs/editor): 基于 Vue3 和 Tiptap3 的本土化开源文档编辑器，专为国人用户设计。
 - [Umo Viewer](https://dev.umodoc.com/cn/docs/viewer): 开源轻量级的 Umo Editor 文档查看器。
-- [Umo Editor Next](https://dev.umodoc.com/cn/docs/next): Umo Editor 的增强版，在包含最新版本的 Umo Editor 所有功能的基础上，重点增加或者增强了对多用户在线协作编辑、文档批注(评论)、文档历史版本管理、AI 创作、文档导入导出、表格等功能的支持，同时增强了工具栏和页边栏等区域的自定义能力。
+- [Umo Editor Next](https://dev.umodoc.com/cn/docs/next): Umo Editor 的企业级增强版，在延续编辑体验的基础上，进一步围绕真实业务落地做了更完整的能力升级，更适合希望把文档能力真正接入核心产品、支撑复杂企业场景的团队。
 - [Umo Editor Server](https://dev.umodoc.com/cn/docs/server): 为增强 Umo Editor 功能，如多用户在线协作编辑、文档批注(评论)、文档导入导出等功能而开发的配套服务器端软件。
 - [Umo Office Viewer](https://dev.umodoc.com/cn/docs/office-viewer): Umo Office Viewer 是一款 Office 文档查看器，支持在 Web 页面中查看包括 WPS 文档在内的 40 余种主流的办公文档。
 - [Umo Office Convert](https://dev.umodoc.com/cn/docs/office-convert): 将 Office、WPS 等 40 余种办公文档转换为可在线查看的文档格式，可与 Umo Office Viewer 结合使用实现办公文档的在线预览。
