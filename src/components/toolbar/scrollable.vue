@@ -91,7 +91,6 @@ defineExpose({
     top: 50%;
     transform: translateY(-50%);
     height: calc(100% - 20px);
-    outline: solid 10px var(--umo-color-white);
     &:hover {
       border-color: var(--umo-primary-color);
       background-color: var(--umo-primary-color);
@@ -111,7 +110,7 @@ defineExpose({
           var(--umo-color-white)
         );
         position: absolute;
-        left: 30px;
+        left: 21px;
         top: 0;
         bottom: 0;
         width: 30px;
@@ -132,7 +131,7 @@ defineExpose({
           var(--umo-color-white)
         );
         position: absolute;
-        right: 30px;
+        right: 21px;
         top: 0;
         bottom: 0;
         width: 30px;
