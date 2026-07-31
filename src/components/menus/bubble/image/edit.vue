@@ -30,14 +30,6 @@
     :content="attrs.content"
     :config="JSON.parse(attrs.config || '{}')"
   />
-  <menus-toolbar-tools-plantuml
-    v-if="attrs.type === 'plantuml'"
-    :content="attrs.content"
-  />
-  <menus-toolbar-tools-flowchart
-    v-if="attrs.type === 'flowchart'"
-    :content="attrs.content"
-  />
 </template>
 
 <script setup>
