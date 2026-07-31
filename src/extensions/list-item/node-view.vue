@@ -158,6 +158,8 @@
 <script setup>
 import { NodeViewContent, nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 
+import { safeNodePos, safeOffsetPos } from '@/utils/position'
+
 import {
   getListItemContext,
   isContinueOrderedListNumberingUnchanged,
@@ -381,7 +383,7 @@ const listItemContext = $computed(() => {
   listItemState?.structureVersion
   const { getPos } = props
   const state = editor.value?.state
-  const listItemPos = typeof getPos === 'function' ? getPos() : null
+  const listItemPos = safeNodePos(getPos, state)
   return getListItemContext(state, listItemPos)
 })
 const orderedContext = $computed(() =>
@@ -439,7 +441,7 @@ const isCurrentItem = $computed(() => {
   if (!isOrderedList) {
     return false
   }
-  const listItemPos = props.getPos?.()
+  const listItemPos = safeNodePos(props.getPos, editor.value?.state)
   return (
     typeof activeListItemPos === 'number' && activeListItemPos === listItemPos
   )
@@ -464,15 +466,12 @@ const wrapperClass = $computed(() => ({
 }))
 
 const focusListItem = () => {
-  const pos = props.getPos?.()
-  if (typeof pos !== 'number') {
+  const pos = safeNodePos(props.getPos, editor.value?.state)
+  const selectionPos = safeOffsetPos(props.getPos, editor.value?.state, 2)
+  if (typeof pos !== 'number' || typeof selectionPos !== 'number') {
     return null
   }
-  editor.value
-    ?.chain()
-    .focus()
-    .setTextSelection(pos + 2)
-    .run()
+  editor.value?.chain().focus().setTextSelection(selectionPos).run()
   return pos
 }
 
@@ -613,7 +612,7 @@ const toggleTaskItemChecked = (event) => {
   }
 
   const { checked } = target
-  const pos = props.getPos?.()
+  const pos = safeNodePos(props.getPos, editor.value?.state)
   if (typeof pos !== 'number') {
     target.checked = isTaskChecked
     return

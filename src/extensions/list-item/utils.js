@@ -1,5 +1,7 @@
 import nzh from 'nzh'
 
+import { resolvePos } from '@/utils/position'
+
 const LIST_ITEM_NODE_NAMES = new Set(['listItem', 'taskItem'])
 const LIST_NODE_NAMES = new Set(['orderedList', 'bulletList', 'taskList'])
 const BULLET_MARKERS = {
@@ -80,18 +82,6 @@ export const formatOrderedValue = (value, listType) => {
   }
 }
 
-const getListItemResolvedPos = (state, listItemPos = null) => {
-  if (!state) {
-    return null
-  }
-
-  if (typeof listItemPos === 'number') {
-    return state.doc.resolve(listItemPos + 1)
-  }
-
-  return state.selection.$from
-}
-
 const getListItemDepth = ($pos) => {
   if (!$pos) {
     return null
@@ -109,7 +99,14 @@ const getListItemDepth = ($pos) => {
 }
 
 export const getListItemContext = (state, listItemPos = null) => {
-  const $pos = getListItemResolvedPos(state, listItemPos)
+  if (!state) {
+    return null
+  }
+
+  const $pos =
+    typeof listItemPos === 'number'
+      ? resolvePos(state.doc, listItemPos + 1)
+      : state.selection.$from
   if (!$pos) {
     return null
   }

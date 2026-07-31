@@ -2,7 +2,8 @@
   <node-view-wrapper
     as="span"
     class="umo-node-tag"
-    @click.capture="editor?.commands.setNodeSelection(getPos())"
+    contenteditable="false"
+    @click.capture="clickCapture"
   >
     <span
       class="umo-node-tag-text"
@@ -22,11 +23,17 @@
 <script setup>
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 
+import { selectNodePos } from '@/utils/position'
+
 const props = defineProps(nodeViewProps)
 const { getPos } = props
 const attrs = $computed(() => props.node.attrs)
 const options = inject('options')
 const editor = inject('editor')
+
+const clickCapture = () => {
+  selectNodePos(editor.value, getPos)
+}
 </script>
 
 <style lang="less">

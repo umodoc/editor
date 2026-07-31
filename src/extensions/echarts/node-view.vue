@@ -4,7 +4,7 @@
     ref="containerRef"
     class="umo-node-view"
     :style="nodeStyle"
-    @click.capture="editor?.commands.setNodeSelection(getPos())"
+    @click.capture="clickCapture"
   >
     <div
       class="umo-node-container umo-node-echarts umo-select-outline"
@@ -19,7 +19,7 @@
         :selected="selected"
         :rotatable="false"
         :boundary="false"
-        :disabled="!editor?.isEditable"
+        :disabled="!editor?.isEditable || isLockedNode"
         :angle="0"
         :width="Number(attrs.width)"
         :height="Number(attrs.height)"
@@ -41,6 +41,7 @@ import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 // 拖拽组件
 import Drager from 'es-drager'
 
+import { selectNodePos } from '@/utils/position'
 import {
   calbaseConfigData,
   calbaseConfigOptions,
@@ -50,6 +51,7 @@ import { loadResource } from '@/utils/load-resource'
 
 const props = defineProps(nodeViewProps)
 const attrs = $computed(() => props.node.attrs)
+const isLockedNode = $computed(() => !!attrs.lockedNode)
 const { updateAttributes, getPos } = props
 const options = inject('options')
 const editor = inject('editor')
@@ -58,6 +60,10 @@ let maxWidth = $ref(0)
 let selected = $ref(false)
 let chart = null
 let chartOption = $ref(null)
+
+const clickCapture = () => {
+  selectNodePos(editor.value, getPos)
+}
 
 // 加载数据
 onMounted(async () => {
@@ -83,6 +89,7 @@ const nodeStyle = $computed(() => {
   }
 })
 const onResize = ({ width, height }) => {
+  if (isLockedNode) return
   updateAttributes({
     width: Number(width.toFixed(2)),
     height: Number(height.toFixed(2)),

@@ -4,7 +4,7 @@
     ref="containerRef"
     class="umo-node-view"
     :style="nodeStyle"
-    @click.capture="editor?.commands.setNodeSelection(getPos())"
+    @click.capture="clickCapture"
   >
     <div
       class="umo-node-container umo-select-outline umo-node-iframe"
@@ -20,7 +20,7 @@
         :min-width="400"
         :min-height="200"
         :max-width="maxWidth"
-        :disabled="!editor?.isEditable"
+        :disabled="options.document?.readOnly || isLockedNode"
         @resize="onResize"
         @focus="selected = true"
       >
@@ -36,15 +36,21 @@
 <script setup>
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import Drager from 'es-drager'
+import { selectNodePos } from '@/utils/position'
 const options = inject('options')
 const editor = inject('editor')
 
 const props = defineProps(nodeViewProps)
 const attrs = $computed(() => props.node.attrs)
+const isLockedNode = $computed(() => !!attrs.lockedNode)
 const { updateAttributes, getPos } = props
 const containerRef = ref(null)
 let selected = $ref(false)
 let maxWidth = $ref(0)
+
+const clickCapture = () => {
+  selectNodePos(editor.value, getPos)
+}
 
 const nodeStyle = $computed(() => {
   const { nodeAlign, margin } = attrs
@@ -71,6 +77,7 @@ onMounted(async () => {
   }
 })
 const onResize = ({ width, height }) => {
+  if (isLockedNode) return
   updateAttributes({ width, height })
 }
 onClickOutside(containerRef, () => {

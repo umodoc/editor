@@ -2,7 +2,7 @@
   <node-view-wrapper
     :id="node.attrs.id"
     class="umo-node-view"
-    @click.capture="editor?.commands.setNodeSelection(getPos())"
+    @click.capture="clickCapture"
   >
     <div
       class="umo-node-container umo-hover-shadow umo-select-outline umo-node-toc"
@@ -33,7 +33,9 @@
 import { TextSelection } from '@tiptap/pm/state'
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 
-const { getPos } = defineProps(nodeViewProps)
+import { selectNodePos } from '@/utils/position'
+
+const { getPos, node } = defineProps(nodeViewProps)
 
 const container = inject('container')
 const editor = inject('editor')
@@ -43,6 +45,9 @@ defineEmits(['close'])
 // 最终可视化数据
 let tocTreeData = $ref([])
 let watchTreeData = [] // 可视化监听数据
+const clickCapture = () => {
+  selectNodePos(editor.value, getPos)
+}
 const buildTocTree = (tocArray) => {
   const root = []
   const stack = []

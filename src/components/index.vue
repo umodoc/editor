@@ -744,7 +744,7 @@ const setContent = (
   content,
   options = {
     emitUpdate: true,
-    focusPosition: 'start',
+    focusPosition: null,
     focusOptions: { scrollIntoView: true },
   },
 ) => {
@@ -752,21 +752,11 @@ const setContent = (
     throw new Error('editor is not ready!')
   }
   const doc = contentTransform(content)
-  try {
-    editor.value
-      .chain()
-      .setContent(doc, { emitUpdate: options.emitUpdate })
-      .focus(options.focusPosition, options.focusOptions)
-      .run()
-  } catch (error) {
-    const isSelectionPositionError =
-      error instanceof RangeError &&
-      /outside of fragment|out of range/i.test(String(error.message || ''))
-
-    if (!isSelectionPositionError) {
-      throw error
-    }
-  }
+  editor.value
+    .chain()
+    .setContent(doc, { emitUpdate: options.emitUpdate })
+    .focus(options.focusPosition, options.focusOptions)
+    .run()
 }
 
 // Content Methods

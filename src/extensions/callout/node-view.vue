@@ -50,6 +50,9 @@
 
 <script setup>
 import { NodeViewContent, nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
+
+import { safeOffsetPos } from '@/utils/position'
+
 const props = defineProps(nodeViewProps)
 const attrs = $computed(() => props.node.attrs)
 const { updateAttributes } = props
@@ -75,15 +78,11 @@ const focusCalloutContent = (event) => {
   if (target.closest('.umo-node-callout-content')) {
     return
   }
-  const pos = props.getPos?.()
+  const pos = safeOffsetPos(props.getPos, props.editor?.state, 1)
   if (typeof pos !== 'number') {
     return
   }
-  props.editor
-    .chain()
-    .focus()
-    .setTextSelection(pos + 1)
-    .run()
+  props.editor.chain().focus().setTextSelection(pos).run()
 }
 </script>
 

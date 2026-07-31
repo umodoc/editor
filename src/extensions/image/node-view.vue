@@ -122,6 +122,7 @@
 import { NodeViewContent, nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import Drager from 'es-drager'
 
+import { safeNodePos, selectNodePos } from '@/utils/position'
 import { ImageCropper } from '@/utils/image-cropper'
 import { loadResource } from '@/utils/load-resource'
 import { shortId } from '@/utils/short-id'
@@ -285,6 +286,7 @@ const nodeStyle = $computed(() => {
   return {
     justifyContent: nodeAlign,
     position: attrs.draggable ? 'relative' : undefined,
+    width: attrs.draggable ? '100%' : undefined,
     zIndex: attrs.draggable ? (selected ? 100 : 95) : undefined,
     ...imageWrapperMargins,
     marginTop,
@@ -296,7 +298,7 @@ const imageContainerStyle = $computed(() => ({
     attrs.draggable && !attrs.inline
       ? `${Math.max(Number(attrs.width) || 0, 14)}px`
       : undefined,
-  maxWidth: '100%',
+  maxWidth: attrs.draggable ? 'none' : '100%',
   position: attrs.draggable ? 'absolute' : 'relative',
   left: attrs.draggable ? `${Number(attrs.left) || 0}px` : undefined,
   top: attrs.draggable ? `${Number(attrs.top) || 0}px` : undefined,
@@ -304,7 +306,7 @@ const imageContainerStyle = $computed(() => ({
 
 const getHostElement = () => containerRef.value?.$el
 const getImageContainerElement = () => imageContainerRef.value
-const getNodePos = () => getPos?.()
+const getNodePos = () => safeNodePos(getPos, editor.value?.state)
 const getAltContentElement = () =>
   getHostElement()?.querySelector('.umo-node-image-alt-content')
 const isAltContentFocused = () => {
@@ -523,12 +525,20 @@ const handleImageCropTransaction = async ({ transaction }) => {
   }
 }
 
+const getElementWidth = (element) =>
+  Math.max(
+    0,
+    element?.clientWidth || element?.getBoundingClientRect?.().width || 0,
+  )
+
 const getContainerMaxWidth = () => {
   const hostEl = getHostElement()
-  return Math.max(
-    14,
-    hostEl?.clientWidth || hostEl?.getBoundingClientRect().width || 0,
-  )
+  if (attrs.draggable && !attrs.inline) {
+    const currentWidth = Math.max(Number(attrs.width) || 0, 14)
+    const parentWidth = getElementWidth(hostEl?.parentElement)
+    return Math.max(currentWidth, parentWidth, 14)
+  }
+  return Math.max(14, getElementWidth(hostEl))
 }
 
 const getImageRatio = () => {
@@ -894,17 +904,12 @@ const syncLoadedImageLayout = async () => {
   }
   await onLoad()
 }
-
 const isAltTarget = (target) =>
   target instanceof HTMLElement && !!target.closest('.umo-node-image-alt')
 
 const setImageNodeSelection = () => {
-  const pos = getNodePos()
-  if (typeof pos !== 'number') {
-    return
-  }
   editor.value?.commands.focus(undefined, { scrollIntoView: false })
-  editor.value?.commands.setNodeSelection(pos)
+  selectNodePos(editor.value, getPos)
 }
 
 const wrapperClick = (event) => {
@@ -1234,6 +1239,10 @@ onMounted(async () => {
     flex-direction: column;
     align-items: center;
     caret-color: transparent;
+    &.is-draggable {
+      align-items: flex-start;
+      max-width: none;
+    }
     &.is-loading {
       outline: none !important;
       box-shadow: none !important;
