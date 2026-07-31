@@ -3,6 +3,16 @@
 .umo-editor-content {
   accent-color: var(--umo-primary-color);
 
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-block-start: 0;
+    margin-block-end: 0;
+  }
+
   &.show-line-number {
     .umo-editor {
       >*:not([data-line-number='false'], div) {
