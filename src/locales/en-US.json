@@ -802,8 +802,11 @@
   },
   "file": {
     "uploading": "Uploading file...",
+    "preview": "Preview File",
     "download": "Download File",
     "limit": "File \"{filename}\" exceeds the limit of {size}MB",
+    "unknownName": "Unknown Name",
+    "unknownSize": "Unknown Size",
     "notAllow": {
       "title": "Error Message",
       "message": "Insertion of this file type is not allowed in the current document."

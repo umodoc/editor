@@ -133,7 +133,7 @@ export default Node.create({
           if (maxSize !== 0 && size > maxSize) {
             useMessage('error', {
               attach: editor.storage.container,
-              content: t('file.limitSize', {
+              content: t('file.limit', {
                 filename: file.name,
                 size: maxSize / 1024 / 1024,
               }),
