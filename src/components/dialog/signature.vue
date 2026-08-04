@@ -237,7 +237,7 @@ const selectedImageDimensionText = computed(() =>
 )
 
 const getFileSizeLimitMessage = (file) =>
-  t('file.limitSize', {
+  t('file.limit', {
     filename: file?.name || t('file.unknownName'),
     size: Math.ceil(uploadMaxSize.value / 1024 / 1024),
   })

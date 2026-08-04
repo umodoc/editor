@@ -667,8 +667,11 @@
   },
   "file": {
     "uploading": "Caricamento file...",
+    "preview": "Anteprima file",
     "download": "Scarica file",
     "limit": "Il file \"{filename}\" supera il limite di {size}MB",
+    "unknownName": "Nome sconosciuto",
+    "unknownSize": "Dimensione sconosciuta",
     "notAllow": {
       "title": "Messaggio di errore",
       "message": "L'inserimento di questo tipo di file non è consentito nel documento corrente."
