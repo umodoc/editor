@@ -4,13 +4,14 @@
     :text="isEditMode ? t('tools.qrcode.edit') : t('tools.qrcode.text')"
     huge
     @menu-click="dialogVisible = true"
-  />
-  <dialog-qrcode
-    v-model:visible="dialogVisible"
-    :content="content"
-    :value="value"
-    @confirm="setQrcode"
-  />
+  >
+    <dialog-qrcode
+      v-model:visible="dialogVisible"
+      :content="content"
+      :value="value"
+      @confirm="setQrcode"
+    />
+  </menus-button>
 </template>
 
 <script setup>

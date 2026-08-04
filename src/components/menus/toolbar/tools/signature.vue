@@ -1,15 +1,16 @@
 <template>
   <menus-button
-    ico="vars-signature"
+    ico="signature"
     :text="t('tools.signature.text')"
     huge
     @menu-click="dialogVisible = true"
-  />
-  <dialog-signature
-    v-model:visible="dialogVisible"
-    :value="value"
-    @confirm="setSignature"
-  />
+  >
+    <dialog-signature
+      v-model:visible="dialogVisible"
+      :value="value"
+      @confirm="setSignature"
+    />
+  </menus-button>
 </template>
 
 <script setup>

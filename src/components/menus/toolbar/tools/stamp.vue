@@ -4,12 +4,13 @@
     :text="t('tools.stamp.text')"
     huge
     @menu-click="dialogVisible = true"
-  />
-  <dialog-stamp
-    v-model:visible="dialogVisible"
-    :value="value"
-    @confirm="setStamp"
-  />
+  >
+    <dialog-stamp
+      v-model:visible="dialogVisible"
+      :value="value"
+      @confirm="setStamp"
+    />
+  </menus-button>
 </template>
 
 <script setup>

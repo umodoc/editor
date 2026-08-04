@@ -4,13 +4,14 @@
     :text="isEditMode ? t('tools.barcode.edit') : t('tools.barcode.text')"
     huge
     @menu-click="dialogVisible = true"
-  />
-  <dialog-barcode
-    v-model:visible="dialogVisible"
-    :content="content"
-    :value="value"
-    @confirm="setBarcode"
-  />
+  >
+    <dialog-barcode
+      v-model:visible="dialogVisible"
+      :content="content"
+      :value="value"
+      @confirm="setBarcode"
+    />
+  </menus-button>
 </template>
 
 <script setup>
