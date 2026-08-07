@@ -126,6 +126,7 @@ import { safeNodePos, selectNodePos } from '@/utils/position'
 import { ImageCropper } from '@/utils/image-cropper'
 import { loadResource } from '@/utils/load-resource'
 import { shortId } from '@/utils/short-id'
+import { svgBoundsNormalizer } from '@/utils/svg-normalizer'
 import {
   dataURLToFile,
   imageNodeTypes,
@@ -633,51 +634,18 @@ const scheduleImageLayoutSync = () => {
   })
 }
 
-const parseSvgNumber = (value) => {
-  if (value === undefined || value === null) return undefined
-  const raw = String(value).trim()
-  if (!raw) return undefined
-  const num = Number.parseFloat(raw.replace(/px$/i, ''))
-  return Number.isFinite(num) ? num : undefined
-}
-
-const getSvgIntrinsicSize = (svgText) => {
-  if (!svgText) return null
-  try {
-    const parser = new DOMParser()
-    const doc = parser.parseFromString(String(svgText), 'image/svg+xml')
-    const svg = doc.documentElement
-    if (!svg || svg.nodeName.toLowerCase() !== 'svg') return null
-    const widthAttr = parseSvgNumber(svg.getAttribute('width'))
-    const heightAttr = parseSvgNumber(svg.getAttribute('height'))
-    if (widthAttr && heightAttr) return { width: widthAttr, height: heightAttr }
-    const viewBox = svg.getAttribute('viewBox')
-    if (viewBox) {
-      const parts = viewBox
-        .trim()
-        .split(/[\s,]+/)
-        .map((item) => Number.parseFloat(item))
-      if (parts.length === 4 && parts.every((item) => Number.isFinite(item))) {
-        const [, , width, height] = parts
-        if (width > 0 && height > 0) {
-          return { width, height }
-        }
-      }
-    }
-  } catch {}
-  return null
-}
-
 const applyRenderedDiagram = (svg, seq) => {
   if (!svg || seq !== diagramRenderSeq) {
     return
   }
-  const size = getSvgIntrinsicSize(svg)
+  const normalizedSvg = svgBoundsNormalizer.normalize(svg)
   updateNodeAttrsWithoutHistory({
     id: shortId(10),
-    src: svgToDataURL(svg),
-    width: size?.width ? Number(size.width.toFixed(2)) : null,
-    height: size?.height ? Number(size.height.toFixed(2)) : null,
+    src: svgToDataURL(normalizedSvg.svg),
+    width: normalizedSvg.width ? Number(normalizedSvg.width.toFixed(2)) : null,
+    height: normalizedSvg.height
+      ? Number(normalizedSvg.height.toFixed(2))
+      : null,
     equalProportion: true,
   })
 }

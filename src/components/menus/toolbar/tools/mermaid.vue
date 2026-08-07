@@ -47,12 +47,17 @@
             :placeholder="t('tools.mermaid.placeholder')"
           />
         </div>
-        <div class="umo-mermaid-render">
+        <div
+          class="umo-mermaid-render"
+          :class="{ 'is-invalid': isRenderError }"
+        >
           <div
             class="umo-mermaid-title"
             v-text="t('tools.mermaid.preview')"
           ></div>
-          <div class="umo-mermaid-error" v-if="errorTxt">{{ errorTxt }}</div>
+          <div class="umo-mermaid-error" v-if="errorTxt">
+            {{ errorTxt }}
+          </div>
           <div
             v-else
             ref="mermaidRef"
@@ -76,6 +81,7 @@
 import { getSelectionNode } from '@/utils/selection'
 import { shortId } from '@/utils/short-id'
 import { svgToDataURL } from '@/utils/file'
+import { svgBoundsNormalizer } from '@/utils/svg-normalizer'
 
 const props = defineProps({
   config: {
@@ -126,20 +132,26 @@ const mermaidInit = () => {
 let mermaidCode = $ref(props.content || '')
 let svgCode = $ref('')
 let errorTxt = $ref('')
+let isRenderError = $ref(false)
 const mermaidRef = $ref(null)
+let renderedSvgSize = $ref({ width: 0, height: 0 })
 
 const renderMermaid = async () => {
   const { mermaid } = window
 
   if (!mermaid) {
     svgCode = ''
+    renderedSvgSize = { width: 0, height: 0 }
     errorTxt = t('tools.mermaid.notLoaded')
+    isRenderError = false
     return
   }
 
   if (!mermaidCode || mermaidCode.trim() === '') {
     svgCode = ''
+    renderedSvgSize = { width: 0, height: 0 }
     errorTxt = t('tools.mermaid.codeEmpty')
+    isRenderError = false
     return
   }
 
@@ -148,10 +160,23 @@ const renderMermaid = async () => {
   try {
     const { svg } = await mermaid.render(renderId, mermaidCode)
     svgCode = svg
+    await nextTick()
+    const renderedSvg = mermaidRef?.querySelector('svg')
+    const normalizedSvg = renderedSvg
+      ? svgBoundsNormalizer.normalize(renderedSvg, { mutate: true })
+      : svgBoundsNormalizer.normalize(svg)
+    svgCode = normalizedSvg.svg
+    renderedSvgSize = {
+      width: normalizedSvg.width,
+      height: normalizedSvg.height,
+    }
     errorTxt = ''
+    isRenderError = false
   } catch (err) {
     svgCode = ''
+    renderedSvgSize = { width: 0, height: 0 }
     errorTxt = t('tools.mermaid.renderError')
+    isRenderError = true
   }
 }
 
@@ -161,6 +186,7 @@ watch(
     if (visible) {
       localConfig = { ...props.config }
       mermaidCode = props.content || 'graph TB\na-->b'
+      isRenderError = false
       await nextTick()
       mermaidInit()
       renderMermaid()
@@ -191,12 +217,6 @@ const setMermaid = () => {
   }
 
   if (!props.content || (props.content && props.content !== mermaidCode)) {
-    const svg = mermaidRef?.querySelector('svg')
-
-    if (!svg) {
-      return
-    }
-
     if (errorTxt) {
       useMessage('error', {
         attach: container,
@@ -205,13 +225,24 @@ const setMermaid = () => {
       return
     }
 
-    const { width, height } = svg.getBoundingClientRect()
+    const svg = mermaidRef?.querySelector('svg')
+
+    if (!svg) {
+      return
+    }
+
     const { attrs } = getSelectionNode(editor.value) || {}
+    const width =
+      renderedSvgSize.width ||
+      svgBoundsNormalizer.parseNumber(svg.getAttribute('width'))
+    const height =
+      renderedSvgSize.height ||
+      svgBoundsNormalizer.parseNumber(svg.getAttribute('height'))
 
     const imageOptions = {
       id: shortId(10),
       type: 'mermaid',
-      src: svgToDataURL(svgCode),
+      src: svgToDataURL(svg),
       config: JSON.stringify(localConfig),
       content: mermaidCode,
       alt: t('tools.mermaid.text'),
@@ -279,6 +310,21 @@ const setMermaid = () => {
       overflow: auto;
       display: flex;
       justify-content: center;
+    }
+
+    &.is-invalid {
+      border-color: rgba(231, 36, 36, 0.18);
+      background-color: rgba(231, 36, 36, 0.04);
+
+      .umo-mermaid-title {
+        color: var(--td-error-color);
+        background-color: rgba(231, 36, 36, 0.08);
+      }
+
+      .umo-mermaid-error {
+        color: var(--td-error-color);
+        background-color: transparent;
+      }
     }
   }
 }
