@@ -143,6 +143,36 @@ const createOrderedListStartCommand =
         : undefined,
     })
 
+const setOrderedListType =
+  ({ listType, listItemPos } = {}) =>
+  ({ state, dispatch }) => {
+    if (!listType) {
+      return false
+    }
+
+    const context = getOrderedListContext(state, listItemPos)
+    if (!context) {
+      return false
+    }
+
+    if (context.orderedListNode.attrs.listType === listType) {
+      return true
+    }
+
+    const tr = syncNestedOrderedListType(
+      state.tr,
+      context.orderedListPos,
+      context.orderedListPos + context.orderedListNode.nodeSize,
+      listType,
+    )
+
+    if (dispatch) {
+      dispatch(focusListItem(tr, context.listItemPos).scrollIntoView())
+    }
+
+    return true
+  }
+
 const sinkOrderedListItemWithType =
   () =>
   ({ state, dispatch }) => {
@@ -255,6 +285,7 @@ export default OrderedList.extend({
         getStart: (_context, start) => start,
         shouldSkip: isOrderedListStartUnchanged,
       }),
+      setOrderedListType,
     }
   },
 })

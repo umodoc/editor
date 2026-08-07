@@ -580,7 +580,7 @@ const changeOrderedListType = (listType) => {
   editor.value
     ?.chain()
     .focus()
-    .updateAttributes('orderedList', { listType })
+    .setOrderedListType({ listType, listItemPos: pos })
     .run()
   closeMarkerMenu()
 }

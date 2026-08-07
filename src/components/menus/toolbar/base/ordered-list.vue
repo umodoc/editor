@@ -80,13 +80,10 @@ const toggleOrderedList = (listType) => {
     if (editor.value.getAttributes('orderedList').listType === listType) {
       chain?.toggleOrderedList().run()
     } else {
-      chain?.updateAttributes('orderedList', { listType }).run()
+      chain?.setOrderedListType({ listType }).run()
     }
   } else {
-    chain
-      ?.toggleOrderedList()
-      .updateAttributes('orderedList', { listType })
-      .run()
+    chain?.toggleOrderedList().setOrderedListType({ listType }).run()
   }
   listStyleType = listType
   popupVisible.value = false
