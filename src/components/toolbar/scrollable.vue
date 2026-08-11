@@ -38,11 +38,11 @@ const checkScrollPosition = () => {
 }
 
 const scrollLeft = () => {
-  contentRef.scrollLeft -= contentRef.offsetWidth - 10 || 100
+  contentRef.scrollLeft -= contentRef.offsetWidth - 80 || 100
 }
 
 const scrollRight = () => {
-  contentRef.scrollLeft += contentRef.offsetWidth - 10 || 100
+  contentRef.scrollLeft += contentRef.offsetWidth - 80 || 100
 }
 
 // 监听父元素大小变化
