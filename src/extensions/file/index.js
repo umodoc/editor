@@ -1,4 +1,6 @@
 import { mergeAttributes, Node } from '@tiptap/core'
+import { Fragment } from '@tiptap/pm/model'
+import { Selection } from '@tiptap/pm/state'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 
 import { shortId } from '@/utils/short-id'
@@ -49,6 +51,106 @@ export const resolveFileAccept = (type, accept = []) => {
     acceptArray = ['notAllow']
   }
   return acceptArray.length === 0 ? '' : acceptArray.toString()
+}
+
+const insertBatchContent = (editor, nodes = [], inline = false) => {
+  const list = nodes.filter(Boolean)
+  if (!editor || list.length === 0) {
+    return false
+  }
+  const { state, view, chain } = editor
+  if (inline || list.length === 1) {
+    return chain().focus().insertContent(list).run()
+  }
+  const parsedNodes = list.map((node) => state.schema.nodeFromJSON(node))
+  const content = Fragment.fromArray(parsedNodes)
+  const { tr } = state
+  let { from, to } = tr.selection
+  const isOnlyBlockContent = parsedNodes.every((node) => node.isBlock)
+  if (from === to && isOnlyBlockContent) {
+    const { parent } = tr.doc.resolve(from)
+    const isEmptyTextBlock =
+      parent.isTextblock && !parent.type.spec.code && !parent.childCount
+    if (isEmptyTextBlock) {
+      from = Math.max(0, from - 1)
+      to += 1
+    }
+  }
+  tr.replaceWith(from, to, content)
+  tr.setSelection(Selection.near(tr.doc.resolve(from + content.size), -1))
+  view.dispatch(tr.scrollIntoView())
+  return true
+}
+
+const createInsertFileNode = ({
+  file,
+  uploadFileMap,
+  autoType,
+  dimensions = {},
+  editor,
+}) => {
+  const { type, name, size } = file
+  const { options } = editor.storage
+  const { maxSize } = options.file
+  if (maxSize !== 0 && size > maxSize) {
+    useMessage('error', {
+      attach: editor.storage.container,
+      content: t('file.limit', {
+        filename: file.name,
+        size: maxSize / 1024 / 1024,
+      }),
+    })
+    return null
+  }
+  let previewType = 'file'
+  if (type.startsWith('image/') && fileMimeTypes.image.includes(type)) {
+    previewType = 'image'
+  }
+  if (type.startsWith('video/') && fileMimeTypes.video.includes(type)) {
+    previewType = 'video'
+  }
+  if (type.startsWith('audio/') && fileMimeTypes.audio.includes(type)) {
+    previewType = 'audio'
+  }
+  const id = shortId(10)
+  uploadFileMap.set(id, file)
+
+  let nodeData = {
+    id,
+    [previewType === 'file' ? 'url' : 'src']: URL.createObjectURL(file),
+    name,
+    type: type || 'unknown',
+    size,
+    previewType,
+  }
+
+  if (previewType === 'image') {
+    const { width, height, inline } = dimensions
+    if (width && width > 0) {
+      nodeData = {
+        ...nodeData,
+        width,
+      }
+    }
+    if (height && height > 0) {
+      nodeData = {
+        ...nodeData,
+        height,
+      }
+    }
+    if (inline) {
+      previewType = 'inlineImage'
+      nodeData = {
+        ...nodeData,
+        inline: true,
+      }
+    }
+  }
+
+  return {
+    type: autoType ? previewType : 'file',
+    attrs: nodeData,
+  }
 }
 
 export default Node.create({
@@ -127,73 +229,18 @@ export default Node.create({
       insertFile:
         ({ file, uploadFileMap, autoType, pos, dimensions }) =>
         ({ editor, commands }) => {
-          const { type, name, size } = file
-          const { options } = editor.storage
-          const { maxSize } = options.file
-          if (maxSize !== 0 && size > maxSize) {
-            useMessage('error', {
-              attach: editor.storage.container,
-              content: t('file.limit', {
-                filename: file.name,
-                size: maxSize / 1024 / 1024,
-              }),
-            })
+          const node = createInsertFileNode({
+            file,
+            uploadFileMap,
+            autoType,
+            dimensions,
+            editor,
+          })
+          if (!node) {
             return false
           }
           const position = pos || editor.state.selection.anchor
-          let previewType = 'file'
-          // 图片
-          if (type.startsWith('image/') && fileMimeTypes.image.includes(type)) {
-            previewType = 'image'
-          }
-          // 视频
-          if (type.startsWith('video/') && fileMimeTypes.video.includes(type)) {
-            previewType = 'video'
-          }
-          // 音频
-          if (type.startsWith('audio/') && fileMimeTypes.audio.includes(type)) {
-            previewType = 'audio'
-          }
-          // 插入节点
-          const id = shortId(10)
-          uploadFileMap.set(id, file)
-
-          let nodeData = {
-            id,
-            [previewType === 'file' ? 'url' : 'src']: URL.createObjectURL(file),
-            name,
-            type: type || 'unknown', // Ensure type is never null
-            size,
-            previewType,
-          }
-
-          // 图片处理
-          if (previewType === 'image') {
-            const { width, height, inline } = dimensions
-            if (width && width > 0) {
-              nodeData = {
-                ...nodeData,
-                width,
-              }
-            }
-            if (height && height > 0) {
-              nodeData = {
-                ...nodeData,
-                height,
-              }
-            }
-            if (inline) {
-              previewType = 'inlineImage'
-              nodeData = {
-                ...nodeData,
-                inline: true,
-              }
-            }
-          }
-          return commands.insertContentAt(position, {
-            type: autoType ? previewType : 'file',
-            attrs: nodeData,
-          })
+          return commands.insertContentAt(position, node)
         },
       selectFiles:
         (type, container = 'body', uploadFileMap, autoType = true) =>
@@ -214,6 +261,7 @@ export default Node.create({
           }
           const { open, onChange } = useFileDialog({
             accept,
+            multiple: true,
             reset: true,
           })
           // 打开文件对话框
@@ -222,18 +270,23 @@ export default Node.create({
           // 插入文件
           onChange((fileList) => {
             const files = Array.from(fileList)
-            for (const file of files) {
-              bool = editor
-                .chain()
-                .focus()
-                .insertFile({
+            const nodes = files
+              .map((file) =>
+                createInsertFileNode({
                   file,
                   uploadFileMap,
                   autoType,
-                  dimensions: { inline: type === 'inlineImage' ? true : false },
-                })
-                .run()
+                  dimensions: {
+                    inline: type === 'inlineImage' ? true : false,
+                  },
+                  editor,
+                }),
+              )
+              .filter(Boolean)
+            if (nodes.length === 0) {
+              return
             }
+            bool = insertBatchContent(editor, nodes, type === 'inlineImage')
           })
           return bool
         },
