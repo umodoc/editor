@@ -261,7 +261,15 @@ let contentUpdated = $ref(false)
 let isFirstUpdate = $ref(true)
 let autoSaveInterval = $ref(null)
 let isSaving = $ref(false)
-const shouldBlockUnload = () => isSaving || contentUpdated
+const shouldBlockUnload = () => {
+  if (
+    options.value.document?.readOnly === true ||
+    editor.value?.isEditable === false
+  ) {
+    return false
+  }
+  return isSaving || contentUpdated
+}
 const handleBeforeUnload = (event) => {
   if (!shouldBlockUnload()) {
     return
