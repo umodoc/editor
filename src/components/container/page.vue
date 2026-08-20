@@ -82,6 +82,7 @@
       v-model:index="currentImageIndex"
       :images="previewImages"
       :trigger="() => {}"
+      :image-scale="{ max: 10, min: 0.1, step: 0.2 }"
       @close="imageViewer.visible = false"
     />
     <container-search-replace />
