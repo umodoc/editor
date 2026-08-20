@@ -58,9 +58,9 @@ const insertBatchContent = (editor, nodes = [], inline = false) => {
   if (!editor || list.length === 0) {
     return false
   }
-  const { state, view, chain } = editor
+  const { state, view } = editor
   if (inline || list.length === 1) {
-    return chain().focus().insertContent(list).run()
+    return editor.chain().focus().insertContent(list).run()
   }
   const parsedNodes = list.map((node) => state.schema.nodeFromJSON(node))
   const content = Fragment.fromArray(parsedNodes)
