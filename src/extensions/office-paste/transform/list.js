@@ -4,14 +4,7 @@ import {
   parseStyleAttribute,
 } from '../utils'
 
-export const transformLists = (html) => {
-  if (html.indexOf(`mso-list:`) === -1) {
-    return html
-  }
-
-  const parser = new DOMParser()
-  const doc = parser.parseFromString(html, `text/html`)
-
+export const transformLists = (doc) => {
   let listStack = []
   let currentListId
   const listElements = doc.querySelectorAll(`p[style*="mso-list:"]`)
@@ -49,8 +42,6 @@ export const transformLists = (html) => {
     listStack[listStack.length - 1].appendChild(getListItemFromParagraph(el))
     el.remove()
   })
-
-  return doc.documentElement.outerHTML
 }
 
 const hasNonListItemSibling = (el) => {
@@ -64,7 +55,7 @@ const hasNonListItemSibling = (el) => {
 }
 
 const getListItemFromParagraph = (el) => {
-  const li = document.createElement(`li`)
+  const li = el.ownerDocument.createElement(`li`)
   li.innerHTML = el.innerHTML.replace(listTypeRegex, ``)
 
   return li
@@ -81,8 +72,9 @@ const parseMsoListAttribute = (attr) => {
 
   return [msoListId, msoListLevel]
 }
+// 必须非贪婪匹配：同段内图片的条件注释也以 endif 结尾，贪婪匹配会把图片和文字一起删除
 // eslint-disable-next-line
-const listTypeRegex = /<!--\[if \!supportLists\]-->((.|\n)*)<!--\[endif\]-->/m
+const listTypeRegex = /<!--\[if \!supportLists\]-->[\s\S]*?<!--\[endif\]-->/
 const getListPrefix = (el) => {
   const matches = el.innerHTML.match(listTypeRegex)
   if (matches?.length) {
@@ -96,7 +88,7 @@ const getListPrefix = (el) => {
 
 const createListElement = (el) => {
   const listInfo = getListInfo(getListPrefix(el))
-  const list = document.createElement(listInfo.type)
+  const list = el.ownerDocument.createElement(listInfo.type)
   if (listInfo.countType) {
     list.setAttribute(`type`, listInfo.countType)
   }

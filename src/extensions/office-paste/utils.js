@@ -86,42 +86,12 @@ export function isOfficeHtml(html) {
   return hasMsOfficeSignature || hasWpsSignature
 }
 
-export function replaceImageWithPlaceholderResult(
-  html,
-  placeholder = '[图片]',
-) {
-  if (!html) {
-    return {
-      html,
-      replaced: false,
-    }
-  }
-
-  let replaced = false
-  const replaceWithPlaceholder = () => {
-    replaced = true
-    return placeholder
-  }
-
-  let nextHtml = html
-  nextHtml = nextHtml.replace(
-    /<v:shape\b[^>]*>[\s\S]*?<v:imagedata[\s\S]*?<\/v:shape>/gi,
-    replaceWithPlaceholder,
+// 表格类内容由 transformExcel 处理，不走 Word 文档的流程
+export function isSheetHtml(html) {
+  return (
+    /<html\b[^>]*office:excel/i.test(html.slice(0, 4096)) ||
+    html.includes('byte-sheet-html-origin')
   )
-  nextHtml = nextHtml.replace(
-    /<v:imagedata\b[^>]*\/?>/gi,
-    replaceWithPlaceholder,
-  )
-  nextHtml = nextHtml.replace(/<img\b[^>]*>/gi, replaceWithPlaceholder)
-
-  return {
-    html: nextHtml,
-    replaced,
-  }
-}
-
-export function replaceImageWithPlaceholder(html, placeholder = '[图片]') {
-  return replaceImageWithPlaceholderResult(html, placeholder).html
 }
 
 export function isOfficeLikeClipboardData(clipboardData) {

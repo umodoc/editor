@@ -134,7 +134,12 @@ import {
   svgToDataURL,
 } from '@/utils/file'
 
-import { updateAttributesWithoutHistory } from '../file'
+import {
+  queueAttributesWithoutHistory,
+  shouldReportUploadError,
+  sliceUploadPreparation,
+  updateAttributesWithoutHistory,
+} from '../file'
 
 const DIAGRAM_TYPES = new Set(['mermaid', 'plantuml', 'flowchart'])
 
@@ -365,6 +370,9 @@ const updateNodeAttrsWithoutHistory = (nextAttrs) => {
   updateAttributesWithoutHistory(editor.value, nextAttrs, getNodePos())
 }
 
+const queueNodeAttrsWithoutHistory = (nextAttrs) =>
+  queueAttributesWithoutHistory(editor.value, nextAttrs, getNodePos)
+
 const ensureInitialImageAttrs = () => {
   if (attrs.initialAttrs) {
     return
@@ -386,7 +394,7 @@ const setNodeErrorState = (nextError) => {
   const normalizedError = !!nextError
   error = normalizedError
   if (!!attrs.error !== normalizedError) {
-    updateNodeAttrsWithoutHistory({ error: normalizedError })
+    queueNodeAttrsWithoutHistory({ error: normalizedError })
   }
 }
 
@@ -712,7 +720,7 @@ const syncRenderedImageHeight = () => {
   if (Math.abs(currentHeight - renderedHeight) < 0.5) {
     return
   }
-  updateAttributes({ height: renderedHeight })
+  queueNodeAttrsWithoutHistory({ height: renderedHeight })
 }
 
 const clampImageToContainer = () => {
@@ -733,7 +741,7 @@ const clampImageToContainer = () => {
     currentWidth > 0 ? Math.min(currentWidth, nextMaxWidth) : nextMaxWidth
   const nextHeight =
     ratio > 0 ? Number((nextWidth / ratio).toFixed(2)) : Number(attrs.height)
-  updateAttributes({
+  queueNodeAttrsWithoutHistory({
     width: Number(nextWidth.toFixed(2)),
     ...(Number.isFinite(nextHeight) && nextHeight > 0
       ? { height: nextHeight }
@@ -955,7 +963,7 @@ const renderDiagramToImageSrc = async () => {
 
 const uploadImage = async () => {
   if (attrs.uploaded || !attrs.id || !uploadFileMap.value.has(attrs.id)) {
-    updateNodeAttrsWithoutHistory({ uploaded: true })
+    await queueNodeAttrsWithoutHistory({ uploaded: true })
     return
   }
   const currentUploadId = attrs.id
@@ -968,14 +976,16 @@ const uploadImage = async () => {
     const result = await options.value?.onFileUpload?.(file)
     const { id, url } = result
     if (containerRef.value) {
-      updateNodeAttrsWithoutHistory({ id, src: url, uploaded: true })
+      queueNodeAttrsWithoutHistory({ id, src: url, uploaded: true })
     }
     uploadFileMap.value.delete(currentUploadId)
   } catch (uploadError) {
-    useMessage('error', {
-      attach: container,
-      content: uploadError.message,
-    })
+    if (shouldReportUploadError(uploadError.message)) {
+      useMessage('error', {
+        attach: container,
+        content: uploadError.message,
+      })
+    }
   } finally {
     uploadingImageIds.delete(currentUploadId)
   }
@@ -1260,9 +1270,13 @@ const syncUploadStateFromSrc = async (src) => {
       return
     }
     const name = `${attrs.type}-${id}`
+    await sliceUploadPreparation()
+    if (!containerRef.value || uploadFileMap.value.has(id)) {
+      return
+    }
     const { file, filename } = dataURLToFile(src, name)
     uploadFileMap.value.set(id, file)
-    updateNodeAttrsWithoutHistory({
+    await queueNodeAttrsWithoutHistory({
       id,
       size: file.size,
       name: filename,

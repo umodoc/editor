@@ -4,6 +4,7 @@ import { Selection } from '@tiptap/pm/state'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 
 import { shortId } from '@/utils/short-id'
+import { createTimeSlicer } from '@/utils/time-slice'
 
 import NodeView from './node-view.vue'
 
@@ -310,3 +311,69 @@ export const updateAttributesWithoutHistory = (editor, attrs, pos) => {
   tr.setMeta('addToHistory', false)
   view.dispatch(tr)
 }
+
+// 所有节点视图共用，避免大量图片同时解码时连续占用主线程
+export const sliceUploadPreparation = createTimeSlicer()
+
+let lastUploadError = null
+let lastUploadErrorTime = 0
+
+// 批量上传失败时错误信息往往相同，短时间内只提示一次
+export const shouldReportUploadError = (message) => {
+  const now = Date.now()
+  const repeated =
+    message === lastUploadError && now - lastUploadErrorTime < 3000
+  lastUploadError = message
+  lastUploadErrorTime = now
+  return !repeated
+}
+
+const pendingAttributeUpdates = new WeakMap()
+
+let lastFlushDuration = 0
+
+const flushAttributeUpdates = (editor) => {
+  const started = performance.now()
+  const updates = pendingAttributeUpdates.get(editor)
+  pendingAttributeUpdates.delete(editor)
+  if (!updates || editor.isDestroyed) {
+    updates?.forEach(({ resolvers }) => resolvers.forEach((fn) => fn()))
+    return
+  }
+  const { state, view } = editor
+  const { tr } = state
+  updates.forEach(({ attrs }, getPos) => {
+    const pos = getPos()
+    if (typeof pos !== 'number' || !state.doc.nodeAt(pos)) {
+      return
+    }
+    Object.entries(attrs).forEach(([name, value]) => {
+      tr.setNodeAttribute(pos, name, value)
+    })
+  })
+  if (tr.docChanged) {
+    tr.setMeta('addToHistory', false)
+    tr.setMeta('toc', true)
+    view.dispatch(tr)
+  }
+  updates.forEach(({ resolvers }) => resolvers.forEach((fn) => fn()))
+  lastFlushDuration = performance.now() - started
+}
+
+// 将同一轮事件循环内的节点属性更新合并到一个事务。
+// 大量节点同时挂载时，逐个 dispatch 的开销为 节点数 × 文档大小，会长时间阻塞页面
+export const queueAttributesWithoutHistory = (editor, attrs, getPos) =>
+  new Promise((resolve) => {
+    let updates = pendingAttributeUpdates.get(editor)
+    if (!updates) {
+      updates = new Map()
+      pendingAttributeUpdates.set(editor, updates)
+      // 单次事务的开销随文档增大，按上次耗时拉开间隔，把更多更新合并到一起
+      const delay = Math.min(lastFlushDuration * 4, 500)
+      setTimeout(() => flushAttributeUpdates(editor), delay)
+    }
+    const update = updates.get(getPos) ?? { attrs: {}, resolvers: [] }
+    Object.assign(update.attrs, attrs)
+    update.resolvers.push(resolve)
+    updates.set(getPos, update)
+  })

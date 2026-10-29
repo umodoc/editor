@@ -43,7 +43,6 @@ const TableCellOptions = {
         parseHTML: (element) => {
           const style = element.getAttribute('style') || ''
           const match = style.match(/(?<!background-)color:\s*([^;]+)/i)
-          if (style.includes('background-color')) return null
           return match ? match[1].trim() : null
         },
         renderHTML: ({ color }) => {

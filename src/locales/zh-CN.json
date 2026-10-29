@@ -854,6 +854,8 @@
   },
   "officePaste": {
     "imagePlaceholder": "[图片]",
+    "processing": "正在处理粘贴内容…",
+    "failed": "粘贴内容处理失败",
     "dialog": {
       "title": "提示信息",
       "body": "剪贴板内容已粘贴，但包含的图片未被正确处理，请手动复制替换文档中未处理的图片。"
