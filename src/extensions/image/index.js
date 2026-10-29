@@ -6,8 +6,15 @@ import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import NodeView from './node-view.vue'
 
 const IMAGE_NODE_NAMES = ['image', 'inlineImage']
-const PIXEL_DIMENSION_REGEX = /^\d+(\.\d+)?px$/i
-const NUMBER_DIMENSION_REGEX = /^\d+(\.\d+)?$/
+const DIMENSION_REGEX = /^(\d*\.?\d+)(px|pt|pc|in|cm|mm)?$/i
+const PIXELS_PER_UNIT = {
+  px: 1,
+  pt: 96 / 72,
+  pc: 16,
+  in: 96,
+  cm: 96 / 2.54,
+  mm: 96 / 25.4,
+}
 const IMAGE_PARSE_CACHE = new WeakMap()
 
 const createInitialImageAttrs = (attrs = {}) => {
@@ -38,14 +45,14 @@ const parseDimensionValue = (rawValue) => {
   if (!rawValue) {
     return null
   }
-  const normalizedValue = String(rawValue).trim()
-  if (PIXEL_DIMENSION_REGEX.test(normalizedValue)) {
-    return Number.parseFloat(normalizedValue)
+  const match = String(rawValue).trim().match(DIMENSION_REGEX)
+  if (!match) {
+    return null
   }
-  if (NUMBER_DIMENSION_REGEX.test(normalizedValue)) {
-    return Number.parseFloat(normalizedValue)
-  }
-  return null
+  const unit = (match[2] || 'px').toLowerCase()
+  return Number(
+    (Number.parseFloat(match[1]) * PIXELS_PER_UNIT[unit]).toFixed(2),
+  )
 }
 
 const getParsedImageElement = (element) => {
@@ -60,10 +67,12 @@ const getParsedImageElement = (element) => {
   if (cached) {
     return cached
   }
+  // 旧版本导出的 inline-img 把属性写在自身，且没有嵌套的 img
   const sourceElement =
     element.tagName.toLowerCase() === 'img'
       ? element
-      : element.querySelector('img')
+      : element.querySelector('img') ||
+        (element.tagName.toLowerCase() === 'inline-img' ? element : null)
   const parsed = {
     sourceElement,
     attrs: {
@@ -72,12 +81,12 @@ const getParsedImageElement = (element) => {
       title: sourceElement?.getAttribute('title') ?? null,
     },
     dimensions: {
-      width: parseDimensionValue(
-        sourceElement?.style?.width || sourceElement?.getAttribute('width'),
-      ),
-      height: parseDimensionValue(
-        sourceElement?.style?.height || sourceElement?.getAttribute('height'),
-      ),
+      width:
+        parseDimensionValue(sourceElement?.style?.width) ??
+        parseDimensionValue(sourceElement?.getAttribute('width')),
+      height:
+        parseDimensionValue(sourceElement?.style?.height) ??
+        parseDimensionValue(sourceElement?.getAttribute('height')),
     },
   }
   IMAGE_PARSE_CACHE.set(element, parsed)
@@ -107,6 +116,23 @@ const shouldParseImageElement = (element) =>
 const shouldParseImageFigure = (element) =>
   element instanceof HTMLElement && shouldParseImageElement(element)
 
+const INLINE_IMAGE_PARENT_SELECTOR = 'p, h1, h2, h3, h4, h5, h6, li'
+
+const getInlineImageParent = (element) =>
+  element.closest('figure, inline-img')
+    ? null
+    : element.closest(INLINE_IMAGE_PARENT_SELECTOR)
+
+// 与文字同段的图片必须保持行内，否则解析时段落会被拆开
+const isImageAmongText = (element) => {
+  const parent = getInlineImageParent(element)
+  return (
+    !!parent &&
+    (parent.textContent.trim() !== '' ||
+      parent.querySelectorAll('img').length > 1)
+  )
+}
+
 const wrapImageElementAsFigure = (element) => {
   const doc = element?.ownerDocument
   if (!doc || !(element instanceof HTMLElement)) {
@@ -118,11 +144,22 @@ const wrapImageElementAsFigure = (element) => {
   if (element.closest('figure[data-type="image"], inline-img')) {
     return
   }
+  if (isImageAmongText(element)) {
+    return
+  }
   const figure = doc.createElement('figure')
   figure.setAttribute('data-type', 'image')
   figure.appendChild(element.cloneNode(true))
   figure.appendChild(doc.createElement('figcaption'))
-  element.replaceWith(figure)
+  // 独占段落的图片直接替换段落，避免前后多出空段落
+  ;(getInlineImageParent(element) || element).replaceWith(figure)
+}
+
+export const normalizeDocumentImages = (doc) => {
+  doc
+    .querySelectorAll('.ProseMirror-separator, br.ProseMirror-trailingBreak')
+    .forEach((element) => element.remove())
+  doc.querySelectorAll('img').forEach(wrapImageElementAsFigure)
 }
 
 const normalizePastedHtmlImages = (html) => {
@@ -131,10 +168,7 @@ const normalizePastedHtmlImages = (html) => {
   }
   const parser = new DOMParser()
   const doc = parser.parseFromString(html, 'text/html')
-  doc
-    .querySelectorAll('.ProseMirror-separator, br.ProseMirror-trailingBreak')
-    .forEach((element) => element.remove())
-  doc.querySelectorAll('img').forEach(wrapImageElementAsFigure)
+  normalizeDocumentImages(doc)
   return doc.body?.innerHTML || html
 }
 
@@ -437,15 +471,38 @@ export const InlineImage = BaseImage.extend({
       ...this.parent?.(),
       inline: { default: true },
       equalProportion: { default: false },
-      width: { default: 150 },
-      height: { default: 80 },
+      width: {
+        default: 150,
+        parseHTML: (element) => parseDimension(element, 'width'),
+      },
+      height: {
+        default: 80,
+        parseHTML: (element) => parseDimension(element, 'height'),
+      },
     }
   },
   parseHTML() {
-    return [{ tag: 'inline-img' }]
+    return [
+      { tag: 'inline-img', getAttrs: () => ({ width: null, height: null }) },
+      {
+        tag: 'img',
+        priority: 60,
+        getAttrs: (element) =>
+          shouldParseImageElement(element) && getInlineImageParent(element)
+            ? { width: null, height: null }
+            : false,
+      },
+    ]
   },
   renderHTML({ HTMLAttributes }) {
-    return ['inline-img', mergeAttributes(HTMLAttributes)]
+    const { src, alt, title, width, height, ...wrapperAttributes } =
+      HTMLAttributes
+    // inline-img 是自定义标签，嵌套 img 才能让导出的 HTML 在别处正常显示
+    return [
+      'inline-img',
+      mergeAttributes(wrapperAttributes),
+      ['img', { src, alt, title, width, height }],
+    ]
   },
   addNodeView() {
     return VueNodeViewRenderer(NodeView)

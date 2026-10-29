@@ -178,6 +178,34 @@ export const buildCroppedImageFileName = (name, fallbackName = 'image') => {
   return `${baseName}-cropped.png`
 }
 
+const readBlobAsDataURL = (blob) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = () => reject(reader.error)
+    reader.readAsDataURL(blob)
+  })
+
+// blob: 地址随页面关闭失效，导出的文件中必须替换为图片数据
+export const inlineBlobImages = async (html) => {
+  const sources = new Set(
+    Array.from(
+      html.matchAll(/<img\b[^>]*?\ssrc="(blob:[^"]+)"/gi),
+      ([, src]) => src,
+    ),
+  )
+  let inlined = html
+  for (const src of sources) {
+    try {
+      const blob = await (await fetch(src)).blob()
+      inlined = inlined.replaceAll(src, await readBlobAsDataURL(blob))
+    } catch (error) {
+      console.warn(`Unable to inline image ${src}`, error)
+    }
+  }
+  return inlined
+}
+
 export const dataURLToFile = (dataURL, name) => {
   if (!dataURL || !dataURL.startsWith('data:')) {
     throw new Error('Invalid dataURL')

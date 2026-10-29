@@ -855,6 +855,8 @@
   },
   "officePaste": {
     "imagePlaceholder": "[Image]",
+    "processing": "Processing pasted content…",
+    "failed": "Failed to process the pasted content",
     "dialog": {
       "title": "Notice",
       "body": "The clipboard content has been pasted, but included images were not processed correctly. Please manually copy and replace the unprocessed images in the document."

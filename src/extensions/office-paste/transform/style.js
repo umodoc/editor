@@ -14,9 +14,7 @@ export const normalizeLineHeight = (value) => {
   return lineHeight
 }
 
-export const normalizeOfficeHtmlLineHeights = (html) => {
-  const parser = new DOMParser()
-  const doc = parser.parseFromString(html, `text/html`)
+export const normalizeOfficeLineHeights = (doc) => {
   doc.querySelectorAll(`[style*="mso-"]`).forEach((node) => {
     const styles = parseStyleAttribute(node)
     const newStyles = []
@@ -52,11 +50,9 @@ export const normalizeOfficeHtmlLineHeights = (html) => {
   doc.querySelectorAll(`[style*="color: black"]`).forEach((node) => {
     node.style.removeProperty(`color`)
   })
-
-  return doc.documentElement.outerHTML
 }
 
-export const transformMsoStyles = (html) => {
-  html = html.replace(/<o:p>(.*?)<\/o:p>/g, ``)
-  return normalizeOfficeHtmlLineHeights(html)
+export const transformMsoStyles = (doc) => {
+  doc.querySelectorAll(`o\\:p`).forEach((node) => node.remove())
+  normalizeOfficeLineHeights(doc)
 }
