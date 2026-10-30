@@ -217,6 +217,9 @@ watch(
       height: 100%;
       background-color: #fff;
       outline: solid 1px var(--umo-content-node-border);
+      canvas {
+        z-index: 1;
+      }
     }
   }
 }
