@@ -13,7 +13,7 @@
 import domtoimage from 'dom-to-image-more'
 import { saveAs } from 'file-saver'
 
-const { toBlob } = domtoimage
+const { toCanvas } = domtoimage
 const container = inject('container')
 const exportFile = inject('exportFile')
 const page = inject('page')
@@ -34,7 +34,14 @@ const saveImage = async ({ content, value }) => {
     page.value.zoomLevel = 100
     await nextTick()
     const node = document.querySelector(`${container} .umo-page-content`)
-    const blob = await toBlob(node, { scale: devicePixelRatio })
+    const canvas = await toCanvas(node, { scale: devicePixelRatio })
+    const mimeType = value === 'jpg' ? 'image/jpeg' : 'image/png'
+    const blob = await new Promise((resolve) =>
+      canvas.toBlob(resolve, mimeType, 1),
+    )
+    if (!blob) {
+      throw new Error('Failed to encode exported image')
+    }
     const { title } = options.value.document
     const filename =
       title !== '' ? options.value?.document?.title : t('document.untitled')
