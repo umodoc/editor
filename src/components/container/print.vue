@@ -65,12 +65,14 @@ const defaultLineHeight = $computed(
 
 const getIframeCode = () => {
   const { orientation, size, margin, background } = page.value
+  const title = document.createElement('title')
+  title.textContent = options.value.document?.title || ''
   /* eslint-disable */
   return `
     <!DOCTYPE html>
     <html lang="zh-CN" theme-mode="${options.value.theme}">
     <head>
-      <title>${options.value.document?.title}</title>
+      ${title.outerHTML}
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       ${getStylesHtml()}
