@@ -3,7 +3,7 @@
     ico="math"
     :text="t('tools.math.text')"
     huge
-    @menu-click="dialogVisible = true"
+    @menu-click="openDialog"
   >
     <modal
       :visible="dialogVisible"
@@ -13,23 +13,26 @@
         disabled: latexValue === '',
       }"
       destroy-on-close
-      @cancel="dialogVisible = false"
-      @close="dialogVisible = false"
+      @cancel="closeDialog"
+      @close="closeDialog"
     >
       <template #header>
         <icon name="math" />
-        {{ props.latex === '' ? t('tools.math.insert') : t('tools.math.edit') }}
+        {{ editingType ? t('tools.math.edit') : t('tools.math.insert') }}
       </template>
-      <div ref="containerRef" class="umo-math-container">
+      <div class="umo-math-container">
         <div class="umo-math-input">
           <t-textarea
             v-model.trim="latexValue"
             :autosize="{ minRows: 3, maxRows: 6 }"
             :placeholder="t('tools.math.placeholder')"
-            @change="previewMath"
           />
           <div class="umo-math-input-preview umo-scrollbar">
-            <div v-if="latexValue !== ''" class="umo-math-input-render"></div>
+            <div
+              v-if="latexValue !== ''"
+              class="umo-math-input-render"
+              v-html="preview"
+            ></div>
             <div v-else class="umo-math-input-preview-empty">
               {{ t('tools.math.preview') }}
             </div>
@@ -37,30 +40,21 @@
         </div>
         <div class="umo-math-select">
           <div
-            v-for="(item, index) in templates"
-            v-show="latexLoaded"
-            :key="index"
+            v-for="{ latex, html } in templatePreviews"
+            :key="latex"
             class="umo-math-select-item"
-            @click="selectMath(item)"
-          >
-            {{ item }}
-          </div>
-          <div v-if="!latexLoaded" class="umo-math-select-loading">
-            {{ t('tools.math.template') }}
-          </div>
+            @click="selectMath(latex)"
+            v-html="html"
+          ></div>
         </div>
       </div>
       <template #footer>
         <div class="umo-math-footer">
-          <t-button
-            theme="default"
-            variant="base"
-            @click="dialogVisible = false"
-          >
+          <t-button theme="default" variant="base" @click="closeDialog">
             {{ t('tools.math.cancel') }}
           </t-button>
           <t-dropdown
-            v-if="props.latex === ''"
+            v-if="!editingType"
             trigger="click"
             :options="[
               { content: t('tools.math.inline'), value: 'inline' },
@@ -82,7 +76,7 @@
 </template>
 
 <script setup>
-import { loadResource } from '@/utils/load-resource'
+import katex from 'katex'
 
 const props = defineProps({
   type: {
@@ -96,7 +90,6 @@ const props = defineProps({
 })
 
 const editor = inject('editor')
-const options = inject('options')
 
 const templates = [
   '\\times',
@@ -185,85 +178,66 @@ const templates = [
 ]
 
 let dialogVisible = $ref(false)
-const containerRef = $ref()
-let latexLoaded = $ref(false)
+let editingType = $ref(null)
 let latexValue = $ref('')
+let position = null
 
-const loadKatex = async () => {
-  const { cdnUrl } = options.value
-  await loadResource(
-    `${cdnUrl}/libs/katex/katex.min.js`,
-    'script',
-    'katex-script',
-  )
-  await loadResource(`${cdnUrl}/libs/katex/katex.min.css`, 'css', 'katex-style')
-  setTimeout(() => {
-    latexLoaded = true
-  }, 100)
-}
-
-watch(
-  () => dialogVisible,
-  async (visible) => {
-    if (visible) {
-      await loadKatex()
-      setTimeout(() => {
-        renderMath('templates')
-      }, 100)
-      if (props.latex !== '') {
-        const { latex } = props
-        latexValue = latex
-        previewMath()
-      }
-    } else {
-      latexValue = ''
-    }
-  },
+const renderMath = (latex) =>
+  katex.renderToString(latex, { throwOnError: false, output: 'mathml' })
+const preview = computed(() => renderMath(latexValue))
+const templatePreviews = computed(() =>
+  templates.map((latex) => ({ latex, html: renderMath(latex) })),
 )
 
-const renderMath = async (type) => {
-  await nextTick()
-  const render = (text, el) =>
-    katex.render(text, el, {
-      throwOnError: false,
-      output: 'mathml',
-    })
-  if (type === 'templates') {
-    containerRef.querySelectorAll('.umo-math-select-item').forEach((el) => {
-      render(el.textContent, el)
-    })
-  }
-  if (type === 'preview' && latexValue !== '') {
-    await nextTick()
-    const el = containerRef.querySelector('.umo-math-input-render')
-    render(latexValue, el)
+const mapPosition = ({ transaction }) => {
+  if (position !== null && transaction.docChanged) {
+    const mapped = transaction.mapping.mapResult(position)
+    position = editingType && mapped.deleted ? null : mapped.pos
   }
 }
+
+const openDialog = () => {
+  if (!editor.value) {
+    return
+  }
+  position = editor.value.state.selection.from
+  editingType = props.type
+  latexValue = props.latex
+  editor.value.on('transaction', mapPosition)
+  dialogVisible = true
+}
+
+const closeDialog = () => {
+  editor.value?.off('transaction', mapPosition)
+  dialogVisible = false
+  position = null
+}
+
+onBeforeUnmount(closeDialog)
 
 const selectMath = (value) => {
   latexValue = latexValue === '' ? value : `${latexValue} ${value}`
-  previewMath()
 }
 
-const previewMath = () => {
-  renderMath('preview')
+const applyMath = (command, focusPosition) => {
+  if (position !== null && latexValue !== '') {
+    editor.value
+      ?.chain()
+      .focus(focusPosition)
+      [command]({ latex: latexValue, pos: position })
+      .run()
+  }
+  closeDialog()
 }
 
-const insertMath = ({ value }) => {
-  if (value === 'inline') {
-    editor.value?.chain().focus().insertInlineMath({ latex: latexValue }).run()
-  }
-  if (value === 'block') {
-    editor.value?.chain().focus().insertBlockMath({ latex: latexValue }).run()
-  }
-  dialogVisible = false
-}
+const insertMath = ({ value }) =>
+  applyMath(
+    value === 'inline' ? 'insertInlineMath' : 'insertBlockMath',
+    position,
+  )
 
 const updateMath = () => {
-  if (props.latex !== '') {
-    editor.value?.chain().focus().deleteSelectionNode().run()
-  }
-  insertMath({ value: props.type })
+  applyMath(editingType === 'inline' ? 'updateInlineMath' : 'updateBlockMath')
 }
 </script>
 
