@@ -167,7 +167,12 @@ onMounted(() => {
     loadResource(`${libUrl}/katex/katex.min.css`, 'css', 'katex-style')
   }
   if (has('mermaid')) {
-    loadResource(`${libUrl}/mermaid/mermaid.min.js`, 'script', 'mermaid-script')
+    // 预加载失败时，打开绘图弹窗仍可重新加载。
+    loadResource(
+      `${libUrl}/mermaid/mermaid.min.js`,
+      'script',
+      'mermaid-script',
+    ).catch(() => {})
   }
   window.addEventListener('beforeunload', flushSyncDocumentContent)
   window.addEventListener('pagehide', flushSyncDocumentContent)

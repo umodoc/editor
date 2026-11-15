@@ -9,6 +9,7 @@
       :visible="dialogVisible"
       icon="mermaid"
       width="960px"
+      :confirm-btn="{ disabled: rendering }"
       @confirm="setMermaid"
       @close="dialogVisible = false"
     >
@@ -79,6 +80,7 @@
 
 <script setup>
 import { getSelectionNode } from '@/utils/selection'
+import { loadResource } from '@/utils/load-resource'
 import { shortId } from '@/utils/short-id'
 import { svgToDataURL } from '@/utils/file'
 import { svgBoundsNormalizer } from '@/utils/svg-normalizer'
@@ -98,6 +100,7 @@ const props = defineProps({
 
 const editor = inject('editor')
 const container = inject('container')
+const options = inject('options')
 
 let dialogVisible = $ref(false)
 
@@ -116,9 +119,7 @@ const copyCode = () => {
 }
 
 // 初始化 Mermaid
-const mermaidInit = () => {
-  const { mermaid } = window
-  if (!mermaid) return
+const mermaidInit = (mermaid) => {
   mermaid.initialize({
     darkMode: false,
     startOnLoad: false,
@@ -135,32 +136,44 @@ let errorTxt = $ref('')
 let isRenderError = $ref(false)
 const mermaidRef = $ref(null)
 let renderedSvgSize = $ref({ width: 0, height: 0 })
+let rendering = $ref(false)
+let renderRevision = 0
 
 const renderMermaid = async () => {
-  const { mermaid } = window
+  const revision = ++renderRevision
+  const isCurrent = () => dialogVisible && revision === renderRevision
+  const code = mermaidCode
 
-  if (!mermaid) {
-    svgCode = ''
-    renderedSvgSize = { width: 0, height: 0 }
-    errorTxt = t('tools.mermaid.notLoaded')
-    isRenderError = false
-    return
-  }
-
-  if (!mermaidCode || mermaidCode.trim() === '') {
+  if (!code?.trim()) {
     svgCode = ''
     renderedSvgSize = { width: 0, height: 0 }
     errorTxt = t('tools.mermaid.codeEmpty')
     isRenderError = false
+    rendering = false
     return
   }
 
+  rendering = true
+  errorTxt = ''
   const renderId = `mermaid-svg-${shortId(8)}`
+  let resourceReady = false
 
   try {
-    const { svg } = await mermaid.render(renderId, mermaidCode)
+    await loadResource(
+      `${options.value.cdnUrl}/libs/mermaid/mermaid.min.js`,
+      'script',
+      'mermaid-script',
+    )
+    if (!isCurrent()) return
+    const { mermaid } = window
+    if (!mermaid) throw new Error('Mermaid is unavailable')
+    resourceReady = true
+    mermaidInit(mermaid)
+    const { svg } = await mermaid.render(renderId, code)
+    if (!isCurrent()) return
     svgCode = svg
     await nextTick()
+    if (!isCurrent()) return
     const renderedSvg = mermaidRef?.querySelector('svg')
     const normalizedSvg = renderedSvg
       ? svgBoundsNormalizer.normalize(renderedSvg, { mutate: true })
@@ -172,42 +185,50 @@ const renderMermaid = async () => {
     }
     errorTxt = ''
     isRenderError = false
-  } catch (err) {
+  } catch {
+    if (!isCurrent()) return
     svgCode = ''
     renderedSvgSize = { width: 0, height: 0 }
-    errorTxt = t('tools.mermaid.renderError')
-    isRenderError = true
+    errorTxt = t(
+      resourceReady ? 'tools.mermaid.renderError' : 'tools.mermaid.notLoaded',
+    )
+    isRenderError = resourceReady
+  } finally {
+    if (isCurrent()) rendering = false
   }
 }
 
 watch(
   () => dialogVisible,
-  async (visible) => {
+  (visible) => {
     if (visible) {
       localConfig = { ...props.config }
       mermaidCode = props.content || 'graph TB\na-->b'
       isRenderError = false
-      await nextTick()
-      mermaidInit()
-      renderMermaid()
+    } else {
+      renderRevision += 1
+      svgCode = ''
+      rendering = false
     }
   },
   { immediate: true },
 )
 
 watch(
-  () => [localConfig.theme, mermaidCode],
-  async () => {
-    if (!dialogVisible || !mermaidCode || mermaidCode === '') return
-    await nextTick()
-    mermaidInit()
-    renderMermaid()
+  () => [dialogVisible, localConfig.theme, mermaidCode],
+  ([visible]) => {
+    if (visible) void renderMermaid()
   },
 )
+
+onBeforeUnmount(() => {
+  renderRevision += 1
+})
 
 // 创建或更新 Mermaid
 const keepSize = $ref(false)
 const setMermaid = () => {
+  if (rendering) return
   if (mermaidCode === '') {
     useMessage('error', {
       attach: container,
