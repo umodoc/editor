@@ -77,7 +77,6 @@ import {
 import { getOptions } from '@/utils/options'
 import { getSelectionNode, getSelectionText } from '@/utils/selection'
 import { shortId } from '@/utils/short-id'
-import { getCurrentInstance } from 'vue'
 const { toBlob, toJpeg, toPng } = domToImage
 
 defineOptions({ name: 'UmoEditor' })
@@ -258,7 +257,6 @@ watch(
 
 // 定时保存
 let contentUpdated = $ref(false)
-let isFirstUpdate = $ref(true)
 let autoSaveInterval = $ref(null)
 let isSaving = $ref(false)
 const shouldBlockUnload = () => {
@@ -286,26 +284,11 @@ const clearAutoSaveInterval = () => {
 watch(
   () => contentUpdated,
   (val) => {
+    clearAutoSaveInterval()
     const { autoSave } = options.value.document
-    if (!autoSave?.enabled) {
-      return
+    if (val && autoSave?.enabled) {
+      autoSaveInterval = setInterval(saveContent, autoSave.interval)
     }
-    if (isFirstUpdate) {
-      isFirstUpdate = false
-      setTimeout(() => {
-        contentUpdated = false
-      })
-      return
-    }
-    if (!val) {
-      clearAutoSaveInterval()
-      return
-    }
-    autoSaveInterval = setInterval(() => {
-      saveContent()
-      contentUpdated = false
-      clearAutoSaveInterval()
-    }, autoSave.interval)
   },
 )
 
@@ -1053,41 +1036,42 @@ const destroy = () => {
 
 // Content Saving Methods
 const saveContent = async (showMessage = true) => {
-  if (options.value.document?.readOnly) {
+  const targetEditor = editor.value
+  if (!targetEditor || isSaving || options.value.document?.readOnly) {
     return
   }
-  if (editor.value) {
-    // 保存前先同步一份最新内容，避免 onSave 第三个参数读取到旧值
-    $document.value.content = editor.value.getHTML()
+  const savedDoc = targetEditor.state.doc
+  const content = {
+    html: targetEditor.getHTML(),
+    json: targetEditor.getJSON(),
+    text: targetEditor.getText(),
   }
+  // 保存前先同步一份最新内容，避免 onSave 第三个参数读取到旧值
+  $document.value.content = content.html
   const saveBack = {
     status: '', // 可选值：'success' | 'error'  // 状态描述文本（用于前端提示或日志）
     message: '', // 例如：'保存失败：网络异常'
-    showMessage: true, // 是否展示message
+    showMessage, // 是否展示message
   }
+  let loadingMessage
   try {
     isSaving = true
-    useMessage(
-      'loading',
-      {
-        attach: container,
-        content: t('save.saving'),
-        placement: 'bottom',
-        closeBtn: true,
-        duration: 0, // 需要手工关闭，不会自动关闭了
-        offset: [0, -20],
-      },
-      getCurrentInstance(),
-    )
+    loadingMessage = useMessage('loading', {
+      attach: container,
+      content: t('save.saving'),
+      placement: 'bottom',
+      closeBtn: true,
+      duration: 0, // 需要手工关闭，不会自动关闭了
+      offset: [0, -20],
+    })
     const _saveBack = await options.value?.onSave?.(
-      {
-        html: editor.value?.getHTML(),
-        json: editor.value?.getJSON(),
-        text: editor.value?.getText(),
-      },
+      content,
       page.value,
       $document.value,
     )
+    if (targetEditor.isDestroyed) {
+      return
+    }
     if (!_saveBack) {
       throw new Error('`onSave` callback must return a value.')
     }
@@ -1109,7 +1093,6 @@ const saveContent = async (showMessage = true) => {
         saveBack['showMessage'] = showMessage
       }
     }
-    MessagePlugin.closeAll()
     if (saveBack.status === 'error') {
       if (saveBack.showMessage) {
         useMessage('error', {
@@ -1122,7 +1105,7 @@ const saveContent = async (showMessage = true) => {
       return
     }
     emits('saved')
-    contentUpdated = false
+    contentUpdated = !savedDoc.eq(targetEditor.state.doc)
     if (saveBack.showMessage) {
       useMessage('success', {
         attach: container,
@@ -1134,8 +1117,7 @@ const saveContent = async (showMessage = true) => {
     const time = useTimestamp({ offset: 0 })
     savedAt.value = time.value
   } catch (error) {
-    MessagePlugin.closeAll()
-    if (saveBack.showMessage) {
+    if (saveBack.showMessage && !targetEditor.isDestroyed) {
       useMessage('error', {
         attach: container,
         content: error?.message ? error.message : t('save.error'),
@@ -1145,6 +1127,7 @@ const saveContent = async (showMessage = true) => {
     }
     console.error(error?.message)
   } finally {
+    loadingMessage?.then((message) => message.close())
     isSaving = false
   }
 }
