@@ -79,9 +79,11 @@ const locales = {
 
 export const player = async (container, cdnUrl) => {
   const { locale } = useI18n()
-  await loadResource(`${cdnUrl}/libs/plyr/plyr.css`, 'css', 'plyr-style')
-  await loadResource(`${cdnUrl}/libs/plyr/plyr.min.js`, 'script', 'plyr-script')
+  const plyrUrl = `${cdnUrl}/libs/plyr`
+  await loadResource(`${plyrUrl}/plyr.css`, 'css', 'plyr-style')
+  await loadResource(`${plyrUrl}/plyr.min.js`, 'script', 'plyr-script')
   return new Plyr(container, {
+    iconUrl: `${plyrUrl}/plyr.svg`,
     i18n: locales[locale.value],
     settings: [],
     tooltips: { controls: true },
