@@ -1,4 +1,6 @@
 import { computePosition, flip, shift } from '@floating-ui/dom'
+import { PluginKey } from '@tiptap/pm/state'
+import { exitSuggestion } from '@tiptap/suggestion'
 import { posToDOMRect, VueRenderer } from '@tiptap/vue-3'
 
 import Mentions from './mentions.vue'
@@ -41,6 +43,7 @@ const updatePosition = (editor, element) => {
 }
 
 export default ({ users = [], onSearch } = {}) => {
+  const pluginKey = new PluginKey('umo-mention')
   const localUsers = normalizeUsers(users)
   const state = {
     items: filterUsers(localUsers),
@@ -50,6 +53,23 @@ export default ({ users = [], onSearch } = {}) => {
   let requestId = 0
   let component = null
   let currentProps = null
+  let dismissedPosition = null
+
+  const dismissOnOutsideClick = (event) => {
+    const editor = currentProps?.editor
+    if (!editor || editor.isDestroyed) {
+      return
+    }
+    const { view } = editor
+    if (
+      view.dom.contains(event.target) ||
+      component?.element?.contains(event.target)
+    ) {
+      return
+    }
+    dismissedPosition = currentProps.range.from
+    exitSuggestion(view, pluginKey)
+  }
 
   const syncComponent = () => {
     if (!component || !currentProps) {
@@ -104,6 +124,17 @@ export default ({ users = [], onSearch } = {}) => {
   }
 
   return {
+    pluginKey,
+
+    shouldShow: ({ range, transaction }) => {
+      if (dismissedPosition === null) {
+        return true
+      }
+      const { pos, deleted } = transaction.mapping.mapResult(dismissedPosition)
+      dismissedPosition = deleted || pos !== range.from ? null : pos
+      return dismissedPosition === null
+    },
+
     items: ({ query }) => {
       const localItems = filterUsers(localUsers, query)
       // Once a remote search handler is provided, suggestions are driven only by
@@ -140,6 +171,10 @@ export default ({ users = [], onSearch } = {}) => {
     render: () => {
       return {
         onStart: (props) => {
+          if (props.editor.isDestroyed) {
+            return
+          }
+
           currentProps = props
           component = new VueRenderer(Mentions, {
             props: {
@@ -150,17 +185,26 @@ export default ({ users = [], onSearch } = {}) => {
             editor: props.editor,
           })
 
-          if (!props.clientRect) {
+          const { element } = component
+          if (!props.clientRect || !element) {
             return
           }
 
-          component.element.style.position = 'absolute'
-
-          document.body.appendChild(component.element)
-
-          updatePosition(props.editor, component.element)
+          element.style.position = 'absolute'
+          const { ownerDocument } = element
+          ownerDocument.body.appendChild(element)
+          ownerDocument.addEventListener(
+            'pointerdown',
+            dismissOnOutsideClick,
+            true,
+          )
+          updatePosition(props.editor, element)
         },
         onUpdate(props) {
+          if (!component) {
+            return
+          }
+
           currentProps = props
           syncComponent()
           if (!props.clientRect) {
@@ -170,18 +214,23 @@ export default ({ users = [], onSearch } = {}) => {
           updatePosition(props.editor, component.element)
         },
         onKeyDown(props) {
-          if (props.event.key === 'Escape') {
-            component.destroy()
-            return true
+          if (props.event.key === 'Escape' || props.event.key === 'Esc') {
+            dismissedPosition = props.range.from
+            return false
           }
-          return component.ref?.onKeyDown(props)
+          return component?.ref?.onKeyDown(props)
         },
         onExit() {
-          component.element.remove()
-          component.destroy()
+          const element = component?.element
+          element?.ownerDocument.removeEventListener(
+            'pointerdown',
+            dismissOnOutsideClick,
+            true,
+          )
+          element?.remove()
+          component?.destroy()
           component = null
           currentProps = null
-          state.isLoading = false
         },
       }
     },
