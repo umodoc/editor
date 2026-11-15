@@ -102,6 +102,7 @@ export default defineConfig({
     drop: ['debugger'],
   },
   resolve: {
+    dedupe: ['prosemirror-state', 'prosemirror-view'],
     alias: {
       '@': `${process.cwd()}/src`,
     },
