@@ -137,13 +137,14 @@ const goToSelection = () => {
   const { node } = editor.value.view.domAtPos(
     editor.value.state.selection.anchor,
   )
-  node.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  const element = node instanceof Element ? node : node.parentElement
+  element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
 
 watch(
-  () => searchText.trim(),
+  () => searchText,
   (val, oldVal) => {
-    if (!val) {
+    if (!val.trim()) {
       clear()
     }
     if (val !== oldVal) {
@@ -152,7 +153,7 @@ watch(
   },
 )
 watch(
-  () => replaceText.trim(),
+  () => replaceText,
   (val, oldVal) => (val === oldVal ? null : search()),
 )
 

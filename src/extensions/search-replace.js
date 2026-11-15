@@ -20,6 +20,7 @@ const processSearches = (doc, searchTerm, searchResultClass, resultIndex) => {
     return {
       decorationsToReturn: DecorationSet.empty,
       results: [],
+      resultIndex: 0,
     }
   }
 
@@ -61,10 +62,11 @@ const processSearches = (doc, searchTerm, searchResultClass, resultIndex) => {
     }
   }
 
+  const activeIndex = Math.min(resultIndex, Math.max(0, results.length - 1))
   for (let i = 0; i < results.length; i += 1) {
     const r = results[i]
     const className =
-      i === resultIndex
+      i === activeIndex
         ? `${searchResultClass} ${searchResultClass}-current`
         : searchResultClass
     const decoration = Decoration.inline(r.from, r.to, {
@@ -77,62 +79,8 @@ const processSearches = (doc, searchTerm, searchResultClass, resultIndex) => {
   return {
     decorationsToReturn: DecorationSet.create(doc, decorations),
     results,
+    resultIndex: activeIndex,
   }
-}
-
-const replace = (replaceTerm, results, { state, dispatch }) => {
-  const [firstResult] = results
-
-  if (!firstResult) return
-
-  const { from, to } = firstResult
-
-  if (dispatch) dispatch(state.tr.insertText(replaceTerm, from, to))
-}
-
-const rebaseNextResult = (replaceTerm, index, lastOffset, results) => {
-  const nextIndex = index + 1
-
-  if (!results[nextIndex]) return null
-
-  const { from: currentFrom, to: currentTo } = results[index]
-
-  const offset = currentTo - currentFrom - replaceTerm.length + lastOffset
-
-  const { from, to } = results[nextIndex]
-
-  results[nextIndex] = {
-    to: to - offset,
-    from: from - offset,
-  }
-
-  return [offset, results]
-}
-
-const replaceAll = (replaceTerm, results, { tr, dispatch }) => {
-  let offset = 0
-
-  let resultsCopy = results.slice()
-
-  if (!resultsCopy.length) return
-
-  for (let i = 0; i < resultsCopy.length; i += 1) {
-    const { from, to } = resultsCopy[i]
-
-    tr.insertText(replaceTerm, from, to)
-
-    const rebaseNextResultResponse = rebaseNextResult(
-      replaceTerm,
-      i,
-      offset,
-      resultsCopy,
-    )
-
-    if (!rebaseNextResultResponse) continue
-    ;[offset, resultsCopy] = rebaseNextResultResponse
-  }
-
-  dispatch(tr)
 }
 
 export const SearchAndReplace = Extension.create({
@@ -205,33 +153,34 @@ export const SearchAndReplace = Extension.create({
         ({ editor }) => {
           const { results, resultIndex } = editor.storage.searchAndReplace
 
-          const prevIndex = resultIndex - 1
-
-          if (results[prevIndex]) {
-            editor.storage.searchAndReplace.resultIndex = prevIndex
-          } else {
-            editor.storage.searchAndReplace.resultIndex = results.length - 1
-          }
+          editor.storage.searchAndReplace.resultIndex =
+            resultIndex > 0 ? resultIndex - 1 : Math.max(0, results.length - 1)
 
           return false
         },
       replace:
         () =>
-        ({ editor, state, dispatch }) => {
-          const { replaceTerm, results } = editor.storage.searchAndReplace
-
-          replace(replaceTerm, results, { state, dispatch })
-
-          return false
+        ({ editor, tr, dispatch }) => {
+          const { replaceTerm, results, resultIndex } =
+            editor.storage.searchAndReplace
+          const result = results[resultIndex]
+          if (!result) return false
+          if (dispatch) tr.insertText(replaceTerm, result.from, result.to)
+          return true
         },
       replaceAll:
         () =>
         ({ editor, tr, dispatch }) => {
           const { replaceTerm, results } = editor.storage.searchAndReplace
 
-          replaceAll(replaceTerm, results, { tr, dispatch })
-
-          return false
+          if (!results.length) return false
+          if (dispatch) {
+            for (let i = results.length - 1; i >= 0; i -= 1) {
+              const { from, to } = results[i]
+              tr.insertText(replaceTerm, from, to)
+            }
+          }
+          return true
         },
     }
   },
@@ -272,14 +221,18 @@ export const SearchAndReplace = Extension.create({
 
             setLastSearchTerm(searchTerm)
             setLastCaseSensitive(caseSensitive)
-            setLastResultIndex(resultIndex)
-
             if (!searchTerm) {
               editor.storage.searchAndReplace.results = []
+              editor.storage.searchAndReplace.resultIndex = 0
+              setLastResultIndex(0)
               return DecorationSet.empty
             }
 
-            const { decorationsToReturn, results } = processSearches(
+            const {
+              decorationsToReturn,
+              results,
+              resultIndex: activeIndex,
+            } = processSearches(
               doc,
               getRegex(searchTerm, disableRegex, caseSensitive),
               searchResultClass,
@@ -287,6 +240,8 @@ export const SearchAndReplace = Extension.create({
             )
 
             editor.storage.searchAndReplace.results = results
+            editor.storage.searchAndReplace.resultIndex = activeIndex
+            setLastResultIndex(activeIndex)
 
             return decorationsToReturn
           },
