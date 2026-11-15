@@ -28,15 +28,15 @@ export const loadResource = (url, type = 'script', id = '') => {
       element = document.createElement('script')
       element.src = url
       element.type = 'text/javascript'
-      errorMessage = `JS 脚本加载失败: ${url}`
+      errorMessage = `Failed to load script: ${url}`
     } else if (type === 'css') {
       // 加载 CSS 样式
       element = document.createElement('link')
       element.rel = 'stylesheet'
       element.href = url
-      errorMessage = `CSS 样式加载失败: ${url}`
+      errorMessage = `Failed to load stylesheet: ${url}`
     } else {
-      reject(new Error(`不支持的类型: ${type}`))
+      reject(new Error(`Unsupported resource type: ${type}`))
       return
     }
 
