@@ -8,6 +8,7 @@
   >
     <div
       :id="container.substr(1)"
+      ref="editorRoot"
       class="umo-editor-container"
       :class="{
         'toolbar-classic': isRecord($toolbar) && $toolbar.mode === 'classic',
@@ -121,6 +122,7 @@ const historyRecords = ref({
 })
 
 const container = $ref(`#umo-editor-${shortId(4)}`)
+const editorRoot = ref(null)
 const defaultOptions = inject('defaultOptions', {})
 const options = ref(getOptions(props, defaultOptions))
 const editor = ref(null)
@@ -142,6 +144,7 @@ const $document = useState('document', options)
 const $layout = useState('layout', options)
 
 provide('container', container)
+provide('editorRoot', editorRoot)
 provide('options', options)
 provide('editor', editor)
 provide('savedAt', savedAt)
@@ -1030,7 +1033,6 @@ const reset = (silent) => {
 
 const destroy = () => {
   editor.value?.unmount()
-  removeAllHotkeys()
   destroyed.value = true
 }
 
@@ -1209,54 +1211,50 @@ const redoHistory = () => {
   })
 }
 
-// Hotkeys Setup
-watch(
-  () => editor.value,
-  () => {
-    const unsetFormatPainter = () => editor.value?.commands.unsetFormatPainter()
-    const bindEscKey = () => {
-      useHotkeys('esc', () => {
-        if (page.value.preview) {
-          page.value.preview.enabled = false
-        }
-        if (fullscreen.value) {
-          fullscreen.value = false
-        }
-      })
+const unsetFormatPainter = () => {
+  if (editor.value?.view.painter?.enabled) {
+    editor.value.commands.unsetFormatPainter()
+  }
+}
+const undoShortcut = () => {
+  if (!editor.value?.isEditable) return false
+  undoHistory()
+}
+const redoShortcut = () => {
+  if (!editor.value?.isEditable) return false
+  redoHistory()
+}
+useHotkeys(editorRoot, editor, {
+  escape: () => {
+    if (
+      !page.value.preview?.enabled &&
+      !fullscreen.value &&
+      !editor.value?.view.painter?.enabled
+    ) {
+      return false
     }
-    const bindUndoRedoKey = () => {
-      useHotkeys('ctrl+z, command+z', () => {
-        undoHistory()
-      })
-      useHotkeys('ctrl+y, command+y', () => {
-        redoHistory()
-      })
-    }
-    editor.value?.on('focus', () => {
-      useHotkeys('esc', unsetFormatPainter)
-      useHotkeys('ctrl+s,command+s', () => {
-        if (options?.value?.toolbar?.showSaveLabel) {
-          saveContent()
-          unsetFormatPainter()
-        }
-      })
-      useHotkeys('ctrl+p,command+p', () => {
-        print()
-        unsetFormatPainter()
-      })
-      useHotkeys('ctrl+f, command+f', () => {
-        searchReplace.value = true
-      })
-    })
-    bindEscKey()
-    bindUndoRedoKey()
-    editor.value?.on('blur', () => {
-      removeAllHotkeys()
-      bindEscKey()
-      bindUndoRedoKey()
-    })
+    page.value.preview.enabled = false
+    fullscreen.value = false
+    unsetFormatPainter()
   },
-)
+  z: undoShortcut,
+  y: redoShortcut,
+  'shift+z': redoShortcut,
+  s: () => {
+    if (!editor.value?.isEditable || !options.value.toolbar?.showSaveLabel) {
+      return false
+    }
+    saveContent()
+    unsetFormatPainter()
+  },
+  p: () => {
+    print()
+    unsetFormatPainter()
+  },
+  f: () => {
+    searchReplace.value = true
+  },
+})
 
 // Methods Exposed to Descendants
 provide('saveContent', saveContent)

@@ -216,6 +216,7 @@ export default ({ users = [], onSearch } = {}) => {
         onKeyDown(props) {
           if (props.event.key === 'Escape' || props.event.key === 'Esc') {
             dismissedPosition = props.range.from
+            props.event.stopPropagation()
             return false
           }
           return component?.ref?.onKeyDown(props)

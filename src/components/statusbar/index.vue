@@ -581,20 +581,13 @@ const toggleSpellcheck = () => {
   }
 }
 
-// 快捷键
-watch(
-  () => editor.value,
-  () => {
-    editor.value?.on('focus', () => {
-      useHotkeys('ctrl+f11, command+f11', toggleFullscreen)
-      useHotkeys('ctrl+0,command+0', autoWidth)
-      useHotkeys('ctrl+-,command+-', zoomOut)
-      useHotkeys('ctrl+=,command+=', zoomIn)
-      useHotkeys('ctrl+1,command+1', zoomReset)
-    })
-  },
-  { immediate: true },
-)
+useHotkeys(inject('editorRoot'), editor, {
+  f11: toggleFullscreen,
+  0: autoWidth,
+  '-': zoomOut,
+  '=': zoomIn,
+  1: zoomReset,
+})
 </script>
 
 <style lang="less" scoped>
