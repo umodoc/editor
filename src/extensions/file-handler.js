@@ -1,5 +1,6 @@
 import { Extension } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
+import { isAllowedFileMimeType } from '@/utils/file'
 import { isOfficeLikeClipboardData } from './office-paste/utils'
 
 const FileHandlePlugin = (option) => {
@@ -19,15 +20,9 @@ const FileHandlePlugin = (option) => {
           left: event.clientX,
           top: event.clientY,
         })
-        let files = Array.from(dataTransfer.files)
-        if (allowedMimeTypes.length > 0) {
-          files = files.filter((item) => {
-            if (allowedMimeTypes.includes(item.type)) {
-              return true
-            }
-            return allowedMimeTypes.includes(`${item.type.split('/')[0]}/*`)
-          })
-        }
+        const files = Array.from(dataTransfer.files).filter((file) =>
+          isAllowedFileMimeType(file.type, allowedMimeTypes),
+        )
         if (files.length !== 0) {
           onDrop(editor, files, pos === null ? undefined : pos.pos)
           event.preventDefault()
@@ -50,18 +45,12 @@ const FileHandlePlugin = (option) => {
         if (!clipboardData?.files.length) {
           return false
         }
-        let files = Array.from(clipboardData.files)
+        const files = Array.from(clipboardData.files).filter((file) =>
+          isAllowedFileMimeType(file.type, allowedMimeTypes),
+        )
         const html = clipboardData.getData('text/html')
         const hasHtmlContent = String(html || '').trim() !== ''
         const hasHtmlImages = /<img\b/i.test(String(html || ''))
-        if (allowedMimeTypes.length > 0) {
-          files = files.filter((item) => {
-            if (allowedMimeTypes.includes(item.type)) {
-              return true
-            }
-            return allowedMimeTypes.includes(`${item.type.split('/')[0]}/*`)
-          })
-        }
         if (files.length !== 0) {
           if (hasHtmlContent) {
             if (!hasHtmlImages) {

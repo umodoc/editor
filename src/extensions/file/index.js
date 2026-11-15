@@ -3,6 +3,7 @@ import { Fragment } from '@tiptap/pm/model'
 import { Selection } from '@tiptap/pm/state'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 
+import { isAllowedFileMimeType } from '@/utils/file'
 import { shortId } from '@/utils/short-id'
 import { createTimeSlicer } from '@/utils/time-slice'
 
@@ -37,21 +38,14 @@ export const fileMimeTypes = {
 }
 
 export const resolveFileAccept = (type, accept = []) => {
-  if (type === 'file' && accept.length === 0) {
-    return ''
-  }
-  if (!type || !['image', 'video', 'audio', 'inlineImage'].includes(type)) {
+  const supported = fileMimeTypes[type]
+  if (!supported) {
     return accept.toString()
   }
-  let acceptArray = [...accept]
-  if (acceptArray.includes(`${type}/*`) || accept.length === 0) {
-    acceptArray = fileMimeTypes[type]
-  } else if (acceptArray.filter((item) => item.startsWith(type)).length > 0) {
-    acceptArray = accept.filter((item) => fileMimeTypes[type].includes(item))
-  } else {
-    acceptArray = ['notAllow']
-  }
-  return acceptArray.length === 0 ? '' : acceptArray.toString()
+  const allowed = supported.filter((mime) =>
+    isAllowedFileMimeType(mime, accept),
+  )
+  return allowed.length === 0 ? 'notAllow' : allowed.toString()
 }
 
 const insertBatchContent = (editor, nodes = [], inline = false) => {
@@ -87,12 +81,24 @@ const createInsertFileNode = ({
   file,
   uploadFileMap,
   autoType,
+  requestedType,
   dimensions = {},
   editor,
 }) => {
   const { type, name, size } = file
   const { options } = editor.storage
-  const { maxSize } = options.file
+  const { maxSize, allowedMimeTypes } = options.file
+  const supported = fileMimeTypes[requestedType]
+  if (
+    !isAllowedFileMimeType(type, allowedMimeTypes) ||
+    (supported && !supported.includes(type))
+  ) {
+    useMessage('error', {
+      attach: editor.storage.container,
+      content: t('file.notAllow.message'),
+    })
+    return null
+  }
   if (maxSize !== 0 && size > maxSize) {
     useMessage('error', {
       attach: editor.storage.container,
@@ -240,15 +246,16 @@ export default Node.create({
           if (!node) {
             return false
           }
-          const position = pos || editor.state.selection.anchor
+          const position = pos ?? editor.state.selection.anchor
           return commands.insertContentAt(position, node)
         },
       selectFiles:
         (type, container = 'body', uploadFileMap, autoType = true) =>
-        ({ editor }) => {
+        ({ editor, dispatch }) => {
           const { options } = editor.storage
           const accept = resolveFileAccept(type, options.file.allowedMimeTypes)
-          if ((!accept && accept !== '') || accept === 'notAllow') {
+          if (!dispatch) return accept !== 'notAllow'
+          if (accept === 'notAllow') {
             const dialog = useAlert({
               attach: container,
               theme: 'danger',
@@ -265,11 +272,8 @@ export default Node.create({
             multiple: true,
             reset: true,
           })
-          // 打开文件对话框
-          open()
-          let bool = false
-          // 插入文件
           onChange((fileList) => {
+            if (editor.isDestroyed || !fileList?.length) return
             const files = Array.from(fileList)
             const nodes = files
               .map((file) =>
@@ -277,6 +281,7 @@ export default Node.create({
                   file,
                   uploadFileMap,
                   autoType,
+                  requestedType: type,
                   dimensions: {
                     inline: type === 'inlineImage' ? true : false,
                   },
@@ -287,9 +292,10 @@ export default Node.create({
             if (nodes.length === 0) {
               return
             }
-            bool = insertBatchContent(editor, nodes, type === 'inlineImage')
+            insertBatchContent(editor, nodes, type === 'inlineImage')
           })
-          return bool
+          open()
+          return true
         },
     }
   },

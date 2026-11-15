@@ -70,6 +70,11 @@ const fileTypes = {
   font: ['eot', 'otf', 'fon', 'font', 'ttf', 'ttc', 'woff', 'woff2'],
 }
 
+export const isAllowedFileMimeType = (type, allowed = []) =>
+  allowed.length === 0 ||
+  allowed.includes(type) ||
+  allowed.includes(`${type.split('/')[0]}/*`)
+
 export const getFileExtname = (filename) => {
   const splitFileName = filename?.split('.')
   return splitFileName ? splitFileName[splitFileName.length - 1] : undefined
