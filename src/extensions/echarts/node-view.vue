@@ -29,7 +29,11 @@
         @resize="onResize"
         @focus="selected = true"
       >
-        <div :id="'chart-' + attrs.id" class="umo-node-echarts-body"></div>
+        <div
+          :id="'chart-' + attrs.id"
+          ref="chartContainerRef"
+          class="umo-node-echarts-body"
+        ></div>
       </drager>
     </div>
   </node-view-wrapper>
@@ -56,6 +60,7 @@ const { updateAttributes, getPos } = props
 const options = inject('options')
 const editor = inject('editor')
 const containerRef = ref(null)
+const chartContainerRef = ref(null)
 let maxWidth = $ref(0)
 let selected = $ref(false)
 let chart = null
@@ -99,8 +104,9 @@ const onResize = ({ width, height }) => {
   }
 }
 
-// onBeforeUnmount(() => {
-// })
+onBeforeUnmount(() => {
+  chart?.dispose()
+})
 
 onClickOutside(containerRef, () => {
   selected = false
@@ -134,8 +140,9 @@ const loadData = async () => {
   // 等待 echarts 加载完成
   await waitForECharts()
   // 接下来的使用就跟之前一样，初始化图表，设置配置项
-  if (typeof echarts !== 'undefined') {
-    const { chartOptions, chartConfig, id, mode } = attrs
+  const chartContainer = chartContainerRef.value
+  if (typeof echarts !== 'undefined' && chartContainer) {
+    const { chartOptions, chartConfig, mode } = attrs
     // 根据参数不同 实现效果不同
     if (chart !== null) {
       chart.dispose()
@@ -151,13 +158,13 @@ const loadData = async () => {
           options.value,
         )
         if (resOptions !== null) {
-          chart = echarts.init(document.getElementById(`chart-${id}`))
+          chart = echarts.init(chartContainer)
           chart.setOption(resOptions)
           chartOption = resOptions
         }
       }
     } else if (chartOptions !== null) {
-      chart = echarts.init(document.getElementById(`chart-${id}`))
+      chart = echarts.init(chartContainer)
       chart.setOption(chartOptions)
       chartOption = chartOptions
     }
