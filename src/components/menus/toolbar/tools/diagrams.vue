@@ -43,26 +43,15 @@ const options = inject('options')
 
 let dialogVisible = $ref(false)
 let loading = $ref(false)
-const diagramEditor = new DiagramEditor({
-  domain: options.value.diagrams?.domain || '',
-  params: options.value.diagrams?.params || {},
-  container: `${container} .umo-diagrams-container`,
-})
-
 let image = $ref(undefined)
 
-const messageListener = async (evt) => {
-  if (evt?.type !== 'message' || typeof evt?.data !== 'string') {
-    return
-  }
-
-  const { event, bounds, data } = JSON.parse(evt.data)
+const onDiagramMessage = ({ event, bounds, data }) => {
   if (event === 'load') {
     loading = false
   }
   if (event === 'export') {
     if (!props.content || (props.content && props.content !== data)) {
-      const { width, height } = bounds
+      const { width, height } = bounds || {}
       image = {
         id: shortId(10),
         type: 'diagrams',
@@ -80,23 +69,31 @@ const messageListener = async (evt) => {
   }
 }
 
+const diagramEditor = new DiagramEditor({
+  domain: options.value.diagrams?.domain,
+  params: options.value.diagrams?.params,
+  container: `${container} .umo-diagrams-container`,
+  onMessage: onDiagramMessage,
+})
+onBeforeUnmount(() => diagramEditor.stopEditing())
+
 watch(
   () => dialogVisible,
   async (val) => {
     if (!val) {
-      window.removeEventListener('message', messageListener)
       diagramEditor.stopEditing()
       if (image?.type) {
         image.alt = t('tools.diagrams.text')
         editor.value?.chain().focus().setImage(image, !!props.content).run()
       }
+      image = undefined
       return
     }
-    await nextTick()
     loading = true
-    diagramEditor.edit(props.content || '')
-    window.addEventListener('message', messageListener)
-    image = undefined
+    await nextTick()
+    if (dialogVisible) {
+      diagramEditor.edit(props.content || '')
+    }
   },
   { immediate: true },
 )

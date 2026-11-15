@@ -7,73 +7,74 @@ const locales = {
 
 // https://www.diagrams.com/doc/faq/embed-mode
 class DiagramEditor {
-  constructor({ domain, params, container }) {
+  constructor({ domain, params, container, onMessage }) {
     this.frame = undefined
     this.container = container
-    this.domain = 'https://embed.diagrams.net'
+    this.domain = domain || 'https://embed.diagrams.net'
+    this.onMessage = onMessage
     // https://www.drawio.com/doc/faq/supported-url-parameters
     this.params = {
+      embed: 1,
       ui: 'atlas',
       proto: 'json',
       libraries: 1,
       configure: 1,
       noSaveBtn: 1,
+      ...params,
     }
     this.xml = null
     this.format = 'xmlsvg'
     this.data = null
-
-    this.domain = domain || this.domain
-    this.params = { ...this.params, ...params }
-    this.container = container
+    this.exportPending = false
   }
 
   handleMessageEvent = (evt) => {
     if (
-      this.frame !== undefined &&
-      evt.source === this.frame.contentWindow &&
-      evt.data.length > 0
+      !this.frame ||
+      evt.source !== this.frame.contentWindow ||
+      evt.origin !== this.origin ||
+      typeof evt.data !== 'string'
     ) {
-      try {
-        const msg = JSON.parse(evt.data)
-        if (msg) {
-          this.handleMessage(msg)
-        }
-      } catch (e) {
-        console.error(e)
-      }
+      return
+    }
+    let msg
+    try {
+      msg = JSON.parse(evt.data)
+    } catch {
+      return
+    }
+    if (msg?.event) {
+      this.handleMessage(msg)
     }
   }
 
   // 编辑元素
   edit(src) {
-    let fmt = this.format
-    if (src.substring(0, 15) === 'data:image/png;') {
-      fmt = 'xmlpng'
-    } else if (src.substring(0, 19) === 'data:image/svg+xml;') {
-      fmt = 'xmlsvg'
-    }
+    const fmt = src.startsWith('data:image/png;') ? 'xmlpng' : 'xmlsvg'
     this.startEditing(src, fmt)
     return this
   }
 
   // 创建 iframe
   createFrame() {
-    const params = Object.keys(this.params)
-      .map((key) => `${key}=${this.params[key]}`)
-      .join('&')
+    const url = new URL(this.domain, document.baseURI)
+    for (const [key, value] of Object.entries(this.params)) {
+      const param = key === 'configure' && typeof value === 'object' ? 1 : value
+      url.searchParams.set(key, param)
+    }
     const { locale } = useI18n()
-    const lang = locales[locale.value]
+    url.searchParams.set('lang', locales[locale.value])
+    this.origin = url.origin
     const frame = document.createElement('iframe')
     frame.setAttribute('class', 'umo-diagrams-iframe')
-    frame.setAttribute('src', `${this.domain}?${params}&lang=${lang}`)
+    frame.src = url.href
     return frame
   }
 
   // diagrams页面和当前页面通信
   postMessage(msg) {
     if (this.frame) {
-      this.frame.contentWindow?.postMessage(JSON.stringify(msg), '*')
+      this.frame.contentWindow?.postMessage(JSON.stringify(msg), this.origin)
     }
   }
 
@@ -82,11 +83,13 @@ class DiagramEditor {
       this.configureEditor()
     } else if (msg.event === 'init') {
       this.initializeEditor()
+    } else if (msg.event === 'load') {
+      this.onMessage(msg)
     } else if (msg.event === 'save') {
-      this.exportData(msg.data)
+      if (typeof msg.xml !== 'string') return
       this.xml = msg.xml
       if (msg.exit) {
-        msg.event = 'exit'
+        this.finishEditing()
       } else {
         this.postMessage({
           action: 'status',
@@ -94,38 +97,53 @@ class DiagramEditor {
           modified: false,
         })
       }
-    }
-    if (msg.event === 'exit') {
-      if (this.format !== 'xml') {
-        if (this.xml) {
-          this.postMessage({
-            action: 'export',
-            format: this.format,
-            xml: this.xml,
-            spinKey: 'export',
-          })
-        }
+    } else if (msg.event === 'exit') {
+      this.finishEditing()
+    } else if (msg.event === 'export' && this.exportPending) {
+      this.exportPending = false
+      if (
+        typeof msg.data === 'string' &&
+        /^data:image\/(png|svg\+xml)[;,]/i.test(msg.data)
+      ) {
+        this.onMessage(msg)
       }
-      this.stopEditing()
     }
+  }
+
+  finishEditing() {
+    if (this.exportPending) return
+    if (!this.xml) {
+      this.onMessage({ event: 'exit' })
+      return
+    }
+    this.exportPending = true
+    this.postMessage({
+      action: 'export',
+      format: this.format,
+      xml: this.xml,
+      spinKey: 'export',
+    })
   }
 
   // 开始编辑
   startEditing(data, format) {
-    if (!this.frame) {
-      window.addEventListener('message', this.handleMessageEvent)
-      this.format = format || this.format
-      this.data = data
-      this.frame = this.createFrame()
-      const container = document.querySelector(this.container)
-      container?.appendChild(this.frame)
-    }
+    const container = document.querySelector(this.container)
+    if (this.frame || !container) return
+    this.format = format
+    this.data = data
+    this.frame = this.createFrame()
+    window.addEventListener('message', this.handleMessageEvent)
+    container.appendChild(this.frame)
   }
 
   // 停止编辑
   stopEditing() {
     window.removeEventListener('message', this.handleMessageEvent)
+    this.frame?.remove()
     this.frame = undefined
+    this.xml = null
+    this.data = null
+    this.exportPending = false
   }
 
   // 安装编辑器
@@ -141,12 +159,9 @@ class DiagramEditor {
 
   // 设置编辑器
   configureEditor() {
-    this.postMessage({ action: 'configure', config: this.params.configure })
-  }
-
-  // 导出数据
-  exportData(data) {
-    return data
+    const { configure } = this.params
+    const config = configure && typeof configure === 'object' ? configure : {}
+    this.postMessage({ action: 'configure', config })
   }
 }
 
