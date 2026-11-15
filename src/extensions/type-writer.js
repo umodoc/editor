@@ -1,256 +1,146 @@
 import { Extension } from '@tiptap/core'
 import { ref } from 'vue'
 
-const typewriterState = ref({
+const initialState = () => ({
   isRunning: false,
   currentParagraph: 0,
   currentTextNode: 0,
   currentChar: 0,
 })
 
-let typewriterTimer = null
-let typewriterProgress = {
-  totalChars: 0,
-  typedChars: 0,
+const stopTyping = (storage) => {
+  const { run } = storage
+  storage.run = null
+  storage.state.value.isRunning = false
+  run?.cancelDelay?.()
 }
 
-// 计算总字符数用于进度跟踪
-const calculateTotalChars = (content) => {
-  return content.reduce((total, node) => {
-    if (node.type === 'paragraph' && node.content) {
-      return node.content.reduce((paraTotal, textNode) => {
-        return (
-          paraTotal + (textNode.type === 'text' ? textNode.text?.length : 0)
-        )
-      }, total)
+const waitForStep = (run, delay) =>
+  new Promise((resolve) => {
+    const done = () => {
+      run.cancelDelay = null
+      resolve()
     }
-    return total
-  }, 0)
+    const timer = setTimeout(done, delay)
+    run.cancelDelay = () => {
+      clearTimeout(timer)
+      done()
+    }
+  })
+
+const isEmptyParagraph = (node) =>
+  node.type === 'paragraph' &&
+  (!node.content?.length ||
+    (node.content.length === 1 &&
+      node.content[0].type === 'text' &&
+      !node.content[0].text))
+
+const runTypewriter = async (editor, nodes, options, storage, run) => {
+  const { state } = storage
+  const isCurrent = () => storage.run === run && !editor.isDestroyed
+  const focus = options?.focus === undefined ? 'end' : options.focus
+  const speed = Number.isFinite(options?.speed) ? Math.max(0, options.speed) : 1
+  const step = Math.max(1, Math.floor(options?.step) || 1)
+  let totalChars = 0
+  let typedChars = 0
+
+  for (const node of nodes) {
+    if (node.type === 'paragraph') {
+      for (const child of node.content || []) {
+        if (child.type === 'text') totalChars += child.text?.length || 0
+      }
+    }
+  }
+
+  const insert = async (content, delay = 0) => {
+    await waitForStep(run, delay)
+    if (!isCurrent()) return false
+    if (!editor.chain().insertContent(content).focus(focus).run()) {
+      throw new Error('Failed to insert typewriter content')
+    }
+    return isCurrent()
+  }
+
+  const processNodes = async (content, topLevel) => {
+    for (let index = 0; index < content.length && isCurrent(); index += 1) {
+      const node = content[index]
+      if (!topLevel) state.value.currentTextNode = index
+
+      if (isEmptyParagraph(node) || node.type === 'table') {
+        const blocks = [node]
+        while (content[index + 1] && isEmptyParagraph(content[index + 1])) {
+          blocks.push(content[++index])
+        }
+        if (node.type === 'table' && blocks.length === 1) {
+          blocks.push({ type: 'paragraph' })
+        }
+        if (!(await insert(blocks))) return
+        if (node.type === 'table') {
+          editor.commands.enter()
+        } else {
+          state.value.currentParagraph += blocks.length
+        }
+      } else if (node.type === 'paragraph') {
+        if (!(await insert([{ type: 'paragraph', attrs: node.attrs }]))) return
+        await processNodes(node.content, false)
+        if (isCurrent()) state.value.currentParagraph += 1
+      } else if (node.type === 'text') {
+        const text = node.text || ''
+        for (let i = 0; i < text.length && isCurrent(); i += step) {
+          const chunk = text.slice(i, i + step)
+          if (!(await insert([{ ...node, text: chunk }], speed))) return
+          state.value.currentChar = i + chunk.length - 1
+          typedChars += chunk.length
+          if (totalChars > 0) options?.onProgress?.(typedChars / totalChars)
+        }
+      } else {
+        await insert(topLevel ? [node, { type: 'paragraph' }] : [node])
+      }
+    }
+  }
+
+  await waitForStep(run, 0)
+  await processNodes(nodes, true)
+  if (isCurrent()) options?.onComplete?.()
 }
 
 export default Extension.create({
   name: 'typewriter',
+  addStorage() {
+    return { state: ref(initialState()), run: null }
+  },
+  onBeforeCreate() {
+    const { editor, storage } = this
+    editor.on('unmount', () => stopTyping(storage))
+  },
   addCommands() {
     return {
       startTypewriter:
         (content, options) =>
-        ({ editor, commands }) => {
-          // 立即返回 true 表示命令开始执行
+        ({ editor, dispatch }) => {
+          if (!Array.isArray(content?.content) || editor.isDestroyed) {
+            return false
+          }
+          if (!dispatch) return true
 
-          ;(async () => {
-            try {
-              // 清除现有计时器
-              if (typewriterTimer) {
-                clearTimeout(typewriterTimer)
-                typewriterTimer = null
-              }
-
-              // 重置状态
-              typewriterState.value = {
-                isRunning: true,
-                currentParagraph: 0,
-                currentTextNode: 0,
-                currentChar: 0,
-              }
-
-              // 计算总字符数
-              typewriterProgress = {
-                totalChars: calculateTotalChars(content?.content),
-                typedChars: 0,
-              }
-              const focusState =
-                options?.focus === null ? null : options?.focus || 'end'
-              // 插入内容
-              const typeWriterInsertContent = async (curContent) => {
-                await new Promise((resolve) => {
-                  setTimeout(() => {
-                    try {
-                      editor
-                        .chain()
-                        .insertContent(curContent)
-                        .focus(focusState)
-                        .run()
-                    } catch (e) {}
-                    resolve()
-                  }, 0)
-                })
-              }
-              // 取非负数
-              const speed = Math.max(options?.speed || 1, 0)
-
-              const isEmptyParagraph = (node) => {
-                return (
-                  node?.type === 'paragraph' &&
-                  (!node.content ||
-                    node.content.length === 0 ||
-                    (node.content.length === 1 &&
-                      node.content[0].type === 'text' &&
-                      !node.content[0].text))
-                )
-              }
-              // 处理内容
-              const processNode = async (
-                node,
-                index,
-                nodes,
-                isTopLevel = false,
-              ) => {
-                let resultIndex = 0
-                if (node.type === 'paragraph') {
-                  if (isEmptyParagraph(node)) {
-                    const ParagraphNodes = [node]
-                    for (
-                      let paragraphIndex = index + 1;
-                      paragraphIndex < nodes.length;
-                      paragraphIndex++
-                    ) {
-                      if (isEmptyParagraph(nodes[paragraphIndex])) {
-                        ParagraphNodes.push(nodes[paragraphIndex])
-                        resultIndex++
-                        typewriterState.value.currentParagraph++
-                      } else {
-                        break
-                      }
-                    }
-                    await typeWriterInsertContent(ParagraphNodes)
-                    typewriterState.value.currentParagraph++
-                  } else {
-                    // 当前为段落时 插入段落样式
-                    await typeWriterInsertContent([
-                      { type: 'paragraph', attrs: node.attrs },
-                    ])
-                    // 处理段落内容
-                    if (node.content && node.content.length > 0) {
-                      for (
-                        let childIndex = 0;
-                        childIndex < node.content.length;
-                        childIndex++
-                      ) {
-                        typewriterState.value.currentTextNode = childIndex
-                        const childNode = node.content[childIndex]
-                        const childResultIndex = await processNode(
-                          childNode,
-                          childIndex,
-                          node.content,
-                          false,
-                        )
-                        childIndex = childIndex + (childResultIndex || 0)
-                      }
-                    } else {
-                      editor.commands.enter()
-                    }
-                    typewriterState.value.currentParagraph++
-                  }
-                } else if (node.type === 'text') {
-                  // 处理文本节点
-                  const text = node.text || ''
-                  const marks = node.marks || []
-                  const step = options?.step || 1
-                  for (let i = 0; i < text.length; i += step) {
-                    if (!typewriterState.value.isRunning) return // 检查是否被停止
-                    const endIndex = Math.min(i + step, text.length)
-                    const currentText = text.slice(i, endIndex)
-                    await new Promise((resolve) => {
-                      typewriterTimer = setTimeout(async () => {
-                        // 插入当前字符
-                        await typeWriterInsertContent([
-                          {
-                            type: 'text',
-                            text: currentText,
-                            marks,
-                          },
-                        ])
-
-                        typewriterState.value.currentChar =
-                          i + currentText.length - 1
-                        typewriterProgress.typedChars += currentText.length
-
-                        // 更新进度回调
-                        if (
-                          options?.onProgress &&
-                          typewriterProgress.totalChars > 0
-                        ) {
-                          options.onProgress(
-                            typewriterProgress.typedChars /
-                              typewriterProgress.totalChars,
-                          )
-                        }
-
-                        resolve()
-                      }, speed)
-                    })
-                  }
-                } else if (node.type === 'table') {
-                  const tableNodes = [node]
-                  for (
-                    let tableIndex = index + 1;
-                    tableIndex < nodes.length;
-                    tableIndex++
-                  ) {
-                    if (isEmptyParagraph(nodes[tableIndex])) {
-                      tableNodes.push(nodes[tableIndex])
-                      resultIndex++
-                    } else {
-                      break
-                    }
-                  }
-                  if (tableNodes.length === 1) {
-                    tableNodes.push({ type: 'paragraph' })
-                  }
-                  await typeWriterInsertContent(tableNodes)
-                  editor.commands.enter()
-                } else {
-                  if (isTopLevel) {
-                    await typeWriterInsertContent([node, { type: 'paragraph' }])
-                  } else {
-                    await typeWriterInsertContent([node])
-                  }
-                }
-                return resultIndex
-              }
-              // // 结束当前事务（确保之前的修改已应用）
-              // editor.view.dispatch(editor.state.tr) // 应用一个空事务来确保状态更新
-              // 处理所有顶级节点
-              const contentNodes = content?.content
-              for (let i = 0; i < contentNodes.length; i++) {
-                if (!typewriterState.value.isRunning) break
-                const resultIndex = await processNode(
-                  contentNodes[i],
-                  i,
-                  contentNodes,
-                  true,
-                )
-                i = i + resultIndex
-              }
-              // 完成回调
-              if (typewriterState.value.isRunning && options?.onComplete) {
-                options.onComplete()
-              }
-              typewriterState.value.isRunning = false
-            } catch (e) {}
-          })()
+          const { typewriter } = editor.storage
+          stopTyping(typewriter)
+          const run = { cancelDelay: null }
+          typewriter.run = run
+          typewriter.state.value = { ...initialState(), isRunning: true }
+          runTypewriter(editor, content.content, options, typewriter, run)
+            .catch((error) => console.error('[typewriter]', error))
+            .finally(() => {
+              if (typewriter.run === run) stopTyping(typewriter)
+            })
           return true
         },
-
-      stopTypewriter: () => () => {
-        typewriterState.value.isRunning = false
-        if (typewriterTimer) {
-          clearTimeout(typewriterTimer)
-          typewriterTimer = null
-        }
-        return true
-      },
-
-      getTypewriterState: () => {
-        return {
-          isRunning: typewriterState.value.isRunning,
-          currentParagraph: typewriterState.value.currentParagraph,
-          currentTextNode: typewriterState.value.currentTextNode,
-          currentChar: typewriterState.value.currentChar,
-        }
-      },
+      stopTypewriter:
+        () =>
+        ({ editor, dispatch }) => {
+          if (dispatch) stopTyping(editor.storage.typewriter)
+          return true
+        },
     }
   },
 })
-
-export const getTypewriterRunState = () => typewriterState.value.isRunning

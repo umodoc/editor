@@ -60,12 +60,11 @@ import {
   isRecord,
   isString,
 } from '@tool-belt/type-predicates'
-import { AllSelection } from '@tiptap/pm/state'
+import { AllSelection, Selection } from '@tiptap/pm/state'
 import domToImage from 'dom-to-image-more'
 import enConfig from 'tdesign-vue-next/esm/locale/en_US'
 import cnConfig from 'tdesign-vue-next/esm/locale/zh_CN'
 
-import { getTypewriterRunState } from '@/extensions/type-writer'
 import { i18n } from '@/i18n'
 import { propsOptions } from '@/options'
 import { contentTransform } from '@/utils/content-transform'
@@ -137,7 +136,9 @@ const exportFile = ref({ pdf: false, image: false })
 const uploadFileMap = ref(new Map())
 // const bookmark = ref(false)
 const destroyed = ref(false)
-const typeWriterIsRunning = ref(false)
+const typeWriterIsRunning = computed(
+  () => editor.value?.storage.typewriter?.state.value.isRunning ?? false,
+)
 
 const $toolbar = useState('toolbar', options)
 const $document = useState('document', options)
@@ -247,14 +248,6 @@ watch(
   () => options.value.document,
   (val) => {
     $document.value = val
-  },
-)
-
-watch(
-  () => getTypewriterRunState(),
-  (newValue) => {
-    typeWriterIsRunning.value = newValue
-    console.log('typeWriterIsRunning', typeWriterIsRunning)
   },
 )
 
@@ -780,10 +773,16 @@ const startTypewriter = (content, options) => {
   if (typeof content !== 'object') {
     throw new Error('content is not object!')
   }
-  setTimeout(() => {
-    editor?.value?.commands.focus('end')
-    editor?.value?.commands.startTypewriter(content, options)
-  }, 100)
+  const chain = editor.value.chain()
+  if (options?.focus === false) {
+    chain.command(({ tr }) => {
+      tr.setSelection(Selection.atEnd(tr.doc))
+      return true
+    })
+  } else {
+    chain.focus('end')
+  }
+  chain.startTypewriter(content, options).run()
 }
 
 const stopTypewriter = () => {
@@ -791,7 +790,8 @@ const stopTypewriter = () => {
 }
 
 const getTypewriterState = () => {
-  return editor?.value?.commands.getTypewriterState()
+  const state = editor.value?.storage.typewriter?.state.value
+  return state && { ...state }
 }
 
 const getContent = (format = 'html') => {
