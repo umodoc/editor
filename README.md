@@ -142,6 +142,9 @@ The development of Umo Editor relies on community support. Below is a list of co
 - [vace](https://github.com/vace)：🛠️ Contributed code
 - [Mikasa33](https://github.com/Mikasa33)：🛠️ Contributed code
 - [ohmua](https://github.com/ohmua)：🛠️ Contributed code
+- [nishizbdjy](https://github.com/nishizbdjy): 🛠️ Contributed code
+- [nushagakosmiumallium-beep](https://github.com/nushagakosmiumallium-beep): 🛠️ Contributed code
+- [yuluqqvip](https://github.com/yuluqqvip): 🛠️ Contributed code
 
 We welcome all forms of contributions, including but not limited to submitting bug reports, feature requests, and code contributions.
 
