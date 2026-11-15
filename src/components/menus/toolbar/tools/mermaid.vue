@@ -237,7 +237,9 @@ const setMermaid = () => {
     return
   }
 
-  if (!props.content || (props.content && props.content !== mermaidCode)) {
+  const themeChanged =
+    (localConfig.theme ?? 'default') !== (props.config?.theme ?? 'default')
+  if (props.content !== mermaidCode || themeChanged) {
     if (errorTxt) {
       useMessage('error', {
         attach: container,
